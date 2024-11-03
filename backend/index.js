@@ -19,7 +19,7 @@ app.get("/test", (req, res) => {
   res.json({ message: "hello" });
 });
 
-app.use("/auth", authRoute);
+app.use("/api/v1/auth", authRoute);
 
 app.use(express.json());
 
