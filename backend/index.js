@@ -7,6 +7,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const hpp = require("hpp");
 const { connectToDB } = require("./DB/connectToDB");
+const authRoute = require("./routes/authRoute");
 connectToDB();
 const app = express(xss());
 app.use(helmet());
@@ -16,6 +17,8 @@ app.get("/test", (req, res) => {
     message: "hello",
   });
 });
+
+app.use("/api/v1/auth", authRoute);
 // app.use(
 //   rateLimit({
 //     windowMs: 15 * 60 * 1000,
