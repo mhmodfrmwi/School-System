@@ -5,7 +5,6 @@ const Login = asyncHandler(async (req, res) => {
 const Register = asyncHandler(async (req, res) => {
   res.json({ message: "you registerd in successfully" });
 });
-
 module.exports = {
   Login,
   Register,
