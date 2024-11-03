@@ -1,6 +1,5 @@
 const express = require("express");
-const cors = require("cors"); // Import cors package
-// const connectToDB = require("./DB/connnectToDB");
+const cors = require("cors");
 require("dotenv").config();
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
@@ -8,31 +7,19 @@ const helmet = require("helmet");
 const hpp = require("hpp");
 const { connectToDB } = require("./DB/connectToDB");
 const authRoute = require("./routes/authRoute");
+
 connectToDB();
+
 const app = express(xss());
+app.use(cors({ origin: "*" })); // Move CORS here
 app.use(helmet());
 app.use(hpp());
+
 app.get("/test", (req, res) => {
-  res.json({
-    message: "hello",
-  });
+  res.json({ message: "hello" });
 });
 
 app.use("/api/v1/auth", authRoute);
-// app.use(
-//   rateLimit({
-//     windowMs: 15 * 60 * 1000,
-//     limit: 100,
-//     standardHeaders: "draft-7",
-//     legacyHeaders: false,
-//   })
-// );
-
-app.use(
-  cors({
-    origin: process.env.DOMAIN_LINK,
-  })
-);
 
 app.use(express.json());
 
