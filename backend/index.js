@@ -11,10 +11,10 @@ const authRoute = require("./routes/authRoute");
 connectToDB();
 
 const app = express(xss());
-app.use(cors({ origin: "*" })); // Move CORS here
+app.use(cors({ origin: "*" }));
 app.use(helmet());
 app.use(hpp());
-
+app.use(express.json());
 app.get("/test", (req, res) => {
   res.json({ message: "hello" });
 });

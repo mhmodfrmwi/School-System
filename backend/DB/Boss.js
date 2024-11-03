@@ -1,22 +1,46 @@
+// models/Boss.js
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
 // Define Boss Schema
 const bossSchema = new mongoose.Schema({
-  bossId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+  name: { type: String, required: true, minlength: 3, maxlength: 30 },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  SSN: { type: String, required: true },
+  themePreference: {
+    type: String,
+    enum: ["light", "dark"],
+    default: "light",
   },
+  notificationsEnabled: { type: Boolean, default: true },
 });
 
 // Joi Validation for Boss
 const validateBoss = (obj) => {
   const schema = Joi.object({
-    bossId: Joi.string().required().messages({
-      "string.base": "Boss ID must be a valid ObjectId string.",
-      "any.required": "Boss ID is required.",
+    name: Joi.string().min(3).max(30).required().messages({
+      "string.base": "Name must be a string.",
+      "string.min": "Name must be at least 3 characters long.",
+      "string.max": "Name cannot exceed 30 characters.",
+      "any.required": "Name is required.",
     }),
+    email: Joi.string().email().required().messages({
+      "string.email": "Email must be a valid email address.",
+      "any.required": "Email is required.",
+    }),
+    password: Joi.string().required().messages({
+      "any.required": "Password is required.",
+    }),
+    role: Joi.string().valid("Boss").required(),
+    SSN: Joi.string()
+      .pattern(/^\d{14}$/)
+      .required()
+      .messages({
+        "any.required": "SSN is required.",
+      }),
+    themePreference: Joi.string().valid("light", "dark").default("light"),
+    notificationsEnabled: Joi.boolean().default(true),
   });
 
   return schema.validate(obj);
