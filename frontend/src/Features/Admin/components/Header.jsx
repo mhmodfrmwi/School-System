@@ -41,7 +41,7 @@ const Header = ({ onSearchChange, onFilterChange }) => {
             value={selectedFilter}
             className="text-[#244856] bg-white px-3 py-2 w-full sm:w-auto rounded-md border focus:outline-none focus:ring-2 focus:ring-[#117C90] text-xs sm:text-sm"
           >
-            <option value="">Add Filter</option>
+            <option value="">Select Filter</option>
             <option value="name">Name</option>
             <option value="class">Class</option>
             <option value="gender">Gender</option>

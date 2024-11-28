@@ -19,7 +19,6 @@ const StudentTable = () => {
     dispatch(fetchStudents());
   }, [dispatch]);
 
- 
   const filteredStudents = students.filter((student) => {
     const lowerSearchText = searchText.toLowerCase(); 
 
@@ -79,7 +78,6 @@ const StudentTable = () => {
     <div className="max-w-full px-4 lg:px-0 lg:w-[1000px] mx-auto">
       <Header onSearchChange={handleSearchChange} onFilterChange={handleFilterChange} />
 
-     
       {message && (
         <div className="bg-green-100 text-green-800 p-3 mb-4 rounded-lg shadow-md border-l-4 border-green-500 mt-6">
           {message}

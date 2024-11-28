@@ -4,7 +4,6 @@ import OnBoarding from "./Features/Auth/OnBoarding";
 import ChooseRole from "./Features/Auth/ChooseRole";
 import Student from "./Features/Admin/Pages/Students";
 
-
 function App() {
   return (
     <BrowserRouter>
