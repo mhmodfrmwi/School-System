@@ -55,6 +55,7 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%
   }
+  
 }
 @layer base {
   * {
@@ -62,5 +63,50 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+@layer components {
+  .navbar {
+    @apply flex items-center justify-between bg-white p-4 shadow-md w-full;
+  }
+
+  .search-bar {
+    @apply relative w-full max-w-lg mx-auto;
+  }
+
+  .search-bar input {
+    @apply w-full pl-10 pr-4 py-2 border rounded-full focus:outline-none;
+  }
+
+  .search-icon {
+    @apply absolute left-3 top-2 text-gray-500;
+  }
+
+  .app-icon {
+    @apply absolute right-3 top-2 text-gray-500;
+  }
+
+  .notification-buttons {
+    @apply flex items-center space-x-4;
+  }
+
+  .profile {
+    @apply flex items-center space-x-2;
+  }
+}
+@layer components {
+  html::-webkit-scrollbar {
+    width: 7px;
+    height: 8px;
+  }
+
+  html::-webkit-scrollbar-track {
+    background-color: #117C90;
+    /* display: none; */
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background-color: #eeeeee;
+    border-radius: 0;
   }
 }

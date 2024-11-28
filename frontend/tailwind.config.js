@@ -6,7 +6,9 @@ export default {
     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
   	fontFamily: {
-  		sans: 'Roboto Mono, monospace'
+  		sans: 'Roboto Mono, monospace',
+		poppins: ['Poppins', 'sans-serif'],
+		inter: ['Inter', 'sans-serif'],
   	},
   	extend: {
   		fontSize: {
@@ -16,6 +18,10 @@ export default {
   			screen: '100dvh'
   		},
   		colors: {
+			'search-bg':'#F5F5F5',
+			'search-text':'#7B7B7B',
+			'dashboard-bg':'#117C90',
+		    'dashboard-header': '#043B44', 
   			Color1OnBoarding: '#FD813D',
   			Color2OnBoarding: '#E47986',
   			Color3OnBoarding: '#CF72C0',
