@@ -109,4 +109,13 @@
     background-color: #eeeeee;
     border-radius: 0;
   }
+  .custom-scrollbar {
+    overflow-y: auto; /* Allows scrolling */
+    scrollbar-width: none; /* For Firefox: hides the scrollbar */
+    -ms-overflow-style: none; /* For IE and Edge: hides the scrollbar */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge: hides the scrollbar */
+  }
 }

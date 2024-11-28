@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import OnBoarding from "./Features/Auth/OnBoarding";
 // import ChooseRole from "./Features/Auth/ChooseRole";
 import Navbar from "./Features/Admin/components/navbar";
+import FullBG from "./Features/Admin/components/FullBG";
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
     //     <Route path="role" element={<ChooseRole />} />
     //   </Routes>
     // </BrowserRouter>
-    <Navbar />
+    <FullBG/>
 
   );
 }
