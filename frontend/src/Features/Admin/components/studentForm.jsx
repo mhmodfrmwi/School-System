@@ -48,12 +48,12 @@ function StudentForm() {
 
     dispatch(
       postStudent({
-        fullName: formData.fullName,
+        name: formData.fullName,
         email: formData.email,
-        password: formData.password,
-        phoneNumber: formData.phoneNumber,
-        studentClass: formData.studentClass,
+        class: formData.studentClass,
         gender: formData.gender,
+        studentID: crypto.randomUUID(),
+        image: "https://randomuser.me/api/portraits/men/23.jpg",
       }),
     );
 

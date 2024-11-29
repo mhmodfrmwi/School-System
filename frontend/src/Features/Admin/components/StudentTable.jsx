@@ -130,7 +130,7 @@ const StudentTable = () => {
                     />
                     <span className="truncate">{student.name}</span>
                   </td>
-                  <td className="truncate px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="max-w-4 truncate px-3 py-2 text-xs sm:text-sm md:text-base">
                     {student.studentID}
                   </td>
                   <td className="truncate px-3 py-2 text-xs sm:text-sm md:text-base">
