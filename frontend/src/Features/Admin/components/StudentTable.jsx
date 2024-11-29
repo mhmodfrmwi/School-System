@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeStudent, fetchStudents, clearMessage } from "../studentSlice";
+import { removeStudent, fetchStudents, clearMessage } from "./studentSlice";
 import Pagination from "./Pagination";
 import Header from "../components/Header";
 
@@ -12,15 +12,15 @@ const StudentTable = () => {
   const itemsPerPage = 10;
   const totalItems = students.length;
 
-  const [searchText, setSearchText] = useState(""); 
-  const [filterOption, setFilterOption] = useState(""); 
+  const [searchText, setSearchText] = useState("");
+  const [filterOption, setFilterOption] = useState("");
 
   useEffect(() => {
     dispatch(fetchStudents());
   }, [dispatch]);
 
   const filteredStudents = students.filter((student) => {
-    const lowerSearchText = searchText.toLowerCase(); 
+    const lowerSearchText = searchText.toLowerCase();
 
     if (!filterOption || filterOption === "") {
       return (
@@ -44,13 +44,15 @@ const StudentTable = () => {
 
   const paginatedStudents = filteredStudents.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDelete = (id) => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this student?");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this student?",
+    );
     if (isConfirmed) {
-      dispatch(removeStudent(id)); 
+      dispatch(removeStudent(id));
     }
   };
 
@@ -70,30 +72,45 @@ const StudentTable = () => {
     if (message) {
       setTimeout(() => {
         dispatch(clearMessage());
-      }, 5000); 
+      }, 5000);
     }
   }, [message, dispatch]);
 
   return (
-    <div className="max-w-full px-4 lg:px-0 lg:w-[1000px] mx-auto">
-      <Header onSearchChange={handleSearchChange} onFilterChange={handleFilterChange} />
+    <div className="mx-auto max-w-full px-4 lg:w-[1000px] lg:px-0">
+      <Header
+        onSearchChange={handleSearchChange}
+        onFilterChange={handleFilterChange}
+      />
 
       {message && (
-        <div className="bg-green-100 text-green-800 p-3 mb-4 rounded-lg shadow-md border-l-4 border-green-500 mt-6">
+        <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">
           {message}
         </div>
       )}
 
-      <div className="overflow-x-auto mt-7">
-        <table className="table-auto w-full min-w-[600px] border-collapse bg-[#FBE9D1] rounded-2xl">
-          <thead className="bg-[#FFFFFF] shadow-md shadow-[#117C90] text-black">
+      <div className="mt-7 overflow-x-auto">
+        <table className="w-full min-w-[600px] table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
+          <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
             <tr>
-              <th className="py-2 px-3 text-left text-xs sm:text-sm md:text-base font-medium">Name</th>
-              <th className="py-2 px-3 text-left text-xs sm:text-sm md:text-base font-medium">Student ID</th>
-              <th className="py-2 px-3 text-left text-xs sm:text-sm md:text-base font-medium">Email</th>
-              <th className="py-2 px-3 text-left text-xs sm:text-sm md:text-base font-medium">Class</th>
-              <th className="py-2 px-3 text-left text-xs sm:text-sm md:text-base font-medium">Gender</th>
-              <th className="py-2 px-3 text-left text-xs sm:text-sm md:text-base font-medium">Actions</th>
+              <th className="px-3 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+                Name
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+                Student ID
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+                Email
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+                Class
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+                Gender
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -105,30 +122,41 @@ const StudentTable = () => {
                     index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                   } hover:bg-[#117C90]/70`}
                 >
-                  <td className="py-2 px-3 text-xs sm:text-sm md:text-base flex items-center">
+                  <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
                     <img
                       src={student.image}
                       alt="Profile"
-                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full mr-2"
+                      className="mr-2 h-8 w-8 rounded-full sm:h-10 sm:w-10 md:h-12 md:w-12"
                     />
                     <span className="truncate">{student.name}</span>
                   </td>
-                  <td className="py-2 px-3 text-xs sm:text-sm md:text-base truncate">{student.studentID}</td>
-                  <td className="py-2 px-3 text-xs sm:text-sm md:text-base truncate">{student.email}</td>
-                  <td className="py-2 px-3 text-xs sm:text-sm md:text-base truncate">{student.class}</td>
-                  <td className="py-2 px-3 text-xs sm:text-sm md:text-base truncate">{student.gender}</td>
-                  <td className="py-2 px-3 text-xs sm:text-sm md:text-base space-x-2">
+                  <td className="truncate px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {student.studentID}
+                  </td>
+                  <td className="truncate px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {student.email}
+                  </td>
+                  <td className="truncate px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {student.class}
+                  </td>
+                  <td className="truncate px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {student.gender}
+                  </td>
+                  <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       onClick={() => {}}
-                      className="text-[#117C90] hover:text-[#244856] transition duration-300"
+                      className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-edit" style={{ fontSize: "16px" }} />
                     </button>
                     <button
                       onClick={() => handleDelete(student.id)}
-                      className="text-[#E74833] hover:text-[#244856] transition duration-300"
+                      className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     >
-                      <i className="far fa-trash-alt" style={{ fontSize: "16px" }} />
+                      <i
+                        className="far fa-trash-alt"
+                        style={{ fontSize: "16px" }}
+                      />
                     </button>
                   </td>
                 </tr>
@@ -137,7 +165,7 @@ const StudentTable = () => {
               <tr>
                 <td
                   colSpan="6"
-                  className="text-center py-12 text-xs sm:text-sm md:text-base text-[#244856] bg-[#FFEBEB] rounded-lg"
+                  className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                 >
                   <span className="font-semibold">No Students Found</span>
                 </td>

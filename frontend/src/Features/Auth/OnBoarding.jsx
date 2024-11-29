@@ -25,7 +25,7 @@ function OnBoarding() {
         <button className="mr-5 flex h-10 w-40 items-center justify-center rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[3px]">
           <div
             className="flex h-full w-full items-center justify-center rounded-full bg-white text-xl font-semibold text-black"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/role")}
           >
             Login
           </div>
@@ -96,7 +96,7 @@ function OnBoarding() {
             </p>
             <p className="ms-14 mt-4 font-semibold text-blue-500">
               Click here to{" "}
-              <button onClick={() => navigate("/login")}>login&rarr; </button>
+              <button onClick={() => navigate("/role")}>login&rarr; </button>
             </p>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const Header = ({ onSearchChange, onFilterChange }) => {
   const [searchText, setSearchText] = useState("");
@@ -15,31 +16,41 @@ const Header = ({ onSearchChange, onFilterChange }) => {
   };
 
   return (
-    <div className="max-w-full px-4 md:px-6 lg:px-0 lg:w-[1000px] mx-auto">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 lg:mb-6 space-y-2 sm:space-y-0">
+    <div className="mx-auto max-w-full px-4 md:px-6 lg:w-[1000px] lg:px-0">
+      <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
-          <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#244856]">
+          <h1 className="text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
             Students
           </h1>
-          <div className="mt-1 w-[80px] lg:w-[120px] h-[3px] lg:h-[4px] bg-[#244856] rounded-t-md"></div>
+          <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[120px]"></div>
         </div>
 
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4">
-          <button className="text-[#244856] text-xs sm:text-sm py-2 px-4 hover:bg-[#117C90] hover:text-white rounded-md transition">
+        <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
+          <button className="rounded-md px-4 py-2 text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white sm:text-sm">
             Export CSV
           </button>
-          <button className="bg-[#117C90] text-white text-xs sm:text-sm px-4 py-2 rounded-md hover:bg-[#0E6B7A] transition">
+          {/* <button
+            className="rounded-md bg-[#117C90] px-4 py-2 text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
+            onClick={() => navigate("/students/studentform")}
+          >
             Add Student
-          </button>
+          </button> */}
+
+          <NavLink
+            to="/students/studentform"
+            className="rounded-md bg-[#117C90] px-4 py-2 text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
+          >
+            Add Student
+          </NavLink>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-4 sm:space-y-0 w-full">
+      <div className="flex w-full flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
         <div className="relative w-full sm:w-auto">
           <select
             onChange={handleFilterChange}
             value={selectedFilter}
-            className="text-[#244856] bg-white px-3 py-2 w-full sm:w-auto rounded-md border focus:outline-none focus:ring-2 focus:ring-[#117C90] text-xs sm:text-sm"
+            className="w-full rounded-md border bg-white px-3 py-2 text-xs text-[#244856] focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:w-auto sm:text-sm"
           >
             <option value="">Select Filter</option>
             <option value="name">Name</option>
@@ -49,11 +60,11 @@ const Header = ({ onSearchChange, onFilterChange }) => {
         </div>
 
         <div className="relative flex-grow">
-          <i className="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-white text-xs sm:text-sm"></i>
+          <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-white sm:text-sm"></i>
           <input
             type="text"
             placeholder="Search for a student by name or email"
-            className="w-full px-3 py-2 bg-[#117C90] text-white rounded-md pl-10 focus:outline-none focus:ring-2 focus:ring-[#117C90] text-xs sm:text-sm"
+            className="w-full rounded-md bg-[#117C90] px-3 py-2 pl-10 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
             value={searchText}
             onChange={handleSearchChange}
           />

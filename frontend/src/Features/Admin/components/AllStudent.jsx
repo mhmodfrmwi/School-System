@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchStudents } from '../studentSlice';
-import StudentTable from './StudentTable';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchStudents } from "./studentSlice";
+import StudentTable from "./StudentTable";
 
 const AllStudent = () => {
   const dispatch = useDispatch();
@@ -12,13 +12,13 @@ const AllStudent = () => {
 
   return (
     <>
-    <div className="flex flex-col">
-      <div className="flex-1">
-        <div className="p-6">
-          <StudentTable />
+      <div className="flex flex-col">
+        <div className="flex-1">
+          <div className="p-6">
+            <StudentTable />
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

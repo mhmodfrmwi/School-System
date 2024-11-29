@@ -1,15 +1,6 @@
 {
   "students": [
     {
-      "id": "1",
-      "name": "Eneh Mercy",
-      "studentID": "703703",
-      "email": "michelle.rivera@example.com",
-      "class": "JSS 2",
-      "gender": "Female",
-      "image": "https://randomuser.me/api/portraits/women/1.jpg"
-    },
-    {
       "id": "2",
       "name": "Marvin McKinney",
       "studentID": "877037",

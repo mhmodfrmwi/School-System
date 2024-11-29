@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logoorangee 1.png";
 
 import React from "react";
 
 const ChooseRole = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex h-screen w-screen items-center justify-center overflow-y-scroll bg-[#FEDDC6]">
       <div className="justify-space flex h-full w-full flex-col items-center rounded-lg">
@@ -25,6 +28,7 @@ const ChooseRole = () => {
             <button
               key={index}
               className="flex flex-col items-center rounded-lg border-2 border-orange-500 bg-white p-12 text-center text-orange-500 transition-colors hover:bg-orange-500 hover:text-white"
+              onClick={() => navigate("/login")}
             >
               <span className="mb-2 text-3xl">{item.icon}</span>
               <span className="font-semibold">{item.label}</span>
