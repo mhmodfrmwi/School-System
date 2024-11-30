@@ -8,7 +8,6 @@ const AdminRegister = asyncHandler(async (req, res) => {
   let admin = await Admin.findOne({ email: req.body.email });
   if (admin)
     return res.status(400).json({ message: "Admin already registered." });
-
   admin = new Admin({
     name: req.body.name,
     email: req.body.email,
