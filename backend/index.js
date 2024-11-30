@@ -7,7 +7,7 @@ const helmet = require("helmet");
 const hpp = require("hpp");
 const { connectToDB } = require("./DB/connectToDB");
 const authRoute = require("./routes/authRoute");
-
+const adminRoute = require("./routes/adminRoute");
 connectToDB();
 
 const app = express(xss());
@@ -20,6 +20,7 @@ app.get("/test", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/getUsers", adminRoute);
 
 app.use(express.json());
 
