@@ -16,7 +16,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { label: "Dashboard", icon: faHome, href: "#dashboard" },
-    { label: "Members", icon: faUsers, href: "#members" },
+    { label: "Members", icon: faUsers, href: "/students/BasicForm" },
     { label: "Term Management", icon: faCalendar, href: "#term-management" },
     { label: "Course Management", icon: faPen, href: "#course-management" },
     { label: "Reports & Analytics", icon: faChartPie, href: "#reports" },

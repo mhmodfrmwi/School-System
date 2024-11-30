@@ -5,8 +5,8 @@ import ChooseRole from "./Features/Auth/ChooseRole";
 import Students from "./Features/Admin/Pages/Students";
 import StudentForm from "./Features/Admin/components/studentForm";
 import BasicForm from "./Features/Admin/components/basicForm";
-import AllStudent from "./Features/Admin/components/AllStudent";
-import DashboardAdmin from "./Features/Admin/components/DashboardAdmin";
+import DashboardAdmin from "./Features/Admin/Pages/DashboardAdmin";
+import AllStudent from "./Features/Admin/Pages/StudentTablePage";
 
 function App() {
   return (

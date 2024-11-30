@@ -1,24 +1,56 @@
 import { useState } from "react";
 import Img2 from "../../assets/loginImg2.png";
 import logo from "../../assets/logologin.png";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { updateUser } from "./userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser } from "./AuthRedux/userSlice";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const dispatch = useDispatch();
   const { email: userEmail, password: userPassword } = useSelector(
-    (state) => state.user,
+    (state) => state.user
   );
-  console.log(userEmail, userPassword);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 6; // Example: Minimum 6 characters
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!email || !password) return;
-    dispatch(updateUser(email, password));
+    // Reset errors
+    setEmailError("");
+    setPasswordError("");
+
+    // Validate inputs
+    let isValid = true;
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      isValid = false;
+    }
+    if (!validatePassword(password)) {
+      setPasswordError("Password must be at least 6 characters long.");
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    // Mock authentication logic
+    if (email === userEmail && password === userPassword) {
+      alert("Login successful!");
+      dispatch(updateUser(email, password)); // Save user session
+    } else {
+      alert("Invalid email or password.");
+    }
+
     setEmail("");
     setPassword("");
   };
@@ -32,13 +64,13 @@ function Login() {
         >
           <div className="mb-6 flex items-center space-x-2">
             <img src={logo} alt="Logo" className="h-8 w-8" />
-            <h2 className="text-2xl font-semibold text-[#F25019]">Learnova</h2>
+            <h2 className="text-2xl font-poppins text-[#F25019]">Learnova</h2>
           </div>
 
-          <h1 className="mb-8 text-3xl font-bold text-[#F25019]">Login</h1>
+          <h1 className="mb-8 text-3xl font-poppins font-bold text-[#F25019]">Login</h1>
 
           <div className="mb-4 w-full">
-            <label htmlFor="email" className="mb-1 block font-semibold">
+            <label htmlFor="email" className="mb-1 font-poppins block font-semibold">
               Email
             </label>
             <input
@@ -47,13 +79,18 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="username@gmail.com"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+              className={`w-full rounded-lg font-poppins border ${
+                emailError ? "border-red-500" : "border-gray-300"
+              } px-4 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500`}
               required
             />
+            {emailError && (
+              <p className="mt-1 text-sm text-red-500">{emailError}</p>
+            )}
           </div>
 
           <div className="mb-6 w-full">
-            <label htmlFor="password" className="mb-1 block font-semibold">
+            <label htmlFor="password" className="mb-1 font-poppins block font-semibold">
               Password
             </label>
             <input
@@ -62,18 +99,23 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+              className={`w-full font-poppins rounded-lg border ${
+                passwordError ? "border-red-500" : "border-gray-300"
+              } px-4 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500`}
               required
             />
+            {passwordError && (
+              <p className="mt-1 text-sm text-red-500">{passwordError}</p>
+            )}
           </div>
 
-          <p className="mb-6 w-full text-right text-sm font-semibold text-[#F25019]">
+          <p className="mb-6 w-full font-poppins text-right text-sm  text-[#F25019]">
             Forgot password?
           </p>
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-[#F25019] px-4 py-2 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
+            className="w-full font-poppins rounded-lg bg-[#F25019] px-4 py-2 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
           >
             Sign In
           </button>

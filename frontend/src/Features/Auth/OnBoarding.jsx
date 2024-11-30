@@ -24,7 +24,7 @@ function OnBoarding() {
         <img src={logo} className="mb-5 ms-5 h-16 w-52" alt="Logo" />
         <button className="mr-5 flex h-10 w-40 items-center justify-center rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[3px]">
           <div
-            className="flex h-full w-full items-center justify-center rounded-full bg-white text-xl font-semibold text-black"
+            className="flex h-full font-poppins w-full items-center justify-center rounded-full bg-white text-xl font-semibold text-black"
             onClick={() => navigate("/role")}
           >
             Login
@@ -57,11 +57,11 @@ function OnBoarding() {
         <div className="mx-auto mb-12 grid gap-4 sm:grid-cols-2">
           <div className="mx-auto">
             {" "}
-            <h1 className="mb-3 ms-14 bg-gradient-to-r from-Color1OnBoarding to-Color4OnBoarding bg-clip-text font-semibold text-transparent">
+            <h1 className="mb-3 ms-14 font-poppins bg-gradient-to-r from-Color1OnBoarding to-Color4OnBoarding bg-clip-text font-semibold text-transparent">
               Start a journey with us
             </h1>
-            <p className="mb-3 ms-14 w-32 border-b-4 border-Color4OnBoarding"></p>
-            <p className="ms-10 p-5 font-semibold">
+            <p className="mb-3 ms-14 font-poppins w-32 border-b-4 border-Color4OnBoarding"></p>
+            <p className="ms-10 p-5 font-poppins">
               Welcome to our platform! Our website is designed to help you get
               started smoothly, providing essential resources and a clear
               understanding of our values, We're here to support you every step
@@ -85,16 +85,16 @@ function OnBoarding() {
           />
           <div className="mx-auto">
             {" "}
-            <h1 className="mb-6 mr-5 ms-6 flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[1.5px] transition duration-300 sm:ms-14 md:w-72">
+            <h1 className="mb-6 mr-5 ms-6 font-poppins flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[1.5px] transition duration-300 sm:ms-14 md:w-72">
               Your journey start here
             </h1>
-            <p className="ms-10 p-5 font-semibold">
+            <p className="ms-10 p-5 font-poppins">
               Studying is the foundation of success, building knowledge and
               skills that open doors to future opportunities. Dedication to
               learning fosters growth, resilience, and the confidence needed to
               achieve your goals
             </p>
-            <p className="ms-14 mt-4 font-semibold text-blue-500">
+            <p className="ms-14 mt-4 font-poppins text-blue-500">
               Click here to{" "}
               <button onClick={() => navigate("/role")}>login&rarr; </button>
             </p>
@@ -105,7 +105,7 @@ function OnBoarding() {
         <div className="m-5 grid gap-10 rounded-lg bg-[#EEE8F6] p-5 sm:grid-cols-2 xl:grid-cols-3">
           <div className="mx-auto mt-14">
             <img src={img5} alt="logoImage not found" />
-            <h2 className="ms-6 text-[#3D52A1] lg:ms-24">Learn,Graw,Success</h2>
+            <h2 className="ms-6 text-[#3D52A1] font-poppins lg:ms-24">Learn,Graw,Success</h2>
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[#826FB5]">
             <div className="flex items-center">
@@ -113,7 +113,7 @@ function OnBoarding() {
                 <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
               </p>
 
-              <h2 className="ms-4 text-[10px] font-semibold md:text-sm">
+              <h2 className="ms-4 font-poppins text-[10px] md:text-sm">
                 Empower Growth
               </h2>
             </div>
@@ -122,7 +122,7 @@ function OnBoarding() {
               <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
                 <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
               </p>
-              <h2 className="ms-4 text-[10px] font-semibold md:text-sm">
+              <h2 className="ms-4 font-poppins text-[10px]  md:text-sm">
                 Inspire Learning
               </h2>{" "}
             </div>
@@ -131,7 +131,7 @@ function OnBoarding() {
               <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
                 <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
               </p>
-              <h2 className="ms-4 text-[10px] font-semibold md:text-sm">
+              <h2 className="ms-4  text-[10px] font-poppins md:text-sm">
                 Discover Kowledge
               </h2>
             </div>
@@ -140,7 +140,7 @@ function OnBoarding() {
               <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
                 <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
               </p>
-              <h2 className="ms-4 text-[10px] font-semibold md:text-sm">
+              <h2 className="ms-4 text-[10px] font-poppins md:text-sm">
                 Imagine More
               </h2>
             </div>
@@ -149,7 +149,7 @@ function OnBoarding() {
               <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
                 <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
               </p>
-              <h2 className="ms-4 text-[10px] font-semibold md:text-sm">
+              <h2 className="ms-4 text-[10px] font-poppins md:text-sm">
                 Unlock
               </h2>
             </div>
@@ -158,7 +158,7 @@ function OnBoarding() {
               <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
                 <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
               </p>
-              <h2 className="ms-4 text-[10px] font-semibold md:text-sm">
+              <h2 className="ms-4 text-[10px] font-poppins md:text-sm">
                 Dream Big
               </h2>
             </div>
@@ -167,7 +167,7 @@ function OnBoarding() {
               <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
                 <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
               </p>
-              <h2 className="ms-4 text-[10px] font-semibold md:text-sm">
+              <h2 className="ms-4 text-[10px] font-poppins md:text-sm">
                 Explore Ideas
               </h2>
             </div>
@@ -175,7 +175,7 @@ function OnBoarding() {
               <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
                 <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
               </p>
-              <h2 className="ms-4 text-[10px] font-semibold md:text-sm">
+              <h2 className="ms-4 text-[10px] font-poppins md:text-sm">
                 Achieve Greatness
               </h2>
             </div>

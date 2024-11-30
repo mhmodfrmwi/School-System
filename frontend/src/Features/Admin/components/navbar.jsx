@@ -1,5 +1,6 @@
 import React from "react";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
@@ -9,18 +10,27 @@ import InfoIcon from '../../../assets/icons/Info.svg';
 import Mode from '../../../assets/icons/Mode.svg';
 
 const Navbar = () => {
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+      navigate(-1); // Navigates to the previous page
+    };
     return (
         <div className="flex-1 flex flex-col">
             <div className="flex items-center justify-between bg-white px-4 shadow-md w-full h-16 max-w-full">
                 {/* Left Section - Back Button */}
                 <div className="flex items-center space-x-3">
-                    <button className="p-2 bg-dashboard-bg text-white rounded-lg hidden lg:flex">
-                        <FaArrowLeft className="text-lg" />
-                    </button>
-                    <p className="text-lg font-semibold font-inter text-dashboard-header hidden lg:flex">
-                        Dashboard
-                    </p>
-                </div>
+                {/* Back Button */}
+                <button
+                  onClick={handleBack}
+                  className="p-2 bg-dashboard-bg text-white rounded-lg hidden lg:flex"
+                >
+                  <FaArrowLeft className="text-lg" />
+                </button>
+                <p className="text-lg font-semibold font-inter text-dashboard-header hidden lg:flex">
+                  Dashboard
+                </p>
+              </div>
 
                 {/* Search Section */}
                 <div className="flex items-center flex-1 mx-4 space-x-2">
