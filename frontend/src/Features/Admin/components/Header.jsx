@@ -16,7 +16,7 @@ const Header = ({ onSearchChange, onFilterChange }) => {
   };
 
   return (
-    <div className="mx-auto max-w-full px-4 md:px-6 lg:w-[1000px] lg:px-0">
+    <div className="mx-auto px-4 md:px-6 lg:px-0">
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
           <h1 className="text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
@@ -26,7 +26,7 @@ const Header = ({ onSearchChange, onFilterChange }) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
-          <button className="rounded-md  font-poppins px-4 py-2 text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white sm:text-sm">
+          <button className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white sm:text-sm">
             Export CSV
           </button>
           {/* <button
@@ -38,7 +38,7 @@ const Header = ({ onSearchChange, onFilterChange }) => {
 
           <NavLink
             to="/students/studentform"
-            className="rounded-md  bg-[#117C90] font-poppins px-4 py-2 text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
+            className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
           >
             Add Student
           </NavLink>
@@ -50,12 +50,20 @@ const Header = ({ onSearchChange, onFilterChange }) => {
           <select
             onChange={handleFilterChange}
             value={selectedFilter}
-            className="w-full font-poppins rounded-md border bg-white px-3 py-2 text-xs text-[#244856] focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:w-auto sm:text-sm"
+            className="w-full rounded-md border bg-white px-3 py-2 font-poppins text-xs text-[#244856] focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:w-auto sm:text-sm"
           >
-            <option value="" className="font-poppins">Select Filter</option>
-            <option value="name" className="font-poppins">Name</option>
-            <option value="class" className="font-poppins">Class</option>
-            <option value="gender" className="font-poppins">Gender</option>
+            <option value="" className="font-poppins">
+              Select Filter
+            </option>
+            <option value="name" className="font-poppins">
+              Name
+            </option>
+            <option value="class" className="font-poppins">
+              Class
+            </option>
+            <option value="gender" className="font-poppins">
+              Gender
+            </option>
           </select>
         </div>
 
@@ -64,7 +72,7 @@ const Header = ({ onSearchChange, onFilterChange }) => {
           <input
             type="text"
             placeholder="Search for a student by name or email"
-            className="w-full font-poppins rounded-md bg-[#117C90] px-3 py-2 pl-10 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
+            className="w-full rounded-md bg-[#117C90] px-3 py-2 pl-10 font-poppins text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
             value={searchText}
             onChange={handleSearchChange}
           />

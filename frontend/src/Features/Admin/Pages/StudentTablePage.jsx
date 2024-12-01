@@ -12,9 +12,9 @@ const AllStudent = () => {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col p-4">
         <div className="flex-1">
-          <div className="p-6">
+          <div className="mx-auto w-[360px] overflow-x-scroll p-6 sm:w-[550px] md:w-[700px] xl:w-full">
             <StudentTable />
           </div>
         </div>

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeStudent, fetchStudents, clearMessage } from "./AdminRedux/studentSlice";
+import {
+  removeStudent,
+  fetchStudents,
+  clearMessage,
+} from "./AdminRedux/studentSlice";
 import Pagination from "./Pagination";
 import Header from "../components/Header";
 
@@ -77,7 +81,7 @@ const StudentTable = () => {
   }, [message, dispatch]);
 
   return (
-    <div className="mx-auto max-w-full px-4 lg:w-[1000px] lg:px-0">
+    <div className="mx-auto px-4 lg:px-0">
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -89,31 +93,31 @@ const StudentTable = () => {
         </div>
       )}
 
-      <div className="mt-7 overflow-x-auto">
-        <table className="w-full min-w-[600px] table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
+      <div className="mt-7">
+        <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
           <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
             <tr>
-              <th className="px-3 py-2 text-left text-xs font-medium font-poppins sm:text-sm md:text-base">
+              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Name
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium font-poppins sm:text-sm md:text-base">
+              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Student ID
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium font-poppins sm:text-sm md:text-base">
+              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Email
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium font-poppins sm:text-sm md:text-base">
+              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Class
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium font-poppins sm:text-sm md:text-base">
+              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Gender
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium font-poppins sm:text-sm md:text-base">
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className=" ">
             {paginatedStudents.length > 0 ? (
               paginatedStudents.map((student, index) => (
                 <tr
@@ -126,23 +130,25 @@ const StudentTable = () => {
                     <img
                       src={student.image}
                       alt="Profile"
-                      className="mr-2 h-8 w-8 rounded-full sm:h-10 sm:w-10 md:h-12 md:w-12"
+                      className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                     />
-                    <span className="truncate font-poppins">{student.name}</span>
+                    <span className="truncate font-poppins">
+                      {student.name}
+                    </span>
                   </td>
-                  <td className="max-w-4 font-poppins truncate px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="max-w-4 truncate px-2 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.studentID}
                   </td>
-                  <td className="truncate font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="truncate py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.email}
                   </td>
-                  <td className="truncate font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="truncate py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.class}
                   </td>
-                  <td className="truncate font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="truncate py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.gender}
                   </td>
-                  <td className="space-x-2 font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="space-x-2 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     <button
                       onClick={() => {}}
                       className="text-[#117C90] transition duration-300 hover:text-[#244856]"
