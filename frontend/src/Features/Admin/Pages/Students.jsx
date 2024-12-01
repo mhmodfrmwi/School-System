@@ -8,11 +8,14 @@ const Students = () => {
 
   return (
     <div className="flex min-h-screen bg-[#117C90]">
+      {/* Sidebar */}
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
-      <div className="mx-4 my-6 flex flex-1 flex-col rounded-lg bg-white shadow-lg">
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col rounded-lg bg-white shadow-lg ml-0 my-5 mr-5">
         <Navbar setIsSidebarOpen={setIsSidebarOpen} />
         <div className="flex-1 p-8">
           <Outlet />
