@@ -19,6 +19,11 @@ const studentSchema = new mongoose.Schema({
     type: String,
     default: path.join(__dirname, "../images/student.png"),
   },
+  gender: {
+    type: String,
+    required: true,
+    enum: ["Male", "Female"],
+  },
   academicYear: { type: Number, required: true, min: 1, max: 12 },
   class: { type: String, required: true },
   score: { type: Number, default: 0, min: 0 },
@@ -66,6 +71,7 @@ const validateStudent = (obj) => {
       "number.min": "Order must be at least 1.",
     }),
     role: Joi.string().valid("Student").required(),
+    gender: Joi.string().required(),
   });
 
   return schema.validate(obj);

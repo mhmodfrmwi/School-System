@@ -6,35 +6,55 @@ const { Parent } = require("../../DB/Parent");
 const { Boss } = require("../../DB/Boss");
 const { default: mongoose } = require("mongoose");
 const GetStudents = asyncHandler(async (req, res) => {
-  const students = await Student.find();
+  const students = await Student.find({}, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   res.json({
     status: 200,
     students,
   });
 });
 const GetTeachers = asyncHandler(async (req, res) => {
-  const teachers = await Teacher.find();
+  const teachers = await Teacher.find({}, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   res.json({
     status: 200,
     teachers,
   });
 });
 const GetaAdmins = asyncHandler(async (req, res) => {
-  const admins = await Admin.find();
+  const admins = await Admin.find({}, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   res.json({
     status: 200,
     admins,
   });
 });
 const GetParents = asyncHandler(async (req, res) => {
-  const parents = await Parent.find();
+  const parents = await Parent.find({}, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   res.json({
     status: 200,
     parents,
   });
 });
 const GetBosses = asyncHandler(async (req, res) => {
-  const bosses = await Boss.find();
+  const bosses = await Boss.find({}, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   res.json({
     status: 200,
     bosses,
@@ -49,7 +69,11 @@ const GetOneStudent = asyncHandler(async (req, res) => {
     });
   }
 
-  const student = await Student.findById(id);
+  const student = await Student.findById({ _id: id }, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   if (!student) {
     return res.json({
       status: 404,
@@ -70,7 +94,11 @@ const GetOneTeacher = asyncHandler(async (req, res) => {
     });
   }
 
-  const teacher = await Teacher.findById(id);
+  const teacher = await Teacher.findById({ _id: id }, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   if (!teacher) {
     return res.json({
       status: 404,
@@ -91,7 +119,11 @@ const GetOneAdmin = asyncHandler(async (req, res) => {
     });
   }
 
-  const admin = await Admin.findById(id);
+  const admin = await Admin.findById({ _id: id }, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   if (!admin) {
     return res.json({
       status: 404,
@@ -112,7 +144,11 @@ const GetOneParent = asyncHandler(async (req, res) => {
     });
   }
 
-  const parent = await Parent.findById(id);
+  const parent = await Parent.findById({ _id: id }, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   if (!parent) {
     return res.json({
       status: 404,
@@ -133,7 +169,11 @@ const GetOneBoss = asyncHandler(async (req, res) => {
     });
   }
 
-  const boss = await Boss.findById(id);
+  const boss = await Boss.findById({ _id: id }, [
+    "-password",
+    "-__v",
+    "-notificationsEnabled",
+  ]);
   if (!boss) {
     return res.json({
       status: 404,

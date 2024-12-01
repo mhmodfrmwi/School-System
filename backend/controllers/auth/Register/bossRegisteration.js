@@ -17,6 +17,8 @@ const BossRegister = expressAsyncHandler(async (req, res) => {
     SSN: req.body.SSN,
     themePreference: req.body.themePreference,
     notificationsEnabled: req.body.notificationsEnabled,
+    gender: req.body.gender,
+    phone: req.body.phone,
   });
 
   const salt = await bcrypt.genSalt(10);
@@ -24,7 +26,7 @@ const BossRegister = expressAsyncHandler(async (req, res) => {
 
   try {
     await boss.save();
-    res.status(201).json({ message: "Boss registered successfully." });
+    res.status(201).json({ message: "Boss registered successfully.", boss });
   } catch (err) {
     res.status(500).json({ message: "Internal server error: " + err.message });
   }

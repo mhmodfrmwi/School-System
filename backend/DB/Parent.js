@@ -1,6 +1,8 @@
 // models/Parent.js
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const path = require("path");
+
 // Define Parent Schema
 const parentSchema = new mongoose.Schema({
   name: { type: String, required: true, minlength: 3, maxlength: 30 },
@@ -15,6 +17,19 @@ const parentSchema = new mongoose.Schema({
   notificationsEnabled: { type: Boolean, default: true },
   order: { type: Number, min: 1 },
   sons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
+  gender: {
+    type: String,
+    required: true,
+    enum: ["Male", "Female"],
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
+  profileImage: {
+    type: String,
+    default: path.join(__dirname, "../images/student.png"),
+  },
 });
 
 // Joi Validation for Parent
@@ -47,6 +62,8 @@ const validateParent = (obj) => {
     }),
     role: Joi.string().valid("Parent").required(),
     sons: Joi.array(),
+    gender: Joi.string().required(),
+    phone: Joi.number().required(),
   });
 
   return schema.validate(obj);

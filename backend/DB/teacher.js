@@ -1,7 +1,7 @@
 // models/Teacher.js
 const mongoose = require("mongoose");
 const Joi = require("joi");
-
+const path = require("path");
 // Define Teacher Schema
 const teacherSchema = new mongoose.Schema({
   name: { type: String, required: true, minlength: 3, maxlength: 30 },
@@ -16,6 +16,22 @@ const teacherSchema = new mongoose.Schema({
   notificationsEnabled: { type: Boolean, default: true },
   subject: { type: String, required: true },
   experience: { type: Number, min: 0 },
+  profileImage: {
+    type: String,
+    default: path.join(__dirname, "../images/student.png"),
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
+  classes: {
+    type: [],
+  },
+  gender: {
+    type: String,
+    required: true,
+    enum: ["Male", "Female"],
+  },
 });
 
 // Joi Validation for Teacher
@@ -47,6 +63,8 @@ const validateTeacher = (obj) => {
     experience: Joi.number().min(0).messages({
       "number.base": "Experience must be a non-negative number.",
     }),
+    gender: Joi.string().required(),
+    phone: Joi.number().required(),
   });
 
   return schema.validate(obj);

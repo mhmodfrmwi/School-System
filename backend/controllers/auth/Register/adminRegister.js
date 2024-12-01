@@ -15,6 +15,8 @@ const AdminRegister = asyncHandler(async (req, res) => {
     SSN: req.body.SSN,
     themePreference: req.body.themePreference,
     notificationsEnabled: req.body.notificationsEnabled,
+    gender: req.body.gender,
+    phone: req.body.phone,
   });
 
   const salt = await bcrypt.genSalt(10);

@@ -2,13 +2,14 @@ const expressAsyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const { Student, validateStudent } = require("../../../DB/student");
 const StudentRegister = expressAsyncHandler(async (req, res) => {
+  console.log(req.body);
+
   const { error } = validateStudent(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
 
   let student = await Student.findOne({ email: req.body.email });
   if (student)
     return res.status(400).json({ message: "Student already registered." });
-
   student = new Student({
     name: req.body.name,
     email: req.body.email,
@@ -20,6 +21,7 @@ const StudentRegister = expressAsyncHandler(async (req, res) => {
     class: req.body.class,
     score: req.body.score,
     order: req.body.order,
+    gender: req.body.gender,
   });
 
   const salt = await bcrypt.genSalt(10);
