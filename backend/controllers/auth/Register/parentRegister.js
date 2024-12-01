@@ -18,6 +18,8 @@ const ParentRegister = expressAsyncHandler(async (req, res) => {
     themePreference: req.body.themePreference,
     notificationsEnabled: req.body.notificationsEnabled,
     order: req.body.order,
+    gender:req.body.gender,
+    phone:req.body.phone
   });
 
   const salt = await bcrypt.genSalt(10);

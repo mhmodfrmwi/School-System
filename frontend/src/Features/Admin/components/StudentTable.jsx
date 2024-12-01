@@ -11,6 +11,7 @@ import Header from "../components/Header";
 const StudentTable = () => {
   const { students, message } = useSelector((state) => state.students);
   const dispatch = useDispatch();
+  console.log(students);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -97,19 +98,19 @@ const StudentTable = () => {
         <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
           <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
             <tr>
-              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Name
               </th>
-              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Student ID
               </th>
-              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Email
               </th>
-              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Class
               </th>
-              <th className="px-2 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Gender
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
@@ -136,19 +137,19 @@ const StudentTable = () => {
                       {student.name}
                     </span>
                   </td>
-                  <td className="max-w-4 truncate px-2 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                  <td className="max-w-4 truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.studentID}
                   </td>
-                  <td className="truncate py-2 font-poppins text-xs sm:text-sm md:text-base">
+                  <td className="truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.email}
                   </td>
-                  <td className="truncate py-2 font-poppins text-xs sm:text-sm md:text-base">
+                  <td className="truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.class}
                   </td>
-                  <td className="truncate py-2 font-poppins text-xs sm:text-sm md:text-base">
+                  <td className="truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.gender}
                   </td>
-                  <td className="space-x-2 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                  <td className="space-x-2 px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     <button
                       onClick={() => {}}
                       className="text-[#117C90] transition duration-300 hover:text-[#244856]"

@@ -24,6 +24,7 @@ const Register = asyncHandler(async (req, res) => {
       break;
     case "Student":
       StudentRegister(req, res);
+      break;
     case "Teacher":
       TeacherRegister(req, res);
       break;

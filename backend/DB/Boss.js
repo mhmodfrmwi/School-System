@@ -1,6 +1,7 @@
 // models/Boss.js
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const path = require("path");
 
 // Define Boss Schema
 const bossSchema = new mongoose.Schema({
@@ -14,6 +15,19 @@ const bossSchema = new mongoose.Schema({
     default: "light",
   },
   notificationsEnabled: { type: Boolean, default: true },
+  gender: {
+    type: String,
+    required: true,
+    enum: ["Male", "Female"],
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
+  profileImage: {
+    type: String,
+    default: path.join(__dirname, "../images/student.png"),
+  },
 });
 
 // Joi Validation for Boss
@@ -41,6 +55,8 @@ const validateBoss = (obj) => {
       }),
     themePreference: Joi.string().valid("light", "dark").default("light"),
     notificationsEnabled: Joi.boolean().default(true),
+    gender: Joi.string().required(),
+    phone: Joi.number().required(),
   });
 
   return schema.validate(obj);

@@ -20,6 +20,8 @@ const TeacherRegister = expressAsyncHandler(async (req, res) => {
     notificationsEnabled: req.body.notificationsEnabled,
     department: req.body.department,
     score: req.body.score,
+    gender: req.body.gender,
+    phone: req.body.phone,
   });
 
   const salt = await bcrypt.genSalt(10);
@@ -27,7 +29,9 @@ const TeacherRegister = expressAsyncHandler(async (req, res) => {
 
   try {
     await teacher.save();
-    res.status(201).json({ message: "Teacher registered successfully." });
+    res
+      .status(201)
+      .json({ message: "Teacher registered successfully.", teacher });
   } catch (err) {
     res.status(500).json({ message: "Internal server error: " + err.message });
   }

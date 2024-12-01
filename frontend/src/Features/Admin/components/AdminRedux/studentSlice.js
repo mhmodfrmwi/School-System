@@ -9,9 +9,12 @@ const initialState = {
 export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
   async () => {
-    const response = await fetch("http://localhost:5000/students");
+    const response = await fetch(
+      "http://localhost:4000/api/v1/getUsers/admins",
+    );
     const data = await response.json();
-    return data;
+    const admins = data.admins;
+    return admins;
   },
 );
 
