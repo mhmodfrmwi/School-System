@@ -11,8 +11,6 @@ import Header from "../components/Header";
 const StudentTable = () => {
   const { students, message } = useSelector((state) => state.students);
   const dispatch = useDispatch();
-  console.log(students);
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalItems = students.length;
@@ -122,14 +120,14 @@ const StudentTable = () => {
             {paginatedStudents.length > 0 ? (
               paginatedStudents.map((student, index) => (
                 <tr
-                  key={student.id}
+                  key={student._id}
                   className={`${
                     index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                   } hover:bg-[#117C90]/70`}
                 >
                   <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
                     <img
-                      src={student.image}
+                      src={student.profileImage}
                       alt="Profile"
                       className="mr-2 h-8 w-8 rounded-full sm:h-10 sm:w-10 md:h-12 md:w-12"
                     />
@@ -138,7 +136,7 @@ const StudentTable = () => {
                     </span>
                   </td>
                   <td className="max-w-4 truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                    {student.studentID}
+                    {student.SSN}
                   </td>
                   <td className="truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {student.email}
@@ -157,7 +155,7 @@ const StudentTable = () => {
                       <i className="far fa-edit" style={{ fontSize: "16px" }} />
                     </button>
                     <button
-                      onClick={() => handleDelete(student.id)}
+                      onClick={() => handleDelete(student._id)}
                       className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     >
                       <i

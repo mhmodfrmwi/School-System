@@ -10,11 +10,11 @@ export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
   async () => {
     const response = await fetch(
-      "http://localhost:4000/api/v1/getUsers/admins",
+      "http://localhost:4000/api/v1/getUsers/students",
     );
     const data = await response.json();
-    const admins = data.admins;
-    return admins;
+    const students = data.students;
+    return students;
   },
 );
 
@@ -22,9 +22,12 @@ export const removeStudent = createAsyncThunk(
   "students/removeStudent",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/students/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/v1/getUsers/students/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
         throw new Error("Failed to delete student");

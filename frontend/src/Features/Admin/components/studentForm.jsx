@@ -8,7 +8,7 @@ function StudentForm() {
     fullName: "",
     email: "",
     password: "",
-    phoneNumber: "",
+    academicYear: "",
     studentClass: "",
     gender: "",
   });
@@ -17,19 +17,19 @@ function StudentForm() {
     fullName: studentFullName,
     email: studentEmail,
     password: studentPassword,
-    phoneNumber: studentPhoneNumber,
+    academicYear: studentAcademicYear,
     studentClass: studentC,
     gender: studentGender,
   } = useSelector((state) => state.addstudent);
 
-  console.log(
-    studentFullName,
-    studentEmail,
-    studentPassword,
-    studentPhoneNumber,
-    studentC,
-    studentGender,
-  );
+  // console.log(
+  //   studentFullName,
+  //   studentEmail,
+  //   studentPassword,
+  //   studentAcademicYear,
+  //   studentC,
+  //   studentGender,
+  // );
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -41,7 +41,7 @@ function StudentForm() {
       !formData.fullName ||
       !formData.email ||
       !formData.password ||
-      !formData.phoneNumber
+      !formData.academicYear
     )
       return;
 
@@ -51,8 +51,10 @@ function StudentForm() {
         email: formData.email,
         class: formData.studentClass,
         gender: formData.gender,
-        studentID: crypto.randomUUID(),
-        image: "https://randomuser.me/api/portraits/men/23.jpg",
+        SSN: "30403000000000",
+        password: formData.password,
+        academicYear: Number(formData.academicYear),
+        role: "Student",
       }),
     );
 
@@ -179,15 +181,15 @@ function StudentForm() {
 
             <div className="col-span-12 md:col-span-6">
               <label className="mb-2 block font-poppins font-medium text-gray-700">
-                Phone Number
+                Academic Year
               </label>
               <input
                 type="text"
-                name="phoneNumber"
-                value={formData.phoneNumber}
+                name="academicYear"
+                value={formData.academicYear}
                 onChange={handleChange}
                 className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter phone number"
+                placeholder="Enter acadmic year"
                 required
               />
             </div>
