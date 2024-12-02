@@ -16,7 +16,7 @@ import AllParents from "./Features/Admin/Pages/ParentTablePage";
 import AllTeachers from "./Features/Admin/pages/TeacherTablePage";
 import AllManagers from "./Features/Admin/pages/ManagerTablePage";
 import AllAdmins from "./Features/Admin/Pages/AdminTablePage";
-import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";  
+import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";
 import AllTerms from "./Features/Admin/Pages/TermPage";
 import TermForm from "./Features/Admin/components/Terms/termForm";
 
@@ -32,19 +32,19 @@ function App() {
           <Route path="basicform" element={<BasicForm />} />
           <Route path="studentform" element={<StudentForm />} />
           <Route path="allstudent" element={<AllStudent />} />
-          <Route path="parentform" element={<ParentForm />} />
-          <Route path="scheduleform" element={<ScheduleForm />} />
-          <Route path="teacherform" element={<TeacherForm />} />
-          <Route path="adminform" element={<AdminForm />} />
-          <Route path="managerform" element={<ManagerForm />} />
-          <Route path="allparents" element={<AllParents />} />
-          <Route path="allteachers" element={<AllTeachers />} />
-          <Route path="allmanagers" element={<AllManagers />} />
-          <Route path="alladmins" element={<AllAdmins />} />
-          <Route path="allTerms" element={<AllTerms />} />
-          <Route path="allschedules" element={<AllSchedules />} />
-          <Route path=" termform" element={<TermForm />} />
         </Route>
+        <Route path="parentform" element={<ParentForm />} />
+        <Route path="scheduleform" element={<ScheduleForm />} />
+        <Route path="teacherform" element={<TeacherForm />} />
+        <Route path="adminform" element={<AdminForm />} />
+        <Route path="managerform" element={<ManagerForm />} />
+        <Route path="allparents" element={<AllParents />} />
+        <Route path="allteachers" element={<AllTeachers />} />
+        <Route path="allmanagers" element={<AllManagers />} />
+        <Route path="alladmins" element={<AllAdmins />} />
+        <Route path="allTerms" element={<AllTerms />} />
+        <Route path="allschedules" element={<AllSchedules />} />
+        <Route path=" termform" element={<TermForm />} />
       </Routes>
     </BrowserRouter>
   );

@@ -15,14 +15,16 @@ export const postStudent = createAsyncThunk(
   "addstudent/postStudent",
   async (studentData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/students", {
-        method: "POST",
-        body: JSON.stringify(studentData),
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:4000/api/v1/auth/register",
+        {
+          method: "POST",
+          body: JSON.stringify(studentData),
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
-
+      );
       if (!response.ok) {
         throw new Error("Failed to post student data");
       }

@@ -58,6 +58,7 @@ const StudentTable = () => {
     );
     if (isConfirmed) {
       dispatch(removeStudent(id));
+      dispatch(fetchStudents());
     }
   };
 
@@ -157,7 +158,7 @@ const StudentTable = () => {
                       <i className="far fa-edit" style={{ fontSize: "16px" }} />
                     </button>
                     <button
-                      onClick={() => handleDelete(student.id)}
+                      onClick={() => handleDelete(student._id)}
                       className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     >
                       <i

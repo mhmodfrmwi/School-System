@@ -26,7 +26,8 @@ const bossSchema = new mongoose.Schema({
   },
   profileImage: {
     type: String,
-    default: path.join(__dirname, "../images/student.png"),
+    default:
+      "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?t=st=1733078248~exp=1733081848~hmac=e2eec059dc2217f905388f452eaf9dee7d9679765c2b0ac7f273a5cfe7cd4bde&w=740",
   },
 });
 

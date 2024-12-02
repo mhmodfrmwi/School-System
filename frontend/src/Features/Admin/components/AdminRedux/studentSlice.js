@@ -9,10 +9,14 @@ const initialState = {
 export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
   async () => {
-    const response = await fetch("http://localhost:4000/api/v1/getUsers/students");
+    const response = await fetch(
+      "http://localhost:4000/api/v1/getUsers/students",
+    );
     const data = await response.json();
+    const students = data.students;
+    // console.log(students);
 
-    return data.students;
+    return students;
   },
 );
 
@@ -20,14 +24,15 @@ export const removeStudent = createAsyncThunk(
   "students/removeStudent",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/students/${id}`, {
-        method: "DELETE",
-      });
-
+      const response = await fetch(
+        `http://localhost:4000/api/v1/getUsers/students/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
       if (!response.ok) {
         throw new Error("Failed to delete student");
       }
-
       return id;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -56,7 +61,6 @@ const studentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
       .addCase(fetchStudents.pending, (state) => {
         state.status = "loading";
       })
