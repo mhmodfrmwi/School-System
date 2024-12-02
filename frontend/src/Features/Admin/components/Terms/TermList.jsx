@@ -4,6 +4,7 @@ import { removeTerm, fetchTerms, editTermAsync } from "../AdminRedux/termSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import TermHeader from "../Terms/TermHeader"; // Import the TermHeader component
+import TermmHeader from "../Terms/TermHeader";
 
 const TermList = () => {
   const { terms, status, message } = useSelector((state) => state.terms);
@@ -66,7 +67,7 @@ const TermList = () => {
 
   return (
     <div className="mx-auto px-4 lg:px-0">
-      <TermHeader  /> {/* Include TermHeader component */}
+      <TermmHeader /> {/* Include TermHeader component */}
 
       {message && (
         <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">

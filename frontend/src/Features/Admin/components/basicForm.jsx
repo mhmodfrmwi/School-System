@@ -25,7 +25,7 @@ function BasicForm() {
           {/* Students Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/students/AllStudent")}
+            onClick={() => handleCardClick("/admin/students/allstudent")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#D1F3E0] p-2 text-4xl">
@@ -40,7 +40,7 @@ function BasicForm() {
           {/* Teachers Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/students/allteachers")}
+            onClick={() => handleCardClick("/admin/teachers/allteachers")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#E1F1FF] p-2 text-4xl">
@@ -55,7 +55,7 @@ function BasicForm() {
           {/* Manager Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/students/allmanagers")}
+            onClick={() => handleCardClick("/admin/managers/allmanagers")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#FFEAEA] p-2 text-4xl">
@@ -70,7 +70,7 @@ function BasicForm() {
           {/* Parents Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/students/allparents")}
+            onClick={() => handleCardClick("/admin/parents/allparents")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#FFF2D8] p-2 text-4xl">
@@ -85,7 +85,7 @@ function BasicForm() {
           {/* Admin Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/students/alladmins")}
+            onClick={() => handleCardClick("/admin/admins/alladmins")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#D1F3E0] p-2 text-4xl">
