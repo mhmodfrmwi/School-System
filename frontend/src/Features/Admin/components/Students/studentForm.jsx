@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postStudent, addStudenttoserver } from "./AdminRedux/addstudentSlice";
+import { postStudent, addStudenttoserver } from "../AdminRedux/addstudentSlice";
 
 function StudentForm() {
   const dispatch = useDispatch();

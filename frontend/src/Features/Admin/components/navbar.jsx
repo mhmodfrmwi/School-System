@@ -8,6 +8,8 @@ import { faSliders } from '@fortawesome/free-solid-svg-icons';
 import { ReactSVG } from 'react-svg';
 import InfoIcon from '../../../assets/icons/Info.svg';
 import Mode from '../../../assets/icons/Mode.svg';
+import userImage from '../../../assets/user.jpeg';
+
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -77,7 +79,7 @@ const Navbar = () => {
                     </button>
                     <div className="flex items-center space-x-2">
                         <img
-                            src="src/assets/user.jpeg"
+                            src= {userImage}
                             alt="User"
                             className="w-8 h-8 rounded-full md:w-10 md:h-10"
                         />

@@ -1,64 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  removeStudent,
-  fetchStudents,
+  removeAdmin,
+  fetchAdmins,
   clearMessage,
-} from "./AdminRedux/studentSlice";
-import Pagination from "./Pagination";
-import Header from "../components/Header";
+} from "../AdminRedux/adminSlice";  
+import Pagination from "../Pagination";
+import Header from "../Admins/adminHeader"; 
 
-const StudentTable = () => {
-  const { students, message } = useSelector((state) => state.students);
+const AdminTable = () => {
+  const { admins = [], message, loading } = useSelector(
+    (state) => state.admins || {}
+  );
   const dispatch = useDispatch();
-  console.log(students);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const totalItems = students.length;
 
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedAdminId, setSelectedAdminId] = useState(null);
+
   useEffect(() => {
-    dispatch(fetchStudents());
+    dispatch(fetchAdmins());
   }, [dispatch]);
 
-  const filteredStudents = students.filter((student) => {
+  const filteredAdmins = admins.filter((admin) => {
     const lowerSearchText = searchText.toLowerCase();
-
-    if (!filterOption || filterOption === "") {
+    if (filterOption) {
       return (
-        student.name.toLowerCase().includes(lowerSearchText) ||
-        student.email.toLowerCase().includes(lowerSearchText)
+        admin[filterOption]?.toLowerCase().includes(lowerSearchText)
       );
     }
-
-    if (filterOption === "name") {
-      return student.name.toLowerCase().includes(lowerSearchText);
-    }
-    if (filterOption === "class") {
-      return student.class.toLowerCase().includes(lowerSearchText);
-    }
-    if (filterOption === "gender") {
-      return student.gender.toLowerCase().includes(lowerSearchText);
-    }
-
-    return false;
+    return (
+      admin.name.toLowerCase().includes(lowerSearchText) ||
+      admin.email.toLowerCase().includes(lowerSearchText)
+    );
   });
 
-  const paginatedStudents = filteredStudents.slice(
+  const paginatedAdmins = filteredAdmins.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleDelete = (id) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this student?",
-    );
-    if (isConfirmed) {
-      dispatch(removeStudent(id));
-    }
+    setSelectedAdminId(id);
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    dispatch(removeAdmin(selectedAdminId));
+    setShowConfirm(false);
   };
 
   const handlePageChange = (page) => {
@@ -102,68 +96,48 @@ const StudentTable = () => {
                 Name
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Student ID
-              </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Email
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Class
-              </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Gender
+                Role
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className=" ">
-            {paginatedStudents.length > 0 ? (
-              paginatedStudents.map((student, index) => (
+          <tbody>
+            {paginatedAdmins.length > 0 ? (
+              paginatedAdmins.map((admin, index) => (
                 <tr
-                  key={student.id}
+                  key={admin.id}
                   className={`${
                     index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                   } hover:bg-[#117C90]/70`}
                 >
                   <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <img
-                      src={student.image}
-                      alt="Profile"
-                      className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
-                    />
-                    <span className="truncate font-poppins">
-                      {student.name}
-                    </span>
+                    <span className="truncate font-poppins">{admin.name}</span>
                   </td>
-                  <td className="max-w-4 truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                    {student.studentID}
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {admin.email}
                   </td>
-                  <td className="truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                    {student.email}
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {admin.role}
                   </td>
-                  <td className="truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                    {student.class}
-                  </td>
-                  <td className="truncate px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                    {student.gender}
-                  </td>
-                  <td className="space-x-2 px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                  <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
+                      aria-label="Edit admin"
                       onClick={() => {}}
                       className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                     >
-                      <i className="far fa-edit" style={{ fontSize: "16px" }} />
+                      <i className="far fa-edit text-lg" />
                     </button>
                     <button
-                      onClick={() => handleDelete(student.id)}
+                      aria-label="Delete admin"
+                      onClick={() => handleDelete(admin.id)}
                       className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     >
-                      <i
-                        className="far fa-trash-alt"
-                        style={{ fontSize: "16px" }}
-                      />
+                      <i className="far fa-trash-alt text-lg" />
                     </button>
                   </td>
                 </tr>
@@ -171,10 +145,10 @@ const StudentTable = () => {
             ) : (
               <tr>
                 <td
-                  colSpan="6"
+                  colSpan="4"
                   className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                 >
-                  <span className="font-poppins">No Students Found</span>
+                  <span className="font-poppins">No Admins Found</span>
                 </td>
               </tr>
             )}
@@ -183,7 +157,7 @@ const StudentTable = () => {
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
-            totalItems={totalItems}
+            totalItems={filteredAdmins.length}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
             onPageChange={handlePageChange}
@@ -194,4 +168,4 @@ const StudentTable = () => {
   );
 };
 
-export default StudentTable;
+export default AdminTable;

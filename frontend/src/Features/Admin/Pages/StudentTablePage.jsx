@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchStudents } from "../components/AdminRedux/studentSlice";
-import StudentTable from "../components/StudentTable";
+import StudentTable from "../components/Students/StudentTable";
 
 const AllStudent = () => {
   const dispatch = useDispatch();

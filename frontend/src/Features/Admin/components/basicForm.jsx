@@ -40,7 +40,7 @@ function BasicForm() {
           {/* Teachers Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/teachers")}
+            onClick={() => handleCardClick("/students/allteachers")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#E1F1FF] p-2 text-4xl">
@@ -55,7 +55,7 @@ function BasicForm() {
           {/* Manager Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/manager")}
+            onClick={() => handleCardClick("/students/allmanagers")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#FFEAEA] p-2 text-4xl">
@@ -70,7 +70,7 @@ function BasicForm() {
           {/* Parents Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/parents")}
+            onClick={() => handleCardClick("/students/allparents")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#FFF2D8] p-2 text-4xl">
@@ -85,7 +85,7 @@ function BasicForm() {
           {/* Admin Card */}
           <div
             className="cursor-pointer rounded-lg bg-white p-8 shadow-md transition-transform hover:scale-105"
-            onClick={() => handleCardClick("/admin")}
+            onClick={() => handleCardClick("/students/alladmins")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#D1F3E0] p-2 text-4xl">

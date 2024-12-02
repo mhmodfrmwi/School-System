@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-const Header = ({ onSearchChange, onFilterChange }) => {
+const TeacherHeader = ({ onSearchChange, onFilterChange }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
 
@@ -20,7 +20,7 @@ const Header = ({ onSearchChange, onFilterChange }) => {
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
           <h1 className="text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-            Students
+            Teachers
           </h1>
           <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[120px]"></div>
         </div>
@@ -29,18 +29,12 @@ const Header = ({ onSearchChange, onFilterChange }) => {
           <button className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white sm:text-sm">
             Export CSV
           </button>
-          {/* <button
-            className="rounded-md bg-[#117C90] px-4 py-2 text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
-            onClick={() => navigate("/students/studentform")}
-          >
-            Add Student
-          </button> */}
 
           <NavLink
-            to="/students/studentform"
+            to="/students/teacherform"
             className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
           >
-            Add Student
+            Add Teacher
           </NavLink>
         </div>
       </div>
@@ -58,8 +52,11 @@ const Header = ({ onSearchChange, onFilterChange }) => {
             <option value="name" className="font-poppins">
               Name
             </option>
-            <option value="class" className="font-poppins">
-              Class
+            <option value="email" className="font-poppins">
+              Email
+            </option>
+            <option value="subject" className="font-poppins">
+              Subject
             </option>
             <option value="gender" className="font-poppins">
               Gender
@@ -71,7 +68,7 @@ const Header = ({ onSearchChange, onFilterChange }) => {
           <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-white sm:text-sm"></i>
           <input
             type="text"
-            placeholder="Search for a student by name or email"
+            placeholder="Search for a teacher by name, email, or subject"
             className="w-full rounded-md bg-[#117C90] px-3 py-2 pl-10 font-poppins text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
             value={searchText}
             onChange={handleSearchChange}
@@ -82,4 +79,4 @@ const Header = ({ onSearchChange, onFilterChange }) => {
   );
 };
 
-export default Header;
+export default TeacherHeader;
