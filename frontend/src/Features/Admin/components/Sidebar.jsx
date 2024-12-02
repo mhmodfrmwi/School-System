@@ -22,7 +22,11 @@ const Sidebar = () => {
     { label: "Term Management", icon: faCalendar, href: "/students/allTerms" },
     { label: "Course Management", icon: faPen, href: "#course-management" },
     { label: "Reports & Analytics", icon: faChartPie, href: "#reports" },
-    { label: "Schedule Management", icon: faClock, href: "students/allschedules" },
+    {
+      label: "Schedule Management",
+      icon: faClock,
+      href: "/students/allschedules",
+    },
   ];
 
   return (

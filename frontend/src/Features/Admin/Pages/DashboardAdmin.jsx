@@ -1,9 +1,5 @@
-function DashboardAdmin() {
-  return (
-    <div>
-      <h2>ahmed zakaria</h2>
-    </div>
-  );
-}
+const BashboardAdmin = () => {
+  return <h2 className="text-center">ahmed zakaria</h2>;
+};
 
-export default DashboardAdmin;
+export default BashboardAdmin;

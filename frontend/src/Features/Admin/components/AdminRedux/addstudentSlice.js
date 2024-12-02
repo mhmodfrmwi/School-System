@@ -14,6 +14,7 @@ const initialState = {
 export const postStudent = createAsyncThunk(
   "addstudent/postStudent",
   async (studentData, { rejectWithValue }) => {
+    // console.log(studentData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/auth/register",
