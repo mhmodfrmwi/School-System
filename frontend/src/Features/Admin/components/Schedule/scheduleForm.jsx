@@ -62,7 +62,7 @@ function ScheduleForm() {
               name="subject"
               value={formData.subject}
               onChange={handleChange}
-              className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter subject"
               required
             />
@@ -77,7 +77,7 @@ function ScheduleForm() {
                 name="day"
                 value={formData.day}
                 onChange={handleChange}
-                className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
                 <option value="" disabled>
                   Select day
@@ -98,7 +98,7 @@ function ScheduleForm() {
                 name="time"
                 value={formData.time}
                 onChange={handleChange}
-                className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full p-2 font-poppins border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter time (e.g., 10:00 AM - 12:00 PM)"
                 required
               />
@@ -107,7 +107,7 @@ function ScheduleForm() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
+              <label className="block font-poppins mb-2 font-poppins text-gray-700">
                 Teacher
               </label>
               <input
@@ -115,7 +115,7 @@ function ScheduleForm() {
                 name="teacher"
                 value={formData.teacher}
                 onChange={handleChange}
-                className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter teacher name"
                 required
               />
@@ -130,7 +130,7 @@ function ScheduleForm() {
                 className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4"
               >
                 <div>
-                  <label className="block mb-2 font-poppins text-gray-700">
+                  <label className="block mb-2 font-poppins font-poppins text-gray-700">
                     Student Name
                   </label>
                   <input
@@ -138,7 +138,7 @@ function ScheduleForm() {
                     name="studentName"
                     value={student.studentName}
                     onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                    className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                     placeholder="Enter student name"
                     required
                   />
@@ -151,7 +151,7 @@ function ScheduleForm() {
                     name="studentClass"
                     value={student.studentClass}
                     onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                    className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                   >
                     <option value="" disabled>
                       Select class
@@ -166,7 +166,7 @@ function ScheduleForm() {
             <button
               type="button"
               onClick={addStudent}
-              className="mt-4 text-[#117C90] hover:underline"
+              className="mt-4 font-poppins text-[#117C90] hover:underline"
             >
               + Add another student
             </button>
@@ -176,7 +176,7 @@ function ScheduleForm() {
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full p-2 bg-[#117C90] text-white rounded-md hover:bg-[#043B44]"
+              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
             >
               Add Schedule
             </button>

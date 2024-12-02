@@ -19,14 +19,10 @@ const Sidebar = () => {
   const menuItems = [
     { label: "Dashboard", icon: faHome, href: "#dashboard" },
     { label: "Members", icon: faUsers, href: "/students/BasicForm" },
-    { label: "Term Management", icon: faCalendar, href: "#term-management" },
+    { label: "Term Management", icon: faCalendar, href: "/students/allTerms" },
     { label: "Course Management", icon: faPen, href: "#course-management" },
     { label: "Reports & Analytics", icon: faChartPie, href: "#reports" },
-    {
-      label: "Schedule Management",
-      icon: faClock,
-      href: "#schedule-management",
-    },
+    { label: "Schedule Management", icon: faClock, href: "students/allschedules" },
   ];
 
   return (

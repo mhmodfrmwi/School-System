@@ -189,7 +189,7 @@ function ParentForm() {
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full p-2 bg-[#117C90] text-white rounded-md hover:bg-[#043B44]"
+              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
             >
               Add Parent
             </button>
