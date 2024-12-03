@@ -9,10 +9,11 @@ import Pagination from "../Pagination";
 import Header from "../Admins/adminHeader"; 
 
 const AdminTable = () => {
-  const { admins = [], message, loading } = useSelector(
+  const { admins = [], message } = useSelector(
     (state) => state.admins || {}
   );
   const dispatch = useDispatch();
+   console.log(admins);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -20,7 +21,7 @@ const AdminTable = () => {
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
-  const [showConfirm, setShowConfirm] = useState(false);
+
   const [selectedAdminId, setSelectedAdminId] = useState(null);
 
   useEffect(() => {
@@ -45,15 +46,22 @@ const AdminTable = () => {
     currentPage * itemsPerPage
   );
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     setSelectedAdminId(id);
-    setShowConfirm(true);
+
+    const confirmDelete = window.confirm('Are you sure you want to delete this Admin?');
+    if (confirmDelete) {
+      try {
+        await dispatch(removeAdmin(id)); 
+        alert('Admin deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete Admin:', error);
+        alert('Error occurred while deleting');
+      }
+    }
   };
 
-  const confirmDelete = () => {
-    dispatch(removeAdmin(selectedAdminId));
-    setShowConfirm(false);
-  };
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -99,7 +107,7 @@ const AdminTable = () => {
                 Email
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Role
+                Gender
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Actions
@@ -110,19 +118,24 @@ const AdminTable = () => {
             {paginatedAdmins.length > 0 ? (
               paginatedAdmins.map((admin, index) => (
                 <tr
-                  key={admin.id}
+                  key={admin._id || index}
                   className={`${
                     index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                   } hover:bg-[#117C90]/70`}
                 >
                   <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <img
+                      src={admin.profileImage}
+                      alt="Profile"
+                      className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
+                    />
                     <span className="truncate font-poppins">{admin.name}</span>
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {admin.email}
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {admin.role}
+                    {admin.gender}
                   </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
@@ -134,7 +147,7 @@ const AdminTable = () => {
                     </button>
                     <button
                       aria-label="Delete admin"
-                      onClick={() => handleDelete(admin.id)}
+                      onClick={() => handleDelete(admin._id)}
                       className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-trash-alt text-lg" />

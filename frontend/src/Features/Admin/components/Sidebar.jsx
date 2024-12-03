@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -26,6 +26,20 @@ const Sidebar = () => {
     },
   ];
 
+  useEffect(() => {
+    const savedActiveIndex = localStorage.getItem("activeIndex");
+    if (savedActiveIndex !== null) {
+      setActiveIndex(parseInt(savedActiveIndex, 10));
+    }
+  }, []);
+
+  // تخزين activeIndex في Local Storage عند تغييره
+  const handleActiveIndexChange = (index) => {
+    setActiveIndex(index);
+    localStorage.setItem("activeIndex", index);
+  };
+
+
   return (
     <div className="relative">
       <button
@@ -49,6 +63,7 @@ const Sidebar = () => {
               setHoveredIndex={setHoveredIndex}
               activeIndex={activeIndex}
               setActiveIndex={setActiveIndex}
+              handleActiveIndexChange={handleActiveIndexChange}
             />
           </div>
         </div>
@@ -61,6 +76,7 @@ const Sidebar = () => {
           setHoveredIndex={setHoveredIndex}
           activeIndex={activeIndex}
           setActiveIndex={setActiveIndex}
+          handleActiveIndexChange={handleActiveIndexChange}
         />
       </div>
     </div>
@@ -73,6 +89,7 @@ const SidebarContent = ({
   setHoveredIndex,
   activeIndex,
   setActiveIndex,
+  handleActiveIndexChange,
 }) => {
   return (
     <>
@@ -94,7 +111,8 @@ const SidebarContent = ({
             }`}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
-            onClick={() => setActiveIndex(index)} // Set active index on click
+            // onClick={() => setActiveIndex(index)} // Set active index on click
+            onClick={() => handleActiveIndexChange(index)}
           >
             <FontAwesomeIcon
               icon={item.icon}

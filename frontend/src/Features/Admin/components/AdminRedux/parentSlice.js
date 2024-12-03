@@ -13,16 +13,17 @@ export const fetchParents = createAsyncThunk(
       "http://localhost:4000/api/v1/getUsers/parents"
     );
     const data = await response.json();
-    console.log(data); 
-    return data.parents;
-  }
+    const parents = data.parents;
+    // console.log(parents);
+
+    return parents;}
 );
 
 export const removeParent = createAsyncThunk(
   "parents/removeParent",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/parents/${id}`, {
+      const response = await fetch(`http://localhost:4000/api/v1/getUsers/parents/${id}`, {
         method: "DELETE",
       });
 

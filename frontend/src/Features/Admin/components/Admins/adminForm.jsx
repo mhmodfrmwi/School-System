@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { postAdmin, addAdmintoServer } from "../AdminRedux/addadminSlice";
 
 function AdminForm() {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -16,6 +19,32 @@ function AdminForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!formData.fullName || !formData.email || !formData.password) return;
+
+
+    dispatch(
+      postAdmin({
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phoneNumber,
+        gender: formData.gender,
+        SSN: "30403000000000", // Dummy value
+        password: formData.password,
+        role: "Admin", 
+      })
+    );
+
+    dispatch(
+      addAdmintoServer(
+        formData.fullName,
+        formData.email,
+        formData.password,
+        formData.phoneNumber,
+        formData.gender
+      )
+    );
+
     console.log("Admin Form Submitted", formData);
     setFormData({
       fullName: "",

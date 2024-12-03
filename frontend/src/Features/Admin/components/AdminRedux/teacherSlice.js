@@ -1,10 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const initialState = {
-  teachers: [],
-  status: "idle",
-  message: "",
-};
 
 export const fetchTeachers = createAsyncThunk(
   "teachers/fetchTeachers",
@@ -22,7 +17,7 @@ export const removeTeacher = createAsyncThunk(
   "teachers/removeTeacher",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/teachers/${id}`, {
+      const response = await fetch(`http://localhost:4000/api/v1/getUsers/teachers/${id}`, {
         method: "DELETE",
       });
 
@@ -37,9 +32,14 @@ export const removeTeacher = createAsyncThunk(
   }
 );
 
+
 const teacherSlice = createSlice({
-  name: "teachers",
-  initialState,
+  name: 'teachers',
+  initialState: {
+    teachers: [],
+    status: 'idle',
+    message: '',
+  },
   reducers: {
     addTeacher: (state, action) => {
       state.teachers.push(action.payload);
@@ -53,35 +53,35 @@ const teacherSlice = createSlice({
       }
     },
     clearMessage: (state) => {
-      state.message = "";
+      state.message = '';
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTeachers.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(fetchTeachers.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        console.log("Fetched Teachers:", action.payload); 
+        state.status = 'succeeded';
         state.teachers = action.payload;
       })
       .addCase(fetchTeachers.rejected, (state) => {
-        state.status = "failed";
+        state.status = 'failed';
+        state.message = 'Failed to fetch teachers';
       })
 
       .addCase(removeTeacher.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(removeTeacher.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         state.teachers = state.teachers.filter(
           (teacher) => teacher.id !== action.payload
         );
-        state.message = "Teacher deleted successfully";
+        state.message = 'Teacher deleted successfully';
       })
       .addCase(removeTeacher.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.message = action.payload;
       });
   },

@@ -9,29 +9,25 @@ import Pagination from "../Pagination";
 import Header from "../Parents/parentHeader";
 
 const ParentTable = () => {
-  const { parents = [], message, status } = useSelector((state) => state.parents || {});
+  const { parents = [], message } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
+  // console.log(parents);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
-  const [showConfirm, setShowConfirm] = useState(false);
+
   const [selectedParentId, setSelectedParentId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchParents());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(parents); // عرض البيانات في الكونسول
-  }, [parents]);
-  useEffect(() => {
-    console.log('Parents from Redux:', parents); // تأكد من أن البيانات تصل بشكل صحيح
-    dispatch(fetchParents());
-  }, [dispatch]);
+ 
   const filteredParents = parents.filter((parent) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
@@ -44,21 +40,28 @@ const ParentTable = () => {
     );
   });
 
-  console.log('Filtered Parents:', filteredParents); 
+  // console.log('Filtered Parents:', filteredParents); 
   const paginatedParents = filteredParents.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     setSelectedParentId(id);
-    setShowConfirm(true);
+    // setShowConfirm(true);
+    const confirmDelete = window.confirm('Are you sure you want to delete this parent?');
+    if (confirmDelete) {
+      try {
+        await dispatch(removeParent(id)); 
+        alert('Parent deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete parent:', error);
+        alert('Error occurred while deleting');
+      }
+    }
   };
 
-  const confirmDelete = () => {
-    dispatch(removeParent(selectedParentId));
-    setShowConfirm(false);
-  };
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -93,11 +96,6 @@ const ParentTable = () => {
         </div>
       )}
 
-      {/* عرض البيانات مباشرة هنا للتأكد من صحتها */}
-      {/* <div>
-        <h3>Parents Data:</h3>
-        <pre>{JSON.stringify(parents, null, 2)}</pre>
-      </div> */}
 
       <div className="mt-7">
         <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
@@ -107,19 +105,16 @@ const ParentTable = () => {
                 Name
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Email
+                Student ID
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                SSN
+                Email
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Phone
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Gender
-              </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Profile Image
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Actions
@@ -129,17 +124,19 @@ const ParentTable = () => {
           <tbody>
             {paginatedParents.length > 0 ? (
               paginatedParents.map((parent, index) => (
-                <tr key={parent._id} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
+                <tr key={parent._id || index} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
                   <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <img
+                      src={parent.profileImage}
+                      alt="Profile"
+                      className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
+                    />
                     <span className="truncate font-poppins">{parent.name}</span>
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.email}</td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.SSN}</td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.email}</td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.phone}</td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.gender}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <img src={parent.profileImage} alt="Profile" className="h-10 w-10 rounded-full" />
-                  </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       aria-label="Edit parent"
@@ -186,3 +183,4 @@ const ParentTable = () => {
 
 
 export default ParentTable;
+

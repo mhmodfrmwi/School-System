@@ -1,13 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { postParent, addParenttoserver } from "../AdminRedux/addparentSlice";
 
 function ParentForm() {
+  const dispatch = useDispatch();
+  const { parentFullName, parentEmail, parentPassword, parentPhoneNumber, parentGender, students } = useSelector((state) => state.addparent);
+
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    phoneNumber: "",
-    gender: "",
-    students: [{ studentName: "", studentClass: "" }],
+    fullName: parentFullName || "",
+    email: parentEmail || "",
+    password: parentPassword || "",
+    phoneNumber: parentPhoneNumber || "",
+    gender: parentGender || "",
+    students: students || [{ studentName: "", studentClass: "" }],
   });
 
   const handleChange = (e) => {
@@ -32,7 +37,35 @@ function ParentForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!formData.fullName || !formData.email || !formData.password) return;
+
+    // Dispatch to Redux
+    dispatch(
+      postParent({
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phoneNumber,
+        gender: formData.gender,
+        SSN: "30403000000000", // Dummy value
+        password: formData.password,
+        role: "Parent",
+      })
+    );
+
+    dispatch(
+      addParenttoserver(
+        formData.fullName,
+        formData.email,
+        formData.password,
+        formData.phoneNumber,
+        formData.gender
+      )
+    );
+
     console.log("Form Submitted", formData);
+
+    // Reset form after submit
     setFormData({
       fullName: "",
       email: "",
@@ -44,21 +77,17 @@ function ParentForm() {
   };
 
   return (
-     <>
-    <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
-    <h2 className="font-poppins text-3xl font-bold text-[#043B44]">
-    Add Parent
-    </h2>
-    <p className="mt-3 rounded-2xl border-b-4 border-[#117C90]"></p>
-    </div>
+    <>
+      <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
+        <h2 className="font-poppins text-3xl font-bold text-[#043B44]">Add Parent</h2>
+        <p className="mt-3 rounded-2xl border-b-4 border-[#117C90]"></p>
+      </div>
 
       <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
         <form onSubmit={handleSubmit}>
-          {/* الحقول الأساسية */}
+          {/* Parent fields */}
           <div className="mb-4">
-            <label className="block mb-2 font-poppins text-gray-700">
-              Full Name
-            </label>
+            <label className="block mb-2 font-poppins text-gray-700">Full Name</label>
             <input
               type="text"
               name="fullName"
@@ -72,9 +101,7 @@ function ParentForm() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
-                Email Address
-              </label>
+              <label className="block mb-2 font-poppins text-gray-700">Email Address</label>
               <input
                 type="email"
                 name="email"
@@ -86,18 +113,14 @@ function ParentForm() {
               />
             </div>
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
-                Gender
-              </label>
+              <label className="block mb-2 font-poppins text-gray-700">Gender</label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
                 className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
-                <option value="" disabled>
-                  Select gender
-                </option>
+                <option value="" disabled>Select gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
@@ -106,9 +129,7 @@ function ParentForm() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
-                Password
-              </label>
+              <label className="block mb-2 font-poppins text-gray-700">Password</label>
               <input
                 type="password"
                 name="password"
@@ -120,9 +141,7 @@ function ParentForm() {
               />
             </div>
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
-                Phone Number
-              </label>
+              <label className="block mb-2 font-poppins text-gray-700">Phone Number</label>
               <input
                 type="text"
                 name="phoneNumber"
@@ -135,17 +154,12 @@ function ParentForm() {
             </div>
           </div>
 
-          {/* الحقول الخاصة بالطلاب */}
+          {/* Students fields */}
           <div className="mt-6">
             {formData.students.map((student, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4"
-              >
+              <div key={index} className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
                 <div>
-                  <label className="block mb-2 font-poppins text-gray-700">
-                    Student Name
-                  </label>
+                  <label className="block mb-2 font-poppins text-gray-700">Student Name</label>
                   <input
                     type="text"
                     name="studentName"
@@ -157,18 +171,14 @@ function ParentForm() {
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 font-poppins text-gray-700">
-                    Class
-                  </label>
+                  <label className="block mb-2 font-poppins text-gray-700">Class</label>
                   <select
                     name="studentClass"
                     value={student.studentClass}
                     onChange={(e) => handleStudentChange(index, e)}
                     className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                   >
-                    <option value="" disabled>
-                      Select class
-                    </option>
+                    <option value="" disabled>Select class</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
@@ -185,7 +195,7 @@ function ParentForm() {
             </button>
           </div>
 
-          {/* زر الإرسال */}
+          {/* Submit button */}
           <div className="mt-8">
             <button
               type="submit"
@@ -196,7 +206,7 @@ function ParentForm() {
           </div>
         </form>
       </div>
-      </>
+    </>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import { postStudent, addStudenttoserver } from "../AdminRedux/addstudentSlice";
 
 function StudentForm() {
@@ -13,70 +14,73 @@ function StudentForm() {
     gender: "",
   });
 
-  const {
-    fullName: studentFullName,
-    email: studentEmail,
-    password: studentPassword,
-    academicYear: studentAcademicYear,
-    studentClass: studentC,
-    gender: studentGender,
-  } = useSelector((state) => state.addstudent);
-
-  // console.log(
-  //   studentFullName,
-  //   studentEmail,
-  //   studentPassword,
-  //   studentAcademicYear,
-  //   studentC,
-  //   studentGender,
-  // );
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (
       !formData.fullName ||
       !formData.email ||
       !formData.password ||
       !formData.academicYear
-    )
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please fill in all required fields.",
+      });
       return;
+    }
 
-    dispatch(
-      postStudent({
-        name: formData.fullName,
-        email: formData.email,
-        class: formData.studentClass,
-        gender: formData.gender,
-        SSN: "30403000000000",
-        password: formData.password,
-        academicYear: Number(formData.academicYear),
-        role: "Student",
-      }),
-    );
+    try {
+      dispatch(
+        postStudent({
+          name: formData.fullName,
+          email: formData.email,
+          class: formData.studentClass,
+          gender: formData.gender,
+          SSN: "30403000000000",
+          password: formData.password,
+          academicYear: Number(formData.academicYear),
+          role: "Student",
+        })
+      );
 
-    dispatch(
-      addStudenttoserver(
-        formData.fullName,
-        formData.email,
-        formData.password,
-        formData.phoneNumber,
-        formData.studentClass,
-        formData.gender,
-      ),
-    );
+      dispatch(
+        addStudenttoserver(
+          formData.fullName,
+          formData.email,
+          formData.password,
+          formData.phoneNumber,
+          formData.studentClass,
+          formData.gender
+        )
+      );
 
-    setFormData({
-      fullName: "",
-      email: "",
-      password: "",
-      phoneNumber: "",
-      studentClass: "",
-      gender: "",
-    });
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Student added successfully!",
+      });
+
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+        phoneNumber: "",
+        studentClass: "",
+        gender: "",
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to add student. Please try again.",
+      });
+    }
   };
 
   return (
@@ -90,6 +94,7 @@ function StudentForm() {
 
       <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
         <form className="space-y-6" onSubmit={handleSubmit}>
+
           <div>
             <label className="mb-2 block font-poppins font-medium text-gray-700">
               Full Name
@@ -97,13 +102,33 @@ function StudentForm() {
             <input
               type="text"
               name="fullName"
-              value={formData.fullName}
+              value={formData.name}
               onChange={handleChange}
               className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
           </div>
+
+          <div className="col-span-12 md:col-span-3">
+            <label className="mb-2 block font-poppins font-medium text-gray-700">
+              Subject
+            </label>
+            <select
+              name="studentClass"
+              value={formData.subject}
+              onChange={handleChange}
+              className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+            >
+              <option value="" className="font-poppins" disabled>
+                Select Subject
+              </option>
+              <option value="English">English</option>
+              <option value="Arabic">Arabic</option>
+              <option value="Math">Math</option>
+            </select>
+          </div>
+
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
             <div className="col-span-12 md:col-span-6">
@@ -127,7 +152,7 @@ function StudentForm() {
               </label>
               <select
                 name="studentClass"
-                value={formData.studentClass}
+                value={formData.classes}
                 onChange={handleChange}
                 className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
@@ -183,15 +208,22 @@ function StudentForm() {
               <label className="mb-2 block font-poppins font-medium text-gray-700">
                 Academic Year
               </label>
-              <input
-                type="text"
+              <select
                 name="academicYear"
                 value={formData.academicYear}
                 onChange={handleChange}
                 className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter acadmic year"
                 required
-              />
+              >
+                <option value="" disabled>
+                  Select academic year
+                </option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
             </div>
           </div>
 

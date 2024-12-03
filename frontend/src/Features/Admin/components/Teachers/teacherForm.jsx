@@ -1,19 +1,33 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { postTeacher, addTeachertoServer } from "../AdminRedux/addteacherSlice"; // تأكد من تعديل المسار حسب مشروعك
+
 
 function TeacherForm() {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     phoneNumber: "",
     gender: "",
-    class: "",
-    subjects: [""],
+    classes: [], // This will hold an array of selected classes
+    subjects: [""], // This will hold an array of subjects, starting with one empty string
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleClassChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prevState) => {
+      const updatedClasses = checked
+        ? [...prevState.classes, value] 
+        : prevState.classes.filter((c) => c !== value); 
+      return { ...prevState, classes: updatedClasses };
+    });
   };
 
   const handleSubjectChange = (index, e) => {
@@ -33,14 +47,45 @@ function TeacherForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!formData.fullName || !formData.email || !formData.password) return;
+
+    dispatch(
+      postTeacher({
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phoneNumber,
+        gender: formData.gender,
+        SSN: "30403131700795", // Dummy value
+        subject: formData.subjects[0],
+        password: formData.password,
+        classes: formData.classes,
+        role: "Teacher", // يمكن تعديل الدور إذا كان مطلوبًا
+      })
+    );
+
+    dispatch(
+      addTeachertoServer(
+        formData.fullName,
+        formData.email,
+        formData.password,
+        formData.phoneNumber,
+        formData.gender,
+        formData.classes,
+        formData.subjects[0], 
+      )
+    );
+
     console.log("Form Submitted", formData);
+
+    // Reset form
     setFormData({
       fullName: "",
       email: "",
       password: "",
       phoneNumber: "",
       gender: "",
-      class: "",
+      classes: [],
       subjects: [""],
     });
   };
@@ -137,31 +182,31 @@ function TeacherForm() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
-            <div>
-              <label className="block mb-2 font-poppins text-gray-700">
-                Class
-              </label>
-              <select
-                name="class"
-                value={formData.class}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              >
-                <option value="" disabled>
-                  Select class
-                </option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-              </select>
+         
+          <div className="mt-4">
+            <label className="block mb-2 font-poppins text-gray-700">
+              Classes
+            </label>
+            <div className="flex flex-wrap gap-4">
+              {["A", "B", "C"].map((className) => (
+                <label key={className} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    value={className}
+                    checked={formData.classes.includes(className)}
+                    onChange={handleClassChange}
+                    className="form-checkbox text-[#117C90]"
+                  />
+                  <span>{className}</span>
+                </label>
+              ))}
             </div>
           </div>
 
           {/* الحقول الخاصة بالمواد */}
           <div className="mt-6">
             {formData.subjects.map((subject, index) => (
-              <div key={index} className="grid grid-cols-1 mt-4 ">
+              <div key={index} className="grid grid-cols-1 mt-4">
                 <label className="block mb-2 font-poppins text-gray-700">
                   Subject
                 </label>
@@ -206,3 +251,6 @@ function TeacherForm() {
 }
 
 export default TeacherForm;
+
+
+
