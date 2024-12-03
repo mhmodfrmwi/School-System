@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeManager, fetchManagers } from "../AdminRedux/managerSlice";
+import {
+  fetchBosses,
+  removeBosse,
+  clearMessage,
+} from "../AdminRedux/managerSlice"; 
 import Pagination from "../Pagination";
-import Header from "../Managers/managerHeader";
-import { clearMessage } from "../AdminRedux/studentSlice";
+import Header from "../Managers/managerHeader"; 
 
 const ManagerTable = () => {
-  const {
-    managers = [],
-    message,
-    loading,
-  } = useSelector((state) => state.manager || {});
+  const { bosses = [], message } = useSelector(
+    (state) => state.bosses || {}
+  );
   const dispatch = useDispatch();
+   console.log(bosses);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -19,38 +21,47 @@ const ManagerTable = () => {
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [selectedManagerId, setSelectedManagerId] = useState(null);
+
+  const [selectedBosseId, setSelectedBosseId] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchManagers());
+    dispatch(fetchBosses());
   }, [dispatch]);
 
-  const filteredManagers = managers.filter((manager) => {
+  const filteredManagers = bosses.filter((bosse) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
-      return manager[filterOption]?.toLowerCase().includes(lowerSearchText);
+      return (
+        bosse[filterOption]?.toLowerCase().includes(lowerSearchText)
+      );
     }
     return (
-      manager.name.toLowerCase().includes(lowerSearchText) ||
-      manager.email.toLowerCase().includes(lowerSearchText)
+      bosse.name.toLowerCase().includes(lowerSearchText) ||
+      bosse.email.toLowerCase().includes(lowerSearchText)
     );
   });
 
   const paginatedManagers = filteredManagers.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
-  const handleDelete = (id) => {
-    setSelectedManagerId(id);
-    setShowConfirm(true);
+  const handleDelete = async (id) => {
+    setSelectedBosseId(id);
+
+    const confirmDelete = window.confirm('Are you sure you want to delete this manager?');
+    if (confirmDelete) {
+      try {
+        await dispatch(removeBosse(id)); 
+        alert('manager deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete manager:', error);
+        alert('Error occurred while deleting');
+      }
+    }
   };
 
-  const confirmDelete = () => {
-    dispatch(removeManager(selectedManagerId));
-    setShowConfirm(false);
-  };
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -107,15 +118,13 @@ const ManagerTable = () => {
             {paginatedManagers.length > 0 ? (
               paginatedManagers.map((manager, index) => (
                 <tr
-                  key={manager.id}
+                  key={manager._id}
                   className={`${
                     index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                   } hover:bg-[#117C90]/70`}
                 >
                   <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <span className="truncate font-poppins">
-                      {manager.name}
-                    </span>
+                    <span className="truncate font-poppins">{manager.name}</span>
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {manager.email}
@@ -133,7 +142,7 @@ const ManagerTable = () => {
                     </button>
                     <button
                       aria-label="Delete manager"
-                      onClick={() => handleDelete(manager.id)}
+                      onClick={() => handleDelete(manager._id)}
                       className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-trash-alt text-lg" />

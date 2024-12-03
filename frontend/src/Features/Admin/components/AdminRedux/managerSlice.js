@@ -1,96 +1,85 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-const initialState = {
-  parents: [],
-  status: "idle",
-  message: "",
-};
-
-export const fetchManagers = createAsyncThunk(
-  "managers/fetchManagers",
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+// Fetch bosses
+export const fetchBosses = createAsyncThunk(
+  'bosses/fetchBosses',
   async () => {
-    const response = await fetch(
-      "http://localhost:4000/api/v1/getUsers/bosses",
-    );
+    const response = await fetch("http://localhost:4000/api/v1/getUsers/bosses");
     const data = await response.json();
-    const bosses = data.bosses;
-    // console.log(parents);
-
-    return bosses;
-  },
+    return data.bosses;
+  }
 );
 
-export const removeManager = createAsyncThunk(
-  "manangers/removeManager",
+// Remove Bosses
+export const removeBosse = createAsyncThunk(
+  'bosses/removeBosse',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/bosses/${id}`,
-        {
-          method: "DELETE",
-        },
-      );
-
+      const response = await fetch(`http://localhost:4000/api/v1/getUsers/bosses/${id}`, {
+        method: "DELETE",
+      });
       if (!response.ok) {
-        throw new Error("Failed to delete parent");
+        throw new Error("Failed to delete Bosses");
       }
 
       return id;
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  },
+  }
 );
 
-const managerSlice = createSlice({
-  name: "managers",
-  initialState,
+const bossesSlice = createSlice({
+  name: 'bosses',
+  initialState: {
+    bosses: [],
+    status: 'idle',
+    message: '',
+    loading: false,
+  },
   reducers: {
-    addmanager: (state, action) => {
-      state.parents.push(action.payload);
+    addBosse: (state, action) => {
+      state.bosses.push(action.payload);
     },
-    editmanager: (state, action) => {
-      const index = state.managers.findIndex(
-        (manager) => manager.id === action.payload.id,
+    editBosse: (state, action) => {
+      const index = state.bosses.findIndex(
+        (bosses) => bosses.id === action.payload.id
       );
       if (index !== -1) {
-        state.managers[index] = action.payload;
+        state.bosses[index] = action.payload;
       }
     },
     clearMessage: (state) => {
-      state.message = "";
+      state.message = '';
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchManagers.pending, (state) => {
-        state.status = "loading";
+      .addCase(fetchBosses.pending, (state) => {
+        state.loading = true;
       })
-      .addCase(fetchManagers.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.managers = action.payload;
+      .addCase(fetchBosses.fulfilled, (state, action) => {
+        state.loading = false;
+        state.bosses = action.payload;
       })
-      .addCase(fetchManagers.rejected, (state) => {
-        state.status = "failed";
+      .addCase(fetchBosses.rejected, (state) => {
+        state.loading = false;
       })
-
-      .addCase(removeManager.pending, (state) => {
-        state.status = "loading";
+      .addCase(removeBosse.pending, (state) => {
+        state.loading = true;
       })
-      .addCase(removeManager.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.managers = state.managers.filter(
-          (manager) => manager.id !== action.payload,
+      .addCase(removeBosse.fulfilled, (state, action) => {
+        state.loading = false;
+        state.bosses = state.bosses.filter(
+          (bosse) => bosse.id !== action.payload
         );
-        state.message = "Parent deleted successfully";
+        state.message = 'Bosses deleted successfully';
       })
-      .addCase(removeManager.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
+      .addCase(removeBosse.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
 
-export const { addmanager, editmanager, clearMessage } = managerSlice.actions;
+export const { clearMessage ,addBosse, editBosse} = bossesSlice.actions;
 
-export default managerSlice.reducer;
+export default bossesSlice.reducer;

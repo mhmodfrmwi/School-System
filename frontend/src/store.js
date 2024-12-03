@@ -12,7 +12,8 @@ import addadminReducer from "./Features/Admin/components/AdminRedux/addadminSlic
 import teacherReducer from "./Features/Admin/components/AdminRedux/teacherSlice";
 import addteacherReducer from "./Features/Admin/components/AdminRedux/addteacherSlice";
 import addmanagerReducer from "./Features/Admin/components/AdminRedux/addmanagerSlice";
-import managerReducer from "./Features/Admin/components/AdminRedux/managerSlice";
+import bossReducer from "./Features/Admin/components/AdminRedux/managerSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -28,7 +29,7 @@ const store = configureStore({
     terms: termReducer,
     schedule: scheduleReducer,
     addmanager: addmanagerReducer,
-    manager: managerReducer,
+    bosses: bossReducer,
   },
 });
 

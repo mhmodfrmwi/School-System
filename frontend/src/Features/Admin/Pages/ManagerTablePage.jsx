@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { fetchManagers } from "../components/AdminRedux/managerSlice";
+import { fetchBosses } from "../components/AdminRedux/managerSlice";
 import ManagerTable from "../components/Managers/managerTable";
 
 const AllManagers = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchManagers());
+    dispatch(fetchBosses());
   }, [dispatch]);
 
   return (

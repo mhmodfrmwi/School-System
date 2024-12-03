@@ -1,5 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+// البيانات الأولية للمسؤول
 const initialState = {
   fullName: "",
   email: "",
@@ -10,38 +11,40 @@ const initialState = {
   error: null,
 };
 
-export const postManager = createAsyncThunk(
-  "addmanager/postManager",
-  async (managerData, { rejectWithValue }) => {
-    console.log(managerData);
+// إرسال بيانات المسؤول
+export const postBosse = createAsyncThunk(
+  'addbosse/postBosse',
+  async (bossesData, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/auth/register",
+        "http://localhost:4000/api/v1/auth/register", // تعديل المسار حسب API الخاص بك
         {
-          method: "POST",
-          body: JSON.stringify(managerData),
+          method: 'POST',
+          body: JSON.stringify(bossesData),
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-        },
+        }
       );
+
+
       if (!response.ok) {
-        throw new Error("Failed to post student data");
+        throw new Error('Failed to post bosse data');
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to post student data");
+      return rejectWithValue(error.message || 'Failed to post bosse data');
     }
-  },
+  }
 );
 
-const addmanagerSlice = createSlice({
-  name: "addmanager",
+const addBosseSlice = createSlice({
+  name: 'addbosse',
   initialState,
   reducers: {
-    managertoserver: {
+    addBossetoServer: {
       prepare(fullName, email, password, phoneNumber, gender) {
         return {
           payload: {
@@ -64,20 +67,21 @@ const addmanagerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(postManager.pending, (state) => {
-        state.status = "loading";
+      .addCase(postBosse.pending, (state) => {
+        state.status = 'loading';
         state.error = null;
       })
-      .addCase(postManager.fulfilled, (state, action) => {
-        state.status = "succeeded";
+      .addCase(postBosse.fulfilled, (state, action) => {
+        state.status = 'succeeded';
         Object.assign(state, action.payload);
       })
-      .addCase(postManager.rejected, (state, action) => {
-        state.status = "failed";
+      .addCase(postBosse.rejected, (state, action) => {
+        state.status = 'failed';
         state.error = action.payload;
       });
   },
 });
 
-export const { addmanagertoserver } = addmanagerSlice.actions;
-export default addmanagerSlice.reducer;
+export const { addBossetoServer } = addBosseSlice.actions;
+
+export default addBosseSlice.reducer;
