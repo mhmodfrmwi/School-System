@@ -1,64 +1,96 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Fetch managers
+const initialState = {
+  parents: [],
+  status: "idle",
+  message: "",
+};
+
 export const fetchManagers = createAsyncThunk(
-  'managers/fetchManagers',
+  "managers/fetchManagers",
   async () => {
-    const response = await axios.get('/api/managers'); // Adjust your API endpoint
-    return response.data;
-  }
+    const response = await fetch(
+      "http://localhost:4000/api/v1/getUsers/bosses",
+    );
+    const data = await response.json();
+    const bosses = data.bosses;
+    // console.log(parents);
+
+    return bosses;
+  },
 );
 
-// Remove manager
 export const removeManager = createAsyncThunk(
-  'managers/removeManager',
-  async (id) => {
-    const response = await axios.delete(`/api/managers/${id}`); // Adjust your API endpoint
-    return id;
-  }
+  "manangers/removeManager",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/v1/getUsers/bosses/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete parent");
+      }
+
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
 );
 
 const managerSlice = createSlice({
-  name: 'managers',
-  initialState: {
-    managers: [],
-    message: '',
-    loading: false,
-  },
+  name: "managers",
+  initialState,
   reducers: {
+    addmanager: (state, action) => {
+      state.parents.push(action.payload);
+    },
+    editmanager: (state, action) => {
+      const index = state.managers.findIndex(
+        (manager) => manager.id === action.payload.id,
+      );
+      if (index !== -1) {
+        state.managers[index] = action.payload;
+      }
+    },
     clearMessage: (state) => {
-      state.message = '';
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchManagers.pending, (state) => {
-        state.loading = true;
+        state.status = "loading";
       })
       .addCase(fetchManagers.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "succeeded";
         state.managers = action.payload;
       })
       .addCase(fetchManagers.rejected, (state) => {
-        state.loading = false;
+        state.status = "failed";
       })
+
       .addCase(removeManager.pending, (state) => {
-        state.loading = true;
+        state.status = "loading";
       })
       .addCase(removeManager.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "succeeded";
         state.managers = state.managers.filter(
-          (manager) => manager.id !== action.payload
+          (manager) => manager.id !== action.payload,
         );
-        state.message = 'Manager deleted successfully';
+        state.message = "Parent deleted successfully";
       })
-      .addCase(removeManager.rejected, (state) => {
-        state.loading = false;
+      .addCase(removeManager.rejected, (state, action) => {
+        state.status = "failed";
+        state.message = action.payload;
       });
   },
 });
 
-export const { clearMessage } = managerSlice.actions;
+export const { addmanager, editmanager, clearMessage } = managerSlice.actions;
 
 export default managerSlice.reducer;

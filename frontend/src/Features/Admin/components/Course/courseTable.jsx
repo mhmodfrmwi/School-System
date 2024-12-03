@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeManager, fetchManagers } from "../AdminRedux/managerSlice";
+import {
+  removeParent,
+  fetchParents,
+  clearMessage,
+} from "../AdminRedux/parentSlice";
 import Pagination from "../Pagination";
-import Header from "../Managers/managerHeader";
-import { clearMessage } from "../AdminRedux/studentSlice";
+import Header from "./courseHeader";
 
-const ManagerTable = () => {
-  const {
-    managers = [],
-    message,
-    loading,
-  } = useSelector((state) => state.manager || {});
+const CourseTable = () => {
+  const { parents = [], message } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
+  // console.log(parents);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -19,37 +19,45 @@ const ManagerTable = () => {
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [selectedManagerId, setSelectedManagerId] = useState(null);
+  const [selectedParentId, setSelectedParentId] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchManagers());
+    dispatch(fetchParents());
   }, [dispatch]);
 
-  const filteredManagers = managers.filter((manager) => {
+  const filteredParents = parents.filter((parent) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
-      return manager[filterOption]?.toLowerCase().includes(lowerSearchText);
+      return parent[filterOption]?.toLowerCase().includes(lowerSearchText);
     }
     return (
-      manager.name.toLowerCase().includes(lowerSearchText) ||
-      manager.email.toLowerCase().includes(lowerSearchText)
+      parent.name.toLowerCase().includes(lowerSearchText) ||
+      parent.email.toLowerCase().includes(lowerSearchText) ||
+      parent.studentName?.toLowerCase().includes(lowerSearchText)
     );
   });
 
-  const paginatedManagers = filteredManagers.slice(
+  // console.log('Filtered Parents:', filteredParents);
+  const paginatedParents = filteredParents.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
 
-  const handleDelete = (id) => {
-    setSelectedManagerId(id);
-    setShowConfirm(true);
-  };
-
-  const confirmDelete = () => {
-    dispatch(removeManager(selectedManagerId));
-    setShowConfirm(false);
+  const handleDelete = async (id) => {
+    setSelectedParentId(id);
+    // setShowConfirm(true);
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this parent?",
+    );
+    if (confirmDelete) {
+      try {
+        await dispatch(removeParent(id));
+        alert("Parent deleted successfully");
+      } catch (error) {
+        console.error("Failed to delete parent:", error);
+        alert("Error occurred while deleting");
+      }
+    }
   };
 
   const handlePageChange = (page) => {
@@ -90,64 +98,63 @@ const ManagerTable = () => {
           <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
             <tr>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Name
+                Subject Name
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Email
+                Grade
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Gender
+                term
               </th>
+
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {paginatedManagers.length > 0 ? (
-              paginatedManagers.map((manager, index) => (
+            {paginatedParents.length > 0 ? (
+              paginatedParents.map((course, index) => (
                 <tr
-                  key={manager.id}
-                  className={`${
-                    index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
-                  } hover:bg-[#117C90]/70`}
+                  key={course._id || index}
+                  className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
                 >
                   <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <span className="truncate font-poppins">
-                      {manager.name}
-                    </span>
+                    <span className="truncate font-poppins">{course.name}</span>
+                  </td>
+
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {course.grade}
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {manager.email}
+                    {course.term}
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {manager.gender}
-                  </td>
+
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <button
-                      aria-label="Edit manager"
+                    {/* <button
+                      aria-label="Edit parent"
                       onClick={() => {}}
                       className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-edit text-lg" />
                     </button>
                     <button
-                      aria-label="Delete manager"
-                      onClick={() => handleDelete(manager.id)}
+                      aria-label="Delete parent"
+                      onClick={() => handleDelete(course._id)}
                       className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-trash-alt text-lg" />
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td
-                  colSpan="4"
+                  colSpan="7"
                   className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                 >
-                  <span className="font-poppins">No Managers Found</span>
+                  <span className="font-poppins">No Parents Found</span>
                 </td>
               </tr>
             )}
@@ -156,7 +163,7 @@ const ManagerTable = () => {
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
-            totalItems={filteredManagers.length}
+            totalItems={filteredParents.length}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
             onPageChange={handlePageChange}
@@ -167,4 +174,4 @@ const ManagerTable = () => {
   );
 };
 
-export default ManagerTable;
+export default CourseTable;

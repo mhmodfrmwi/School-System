@@ -19,6 +19,9 @@ import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";
 import AllTerms from "./Features/Admin/Pages/TermPage";
 import TermForm from "./Features/Admin/components/Terms/termForm";
 import Admins from "./Features/Admin/Pages/Admins";
+import CourseForm from "./Features/Admin/components/Course/courseForm";
+import CourseTable from "./Features/Admin/components/Course/courseTable";
+import AllCourses from "./Features/Admin/Pages/Courses";
 
 function App() {
   return (
@@ -57,6 +60,10 @@ function App() {
           <Route path="admins">
             <Route path="adminform" element={<AdminForm />} />
             <Route path="alladmins" element={<AllAdmins />} />
+          </Route>
+          <Route path="courses">
+            <Route path="courseform" element={<CourseForm />} />
+            <Route path="allcourses" element={<CourseTable />} />
           </Route>
         </Route>
       </Routes>
