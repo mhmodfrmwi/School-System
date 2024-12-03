@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Features/Auth/Login";
 import OnBoarding from "./Features/Auth/OnBoarding";
 import ChooseRole from "./Features/Auth/ChooseRole";
-import Students from "./Features/Admin/Pages/Students";
 import StudentForm from "./Features/Admin/components/Students/studentForm";
 import BasicForm from "./Features/Admin/components/basicForm";
 import DashboardAdmin from "./Features/Admin/Pages/DashboardAdmin";
@@ -19,12 +18,6 @@ import AllAdmins from "./Features/Admin/Pages/AdminTablePage";
 import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";
 import AllTerms from "./Features/Admin/Pages/TermPage";
 import TermForm from "./Features/Admin/components/Terms/termForm";
-import Managers from "./Features/Admin/Pages/Managers";
-import Parents from "./Features/Admin/Pages/Parents";
-import Schedules from "./Features/Admin/Pages/Schedules";
-import Terms from "./Features/Admin/Pages/Terms";
-
-import Teachers from "./Features/Admin/Pages/Teachers";
 import Admins from "./Features/Admin/Pages/Admins";
 
 function App() {

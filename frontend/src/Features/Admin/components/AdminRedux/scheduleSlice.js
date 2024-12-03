@@ -18,7 +18,7 @@ export const fetchSchedules = createAsyncThunk(
       }
       const data = await response.json();
       console.log(data);
-      return data; 
+      return data; // Return the fetched schedules
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -50,7 +50,7 @@ export const addScheduleAsync = createAsyncThunk(
   }
 );
 
-// Edit a schedule
+// Edit an existing schedule
 export const editScheduleAsync = createAsyncThunk(
   "schedules/editSchedule",
   async ({ id, updatedSchedule }, { rejectWithValue }) => {
@@ -141,7 +141,7 @@ const scheduleSlice = createSlice({
         state.status = "succeeded";
         const index = state.schedules.findIndex((schedule) => schedule.id === action.payload.id);
         if (index !== -1) {
-          state.schedules[index] = action.payload;
+          state.schedules[index] = action.payload; // Update the schedule in the state
         }
         state.message = "Schedule updated successfully";
       })
@@ -156,7 +156,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(removeSchedule.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.schedules = state.schedules.filter((schedule) => schedule.id !== action.payload);
+        state.schedules = state.schedules.filter((schedule) => schedule.id !== action.payload); // Remove the schedule from the state
         state.message = "Schedule deleted successfully";
       })
       .addCase(removeSchedule.rejected, (state, action) => {

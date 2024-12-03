@@ -49,6 +49,7 @@ export const addTermAsync = createAsyncThunk(
   }
 );
 
+// Edit an existing term
 export const editTermAsync = createAsyncThunk(
   "terms/editTerm",
   async ({ id, updatedTerm }, { rejectWithValue }) => {
@@ -73,9 +74,7 @@ export const editTermAsync = createAsyncThunk(
   }
 );
 
-
-
-
+// Remove a term
 export const removeTerm = createAsyncThunk(
   "terms/removeTerm",
   async (id, { rejectWithValue }) => {
@@ -141,7 +140,7 @@ const termSlice = createSlice({
         state.status = "succeeded";
         const index = state.terms.findIndex((term) => term.id === action.payload.id);
         if (index !== -1) {
-          state.terms[index] = action.payload;
+          state.terms[index] = action.payload; // Update the term in the state
         }
         state.message = "Term updated successfully";
       })
@@ -156,7 +155,7 @@ const termSlice = createSlice({
       })
       .addCase(removeTerm.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.terms = state.terms.filter((term) => term.id !== action.payload);
+        state.terms = state.terms.filter((term) => term.id !== action.payload); // Remove the term from the state
         state.message = "Term deleted successfully";
       })
       .addCase(removeTerm.rejected, (state, action) => {

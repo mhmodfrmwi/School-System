@@ -1,0 +1,125 @@
+{
+  "status": "success",
+  "schedules": [
+    {
+      "id": "1",
+      "subjectName": "Mathematics",
+      "teacher": "Mr. John Doe",
+      "grade": "Grade 10",
+      "day": "Monday",
+      "from": "08:00 AM",
+      "to": "09:30 AM",
+      "className": "Math101"
+    },
+    {
+      "id": "2",
+      "subjectName": "English",
+      "teacher": "Ms. Jane Smith",
+      "grade": "Grade 10",
+      "day": "Monday",
+      "from": "09:45 AM",
+      "to": "11:15 AM",
+      "className": "Eng102"
+    },
+    {
+      "id": "3",
+      "subjectName": "Science",
+      "teacher": "Mr. Alan Brown",
+      "grade": "Grade 10",
+      "day": "Tuesday",
+      "from": "08:00 AM",
+      "to": "09:30 AM",
+      "className": "Sci103"
+    },
+    {
+      "id": "4",
+      "subjectName": "History",
+      "teacher": "Ms. Emily White",
+      "grade": "Grade 10",
+      "day": "Tuesday",
+      "from": "09:45 AM",
+      "to": "11:15 AM",
+      "className": "Hist104"
+    },
+    {
+      "id": "5",
+      "subjectName": "Mathematics",
+      "teacher": "Mr. John Doe",
+      "grade": "Grade 9",
+      "day": "Wednesday",
+      "from": "08:00 AM",
+      "to": "09:30 AM",
+      "className": "Math101"
+    },
+    {
+      "id": "6",
+      "subjectName": "English",
+      "teacher": "Ms. Jane Smith",
+      "grade": "Grade 9",
+      "day": "Wednesday",
+      "from": "09:45 AM",
+      "to": "11:15 AM",
+      "className": "Eng102"
+    },
+    {
+      "id": "7",
+      "subjectName": "Physics",
+      "teacher": "Mr. Alan Brown",
+      "grade": "Grade 11",
+      "day": "Thursday",
+      "from": "08:00 AM",
+      "to": "09:30 AM",
+      "className": "Phys105"
+    },
+    {
+      "id": "8",
+      "subjectName": "Chemistry",
+      "teacher": "Ms. Emily White",
+      "grade": "Grade 11",
+      "day": "Thursday",
+      "from": "09:45 AM",
+      "to": "11:15 AM",
+      "className": "Chem106"
+    },
+    {
+      "id": "9",
+      "subjectName": "Mathematics",
+      "teacher": "Mr. John Doe",
+      "grade": "Grade 12",
+      "day": "Friday",
+      "from": "08:00 AM",
+      "to": "09:30 AM",
+      "className": "Math101"
+    },
+    {
+      "id": "10",
+      "subjectName": "English",
+      "teacher": "Ms. Jane Smith",
+      "grade": "Grade 12",
+      "day": "Friday",
+      "from": "09:45 AM",
+      "to": "11:15 AM",
+      "className": "Eng102"
+    },
+    {
+      "id": "3afe",
+      "subjectName": "Brynn Jones",
+      "day": "Wednesday",
+      "from": "Aut at est repudian",
+      "to": "Velit maxime sit qua",
+      "teacher": "Do commodo voluptate",
+      "className": "Susan Mcintosh",
+      "grade": "Grade 11"
+    },
+    {
+      "id": "64ef",
+      "subjectName": "Bert Kramer",
+      "day": "Wednesday",
+      "from": "Sit eveniet enim p",
+      "to": "Accusamus consequat",
+      "teacher": "Reprehenderit sed co",
+      "className": "Illiana Jackson",
+      "grade": "Grade 10"
+    }
+  ]
+}

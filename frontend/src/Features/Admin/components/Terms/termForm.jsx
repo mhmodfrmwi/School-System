@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTermAsync } from "../AdminRedux/termSlice"; 
 
 function TermForm() {
   const [formData, setFormData] = useState({
@@ -7,6 +9,8 @@ function TermForm() {
     term: "",
   });
 
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -14,7 +18,19 @@ function TermForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
+    
+    // Construct the term data to match the expected JSON structure
+    const newTerm = {
+      id: new Date().getTime().toString(), // Example: Use timestamp for unique id
+      name: formData.term,
+      from: formData.startYear,
+      to: formData.endYear,
+    };
+
+    // Dispatch the addTermAsync action to add the new term
+    dispatch(addTermAsync(newTerm));
+
+    // Reset the form data after submitting
     setFormData({
       startYear: "",
       endYear: "",
@@ -85,11 +101,11 @@ function TermForm() {
             </select>
           </div>
 
-          {/* Submit Button */}
-          <div className="mt-8">
+          {/* Submit Button (Smaller Width) */}
+          <div className="mt-8 text-center">
             <button
               type="submit"
-              className="w-full p-2 bg-[#117C90] text-white rounded-md hover:bg-[#043B44]"
+              className="p-2 px-6 bg-[#117C90] text-white rounded-md hover:bg-[#043B44] w-auto"
             >
               Add Term
             </button>

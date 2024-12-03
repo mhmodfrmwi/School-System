@@ -1,49 +1,47 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addScheduleAsync } from "../AdminRedux/scheduleSlice"; 
 
 function ScheduleForm() {
   const [formData, setFormData] = useState({
-    subject: "",
+    subjectName: "",
     day: "",
-    time: "",
+    from: "",
+    to: "",
     teacher: "",
-    students: [{ studentName: "", studentClass: "" }],
+    className: "",
+    grade: "",
   });
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleStudentChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedStudents = formData.students.map((student, i) =>
-      i === index ? { ...student, [name]: value } : student
-    );
-    setFormData({ ...formData, students: updatedStudents });
-  };
-
-  const addStudent = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      students: [...prevState.students, { studentName: "", studentClass: "" }],
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Schedule Submitted", formData);
+
+    // Dispatch action to add the schedule
+    dispatch(addScheduleAsync(formData));
+
+    // Reset the form
     setFormData({
-      subject: "",
+      subjectName: "",
       day: "",
-      time: "",
+      from: "",
+      to: "",
       teacher: "",
-      students: [{ studentName: "", studentClass: "" }],
+      className: "",
+      grade: "",
     });
   };
 
   return (
     <>
-      <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
+      <div className="mb-6 ms-20 mt-10 w-60 md:ms-24">
         <h2 className="font-poppins text-3xl font-bold text-[#043B44]">
           Add Schedule
         </h2>
@@ -55,15 +53,15 @@ function ScheduleForm() {
           {/* Basic Fields */}
           <div className="mb-4">
             <label className="block mb-2 font-poppins text-gray-700">
-              Subject
+              Subject Name
             </label>
             <input
               type="text"
-              name="subject"
-              value={formData.subject}
+              name="subjectName"
+              value={formData.subjectName}
               onChange={handleChange}
               className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter subject"
+              placeholder="Enter subject name"
               required
             />
           </div>
@@ -91,15 +89,29 @@ function ScheduleForm() {
             </div>
             <div>
               <label className="block mb-2 font-poppins text-gray-700">
-                Time
+                Start Time
               </label>
               <input
                 type="text"
-                name="time"
-                value={formData.time}
+                name="from"
+                value={formData.from}
                 onChange={handleChange}
                 className="w-full p-2 font-poppins border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter time (e.g., 10:00 AM - 12:00 PM)"
+                placeholder="Enter start time (e.g., 08:00 AM)"
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-2 font-poppins text-gray-700">
+                End Time
+              </label>
+              <input
+                type="text"
+                name="to"
+                value={formData.to}
+                onChange={handleChange}
+                className="w-full p-2 font-poppins border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                placeholder="Enter end time (e.g., 09:30 AM)"
                 required
               />
             </div>
@@ -107,7 +119,7 @@ function ScheduleForm() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
             <div>
-              <label className="block font-poppins mb-2 font-poppins text-gray-700">
+              <label className="block mb-2 font-poppins text-gray-700">
                 Teacher
               </label>
               <input
@@ -116,60 +128,46 @@ function ScheduleForm() {
                 value={formData.teacher}
                 onChange={handleChange}
                 className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter teacher name"
+                placeholder="Enter teacher's name"
                 required
               />
             </div>
+            <div>
+              <label className="block mb-2 font-poppins text-gray-700">
+                Grade
+              </label>
+              <select
+                name="grade"
+                value={formData.grade}
+                onChange={handleChange}
+                className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              >
+                <option value="" disabled>
+                  Select grade
+                </option>
+                <option value="Grade 9">Grade 9</option>
+                <option value="Grade 10">Grade 10</option>
+                <option value="Grade 11">Grade 11</option>
+                <option value="Grade 12">Grade 12</option>
+              </select>
+            </div>
           </div>
 
-          {/* Students Fields */}
-          <div className="mt-6">
-            {formData.students.map((student, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4"
-              >
-                <div>
-                  <label className="block mb-2 font-poppins font-poppins text-gray-700">
-                    Student Name
-                  </label>
-                  <input
-                    type="text"
-                    name="studentName"
-                    value={student.studentName}
-                    onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                    placeholder="Enter student name"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-2 font-poppins text-gray-700">
-                    Class
-                  </label>
-                  <select
-                    name="studentClass"
-                    value={student.studentClass}
-                    onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                  >
-                    <option value="" disabled>
-                      Select class
-                    </option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                  </select>
-                </div>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addStudent}
-              className="mt-4 font-poppins text-[#117C90] hover:underline"
-            >
-              + Add another student
-            </button>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+            <div>
+              <label className="block mb-2 font-poppins text-gray-700">
+                Class Name
+              </label>
+              <input
+                type="text"
+                name="className"
+                value={formData.className}
+                onChange={handleChange}
+                className="w-full p-2 font-poppins border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                placeholder="Enter class name"
+                required
+              />
+            </div>
           </div>
 
           {/* Submit Button */}

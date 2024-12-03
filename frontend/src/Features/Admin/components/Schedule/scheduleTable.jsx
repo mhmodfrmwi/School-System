@@ -8,7 +8,7 @@ import Pagination from "../Pagination";
 import Header from "../Schedule/scheduleHeader";
 
 const ScheduleTable = () => {
-  const { schedules = [], message, status } = useSelector((state) => state.schedules || {});
+  const { schedules = [], message } = useSelector((state) => state.schedules || {});
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,8 +17,8 @@ const ScheduleTable = () => {
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [selectedScheduleId, setSelectedScheduleId] = useState(null);
+  const [setShowConfirm] = useState(false);
+  const [setSelectedScheduleId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchSchedules());
@@ -44,11 +44,6 @@ const ScheduleTable = () => {
   const handleDelete = (id) => {
     setSelectedScheduleId(id);
     setShowConfirm(true);
-  };
-
-  const confirmDelete = () => {
-    // Dispatch your delete action here
-    setShowConfirm(false);
   };
 
   const handlePageChange = (page) => {
@@ -107,6 +102,9 @@ const ScheduleTable = () => {
                 To
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                Class Name
+              </th>
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Actions
               </th>
             </tr>
@@ -123,6 +121,7 @@ const ScheduleTable = () => {
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.day}</td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.from}</td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.to}</td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.className}</td> {/* Added Class Name */}
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       aria-label="Edit schedule"
@@ -144,7 +143,7 @@ const ScheduleTable = () => {
             ) : (
               <tr>
                 <td
-                  colSpan="7"
+                  colSpan="8"
                   className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                 >
                   <span className="font-poppins">No Schedules Found</span>
