@@ -37,7 +37,7 @@ const StudentHeader = ({ onSearchChange, onFilterChange }) => {
           </button> */}
 
           <NavLink
-            to="/admin/students/studentform"
+            to="/admin/studentform"
             className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
           >
             Add Student

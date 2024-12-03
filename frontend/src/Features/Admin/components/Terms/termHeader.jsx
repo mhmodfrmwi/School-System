@@ -14,7 +14,7 @@ const TermHeader = () => {
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
           <NavLink
-            to="/admin/terms/termform"
+            to="/admin/termform"
             className="flex items-center rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
           >
             <i className="fa fa-plus mr-2"></i> Add Term
@@ -25,4 +25,4 @@ const TermHeader = () => {
   );
 };
 
-export default  TermHeader ;
+export default TermHeader;

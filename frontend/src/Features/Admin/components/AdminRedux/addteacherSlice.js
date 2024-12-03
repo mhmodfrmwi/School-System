@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // البيانات الأولية للمعلم
 const initialState = {
@@ -15,38 +15,47 @@ const initialState = {
 
 // إرسال بيانات المعلم
 export const postTeacher = createAsyncThunk(
-  'addteacher/postTeacher',
+  "addteacher/postTeacher",
   async (teacherData, { rejectWithValue }) => {
+    console.log(teacherData);
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/auth/register", 
+        "http://localhost:4000/api/v1/auth/register",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(teacherData),
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
-        throw new Error('Failed to post teacher data');
+        throw new Error("Failed to post teacher data");
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to post teacher data');
+      return rejectWithValue(error.message || "Failed to post teacher data");
     }
-  }
+  },
 );
 
 const addTeacherSlice = createSlice({
-  name: 'addteacher',
+  name: "addteacher",
   initialState,
   reducers: {
     addTeachertoServer: {
-      prepare(fullName, email, password, phoneNumber, gender,classes,subject) {
+      prepare(
+        fullName,
+        email,
+        password,
+        phoneNumber,
+        gender,
+        classes,
+        subject,
+      ) {
         return {
           payload: {
             fullName,
@@ -73,15 +82,15 @@ const addTeacherSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(postTeacher.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
         state.error = null;
       })
       .addCase(postTeacher.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         Object.assign(state, action.payload);
       })
       .addCase(postTeacher.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.payload;
       });
   },

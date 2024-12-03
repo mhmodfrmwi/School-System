@@ -31,7 +31,7 @@ const ScheduleHeader = ({ onSearchChange, onFilterChange }) => {
           </button>
 
           <NavLink
-            to="/admin/schedules/scheduleform"
+            to="/admin/scheduleform"
             className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
           >
             Add Schedule

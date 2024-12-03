@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -19,10 +19,13 @@ const Sidebar = () => {
   const menuItems = [
     { label: "Dashboard", icon: faHome, href: "#dashboard" },
     { label: "Members", icon: faUsers, href: "/admin/basicform" },
-    { label: "Term Management", icon: faCalendar, href: "/admin/terms/allTerms" },
-    { label: "Course Management", icon: faPen, href: "#course-management" },
+    { label: "Term Management", icon: faCalendar, href: "/admin/allTerms" },
+    { label: "Course Management", icon: faPen, href: "/admin/allcourses" },
     { label: "Reports & Analytics", icon: faChartPie, href: "#reports" },
-    { label: "Schedule Management",icon: faClock, href: "/admin/schedules/allschedules",
+    {
+      label: "Schedule Management",
+      icon: faClock,
+      href: "/admin/allschedules",
     },
   ];
 
@@ -38,7 +41,6 @@ const Sidebar = () => {
     setActiveIndex(index);
     localStorage.setItem("activeIndex", index);
   };
-
 
   return (
     <div className="relative">
