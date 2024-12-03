@@ -13,7 +13,7 @@ const AllTerms = () => {
   return (
     <div className="flex flex-col p-0">
       <div className="flex-1">
-        <div className="mx-auto w-[360px] overflow-x-scroll p-4 sm:w-[550px] md:w-[700px] xl:w-[900px]">
+        <div className="mx-auto max-w-[900px] p-0 sm:p-4">
           <TermList />
         </div>
       </div>

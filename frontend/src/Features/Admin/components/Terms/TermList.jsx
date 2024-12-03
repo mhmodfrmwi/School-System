@@ -8,7 +8,7 @@ import {
 } from "../AdminRedux/termSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import TermHeader from "../Terms/TermHeader";
+import TermHeader from "./termHeader";
 
 const TermList = () => {
   const { terms, status, message } = useSelector((state) => state.terms);

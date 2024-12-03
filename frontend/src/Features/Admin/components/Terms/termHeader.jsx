@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const TermmHeader = () => {
+const TermHeader = () => {
   return (
     <div className="mx-auto px-4 md:px-6 lg:px-0">
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
@@ -25,4 +25,4 @@ const TermmHeader = () => {
   );
 };
 
-export default  TermmHeader ;
+export default  TermHeader ;
