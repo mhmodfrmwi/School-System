@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const initialState = {
   students: [],
@@ -15,7 +16,6 @@ const initialState = {
 export const postStudent = createAsyncThunk(
   "addstudent/postStudent",
   async (studentData, { rejectWithValue }) => {
-    // console.log(studentData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/auth/register",
@@ -27,8 +27,10 @@ export const postStudent = createAsyncThunk(
           },
         },
       );
+
       if (!response.ok) {
-        throw new Error("Failed to post student data");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
@@ -39,18 +41,23 @@ export const postStudent = createAsyncThunk(
   },
 );
 
-
 export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
   async () => {
-    const response = await fetch(
-      "http://localhost:4000/api/v1/getUsers/students",
-    );
-    const data = await response.json();
-    const students = data.students;
-    // console.log(students);
+    try {
+      const response = await fetch(
+        "http://localhost:4000/api/v1/getUsers/students",
+      );
 
-    return students;
+      if (!response.ok) {
+        const error = await response.json();
+        return toast.error(error.message);
+      }
+      const data = await response.json();
+      const students = data.students;
+
+      return students;
+    } catch (error) {}
   },
 );
 
@@ -64,8 +71,10 @@ export const removeStudent = createAsyncThunk(
           method: "DELETE",
         },
       );
+
       if (!response.ok) {
-        throw new Error("Failed to delete student");
+        const error = await response.json();
+        return toast.error(error.message);
       }
       return id;
     } catch (error) {
@@ -118,18 +127,18 @@ const studentSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-    .addCase(postStudent.pending, (state) => {
-      state.status = "loading";
-      state.error = null;
-    })
-    .addCase(postStudent.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      Object.assign(state, action.payload);
-    })
-    .addCase(postStudent.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.payload;
-    })
+      .addCase(postStudent.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(postStudent.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        Object.assign(state, action.payload);
+      })
+      .addCase(postStudent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
       .addCase(fetchStudents.pending, (state) => {
         state.status = "loading";
       })
@@ -158,6 +167,7 @@ const studentSlice = createSlice({
   },
 });
 
-export const { addStudent, editStudent, clearMessage ,addStudenttoserver} = studentSlice.actions;
+export const { addStudent, editStudent, clearMessage, addStudenttoserver } =
+  studentSlice.actions;
 
 export default studentSlice.reducer;

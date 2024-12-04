@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const initialState = {
   fullName: "",
@@ -29,13 +30,14 @@ export const postBosse = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to post bosse data");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to post bosse data");
+      console.log(error);
     }
   },
 );
@@ -49,7 +51,8 @@ export const fetchBosses = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch bosses");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
@@ -75,7 +78,8 @@ export const removeBosse = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to delete boss");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       dispatch(fetchBosses());

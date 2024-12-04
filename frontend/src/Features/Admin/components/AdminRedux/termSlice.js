@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 // Initial state
 const initialState = {
@@ -13,15 +14,17 @@ export const fetchTerms = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch("http://localhost:5000/terms");
+
       if (!response.ok) {
-        throw new Error("Failed to fetch terms");
+        const error = await response.json();
+        return toast.error(error.message);
       }
       const data = await response.json();
-      return data; 
+      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Add a new term
@@ -38,7 +41,8 @@ export const addTermAsync = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add term");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
@@ -46,7 +50,7 @@ export const addTermAsync = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Edit an existing term
@@ -63,7 +67,8 @@ export const editTermAsync = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to edit term: ${response.statusText}`);
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
@@ -71,7 +76,7 @@ export const editTermAsync = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Remove a term
@@ -84,14 +89,15 @@ export const removeTerm = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete term");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       return id; // Return the id of the deleted term
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Create a slice
@@ -138,7 +144,9 @@ const termSlice = createSlice({
       })
       .addCase(editTermAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const index = state.terms.findIndex((term) => term.id === action.payload.id);
+        const index = state.terms.findIndex(
+          (term) => term.id === action.payload.id,
+        );
         if (index !== -1) {
           state.terms[index] = action.payload; // Update the term in the state
         }

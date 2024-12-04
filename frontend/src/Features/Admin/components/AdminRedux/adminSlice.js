@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const initialState = {
   fullName: "",
@@ -13,31 +14,31 @@ const initialState = {
 };
 
 export const postAdmin = createAsyncThunk(
-  'addadmin/postAdmin',
+  "addadmin/postAdmin",
   async (adminData, { rejectWithValue }) => {
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/auth/register", // تعديل المسار حسب API الخاص بك
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify(adminData),
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
-        throw new Error('Failed to post admin data');
+        const error = await response.json();
+        return toast.error(error.message);
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to post admin data');
+      return rejectWithValue(error.message || "Failed to post admin data");
     }
-  }
+  },
 );
-
 
 export const fetchAdmins = createAsyncThunk(
   "admins/fetchAdmins",
@@ -48,7 +49,8 @@ export const fetchAdmins = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch admins");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
@@ -73,7 +75,8 @@ export const removeAdmin = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to delete admin");
+        const error = await response.json();
+        return toast.error(error.message);
       }
       dispatch(fetchAdmins());
       return id;

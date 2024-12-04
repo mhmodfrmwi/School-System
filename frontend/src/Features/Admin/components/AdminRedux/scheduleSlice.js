@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 // Initial state
 const initialState = {
@@ -13,8 +14,10 @@ export const fetchSchedules = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch("http://localhost:5000/schedules");
+
       if (!response.ok) {
-        throw new Error("Failed to fetch schedules");
+        const error = await response.json();
+        return toast.error(error.message);
       }
       const data = await response.json();
       console.log(data);
@@ -22,7 +25,7 @@ export const fetchSchedules = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Add a new schedule
@@ -39,7 +42,8 @@ export const addScheduleAsync = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add schedule");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
@@ -47,7 +51,7 @@ export const addScheduleAsync = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Edit an existing schedule
@@ -64,7 +68,8 @@ export const editScheduleAsync = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to edit schedule: ${response.statusText}`);
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
@@ -72,7 +77,7 @@ export const editScheduleAsync = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Remove a schedule
@@ -85,14 +90,15 @@ export const removeSchedule = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete schedule");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       return id; // Return the id of the deleted schedule
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Create a slice
@@ -139,7 +145,9 @@ const scheduleSlice = createSlice({
       })
       .addCase(editScheduleAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const index = state.schedules.findIndex((schedule) => schedule.id === action.payload.id);
+        const index = state.schedules.findIndex(
+          (schedule) => schedule.id === action.payload.id,
+        );
         if (index !== -1) {
           state.schedules[index] = action.payload; // Update the schedule in the state
         }
@@ -156,7 +164,9 @@ const scheduleSlice = createSlice({
       })
       .addCase(removeSchedule.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.schedules = state.schedules.filter((schedule) => schedule.id !== action.payload); // Remove the schedule from the state
+        state.schedules = state.schedules.filter(
+          (schedule) => schedule.id !== action.payload,
+        ); // Remove the schedule from the state
         state.message = "Schedule deleted successfully";
       })
       .addCase(removeSchedule.rejected, (state, action) => {

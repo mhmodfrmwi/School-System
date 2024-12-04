@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch ,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addBossetoServer, postBosse } from "../AdminRedux/managerSlice";
 import Swal from "sweetalert2";
 function ManagerForm() {
@@ -29,13 +29,16 @@ function ManagerForm() {
       });
       return;
     }
-    // Check for duplicate email
     const emailExists = bosses.some(
-      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase()
+      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase(),
     );
 
     if (emailExists) {
-      Swal.fire("Error", "Email already exists. Please use another email.", "error");
+      Swal.fire(
+        "Error",
+        "Email already exists. Please use another email.",
+        "error",
+      );
       return;
     }
     try {
@@ -48,8 +51,8 @@ function ManagerForm() {
           SSN: "30403000000000",
           password: formData.password,
           role: "Boss",
-        })
-      )
+        }),
+      );
 
       await dispatch(
         addBossetoServer(
@@ -57,9 +60,9 @@ function ManagerForm() {
           formData.email,
           formData.password,
           formData.phoneNumber,
-          formData.gender
-        )
-      )
+          formData.gender,
+        ),
+      );
 
       Swal.fire({
         icon: "success",
@@ -83,7 +86,6 @@ function ManagerForm() {
     }
   };
 
-
   return (
     <>
       <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
@@ -105,7 +107,7 @@ function ManagerForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
@@ -122,7 +124,7 @@ function ManagerForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter email address"
                 required
               />
@@ -135,13 +137,17 @@ function ManagerForm() {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
                 <option value="" disabled>
                   Select gender
                 </option>
-                <option value="Male" className="font-poppins">Male</option>
-                <option value="Female" className="font-poppins">Female</option>
+                <option value="Male" className="font-poppins">
+                  Male
+                </option>
+                <option value="Female" className="font-poppins">
+                  Female
+                </option>
               </select>
             </div>
           </div>
@@ -157,7 +163,7 @@ function ManagerForm() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full font-poppins rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter password"
                 required
               />
@@ -171,7 +177,7 @@ function ManagerForm() {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
                 required
               />
