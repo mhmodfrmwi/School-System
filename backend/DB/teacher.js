@@ -22,7 +22,7 @@ const teacherSchema = new mongoose.Schema({
       "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?t=st=1733078248~exp=1733081848~hmac=e2eec059dc2217f905388f452eaf9dee7d9679765c2b0ac7f273a5cfe7cd4bde&w=740",
   },
   phone: {
-    type: Number,
+    type: String,
     required: true,
   },
   classes: {
@@ -65,7 +65,8 @@ const validateTeacher = (obj) => {
       "number.base": "Experience must be a non-negative number.",
     }),
     gender: Joi.string().required(),
-    phone: Joi.number().required(),
+    phone: Joi.string().required(),
+    classes: Joi.array().required(),
   });
 
   return schema.validate(obj);

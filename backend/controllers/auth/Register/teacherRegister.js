@@ -22,6 +22,7 @@ const TeacherRegister = expressAsyncHandler(async (req, res) => {
     score: req.body.score,
     gender: req.body.gender,
     phone: req.body.phone,
+    classes: req.body.classes,
   });
 
   const salt = await bcrypt.genSalt(10);

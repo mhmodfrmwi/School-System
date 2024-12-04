@@ -10,8 +10,8 @@ function TeacherForm() {
     password: "",
     phoneNumber: "",
     gender: "",
-    classes: [], // This will hold an array of selected classes
-    subjects: [""], // This will hold an array of subjects, starting with one empty string
+    classes: [],
+    subjects: [""],
   });
 
   const handleChange = (e) => {
