@@ -124,6 +124,11 @@ const ManagerTable = () => {
                   } hover:bg-[#117C90]/70`}
                 >
                   <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                    <img
+                      src={manager.profileImage}
+                      alt="Profile"
+                      className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
+                    />
                     <span className="truncate font-poppins">{manager.name}</span>
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">

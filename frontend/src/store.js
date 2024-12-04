@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import userReducer from "./Features/Auth/AuthRedux/userSlice";
 import studentReducer from "./Features/Admin/components/AdminRedux/studentSlice";
-import addstudentReducer from "./Features/Admin/components/AdminRedux/addstudentSlice";
+import addstudentReducer from "./Features/Admin/components/AdminRedux/studentSlice";
 import termReducer from "./Features/Admin/components/AdminRedux/termSlice";
 import scheduleReducer from "./Features/Admin/components/AdminRedux/scheduleSlice";
 import parentReducer from "./Features/Admin/components/AdminRedux/parentSlice";

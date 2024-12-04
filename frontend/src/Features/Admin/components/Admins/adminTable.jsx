@@ -123,7 +123,7 @@ const AdminTable = () => {
                     index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                   } hover:bg-[#117C90]/70`}
                 >
-                  <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="flex items-center font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
                   <img
                       src={admin.profileImage}
                       alt="Profile"
@@ -131,17 +131,17 @@ const AdminTable = () => {
                     />
                     <span className="truncate font-poppins">{admin.name}</span>
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {admin.email}
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {admin.gender}
                   </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       aria-label="Edit admin"
                       onClick={() => {}}
-                      className="text-[#117C90] transition duration-300 hover:text-[#244856]"
+                      className="text-[#117C90]  transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-edit text-lg" />
                     </button>

@@ -1,25 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addParenttoserver, postParent } from "../AdminRedux/parentSlice";
+import Swal from "sweetalert2";
 
 function ParentForm() {
   const dispatch = useDispatch();
-  const {
-    parentFullName,
-    parentEmail,
-    parentPassword,
-    parentPhoneNumber,
-    parentGender,
-    students,
-  } = useSelector((state) => state.parents);
-
+  const { parents } = useSelector((state) => state.parents); // Assuming you have all parents' data in Redux
   const [formData, setFormData] = useState({
-    fullName: parentFullName || "",
-    email: parentEmail || "",
-    password: parentPassword || "",
-    phoneNumber: parentPhoneNumber || "",
-    gender: parentGender || "",
-    students: students || [{ studentName: "", studentClass: "" }],
+    fullName: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
+    gender: "",
+    students: [{ studentName: "", studentClass: "" }],
   });
 
   const handleChange = (e) => {
@@ -30,7 +23,7 @@ function ParentForm() {
   const handleStudentChange = (index, e) => {
     const { name, value } = e.target;
     const updatedStudents = formData.students.map((student, i) =>
-      i === index ? { ...student, [name]: value } : student,
+      i === index ? { ...student, [name]: value } : student
     );
     setFormData({ ...formData, students: updatedStudents });
   };
@@ -42,43 +35,63 @@ function ParentForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.password) return;
+    if (!formData.fullName || !formData.email || !formData.password) {
+      Swal.fire("Error", "All fields are required!", "error");
+      return;
+    }
 
-    // Dispatch to Redux
-    dispatch(
-      postParent({
-        name: formData.fullName,
-        email: formData.email,
-        phone: formData.phoneNumber,
-        gender: formData.gender,
-        SSN: "30403000000000",
-        password: formData.password,
-        role: "Parent",
-      }),
+    // Check for duplicate email
+    const emailExists = parents.some(
+      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase()
     );
 
-    dispatch(
-      addParenttoserver(
-        formData.fullName,
-        formData.email,
-        formData.password,
-        formData.phoneNumber,
-        formData.gender,
-      ),
-    );
+    if (emailExists) {
+      Swal.fire("Error", "Email already exists. Please use another email.", "error");
+      return;
+    }
 
-    setFormData({
-      fullName: "",
-      email: "",
-      password: "",
-      phoneNumber: "",
-      gender: "",
-      students: [{ studentName: "", studentClass: "" }],
-    });
+    try {
+      // Dispatch to Redux
+      await dispatch(
+        postParent({
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phoneNumber,
+          gender: formData.gender,
+          SSN: "30403000000000",
+          password: formData.password,
+          role: "Parent",
+        })
+      );
+
+      await dispatch(
+        addParenttoserver(
+          formData.fullName,
+          formData.email,
+          formData.password,
+          formData.phoneNumber,
+          formData.gender
+        )
+      );
+
+      Swal.fire("Success", "Parent added successfully!", "success");
+
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+        phoneNumber: "",
+        gender: "",
+        students: [{ studentName: "", studentClass: "" }],
+      });
+    } catch (error) {
+      Swal.fire("Error", "Something went wrong. Please try again.", "error");
+    }
   };
+
 
   return (
     <>
@@ -101,7 +114,7 @@ function ParentForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
@@ -117,7 +130,7 @@ function ParentForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded- font-poppins md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter email address"
                 required
               />
@@ -130,13 +143,13 @@ function ParentForm() {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
-                <option value="" disabled>
+                <option value="" disabled className="font-poppins">
                   Select gender
                 </option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="Male" className="font-poppins">Male</option>
+                <option value="Female" className="font-poppins">Female</option>
               </select>
             </div>
           </div>
@@ -151,7 +164,7 @@ function ParentForm() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter password"
                 required
               />
@@ -165,7 +178,7 @@ function ParentForm() {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full font-poppins rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
                 required
               />
@@ -188,7 +201,7 @@ function ParentForm() {
                     name="studentName"
                     value={student.studentName}
                     onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                    className="w-full font-poppins rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                     placeholder="Enter student name"
                     required
                   />
@@ -201,12 +214,12 @@ function ParentForm() {
                     name="studentClass"
                     value={student.studentClass}
                     onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                    className="w-full font-poppins rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                   >
-                    <option value="" disabled>
+                    <option value="" className="font-poppins" disabled>
                       Select class
                     </option>
-                    <option value="A">A</option>
+                    <option value="A" >A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
                   </select>
@@ -216,7 +229,7 @@ function ParentForm() {
             <button
               type="button"
               onClick={addStudent}
-              className="mt-4 text-[#117C90] hover:underline"
+              className="mt-4 text-[#117C90] font-poppins hover:underline"
             >
               + Add another student
             </button>
@@ -226,7 +239,7 @@ function ParentForm() {
           <div className="mt-8">
             <button
               type="submit"
-              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
+              className="mt-8 rounded-3xl  bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
             >
               Add Parent
             </button>

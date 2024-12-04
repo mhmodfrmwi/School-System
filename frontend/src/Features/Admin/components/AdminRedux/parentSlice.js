@@ -27,18 +27,21 @@ export const postParent = createAsyncThunk(
         },
       );
 
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error("Failed to post parent data");
+        // Assume the server returns an error message for duplicate email
+        if (response.status === 409) {
+          throw new Error("Email already exists. Please use another email.");
+        }
+        throw new Error(data.message || "Failed to post parent data");
       }
 
-      const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to post parent data");
+      return rejectWithValue(error.message);
     }
-  },
+  }
 );
-
 export const fetchParents = createAsyncThunk(
   "parents/fetchParents",
   async (_, { rejectWithValue }) => {

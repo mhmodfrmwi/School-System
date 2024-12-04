@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 import { addBossetoServer, postBosse } from "../AdminRedux/managerSlice";
-
+import Swal from "sweetalert2";
 function ManagerForm() {
   const dispatch = useDispatch();
+  const { bosses } = useSelector((state) => state.bosses); // Assuming you have all parents' data in Redux
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -17,42 +18,71 @@ function ManagerForm() {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.password) return;
-
-    dispatch(
-      postBosse({
-        name: formData.fullName,
-        email: formData.email,
-        phone: formData.phoneNumber,
-        gender: formData.gender,
-        SSN: "30403000000000",
-        password: formData.password,
-        role: "Boss",
-      }),
+    if (!formData.fullName || !formData.email || !formData.password) {
+      Swal.fire({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please fill in all required fields.",
+      });
+      return;
+    }
+    // Check for duplicate email
+    const emailExists = bosses.some(
+      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase()
     );
 
-    dispatch(
-      addBossetoServer(
-        formData.fullName,
-        formData.email,
-        formData.password,
-        formData.phoneNumber,
-        formData.gender,
-      ),
-    );
+    if (emailExists) {
+      Swal.fire("Error", "Email already exists. Please use another email.", "error");
+      return;
+    }
+    try {
+      await dispatch(
+        postBosse({
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phoneNumber,
+          gender: formData.gender,
+          SSN: "30403000000000",
+          password: formData.password,
+          role: "Boss",
+        })
+      )
 
-    console.log("Admin Form Submitted", formData);
-    setFormData({
-      fullName: "",
-      email: "",
-      password: "",
-      phoneNumber: "",
-      gender: "",
-    });
+      await dispatch(
+        addBossetoServer(
+          formData.fullName,
+          formData.email,
+          formData.password,
+          formData.phoneNumber,
+          formData.gender
+        )
+      )
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Manager added successfully!",
+      });
+
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+        phoneNumber: "",
+        gender: "",
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Submission Failed",
+        text: error.message || "An error occurred while submitting the form.",
+      });
+    }
   };
+
 
   return (
     <>
@@ -75,7 +105,7 @@ function ManagerForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
@@ -92,7 +122,7 @@ function ManagerForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter email address"
                 required
               />
@@ -105,13 +135,13 @@ function ManagerForm() {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
                 <option value="" disabled>
                   Select gender
                 </option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="Male" className="font-poppins">Male</option>
+                <option value="Female" className="font-poppins">Female</option>
               </select>
             </div>
           </div>
@@ -127,7 +157,7 @@ function ManagerForm() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full font-poppins rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter password"
                 required
               />
@@ -141,7 +171,7 @@ function ManagerForm() {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
                 required
               />
@@ -152,7 +182,7 @@ function ManagerForm() {
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full rounded-md bg-[#117C90] p-2 text-white hover:bg-[#043B44]"
+              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
             >
               Add Manager
             </button>

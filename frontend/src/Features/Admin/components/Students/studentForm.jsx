@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { postStudent, addStudenttoserver } from "../AdminRedux/addstudentSlice";
+import { postStudent, addStudenttoserver } from "../AdminRedux/studentSlice";
 
 function StudentForm() {
   const dispatch = useDispatch();
+  const { students } = useSelector((state) => state.students); // Assuming you have all parents' data in Redux
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -34,7 +35,15 @@ function StudentForm() {
       });
       return;
     }
+    // Check for duplicate email
+    const emailExists = students.some(
+      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase()
+    );
 
+    if (emailExists) {
+      Swal.fire("Error", "Email already exists. Please use another email.", "error");
+      return;
+    }
     try {
       dispatch(
         postStudent({

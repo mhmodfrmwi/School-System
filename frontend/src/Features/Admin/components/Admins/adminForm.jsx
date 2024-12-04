@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 import { addAdmintoServer, postAdmin } from "../AdminRedux/adminSlice";
-
+import Swal from "sweetalert2";
 function AdminForm() {
   const dispatch = useDispatch();
+  const { admins } = useSelector((state) => state.admins); // Assuming you have all parents' data in Redux
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -17,42 +18,62 @@ function AdminForm() {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.password) return;
+    // Validate form fields
+    if (!formData.fullName || !formData.email || !formData.password) {
+      Swal.fire("Error", "All fields are required!", "error");
+      return;
+    }
 
-    dispatch(
-      postAdmin({
-        name: formData.fullName,
-        email: formData.email,
-        phone: formData.phoneNumber,
-        gender: formData.gender,
-        SSN: "30403000000000", // Dummy value
-        password: formData.password,
-        role: "Admin",
-      }),
+    // Check for duplicate email
+    const emailExists = admins.some(
+      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase()
     );
 
-    dispatch(
-      addAdmintoServer(
-        formData.fullName,
-        formData.email,
-        formData.password,
-        formData.phoneNumber,
-        formData.gender,
-      ),
-    );
+    if (emailExists) {
+      Swal.fire("Error", "Email already exists. Please use another email.", "error");
+      return;
+    }
+    try {
+      // Dispatch Redux actions
+      await dispatch(
+        postAdmin({
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phoneNumber,
+          gender: formData.gender,
+          SSN: "30403000000000", // Dummy value
+          password: formData.password,
+          role: "Admin",
+        }),
+      );
 
-    console.log("Admin Form Submitted", formData);
-    setFormData({
-      fullName: "",
-      email: "",
-      password: "",
-      phoneNumber: "",
-      gender: "",
-    });
-  };
+      await dispatch(
+        addAdmintoServer(
+          formData.fullName,
+          formData.email,
+          formData.password,
+          formData.phoneNumber,
+          formData.gender,
+        ),
+      );
+
+      Swal.fire("Success", "Admin added successfully!", "success");
+
+      // Reset form fields
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+        phoneNumber: "",
+        gender: "",
+      });
+  } catch (error) {
+    Swal.fire("Error", "Something went wrong. Please try again.", "error");
+  }
+};
 
   return (
     <>
@@ -75,7 +96,7 @@ function AdminForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md border font-poppins p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
@@ -92,7 +113,7 @@ function AdminForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter email address"
                 required
               />
@@ -105,13 +126,13 @@ function AdminForm() {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
                 <option value="" disabled>
                   Select gender
                 </option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="Male" className="font-poppins">Male</option>
+                <option value="Female" className="font-poppins">Female</option>
               </select>
             </div>
           </div>
@@ -127,7 +148,7 @@ function AdminForm() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border font-poppins p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter password"
                 required
               />
@@ -141,7 +162,7 @@ function AdminForm() {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border font-poppins p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
                 required
               />
@@ -152,7 +173,7 @@ function AdminForm() {
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full rounded-md bg-[#117C90] p-2 text-white hover:bg-[#043B44]"
+              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
             >
               Add Admin
             </button>
