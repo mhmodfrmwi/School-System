@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { postBosse, addBossetoServer } from "../AdminRedux/addmanagerSlice";
+import { addBossetoServer, postBosse } from "../AdminRedux/managerSlice";
 
 function ManagerForm() {
   const dispatch = useDispatch();
@@ -22,17 +22,16 @@ function ManagerForm() {
 
     if (!formData.fullName || !formData.email || !formData.password) return;
 
-
     dispatch(
       postBosse({
         name: formData.fullName,
         email: formData.email,
         phone: formData.phoneNumber,
         gender: formData.gender,
-        SSN: "30403000000000", // Dummy value
+        SSN: "30403000000000",
         password: formData.password,
-        role: "Boss", 
-      })
+        role: "Boss",
+      }),
     );
 
     dispatch(
@@ -41,8 +40,8 @@ function ManagerForm() {
         formData.email,
         formData.password,
         formData.phoneNumber,
-        formData.gender
-      )
+        formData.gender,
+      ),
     );
 
     console.log("Admin Form Submitted", formData);
@@ -54,7 +53,6 @@ function ManagerForm() {
       gender: "",
     });
   };
-
 
   return (
     <>
@@ -69,7 +67,7 @@ function ManagerForm() {
         <form onSubmit={handleSubmit}>
           {/* Full Name */}
           <div className="mb-4">
-            <label className="block mb-2 font-poppins text-gray-700">
+            <label className="mb-2 block font-poppins text-gray-700">
               Full Name
             </label>
             <input
@@ -77,7 +75,7 @@ function ManagerForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
@@ -86,7 +84,7 @@ function ManagerForm() {
           {/* Email and Gender */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
+              <label className="mb-2 block font-poppins text-gray-700">
                 Email Address
               </label>
               <input
@@ -94,20 +92,20 @@ function ManagerForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter email address"
                 required
               />
             </div>
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
+              <label className="mb-2 block font-poppins text-gray-700">
                 Gender
               </label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
                 <option value="" disabled>
                   Select gender
@@ -119,9 +117,9 @@ function ManagerForm() {
           </div>
 
           {/* Password and Phone Number */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
+              <label className="mb-2 block font-poppins text-gray-700">
                 Password
               </label>
               <input
@@ -129,13 +127,13 @@ function ManagerForm() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter password"
                 required
               />
             </div>
             <div>
-              <label className="block mb-2 font-poppins text-gray-700">
+              <label className="mb-2 block font-poppins text-gray-700">
                 Phone Number
               </label>
               <input
@@ -143,7 +141,7 @@ function ManagerForm() {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
                 required
               />
@@ -154,7 +152,7 @@ function ManagerForm() {
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full p-2 bg-[#117C90] text-white rounded-md hover:bg-[#043B44]"
+              className="w-full rounded-md bg-[#117C90] p-2 text-white hover:bg-[#043B44]"
             >
               Add Manager
             </button>

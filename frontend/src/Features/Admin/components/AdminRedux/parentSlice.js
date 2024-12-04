@@ -1,41 +1,89 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
+  fullName: "",
+  email: "",
+  password: "",
+  phoneNumber: "",
+  gender: "",
   parents: [],
   status: "idle",
+  error: null,
   message: "",
 };
 
+export const postParent = createAsyncThunk(
+  "parents/postParent",
+  async (parentData, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/api/v1/auth/register",
+        {
+          method: "POST",
+          body: JSON.stringify(parentData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to post parent data");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to post parent data");
+    }
+  },
+);
+
 export const fetchParents = createAsyncThunk(
   "parents/fetchParents",
-  async () => {
-    const response = await fetch(
-      "http://localhost:4000/api/v1/getUsers/parents"
-    );
-    const data = await response.json();
-    const parents = data.parents;
-    // console.log(parents);
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/api/v1/getUsers/parents",
+      );
 
-    return parents;}
+      if (!response.ok) {
+        throw new Error("Failed to fetch parents");
+      }
+
+      const data = await response.json();
+      return data.parents;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
 );
 
 export const removeParent = createAsyncThunk(
   "parents/removeParent",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/getUsers/parents/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/v1/getUsers/parents/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
       if (!response.ok) {
         throw new Error("Failed to delete parent");
       }
 
+      dispatch(fetchParents());
+
       return id;
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const parentSlice = createSlice({
@@ -47,7 +95,7 @@ const parentSlice = createSlice({
     },
     editParent: (state, action) => {
       const index = state.parents.findIndex(
-        (parent) => parent.id === action.payload.id
+        (parent) => parent.id === action.payload.id,
       );
       if (index !== -1) {
         state.parents[index] = action.payload;
@@ -56,10 +104,41 @@ const parentSlice = createSlice({
     clearMessage: (state) => {
       state.message = "";
     },
+    addParenttoserver: {
+      prepare(fullName, email, password, phoneNumber, gender) {
+        return {
+          payload: {
+            fullName,
+            email,
+            password,
+            phoneNumber,
+            gender,
+          },
+        };
+      },
+      reducer(state, action) {
+        state.fullName = action.payload.fullName;
+        state.email = action.payload.email;
+        state.password = action.payload.password;
+        state.phoneNumber = action.payload.phoneNumber;
+        state.gender = action.payload.gender;
+      },
+    },
   },
   extraReducers: (builder) => {
     builder
-
+      .addCase(postParent.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(postParent.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        Object.assign(state, action.payload);
+      })
+      .addCase(postParent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
       .addCase(fetchParents.pending, (state) => {
         state.status = "loading";
       })
@@ -77,7 +156,7 @@ const parentSlice = createSlice({
       .addCase(removeParent.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.parents = state.parents.filter(
-          (parent) => parent.id !== action.payload
+          (parent) => parent.id !== action.payload,
         );
         state.message = "Parent deleted successfully";
       })
@@ -88,6 +167,7 @@ const parentSlice = createSlice({
   },
 });
 
-export const { addParent, editParent, clearMessage } = parentSlice.actions;
+export const { addParent, editParent, clearMessage, addParenttoserver } =
+  parentSlice.actions;
 
 export default parentSlice.reducer;
