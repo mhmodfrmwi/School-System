@@ -1,10 +1,13 @@
 const asyncHandler = require("express-async-handler");
 const { Student } = require("../../DB/student");
 const { Teacher } = require("../../DB/teacher");
-const { Admin } = require("../../DB/Admin");
+const { Admin, validateAdmin } = require("../../DB/Admin");
 const { Parent } = require("../../DB/Parent");
 const { Boss } = require("../../DB/Boss");
 const { default: mongoose } = require("mongoose");
+const { validateSchedualForm, Schedual } = require("../../DB/scheduale");
+const { validateTermForm, Term } = require("../../DB/term");
+const { Course, validateCourse } = require("../../DB/courseModel");
 const GetStudents = asyncHandler(async (req, res) => {
   const students = await Student.find({}, [
     "-password",
@@ -424,6 +427,321 @@ const DeleteParent = asyncHandler(async (req, res) => {
     parent,
   });
 });
+const CreateSchedual = asyncHandler(async (req, res) => {
+  const { error } = validateSchedualForm(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  const Teach = await Teacher.findOne({ SSN: req.body.SSN });
+  if (!Teach) {
+    return res.json({
+      status: 404,
+      message: "Teacher not found",
+    });
+  }
+  const schedual = new Schedual({
+    subjectName: req.body.subjectName,
+    teacher: Teach._id,
+    day: req.body.day,
+    startTime: req.body.startTime,
+    endTime: req.body.endTime,
+    class: req.body.class,
+    grade: req.body.grade,
+  });
+  await schedual.save();
+  res.json({
+    status: 200,
+    message: "Schedual has been added successfully",
+    schedual,
+  });
+});
+const GetAllSchedual = asyncHandler(async (req, res) => {
+  const scheduals = await Schedual.find();
+  res.status(200).json({
+    status: 200,
+    scheduals,
+  });
+});
+const GetOneSchedual = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  const schedual = await Schedual.findById({ _id: id });
+  if (!schedual) {
+    return res.status(404).json({
+      status: 404,
+      message: "Schedual not found",
+    });
+  }
+
+  res.status(200).json({
+    status: 200,
+    schedual,
+  });
+});
+const UpdateSchedual = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  let schedual = await Schedual.findById({ _id: id });
+  if (!schedual) {
+    return res.status(404).json({
+      status: 404,
+      message: "Schedual not found",
+    });
+  }
+  if (req.body.teacher) {
+    const Teach = await Teacher.findOne({ SSN: req.body.SSN });
+    if (!Teach) {
+      return res.json({
+        status: 404,
+        message: "Teacher not found",
+      });
+    }
+    req.body.teacher = Teach._id;
+  }
+
+  schedual = await Schedual.findByIdAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: 200,
+    schedual,
+  });
+});
+const DeleteSchedual = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  let schedual = await Schedual.findById({ _id: id });
+  if (!schedual) {
+    return res.status(404).json({
+      status: 404,
+      message: "Schedual not found",
+    });
+  }
+  if (req.body.teacher) {
+    const Teach = await Teacher.findOne({ SSN: req.body.SSN });
+    if (!Teach) {
+      return res.json({
+        status: 404,
+        message: "Teacher not found",
+      });
+    }
+    req.body.teacher = Teach._id;
+  }
+
+  await schedual.deleteOne({ _id: id });
+  res.status(200).json({
+    status: 200,
+    message: "Schedual has been deleted successfully",
+  });
+});
+const CreateTerm = asyncHandler(async (req, res) => {
+  const { error } = validateTermForm(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  const term = new Term({
+    startYear: req.body.startYear,
+    endYear: req.body.endYear,
+    term: req.body.term,
+  });
+  await term.save();
+  res.status(200).json({
+    status: 200,
+    message: "Term has been created successfully",
+    term,
+  });
+});
+const GetAllTerms = asyncHandler(async (req, res) => {
+  const terms = await Term.find();
+  res.status(200).json({
+    status: 200,
+    terms,
+  });
+});
+
+const GetOneTerm = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  const term = await Term.findById({ _id: id });
+  if (!term) {
+    return res.status(404).json({
+      status: 404,
+      message: "Term not found",
+    });
+  }
+
+  res.status(200).json({
+    status: 200,
+    term,
+  });
+});
+
+const UpdateTerm = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  let term = await Term.findById({ _id: id });
+  if (!term) {
+    return res.status(404).json({
+      status: 404,
+      message: "Term not found",
+    });
+  }
+
+  term = await Term.findByIdAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: 200,
+    term,
+  });
+});
+
+const DeleteTerm = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  let term = await Term.findById({ _id: id });
+  if (!term) {
+    return res.status(404).json({
+      status: 404,
+      message: "Term not found",
+    });
+  }
+
+  await term.deleteOne({ _id: id });
+  res.status(200).json({
+    status: 200,
+    message: "Term has been deleted successfully",
+  });
+});
+const CreateCourse = asyncHandler(async (req, res) => {
+  const { error } = validateCourse(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+  const course = new Course({
+    name: req.body.name,
+    term: req.body.term,
+    grade: req.body.grade,
+  });
+
+  await course.save();
+  res.status(200).json({
+    status: 200,
+    message: "Course has been created successfully",
+    course,
+  });
+});
+
+const GetAllCourses = asyncHandler(async (req, res) => {
+  const courses = await Course.find();
+  res.status(200).json({
+    status: 200,
+    courses,
+  });
+});
+const GetOneCourse = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  const course = await Course.findById({ _id: id });
+  if (!course) {
+    return res.status(404).json({
+      status: 404,
+      message: "Course not found",
+    });
+  }
+
+  res.status(200).json({
+    status: 200,
+    course,
+  });
+});
+const UpdateCourse = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  let course = await Course.findById({ _id: id });
+  if (!course) {
+    return res.status(404).json({
+      status: 404,
+      message: "Course not found",
+    });
+  }
+
+  course = await Course.findByIdAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: 200,
+    course,
+  });
+});
+const DeleteCourse = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.json({
+      status: 400,
+      message: "Invalid id format",
+    });
+  }
+  let course = await Course.findById({ _id: id });
+  if (!course) {
+    return res.status(404).json({
+      status: 404,
+      message: "Course not found",
+    });
+  }
+
+  await course.deleteOne({ _id: id });
+  res.status(200).json({
+    status: 200,
+    message: "Course has been deleted successfully",
+  });
+});
 module.exports = {
   GetBosses,
   GetOneAdmin,
@@ -445,4 +763,19 @@ module.exports = {
   DeleteParent,
   DeleteTeacher,
   DeleteStudent,
+  CreateSchedual,
+  CreateTerm,
+  CreateCourse,
+  GetAllCourses,
+  GetAllSchedual,
+  GetAllTerms,
+  GetOneSchedual,
+  GetOneTerm,
+  GetOneCourse,
+  UpdateSchedual,
+  UpdateTerm,
+  UpdateCourse,
+  DeleteSchedual,
+  DeleteTerm,
+  DeleteCourse,
 };

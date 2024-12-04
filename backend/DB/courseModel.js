@@ -8,29 +8,27 @@ const courseSchema = new mongoose.Schema({
   },
   term: {
     type: String,
-    enum: ["First", "Second"],
+    enum: ["term 1", "term 2"],
     required: true,
   },
-  year: {
+  grade: {
     type: Number,
-    min: 1900,
-    max: 2100,
     required: true,
   },
-  scheduleId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Schedule",
-  },
+  // scheduleId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true,
+  //   ref: "Schedule",
+  // },
 });
 
 const Course = mongoose.model("Course", courseSchema);
 
 const courseValidationSchema = Joi.object({
   name: Joi.string().required(),
-  term: Joi.string().valid(["First", "Second"]).required(),
-  year: Joi.number().integer().min(1900).max(2100).required(),
-  scheduleId: Joi.object().required(),
+  term: Joi.string().required(),
+  grade: Joi.number().integer().required(),
+  // scheduleId: Joi.object().required(),
 }).prefs({
   messages: {
     "any.required": "This field is required.",
