@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 // البيانات الأولية للمعلم
 const initialState = {
@@ -13,7 +14,6 @@ const initialState = {
   error: null,
 };
 
-// إرسال بيانات المعلم
 export const postTeacher = createAsyncThunk(
   "addteacher/postTeacher",
   async (teacherData, { rejectWithValue }) => {
@@ -31,7 +31,8 @@ export const postTeacher = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to post teacher data");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();

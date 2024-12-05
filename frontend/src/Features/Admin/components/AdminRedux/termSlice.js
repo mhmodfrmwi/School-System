@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const initialState = {
   startYear: "",
@@ -33,10 +34,11 @@ export const postTerm = createAsyncThunk(
 
       const data = await response.json();
       return data;
+      return data;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to post term data");
     }
-  }
+  },
 );
 
 // Fetch all terms
@@ -55,7 +57,7 @@ export const fetchTerms = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 export const editTermAsync = createAsyncThunk(
@@ -82,7 +84,7 @@ export const editTermAsync = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Remove a term
@@ -101,7 +103,8 @@ export const removeTerm = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to delete term");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       dispatch(fetchTerms());
@@ -110,7 +113,7 @@ export const removeTerm = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const termsSlice = createSlice({

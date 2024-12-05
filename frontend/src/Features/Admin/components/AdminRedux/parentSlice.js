@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const initialState = {
   fullName: "",
@@ -27,20 +28,17 @@ export const postParent = createAsyncThunk(
         },
       );
 
-      const data = await response.json();
       if (!response.ok) {
-        // Assume the server returns an error message for duplicate email
-        if (response.status === 409) {
-          throw new Error("Email already exists. Please use another email.");
-        }
-        throw new Error(data.message || "Failed to post parent data");
+        const error = await response.json();
+        return toast.error(error.message);
       }
+      const data = await response.json();
 
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 export const fetchParents = createAsyncThunk(
   "parents/fetchParents",
@@ -51,7 +49,8 @@ export const fetchParents = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch parents");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       const data = await response.json();
@@ -77,7 +76,8 @@ export const removeParent = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to delete parent");
+        const error = await response.json();
+        return toast.error(error.message);
       }
 
       dispatch(fetchParents());
