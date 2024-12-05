@@ -1,49 +1,56 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchSchedules,
+  fetchScheduals,
+  removeSchedual,
   clearMessage,
 } from "../AdminRedux/scheduleSlice";
+import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Import fetchTeachers
 import Pagination from "../Pagination";
-import Header from "../Schedule/scheduleHeader";
+import Header from "./scheduleHeader";
 
-const ScheduleTable = () => {
-  const { schedules = [], message } = useSelector((state) => state.schedules || {});
+const SchedualTable = () => {
   const dispatch = useDispatch();
+  const { scheduals = [], message } = useSelector((state) => state.schedule || {});
+  const { teachers = [] } = useSelector((state) => state.teachers || {}); // Access teachers from Redux
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
-  const [setShowConfirm] = useState(false);
-  const [setSelectedScheduleId] = useState(null);
-
   useEffect(() => {
-    dispatch(fetchSchedules());
+    dispatch(fetchScheduals());
+    dispatch(fetchTeachers()); // Fetch teachers when the component mounts
   }, [dispatch]);
 
-  const filteredSchedules = schedules.filter((schedule) => {
+  const filteredScheduals = scheduals.filter((schedule) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
       return schedule[filterOption]?.toLowerCase().includes(lowerSearchText);
     }
     return (
       schedule.subjectName.toLowerCase().includes(lowerSearchText) ||
-      schedule.teacher.toLowerCase().includes(lowerSearchText) ||
-      schedule.grade.toLowerCase().includes(lowerSearchText)
+      schedule.teacher.toLowerCase().includes(lowerSearchText)
     );
   });
 
-  const paginatedSchedules = filteredSchedules.slice(
+  const paginatedScheduals = filteredScheduals.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const handleDelete = (id) => {
-    setSelectedScheduleId(id);
-    setShowConfirm(true);
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this schedule?');
+    if (confirmDelete) {
+      try {
+        await dispatch(removeSchedual(id));
+        alert('Schedule deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete schedule:', error);
+        alert('Error occurred while deleting');
+      }
+    }
   };
 
   const handlePageChange = (page) => {
@@ -65,6 +72,12 @@ const ScheduleTable = () => {
       }, 5000);
     }
   }, [message, dispatch]);
+
+  // Function to get teacher's name based on the teacher ID
+  const getTeacherName = (teacherId) => {
+    const teacher = teachers.find((t) => t._id === teacherId);
+    return teacher ? teacher.name : "Unknown Teacher";
+  };
 
   return (
     <div className="mx-auto px-4 lg:px-0">
@@ -90,19 +103,16 @@ const ScheduleTable = () => {
                 Teacher
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Grade
-              </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Day
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                From
+                Time
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                To
+                Class
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Class Name
+                Grade
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Actions
@@ -110,18 +120,33 @@ const ScheduleTable = () => {
             </tr>
           </thead>
           <tbody>
-            {paginatedSchedules.length > 0 ? (
-              paginatedSchedules.map((schedule, index) => (
-                <tr key={schedule.id} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
-                  <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <span className="truncate font-poppins">{schedule.subjectName}</span>
+            {paginatedScheduals.length > 0 ? (
+              paginatedScheduals.map((schedule, index) => (
+                <tr
+                  key={schedule._id}
+                  className={`${
+                    index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
+                  } hover:bg-[#117C90]/70`}
+                >
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {schedule.subjectName}
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.teacher}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.grade}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.day}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.from}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.to}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{schedule.className}</td> {/* Added Class Name */}
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {getTeacherName(schedule.teacher)} {/* Display teacher's name */}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {schedule.day}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {schedule.startTime} - {schedule.endTime}
+                  </td>
+                  
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {schedule.class}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {schedule.grade}
+                  </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       aria-label="Edit schedule"
@@ -132,7 +157,7 @@ const ScheduleTable = () => {
                     </button>
                     <button
                       aria-label="Delete schedule"
-                      onClick={() => handleDelete(schedule.id)}
+                      onClick={() => handleDelete(schedule._id)}
                       className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-trash-alt text-lg" />
@@ -143,7 +168,7 @@ const ScheduleTable = () => {
             ) : (
               <tr>
                 <td
-                  colSpan="8"
+                  colSpan="5"
                   className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                 >
                   <span className="font-poppins">No Schedules Found</span>
@@ -155,7 +180,7 @@ const ScheduleTable = () => {
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
-            totalItems={filteredSchedules.length}
+            totalItems={filteredScheduals.length}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
             onPageChange={handlePageChange}
@@ -166,4 +191,4 @@ const ScheduleTable = () => {
   );
 };
 
-export default ScheduleTable;
+export default SchedualTable;

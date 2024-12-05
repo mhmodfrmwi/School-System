@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { fetchSchedules } from "../components/AdminRedux/scheduleSlice"; 
-import  ScheduleTable from "../components/Schedule/scheduleTable"; 
+import { fetchScheduals} from "../components/AdminRedux/scheduleSlice"; 
+import  ScheduleTable from "../components/Schedule/schedualTable"; 
 
 const AllSchedules = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchSchedules());
+    dispatch(fetchScheduals());
   }, [dispatch]);
 
   return (

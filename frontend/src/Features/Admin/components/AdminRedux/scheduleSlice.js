@@ -1,181 +1,216 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-// Initial state
 const initialState = {
-  schedules: [],
+  scheduals: [],
   status: "idle",
+  error: null,
   message: "",
+  loading: false,
 };
 
-// Fetch all schedules
-export const fetchSchedules = createAsyncThunk(
-  "schedules/fetchSchedules",
-  async (_, { rejectWithValue }) => {
+// Post a new schedule
+export const postSchedual = createAsyncThunk(
+  "scheduals/postSchedual",
+  async (schedualData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/schedules");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/addSchedual",
+        {
+          method: "POST",
+          body: JSON.stringify(schedualData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         const error = await response.json();
         return toast.error(error.message);
       }
+
       const data = await response.json();
-      console.log(data);
-      return data; // Return the fetched schedules
+      return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Failed to post schedule data");
     }
-  },
+  }
 );
 
-// Add a new schedule
-export const addScheduleAsync = createAsyncThunk(
-  "schedules/addSchedule",
-  async (newSchedule, { rejectWithValue }) => {
+// Fetch all schedules
+export const fetchScheduals = createAsyncThunk(
+  "scheduals/fetchScheduals",
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/schedules", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newSchedule),
-      });
+      const response = await fetch("http://localhost:4000/api/v1/admin/scheduals");
 
       if (!response.ok) {
-        const error = await response.json();
-        return toast.error(error.message);
+        throw new Error("Failed to fetch schedules");
       }
 
       const data = await response.json();
-      return data; // Assuming it returns the created schedule
+      return data.scheduals;
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  },
+  }
 );
 
 // Edit an existing schedule
-export const editScheduleAsync = createAsyncThunk(
-  "schedules/editSchedule",
-  async ({ id, updatedSchedule }, { rejectWithValue }) => {
+export const editSchedualAsync = createAsyncThunk(
+  "scheduals/editSchedualAsync",
+  async ({ id, updatedSchedual }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/schedules/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedSchedule),
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/scheduals/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(updatedSchedual),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
-        const error = await response.json();
-        return toast.error(error.message);
+        throw new Error("Failed to edit schedule");
       }
 
       const data = await response.json();
-      return data; // Return the updated schedule
+      return data.schedual;
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  },
+  }
 );
 
 // Remove a schedule
-export const removeSchedule = createAsyncThunk(
-  "schedules/removeSchedule",
-  async (id, { rejectWithValue }) => {
+export const removeSchedual = createAsyncThunk(
+  "scheduals/removeSchedual",
+  async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:5000/schedules/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/scheduals/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         const error = await response.json();
         return toast.error(error.message);
       }
 
-      return id; // Return the id of the deleted schedule
+      dispatch(fetchScheduals());
+
+      return id;
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  },
+  }
 );
 
-// Create a slice
 const scheduleSlice = createSlice({
-  name: "schedules",
+  name: "scheduals",
   initialState,
   reducers: {
+    addSchedual: (state, action) => {
+      state.scheduals.push(action.payload);
+    },
+    editSchedual: (state, action) => {
+      const index = state.scheduals.findIndex(
+        (schedual) => schedual._id === action.payload._id
+      );
+      if (index !== -1) {
+        state.scheduals[index] = action.payload;
+      }
+    },
     clearMessage: (state) => {
       state.message = "";
+    },
+    addSchedualToServer: {
+      prepare(subjectName, teacher, day, startTime, endTime, className, grade) {
+        return {
+          payload: {
+            subjectName,
+            teacher,
+            day,
+            startTime,
+            endTime,
+            className,
+            grade,
+          },
+        };
+      },
+      reducer(state, action) {
+        const newSchedual = action.payload;
+        state.scheduals.push(newSchedual);
+      },
     },
   },
   extraReducers: (builder) => {
     builder
-      // Fetch Schedules
-      .addCase(fetchSchedules.pending, (state) => {
+      .addCase(postSchedual.pending, (state) => {
         state.status = "loading";
+        state.error = null;
       })
-      .addCase(fetchSchedules.fulfilled, (state, action) => {
+      .addCase(postSchedual.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.schedules = action.payload;
+        state.scheduals.push(action.payload);
       })
-      .addCase(fetchSchedules.rejected, (state, action) => {
+      .addCase(postSchedual.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
+        state.error = action.payload;
       })
-
-      // Add Schedule
-      .addCase(addScheduleAsync.pending, (state) => {
-        state.status = "loading";
+      .addCase(fetchScheduals.pending, (state) => {
+        state.loading = true;
       })
-      .addCase(addScheduleAsync.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.schedules.push(action.payload);
-        state.message = "Schedule added successfully";
+      .addCase(fetchScheduals.fulfilled, (state, action) => {
+        state.loading = false;
+        state.scheduals = action.payload;
       })
-      .addCase(addScheduleAsync.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
+      .addCase(fetchScheduals.rejected, (state) => {
+        state.loading = false;
       })
-
-      // Edit Schedule
-      .addCase(editScheduleAsync.pending, (state) => {
-        state.status = "loading";
+      .addCase(removeSchedual.pending, (state) => {
+        state.loading = true;
       })
-      .addCase(editScheduleAsync.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        const index = state.schedules.findIndex(
-          (schedule) => schedule.id === action.payload.id,
+      .addCase(removeSchedual.fulfilled, (state, action) => {
+        state.loading = false;
+        state.scheduals = state.scheduals.filter(
+          (schedual) => schedual._id !== action.payload
+        );
+        state.message = "Schedule deleted successfully";
+      })
+      .addCase(removeSchedual.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(editSchedualAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editSchedualAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedSchedual = action.payload;
+        const index = state.scheduals.findIndex(
+          (schedual) => schedual._id === updatedSchedual._id
         );
         if (index !== -1) {
-          state.schedules[index] = action.payload; // Update the schedule in the state
+          state.scheduals[index] = updatedSchedual;
         }
         state.message = "Schedule updated successfully";
       })
-      .addCase(editScheduleAsync.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
-      })
-
-      // Delete Schedule
-      .addCase(removeSchedule.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(removeSchedule.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.schedules = state.schedules.filter(
-          (schedule) => schedule.id !== action.payload,
-        ); // Remove the schedule from the state
-        state.message = "Schedule deleted successfully";
-      })
-      .addCase(removeSchedule.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
+      .addCase(editSchedualAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearMessage } = scheduleSlice.actions;
+export const { clearMessage, addSchedual, editSchedual, addSchedualToServer } = scheduleSlice.actions;
 
 export default scheduleSlice.reducer;
