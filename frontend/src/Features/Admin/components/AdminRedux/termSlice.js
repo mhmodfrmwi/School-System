@@ -34,7 +34,6 @@ export const postTerm = createAsyncThunk(
 
       const data = await response.json();
       return data;
-      return data;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to post term data");
     }
