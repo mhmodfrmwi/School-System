@@ -4,23 +4,25 @@ import {
   fetchBosses,
   removeBosse,
   clearMessage,
-} from "../AdminRedux/managerSlice"; 
+} from "../AdminRedux/managerSlice";
 import Pagination from "../Pagination";
-import Header from "../Managers/managerHeader"; 
+import Header from "../Managers/managerHeader";
+import Loader from "@/ui/Loader";
 
 const ManagerTable = () => {
-  const { bosses = [], message } = useSelector(
-    (state) => state.bosses || {}
-  );
+  const {
+    bosses = [],
+    message,
+    loading,
+  } = useSelector((state) => state.bosses || {});
   const dispatch = useDispatch();
-   console.log(bosses);
+  console.log(bosses);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
-
 
   const [selectedBosseId, setSelectedBosseId] = useState(null);
 
@@ -31,9 +33,7 @@ const ManagerTable = () => {
   const filteredManagers = bosses.filter((bosse) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
-      return (
-        bosse[filterOption]?.toLowerCase().includes(lowerSearchText)
-      );
+      return bosse[filterOption]?.toLowerCase().includes(lowerSearchText);
     }
     return (
       bosse.name.toLowerCase().includes(lowerSearchText) ||
@@ -43,25 +43,25 @@ const ManagerTable = () => {
 
   const paginatedManagers = filteredManagers.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDelete = async (id) => {
     setSelectedBosseId(id);
 
-    const confirmDelete = window.confirm('Are you sure you want to delete this manager?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this manager?",
+    );
     if (confirmDelete) {
       try {
-        await dispatch(removeBosse(id)); 
-        alert('manager deleted successfully');
+        await dispatch(removeBosse(id));
+        alert("manager deleted successfully");
       } catch (error) {
-        console.error('Failed to delete manager:', error);
-        alert('Error occurred while deleting');
+        console.error("Failed to delete manager:", error);
+        alert("Error occurred while deleting");
       }
     }
   };
-
-
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -84,7 +84,8 @@ const ManagerTable = () => {
   }, [message, dispatch]);
 
   return (
-    <div className="mx-auto px-4 lg:px-0">
+    <div className="relative w-dvw px-4 sm:w-[100%] lg:px-0">
+      {loading && <Loader />}
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -129,7 +130,9 @@ const ManagerTable = () => {
                       alt="Profile"
                       className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                     />
-                    <span className="truncate font-poppins">{manager.name}</span>
+                    <span className="truncate font-poppins">
+                      {manager.name}
+                    </span>
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {manager.email}

@@ -23,6 +23,7 @@ import CourseForm from "./Features/Admin/components/Course/courseForm";
 import CourseTable from "./Features/Admin/components/Course/courseTable";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PageNotFound from "./ui/PageNotFound";
 function App() {
   return (
     <BrowserRouter>
@@ -61,6 +62,7 @@ function App() {
           <Route path="courseform" element={<CourseForm />} />
           <Route path="allcourses" element={<CourseTable />} />
         </Route>
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );

@@ -17,6 +17,7 @@ const initialState = {
 export const postBosse = createAsyncThunk(
   "bosses/postBosse",
   async (bossesData, { rejectWithValue }) => {
+    console.log(bossesData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/auth/register",
@@ -135,14 +136,17 @@ const bossesSlice = createSlice({
       .addCase(postBosse.pending, (state) => {
         state.status = "loading";
         state.error = null;
+        state.loading = true;
       })
       .addCase(postBosse.fulfilled, (state, action) => {
         state.status = "succeeded";
         Object.assign(state, action.payload);
+        state.loading = false;
       })
       .addCase(postBosse.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        state.loading = false;
       })
       .addCase(fetchBosses.pending, (state) => {
         state.loading = true;
