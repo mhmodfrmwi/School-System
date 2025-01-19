@@ -2,27 +2,26 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
-  fullName: "",
-  email: "",
-  password: "",
-  phoneNumber: "",
-  gender: "",
+  courseName: "",
+  grade: "",
+  term: "",
+  courses: [],
   status: "idle",
   error: null,
-  admins: [],
-  loading: false,
   message: "",
+  loading: false,
 };
 
-export const postAdmin = createAsyncThunk(
-  "admins/postAdmin",
-  async (adminData, { rejectWithValue }) => {
+export const postCourse = createAsyncThunk(
+  "course/postCourse",
+  async (courseData, { rejectWithValue }) => {
+    console.log(courseData);
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/auth/register", // تعديل المسار حسب API الخاص بك
+        "http://localhost:4000/api/v1/admin/addCourse",
         {
           method: "POST",
-          body: JSON.stringify(adminData),
+          body: JSON.stringify(courseData),
           headers: {
             "Content-Type": "application/json",
           },
@@ -36,17 +35,17 @@ export const postAdmin = createAsyncThunk(
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to post admin data");
+      return rejectWithValue(error.message || "Failed to post course data");
     }
   },
 );
 
-export const fetchAdmins = createAsyncThunk(
-  "admins/fetchAdmins",
+export const fetchCourses = createAsyncThunk(
+  "course/fetchCourses",
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/getUsers/admins",
+        "http://localhost:4000/api/v1/admin/courses",
       );
 
       if (!response.ok) {
@@ -55,18 +54,18 @@ export const fetchAdmins = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.admins;
+      return data.courses;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
 );
-export const removeAdmin = createAsyncThunk(
-  "admins/removeAdmin",
+export const removeCourse = createAsyncThunk(
+  "course/removeCourse",
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/admins/${id}`,
+        `http://localhost:4000/api/v1/admin/courses/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -79,7 +78,7 @@ export const removeAdmin = createAsyncThunk(
         const error = await response.json();
         return toast.error(error.message);
       }
-      dispatch(fetchAdmins());
+      dispatch(fetchCourses());
       return id;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -87,89 +86,85 @@ export const removeAdmin = createAsyncThunk(
   },
 );
 
-const adminSlice = createSlice({
-  name: "admins",
+const courseSlice = createSlice({
+  name: "course",
   initialState,
   reducers: {
-    addAdmin: (state, action) => {
-      state.admins.push(action.payload);
+    addCourse: (state, action) => {
+      state.courses.push(action.payload);
     },
-    editAdmin: (state, action) => {
-      const index = state.admins.findIndex(
-        (admin) => admin.id === action.payload.id,
+    editCourse: (state, action) => {
+      const index = state.courses.findIndex(
+        (course) => course.id === action.payload.id,
       );
       if (index !== -1) {
-        state.admins[index] = action.payload;
+        state.courses[index] = action.payload;
       }
     },
     clearMessage: (state) => {
       state.message = "";
     },
-    addAdmintoServer: {
-      prepare(fullName, email, password, phoneNumber, gender) {
+    addCoursetoServer: {
+      prepare(courseName, grade, term) {
         return {
           payload: {
-            fullName,
-            email,
-            password,
-            phoneNumber,
-            gender,
+            courseName,
+            grade,
+            term,
           },
         };
       },
       reducer(state, action) {
-        state.fullName = action.payload.fullName;
-        state.email = action.payload.email;
-        state.password = action.payload.password;
-        state.phoneNumber = action.payload.phoneNumber;
-        state.gender = action.payload.gender;
+        state.courseName = action.payload.courseName;
+        state.grade = action.payload.grade;
+        state.term = action.payload.term;
       },
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(postAdmin.pending, (state) => {
+      .addCase(postCourse.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(postAdmin.fulfilled, (state, action) => {
+      .addCase(postCourse.fulfilled, (state, action) => {
         state.status = "succeeded";
         Object.assign(state, action.payload);
       })
-      .addCase(postAdmin.rejected, (state, action) => {
+      .addCase(postCourse.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(fetchAdmins.pending, (state) => {
+      .addCase(fetchCourses.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchAdmins.fulfilled, (state, action) => {
+      .addCase(fetchCourses.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.admins = action.payload;
+        state.courses = action.payload;
       })
-      .addCase(fetchAdmins.rejected, (state, action) => {
+      .addCase(fetchCourses.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       })
 
-      .addCase(removeAdmin.pending, (state) => {
+      .addCase(removeCourse.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(removeAdmin.fulfilled, (state, action) => {
+      .addCase(removeCourse.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.admins = state.admins.filter(
-          (admin) => admin.id !== action.payload,
+        state.courses = state.courses.filter(
+          (course) => course.id !== action.payload,
         );
         state.message = "Admin deleted successfully";
       })
-      .addCase(removeAdmin.rejected, (state, action) => {
+      .addCase(removeCourse.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
       });
   },
 });
 
-export const { addAdmin, editAdmin, clearMessage, addAdmintoServer } =
-  adminSlice.actions;
+export const { addAdmin, editAdmin, clearMessage, addCoursetoServer } =
+  courseSlice.actions;
 
-export default adminSlice.reducer;
+export default courseSlice.reducer;

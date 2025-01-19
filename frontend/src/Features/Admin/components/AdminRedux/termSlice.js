@@ -1,78 +1,85 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-// Initial state
 const initialState = {
+  startYear: "",
+  endYear: "",
+  term: "",
   terms: [],
   status: "idle",
+  error: null,
   message: "",
+  loading: false,
 };
+
+// Post a new term
+export const postTerm = createAsyncThunk(
+  "terms/postTerm",
+  async (termData, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/addTerm",
+        {
+          method: "POST",
+          body: JSON.stringify(termData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to post term data");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to post term data");
+    }
+  },
+);
 
 // Fetch all terms
 export const fetchTerms = createAsyncThunk(
   "terms/fetchTerms",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/terms");
+      const response = await fetch("http://localhost:4000/api/v1/admin/terms");
 
       if (!response.ok) {
-        const error = await response.json();
-        return toast.error(error.message);
+        throw new Error("Failed to fetch terms");
       }
+
       const data = await response.json();
-      return data;
+      return data.terms;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
 );
 
-// Add a new term
-export const addTermAsync = createAsyncThunk(
-  "terms/addTerm",
-  async (newTerm, { rejectWithValue }) => {
-    try {
-      const response = await fetch("http://localhost:5000/terms", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTerm),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return toast.error(error.message);
-      }
-
-      const data = await response.json();
-      return data; // Assuming it returns the created term
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  },
-);
-
-// Edit an existing term
 export const editTermAsync = createAsyncThunk(
-  "terms/editTerm",
+  "terms/editTermAsync",
   async ({ id, updatedTerm }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/terms/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedTerm),
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/terms/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(updatedTerm),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
-        const error = await response.json();
-        return toast.error(error.message);
+        throw new Error("Failed to edit term");
       }
 
       const data = await response.json();
-      return data; // Return the updated term
+      return data.term;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -82,97 +89,123 @@ export const editTermAsync = createAsyncThunk(
 // Remove a term
 export const removeTerm = createAsyncThunk(
   "terms/removeTerm",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:5000/terms/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/terms/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         const error = await response.json();
         return toast.error(error.message);
       }
 
-      return id; // Return the id of the deleted term
+      dispatch(fetchTerms());
+
+      return id;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
 );
 
-// Create a slice
-const termSlice = createSlice({
+const termsSlice = createSlice({
   name: "terms",
   initialState,
   reducers: {
+    addTerm: (state, action) => {
+      state.terms.push(action.payload);
+    },
+    editTerm: (state, action) => {
+      const index = state.terms.findIndex(
+        (term) => term.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.terms[index] = action.payload;
+      }
+    },
     clearMessage: (state) => {
       state.message = "";
+    },
+    addTermToServer: {
+      prepare(startYear, endYear, term) {
+        return {
+          payload: {
+            startYear,
+            endYear,
+            term,
+          },
+        };
+      },
+      reducer(state, action) {
+        state.startYear = action.payload.startYear;
+        state.endYear = action.payload.endYear;
+        state.term = action.payload.term;
+      },
     },
   },
   extraReducers: (builder) => {
     builder
-      // Fetch Terms
-      .addCase(fetchTerms.pending, (state) => {
+      .addCase(postTerm.pending, (state) => {
         state.status = "loading";
+        state.error = null;
+      })
+      .addCase(postTerm.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        Object.assign(state, action.payload);
+      })
+      .addCase(postTerm.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(fetchTerms.pending, (state) => {
+        state.loading = true;
       })
       .addCase(fetchTerms.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.loading = false;
         state.terms = action.payload;
       })
-      .addCase(fetchTerms.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
+      .addCase(fetchTerms.rejected, (state) => {
+        state.loading = false;
       })
-
-      // Add Term
-      .addCase(addTermAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(addTermAsync.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.terms.push(action.payload);
-        state.message = "Term added successfully";
-      })
-      .addCase(addTermAsync.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
-      })
-
-      // Edit Term
-      .addCase(editTermAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(editTermAsync.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        const index = state.terms.findIndex(
-          (term) => term.id === action.payload.id,
-        );
-        if (index !== -1) {
-          state.terms[index] = action.payload; // Update the term in the state
-        }
-        state.message = "Term updated successfully";
-      })
-      .addCase(editTermAsync.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
-      })
-
-      // Delete Term
       .addCase(removeTerm.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(removeTerm.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.terms = state.terms.filter((term) => term.id !== action.payload); // Remove the term from the state
+        state.loading = false;
+        state.terms = state.terms.filter((term) => term.id !== action.payload);
         state.message = "Term deleted successfully";
       })
-      .addCase(removeTerm.rejected, (state, action) => {
-        state.status = "failed";
-        state.message = action.payload;
+      .addCase(removeTerm.rejected, (state) => {
+        state.loading = false;
+      }).addCase(editTermAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editTermAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedTerm = action.payload;
+        const index = state.terms.findIndex((term) => term._id === updatedTerm._id);
+        if (index !== -1) {
+          state.terms[index] = updatedTerm;
+        }
+        state.message = "Term updated successfully";
+      }
+    )
+      .addCase(editTermAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+      
   },
 });
 
-export const { clearMessage } = termSlice.actions;
+export const { clearMessage, addTerm, editTerm, addTermToServer } = termsSlice.actions;
 
-export default termSlice.reducer;
+export default termsSlice.reducer;

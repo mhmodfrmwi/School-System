@@ -4,23 +4,25 @@ import {
   removeAdmin,
   fetchAdmins,
   clearMessage,
-} from "../AdminRedux/adminSlice";  
+} from "../AdminRedux/adminSlice";
 import Pagination from "../Pagination";
-import Header from "../Admins/adminHeader"; 
+import Header from "../Admins/adminHeader";
+import Loader from "@/ui/Loader";
 
 const AdminTable = () => {
-  const { admins = [], message } = useSelector(
-    (state) => state.admins || {}
-  );
+  const {
+    admins = [],
+    message,
+    loading,
+  } = useSelector((state) => state.admins || {});
   const dispatch = useDispatch();
-   console.log(admins);
+  console.log(admins);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
-
 
   const [selectedAdminId, setSelectedAdminId] = useState(null);
 
@@ -31,9 +33,7 @@ const AdminTable = () => {
   const filteredAdmins = admins.filter((admin) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
-      return (
-        admin[filterOption]?.toLowerCase().includes(lowerSearchText)
-      );
+      return admin[filterOption]?.toLowerCase().includes(lowerSearchText);
     }
     return (
       admin.name.toLowerCase().includes(lowerSearchText) ||
@@ -43,25 +43,25 @@ const AdminTable = () => {
 
   const paginatedAdmins = filteredAdmins.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDelete = async (id) => {
     setSelectedAdminId(id);
 
-    const confirmDelete = window.confirm('Are you sure you want to delete this Admin?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this Admin?",
+    );
     if (confirmDelete) {
       try {
-        await dispatch(removeAdmin(id)); 
-        alert('Admin deleted successfully');
+        await dispatch(removeAdmin(id));
+        alert("Admin deleted successfully");
       } catch (error) {
-        console.error('Failed to delete Admin:', error);
-        alert('Error occurred while deleting');
+        console.error("Failed to delete Admin:", error);
+        alert("Error occurred while deleting");
       }
     }
   };
-
-
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -85,6 +85,7 @@ const AdminTable = () => {
 
   return (
     <div className="mx-auto px-4 lg:px-0">
+      {loading && <Loader />}
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -123,25 +124,25 @@ const AdminTable = () => {
                     index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                   } hover:bg-[#117C90]/70`}
                 >
-                  <td className="flex items-center font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
-                  <img
+                  <td className="flex items-center px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                    <img
                       src={admin.profileImage}
                       alt="Profile"
                       className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                     />
                     <span className="truncate font-poppins">{admin.name}</span>
                   </td>
-                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                  <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {admin.email}
                   </td>
-                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                  <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                     {admin.gender}
                   </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       aria-label="Edit admin"
                       onClick={() => {}}
-                      className="text-[#117C90]  transition duration-300 hover:text-[#244856]"
+                      className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-edit text-lg" />
                     </button>

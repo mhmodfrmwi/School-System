@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { postCourse } from "../AdminRedux/courseSlice";
 
 function CourseForm() {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     courseName: "",
     grade: "",
     term: "",
   });
-
-  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +17,22 @@ function CourseForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!formData.courseName || !formData.grade || !formData.term) return;
+
+    dispatch(
+      postCourse({
+        name: formData.courseName,
+        grade: formData.grade,
+        term: formData.term,
+      }),
+    );
+
+    setFormData({
+      courseName: "",
+      grade: "",
+      term: "",
+    });
   };
 
   return (
@@ -36,8 +52,8 @@ function CourseForm() {
                 Course Name
               </label>
               <input
-                type="number"
-                name="startYear"
+                type="text"
+                name="courseName"
                 value={formData.courseName}
                 onChange={handleChange}
                 className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
@@ -50,8 +66,8 @@ function CourseForm() {
                 Grade
               </label>
               <input
-                type="number"
-                name="endYear"
+                type="text"
+                name="grade"
                 value={formData.grade}
                 onChange={handleChange}
                 className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
@@ -75,8 +91,8 @@ function CourseForm() {
               <option value="" disabled>
                 Select term
               </option>
-              <option value="Term 1">Term 1</option>
-              <option value="Term 2">Term 2</option>
+              <option value="term 1">term 1</option>
+              <option value="term 2">term 2</option>
             </select>
           </div>
 

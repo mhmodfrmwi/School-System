@@ -27,7 +27,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
     --background: 222.2 84% 4.9%;
@@ -53,9 +53,8 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
-  
 }
 @layer base {
   * {
@@ -67,15 +66,15 @@
 }
 @layer components {
   .navbar {
-    @apply flex items-center justify-between bg-white p-4 shadow-md w-full;
+    @apply flex w-full items-center justify-between bg-white p-4 shadow-md;
   }
 
   .search-bar {
-    @apply relative w-full max-w-lg mx-auto;
+    @apply relative mx-auto w-full max-w-lg;
   }
 
   .search-bar input {
-    @apply w-full pl-10 pr-4 py-2 border rounded-full focus:outline-none;
+    @apply w-full rounded-full border py-2 pl-10 pr-4 focus:outline-none;
   }
 
   .search-icon {
@@ -101,7 +100,7 @@
   }
 
   html::-webkit-scrollbar-track {
-    background-color: #117C90;
+    background-color: #117c90;
     /* display: none; */
   }
 
@@ -114,8 +113,47 @@
     scrollbar-width: none; /* For Firefox: hides the scrollbar */
     -ms-overflow-style: none; /* For IE and Edge: hides the scrollbar */
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar {
     display: none; /* For Chrome, Safari, and Edge: hides the scrollbar */
+  }
+
+  .loader {
+    width: 45px;
+    aspect-ratio: 0.75;
+    --c: no-repeat linear-gradient(theme(colors.stone.800) 0 0);
+    background:
+      var(--c) 0% 50%,
+      var(--c) 50% 50%,
+      var(--c) 100% 50%;
+    background-size: 20% 50%;
+    animation: loading 1s infinite linear;
+  }
+
+  @keyframes loading {
+    20% {
+      background-position:
+        0% 0%,
+        50% 50%,
+        100% 50%;
+    }
+    40% {
+      background-position:
+        0% 100%,
+        50% 0%,
+        100% 50%;
+    }
+    60% {
+      background-position:
+        0% 50%,
+        50% 100%,
+        100% 0%;
+    }
+    80% {
+      background-position:
+        0% 50%,
+        50% 50%,
+        100% 100%;
+    }
   }
 }

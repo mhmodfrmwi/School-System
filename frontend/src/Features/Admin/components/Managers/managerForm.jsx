@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addBossetoServer, postBosse } from "../AdminRedux/managerSlice";
 import Swal from "sweetalert2";
+import Loader from "@/ui/Loader";
+
 function ManagerForm() {
   const dispatch = useDispatch();
-  const { bosses } = useSelector((state) => state.bosses); // Assuming you have all parents' data in Redux
+  const { bosses, loading } = useSelector((state) => state.bosses); // Assuming you have all parents' data in Redux
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -87,7 +89,8 @@ function ManagerForm() {
   };
 
   return (
-    <>
+    <div className="relative">
+      {loading && <Loader />}
       <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
         <h2 className="font-poppins text-2xl font-bold text-[#043B44]">
           Add Manager
@@ -195,7 +198,7 @@ function ManagerForm() {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 
