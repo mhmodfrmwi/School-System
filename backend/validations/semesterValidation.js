@@ -1,6 +1,7 @@
+const Joi = require("joi");
 const semesterValidationSchema = Joi.object({
-  semester_name: Joi.string().required(),
-  academic_year_id: Joi.string().required(),
+  semesterName: Joi.string().required(),
+  academicYear: Joi.string().required(),
 });
 
 module.exports = semesterValidationSchema;

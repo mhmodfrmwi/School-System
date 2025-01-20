@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 
 const academicYearSchema = new mongoose.Schema({
-  year_name: { type: String, required: true },
-  start_date: { type: Date, required: true },
-  end_date: { type: Date, required: true },
+  startYear: { type: Number, required: true },
+  endYear: { type: Number, required: true },
 });
-
-module.exports = mongoose.model("AcademicYear", academicYearSchema);
+const AcademicYear = mongoose.model("AcademicYear", academicYearSchema);
+module.exports = AcademicYear;
