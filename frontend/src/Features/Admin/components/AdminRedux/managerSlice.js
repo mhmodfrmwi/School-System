@@ -64,6 +64,34 @@ export const fetchBosses = createAsyncThunk(
   },
 );
 
+export const editManagerAsync = createAsyncThunk(
+  "bosses/editManagerAsync",
+  async ({ id, updatedManager }, { rejectWithValue }) => {
+    console.log(updatedManager);
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/v1/getUsers/bosses/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(updatedManager),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to edit manager");
+      }
+
+      const data = await response.json();
+      return data.newBoss;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
 export const removeBosse = createAsyncThunk(
   "bosses/removeBosse",
   async (id, { rejectWithValue, dispatch }) => {
@@ -170,6 +198,24 @@ const bossesSlice = createSlice({
       })
       .addCase(removeBosse.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(editManagerAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editManagerAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedManager = action.payload;
+        const index = state.bosses.findIndex(
+          (manager) => manager._id === updatedManager._id,
+        );
+        if (index !== -1) {
+          state.bosses[index] = updatedManager;
+        }
+        state.message = "Manager updated successfully";
+      })
+      .addCase(editManagerAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

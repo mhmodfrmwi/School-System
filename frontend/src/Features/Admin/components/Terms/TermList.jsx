@@ -13,7 +13,7 @@ const TermList = () => {
   const [termData, setTermData] = useState({
     startYear: "",
     endYear: "",
-    term: "", 
+    term: "",
   });
 
   const [editingTerm, setEditingTerm] = useState(null);
@@ -39,7 +39,11 @@ const TermList = () => {
         await dispatch(removeTerm(id));
         Swal.fire("Deleted!", "The term has been deleted.", "success");
       } catch (error) {
-        Swal.fire("Error!", "An error occurred while deleting the term.", "error");
+        Swal.fire(
+          "Error!",
+          "An error occurred while deleting the term.",
+          "error",
+        );
       }
     }
   };
@@ -83,9 +87,17 @@ const TermList = () => {
     try {
       await dispatch(editTermAsync({ id: editingTerm, updatedTerm })).unwrap();
       setIsModalOpen(false);
-      Swal.fire("Success!", "The term has been updated successfully.", "success");
+      Swal.fire(
+        "Success!",
+        "The term has been updated successfully.",
+        "success",
+      );
     } catch (error) {
-      Swal.fire("Error!", error.message || "Failed to update the term.", "error");
+      Swal.fire(
+        "Error!",
+        error.message || "Failed to update the term.",
+        "error",
+      );
     }
   };
 
@@ -103,22 +115,24 @@ const TermList = () => {
           terms.map((term, index) => (
             <div
               key={term._id || index}
-              className="flex flex-col bg-white border border-gray-200 rounded-lg shadow-md p-4"
+              className="flex flex-col rounded-lg border border-gray-200 bg-white p-4 shadow-md"
             >
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                   <FontAwesomeIcon
                     icon={faPen}
-                    className="text-green-500 text-xl"
+                    className="text-xl text-green-500"
                   />
                 </div>
                 <div className="ml-4 flex-grow">
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-sm text-gray-500">
                     {term.startYear} - {term.endYear}
                   </p>
                   <h3 className="text-lg font-semibold">
-                    {term.term && typeof term.term === 'string' && term.term.trim() !== "" 
-                      ? term.term 
+                    {term.term &&
+                    typeof term.term === "string" &&
+                    term.term.trim() !== ""
+                      ? term.term
                       : "No Term Available"}
                   </h3>
                 </div>
@@ -146,8 +160,8 @@ const TermList = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h3 className="text-lg font-semibold mb-4">Edit Term</h3>
+          <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold">Edit Term</h3>
             <form onSubmit={handleEditSubmit}>
               <div className="mb-4">
                 <label
@@ -158,9 +172,9 @@ const TermList = () => {
                 </label>
                 <select
                   name="term"
-                  value={termData.term} 
+                  value={termData.term}
                   onChange={handleEditChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full rounded-md border border-gray-300 p-2"
                 >
                   <option value="">Select Term</option>
                   <option value="Term 1">Term 1</option>
@@ -180,7 +194,7 @@ const TermList = () => {
                   name="startYear"
                   value={termData.startYear}
                   onChange={handleEditChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full rounded-md border border-gray-300 p-2"
                 />
               </div>
               <div className="mb-4">
@@ -196,20 +210,20 @@ const TermList = () => {
                   name="endYear"
                   value={termData.endYear}
                   onChange={handleEditChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full rounded-md border border-gray-300 p-2"
                 />
               </div>
               <div className="flex justify-end space-x-4">
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="bg-gray-300 text-black p-2 rounded-md"
+                  className="rounded-md bg-gray-300 p-2 text-black"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white p-2 rounded-md"
+                  className="rounded-md bg-blue-500 p-2 text-white"
                 >
                   Save Changes
                 </button>

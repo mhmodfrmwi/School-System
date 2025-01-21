@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { postTeacher, addTeachertoServer } from "../AdminRedux/addteacherSlice"; // تأكد من تعديل المسار حسب مشروعك
+import { postTeacher, addTeachertoServer } from "../AdminRedux/teacherSlice"; // تأكد من تعديل المسار حسب مشروعك
+import { useNavigate } from "react-router-dom";
 
 function TeacherForm() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     phoneNumber: "",
     gender: "",
-    classes: [],
-    subjects: [""],
+    // classes: [],
+    // subjects: [""],
   });
 
   const handleChange = (e) => {
@@ -19,30 +21,30 @@ function TeacherForm() {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleClassChange = (e) => {
-    const { value, checked } = e.target;
-    setFormData((prevState) => {
-      const updatedClasses = checked
-        ? [...prevState.classes, value]
-        : prevState.classes.filter((c) => c !== value);
-      return { ...prevState, classes: updatedClasses };
-    });
-  };
+  // const handleClassChange = (e) => {
+  //   const { value, checked } = e.target;
+  //   setFormData((prevState) => {
+  //     const updatedClasses = checked
+  //       ? [...prevState.classes, value]
+  //       : prevState.classes.filter((c) => c !== value);
+  //     return { ...prevState, classes: updatedClasses };
+  //   });
+  // };
 
-  const handleSubjectChange = (index, e) => {
-    const { value } = e.target;
-    const updatedSubjects = formData.subjects.map((subject, i) =>
-      i === index ? value : subject,
-    );
-    setFormData({ ...formData, subjects: updatedSubjects });
-  };
+  // const handleSubjectChange = (index, e) => {
+  //   const { value } = e.target;
+  //   const updatedSubjects = formData.subjects.map((subject, i) =>
+  //     i === index ? value : subject,
+  //   );
+  //   setFormData({ ...formData, subjects: updatedSubjects });
+  // };
 
-  const addSubject = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      subjects: [...prevState.subjects, ""],
-    }));
-  };
+  // const addSubject = () => {
+  //   setFormData((prevState) => ({
+  //     ...prevState,
+  //     subjects: [...prevState.subjects, ""],
+  //   }));
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,9 +58,9 @@ function TeacherForm() {
         phone: formData.phoneNumber,
         gender: formData.gender,
         SSN: "30403131700795", // Dummy value
-        subject: formData.subjects[0],
+        // subject: formData.subjects[0],
         password: formData.password,
-        classes: formData.classes,
+        // classes: formData.classes,
         role: "Teacher", // يمكن تعديل الدور إذا كان مطلوبًا
       }),
     );
@@ -70,8 +72,8 @@ function TeacherForm() {
         formData.password,
         formData.phoneNumber,
         formData.gender,
-        formData.classes,
-        formData.subjects[0],
+        // formData.classes,
+        // formData.subjects[0],
       ),
     );
 
@@ -84,25 +86,46 @@ function TeacherForm() {
       password: "",
       phoneNumber: "",
       gender: "",
-      classes: [],
-      subjects: [""],
+      // classes: [],
+      // subjects: [""],
     });
   };
 
   return (
     <>
-      <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
-        <h2 className="font-poppins text-3xl font-bold text-[#043B44]">
-          Add Teacher
-        </h2>
-        <p className="mt-3 rounded-2xl border-b-4 border-[#117C90]"></p>
+      <div className="m-auto grid h-24 w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:h-10 sm:grid-cols-2">
+        <button
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
+          onClick={() => navigate("/admin/teacherform")}
+        >
+          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
+            1
+          </span>
+          Personal data
+        </button>
+
+        <button
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:bg-[#117C90] focus:text-white focus:outline-none"
+          onClick={() => navigate("/admin/teacherinfo")}
+        >
+          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+            2
+          </span>
+          Academic data
+        </button>
       </div>
 
-      <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
+      <div className="mb-6 ms-20 mt-6">
+        <h2 className="w-52 font-poppins text-3xl font-bold text-[#043B44]">
+          Add Teacher
+        </h2>
+        <p className="mt-3 w-28 rounded-2xl border-b-4 border-[#117C90]"></p>
+      </div>
+
+      <div className="mx-auto w-[95%] max-w-4xl rounded-2xl bg-gray-100 p-14 shadow-md">
         <form onSubmit={handleSubmit}>
-          {/* الحقول الأساسية */}
           <div className="mb-4">
-            <label className="mb-2 block font-poppins text-gray-700">
+            <label className="mb-2 block font-semibold text-[#117C90]">
               Full Name
             </label>
             <input
@@ -110,15 +133,15 @@ function TeacherForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <label className="mb-2 block font-poppins text-gray-700">
+            <div className=" ">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Email Address
               </label>
               <input
@@ -126,20 +149,20 @@ function TeacherForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter email address"
                 required
               />
             </div>
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Gender
               </label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
                 <option value="" disabled>
                   Select gender
@@ -152,7 +175,7 @@ function TeacherForm() {
 
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Password
               </label>
               <input
@@ -160,13 +183,13 @@ function TeacherForm() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter password"
                 required
               />
             </div>
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Phone Number
               </label>
               <input
@@ -174,14 +197,14 @@ function TeacherForm() {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
                 required
               />
             </div>
           </div>
 
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <label className="mb-2 block font-poppins text-gray-700">
               Classes
             </label>
@@ -199,10 +222,10 @@ function TeacherForm() {
                 </label>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* الحقول الخاصة بالمواد */}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             {formData.subjects.map((subject, index) => (
               <div key={index} className="mt-4 grid grid-cols-1">
                 <label className="mb-2 block font-poppins text-gray-700">
@@ -211,7 +234,7 @@ function TeacherForm() {
                 <select
                   value={subject}
                   onChange={(e) => handleSubjectChange(index, e)}
-                  className="w-full rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                  className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 >
                   <option value="" disabled>
                     Select subject
@@ -231,13 +254,13 @@ function TeacherForm() {
             >
               + Add another subject
             </button>
-          </div>
+          </div> */}
 
           {/* زر الإرسال */}
-          <div className="mt-8">
+          <div className="mt-8 flex justify-end">
             <button
               type="submit"
-              className="w-full rounded-md bg-[#117C90] p-2 text-white hover:bg-[#043B44]"
+              className="w-32 rounded-2xl bg-[#117C90] p-2 text-white hover:bg-[#043B44]"
             >
               Add Teacher
             </button>

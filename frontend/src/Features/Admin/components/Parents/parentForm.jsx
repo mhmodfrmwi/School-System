@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addParenttoserver, postParent } from "../AdminRedux/parentSlice";
 import Swal from "sweetalert2";
+import Loader from "@/ui/Loader";
 
 function ParentForm() {
   const dispatch = useDispatch();
-  const { parents } = useSelector((state) => state.parents); // Assuming you have all parents' data in Redux
+  const { parents, loading } = useSelector((state) => state.parents); // Assuming you have all parents' data in Redux
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     phoneNumber: "",
     gender: "",
-    students: [{ studentName: "", studentClass: "" }],
+    students: [{ studentID: "" }],
   });
 
   const handleChange = (e) => {
@@ -23,7 +24,7 @@ function ParentForm() {
   const handleStudentChange = (index, e) => {
     const { name, value } = e.target;
     const updatedStudents = formData.students.map((student, i) =>
-      i === index ? { ...student, [name]: value } : student
+      i === index ? { ...student, [name]: value } : student,
     );
     setFormData({ ...formData, students: updatedStudents });
   };
@@ -31,7 +32,7 @@ function ParentForm() {
   const addStudent = () => {
     setFormData((prevState) => ({
       ...prevState,
-      students: [...prevState.students, { studentName: "", studentClass: "" }],
+      students: [...prevState.students, { studentID: "" }],
     }));
   };
 
@@ -43,18 +44,20 @@ function ParentForm() {
       return;
     }
 
-    // Check for duplicate email
     const emailExists = parents.some(
-      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase()
+      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase(),
     );
 
     if (emailExists) {
-      Swal.fire("Error", "Email already exists. Please use another email.", "error");
+      Swal.fire(
+        "Error",
+        "Email already exists. Please use another email.",
+        "error",
+      );
       return;
     }
 
     try {
-      // Dispatch to Redux
       await dispatch(
         postParent({
           name: formData.fullName,
@@ -64,7 +67,7 @@ function ParentForm() {
           SSN: "30403000000000",
           password: formData.password,
           role: "Parent",
-        })
+        }),
       );
 
       await dispatch(
@@ -73,8 +76,8 @@ function ParentForm() {
           formData.email,
           formData.password,
           formData.phoneNumber,
-          formData.gender
-        )
+          formData.gender,
+        ),
       );
 
       Swal.fire("Success", "Parent added successfully!", "success");
@@ -85,28 +88,27 @@ function ParentForm() {
         password: "",
         phoneNumber: "",
         gender: "",
-        students: [{ studentName: "", studentClass: "" }],
+        students: [{ studentID: "" }],
       });
     } catch (error) {
       Swal.fire("Error", "Something went wrong. Please try again.", "error");
     }
   };
 
-
   return (
-    <>
-      <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
-        <h2 className="font-poppins text-3xl font-bold text-[#043B44]">
+    <div className="relative">
+      {loading && <Loader />}
+      <div className="mb-6 ms-10 mt-6">
+        <h2 className="w-52 font-poppins text-3xl font-bold text-[#043B44]">
           Add Parent
         </h2>
-        <p className="mt-3 rounded-2xl border-b-4 border-[#117C90]"></p>
+        <p className="mt-3 w-24 rounded-2xl border-b-4 border-[#117C90]"></p>
       </div>
 
-      <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
+      <div className="mx-auto w-[95%] max-w-4xl rounded-2xl bg-gray-100 p-14 shadow-md">
         <form onSubmit={handleSubmit}>
-          {/* Parent fields */}
           <div className="mb-4">
-            <label className="mb-2 block font-poppins text-gray-700">
+            <label className="mb-2 block font-semibold text-[#117C90]">
               Full Name
             </label>
             <input
@@ -114,7 +116,7 @@ function ParentForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
@@ -122,7 +124,7 @@ function ParentForm() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Email Address
               </label>
               <input
@@ -130,33 +132,37 @@ function ParentForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded- font-poppins md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter email address"
                 required
               />
             </div>
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Gender
               </label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               >
                 <option value="" disabled className="font-poppins">
                   Select gender
                 </option>
-                <option value="Male" className="font-poppins">Male</option>
-                <option value="Female" className="font-poppins">Female</option>
+                <option value="Male" className="font-poppins">
+                  Male
+                </option>
+                <option value="Female" className="font-poppins">
+                  Female
+                </option>
               </select>
             </div>
           </div>
 
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Password
               </label>
               <input
@@ -164,13 +170,13 @@ function ParentForm() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full rounded-md font-poppins border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter password"
                 required
               />
             </div>
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Phone Number
               </label>
               <input
@@ -178,75 +184,57 @@ function ParentForm() {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full font-poppins rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
                 required
               />
             </div>
           </div>
 
-          {/* Students fields */}
-          <div className="mt-6">
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             {formData.students.map((student, index) => (
-              <div
-                key={index}
-                className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2"
-              >
+              <div key={index} className="mt-4">
                 <div>
-                  <label className="mb-2 block font-poppins text-gray-700">
-                    Student Name
+                  <label className="mb-2 block font-semibold text-[#117C90]">
+                    Student ID
                   </label>
                   <input
-                    type="text"
-                    name="studentName"
-                    value={student.studentName}
+                    type="number"
+                    name="studentID"
+                    value={student.studentID}
                     onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full font-poppins rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                    placeholder="Enter student name"
+                    className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                    placeholder="Enter student ID"
                     required
                   />
-                </div>
-                <div>
-                  <label className="mb-2 block font-poppins text-gray-700">
-                    Class
-                  </label>
-                  <select
-                    name="studentClass"
-                    value={student.studentClass}
-                    onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full font-poppins rounded-md border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                  >
-                    <option value="" className="font-poppins" disabled>
-                      Select class
-                    </option>
-                    <option value="A" >A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                  </select>
                 </div>
               </div>
             ))}
             <button
               type="button"
               onClick={addStudent}
-              className="mt-4 text-[#117C90] font-poppins hover:underline"
+              className="mt-8 font-semibold text-[#117C90]"
             >
-              + Add another student
+              <div className="mt-2 flex w-44 flex-row justify-between text-center">
+                <p className="rounded-full border-2 border-black px-3 py-1 text-black">
+                  +
+                </p>
+                <p className="mt-2"> Add another</p>
+              </div>
             </button>
           </div>
 
-          {/* Submit button */}
-          <div className="mt-8">
+          <div className="mt-8 flex justify-end">
             <button
               type="submit"
-              className="mt-8 rounded-3xl  bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
+              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
             >
               Add Parent
             </button>
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 

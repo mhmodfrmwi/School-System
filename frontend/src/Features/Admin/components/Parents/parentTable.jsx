@@ -4,22 +4,38 @@ import {
   removeParent,
   fetchParents,
   clearMessage,
+  editParentAsync,
 } from "../AdminRedux/parentSlice";
 import Pagination from "../Pagination";
 import Header from "../Parents/parentHeader";
+import Loader from "@/ui/Loader";
+import Swal from "sweetalert2";
 
 const ParentTable = () => {
-  const { parents = [], message } = useSelector((state) => state.parents || {});
+  const {
+    parents = [],
+    message,
+    loading,
+  } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
   // console.log(parents);
+
+  const [parentData, setParentData] = useState({
+    name: "",
+    studentID: "",
+    email: "",
+    phone: "",
+    gender: "",
+  });
+
+  const [editingParent, setEditingParent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
-
 
   const [selectedParentId, setSelectedParentId] = useState(null);
 
@@ -27,7 +43,6 @@ const ParentTable = () => {
     dispatch(fetchParents());
   }, [dispatch]);
 
- 
   const filteredParents = parents.filter((parent) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
@@ -40,28 +55,28 @@ const ParentTable = () => {
     );
   });
 
-  // console.log('Filtered Parents:', filteredParents); 
+  // console.log('Filtered Parents:', filteredParents);
   const paginatedParents = filteredParents.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDelete = async (id) => {
     setSelectedParentId(id);
     // setShowConfirm(true);
-    const confirmDelete = window.confirm('Are you sure you want to delete this parent?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this parent?",
+    );
     if (confirmDelete) {
       try {
-        await dispatch(removeParent(id)); 
-        alert('Parent deleted successfully');
+        await dispatch(removeParent(id));
+        alert("Parent deleted successfully");
       } catch (error) {
-        console.error('Failed to delete parent:', error);
-        alert('Error occurred while deleting');
+        console.error("Failed to delete parent:", error);
+        alert("Error occurred while deleting");
       }
     }
   };
-
-
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -83,8 +98,71 @@ const ParentTable = () => {
     }
   }, [message, dispatch]);
 
+  const handleEditClick = (parent) => {
+    setEditingParent(parent._id);
+    setParentData({
+      name: parent.name,
+      email: parent.email,
+      gender: parent.gender,
+      studentID: parent.studentID,
+      phone: parent.phone,
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setParentData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!parentData.name || !parentData.email || !parentData.gender) {
+      Swal.fire({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please fill in all required fields.",
+      });
+      return;
+    }
+
+    const updatedParent = {
+      name: parentData.name,
+      email: parentData.email,
+      gender: parentData.gender,
+      studentID: parentData.studentID,
+      phone: parentData.phone,
+    };
+
+    try {
+      await dispatch(
+        editParentAsync({ id: editingParent, updatedParent }),
+      ).unwrap();
+      setIsModalOpen(false);
+      Swal.fire(
+        "Success!",
+        "The term has been updated successfully.",
+        "success",
+      );
+    } catch (error) {
+      Swal.fire(
+        "Error!",
+        error.message || "Failed to update the term.",
+        "error",
+      );
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className="mx-auto px-4 lg:px-0">
+    <div className="lg:px-0">
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -95,7 +173,6 @@ const ParentTable = () => {
           {message}
         </div>
       )}
-
 
       <div className="mt-7">
         <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
@@ -121,26 +198,39 @@ const ParentTable = () => {
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="relative">
+            {loading && <Loader />}
             {paginatedParents.length > 0 ? (
               paginatedParents.map((parent, index) => (
-                <tr key={parent._id || index} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
+                <tr
+                  key={parent._id || index}
+                  className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                >
                   <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
-                  <img
+                    <img
                       src={parent.profileImage}
                       alt="Profile"
                       className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                     />
                     <span className="truncate font-poppins">{parent.name}</span>
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.SSN}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.email}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.phone}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parent.gender}</td>
+
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {parent.SSN}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {parent.email}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {parent.phone}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {parent.gender}
+                  </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       aria-label="Edit parent"
-                      onClick={() => {}}
+                      onClick={() => handleEditClick(parent)}
                       className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-edit text-lg" />
@@ -177,10 +267,115 @@ const ParentTable = () => {
           />
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold">Edit parent</h3>
+            <form onSubmit={handleEditSubmit}>
+              <div className="mb-4">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={parentData.name}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  value={parentData.email}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  gender
+                </label>
+                <input
+                  type="text"
+                  id="gender"
+                  name="gender"
+                  value={parentData.gender}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  phone
+                </label>
+                <input
+                  type="text"
+                  id="phone"
+                  name="gender"
+                  value={parentData.phone}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="studentID"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  studentID
+                </label>
+                <input
+                  type="number"
+                  id="studentID"
+                  name="studentID"
+                  value={parentData.studentID}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="rounded-md bg-gray-300 p-2 text-black"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-md bg-blue-500 p-2 text-white"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-
 export default ParentTable;
-
