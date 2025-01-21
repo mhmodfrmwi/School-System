@@ -1,0 +1,114 @@
+{
+  "courses": [
+    {
+      "id": "1",
+      "subjectName": "Arabic",
+      "grade": "Grade 1",
+      "term": "Term 1"
+    },
+    {
+      "id": "2",
+      "subjectName": "Arabic",
+      "grade": "Grade 1",
+      "term": "Term 2"
+    },
+    {
+      "id": "3",
+      "subjectName": "Arabic",
+      "grade": "Grade 2",
+      "term": "Term 1"
+    },
+    {
+      "id": "4",
+      "subjectName": "Arabic",
+      "grade": "Grade 2",
+      "term": "Term 2"
+    },
+    {
+      "id": "5",
+      "subjectName": "Mathematics",
+      "grade": "Grade 1",
+      "term": "Fall 2024"
+    },
+    {
+      "id": "6",
+      "subjectName": "Mathematics",
+      "grade": "Grade 2",
+      "term": "Fall 2024"
+    },
+    {
+      "id": "7",
+      "subjectName": "History",
+      "grade": "Grade 1",
+      "term": "Summer 2024"
+    },
+    {
+      "id": "8",
+      "subjectName": "History",
+      "grade": "Grade 2",
+      "term": "Summer 2024"
+    },
+    {
+      "id": "9",
+      "subjectName": "Computer Science",
+      "grade": "Grade 1",
+      "term": "Fall 2024"
+    },
+    {
+      "id": "10",
+      "subjectName": "Computer Science",
+      "grade": "Grade 2",
+      "term": "Fall 2024"
+    },
+    {
+      "id": "11",
+      "subjectName": "Physics",
+      "grade": "Grade 1",
+      "term": "Spring 2025"
+    },
+    {
+      "id": "12",
+      "subjectName": "Physics",
+      "grade": "Grade 2",
+      "term": "Spring 2025"
+    },
+    {
+      "id": "13",
+      "subjectName": "Chemistry",
+      "grade": "Grade 1",
+      "term": "Spring 2025"
+    },
+    {
+      "id": "14",
+      "subjectName": "Chemistry",
+      "grade": "Grade 2",
+      "term": "Spring 2025"
+    },
+    {
+      "id": "f1b4",
+      "subjectName": "Arabic",
+      "term": "Term 1",
+      "grade": "Grade 3"
+    },
+    {
+      "id": "1a15",
+      "subjectName": "Mathematics",
+      "term": "Term 2",
+      "grade": "Grade 2"
+    },
+    {
+      "id": "336c",
+      "subjectName": "n"
+    },
+    {
+      "id": "7285",
+      "subjectName": "n"
+    },
+    {
+      "id": "6b1a",
+      "subjectName": "Arabic",
+      "term": "Term 2",
+      "grade": "Grade 3"
+    }
+  ]
+}

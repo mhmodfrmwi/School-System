@@ -9,7 +9,8 @@ import parentReducer from "./Features/Admin/components/AdminRedux/parentSlice";
 import adminReducer from "./Features/Admin/components/AdminRedux/adminSlice";
 import teacherReducer from "./Features/Admin/components/AdminRedux/teacherSlice";
 import bossReducer from "./Features/Admin/components/AdminRedux/managerSlice";
-import courseReducer from "./Features/Admin/components/AdminRedux/courseSlice";
+// import courseReducer from "./Features/Admin/components/AdminRedux/courseSlice";
+import coursesReducer from "./Features/Admin/components/AdminRedux/coursesSlice";
 
 const store = configureStore({
   reducer: {
@@ -22,7 +23,8 @@ const store = configureStore({
     teachers: teacherReducer,
     terms: termReducer,
     schedule: scheduleReducer,
-    courses: courseReducer,
+    // courses: courseReducer,
+    courses: coursesReducer,
   },
 });
 

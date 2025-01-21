@@ -26,6 +26,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageNotFound from "./ui/PageNotFound";
 import EditTeacher from "./Features/Admin/components/Teachers/editTeacher";
+
+// courses 
+
+import CourseDetails from "./Features/Admin/components/Courses/AllAssignedCourses";
+import CoursesList from "./Features/Admin/components/Courses/AllCourses";
+import AddCourse from "./Features/Admin/components/Courses/AddCourseManagement";
+// end courses
 function App() {
   return (
     <BrowserRouter>
@@ -65,6 +72,11 @@ function App() {
           <Route path="alladmins" element={<AllAdmins />} />
           <Route path="courseform" element={<CourseForm />} />
           <Route path="allcourses" element={<CourseTable />} />
+          {/* courses */}
+          <Route path="allcourses1" element={<CoursesList />} />
+          <Route path="allcourses2/:subjectName" element={<CourseDetails />} />
+          <Route path="addcourse" element={<AddCourse />} />
+          {/* end courses */}
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
