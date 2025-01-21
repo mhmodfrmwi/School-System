@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faEdit } from "@fortawesome/free-solid-svg-icons";
 import Header from "./AcademicYearHeader";
 import { useNavigate } from "react-router-dom"; 
 

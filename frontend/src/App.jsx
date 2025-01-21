@@ -88,6 +88,7 @@ function App() {
           <Route path="gradeform" element={<GradeForm />} />
           <Route path="editGradeForm/:id" element={<EditGradeForm />} />
           <Route path="assigngrade" element={<AssignGrade />} />
+          <Route path="*" element={<PageNotFound />} />
 
           {/* courses */}
           <Route path="allcourses1" element={<CoursesList />} />
@@ -98,7 +99,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard/>} />
           {/* end Dashboard */}
         </Route>
-        <Route path="*" element={<PageNotFound />} />
+       
       </Routes>
     </BrowserRouter>
   );
