@@ -33,6 +33,8 @@ import CourseDetails from "./Features/Admin/components/Courses/AllAssignedCourse
 import CoursesList from "./Features/Admin/components/Courses/AllCourses";
 import AddCourse from "./Features/Admin/components/Courses/AddCourseManagement";
 // end courses
+// Dashboard
+import Dashboard from "./Features/Admin/components/Dashboard/Dashboard";
 function App() {
   return (
     <BrowserRouter>
@@ -77,6 +79,9 @@ function App() {
           <Route path="allcourses2/:subjectName" element={<CourseDetails />} />
           <Route path="addcourse" element={<AddCourse />} />
           {/* end courses */}
+          {/* Dashboard */}
+          <Route path="dashboard" element={<Dashboard/>} />
+          {/* end Dashboard */}
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
