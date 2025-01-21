@@ -5,10 +5,10 @@ import {
   faUsers,
   faCalendar,
   faPen,
-  faChartPie,
   faClock,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
+import { Icon } from "@iconify/react";
 import logo from "../../../assets/logologin.png";
 
 const Sidebar = () => {
@@ -21,12 +21,9 @@ const Sidebar = () => {
     { label: "Members", icon: faUsers, href: "/admin/basicform" },
     { label: "Term Management", icon: faCalendar, href: "/admin/allTerms" },
     { label: "Course Management", icon: faPen, href: "/admin/allcourses" },
-    { label: "Reports & Analytics", icon: faChartPie, href: "#reports" },
-    {
-      label: "Schedule Management",
-      icon: faClock,
-      href: "/admin/allschedules",
-    },
+    { label: "Academic Year", icon: "fluent:number-row-24-regular", href: "/admin/allacademicyears" },
+    { label: "Grade Managment", icon: "octicon:number-16", href: "#" },
+    {label: "Schedule Management",icon: faClock,href: "/admin/allschedules",},
   ];
 
   useEffect(() => {
@@ -116,14 +113,14 @@ const SidebarContent = ({
             // onClick={() => setActiveIndex(index)} // Set active index on click
             onClick={() => handleActiveIndexChange(index)}
           >
-            <FontAwesomeIcon
-              icon={item.icon}
-              className={`mr-3 transition-colors ${
-                activeIndex === index || hoveredIndex === index
-                  ? "text-dashboard-bg"
-                  : "text-white"
-              }`}
-            />
+           {typeof item.icon === "string" ? (
+              <Icon icon={item.icon} className={`mr-3 transition-colors ${activeIndex === index || hoveredIndex === index ? "text-dashboard-bg" : "text-white"}text-xl`}  style={{ fontSize: "1.5rem" }}  />
+            ) : (
+              <FontAwesomeIcon
+                icon={item.icon}
+                className={`mr-3 transition-colors ${activeIndex === index || hoveredIndex === index ? "text-dashboard-bg" : "text-white"}`}
+              />
+            )}
             <span className="font-poppins text-sm transition-colors group-hover:text-dashboard-bg">
               {item.label}
             </span>

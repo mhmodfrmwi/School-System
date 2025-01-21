@@ -26,6 +26,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageNotFound from "./ui/PageNotFound";
 import EditTeacher from "./Features/Admin/components/Teachers/editTeacher";
+import AcademicYearForm from "./Features/Admin/components/AcademicYears/academicYearForm";
+import EditAcademicYearForm from "./Features/Admin/components/AcademicYears/editAcademicYearForm";
+import AllAcademicYears from "./Features/Admin/Pages/AcademicYearPage";
 
 // courses 
 
@@ -74,6 +77,9 @@ function App() {
           <Route path="alladmins" element={<AllAdmins />} />
           <Route path="courseform" element={<CourseForm />} />
           <Route path="allcourses" element={<CourseTable />} />
+          <Route path="allacademicyears" element={<AllAcademicYears />} />
+          <Route path="academicyearform" element={<AcademicYearForm />} />
+          <Route path="editacademicyearform/:id" element={<EditAcademicYearForm />} />
           {/* courses */}
           <Route path="allcourses1" element={<CoursesList />} />
           <Route path="allcourses2/:subjectName" element={<CourseDetails />} />

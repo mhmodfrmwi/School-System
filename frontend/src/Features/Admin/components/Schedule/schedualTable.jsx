@@ -93,9 +93,9 @@ const SchedualTable = () => {
       )}
 
       <div className="mt-7">
-        <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
-          <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
-            <tr>
+        <table className="w-full table-auto border-collapse rounded-2xl bg-[#FFEBEB]">
+          <thead className="bg-[#FFFFFF] text-black ">
+          <tr>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Subject Name
               </th>
@@ -103,16 +103,16 @@ const SchedualTable = () => {
                 Teacher
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                Grade
+              </th>
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Day
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Time
+                From
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Class
-              </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Grade
+                To
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Actions
@@ -135,17 +135,17 @@ const SchedualTable = () => {
                     {getTeacherName(schedule.teacher)} {/* Display teacher's name */}
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {schedule.day}
+                    {schedule.grade}
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {schedule.startTime} - {schedule.endTime}
+                    {schedule.day} 
                   </td>
                   
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {schedule.class}
+                    {schedule.from}
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {schedule.grade}
+                    {schedule.to}
                   </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
@@ -169,7 +169,7 @@ const SchedualTable = () => {
               <tr>
                 <td
                   colSpan="5"
-                  className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
+                  className="rounded-lg bg-[#FFEBEB]   py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                 >
                   <span className="font-poppins">No Schedules Found</span>
                 </td>

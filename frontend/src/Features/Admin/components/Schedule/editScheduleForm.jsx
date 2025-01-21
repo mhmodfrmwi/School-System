@@ -1,12 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { postSchedual } from "../AdminRedux/scheduleSlice"; // Updated action import
-import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Fetch teachers
+import React, { useState } from "react";
 
 function ScheduleForm() {
-  const dispatch = useDispatch();
-
-  
   const [formData, setFormData] = useState({
     courseName: "",
     teacherName: "",
@@ -23,21 +17,9 @@ function ScheduleForm() {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ensure grade is a valid number
-    if (isNaN(formData.grade)) {
-      alert("Grade must be a valid number.");
-      return;
-    }
-
     console.log("Schedule Submitted", formData);
-    
-    // Dispatch action to post schedule
-    dispatch(postSchedual(formData)); // Updated dispatch action
-
-    // Reset form data after submission
     setFormData({
       courseName: "",
       teacherName: "",
@@ -50,16 +32,11 @@ function ScheduleForm() {
     });
   };
 
-  // Fetch teachers when the component mounts
-  useEffect(() => {
-    dispatch(fetchTeachers());
-  }, [dispatch]);
-
   return (
     <>
      <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
         <h2 className="font-poppins text-2xl font-bold text-[#043B44]">
-          Add Schedule
+          Edit Schedule
         </h2>
         <p className="mt-1 h-[3px] w-[170px] rounded-t-md bg-[#117C90] lg:h-[4px] lg:w-[10px]"></p>
       </div>
@@ -207,7 +184,7 @@ function ScheduleForm() {
             type="submit"
             className="rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#0D5F6A]"
           >
-            Add Schedule
+            Update Schedule
           </button>
         </div>
       </form>
