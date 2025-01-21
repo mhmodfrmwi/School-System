@@ -8,7 +8,6 @@ import scheduleReducer from "./Features/Admin/components/AdminRedux/scheduleSlic
 import parentReducer from "./Features/Admin/components/AdminRedux/parentSlice";
 import adminReducer from "./Features/Admin/components/AdminRedux/adminSlice";
 import teacherReducer from "./Features/Admin/components/AdminRedux/teacherSlice";
-import addteacherReducer from "./Features/Admin/components/AdminRedux/addteacherSlice";
 import bossReducer from "./Features/Admin/components/AdminRedux/managerSlice";
 import courseReducer from "./Features/Admin/components/AdminRedux/courseSlice";
 
@@ -21,7 +20,6 @@ const store = configureStore({
     students: studentReducer,
     addstudent: addstudentReducer,
     teachers: teacherReducer,
-    addteacher: addteacherReducer,
     terms: termReducer,
     schedule: scheduleReducer,
     courses: courseReducer,

@@ -22,7 +22,7 @@ const TeacherHeader = ({ onSearchChange, onFilterChange }) => {
           <h1 className="text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
             Teachers
           </h1>
-          <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[120px]"></div>
+          <div className="mt-1 h-[3px] w-20 rounded-t-md bg-[#244856] lg:h-[4px]"></div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">

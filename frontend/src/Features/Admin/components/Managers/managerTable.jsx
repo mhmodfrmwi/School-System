@@ -4,10 +4,12 @@ import {
   fetchBosses,
   removeBosse,
   clearMessage,
+  editManagerAsync,
 } from "../AdminRedux/managerSlice";
 import Pagination from "../Pagination";
 import Header from "../Managers/managerHeader";
 import Loader from "@/ui/Loader";
+import Swal from "sweetalert2";
 
 const ManagerTable = () => {
   const {
@@ -15,6 +17,16 @@ const ManagerTable = () => {
     message,
     loading,
   } = useSelector((state) => state.bosses || {});
+
+  const [managerData, setManagerData] = useState({
+    name: "",
+    email: "",
+    gender: "",
+  });
+
+  const [editingManager, setEditingManager] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const dispatch = useDispatch();
   console.log(bosses);
 
@@ -83,6 +95,65 @@ const ManagerTable = () => {
     }
   }, [message, dispatch]);
 
+  const handleEditClick = (manager) => {
+    setEditingManager(manager._id);
+    setManagerData({
+      name: manager.name,
+      email: manager.email,
+      gender: manager.gender,
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setManagerData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!managerData.name || !managerData.email || !managerData.gender) {
+      Swal.fire({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please fill in all required fields.",
+      });
+      return;
+    }
+
+    const updatedManager = {
+      name: managerData.name,
+      email: managerData.email,
+      gender: managerData.gender,
+    };
+
+    try {
+      await dispatch(
+        editManagerAsync({ id: editingManager, updatedManager }),
+      ).unwrap();
+      setIsModalOpen(false);
+      Swal.fire(
+        "Success!",
+        "The term has been updated successfully.",
+        "success",
+      );
+    } catch (error) {
+      Swal.fire(
+        "Error!",
+        error.message || "Failed to update the term.",
+        "error",
+      );
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="relative w-dvw px-4 sm:w-[100%] lg:px-0">
       {loading && <Loader />}
@@ -143,7 +214,7 @@ const ManagerTable = () => {
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       aria-label="Edit manager"
-                      onClick={() => {}}
+                      onClick={() => handleEditClick(manager)}
                       className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-edit text-lg" />
@@ -180,6 +251,78 @@ const ManagerTable = () => {
           />
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold">Edit Manager</h3>
+            <form onSubmit={handleEditSubmit}>
+              <div className="mb-4">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={managerData.name}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  value={managerData.email}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  gender
+                </label>
+                <input
+                  type="text"
+                  id="gender"
+                  name="gender"
+                  value={managerData.gender}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="rounded-md bg-gray-300 p-2 text-black"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-md bg-blue-500 p-2 text-white"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

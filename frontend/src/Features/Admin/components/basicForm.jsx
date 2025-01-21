@@ -23,7 +23,7 @@ function BasicForm() {
       </div>
 
       <div className="flex flex-col items-center px-4">
-        <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-x-14 gap-y-8 sm:grid-cols-2 md:gap-x-16 lg:grid-cols-3 xl:gap-x-32">
           {/* Students Card */}
           <div
             className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105"

@@ -9,6 +9,7 @@ import AllStudent from "./Features/Admin/Pages/StudentTablePage";
 import ParentForm from "./Features/Admin/components/Parents/parentForm";
 import ScheduleForm from "./Features/Admin/components/Schedule/scheduleForm";
 import TeacherForm from "./Features/Admin/components/Teachers/teacherForm";
+import TeacherInfo from "./Features/Admin/components/Teachers/teacherInfo";
 import AdminForm from "./Features/Admin/components/Admins/adminForm";
 import ManagerForm from "./Features/Admin/components/Managers/managerForm";
 import AllParents from "./Features/Admin/Pages/ParentTablePage";
@@ -24,6 +25,7 @@ import CourseTable from "./Features/Admin/components/Course/courseTable";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageNotFound from "./ui/PageNotFound";
+import EditTeacher from "./Features/Admin/components/Teachers/editTeacher";
 function App() {
   return (
     <BrowserRouter>
@@ -57,6 +59,8 @@ function App() {
           <Route path="termform" element={<TermForm />} />
           <Route path="allteachers" element={<AllTeachers />} />
           <Route path="teacherform" element={<TeacherForm />} />
+          <Route path="editteacher" element={<EditTeacher />} />
+          <Route path="teacherinfo" element={<TeacherInfo />} />
           <Route path="adminform" element={<AdminForm />} />
           <Route path="alladmins" element={<AllAdmins />} />
           <Route path="courseform" element={<CourseForm />} />
