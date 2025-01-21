@@ -38,6 +38,10 @@ import AddCourse from "./Features/Admin/components/Courses/AddCourseManagement";
 // end courses
 // Dashboard
 import Dashboard from "./Features/Admin/components/Dashboard/Dashboard";
+import AllGrades from "./Features/Admin/Pages/GradePage";
+import GradeForm from "./Features/Admin/components/Grades/GradeForm";
+import EditGradeForm from "./Features/Admin/components/Grades/EditGradeForm";
+import AssignGrade from "./Features/Admin/components/Grades/AssignGrade";
 function App() {
   return (
     <BrowserRouter>
@@ -80,6 +84,11 @@ function App() {
           <Route path="allacademicyears" element={<AllAcademicYears />} />
           <Route path="academicyearform" element={<AcademicYearForm />} />
           <Route path="editacademicyearform/:id" element={<EditAcademicYearForm />} />
+          <Route path="allgrades" element={<AllGrades />} />
+          <Route path="gradeform" element={<GradeForm />} />
+          <Route path="editGradeForm/:id" element={<EditGradeForm />} />
+          <Route path="assigngrade" element={<AssignGrade />} />
+
           {/* courses */}
           <Route path="allcourses1" element={<CoursesList />} />
           <Route path="allcourses2/:subjectName" element={<CourseDetails />} />

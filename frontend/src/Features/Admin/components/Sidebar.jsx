@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -9,35 +9,24 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import { Icon } from "@iconify/react";
+import { useLocation } from "react-router-dom";
 import logo from "../../../assets/logologin.png";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(null); // Track the active menu item
+  const location = useLocation(); // Get the current route
+  const currentPath = location.pathname;
 
   const menuItems = [
-    { label: "Dashboard", icon: faHome, href: "#dashboard" },
+    { label: "Dashboard", icon: faHome, href: "/admin/dashboard" },
     { label: "Members", icon: faUsers, href: "/admin/basicform" },
     { label: "Term Management", icon: faCalendar, href: "/admin/allTerms" },
     { label: "Course Management", icon: faPen, href: "/admin/allcourses" },
     { label: "Academic Year", icon: "fluent:number-row-24-regular", href: "/admin/allacademicyears" },
-    { label: "Grade Managment", icon: "octicon:number-16", href: "#" },
-    {label: "Schedule Management",icon: faClock,href: "/admin/allschedules",},
+    { label: "Grade Management", icon: "octicon:number-16", href: "/admin/allGrades" },
+    { label: "Schedule Management", icon: faClock, href: "/admin/allschedules" },
   ];
-
-  useEffect(() => {
-    const savedActiveIndex = localStorage.getItem("activeIndex");
-    if (savedActiveIndex !== null) {
-      setActiveIndex(parseInt(savedActiveIndex, 10));
-    }
-  }, []);
-
-  // تخزين activeIndex في Local Storage عند تغييره
-  const handleActiveIndexChange = (index) => {
-    setActiveIndex(index);
-    localStorage.setItem("activeIndex", index);
-  };
 
   return (
     <div className="relative">
@@ -60,9 +49,7 @@ const Sidebar = () => {
               menuItems={menuItems}
               hoveredIndex={hoveredIndex}
               setHoveredIndex={setHoveredIndex}
-              activeIndex={activeIndex}
-              setActiveIndex={setActiveIndex}
-              handleActiveIndexChange={handleActiveIndexChange}
+              currentPath={currentPath}
             />
           </div>
         </div>
@@ -73,9 +60,7 @@ const Sidebar = () => {
           menuItems={menuItems}
           hoveredIndex={hoveredIndex}
           setHoveredIndex={setHoveredIndex}
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
-          handleActiveIndexChange={handleActiveIndexChange}
+          currentPath={currentPath}
         />
       </div>
     </div>
@@ -86,9 +71,7 @@ const SidebarContent = ({
   menuItems,
   hoveredIndex,
   setHoveredIndex,
-  activeIndex,
-  setActiveIndex,
-  handleActiveIndexChange,
+  currentPath,
 }) => {
   return (
     <>
@@ -104,27 +87,37 @@ const SidebarContent = ({
             key={index}
             href={item.href}
             className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${
-              activeIndex === index || hoveredIndex === index
+              currentPath === item.href || hoveredIndex === index
                 ? "bg-white text-dashboard-bg"
                 : "text-white"
             }`}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
-            // onClick={() => setActiveIndex(index)} // Set active index on click
-            onClick={() => handleActiveIndexChange(index)}
           >
-           {typeof item.icon === "string" ? (
-              <Icon icon={item.icon} className={`mr-3 transition-colors ${activeIndex === index || hoveredIndex === index ? "text-dashboard-bg" : "text-white"}text-xl`}  style={{ fontSize: "1.5rem" }}  />
+            {typeof item.icon === "string" ? (
+              <Icon
+                icon={item.icon}
+                className={`mr-3 transition-colors ${
+                  currentPath === item.href || hoveredIndex === index
+                    ? "text-dashboard-bg"
+                    : "text-white"
+                } text-xl`}
+                style={{ fontSize: "1.5rem" }}
+              />
             ) : (
               <FontAwesomeIcon
                 icon={item.icon}
-                className={`mr-3 transition-colors ${activeIndex === index || hoveredIndex === index ? "text-dashboard-bg" : "text-white"}`}
+                className={`mr-3 transition-colors ${
+                  currentPath === item.href || hoveredIndex === index
+                    ? "text-dashboard-bg"
+                    : "text-white"
+                }`}
               />
             )}
             <span className="font-poppins text-sm transition-colors group-hover:text-dashboard-bg">
               {item.label}
             </span>
-            {(activeIndex === index || hoveredIndex === index) && (
+            {(currentPath === item.href || hoveredIndex === index) && (
               <>
                 <div className="pointer-events-none absolute right-4 top-[-48px] h-12 w-12 rounded-full bg-transparent shadow-[34px_34px_0_9px_white]"></div>
                 <div className="pointer-events-none absolute bottom-[-48px] right-4 h-12 w-12 rounded-full bg-transparent shadow-[34px_-34px_0_9px_white]"></div>
