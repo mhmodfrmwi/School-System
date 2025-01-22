@@ -36,6 +36,9 @@ import AllGrades from "./Features/Admin/Pages/GradePage";
 import GradeForm from "./Features/Admin/components/Grades/GradeForm";
 import EditGradeForm from "./Features/Admin/components/Grades/EditGradeForm";
 import AssignGrade from "./Features/Admin/components/Grades/AssignGrade";
+import Students from "./Features/Student/pages/Students";
+import DashboardStudent from "./Features/Student/pages/DashboardStudent";
+import Grades from "./Features/Student/pages/Grades";
 function App() {
   return (
     <BrowserRouter>
@@ -89,6 +92,11 @@ function App() {
           <Route path="allcourses2/:subjectName" element={<CourseDetails />} />
           <Route path="addcourse" element={<AddCourse />} />
         </Route>
+        <Route path="student" element={<Students />}>
+          <Route index element={<DashboardStudent />} />
+          <Route path="grades" element={<Grades />} />
+        </Route>
+
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
