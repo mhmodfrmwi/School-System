@@ -12,6 +12,8 @@ function TeacherForm() {
     password: "",
     phoneNumber: "",
     gender: "",
+    subject: "",
+    dataOfBirth: "",
     // classes: [],
     // subjects: [""],
   });
@@ -60,6 +62,8 @@ function TeacherForm() {
         SSN: "30403131700795", // Dummy value
         // subject: formData.subjects[0],
         password: formData.password,
+        subject: formData.subject,
+        dataOfBirth: formData.dataOfBirth,
         // classes: formData.classes,
         role: "Teacher", // يمكن تعديل الدور إذا كان مطلوبًا
       }),
@@ -86,6 +90,8 @@ function TeacherForm() {
       password: "",
       phoneNumber: "",
       gender: "",
+      subject: "",
+      dataOfBirth: "",
       // classes: [],
       // subjects: [""],
     });
@@ -93,7 +99,7 @@ function TeacherForm() {
 
   return (
     <>
-      <div className="m-auto grid h-24 w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:h-10 sm:grid-cols-2">
+      <div className="m-auto grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:h-10 sm:grid-cols-2">
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
           onClick={() => navigate("/admin/teacherform")}
@@ -115,7 +121,7 @@ function TeacherForm() {
         </button>
       </div>
 
-      <div className="mb-6 ms-20 mt-6">
+      <div className="mb-6 ms-8 mt-6 md:ms-20">
         <h2 className="w-52 font-poppins text-3xl font-bold text-[#043B44]">
           Add Teacher
         </h2>
@@ -199,6 +205,42 @@ function TeacherForm() {
                 onChange={handleChange}
                 className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1">
+              <label className="mb-2 block font-semibold text-[#117C90]">
+                Subject
+              </label>
+              <select
+                value={formData.subject}
+                onChange={handleChange}
+                name="subject"
+                className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              >
+                <option value="" disabled>
+                  Select subject
+                </option>
+                <option value="Math">Math</option>
+                <option value="English">English</option>
+                <option value="Science">Science</option>
+                <option value="History">History</option>
+                <option value="Physics">Physics</option>
+              </select>
+            </div>
+
+            <div className=" ">
+              <label className="mb-2 block font-semibold text-[#117C90]">
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                name="dataOfBirth"
+                value={formData.dataOfBirth}
+                onChange={handleChange}
+                className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                placeholder="Enter Date of Birth"
                 required
               />
             </div>

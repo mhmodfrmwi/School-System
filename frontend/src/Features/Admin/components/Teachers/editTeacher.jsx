@@ -5,6 +5,7 @@ import { editTeacherAsync } from "../AdminRedux/teacherSlice"; // تأكد من 
 function EditTeacher() {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
+    id: "",
     fullName: "",
     email: "",
     password: "",
@@ -38,8 +39,9 @@ function EditTeacher() {
 
     if (!formData.fullName || !formData.email || !formData.password) return;
 
-    dispatch(
-      editTeacherAsync({
+    dispatch({
+      id: formData.id,
+      editTeacherAsync: {
         name: formData.fullName,
         email: formData.email,
         phone: formData.phoneNumber,
@@ -48,8 +50,8 @@ function EditTeacher() {
         subject: formData.subject,
         password: formData.password,
         role: "Teacher",
-      }),
-    );
+      },
+    });
 
     setFormData({
       fullName: "",

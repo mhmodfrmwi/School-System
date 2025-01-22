@@ -29,15 +29,9 @@ import EditTeacher from "./Features/Admin/components/Teachers/editTeacher";
 import AcademicYearForm from "./Features/Admin/components/AcademicYears/academicYearForm";
 import EditAcademicYearForm from "./Features/Admin/components/AcademicYears/editAcademicYearForm";
 import AllAcademicYears from "./Features/Admin/Pages/AcademicYearPage";
-
-// courses 
-
 import CourseDetails from "./Features/Admin/components/Courses/AllAssignedCourses";
 import CoursesList from "./Features/Admin/components/Courses/AllCourses";
 import AddCourse from "./Features/Admin/components/Courses/AddCourseManagement";
-// end courses
-// Dashboard
-import Dashboard from "./Features/Admin/components/Dashboard/Dashboard";
 import AllGrades from "./Features/Admin/Pages/GradePage";
 import GradeForm from "./Features/Admin/components/Grades/GradeForm";
 import EditGradeForm from "./Features/Admin/components/Grades/EditGradeForm";
@@ -75,7 +69,7 @@ function App() {
           <Route path="termform" element={<TermForm />} />
           <Route path="allteachers" element={<AllTeachers />} />
           <Route path="teacherform" element={<TeacherForm />} />
-          <Route path="editteacher" element={<EditTeacher />} />
+          <Route path="editteacher/:id" element={<EditTeacher />} />
           <Route path="teacherinfo" element={<TeacherInfo />} />
           <Route path="adminform" element={<AdminForm />} />
           <Route path="alladmins" element={<AllAdmins />} />
@@ -83,23 +77,19 @@ function App() {
           <Route path="allcourses" element={<CourseTable />} />
           <Route path="allacademicyears" element={<AllAcademicYears />} />
           <Route path="academicyearform" element={<AcademicYearForm />} />
-          <Route path="editacademicyearform/:id" element={<EditAcademicYearForm />} />
+          <Route
+            path="editacademicyearform/:id"
+            element={<EditAcademicYearForm />}
+          />
           <Route path="allgrades" element={<AllGrades />} />
           <Route path="gradeform" element={<GradeForm />} />
           <Route path="editGradeForm/:id" element={<EditGradeForm />} />
           <Route path="assigngrade" element={<AssignGrade />} />
-          <Route path="*" element={<PageNotFound />} />
-
-          {/* courses */}
           <Route path="allcourses1" element={<CoursesList />} />
           <Route path="allcourses2/:subjectName" element={<CourseDetails />} />
           <Route path="addcourse" element={<AddCourse />} />
-          {/* end courses */}
-          {/* Dashboard */}
-          <Route path="dashboard" element={<Dashboard/>} />
-          {/* end Dashboard */}
         </Route>
-       
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );

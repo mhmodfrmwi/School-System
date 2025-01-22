@@ -58,7 +58,7 @@ function TeacherInfo() {
     <>
       <div className="m-auto grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
         <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:bg-[#117C90] focus:outline-none"
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
           onClick={() => navigate("/admin/teacherform")}
         >
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
@@ -78,11 +78,11 @@ function TeacherInfo() {
         </button>
       </div>
 
-      <div className="mb-6 ms-20 mt-6">
+      <div className="mb-6 ms-6 mt-6 sm:ms-14">
         <h2 className="w-80 font-poppins text-3xl font-bold text-[#043B44]">
           Assign Teacher Info
         </h2>
-        <p className="mt-3 w-52 rounded-2xl border-b-4 border-[#117C90]"></p>
+        <p className="mt-3 w-40 rounded-2xl border-b-4 border-[#117C90]"></p>
       </div>
       <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
         <form onSubmit={handleSubmit}>
@@ -197,9 +197,9 @@ function TeacherInfo() {
           <div className="mt-8 flex justify-end">
             <button
               type="submit"
-              className="w-32 rounded-2xl bg-[#117C90] p-2 text-white hover:bg-[#043B44]"
+              className="w-40 rounded-2xl bg-[#117C90] p-2 text-white hover:bg-[#043B44]"
             >
-              Add Teacher
+              Assign Teacher
             </button>
           </div>
         </form>

@@ -304,7 +304,7 @@ const ParentTable = () => {
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
               </div>
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label
                   htmlFor="gender"
                   className="block text-sm font-medium text-gray-700"
@@ -319,19 +319,37 @@ const ParentTable = () => {
                   onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
+              </div> */}
+
+              <div>
+                <label className="mb-2 block font-semibold text-gray-600">
+                  Gender
+                </label>
+                <select
+                  name="gender"
+                  value={parentData.gender}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border p-2 font-poppins text-gray-600"
+                >
+                  <option value="" disabled>
+                    Select gender
+                  </option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
               </div>
 
               <div className="mb-4">
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700"
+                  className="mt-2 block text-sm font-medium text-gray-700"
                 >
                   phone
                 </label>
                 <input
                   type="text"
                   id="phone"
-                  name="gender"
+                  name="phone"
                   value={parentData.phone}
                   onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
