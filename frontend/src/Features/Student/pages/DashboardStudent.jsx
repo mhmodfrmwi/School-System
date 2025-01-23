@@ -1,7 +1,7 @@
 function DashboardStudent() {
   return (
     <>
-      <div className="pt-52 text-center">DashboardStudent</div>
+      <div className="py-28 text-center">DashboardStudent</div>
     </>
   );
 }
