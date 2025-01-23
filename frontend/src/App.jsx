@@ -38,7 +38,14 @@ import EditGradeForm from "./Features/Admin/components/Grades/EditGradeForm";
 import AssignGrade from "./Features/Admin/components/Grades/AssignGrade";
 import Students from "./Features/Student/pages/Students";
 import DashboardStudent from "./Features/Student/pages/DashboardStudent";
-import Grades from "./Features/Student/pages/Grades";
+import Grades from "./Features/Student/components/Grades/Grades";
+import GradesAssignment from "./Features/Student/components/Grades/GradesAssignment";
+import GradesExam from "./Features/Student/components/Grades/GradesExam";
+import Schedule from "./Features/Student/components/Schedule/schedule";
+import ScheduleExam from "./Features/Student/components/Schedule/scheduleExam";
+import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBooksEnglish";
+import Parents from "./Features/Parent/pages/Parents";
+import DashboardParent from "./Features/Parent/pages/DashboardParent";
 function App() {
   return (
     <BrowserRouter>
@@ -57,6 +64,7 @@ function App() {
         <Route index element={<OnBoarding />} />
         <Route path="login" element={<Login />} />
         <Route path="role" element={<ChooseRole />} />
+        {/* /////////////////adminpage//////////////////// */}
         <Route path="admin" element={<Admins />}>
           <Route index element={<DashboardAdmin />} />
           <Route path="basicform" element={<BasicForm />} />
@@ -92,9 +100,19 @@ function App() {
           <Route path="allcourses2/:subjectName" element={<CourseDetails />} />
           <Route path="addcourse" element={<AddCourse />} />
         </Route>
+        {/* /////////////////studentpage//////////////////// */}
         <Route path="student" element={<Students />}>
           <Route index element={<DashboardStudent />} />
           <Route path="grades" element={<Grades />} />
+          <Route path="grades/assignment" element={<GradesAssignment />} />
+          <Route path="grades/exam" element={<GradesExam />} />
+          <Route path="schedule" element={<Schedule />} />
+          <Route path="schedule/exam" element={<ScheduleExam />} />
+          <Route path="librarybooksenglish" element={<LibraryBooksEnglish />} />
+        </Route>
+        {/* /////////////////parentpage//////////////////// */}
+        <Route path="parent" element={<Parents />}>
+          <Route index element={<DashboardParent />} />
         </Route>
 
         <Route path="*" element={<PageNotFound />} />

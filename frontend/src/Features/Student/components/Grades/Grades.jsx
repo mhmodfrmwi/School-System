@@ -1,8 +1,8 @@
-import img1 from "./../../../assets/gradeshere.png";
-import img4 from "./../../../assets/arabic.png";
-import img5 from "./../../../assets/english.png";
-import img6 from "./../../../assets/french.png";
-import img7 from "./../../../assets/science.png";
+import img1 from "../../../../assets/gradeshere.png";
+import img4 from "../../../../assets/arabic.png";
+import img5 from "../../../../assets/english.png";
+import img6 from "../../../../assets/french.png";
+import img7 from "../../../../assets/science.png";
 
 function Grades() {
   return (
