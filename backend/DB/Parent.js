@@ -1,9 +1,10 @@
+const mongoose = require("mongoose");
 const parentSchema = new mongoose.Schema({
-  first_name: { type: String, required: true },
-  last_name: { type: String, required: true },
+  fullName: { type: String, required: true },
   phone: { type: String, required: true },
   email: { type: String, required: true },
-  password: { type: String, required: true }, // Hashed password
+  password: { type: String, required: true },
+  gender: { type: String, enum: ["M", "F", "O"], required: true },
 });
-
-module.exports = mongoose.model("Parent", parentSchema);
+const Parent = mongoose.model("Parent", parentSchema);
+module.exports = Parent;

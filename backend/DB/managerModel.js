@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const adminSchema = new mongoose.Schema({
+const managerSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phone: { type: String, required: true },
-  role: { type: String, default: "admin", enum: ["admin"] },
+  role: { type: String, default: "manager", enum: ["manager"] },
   gender: { type: String, enum: ["M", "F", "O"], required: true },
 });
-const Admin = mongoose.model("Admin", adminSchema);
-module.exports = Admin;
+const Manager = mongoose.model("Manager", managerSchema);
+module.exports = Manager;

@@ -27,6 +27,48 @@ const {
   deleteSemester,
   getAllSemester,
 } = require("../controllers/semesterController");
+const {
+  createTeacher,
+  getTeacher,
+  updateTeacher,
+  deleteTeacher,
+  getAllTeacher,
+} = require("../controllers/teacherController");
+const {
+  createClassTeacher,
+  getClassTeacher,
+  updateClassTeacher,
+  deleteClassTeacher,
+  getAllClassTeacher,
+} = require("../controllers/classTeacherController");
+const {
+  createParent,
+  getParent,
+  updateParent,
+  deleteParent,
+  getAllParent,
+} = require("../controllers/parentController");
+const {
+  createManager,
+  getManager,
+  updateManager,
+  deleteManager,
+  getAllManager,
+} = require("../controllers/managerController");
+const {
+  createAdmin,
+  getAdmin,
+  updateAdmin,
+  deleteAdmin,
+  getAllAdmin,
+} = require("../controllers/adminController");
+const {
+  createSchedule,
+  deleteSchedule,
+  updateSchedule,
+  getSchedule,
+  getAllSchedule,
+} = require("../controllers/scheduleController");
 
 const {
   createGradeSubjectSemester,
@@ -112,4 +154,79 @@ router
   .delete(deleteStudent);
 router.get("/student", getAllStudents);
 
+//Grade Subjects Semester Routes
+router.post(
+  "/gradeSubjectSemester/createGradeSubjectSemester",
+  createGradeSubjectSemester
+);
+router
+  .route("/gradeSubjectSemester/:id")
+  .get(getGradeSubjectSemester)
+  .patch(updateGradeSubjectSemester)
+  .delete(deleteGradeSubjectSemester);
+router.get("/gradeSubjectSemester", getAllGradeSubjectSemesters);
+
+// class Routes
+router.post("/class/createClass", createClass);
+router.route("/class/:id").get(getClass).patch(updateClass).delete(deleteClass);
+router.get("/class", getAllClasses);
+
+//student Routes
+router.post("/student/createStudent", createStudent);
+router
+  .route("/student/:id")
+  .get(getStudent)
+  .patch(updateStudent)
+  .delete(deleteStudent);
+router.get("/student", getAllStudents);
+
+//teacher routes
+router.post("/teacher/createTeacher", createTeacher);
+router
+  .route("/teacher/:id")
+  .get(getTeacher)
+  .patch(updateTeacher)
+  .delete(deleteTeacher);
+router.get("/teacher", getAllTeacher);
+
+//class-teacher routes
+router.post("/classTeacher/createClassTeacher", createClassTeacher);
+router
+  .route("/classTeacher/:id")
+  .get(getClassTeacher)
+  .patch(updateClassTeacher)
+  .delete(deleteClassTeacher);
+router.get("/classTeacher", getAllClassTeacher);
+
+//parent routes
+router.post("/parent/createParent", createParent);
+router
+  .route("/parent/:id")
+  .get(getParent)
+  .patch(updateParent)
+  .delete(deleteParent);
+router.get("/parent", getAllParent);
+
+//manager routes
+router.post("/manager/createManager", createManager);
+router
+  .route("/manager/:id")
+  .get(getManager)
+  .patch(updateManager)
+  .delete(deleteManager);
+router.get("/manager", getAllManager);
+
+//admin routes
+router.post("/admin/createAdmin", createAdmin);
+router.route("/admin/:id").get(getAdmin).patch(updateAdmin).delete(deleteAdmin);
+router.get("/admin", getAllAdmin);
+
+//schedule routes
+router.post("/schedule/createSchedule", createSchedule);
+router
+  .route("/schedule/:id")
+  .get(getSchedule)
+  .patch(updateSchedule)
+  .delete(deleteSchedule);
+router.get("/schedule", getAllSchedule);
 module.exports = router;

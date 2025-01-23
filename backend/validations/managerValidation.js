@@ -1,10 +1,10 @@
+const Joi = require("joi");
 const managerValidationSchema = Joi.object({
-  first_name: Joi.string().required(),
-  last_name: Joi.string().required(),
+  fullName: Joi.string().required(),
   email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(), // Minimum password length
+  password: Joi.string().min(6).required(),
   phone: Joi.string().required(),
-  role: Joi.string().valid("manager").default("manager"), // Role is fixed as 'manager'
+  gender: Joi.string().valid("M", "F", "O").required(),
 });
 
 module.exports = managerValidationSchema;

@@ -1,8 +1,9 @@
+const Joi = require("joi");
 const classTeacherValidationSchema = Joi.object({
-  class_id: Joi.string().required(),
-  subject_id: Joi.string().required(),
-  teacher_id: Joi.string().required(),
-  academic_year_id: Joi.string().required(),
+  className: Joi.string().required(),
+  subjectName: Joi.string().required(),
+  teacherName: Joi.string().required(),
+  academicYear: Joi.string().required(),
 });
 
 module.exports = classTeacherValidationSchema;
