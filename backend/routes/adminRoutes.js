@@ -27,6 +27,31 @@ const {
   deleteSemester,
   getAllSemester,
 } = require("../controllers/semesterController");
+
+const {
+  createGradeSubjectSemester,
+  deleteGradeSubjectSemester,
+  updateGradeSubjectSemester,
+  getGradeSubjectSemester,
+  getAllGradeSubjectSemesters,
+} = require("../controllers/gradeSubjectSemester");
+
+const {
+  createClass,
+  updateClass,
+  deleteClass,
+  getClass,
+  getAllClasses,
+} = require("../controllers/classController");
+
+const {
+  createStudent,
+  updateStudent,
+  deleteStudent,
+  getStudent,
+  getAllStudents,
+} = require("../controllers/studentController");
+
 const router = express.Router();
 
 //academic year routes
@@ -60,5 +85,31 @@ router
   .patch(updateSemester)
   .delete(deleteSemester);
 router.get("/semester", getAllSemester);
+
+//Grade Subjects Semester Routes
+router.post(
+  "/gradeSubjectSemester/createGradeSubjectSemester",
+  createGradeSubjectSemester
+);
+router
+  .route("/gradeSubjectSemester/:id")
+  .get(getGradeSubjectSemester)
+  .patch(updateGradeSubjectSemester)
+  .delete(deleteGradeSubjectSemester);
+router.get("/gradeSubjectSemester", getAllGradeSubjectSemesters);
+
+// class Routes
+router.post("/class/createClass", createClass);
+router.route("/class/:id").get(getClass).patch(updateClass).delete(deleteClass);
+router.get("/class", getAllClasses);
+
+//student Routes
+router.post("/student/createStudent", createStudent);
+router
+  .route("/student/:id")
+  .get(getStudent)
+  .patch(updateStudent)
+  .delete(deleteStudent);
+router.get("/student", getAllStudents);
 
 module.exports = router;

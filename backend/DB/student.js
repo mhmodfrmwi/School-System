@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const studentSchema = new mongoose.Schema({
   academic_number: { type: String, required: true, unique: true }, // Unique academic number
   first_name: { type: String, required: true },
