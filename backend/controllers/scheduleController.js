@@ -44,7 +44,7 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const grade = await Grade.findOne({ gradeName: req.body.gradeName });
+  const grade = await Grade.findOne({ gradeName: req.body.grade });
   if (!grade) {
     return res.status(404).json({
       status: 404,
@@ -67,7 +67,7 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
     subject_id: existingSubject._id,
     teacher_id: teacher._id,
     grade_id: grade._id,
-    academicYear_id: academicYear._id,
+    academic_year_id: academicYear._id,
     day_of_week: req.body.day,
     start_time: req.body.startTime,
     end_time: req.body.endTime,
@@ -213,7 +213,7 @@ const getSchedule = expressAsyncHandler(async (req, res) => {
     .populate("subject_id", "subjectName")
     .populate("teacher_id", "fullName")
     .populate("grade_id", "gradeName")
-    .populate("academicYear_id", "startYear");
+    .populate("academic_year_id", "startYear endYear");
 
   if (!schedule) {
     return res.status(404).json({
@@ -235,7 +235,7 @@ const getAllSchedule = expressAsyncHandler(async (req, res) => {
     .populate("subject_id", "subjectName")
     .populate("teacher_id", "fullName")
     .populate("grade_id", "gradeName")
-    .populate("academicYear_id", "startYear");
+    .populate("academic_year_id", "startYear endYear");
 
   res.status(200).json({
     status: 200,

@@ -8,7 +8,7 @@ const ClassTeacher = require("../DB/classTeacherModel");
 const Class = require("../DB/classModel");
 
 const createClassTeacher = expressAsyncHandler(async (req, res) => {
-  const error = classTeacherValidationSchema.validate(req.body);
+  const { error } = classTeacherValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
       status: 400,
@@ -24,7 +24,7 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
   }
 
   const existingSubject = await Subject.findOne({
-    subjectName: req.body.subject,
+    subjectName: req.body.subjectName,
   });
 
   if (!existingSubject) {
@@ -80,7 +80,7 @@ const updateClassTeacher = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const error = classTeacherValidationSchema.validate(req.body);
+  const { error } = classTeacherValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
       status: 400,
@@ -97,7 +97,7 @@ const updateClassTeacher = expressAsyncHandler(async (req, res) => {
   }
 
   const existingSubject = await Subject.findOne({
-    subjectName: req.body.subject,
+    subjectName: req.body.subjectName,
   });
 
   if (!existingSubject) {
@@ -191,7 +191,7 @@ const getClassTeacher = expressAsyncHandler(async (req, res) => {
     .populate("classId", "className")
     .populate("subjectId", "subjectName")
     .populate("teacherId", "fullName")
-    .populate("academicYear_id", "startYear");
+    .populate("academicYear_id", "startYear endYear");
 
   if (!classTeacher) {
     return res.status(404).json({
@@ -212,7 +212,7 @@ const getAllClassTeacher = expressAsyncHandler(async (req, res) => {
     .populate("classId", "className")
     .populate("subjectId", "subjectName")
     .populate("teacherId", "fullName")
-    .populate("academicYear_id", "startYear");
+    .populate("academicYear_id", "startYear endYear");
 
   res.status(200).json({
     status: 200,

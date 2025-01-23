@@ -5,9 +5,6 @@ const Class = require("../DB/classModel");
 const Grade = require("../DB/gradeModel");
 const AcademicYear = require("../DB/academicYearModel");
 
-
-
-// Create a Class
 const createClass = expressAsyncHandler(async (req, res) => {
   const { error } = classValidationSchema.validate(req.body);
   if (error) {
@@ -17,16 +14,16 @@ const createClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { gradeName, academicYear, class_name} = req.body;
+  const { gradeName, academicYear, className } = req.body;
 
   const startYear = academicYear.slice(0, 4);
-    const academicYearRecord = await AcademicYear.findOne({ startYear });
-    if (!academicYearRecord) {
-      return res.status(404).json({
-        status: 404,
-        message: "Academic year not found",
-      });
-    }
+  const academicYearRecord = await AcademicYear.findOne({ startYear });
+  if (!academicYearRecord) {
+    return res.status(404).json({
+      status: 404,
+      message: "Academic year not found",
+    });
+  }
 
   const grade = await Grade.findOne({ gradeName });
   if (!grade) {
@@ -36,10 +33,24 @@ const createClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
+  const existingClass = await Class.findOne({
+    className,
+    gradeId: grade._id,
+    academicYear_id: academicYearRecord._id,
+  });
+
+  if (existingClass) {
+    return res.status(400).json({
+      status: 400,
+      message:
+        "Class with the same name, grade, and academic year already exists.",
+    });
+  }
+
   const newClass = new Class({
-    class_name,
-    grade_id:grade._id,
-    academic_year_id:academicYearRecord._id,
+    className,
+    gradeId: grade._id,
+    academicYear_id: academicYearRecord._id,
   });
 
   await newClass.save();
@@ -51,9 +62,6 @@ const createClass = expressAsyncHandler(async (req, res) => {
   });
 });
 
-
-
-// Update a Class
 const updateClass = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -72,7 +80,7 @@ const updateClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { gradeName, academicYear, class_name } = req.body;
+  const { gradeName, academicYear, className } = req.body;
 
   const existingClass = await Class.findById(id);
   if (!existingClass) {
@@ -99,12 +107,27 @@ const updateClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
+  const duplicateClass = await Class.findOne({
+    _id: { $ne: id },
+    className,
+    gradeId: grade._id,
+    academicYear_id: academicYearRecord._id,
+  });
+
+  if (duplicateClass) {
+    return res.status(400).json({
+      status: 400,
+      message:
+        "Class with the same name, grade, and academic year already exists.",
+    });
+  }
+
   const updatedClass = await Class.findByIdAndUpdate(
     id,
     {
-      class_name,
-      grade_id: grade._id,
-      academic_year_id: academicYearRecord._id,
+      className,
+      gradeId: grade._id,
+      academicYear_id: academicYearRecord._id,
     },
     { new: true }
   );
@@ -116,7 +139,6 @@ const updateClass = expressAsyncHandler(async (req, res) => {
   });
 });
 
-// Delete a Class
 const deleteClass = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -143,7 +165,6 @@ const deleteClass = expressAsyncHandler(async (req, res) => {
   });
 });
 
-// Get a Single Class
 const getClass = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -154,7 +175,9 @@ const getClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const foundClass = await Class.findById(id);
+  const foundClass = await Class.findById(id)
+    .populate("gradeId", "gradeName")
+    .populate("academicYear_id", "startYear endYear");
 
   if (!foundClass) {
     return res.status(404).json({
@@ -170,9 +193,10 @@ const getClass = expressAsyncHandler(async (req, res) => {
   });
 });
 
-// Get All Classes
 const getAllClasses = expressAsyncHandler(async (req, res) => {
-  const classes = await Class.find();
+  const classes = await Class.find()
+    .populate("gradeId", "gradeName")
+    .populate("academicYear_id", "startYear endYear");
 
   res.status(200).json({
     status: 200,

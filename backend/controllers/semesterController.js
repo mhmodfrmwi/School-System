@@ -12,18 +12,35 @@ const createSemester = expressAsyncHandler(async (req, res) => {
       message: error.details[0].message,
     });
   }
-  const startYear = req.body.academicYear.slice(0, 4);
-  const academicYear = await AcademicYear.findOne({ startYear });
-  if (!academicYear) {
+
+  const { academicYear, semesterName } = req.body;
+
+  const startYear = academicYear.slice(0, 4);
+  const academicYearRecord = await AcademicYear.findOne({ startYear });
+
+  if (!academicYearRecord) {
     return res.status(404).json({
       status: 404,
       message: "Academic year not found",
     });
   }
 
+  const existingSemester = await Semester.findOne({
+    academicYear_id: academicYearRecord._id,
+    semesterName,
+  });
+
+  if (existingSemester) {
+    return res.status(400).json({
+      status: 400,
+      message:
+        "Semester with the same name already exists for this academic year.",
+    });
+  }
+
   const semester = new Semester({
-    academicYear_id: academicYear._id,
-    semesterName: req.body.semesterName,
+    academicYear_id: academicYearRecord._id,
+    semesterName,
   });
 
   await semester.save();
@@ -53,20 +70,37 @@ const updateSemester = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const startYear = req.body.academicYear.slice(0, 4);
-  const academicYear = await AcademicYear.findOne({ startYear });
-  if (!academicYear) {
+  const { academicYear, semesterName } = req.body;
+
+  const startYear = academicYear.slice(0, 4);
+  const academicYearRecord = await AcademicYear.findOne({ startYear });
+
+  if (!academicYearRecord) {
     return res.status(404).json({
       status: 404,
       message: "Academic year not found",
     });
   }
 
+  const existingSemester = await Semester.findOne({
+    _id: { $ne: id },
+    academicYear_id: academicYearRecord._id,
+    semesterName,
+  });
+
+  if (existingSemester) {
+    return res.status(400).json({
+      status: 400,
+      message:
+        "Semester with the same name already exists for this academic year.",
+    });
+  }
+
   const semester = await Semester.findByIdAndUpdate(
     id,
     {
-      academicYear_id: academicYear._id,
-      semesterName: req.body.semesterName,
+      academicYear_id: academicYearRecord._id,
+      semesterName,
     },
     { new: true }
   );
@@ -120,7 +154,7 @@ const getSemester = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const semester = await Semester.findById(id);
+  const semester = await Semester.findById(id).populate("academicYear_id");
 
   if (!semester) {
     return res.status(404).json({
@@ -137,7 +171,7 @@ const getSemester = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllSemester = expressAsyncHandler(async (req, res) => {
-  const semesters = await Semester.find();
+  const semesters = await Semester.find().populate("academicYear_id");
   res.status(200).json({
     status: 200,
     message: "Semesters retrieved successfully",

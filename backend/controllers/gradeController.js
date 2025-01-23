@@ -11,10 +11,24 @@ const createGrade = expressAsyncHandler(async (req, res) => {
       message: error.details[0].message,
     });
   }
+
+  const { gradeName } = req.body;
+
+  const existingGrade = await Grade.findOne({ gradeName });
+
+  if (existingGrade) {
+    return res.status(400).json({
+      status: 400,
+      message: "Grade with the same name already exists.",
+    });
+  }
+
   const grade = new Grade({
-    gradeName: req.body.gradeName,
+    gradeName,
   });
+
   await grade.save();
+
   res.status(201).json({
     status: 201,
     message: "Grade created successfully",
@@ -28,7 +42,7 @@ const updateGrade = expressAsyncHandler(async (req, res) => {
   if (!validateObjectId(id)) {
     return res.status(400).json({
       status: 400,
-      message: "Error getting this page",
+      message: "Invalid Grade ID",
     });
   }
 
@@ -40,11 +54,21 @@ const updateGrade = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const grade = await Grade.findByIdAndUpdate(
-    id,
-    { gradeName: req.body.gradeName },
-    { new: true }
-  );
+  const { gradeName } = req.body;
+
+  const existingGrade = await Grade.findOne({
+    _id: { $ne: id },
+    gradeName,
+  });
+
+  if (existingGrade) {
+    return res.status(400).json({
+      status: 400,
+      message: "Grade with the same name already exists.",
+    });
+  }
+
+  const grade = await Grade.findByIdAndUpdate(id, { gradeName }, { new: true });
 
   if (!grade) {
     return res.status(404).json({
