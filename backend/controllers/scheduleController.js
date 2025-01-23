@@ -1,0 +1,253 @@
+const expressAsyncHandler = require("express-async-handler");
+const validateObjectId = require("../utils/validateObjectId");
+const scheduleValidationSchema = require("../validations/scheduleValidation");
+const Class = require("../DB/classModel");
+const Subject = require("../DB/subjectModel");
+const Grade = require("../DB/gradeModel");
+const Teacher = require("../DB/teacher");
+const AcademicYear = require("../DB/academicYearModel");
+const Schedule = require("../DB/schedule");
+
+const createSchedule = expressAsyncHandler(async (req, res) => {
+  const { error } = scheduleValidationSchema.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.details[0].message,
+    });
+  }
+
+  const existingClass = await Class.findOne({ className: req.body.className });
+  if (!existingClass) {
+    return res.status(404).json({
+      status: 404,
+      message: "Class not found",
+    });
+  }
+
+  const existingSubject = await Subject.findOne({
+    subjectName: req.body.subjectName,
+  });
+  if (!existingSubject) {
+    return res.status(404).json({
+      status: 404,
+      message: "Subject not found",
+    });
+  }
+
+  const teacher = await Teacher.findOne({ fullName: req.body.teacherName });
+  if (!teacher) {
+    return res.status(404).json({
+      status: 404,
+      message: "Teacher not found",
+    });
+  }
+
+  const grade = await Grade.findOne({ gradeName: req.body.gradeName });
+  if (!grade) {
+    return res.status(404).json({
+      status: 404,
+      message: "Grade not found",
+    });
+  }
+
+  const academicYear = await AcademicYear.findOne({
+    startYear: req.body.academicYear.slice(0, 4),
+  });
+  if (!academicYear) {
+    return res.status(404).json({
+      status: 404,
+      message: "Academic year not found",
+    });
+  }
+
+  const schedule = new Schedule({
+    class_id: existingClass._id,
+    subject_id: existingSubject._id,
+    teacher_id: teacher._id,
+    grade_id: grade._id,
+    academicYear_id: academicYear._id,
+    day_of_week: req.body.day,
+    start_time: req.body.startTime,
+    end_time: req.body.endTime,
+  });
+
+  await schedule.save();
+
+  res.status(201).json({
+    status: 201,
+    message: "Schedule created successfully",
+    schedule,
+  });
+});
+
+const updateSchedule = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!validateObjectId(id)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Schedule ID",
+    });
+  }
+
+  const { error } = scheduleValidationSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.details[0].message,
+    });
+  }
+
+  const existingClass = await Class.findOne({ className: req.body.className });
+  if (!existingClass) {
+    return res.status(404).json({
+      status: 404,
+      message: "Class not found",
+    });
+  }
+
+  const existingSubject = await Subject.findOne({
+    subjectName: req.body.subjectName,
+  });
+  if (!existingSubject) {
+    return res.status(404).json({
+      status: 404,
+      message: "Subject not found",
+    });
+  }
+
+  const teacher = await Teacher.findOne({ fullName: req.body.teacherName });
+  if (!teacher) {
+    return res.status(404).json({
+      status: 404,
+      message: "Teacher not found",
+    });
+  }
+
+  const grade = await Grade.findOne({ gradeName: req.body.gradeName });
+  if (!grade) {
+    return res.status(404).json({
+      status: 404,
+      message: "Grade not found",
+    });
+  }
+
+  const academicYear = await AcademicYear.findOne({
+    startYear: req.body.academicYear.slice(0, 4),
+  });
+  if (!academicYear) {
+    return res.status(404).json({
+      status: 404,
+      message: "Academic year not found",
+    });
+  }
+
+  const schedule = await Schedule.findByIdAndUpdate(
+    id,
+    {
+      class_id: existingClass._id,
+      subject_id: existingSubject._id,
+      teacher_id: teacher._id,
+      grade_id: grade._id,
+      academicYear_id: academicYear._id,
+      day_of_week: req.body.day,
+      start_time: req.body.startTime,
+      end_time: req.body.endTime,
+    },
+    { new: true }
+  );
+
+  if (!schedule) {
+    return res.status(404).json({
+      status: 404,
+      message: "Schedule not found",
+    });
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: "Schedule updated successfully",
+    schedule,
+  });
+});
+
+const deleteSchedule = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!validateObjectId(id)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Schedule ID",
+    });
+  }
+
+  const schedule = await Schedule.findByIdAndDelete(id);
+
+  if (!schedule) {
+    return res.status(404).json({
+      status: 404,
+      message: "Schedule not found",
+    });
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: "Schedule deleted successfully",
+  });
+});
+
+const getSchedule = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!validateObjectId(id)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Schedule ID",
+    });
+  }
+
+  const schedule = await Schedule.findById(id)
+    .populate("class_id", "className")
+    .populate("subject_id", "subjectName")
+    .populate("teacher_id", "fullName")
+    .populate("grade_id", "gradeName")
+    .populate("academicYear_id", "startYear");
+
+  if (!schedule) {
+    return res.status(404).json({
+      status: 404,
+      message: "Schedule not found",
+    });
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: "Schedule retrieved successfully",
+    schedule,
+  });
+});
+
+const getAllSchedule = expressAsyncHandler(async (req, res) => {
+  const schedules = await Schedule.find()
+    .populate("class_id", "className")
+    .populate("subject_id", "subjectName")
+    .populate("teacher_id", "fullName")
+    .populate("grade_id", "gradeName")
+    .populate("academicYear_id", "startYear");
+
+  res.status(200).json({
+    status: 200,
+    message: "Schedules retrieved successfully",
+    schedules,
+  });
+});
+
+module.exports = {
+  createSchedule,
+  updateSchedule,
+  deleteSchedule,
+  getSchedule,
+  getAllSchedule,
+};

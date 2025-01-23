@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const scheduleSchema = new mongoose.Schema({
   class_id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -14,6 +15,11 @@ const scheduleSchema = new mongoose.Schema({
     ref: "Teacher",
     required: true,
   },
+  grade_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Grade",
+    required: true,
+  },
   day_of_week: { type: String, required: true },
   start_time: { type: String, required: true },
   end_time: { type: String, required: true },
@@ -23,5 +29,5 @@ const scheduleSchema = new mongoose.Schema({
     required: true,
   },
 });
-
-module.exports = mongoose.model("Schedule", scheduleSchema);
+const Schedule = mongoose.model("Schedule", scheduleSchema);
+module.exports = Schedule;

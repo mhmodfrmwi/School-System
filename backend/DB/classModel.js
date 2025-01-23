@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const classSchema = new mongoose.Schema({
   class_name: { type: String, required: true },
   grade_id: {
@@ -11,5 +12,5 @@ const classSchema = new mongoose.Schema({
     required: true,
   },
 });
-
-module.exports = mongoose.model("Class", classSchema);
+const Class = mongoose.model("Class", classSchema);
+module.exports = Class;

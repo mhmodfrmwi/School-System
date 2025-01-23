@@ -1,13 +1,13 @@
+const Joi = require("joi");
 const teacherValidationSchema = Joi.object({
-  academic_number: Joi.string().required(), // Academic number is required
-  first_name: Joi.string().required(),
-  last_name: Joi.string().required(),
-  date_of_birth: Joi.date().required(),
+  fullName: Joi.string().required(),
+  dateOfBirth: Joi.string().required(),
   gender: Joi.string().valid("M", "F", "O").required(),
   address: Joi.string().required(),
   phone: Joi.string().required(),
   email: Joi.string().email().required(),
-  hire_date: Joi.date().required(),
+  subject: Joi.string().required(),
+  password: Joi.string().min(6).required(),
 });
 
 module.exports = teacherValidationSchema;

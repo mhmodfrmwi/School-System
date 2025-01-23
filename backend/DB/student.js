@@ -1,5 +1,5 @@
 const studentSchema = new mongoose.Schema({
-  academic_number: { type: String, required: true, unique: true }, // Unique academic number
+  academic_number: { type: String, required: true, unique: true },
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
   date_of_birth: { type: Date, required: true },
@@ -8,7 +8,7 @@ const studentSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   email: { type: String, required: true },
   admission_date: { type: Date, required: true },
-  password: { type: String, required: true }, // Hashed password
+  password: { type: String, required: true },
 
   grade_id: {
     type: mongoose.Schema.Types.ObjectId,
