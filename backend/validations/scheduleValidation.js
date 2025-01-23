@@ -1,11 +1,13 @@
+const Joi = require("joi");
 const scheduleValidationSchema = Joi.object({
-  class_id: Joi.string().required(),
-  subject_id: Joi.string().required(),
-  teacher_id: Joi.string().required(),
-  day_of_week: Joi.string().required(),
-  start_time: Joi.string().required(),
-  end_time: Joi.string().required(),
-  academic_year_id: Joi.string().required(),
+  className: Joi.string().required(),
+  subjectName: Joi.string().required(),
+  teacherName: Joi.string().required(),
+  grade: Joi.string().required(),
+  day: Joi.string().required(),
+  startTime: Joi.string().required(),
+  endTime: Joi.string().required(),
+  academicYear: Joi.string().required(),
 });
 
 module.exports = scheduleValidationSchema;

@@ -1,76 +1,10 @@
-// models/Parent.js
 const mongoose = require("mongoose");
-const Joi = require("joi");
-const path = require("path");
-
-// Define Parent Schema
 const parentSchema = new mongoose.Schema({
-  name: { type: String, required: true, minlength: 3, maxlength: 30 },
-  email: { type: String, required: true, unique: true },
+  fullName: { type: String, required: true },
+  phone: { type: String, required: true },
+  email: { type: String, required: true },
   password: { type: String, required: true },
-  SSN: { type: String, required: true },
-  themePreference: {
-    type: String,
-    enum: ["light", "dark"],
-    default: "light",
-  },
-  notificationsEnabled: { type: Boolean, default: true },
-  order: { type: Number, min: 1 },
-  sons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
-  gender: {
-    type: String,
-    required: true,
-    enum: ["Male", "Female"],
-  },
-  phone: {
-    type: Number,
-    required: true,
-  },
-  profileImage: {
-    type: String,
-    default: "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?t=st=1733078248~exp=1733081848~hmac=e2eec059dc2217f905388f452eaf9dee7d9679765c2b0ac7f273a5cfe7cd4bde&w=740",
-  },
+  gender: { type: String, enum: ["M", "F", "O"], required: true },
 });
-
-// Joi Validation for Parent
-const validateParent = (obj) => {
-  const schema = Joi.object({
-    name: Joi.string().min(3).max(30).required().messages({
-      "string.base": "Name must be a string.",
-      "string.min": "Name must be at least 3 characters long.",
-      "string.max": "Name cannot exceed 30 characters.",
-      "any.required": "Name is required.",
-    }),
-    email: Joi.string().email().required().messages({
-      "string.email": "Email must be a valid email address.",
-      "any.required": "Email is required.",
-    }),
-    password: Joi.string().required().messages({
-      "any.required": "Password is required.",
-    }),
-    SSN: Joi.string()
-      .pattern(/^\d{14}$/)
-      .required()
-      .messages({
-        "any.required": "SSN is required.",
-      }),
-    themePreference: Joi.string().valid("light", "dark").default("light"),
-    notificationsEnabled: Joi.boolean().default(true),
-    order: Joi.number().integer().min(1).messages({
-      "number.base": "Order must be a positive integer.",
-      "number.min": "Order must be at least 1.",
-    }),
-    role: Joi.string().valid("Parent").required(),
-    sons: Joi.array(),
-    gender: Joi.string().required(),
-    phone: Joi.number().required(),
-  });
-
-  return schema.validate(obj);
-};
-
-// Exporting the Model and Validation Function
-module.exports = {
-  Parent: mongoose.model("Parent", parentSchema),
-  validateParent,
-};
+const Parent = mongoose.model("Parent", parentSchema);
+module.exports = Parent;

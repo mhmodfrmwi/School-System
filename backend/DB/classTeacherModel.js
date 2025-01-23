@@ -1,24 +1,25 @@
+const mongoose = require("mongoose");
 const classTeacherSchema = new mongoose.Schema({
-  class_id: {
+  classId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Class",
     required: true,
   },
-  subject_id: {
+  subjectId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Subject",
     required: true,
   },
-  teacher_id: {
+  teacherId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Teacher",
     required: true,
   },
-  academic_year_id: {
+  academicYear_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "AcademicYear",
     required: true,
   },
 });
-
-module.exports = mongoose.model("ClassTeacher", classTeacherSchema);
+const ClassTeacher = mongoose.model("ClassTeacher", classTeacherSchema);
+module.exports = ClassTeacher;

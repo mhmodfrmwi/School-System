@@ -1,5 +1,6 @@
-const gradeValidationSchema = Joi.object({
-  grade_name: Joi.string().required(),
+const Joi = require("joi");
+const subjectValidationSchema = Joi.object({
+  subjectName: Joi.string().required(),
 });
 
-module.exports = gradeValidationSchema;
+module.exports = subjectValidationSchema;

@@ -1,8 +1,10 @@
+const Joi = require("joi");
 const parentValidationSchema = Joi.object({
-  first_name: Joi.string().required(),
-  last_name: Joi.string().required(),
+  fullName: Joi.string().required(),
   phone: Joi.string().required(),
   email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+  gender: Joi.string().valid("M", "F", "O").required(),
 });
 
 module.exports = parentValidationSchema;

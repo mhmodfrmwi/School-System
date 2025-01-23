@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const gradeSubjectSemesterSchema = new mongoose.Schema({
   grade_subject_id: {
     type: mongoose.Schema.Types.ObjectId,

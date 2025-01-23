@@ -1,19 +1,20 @@
+const mongoose = require("mongoose");
 const gradeSubjectSchema = new mongoose.Schema({
-  subject_id: {
+  subjectId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Subject",
     required: true,
   },
-  grade_id: {
+  gradeId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Grade",
     required: true,
   },
-  academic_year_id: {
+  academicYear_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "AcademicYear",
     required: true,
   },
 });
-
-module.exports = mongoose.model("GradeSubject", gradeSubjectSchema);
+const GradeSubject = mongoose.model("GradeSubject", gradeSubjectSchema);
+module.exports = GradeSubject;
