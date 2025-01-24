@@ -76,7 +76,7 @@ const GradeList = () => {
             <div className="flex items-center">
               <div
                 className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
-                style={{ backgroundColor: `${getColor(index)}33` }} // Light background
+                style={{ backgroundColor: `${getColor(index)}33` }} 
               >
                 <FontAwesomeIcon icon={faCalendar} style={{ color: getColor(index) }} />
               </div>

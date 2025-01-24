@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { editAcademicYear } from "../AdminRedux/academicYearSlice";  // تأكدي من أن الدالة موجودة في الـ slice
-
+import { editAcademicYear } from "../AdminRedux/academicYearSlice";  
 const EditAcademicYearForm = () => {
   const { id } = useParams(); 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const academicYears = useSelector((state) => state.academicYears.academicYears);  // جلب البيانات من Redux
+  const academicYears = useSelector((state) => state.academicYears.academicYears);  
   const [formData, setFormData] = useState({
     startYear: "",
     endYear: "",
   });
 
   useEffect(() => {
-    const academicYear = academicYears.find((year) => year._id === id); // تأكدي من أن الـ id يتطابق مع الـ _id في الداتا
+    const academicYear = academicYears.find((year) => year._id === id); 
     if (academicYear) {
       setFormData({
         startYear: academicYear.startYear,
@@ -31,7 +30,7 @@ const EditAcademicYearForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(editAcademicYear({ id, updatedAcademicYear: formData }));
-    navigate("/admin/allacademicyears"); // العودة إلى صفحة الليست بعد التحديث
+    navigate("/admin/allacademicyears"); 
   };
 
   return (

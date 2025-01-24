@@ -5,7 +5,7 @@ const GradeToggle = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path; // Check active route
+  const isActive = (path) => location.pathname === path;
 
   return (
     <div className="w-full mx-auto mt-10">

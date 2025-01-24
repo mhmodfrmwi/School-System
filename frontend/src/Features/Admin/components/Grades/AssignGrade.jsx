@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGrades } from "../AdminRedux/gradeSlice"; // Assuming the slice is in gradeSlice.js
-import { fetchAcademicYears } from "../AdminRedux/academicYearSlice"; // Import the fetchAcademicYears action
+import { fetchGrades } from "../AdminRedux/gradeSlice"; 
+import { fetchAcademicYears } from "../AdminRedux/academicYearSlice"; 
 import GradeToggle from "./SelectPage";
 
 function AssignGrade() {
   const dispatch = useDispatch();
+  
   const { grade, loading: gradeLoading, error: gradeError } = useSelector((state) => state.grades);
-  const { academicYears, loading: yearLoading, error: yearError } = useSelector((state) => state.academicYears); // Access academicYears state
+  const { academicYears, loading: yearLoading, error: yearError } = useSelector((state) => state.academicYears); 
 
   useEffect(() => {
     dispatch(fetchGrades());
-    dispatch(fetchAcademicYears()); // Dispatch the fetchAcademicYears action to get the academic years
+    dispatch(fetchAcademicYears());
   }, [dispatch]);
 
   return (

@@ -6,28 +6,25 @@ import { fetchAcademicYears, editAcademicYear } from "../AdminRedux/academicYear
 import { editGradeAsync } from "../AdminRedux/gradeSlice";
 
 const EditGradeForm = () => {
-  const { id } = useParams(); // جلب الـ ID الخاص بالصف
+  const { id } = useParams(); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // جلب البيانات من Redux
   const grades = useSelector((state) => state.grades.grade);
   const academicYears = useSelector((state) => state.academicYears.academicYears);
 
-  // الحقول الخاصة بالفورم
   const [formData, setFormData] = useState({
     gradeName: "",
     startYear: "",
     endYear: "",
   });
 
-  // تحميل البيانات عند فتح الصفحة
   useEffect(() => {
     dispatch(fetchGrades());
     dispatch(fetchAcademicYears());
 
-    const grade = grades.find((g) => g._id === id); // الصف المناسب
-    const academicYear = academicYears.find((year) => year._id === id); // السنة المناسبة
+    const grade = grades.find((g) => g._id === id); 
+    const academicYear = academicYears.find((year) => year._id === id); 
 
     if (grade && academicYear) {
       setFormData({
@@ -38,17 +35,13 @@ const EditGradeForm = () => {
     }
   }, [id, grades, academicYears, dispatch]);
 
-  // تحديث الحقول عند التغيير
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  // إرسال التحديث
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // تحديث gradeName
     dispatch(
       editGradeAsync({
         id,
@@ -56,7 +49,6 @@ const EditGradeForm = () => {
       })
     );
 
-    // تحديث startYear و endYear
     dispatch(
       editAcademicYear({
         id,
@@ -67,7 +59,6 @@ const EditGradeForm = () => {
       })
     );
 
-    // الرجوع إلى صفحة القائمة بعد الإرسال
     navigate("/admin/allgrades");
   };
 

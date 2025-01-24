@@ -12,9 +12,9 @@ import Loader from "@/ui/Loader";
 const AcademicYearList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const academicYears = useSelector((state) => state.academicYears.academicYears); // تأكد من أن الـ state يحتوي على بيانات السنين الدراسية بشكل صحيح
-  const [loading, setLoading] = useState(true); // حالة التحميل
-  const [error, setError] = useState(null); // حالة الخطأ
+  const academicYears = useSelector((state) => state.academicYears.academicYears); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -27,10 +27,9 @@ const AcademicYearList = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this academic year?");
     if (confirmDelete) {
       try {
-        dispatch(removeAcademicYear(id)); // حذف الـ Academic Year من Redux
-        // alert("Academic Year deleted successfully");
+        dispatch(removeAcademicYear(id)); 
       } catch (err) {
-        setError(err.message); // في حالة حدوث خطأ أثناء الحذف
+        setError(err.message); 
         alert("Error occurred while deleting");
       }
     }
@@ -42,9 +41,9 @@ const AcademicYearList = () => {
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
 
-  // دالة لاختيار لون من الألوان المتاحة
+  
   const getColor = (index) => {
-    return colors[index % colors.length]; // اختيار اللون بناءً على الفهرس (سيتم التبديل بين الألوان الأربعة)
+    return colors[index % colors.length]; 
   };
 
   if (loading) {
@@ -55,7 +54,6 @@ const AcademicYearList = () => {
     return <div>Error: {error}</div>;
   }
 
-  // تحقق أن academicYears هو مصفوفة قبل استخدام map
   if (!Array.isArray(academicYears) || academicYears.length === 0) {
     return <div>No academic years available.</div>;
   }
@@ -78,7 +76,7 @@ const AcademicYearList = () => {
       <div className="p-5 max-w-full">
         {paginatedAcademicYears.map((year, index) => (
           <div
-            key={year._id} // Ensure that each element has a unique key
+            key={year._id} 
             className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full"
           >
             {/* Icon and Info */}
@@ -86,7 +84,7 @@ const AcademicYearList = () => {
               {/* Circle Icon */}
               <div
                 className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
-                style={{ backgroundColor: `${getColor(index)}33` }} // Light background
+                style={{ backgroundColor: `${getColor(index)}33` }} 
               >
                 <FontAwesomeIcon icon={faCalendar} style={{ color: getColor(index) }} />
               </div>

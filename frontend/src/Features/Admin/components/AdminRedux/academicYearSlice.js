@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const BASE_URL = "http://localhost:4000/api/v1/admin/academicYear"; // تعديل الرابط الأساسي
+const BASE_URL = "http://localhost:4000/api/v1/admin/academicYear";
 
 const initialState = {
   academicYears: [],
-  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+  status: "idle", 
   error: null,
 };
 
-// Fetch all academic years
+
 export const fetchAcademicYears = createAsyncThunk(
   "academicYears/fetchAll",
   async (_, { rejectWithValue }) => {
@@ -16,15 +16,15 @@ export const fetchAcademicYears = createAsyncThunk(
       const response = await fetch(`${BASE_URL}`);
       if (!response.ok) throw new Error("Failed to fetch academic years");
       const data = await response.json();
-      // console.log("Fetched academic years:", data.academicYears); // تحقق من البيانات هنا
-      return data.academicYears; // البيانات المسترجعة
+      
+      return data.academicYears; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Add a new academic year
+
 export const addAcademicYear = createAsyncThunk(
   "academicYears/add",
   async (newAcademicYear, { rejectWithValue }) => {
@@ -36,13 +36,13 @@ export const addAcademicYear = createAsyncThunk(
       });
       if (!response.ok) throw new Error("Failed to add academic year");
       const data = await response.json();
-      return data.academicYear; // البيانات الجديدة
+      return data.academicYear; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
-// Edit an academic year
+
 export const editAcademicYear = createAsyncThunk(
   "academicYears/edit",
   async ({ id, updatedAcademicYear }, { rejectWithValue }) => {
@@ -53,7 +53,7 @@ export const editAcademicYear = createAsyncThunk(
         body: JSON.stringify(updatedAcademicYear),
       });
       if (!response.ok) throw new Error("Failed to update academic year");
-      return { id, ...updatedAcademicYear }; // تحديث البيانات
+      return { id, ...updatedAcademicYear };  
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -70,7 +70,7 @@ export const removeAcademicYear = createAsyncThunk(
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete academic year");
-      return id; // ID العنصر المحذوف
+      return id; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -95,7 +95,7 @@ const academicYearSlice = createSlice({
       .addCase(fetchAcademicYears.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.academicYears = action.payload;
-        // console.log("Updated academic years in Redux:", state.academicYears); // تحقق من البيانات في Redux
+        // console.log("Updated academic years in Redux:", state.academicYears); 
       })
       .addCase(fetchAcademicYears.rejected, (state, action) => {
         state.status = "failed";
