@@ -44,12 +44,10 @@ import ScheduleExam from "./Features/Student/components/Schedule/scheduleExam";
 import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBooksEnglish";
 import Parents from "./Features/Parent/pages/Parents";
 import DashboardParent from "./Features/Parent/pages/DashboardParent";
-<<<<<<< Updated upstream
 import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
-=======
+
 import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
->>>>>>> Stashed changes
 function App() {
   return (
     <BrowserRouter>
