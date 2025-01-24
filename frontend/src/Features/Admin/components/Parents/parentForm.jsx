@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addParenttoserver, postParent } from "../AdminRedux/parentSlice";
+import { postParent } from "../AdminRedux/parentSlice";
 import Swal from "sweetalert2";
 import Loader from "@/ui/Loader";
 
@@ -11,7 +11,7 @@ function ParentForm() {
     fullName: "",
     email: "",
     password: "",
-    phoneNumber: "",
+    phone: "",
     gender: "",
     students: [{ studentID: "" }],
   });
@@ -60,33 +60,23 @@ function ParentForm() {
     try {
       await dispatch(
         postParent({
-          name: formData.fullName,
+          fullName: formData.fullName,
           email: formData.email,
-          phone: formData.phoneNumber,
+          phone: formData.phone,
           gender: formData.gender,
-          SSN: "30403000000000",
+          // SSN: "30403000000000",
           password: formData.password,
-          role: "Parent",
+          // role: "Parent",
         }),
       );
 
-      await dispatch(
-        addParenttoserver(
-          formData.fullName,
-          formData.email,
-          formData.password,
-          formData.phoneNumber,
-          formData.gender,
-        ),
-      );
-
-      Swal.fire("Success", "Parent added successfully!", "success");
+      // Swal.fire("Success", "Parent added successfully!", "success");
 
       setFormData({
         fullName: "",
         email: "",
         password: "",
-        phoneNumber: "",
+        phone: "",
         gender: "",
         students: [{ studentID: "" }],
       });
@@ -150,11 +140,11 @@ function ParentForm() {
                 <option value="" disabled className="font-poppins">
                   Select gender
                 </option>
-                <option value="Male" className="font-poppins">
-                  Male
+                <option value="M" className="font-poppins">
+                  M
                 </option>
-                <option value="Female" className="font-poppins">
-                  Female
+                <option value="F" className="font-poppins">
+                  F
                 </option>
               </select>
             </div>
@@ -181,8 +171,8 @@ function ParentForm() {
               </label>
               <input
                 type="text"
-                name="phoneNumber"
-                value={formData.phoneNumber}
+                name="phone"
+                value={formData.phone}
                 onChange={handleChange}
                 className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"

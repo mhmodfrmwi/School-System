@@ -13,15 +13,16 @@ const initialState = {
   status: "idle",
   error: null,
   loading: false,
+  message: "",
 };
 
 export const postTeacher = createAsyncThunk(
   "teachers/postTeacher",
   async (teacherData, { rejectWithValue }) => {
-    console.log(teacherData);
+    // console.log(teacherData);
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/auth/register",
+        "http://localhost:4000/api/v1/admin/teacher/createTeacher",
         {
           method: "POST",
           body: JSON.stringify(teacherData),
@@ -49,7 +50,7 @@ export const fetchTeachers = createAsyncThunk(
   async () => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/getUsers/teachers",
+        "http://localhost:4000/api/v1/admin/teacher/",
       );
 
       if (!response.ok) {
@@ -71,9 +72,9 @@ export const editTeacherAsync = createAsyncThunk(
   async ({ id, updatedTeacher }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/teachers/${id}`,
+        `http://localhost:4000/api/v1/admin/teacher/${id}`,
         {
-          method: "PUT",
+          method: "PATCH",
           body: JSON.stringify(updatedTeacher),
           headers: {
             "Content-Type": "application/json",
@@ -87,7 +88,7 @@ export const editTeacherAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.newTeacher;
+      return data.teacher;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit teacher data");
     }
@@ -99,7 +100,7 @@ export const removeTeacher = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/teachers/${id}`,
+        `http://localhost:4000/api/v1/admin/teacher/${id}`,
         {
           method: "DELETE",
         },
@@ -119,11 +120,7 @@ export const removeTeacher = createAsyncThunk(
 
 const teacherSlice = createSlice({
   name: "teachers",
-  initialState: {
-    teachers: [],
-    status: "idle",
-    message: "",
-  },
+  initialState,
   reducers: {
     addTeachertoServer: {
       prepare(
@@ -213,7 +210,6 @@ const teacherSlice = createSlice({
         state.loading = true;
       })
       .addCase(editTeacherAsync.fulfilled, (state, action) => {
-        state.loading = false;
         const updatedTeacher = action.payload;
         const index = state.teachers.findIndex(
           (teacher) => teacher._id === updatedTeacher._id,

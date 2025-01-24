@@ -19,9 +19,11 @@ const ManagerTable = () => {
   } = useSelector((state) => state.bosses || {});
 
   const [managerData, setManagerData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     gender: "",
+    phone: "",
+    password: "",
   });
 
   const [editingManager, setEditingManager] = useState(null);
@@ -48,7 +50,7 @@ const ManagerTable = () => {
       return bosse[filterOption]?.toLowerCase().includes(lowerSearchText);
     }
     return (
-      bosse.name.toLowerCase().includes(lowerSearchText) ||
+      bosse.fullName.toLowerCase().includes(lowerSearchText) ||
       bosse.email.toLowerCase().includes(lowerSearchText)
     );
   });
@@ -98,9 +100,11 @@ const ManagerTable = () => {
   const handleEditClick = (manager) => {
     setEditingManager(manager._id);
     setManagerData({
-      name: manager.name,
+      fullName: manager.fullName,
       email: manager.email,
       gender: manager.gender,
+      phone: manager.phone,
+      password: manager.password,
     });
     setIsModalOpen(true);
   };
@@ -116,7 +120,7 @@ const ManagerTable = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
 
-    if (!managerData.name || !managerData.email || !managerData.gender) {
+    if (!managerData.fullName || !managerData.email || !managerData.gender) {
       Swal.fire({
         icon: "warning",
         title: "Validation Error",
@@ -126,9 +130,11 @@ const ManagerTable = () => {
     }
 
     const updatedManager = {
-      name: managerData.name,
+      fullName: managerData.fullName,
       email: managerData.email,
       gender: managerData.gender,
+      phone: managerData.phone,
+      password: managerData.password,
     };
 
     try {
@@ -138,13 +144,13 @@ const ManagerTable = () => {
       setIsModalOpen(false);
       Swal.fire(
         "Success!",
-        "The term has been updated successfully.",
+        "The manager has been updated successfully.",
         "success",
       );
     } catch (error) {
       Swal.fire(
         "Error!",
-        error.message || "Failed to update the term.",
+        error.message || "Failed to update the manager.",
         "error",
       );
     }
@@ -202,7 +208,7 @@ const ManagerTable = () => {
                       className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                     />
                     <span className="truncate font-poppins">
-                      {manager.name}
+                      {manager.fullName}
                     </span>
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
@@ -254,20 +260,20 @@ const ManagerTable = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
+          <div className="h-[85vh] w-96 overflow-y-scroll bg-white p-6 shadow-lg">
             <h3 className="mb-4 text-lg font-semibold">Edit Manager</h3>
             <form onSubmit={handleEditSubmit}>
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="mb-2 block font-semibold text-gray-700"
                 >
                   Name
                 </label>
                 <input
                   type="text"
-                  name="name"
-                  value={managerData.name}
+                  name="fullName"
+                  value={managerData.fullName}
                   onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
@@ -275,7 +281,7 @@ const ManagerTable = () => {
               <div className="mb-4">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="mb-2 block font-semibold text-gray-700"
                 >
                   Email
                 </label>
@@ -288,22 +294,58 @@ const ManagerTable = () => {
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
               </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="gender"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  gender
+
+              <div>
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Gender
                 </label>
-                <input
-                  type="text"
-                  id="gender"
+                <select
                   name="gender"
                   value={managerData.gender}
                   onChange={handleEditChange}
+                  className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none"
+                >
+                  <option value="" disabled>
+                    Select gender
+                  </option>
+                  <option value="M" className="font-poppins">
+                    M
+                  </option>
+                  <option value="F" className="font-poppins">
+                    F
+                  </option>
+                </select>
+              </div>
+
+              <div className="my-2">
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={managerData.password}
+                  onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
+                  placeholder="Enter password"
+                  required
                 />
               </div>
+              <div className="my-2">
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Phone Number
+                </label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={managerData.phone}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                  placeholder="Enter phone number"
+                  required
+                />
+              </div>
+
               <div className="flex justify-end space-x-4">
                 <button
                   type="button"

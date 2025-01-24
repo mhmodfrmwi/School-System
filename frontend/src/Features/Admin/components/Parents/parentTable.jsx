@@ -21,11 +21,12 @@ const ParentTable = () => {
   // console.log(parents);
 
   const [parentData, setParentData] = useState({
-    name: "",
+    fullName: "",
     studentID: "",
     email: "",
     phone: "",
     gender: "",
+    password: "",
   });
 
   const [editingParent, setEditingParent] = useState(null);
@@ -43,24 +44,25 @@ const ParentTable = () => {
     dispatch(fetchParents());
   }, [dispatch]);
 
+  // console.log(parents);
+
   const filteredParents = parents.filter((parent) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
       return parent[filterOption]?.toLowerCase().includes(lowerSearchText);
     }
     return (
-      parent.name.toLowerCase().includes(lowerSearchText) ||
-      parent.email.toLowerCase().includes(lowerSearchText) ||
-      parent.studentName?.toLowerCase().includes(lowerSearchText)
+      parent.fullName.toLowerCase().includes(lowerSearchText) ||
+      parent.email.toLowerCase().includes(lowerSearchText)
     );
   });
 
-  // console.log('Filtered Parents:', filteredParents);
+  // console.log("Filtered Parents:", filteredParents);
   const paginatedParents = filteredParents.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
-
+  // console.log(paginatedParents);
   const handleDelete = async (id) => {
     setSelectedParentId(id);
     // setShowConfirm(true);
@@ -101,11 +103,12 @@ const ParentTable = () => {
   const handleEditClick = (parent) => {
     setEditingParent(parent._id);
     setParentData({
-      name: parent.name,
+      fullName: parent.fullName,
       email: parent.email,
       gender: parent.gender,
-      studentID: parent.studentID,
+      // studentID: parent.studentID,
       phone: parent.phone,
+      password: parent.password,
     });
     setIsModalOpen(true);
   };
@@ -121,7 +124,7 @@ const ParentTable = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
 
-    if (!parentData.name || !parentData.email || !parentData.gender) {
+    if (!parentData.fullName || !parentData.email || !parentData.gender) {
       Swal.fire({
         icon: "warning",
         title: "Validation Error",
@@ -131,11 +134,12 @@ const ParentTable = () => {
     }
 
     const updatedParent = {
-      name: parentData.name,
+      fullName: parentData.fullName,
       email: parentData.email,
       gender: parentData.gender,
-      studentID: parentData.studentID,
+      // studentID: parentData.studentID,
       phone: parentData.phone,
+      password: parentData.password,
     };
 
     try {
@@ -145,13 +149,13 @@ const ParentTable = () => {
       setIsModalOpen(false);
       Swal.fire(
         "Success!",
-        "The term has been updated successfully.",
+        "The parent has been updated successfully.",
         "success",
       );
     } catch (error) {
       Swal.fire(
         "Error!",
-        error.message || "Failed to update the term.",
+        error.message || "Failed to update the parent.",
         "error",
       );
     }
@@ -182,14 +186,16 @@ const ParentTable = () => {
                 Name
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                Student Name
+              </th>
+
+              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Student ID
               </th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Email
               </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                Phone
-              </th>
+
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Gender
               </th>
@@ -200,7 +206,7 @@ const ParentTable = () => {
           </thead>
           <tbody className="relative">
             {loading && <Loader />}
-            {paginatedParents.length > 0 ? (
+            {[paginatedParents].length > 0 ? (
               paginatedParents.map((parent, index) => (
                 <tr
                   key={parent._id || index}
@@ -212,18 +218,21 @@ const ParentTable = () => {
                       alt="Profile"
                       className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                     />
-                    <span className="truncate font-poppins">{parent.name}</span>
+                    <span className="truncate font-poppins">
+                      {parent.fullName}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {parent.studentName}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {parent.studentID}
                   </td>
 
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {parent.SSN}
-                  </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {parent.email}
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    {parent.phone}
-                  </td>
+
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {parent.gender}
                   </td>
@@ -270,20 +279,20 @@ const ParentTable = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
+          <div className="h-[87vh] w-96 overflow-y-scroll bg-white p-6 shadow-lg">
             <h3 className="mb-4 text-lg font-semibold">Edit parent</h3>
             <form onSubmit={handleEditSubmit}>
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="my-2 block font-semibold text-gray-700"
                 >
                   Name
                 </label>
                 <input
                   type="text"
-                  name="name"
-                  value={parentData.name}
+                  name="fullName"
+                  value={parentData.fullName}
                   onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
@@ -291,7 +300,7 @@ const ParentTable = () => {
               <div className="mb-4">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="my-2 block font-semibold text-gray-700"
                 >
                   Email
                 </label>
@@ -304,25 +313,9 @@ const ParentTable = () => {
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
               </div>
-              {/* <div className="mb-4">
-                <label
-                  htmlFor="gender"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  gender
-                </label>
-                <input
-                  type="text"
-                  id="gender"
-                  name="gender"
-                  value={parentData.gender}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                />
-              </div> */}
 
               <div>
-                <label className="mb-2 block font-semibold text-gray-600">
+                <label className="my-2 block font-semibold text-gray-700">
                   Gender
                 </label>
                 <select
@@ -331,18 +324,22 @@ const ParentTable = () => {
                   onChange={handleEditChange}
                   className="w-full rounded-md border p-2 font-poppins text-gray-600"
                 >
-                  <option value="" disabled>
+                  <option value="" disabled className="font-poppins">
                     Select gender
                   </option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
+                  <option value="M" className="font-poppins">
+                    M
+                  </option>
+                  <option value="F" className="font-poppins">
+                    F
+                  </option>
                 </select>
               </div>
 
               <div className="mb-4">
                 <label
                   htmlFor="phone"
-                  className="mt-2 block text-sm font-medium text-gray-700"
+                  className="my-2 block font-semibold text-gray-700"
                 >
                   phone
                 </label>
@@ -351,6 +348,38 @@ const ParentTable = () => {
                   id="phone"
                   name="phone"
                   value={parentData.phone}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                />
+              </div>
+
+              <div className="mb-2">
+                <label className="my-2 block font-semibold text-gray-700">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={parentData.password}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border p-2 font-poppins text-gray-600"
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
+
+              {/* <div className="mb-4">
+                <label
+                  htmlFor="studentID"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  studentName
+                </label>
+                <input
+                  type="text"
+                  id="studentName"
+                  name="studenName"
+                  value={parentData.studentName}
                   onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
@@ -371,7 +400,7 @@ const ParentTable = () => {
                   onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
-              </div>
+              </div> */}
 
               <div className="flex justify-end space-x-4">
                 <button

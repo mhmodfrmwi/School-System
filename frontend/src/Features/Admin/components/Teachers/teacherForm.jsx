@@ -1,19 +1,23 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { postTeacher, addTeachertoServer } from "../AdminRedux/teacherSlice"; // تأكد من تعديل المسار حسب مشروعك
+import { useDispatch, useSelector } from "react-redux";
+import { postTeacher } from "../AdminRedux/teacherSlice"; // تأكد من تعديل المسار حسب مشروعك
 import { useNavigate } from "react-router-dom";
+import { Loader } from "lucide-react";
 
 function TeacherForm() {
+  const { loading } = useSelector((state) => state.teachers); // Assuming you have all parents' data in Redux
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
-    phoneNumber: "",
+    phone: "",
     gender: "",
     subject: "",
-    dataOfBirth: "",
+    dateOfBirth: "",
+    address: "",
     // classes: [],
     // subjects: [""],
   });
@@ -55,30 +59,19 @@ function TeacherForm() {
 
     dispatch(
       postTeacher({
-        name: formData.fullName,
+        fullName: formData.fullName,
         email: formData.email,
-        phone: formData.phoneNumber,
+        phone: formData.phone,
         gender: formData.gender,
-        SSN: "30403131700795", // Dummy value
+        // SSN: "30403131700795", // Dummy value
         // subject: formData.subjects[0],
         password: formData.password,
         subject: formData.subject,
-        dataOfBirth: formData.dataOfBirth,
+        dateOfBirth: formData.dateOfBirth,
+        address: formData.address,
         // classes: formData.classes,
-        role: "Teacher", // يمكن تعديل الدور إذا كان مطلوبًا
+        // role: "Teacher", // يمكن تعديل الدور إذا كان مطلوبًا
       }),
-    );
-
-    dispatch(
-      addTeachertoServer(
-        formData.fullName,
-        formData.email,
-        formData.password,
-        formData.phoneNumber,
-        formData.gender,
-        // formData.classes,
-        // formData.subjects[0],
-      ),
     );
 
     // console.log("Form Submitted", formData);
@@ -88,17 +81,19 @@ function TeacherForm() {
       fullName: "",
       email: "",
       password: "",
-      phoneNumber: "",
+      phone: "",
       gender: "",
       subject: "",
-      dataOfBirth: "",
+      dateOfBirth: "",
+      address: "",
       // classes: [],
       // subjects: [""],
     });
   };
 
   return (
-    <>
+    <div>
+      {loading && <Loader />}
       <div className="m-auto grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:h-10 sm:grid-cols-2">
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
@@ -173,8 +168,8 @@ function TeacherForm() {
                 <option value="" disabled>
                   Select gender
                 </option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="M">M</option>
+                <option value="F">F</option>
               </select>
             </div>
           </div>
@@ -200,8 +195,8 @@ function TeacherForm() {
               </label>
               <input
                 type="text"
-                name="phoneNumber"
-                value={formData.phoneNumber}
+                name="phone"
+                value={formData.phone}
                 onChange={handleChange}
                 className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter phone number"
@@ -232,12 +227,27 @@ function TeacherForm() {
 
             <div className=" ">
               <label className="mb-2 block font-semibold text-[#117C90]">
+                Address
+              </label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                placeholder="Enter Date of Birth"
+                required
+              />
+            </div>
+
+            <div className=" ">
+              <label className="mb-2 block font-semibold text-[#117C90]">
                 Date of Birth
               </label>
               <input
                 type="date"
-                name="dataOfBirth"
-                value={formData.dataOfBirth}
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
                 onChange={handleChange}
                 className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter Date of Birth"
@@ -309,7 +319,7 @@ function TeacherForm() {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 

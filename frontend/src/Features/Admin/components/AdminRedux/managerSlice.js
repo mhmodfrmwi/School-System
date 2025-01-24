@@ -20,7 +20,7 @@ export const postBosse = createAsyncThunk(
     console.log(bossesData);
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/auth/register",
+        "http://localhost:4000/api/v1/admin/manager/createManager",
         {
           method: "POST",
           body: JSON.stringify(bossesData),
@@ -48,7 +48,7 @@ export const fetchBosses = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/getUsers/bosses",
+        "http://localhost:4000/api/v1/admin/manager/",
       );
 
       if (!response.ok) {
@@ -57,7 +57,7 @@ export const fetchBosses = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.bosses;
+      return data.managers;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -70,9 +70,9 @@ export const editManagerAsync = createAsyncThunk(
     console.log(updatedManager);
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/bosses/${id}`,
+        `http://localhost:4000/api/v1/admin/manager/${id}`,
         {
-          method: "PUT",
+          method: "PATCH",
           body: JSON.stringify(updatedManager),
           headers: {
             "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export const editManagerAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.newBoss;
+      return data.manager;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -97,7 +97,7 @@ export const removeBosse = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/bosses/${id}`,
+        `http://localhost:4000/api/v1/admin/manager/${id}`,
         {
           method: "DELETE",
           headers: {

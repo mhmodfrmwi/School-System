@@ -1,9 +1,21 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import Loader from "@/ui/Loader";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchTeachers, postTeacher } from "../AdminRedux/teacherSlice";
 
 function TeacherInfo() {
+  const { teachers = [], loading } = useSelector(
+    (state) => state.teachers || {},
+  );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchTeachers());
+  }, [dispatch]);
+
+  console.log(teachers);
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     teacherName: "",
@@ -33,29 +45,14 @@ function TeacherInfo() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.subject) return;
+    if (!formData.fullName || !formData.subject) return;
 
-    // dispatch();
-    // postTeacher({
-    //   name: formData.name,
-    //   SSN: "30403131700795", // Dummy value
-    //   subject: formData.subjects[0],
-    //   password: formData.password,
-    //   classes: formData.classes,
-    //   role: "Teacher",
-    // }),
-
-    // dispatch();
-    // addTeachertoServer(formData.name, formData.classes, formData.subjects[0]),
-
-    setFormData({
-      name: "",
-      subject: "",
-      assignTeacher: [{ grade: "", class: "" }],
-    });
+    dispatch(postTeacher({}));
   };
+
   return (
     <>
+      {loading && <Loader />}
       <div className="m-auto grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
@@ -100,11 +97,9 @@ function TeacherInfo() {
                 <option value="" disabled>
                   Select Teacher
                 </option>
-                <option value="Ahmed">ahmed</option>
-                <option value="Mohamed">mohamed</option>
-                <option value="Ali">ali</option>
-                <option value="Elsayed">elsayed</option>
-                <option value="Mohmoud">mahmoud</option>
+                {teachers.map((teacher, index) => (
+                  <option value={teacher.fullName}>{teacher.fullName}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -123,11 +118,9 @@ function TeacherInfo() {
                 <option value="" disabled>
                   Select subject
                 </option>
-                <option value="Math">Math</option>
-                <option value="English">English</option>
-                <option value="Science">Science</option>
-                <option value="History">History</option>
-                <option value="Physics">Physics</option>
+                {teachers.map((teacher, index) => (
+                  <option value={teacher.subject}>{teacher.subject}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -161,7 +154,7 @@ function TeacherInfo() {
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block font-poppins text-gray-700">
+                  <label className="mb-2 block font-semibold text-[#117C90]">
                     Class
                   </label>
                   <select
