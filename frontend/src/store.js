@@ -9,10 +9,10 @@ import parentReducer from "./Features/Admin/components/AdminRedux/parentSlice";
 import adminReducer from "./Features/Admin/components/AdminRedux/adminSlice";
 import teacherReducer from "./Features/Admin/components/AdminRedux/teacherSlice";
 import bossReducer from "./Features/Admin/components/AdminRedux/managerSlice";
-// import courseReducer from "./Features/Admin/components/AdminRedux/courseSlice";
-import coursesReducer from "./Features/Admin/components/AdminRedux/coursesSlice";
+import subjectsReducer from "./Features/Admin/components/AdminRedux/subjectSlice";
 import academicYearReducer from "./Features/Admin/components/AdminRedux/academicYearSlice";
 import gradeReducer from "./Features/Admin/components/AdminRedux/gradeSlice";
+import assignSubjectReducer from "./Features/Admin/components/AdminRedux/AssignSubjectSlice";
 
 const store = configureStore({
   reducer: {
@@ -25,8 +25,8 @@ const store = configureStore({
     teachers: teacherReducer,
     terms: termReducer,
     schedule: scheduleReducer,
-    // courses: courseReducer,
-    courses: coursesReducer,
+    subject: subjectsReducer,
+    assignSubject: assignSubjectReducer,
     academicYears: academicYearReducer,
     grades:gradeReducer,
   },
