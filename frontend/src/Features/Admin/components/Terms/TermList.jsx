@@ -1,237 +1,122 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeTerm, fetchTerms, editTermAsync } from "../AdminRedux/termSlice";
+import { removeTerm, fetchTerms } from "../AdminRedux/termSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit,faCalendar } from "@fortawesome/free-solid-svg-icons";
 import TermHeader from "./termHeader";
-import Swal from "sweetalert2";
+import Pagination from "../Pagination";
 
 const TermList = () => {
   const { terms = [], loading } = useSelector((state) => state.terms || {});
   const dispatch = useDispatch();
 
-  const [termData, setTermData] = useState({
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const [ setTermData] = useState({
+    semester: "",
     startYear: "",
     endYear: "",
-    term: "",
   });
-
-  const [editingTerm, setEditingTerm] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTerms());
   }, [dispatch]);
 
-  const handleDelete = async (id) => {
-    const confirmDelete = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to undo this action!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    });
+  const paginatedTerms = terms.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
-    if (confirmDelete.isConfirmed) {
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this term?"
+    );
+    if (confirmDelete) {
       try {
         await dispatch(removeTerm(id));
-        Swal.fire("Deleted!", "The term has been deleted.", "success");
+        alert("The term has been deleted.");
       } catch (error) {
-        Swal.fire(
-          "Error!",
-          "An error occurred while deleting the term.",
-          "error",
-        );
+        alert("An error occurred while deleting the term.");
       }
     }
   };
 
-  const handleEditClick = (term) => {
-    setEditingTerm(term._id);
-    setTermData({
-      term: term.term,
-      startYear: term.startYear,
-      endYear: term.endYear,
-    });
-    setIsModalOpen(true);
-  };
-
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setTermData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!termData.term || !termData.startYear || !termData.endYear) {
-      Swal.fire({
-        icon: "warning",
-        title: "Validation Error",
-        text: "Please fill in all required fields.",
-      });
-      return;
-    }
-
-    const updatedTerm = {
-      term: termData.term,
-      startYear: termData.startYear,
-      endYear: termData.endYear,
-    };
-
-    try {
-      await dispatch(editTermAsync({ id: editingTerm, updatedTerm })).unwrap();
-      setIsModalOpen(false);
-      Swal.fire(
-        "Success!",
-        "The term has been updated successfully.",
-        "success",
-      );
-    } catch (error) {
-      Swal.fire(
-        "Error!",
-        error.message || "Failed to update the term.",
-        "error",
-      );
-    }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
+  const getColor = (index) => {
+    return colors[index % colors.length];
   };
 
   return (
     <div className="mx-auto px-4 lg:px-0">
       <TermHeader />
-      <div className="space-y-4 p-4">
+      <div className="p-5 max-w-full">
         {loading ? (
           <p>Loading terms...</p>
         ) : (
-          terms.map((term, index) => (
+          paginatedTerms.map((term, index) => (
             <div
-              key={term._id || index}
-              className="flex flex-col rounded-lg border border-gray-200 bg-white p-4 shadow-md"
+              key={term._id}
+              className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4"
             >
               <div className="flex items-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                <div
+                  className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
+                  style={{ backgroundColor: `${getColor(index)}33` }}
+                >
                   <FontAwesomeIcon
-                    icon={faPen}
-                    className="text-xl text-green-500"
+                    icon={faCalendar}
+                    style={{ color: getColor(index) }}
                   />
                 </div>
-                <div className="ml-4 flex-grow">
-                  <p className="text-sm text-gray-500">
-                    {term.startYear} - {term.endYear}
+
+                <div className="flex flex-col">
+                  <p className="m-0 text-sm text-gray-500">
+                    {term.academicYear_id.startYear} - {term.academicYear_id.endYear}
                   </p>
-                  <h3 className="text-lg font-semibold">
-                    {term.term &&
-                    typeof term.term === "string" &&
-                    term.term.trim() !== ""
-                      ? term.term
-                      : "No Term Available"}
+                  <h3 className="m-0 text-lg font-bold text-gray-600">
+                    {term.semesterName &&
+                    typeof term.semesterName === "string" &&
+                    term.semesterName.trim() !== ""
+                      ? term.semesterName
+                      : "No Semester Available"}
                   </h3>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <button
-                    className="text-blue-500 hover:text-blue-700"
-                    onClick={() => handleEditClick(term)}
-                    title="Edit"
-                  >
-                    <FontAwesomeIcon icon={faPen} />
-                  </button>
-                  <button
-                    className="text-red-500 hover:text-red-700"
-                    onClick={() => handleDelete(term._id)}
-                    title="Delete"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
-                </div>
+              </div>
+
+              <div className="flex">
+                <button
+                  className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+                  onClick={() => {
+                    setTermData({
+                      semester: term.semester,
+                      startYear: term.academicYear_id.startYear,
+                      endYear: term.academicYear_id.endYear,
+                    });
+                  }}
+                >
+                  <FontAwesomeIcon icon={faEdit} className="text-lg" />
+                </button>
+                <button
+                  className="text-[#E74833] transition duration-300 hover:text-[#244856]"
+                  onClick={() => handleDelete(term._id)}
+                >
+                 <i className="far fa-trash-alt" style={{ fontSize: "16px" }} />
+                </button>
               </div>
             </div>
           ))
         )}
+        <Pagination
+          totalItems={terms.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
-            <h3 className="mb-4 text-lg font-semibold">Edit Term</h3>
-            <form onSubmit={handleEditSubmit}>
-              <div className="mb-4">
-                <label
-                  htmlFor="term"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Term
-                </label>
-                <select
-                  name="term"
-                  value={termData.term}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                >
-                  <option value="">Select Term</option>
-                  <option value="Term 1">Term 1</option>
-                  <option value="Term 2">Term 2</option>
-                </select>
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="startYear"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Start Year
-                </label>
-                <input
-                  type="number"
-                  id="startYear"
-                  name="startYear"
-                  value={termData.startYear}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="endYear"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  End Year
-                </label>
-                <input
-                  type="number"
-                  id="endYear"
-                  name="endYear"
-                  value={termData.endYear}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                />
-              </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={handleCloseModal}
-                  className="rounded-md bg-gray-300 p-2 text-black"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="rounded-md bg-blue-500 p-2 text-white"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

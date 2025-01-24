@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addBossetoServer, postBosse } from "../AdminRedux/managerSlice";
+// import { addBossetoServer, postBosse } from "../AdminRedux/managerSlice";
+import { postBosse } from "../AdminRedux/managerSlice";
 import Swal from "sweetalert2";
 import Loader from "@/ui/Loader";
 

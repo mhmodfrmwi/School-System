@@ -17,8 +17,10 @@ export const postTerm = createAsyncThunk(
   "terms/postTerm",
   async (termData, { rejectWithValue }) => {
     try {
+      console.log("Sending term data:", termData); // Log payload
+
       const response = await fetch(
-        "http://localhost:4000/api/v1/admin/addTerm",
+        "http://localhost:4000/api/v1/admin/semester/createSemester",
         {
           method: "POST",
           body: JSON.stringify(termData),
@@ -29,44 +31,52 @@ export const postTerm = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to post term data");
+        const errorData = await response.json();
+        console.error("Error response from server:", errorData); // Log server error
+        throw new Error(errorData.message || "Failed to post term data");
       }
 
       const data = await response.json();
+      toast.success("Term added successfully");
       return data;
     } catch (error) {
+      console.error("Error in postTerm:", error); // Log client-side error
+      toast.error(error.message || "Failed to post term data");
       return rejectWithValue(error.message || "Failed to post term data");
     }
-  },
+  }
 );
+
 
 // Fetch all terms
 export const fetchTerms = createAsyncThunk(
   "terms/fetchTerms",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/terms");
+      const response = await fetch("http://localhost:4000/api/v1/admin/semester");
 
       if (!response.ok) {
         throw new Error("Failed to fetch terms");
       }
 
       const data = await response.json();
-      return data.terms;
+      return data.semesters;
     } catch (error) {
+      toast.error(error.message || "Failed to fetch terms");
       return rejectWithValue(error.message);
     }
   },
 );
 
+// Edit a term
 export const editTermAsync = createAsyncThunk(
   "terms/editTermAsync",
   async ({ id, updatedTerm }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/admin/terms/${id}`,
+        `http://localhost:4000/api/v1/admin/semester/${id}`,
         {
-          method: "PUT",
+          method: "PATCH",
           body: JSON.stringify(updatedTerm),
           headers: {
             "Content-Type": "application/json",
@@ -79,8 +89,10 @@ export const editTermAsync = createAsyncThunk(
       }
 
       const data = await response.json();
+      toast.success("Term updated successfully");
       return data.term;
     } catch (error) {
+      toast.error(error.message || "Failed to edit term");
       return rejectWithValue(error.message);
     }
   },
@@ -92,7 +104,7 @@ export const removeTerm = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/admin/terms/${id}`,
+        `http://localhost:4000/api/v1/admin/semester/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -103,13 +115,15 @@ export const removeTerm = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
+        toast.error(error.message || "Failed to delete term");
         return toast.error(error.message);
       }
 
       dispatch(fetchTerms());
-
+      toast.success("Term deleted successfully");
       return id;
     } catch (error) {
+      toast.error(error.message || "Failed to delete term");
       return rejectWithValue(error.message);
     }
   },
@@ -155,14 +169,17 @@ const termsSlice = createSlice({
       .addCase(postTerm.pending, (state) => {
         state.status = "loading";
         state.error = null;
+        state.loading = true;
       })
       .addCase(postTerm.fulfilled, (state, action) => {
         state.status = "succeeded";
-        Object.assign(state, action.payload);
+        state.loading = false;
+        state.terms.push(action.payload);
       })
       .addCase(postTerm.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        state.loading = false;
       })
       .addCase(fetchTerms.pending, (state) => {
         state.loading = true;
@@ -184,25 +201,24 @@ const termsSlice = createSlice({
       })
       .addCase(removeTerm.rejected, (state) => {
         state.loading = false;
-      }).addCase(editTermAsync.pending, (state) => {
+      })
+      .addCase(editTermAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(editTermAsync.fulfilled, (state, action) => {
         state.loading = false;
         const updatedTerm = action.payload;
-        const index = state.terms.findIndex((term) => term._id === updatedTerm._id);
+        const index = state.terms.findIndex((term) => term.id === updatedTerm.id);
         if (index !== -1) {
           state.terms[index] = updatedTerm;
         }
         state.message = "Term updated successfully";
-      }
-    )
+      })
       .addCase(editTermAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
-      
   },
 });
 
