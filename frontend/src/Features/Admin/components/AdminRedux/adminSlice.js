@@ -66,7 +66,7 @@ export const editAdmin = createAsyncThunk(
   "admins/edit",
   async ({ id, updatedAdmin }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/grade/${id}`, {
+      const response = await fetch(`http://localhost:4000/api/v1/admin/admin/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedAdmin),

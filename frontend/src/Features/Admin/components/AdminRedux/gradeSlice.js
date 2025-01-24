@@ -28,12 +28,15 @@ export const postGrades = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
+        toast.error(error.message || "Failed to create grade");
         return toast.error(error.message);
       }
 
       const data = await response.json();
+      toast.success("Grade created successfully");
       return data;
     } catch (error) {
+      toast.error("Something went wrong while creating the grade");
       console.log(error);
     }
   },
@@ -81,8 +84,10 @@ export const editGradeAsync = createAsyncThunk(
       }
 
       const data = await response.json();
+      toast.success("Grade updated successfully");
       return data.grade;
     } catch (error) {
+      toast.error("Failed to update grade");
       return rejectWithValue(error.message);
     }
   },
@@ -104,13 +109,15 @@ export const removeGrade = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
+        toast.error(error.message || "Failed to delete grade");
         return toast.error(error.message);
       }
 
       dispatch(fetchGrades());
-
+      toast.success("Grade deleted successfully");
       return id;
     } catch (error) {
+      toast.error("Failed to delete grade");
       return rejectWithValue(error.message);
     }
   },

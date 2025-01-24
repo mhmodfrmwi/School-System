@@ -4,11 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { editAdmin } from "../AdminRedux/adminSlice";
 
 const EditAdminForm = () => {
-  const { id } = useParams(); // Extracting ID from URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const admins = useSelector((state) => state.admins.admins); // Getting admin data from Redux
-
+  const admins = useSelector((state) => state.admins.admins);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -16,35 +15,48 @@ const EditAdminForm = () => {
     phone: "",
     gender: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const admin = admins.find((admin) => admin._id === id); // Find the admin by ID
+    const admin = admins.find((admin) => admin._id === id);
     if (admin) {
       setFormData({
-        fullName: admin.fullName || "",
+        fullName: admin.name || "",
         email: admin.email || "",
-        password: admin.password || "",
         phone: admin.phone || "",
         gender: admin.gender || "",
+        password: "", // Leave this empty for security reasons
       });
     }
   }, [id, admins]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
-    if (!formData.fullName || !formData.email || !formData.password || !formData.phone || !formData.gender) {
+    // Ensure all required fields are filled
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.gender) {
       alert("Please fill in all required fields.");
+      setIsSubmitting(false);
       return;
     }
 
-    dispatch(editAdmin({ id, updatedAdmin: formData }));
-    navigate("/admin/alladmins"); // Navigate back to the admin list
+    const updatedAdmin = { ...formData };
+    if (!formData.password) delete updatedAdmin.password;
+
+    try {
+      await dispatch(editAdmin({ id, updatedAdmin })).unwrap();
+      navigate("/admin/alladmins");
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -60,9 +72,7 @@ const EditAdminForm = () => {
         <form onSubmit={handleSubmit}>
           {/* Full Name */}
           <div className="mb-4">
-            <label className="mb-2 block font-poppins text-gray-700">
-              Full Name
-            </label>
+            <label className="mb-2 block font-poppins text-gray-700">Full Name</label>
             <input
               type="text"
               name="fullName"
@@ -77,9 +87,7 @@ const EditAdminForm = () => {
           {/* Email and Gender */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
-                Email Address
-              </label>
+              <label className="mb-2 block font-poppins text-gray-700">Email Address</label>
               <input
                 type="email"
                 name="email"
@@ -91,9 +99,7 @@ const EditAdminForm = () => {
               />
             </div>
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
-                Gender
-              </label>
+              <label className="mb-2 block font-poppins text-gray-700">Gender</label>
               <select
                 name="gender"
                 value={formData.gender}
@@ -104,15 +110,8 @@ const EditAdminForm = () => {
                 <option value="" disabled>
                   Select gender
                 </option>
-                <option value="M" className="font-poppins">
-                  Male
-                </option>
-                <option value="F" className="font-poppins">
-                  Female
-                </option>
-                <option value="O" className="font-poppins">
-                  Other
-                </option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
               </select>
             </div>
           </div>
@@ -120,23 +119,18 @@ const EditAdminForm = () => {
           {/* Password and Phone */}
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
-                Password
-              </label>
+              <label className="mb-2 block font-poppins text-gray-700">Password</label>
               <input
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full rounded-md border font-poppins p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter password"
-                required
+                placeholder="Enter new password (leave blank to keep current password)"
               />
             </div>
             <div>
-              <label className="mb-2 block font-poppins text-gray-700">
-                Phone Number
-              </label>
+              <label className="mb-2 block font-poppins text-gray-700">Phone Number</label>
               <input
                 type="text"
                 name="phone"
@@ -153,9 +147,12 @@ const EditAdminForm = () => {
           <div className="mt-8">
             <button
               type="submit"
-              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#043B44]"
+              disabled={isSubmitting}
+              className={`mt-8 rounded-3xl px-6 py-2 font-poppins font-medium text-white ${
+                isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#117C90] hover:bg-[#043B44]"
+              }`}
             >
-              Update Admin
+              {isSubmitting ? "Updating..." : "Update Admin"}
             </button>
           </div>
         </form>

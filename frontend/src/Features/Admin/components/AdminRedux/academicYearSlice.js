@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const BASE_URL = "http://localhost:4000/api/v1/admin/academicYear";
 
@@ -16,9 +17,11 @@ export const fetchAcademicYears = createAsyncThunk(
       const response = await fetch(`${BASE_URL}`);
       if (!response.ok) throw new Error("Failed to fetch academic years");
       const data = await response.json();
+
       
       return data.academicYears; 
     } catch (error) {
+    
       return rejectWithValue(error.message);
     }
   }
@@ -36,8 +39,11 @@ export const addAcademicYear = createAsyncThunk(
       });
       if (!response.ok) throw new Error("Failed to add academic year");
       const data = await response.json();
+
+      toast.success("Academic year added successfully!");
       return data.academicYear; 
     } catch (error) {
+      toast.error(error.message || "Failed to add academic year");
       return rejectWithValue(error.message);
     }
   }
@@ -53,8 +59,11 @@ export const editAcademicYear = createAsyncThunk(
         body: JSON.stringify(updatedAcademicYear),
       });
       if (!response.ok) throw new Error("Failed to update academic year");
+
+      toast.success("Academic year updated successfully!");
       return { id, ...updatedAcademicYear };  
     } catch (error) {
+      toast.error(error.message || "Failed to update academic year");
       return rejectWithValue(error.message);
     }
   }
@@ -70,8 +79,11 @@ export const removeAcademicYear = createAsyncThunk(
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete academic year");
+
+      toast.success("Academic year deleted successfully!");
       return id; 
     } catch (error) {
+      toast.error(error.message || "Failed to delete academic year");
       return rejectWithValue(error.message);
     }
   }
