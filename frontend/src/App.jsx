@@ -48,6 +48,7 @@ import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
 
 import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
+import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
 function App() {
   return (
     <BrowserRouter>
@@ -102,6 +103,8 @@ function App() {
           <Route path="addsubject" element={<AddSubject />} />
           <Route path="assignSubject" element={<AssignSubject />} />
           <Route path="edit-subject/:id" element={<EditSubject />} />
+          <Route path="edit-assigned-subject/:id" element={<EditAssignedSubject />} />
+
 
         </Route>
         {/* /////////////////studentpage//////////////////// */}

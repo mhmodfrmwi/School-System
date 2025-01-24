@@ -80,11 +80,17 @@ export const fetchSemesters = createAsyncThunk(
 // Delete assigned subject
 export const deleteAssignedSubject = createAsyncThunk(
   "assignSubject/deleteAssignedSubject",
-  async (subjectId, { rejectWithValue }) => {
+  async (gradeSubjectSemesterId, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/gradeSubjectSemester/${subjectId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/gradeSubjectSemester/${gradeSubjectSemesterId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -92,10 +98,36 @@ export const deleteAssignedSubject = createAsyncThunk(
       }
 
       const data = await response.json();
-      toast.success(data.message || "Subject deleted successfully");
-      return subjectId;
+      toast.success(data.message || "GradeSubjectSemester deleted successfully");
+      return gradeSubjectSemesterId;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to delete subject");
+      return rejectWithValue(error.message || "Failed to delete GradeSubjectSemester");
+    }
+  }
+);
+
+// Update assigned subject
+export const updateAssignedSubject = createAsyncThunk(
+  "assignSubject/updateAssignedSubject",
+  async ({ id, updatedData }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/v1/admin/gradeSubjectSemester/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || "Failed to update subject");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to update subject");
     }
   }
 );
@@ -115,6 +147,7 @@ const assignSubjectSlice = createSlice({
         state.assignedSubjects = action.payload
           .filter((subject) => subject.grade_subject_id && subject.grade_subject_id.subjectId !== null) 
           .map((subject) => ({
+            _id: subject._id,
             subjectId: subject.grade_subject_id?.subjectId?._id, 
             subject: subject.grade_subject_id?.subjectId?.subjectName || "Unknown", 
             grade: subject.grade_subject_id?.gradeId,
@@ -172,6 +205,26 @@ const assignSubjectSlice = createSlice({
       .addCase(deleteAssignedSubject.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to delete subject";
+        state.loading = false;
+        toast.error(state.error);
+      })
+      .addCase(updateAssignedSubject.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+      })
+      .addCase(updateAssignedSubject.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const updatedSubjectIndex = state.assignedSubjects.findIndex(
+          (subject) => subject._id === action.payload._id
+        );
+        if (updatedSubjectIndex !== -1) {
+          state.assignedSubjects[updatedSubjectIndex] = action.payload;
+        }
+        state.loading = false;
+      })
+      .addCase(updateAssignedSubject.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to update subject";
         state.loading = false;
         toast.error(state.error);
       });

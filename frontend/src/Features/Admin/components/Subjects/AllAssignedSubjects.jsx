@@ -7,6 +7,10 @@ import Loader from "@/ui/Loader";
 import SubjectsHeader from "./SubjectsHeader";
 import { toast } from "react-toastify";
 
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {  faPen} from "@fortawesome/free-solid-svg-icons";
+
 const AssignedSubjects = () => {
   const dispatch = useDispatch();
   const { assignedSubjects, loading: loadingSubjects } = useSelector(
@@ -34,7 +38,7 @@ const AssignedSubjects = () => {
 
   const handleDeleteSubject = (_id) => {
     if (_id) {
-      dispatch(deleteAssignedSubject(_id));
+      dispatch(deleteAssignedSubject(_id)); 
     } else {
       toast.error("Invalid subject ID. Cannot delete subject.");
     }
@@ -50,7 +54,7 @@ const AssignedSubjects = () => {
 
   return (
     <div className="container mx-auto mt-4">
-        <SubjectsHeader />
+      <SubjectsHeader />
       <div className="overflow-x-auto w-4/5 mx-auto">
         <table className="table-auto w-full">
           <thead>
@@ -74,9 +78,12 @@ const AssignedSubjects = () => {
                   <td className="px-4 py-2 text-center">{subject.gradeName}</td>
                   <td className="px-4 py-2 text-center">{subject.term}</td>
                   <td className="px-4 py-2 text-center flex justify-center gap-4 text-[#117C90]">
-                    <button className="transition duration-300 hover:text-white">
-                      <i className="fa fa-pencil-alt"></i>
-                    </button>
+                    <Link
+                                        to={`/admin/edit-assigned-subject/${subject._id}`}
+                                      className="w-5 h-5 text-[#3C8D99] hover:text-[#2C6E79]"
+                                    >
+                                      <FontAwesomeIcon icon={faPen} className="w-5 h-5" />
+                                    </Link>
                     <button
                       className="transition duration-300 hover:text-white"
                       onClick={() => handleDeleteSubject(subject._id)} 
