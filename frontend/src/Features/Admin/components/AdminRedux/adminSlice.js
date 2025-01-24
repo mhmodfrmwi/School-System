@@ -19,26 +19,26 @@ export const postAdmin = createAsyncThunk(
   async (adminData, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/auth/register", // تعديل المسار حسب API الخاص بك
+        "http://localhost:4000/api/v1/admin/admin/createAdmin",
         {
           method: "POST",
           body: JSON.stringify(adminData),
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        throw new Error(error.message);
       }
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to post admin data");
+      toast.error(error.message || "Failed to post admin data");
+      return rejectWithValue(error.message);
     }
-  },
+  }
 );
 
 export const fetchAdmins = createAsyncThunk(
@@ -46,84 +46,78 @@ export const fetchAdmins = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/getUsers/admins",
+        "http://localhost:4000/api/v1/admin/admin/"
       );
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        throw new Error(error.message);
       }
 
       const data = await response.json();
       return data.admins;
     } catch (error) {
+      toast.error(error.message || "Failed to fetch admins");
       return rejectWithValue(error.message);
     }
-  },
+  }
 );
+export const editAdmin = createAsyncThunk(
+  "admins/edit",
+  async ({ id, updatedAdmin }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/v1/admin/grade/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedAdmin),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update admin");
+      }
+
+      const data = await response.json(); // Make sure this matches your API response structure
+      return { id, updatedAdmin: data }; // Return updated admin data
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const removeAdmin = createAsyncThunk(
   "admins/removeAdmin",
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/admins/${id}`,
+        `http://localhost:4000/api/v1/admin/admin/${id}`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        throw new Error(error.message);
       }
+
       dispatch(fetchAdmins());
       return id;
     } catch (error) {
+      toast.error(error.message || "Failed to delete admin");
       return rejectWithValue(error.message);
     }
-  },
+  }
 );
 
 const adminSlice = createSlice({
   name: "admins",
   initialState,
   reducers: {
-    addAdmin: (state, action) => {
-      state.admins.push(action.payload);
-    },
-    editAdmin: (state, action) => {
-      const index = state.admins.findIndex(
-        (admin) => admin.id === action.payload.id,
-      );
-      if (index !== -1) {
-        state.admins[index] = action.payload;
-      }
-    },
     clearMessage: (state) => {
       state.message = "";
-    },
-    addAdmintoServer: {
-      prepare(fullName, email, password, phoneNumber, gender) {
-        return {
-          payload: {
-            fullName,
-            email,
-            password,
-            phoneNumber,
-            gender,
-          },
-        };
-      },
-      reducer(state, action) {
-        state.fullName = action.payload.fullName;
-        state.email = action.payload.email;
-        state.password = action.payload.password;
-        state.phoneNumber = action.payload.phoneNumber;
-        state.gender = action.payload.gender;
-      },
     },
   },
   extraReducers: (builder) => {
@@ -134,7 +128,8 @@ const adminSlice = createSlice({
       })
       .addCase(postAdmin.fulfilled, (state, action) => {
         state.status = "succeeded";
-        Object.assign(state, action.payload);
+        state.admins.push(action.payload);
+        toast.success("Admin added successfully");
       })
       .addCase(postAdmin.rejected, (state, action) => {
         state.status = "failed";
@@ -142,14 +137,35 @@ const adminSlice = createSlice({
       })
       .addCase(fetchAdmins.pending, (state) => {
         state.status = "loading";
+        state.loading = true;
       })
       .addCase(fetchAdmins.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.admins = action.payload;
+        state.loading = false;
       })
       .addCase(fetchAdmins.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
+        state.loading = false;
+      })
+      // Edit
+      .addCase(editAdmin.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(editAdmin.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const { id, updatedAdmin } = action.payload;
+
+        const index = state.admins.findIndex((admin) => admin._id === id);
+        if (index !== -1) {
+          state.admins[index] = { ...state.admins[index], ...updatedAdmin }; // Update specific admin
+        }
+        state.message = "Admin updated successfully!";
+      })
+      .addCase(editAdmin.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       })
 
       .addCase(removeAdmin.pending, (state) => {
@@ -158,9 +174,9 @@ const adminSlice = createSlice({
       .addCase(removeAdmin.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.admins = state.admins.filter(
-          (admin) => admin.id !== action.payload,
+          (admin) => admin.id !== action.payload
         );
-        state.message = "Admin deleted successfully";
+        toast.success("Admin deleted successfully");
       })
       .addCase(removeAdmin.rejected, (state, action) => {
         state.status = "failed";
@@ -169,7 +185,5 @@ const adminSlice = createSlice({
   },
 });
 
-export const { addAdmin, editAdmin, clearMessage, addAdmintoServer } =
-  adminSlice.actions;
-
+export const { clearMessage,addAdmintoServer } = adminSlice.actions;
 export default adminSlice.reducer;

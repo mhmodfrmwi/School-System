@@ -46,6 +46,7 @@ import ScheduleExam from "./Features/Student/components/Schedule/scheduleExam";
 import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBooksEnglish";
 import Parents from "./Features/Parent/pages/Parents";
 import DashboardParent from "./Features/Parent/pages/DashboardParent";
+import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
 function App() {
   return (
     <BrowserRouter>
@@ -92,6 +93,7 @@ function App() {
             path="editacademicyearform/:id"
             element={<EditAcademicYearForm />}
           />
+          <Route path="editadminform/:id" element={<EditAdminForm />}/>
           <Route path="allgrades" element={<AllGrades />} />
           <Route path="gradeform" element={<GradeForm />} />
           <Route path="editGradeForm/:id" element={<EditGradeForm />} />
