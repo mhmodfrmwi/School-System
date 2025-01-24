@@ -18,7 +18,7 @@
     "@iconify/react": "^5.2.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@reduxjs/toolkit": "^2.3.0",
-    "axios": "^1.7.8",
+    "axios": "^1.7.9",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.3.1",
@@ -33,7 +33,7 @@
     "react-toastify": "^10.0.6",
     "recharts": "^2.15.0",
     "sweetalert": "^2.1.2",
-    "sweetalert2": "^11.4.8",
+    "sweetalert2": "^11.15.10",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7"
   },

@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-
-const academicYears = [
-  { id: 1, year: "2022-2023", color: "#68D391" },
-  { id: 2, year: "2022-2023", color: "#63B3ED" },
-  { id: 3, year: "2023-2024", color: "#F6AD55" },
-  { id: 4, year: "2023-2024", color: "#FC8181" },
-];
-
-function EditAcademicYearForm() {
-  const { id } = useParams(); // Get the ID from the URL
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { editAcademicYear } from "../AdminRedux/academicYearSlice";  
+const EditAcademicYearForm = () => {
+  const { id } = useParams(); 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const academicYears = useSelector((state) => state.academicYears.academicYears);  
   const [formData, setFormData] = useState({
     startYear: "",
     endYear: "",
   });
 
   useEffect(() => {
-    console.log("ID: ", id); // Log the ID to the console for debugging
-    const year = academicYears.find((year) => year.id === parseInt(id)); // Find the academic year by ID
-    if (year) {
+    const academicYear = academicYears.find((year) => year._id === id); 
+    if (academicYear) {
       setFormData({
-        startYear: year.year.split("-")[0], // Extract the start year
-        endYear: year.year.split("-")[1], // Extract the end year
+        startYear: academicYear.startYear,
+        endYear: academicYear.endYear,
       });
     }
-  }, [id]);
+  }, [id, academicYears]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,11 +29,8 @@ function EditAcademicYearForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
-    setFormData({
-      startYear: "",
-      endYear: "",
-    });
+    dispatch(editAcademicYear({ id, updatedAcademicYear: formData }));
+    navigate("/admin/allacademicyears"); 
   };
 
   return (
@@ -48,7 +41,7 @@ function EditAcademicYearForm() {
         </h2>
         <p className="mt-3 rounded-2xl border-b-4 border-[#117C90]"></p>
       </div>
-
+  
       <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-10 shadow-md">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -81,7 +74,7 @@ function EditAcademicYearForm() {
               />
             </div>
           </div>
-
+  
           <div className="mt-8 flex justify-center">
             <button
               type="submit"
@@ -94,6 +87,7 @@ function EditAcademicYearForm() {
       </div>
     </>
   );
-}
+  
+};
 
 export default EditAcademicYearForm;

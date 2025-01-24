@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import AddCourse from "./AddCourseName"; // استيراد مكون إضافة المادة
-import AssignCourse from "./AssignCourse"; // استيراد مكون تعيين المادة
+import AddSubjectName from "./AddSubjectName";
+import AssignSubject from "./AssignSubject"; 
 
-function CourseManagementPage() {
-  const [selectedTab, setSelectedTab] = useState("add"); // حالة لتحديد التبويب المختار
+function SubjectManagementPage() {
+  const [selectedTab, setSelectedTab] = useState("add");
 
   return (
     <div className="w-full mx-auto mt-10">
-      {/* التبويبات */}
+    
       <div className="flex mb-20 border border-gray-300 rounded-full overflow-hidden w-[60%] mx-auto bg-[#F5F5F5]">
         <button
           onClick={() => setSelectedTab("add")}
@@ -16,7 +16,7 @@ function CourseManagementPage() {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             1
           </span>
-          Add Course
+          Add Subject
         </button>
         <button
           onClick={() => setSelectedTab("assign")}
@@ -25,17 +25,17 @@ function CourseManagementPage() {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             2
           </span>
-          Assign Course
+          Assign Subject
         </button>
       </div>
 
-      {/* محتوى Add Course */}
-      {selectedTab === "add" && <AddCourse />}
       
-      {/* محتوى Assign Course */}
-      {selectedTab === "assign" && <AssignCourse />}
+      {selectedTab === "add" && <AddSubjectName />}
+      
+      
+      {selectedTab === "assign" && <AssignSubject />}
     </div>
   );
 }
 
-export default CourseManagementPage;
+export default SubjectManagementPage;

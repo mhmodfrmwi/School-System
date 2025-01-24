@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addAcademicYear } from "../AdminRedux/academicYearSlice";
+
 
 function AcademicYearForm() {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     startYear: "",
     endYear: "",
@@ -13,6 +17,7 @@ function AcademicYearForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(addAcademicYear(formData));
     console.log("Form Submitted", formData);
     setFormData({
       startYear: "",

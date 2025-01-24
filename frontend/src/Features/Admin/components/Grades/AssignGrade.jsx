@@ -1,59 +1,87 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchGrades } from "../AdminRedux/gradeSlice"; 
+import { fetchAcademicYears } from "../AdminRedux/academicYearSlice"; 
 import GradeToggle from "./SelectPage";
 
 function AssignGrade() {
+  const dispatch = useDispatch();
+  
+  const { grade, loading: gradeLoading, error: gradeError } = useSelector((state) => state.grades);
+  const { academicYears, loading: yearLoading, error: yearError } = useSelector((state) => state.academicYears); 
+
+  useEffect(() => {
+    dispatch(fetchGrades());
+    dispatch(fetchAcademicYears());
+  }, [dispatch]);
 
   return (
     <>
-    <GradeToggle/>
+      <GradeToggle />
       <div className="w-[80%] mx-auto">
         <h2 className="text-2xl font-poppins text-[#244856] ">
-        Grade management
+          Grade management
         </h2>
         <p className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[250px]"></p>
       </div>
 
       <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
-        <form >
-           {/* Term Selection */}
-           <div className="mt-4">
-           <label className="block mb-2 font-poppins text-gray-700">
-             Select Grade
-           </label>
-           <select
-             name="grade"
-             value="select grade"
-             className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-             required
-           >
-             <option value="" disabled>
-               Select Grade
-             </option>
-             <option value="grade 1">Grade 1</option>
-             <option value="grade 2">Grade 2</option>
-           </select>
-         </div>
+        <form>
+          {/* Grade Selection */}
+          <div className="mt-4">
+            <label className="block mb-2 font-poppins text-gray-700">
+              Select Grade
+            </label>
+            <select
+              name="grade"
+              className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select Grade
+              </option>
+              {gradeLoading ? (
+                <option>Loading grades...</option>
+              ) : gradeError ? (
+                <option>Error loading grades</option>
+              ) : (
+                grade.map((gradeItem) => (
+                  <option key={gradeItem._id} value={gradeItem.gradeName}>
+                    {gradeItem.gradeName}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
 
-           {/* Term Selection */}
-           <div className="mt-4">
-           <label className="block mb-2 font-poppins text-gray-700">
-             Select Academic Year
-           </label>
-           <select
-             name="year"
-             className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-             required
-           >
-             <option value="" disabled>
-               Select Academic Year
-             </option>
-             <option value="Term 1">2023/2024</option>
-             <option value="Term 2">2024/2025</option>
-           </select>
-         </div>
+          {/* Academic Year Selection */}
+          <div className="mt-4">
+            <label className="block mb-2 font-poppins text-gray-700">
+              Select Academic Year
+            </label>
+            <select
+              name="year"
+              className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select Academic Year
+              </option>
+              {yearLoading ? (
+                <option>Loading academic years...</option>
+              ) : yearError ? (
+                <option>Error loading academic years</option>
+              ) : (
+                academicYears.map((year) => (
+                  <option key={year.id} value={year.yearName}>
+                  {year.startYear} - {year.endYear}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
 
-
-          {/* Submit Button (Smaller Width) */}
+          {/* Submit Button */}
           <div className="mt-8 text-center">
             <button
               type="submit"

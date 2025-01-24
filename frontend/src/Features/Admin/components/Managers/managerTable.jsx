@@ -38,7 +38,9 @@ const ManagerTable = () => {
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
-  const [selectedBosseId, setSelectedBosseId] = useState(null);
+  // const [selectedBosseId, setSelectedBosseId] = useState(null);
+  
+  const [setSelectedBosseId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchBosses());

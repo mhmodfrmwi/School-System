@@ -20,8 +20,6 @@ import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";
 import AllTerms from "./Features/Admin/Pages/TermPage";
 import TermForm from "./Features/Admin/components/Terms/termForm";
 import Admins from "./Features/Admin/Pages/Admins";
-import CourseForm from "./Features/Admin/components/Course/courseForm";
-import CourseTable from "./Features/Admin/components/Course/courseTable";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageNotFound from "./ui/PageNotFound";
@@ -29,9 +27,9 @@ import EditTeacher from "./Features/Admin/components/Teachers/editTeacher";
 import AcademicYearForm from "./Features/Admin/components/AcademicYears/academicYearForm";
 import EditAcademicYearForm from "./Features/Admin/components/AcademicYears/editAcademicYearForm";
 import AllAcademicYears from "./Features/Admin/Pages/AcademicYearPage";
-import CourseDetails from "./Features/Admin/components/Courses/AllAssignedCourses";
-import CoursesList from "./Features/Admin/components/Courses/AllCourses";
-import AddCourse from "./Features/Admin/components/Courses/AddCourseManagement";
+import SubjectDetails from "./Features/Admin/components/Subjects/AllAssignedSubjects";
+import SubjectsList from "./Features/Admin/components/Subjects/AllSubjects";
+import AddSubject from "./Features/Admin/components/Subjects/AddSubjectManagement";
 import AllGrades from "./Features/Admin/Pages/GradePage";
 import GradeForm from "./Features/Admin/components/Grades/GradeForm";
 import EditGradeForm from "./Features/Admin/components/Grades/EditGradeForm";
@@ -46,6 +44,10 @@ import ScheduleExam from "./Features/Student/components/Schedule/scheduleExam";
 import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBooksEnglish";
 import Parents from "./Features/Parent/pages/Parents";
 import DashboardParent from "./Features/Parent/pages/DashboardParent";
+import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
+
+import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
+import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 function App() {
   return (
     <BrowserRouter>
@@ -84,21 +86,23 @@ function App() {
           <Route path="teacherinfo" element={<TeacherInfo />} />
           <Route path="adminform" element={<AdminForm />} />
           <Route path="alladmins" element={<AllAdmins />} />
-          <Route path="courseform" element={<CourseForm />} />
-          <Route path="allcourses" element={<CourseTable />} />
           <Route path="allacademicyears" element={<AllAcademicYears />} />
           <Route path="academicyearform" element={<AcademicYearForm />} />
           <Route
             path="editacademicyearform/:id"
             element={<EditAcademicYearForm />}
           />
+          <Route path="editadminform/:id" element={<EditAdminForm />}/>
           <Route path="allgrades" element={<AllGrades />} />
           <Route path="gradeform" element={<GradeForm />} />
           <Route path="editGradeForm/:id" element={<EditGradeForm />} />
           <Route path="assigngrade" element={<AssignGrade />} />
-          <Route path="allcourses1" element={<CoursesList />} />
-          <Route path="allcourses2/:subjectName" element={<CourseDetails />} />
-          <Route path="addcourse" element={<AddCourse />} />
+          <Route path="allsubjects" element={<SubjectsList />} />
+          <Route path="allsubjects/:id" element={<SubjectDetails />} />
+          <Route path="addsubject" element={<AddSubject />} />
+          <Route path="assignSubject" element={<AssignSubject />} />
+          <Route path="edit-subject/:id" element={<EditSubject />} />
+
         </Route>
         {/* /////////////////studentpage//////////////////// */}
         <Route path="student" element={<Students />}>
