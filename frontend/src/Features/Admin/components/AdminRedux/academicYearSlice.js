@@ -1,23 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Initial state
+const BASE_URL = "http://localhost:4000/api/v1/admin/academicYear"; // تعديل الرابط الأساسي
+
 const initialState = {
   academicYears: [],
-  status: "idle",
-  message: "",
+  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+  error: null,
 };
 
 // Fetch all academic years
 export const fetchAcademicYears = createAsyncThunk(
-  "academicYears/fetchAcademicYears",
+  "academicYears/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/academicYears");
-      if (!response.ok) {
-        throw new Error("Failed to fetch academic years");
-      }
+      const response = await fetch(`${BASE_URL}`);
+      if (!response.ok) throw new Error("Failed to fetch academic years");
       const data = await response.json();
-      return data;
+      // console.log("Fetched academic years:", data.academicYears); // تحقق من البيانات هنا
+      return data.academicYears; // البيانات المسترجعة
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -26,149 +26,130 @@ export const fetchAcademicYears = createAsyncThunk(
 
 // Add a new academic year
 export const addAcademicYear = createAsyncThunk(
-  "academicYears/addAcademicYear",
+  "academicYears/add",
   async (newAcademicYear, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/academicYears", {
+      const response = await fetch(`${BASE_URL}/createAcademicYear`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newAcademicYear),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to add academic year");
-      }
-
+      if (!response.ok) throw new Error("Failed to add academic year");
       const data = await response.json();
-      return data;
+      return data.academicYear; // البيانات الجديدة
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
-
 // Edit an academic year
 export const editAcademicYear = createAsyncThunk(
-  "academicYears/editAcademicYear",
+  "academicYears/edit",
   async ({ id, updatedAcademicYear }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/academicYears/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const response = await fetch(`${BASE_URL}/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedAcademicYear),
       });
-
-      if (!response.ok) {
-        throw new Error(`Failed to edit academic year: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data;
+      if (!response.ok) throw new Error("Failed to update academic year");
+      return { id, ...updatedAcademicYear }; // تحديث البيانات
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Remove an academic year
+
+// Delete an academic year
 export const removeAcademicYear = createAsyncThunk(
-  "academicYears/removeAcademicYear",
+  "academicYears/remove",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/academicYears/${id}`, {
+      const response = await fetch(`${BASE_URL}/${id}`, {
         method: "DELETE",
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete academic year");
-      }
-
-      return id; // Return the id of the deleted academic year
+      if (!response.ok) throw new Error("Failed to delete academic year");
+      return id; // ID العنصر المحذوف
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Create a slice
+// Slice
 const academicYearSlice = createSlice({
   name: "academicYears",
   initialState,
   reducers: {
-    clearMessage: (state) => {
-      state.message = "";
+    clearError(state) {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Fetch Academic Years
+      // Fetch
       .addCase(fetchAcademicYears.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchAcademicYears.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.academicYears = action.payload;
+        // console.log("Updated academic years in Redux:", state.academicYears); // تحقق من البيانات في Redux
       })
       .addCase(fetchAcademicYears.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
+        state.error = action.payload;
       })
 
-      // Add Academic Year
+      // Add
       .addCase(addAcademicYear.pending, (state) => {
         state.status = "loading";
       })
       .addCase(addAcademicYear.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.academicYears.push(action.payload);
-        state.message = "Academic year added successfully";
       })
       .addCase(addAcademicYear.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
+        state.error = action.payload;
       })
 
-      // Edit Academic Year
+      // Edit
       .addCase(editAcademicYear.pending, (state) => {
         state.status = "loading";
       })
       .addCase(editAcademicYear.fulfilled, (state, action) => {
         state.status = "succeeded";
         const index = state.academicYears.findIndex(
-          (academicYear) => academicYear.id === action.payload.id
+          (item) => item._id === action.payload.id
         );
         if (index !== -1) {
-          state.academicYears[index] = action.payload;
+          state.academicYears[index] = { ...state.academicYears[index], ...action.payload };
         }
-        state.message = "Academic year updated successfully";
       })
       .addCase(editAcademicYear.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
+        state.error = action.payload;
       })
 
-      // Delete Academic Year
+      // Remove
       .addCase(removeAcademicYear.pending, (state) => {
         state.status = "loading";
       })
       .addCase(removeAcademicYear.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.academicYears = state.academicYears.filter(
-          (academicYear) => academicYear.id !== action.payload
+          (item) => item._id !== action.payload
         );
-        state.message = "Academic year deleted successfully";
       })
       .addCase(removeAcademicYear.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearMessage } = academicYearSlice.actions;
+export const { clearError } = academicYearSlice.actions;
 
 export default academicYearSlice.reducer;

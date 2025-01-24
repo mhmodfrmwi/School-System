@@ -11,6 +11,7 @@ import teacherReducer from "./Features/Admin/components/AdminRedux/teacherSlice"
 import bossReducer from "./Features/Admin/components/AdminRedux/managerSlice";
 // import courseReducer from "./Features/Admin/components/AdminRedux/courseSlice";
 import coursesReducer from "./Features/Admin/components/AdminRedux/coursesSlice";
+import academicYearReducer from "./Features/Admin/components/AdminRedux/academicYearSlice";
 
 const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ const store = configureStore({
     schedule: scheduleReducer,
     // courses: courseReducer,
     courses: coursesReducer,
+    academicYears: academicYearReducer,
   },
 });
 
