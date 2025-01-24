@@ -5,6 +5,7 @@ import { fetchAssignedSubjects, deleteAssignedSubject } from "../AdminRedux/Assi
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import Loader from "@/ui/Loader";
 import SubjectsHeader from "./SubjectsHeader";
+import { toast } from "react-toastify";
 
 const AssignedSubjects = () => {
   const dispatch = useDispatch();
@@ -31,8 +32,12 @@ const AssignedSubjects = () => {
     return { ...subject, gradeName };
   });
 
-  const handleDeleteSubject = (subjectId) => {
-    dispatch(deleteAssignedSubject(subjectId));
+  const handleDeleteSubject = (_id) => {
+    if (_id) {
+      dispatch(deleteAssignedSubject(_id));
+    } else {
+      toast.error("Invalid subject ID. Cannot delete subject.");
+    }
   };
 
   if (loadingSubjects || loadingGrades) {
@@ -45,7 +50,7 @@ const AssignedSubjects = () => {
 
   return (
     <div className="container mx-auto mt-4">
-      <SubjectsHeader />
+        <SubjectsHeader />
       <div className="overflow-x-auto w-4/5 mx-auto">
         <table className="table-auto w-full">
           <thead>
@@ -74,7 +79,7 @@ const AssignedSubjects = () => {
                     </button>
                     <button
                       className="transition duration-300 hover:text-white"
-                      onClick={() => handleDeleteSubject(subject._id)}
+                      onClick={() => handleDeleteSubject(subject._id)} 
                     >
                       <i className="fa fa-trash"></i>
                     </button>
