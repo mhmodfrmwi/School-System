@@ -6,7 +6,7 @@ import Loader from "@/ui/Loader";
 
 function ManagerForm() {
   const dispatch = useDispatch();
-  const { bosses, loading } = useSelector((state) => state.bosses); // Assuming you have all parents' data in Redux
+  const { bosses, loading } = useSelector((state) => state.bosses);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -46,31 +46,13 @@ function ManagerForm() {
     try {
       await dispatch(
         postBosse({
-          name: formData.fullName,
+          fullName: formData.fullName,
           email: formData.email,
           phone: formData.phoneNumber,
           gender: formData.gender,
-          SSN: "30403000000000",
           password: formData.password,
-          role: "Boss",
         }),
       );
-
-      await dispatch(
-        addBossetoServer(
-          formData.fullName,
-          formData.email,
-          formData.password,
-          formData.phoneNumber,
-          formData.gender,
-        ),
-      );
-
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Manager added successfully!",
-      });
 
       setFormData({
         fullName: "",
@@ -143,11 +125,11 @@ function ManagerForm() {
                 <option value="" disabled>
                   Select gender
                 </option>
-                <option value="Male" className="font-poppins">
-                  Male
+                <option value="M" className="font-poppins">
+                  M
                 </option>
-                <option value="Female" className="font-poppins">
-                  Female
+                <option value="F" className="font-poppins">
+                  F
                 </option>
               </select>
             </div>

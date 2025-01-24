@@ -18,13 +18,16 @@ const TeacherTable = () => {
     loading,
   } = useSelector((state) => state.teachers || {});
   const dispatch = useDispatch();
-
+  console.log(teachers);
   const [teacherData, setTeacherData] = useState({
-    name: "",
+    fullName: "",
     email: "",
+    password: "",
+    phone: "",
     gender: "",
-    class: "",
     subject: "",
+    dateOfBirth: "",
+    address: "",
   });
 
   const [editingTeacher, setEditingTeacher] = useState(null);
@@ -41,17 +44,23 @@ const TeacherTable = () => {
     dispatch(fetchTeachers());
   }, [dispatch]);
 
-  // Filter teachers based on search and filter options
   const filteredTeachers = teachers.filter((teacher) => {
     const lowerSearchText = searchText.toLowerCase();
+
+    // Safeguard for teacher[filterOption]
     if (filterOption) {
-      return teacher[filterOption]?.toLowerCase().includes(lowerSearchText);
+      const filterValue = teacher[filterOption];
+      return filterValue && filterValue.toLowerCase().includes(lowerSearchText);
     }
+
+    // Safeguards for fullName and email
     return (
-      teacher.name.toLowerCase().includes(lowerSearchText) ||
-      teacher.email.toLowerCase().includes(lowerSearchText)
+      teacher.fullName?.toLowerCase().includes(lowerSearchText) ||
+      teacher.email?.toLowerCase().includes(lowerSearchText)
     );
   });
+
+  // console.log(filteredTeachers);
 
   // Paginate teachers based on current page
   const paginatedTeachers = filteredTeachers.slice(
@@ -102,11 +111,14 @@ const TeacherTable = () => {
   const handleEditClick = (teacher) => {
     setEditingTeacher(teacher._id);
     setTeacherData({
-      name: teacher.name,
+      fullName: teacher.fullName,
       email: teacher.email,
       gender: teacher.gender,
-      class: teacher.class,
+      address: teacher.address,
       subject: teacher.subject,
+      dateOfBirth: teacher.dateOfBirth,
+      phone: teacher.phone,
+      password: teacher.password,
     });
     setIsModalOpen(true);
   };
@@ -122,7 +134,7 @@ const TeacherTable = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
 
-    if (!teacherData.name || !teacherData.email || !teacherData.gender) {
+    if (!teacherData.fullName || !teacherData.email || !teacherData.gender) {
       Swal.fire({
         icon: "warning",
         title: "Validation Error",
@@ -132,11 +144,14 @@ const TeacherTable = () => {
     }
 
     const updatedTeacher = {
-      name: teacherData.name,
+      fullName: teacherData.fullName,
       email: teacherData.email,
       gender: teacherData.gender,
       subject: teacherData.subject,
-      class: teacherData.class,
+      address: teacherData.address,
+      dateOfBirth: teacherData.dateOfBirth,
+      phone: teacherData.phone,
+      password: teacherData.password,
     };
 
     try {
@@ -146,16 +161,28 @@ const TeacherTable = () => {
       setIsModalOpen(false);
       Swal.fire(
         "Success!",
-        "The term has been updated successfully.",
+        "The teacher has been updated successfully.",
         "success",
       );
     } catch (error) {
       Swal.fire(
         "Error!",
-        error.message || "Failed to update the term.",
+        error.message || "Failed to update the teacher.",
         "error",
       );
     }
+    setTeacherData({
+      fullName: "",
+      email: "",
+      password: "",
+      phone: "",
+      gender: "",
+      subject: "",
+      dateOfBirth: "",
+      address: "",
+      // classes: [],
+      // subjects: [""],
+    });
   };
 
   const handleCloseModal = () => {
@@ -216,15 +243,19 @@ const TeacherTable = () => {
                       className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                     />
                     <span className="truncate font-poppins">
-                      {teacher.name}
+                      {teacher.fullName}
                     </span>
                   </td>
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {teacher.subject}
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  {/* <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {teacher.classes}
+                  </td> */}
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {teacher.class}
                   </td>
+
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {teacher.email}
                   </td>
@@ -274,20 +305,20 @@ const TeacherTable = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
+          <div className="h-[90vh] w-96 overflow-y-scroll bg-white p-6 shadow-lg">
             <h3 className="mb-4 text-lg font-semibold">Edit teacher</h3>
             <form onSubmit={handleEditSubmit}>
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="mb-2 block font-semibold text-gray-700"
                 >
                   Name
                 </label>
                 <input
                   type="text"
-                  name="name"
-                  value={teacherData.name}
+                  name="fullName"
+                  value={teacherData.fullName}
                   onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
@@ -295,7 +326,7 @@ const TeacherTable = () => {
               <div className="mb-4">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="mb-2 block font-semibold text-gray-700"
                 >
                   Email
                 </label>
@@ -308,46 +339,105 @@ const TeacherTable = () => {
                   className="w-full rounded-md border border-gray-300 p-2"
                 />
               </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="gender"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  gender
+              <div className="mb-2">
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Gender
                 </label>
-                <input
-                  type="text"
-                  id="gender"
+                <select
                   name="gender"
                   value={teacherData.gender}
                   onChange={handleEditChange}
                   className="w-full rounded-md border border-gray-300 p-2"
+                >
+                  <option value="" disabled>
+                    Select gender
+                  </option>
+                  <option value="M">M</option>
+                  <option value="F">F</option>
+                </select>
+              </div>
+
+              <div className="mb-2 grid grid-cols-1">
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Subject
+                </label>
+                <select
+                  value={teacherData.subject}
+                  onChange={handleEditChange}
+                  name="subject"
+                  className="w-full rounded-md border border-gray-300 p-2"
+                >
+                  <option value="" disabled>
+                    Select subject
+                  </option>
+                  <option value="Math">Math</option>
+                  <option value="English">English</option>
+                  <option value="Science">Science</option>
+                  <option value="History">History</option>
+                  <option value="Physics">Physics</option>
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={teacherData.password}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Phone Number
+                </label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={teacherData.phone}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                  placeholder="Enter phone number"
+                  required
                 />
               </div>
 
-              <div className="mt-6">
-                <div className="mt-4 grid grid-cols-1">
-                  <label className="mb-2 block font-semibold text-[#117C90]">
-                    Subject
-                  </label>
-                  <select
-                    value={teacherData.subject}
-                    onChange={handleEditChange}
-                    name="subject"
-                    className="w-full rounded-2xl border p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                  >
-                    <option value="" disabled>
-                      Select subject
-                    </option>
-                    <option value="Math">Math</option>
-                    <option value="English">English</option>
-                    <option value="Science">Science</option>
-                    <option value="History">History</option>
-                    <option value="Physics">Physics</option>
-                  </select>
-                </div>
+              <div className="mb-4">
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={teacherData.address}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                  placeholder="Enter Date of Birth"
+                  required
+                />
               </div>
 
+              <div className="mb-4">
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  name="dateOfBirth"
+                  value={teacherData.dateOfBirth}
+                  onChange={handleEditChange}
+                  className="w-full rounded-md border border-gray-300 p-2"
+                  placeholder="Enter Date of Birth"
+                  required
+                />
+              </div>
+
+              {/* 
               <div className="my-5">
                 <label className="mb-2 block font-poppins text-gray-700">
                   Class
@@ -365,7 +455,7 @@ const TeacherTable = () => {
                   <option value="B">B</option>
                   <option value="C">C</option>
                 </select>
-              </div>
+              </div> */}
 
               <div className="flex justify-end space-x-4">
                 <button

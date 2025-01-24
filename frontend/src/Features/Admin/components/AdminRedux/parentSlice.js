@@ -20,7 +20,7 @@ export const postParent = createAsyncThunk(
   async (parentData, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/auth/register",
+        "http://localhost:4000/api/v1/admin/parent/createParent",
         {
           method: "POST",
           body: JSON.stringify(parentData),
@@ -47,7 +47,7 @@ export const fetchParents = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/getUsers/parents",
+        "http://localhost:4000/api/v1/admin/parent/",
       );
 
       if (!response.ok) {
@@ -69,9 +69,9 @@ export const editParentAsync = createAsyncThunk(
     console.log(updatedParent);
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/parents/${id}`,
+        `http://localhost:4000/api/v1/admin/parent/${id}`,
         {
-          method: "PUT",
+          method: "PATCH",
           body: JSON.stringify(updatedParent),
           headers: {
             "Content-Type": "application/json",
@@ -84,7 +84,7 @@ export const editParentAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.newParent;
+      return data.parent;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -96,7 +96,7 @@ export const removeParent = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/parents/${id}`,
+        `http://localhost:4000/api/v1/admin/parent/${id}`,
         {
           method: "DELETE",
           headers: {
