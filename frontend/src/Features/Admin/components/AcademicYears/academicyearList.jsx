@@ -6,7 +6,6 @@ import Header from "./AcademicYearHeader";
 import { useNavigate } from "react-router-dom";
 import { fetchAcademicYears, removeAcademicYear } from "../AdminRedux/academicYearSlice";
 import Pagination from "../Pagination";
-import Swal from 'sweetalert2';
 import Loader from "@/ui/Loader";
 
 
@@ -20,12 +19,10 @@ const AcademicYearList = () => {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    // استخدام dispatch لتحميل البيانات من السيرفر
     dispatch(fetchAcademicYears());
     setLoading(false);
   }, [dispatch]);
 
-  // دالة الحذف
   const handleDeleteClick = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this academic year?");
     if (confirmDelete) {

@@ -1,49 +1,75 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+import { fetchGrades } from "../AdminRedux/gradeSlice";
+import { fetchAcademicYears, editAcademicYear } from "../AdminRedux/academicYearSlice";
+import { editGradeAsync } from "../AdminRedux/gradeSlice";
 
-const grades = [
-  { id: 1, year: "2022-2023", gradeName: "grade one", color: "#68D391" },
-  { id: 2, year: "2022-2023", gradeName: "grade two", color: "#63B3ED" },
-  { id: 3, year: "2023-2024", gradeName: "grade three", color: "#F6AD55" },
-  { id: 4, year: "2023-2024", gradeName: "grade four", color: "#FC8181" },
-];
+const EditGradeForm = () => {
+  const { id } = useParams(); // جلب الـ ID الخاص بالصف
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-function EditGradeForm() {
-  const { id } = useParams(); // Get the ID from the URL
+  // جلب البيانات من Redux
+  const grades = useSelector((state) => state.grades.grade);
+  const academicYears = useSelector((state) => state.academicYears.academicYears);
+
+  // الحقول الخاصة بالفورم
   const [formData, setFormData] = useState({
-    year: "",
     gradeName: "",
-    color: "",
+    startYear: "",
+    endYear: "",
   });
 
+  // تحميل البيانات عند فتح الصفحة
   useEffect(() => {
-    const grade = grades.find((grade) => grade.id === parseInt(id)); // Find the grade by ID
-    if (grade) {
+    dispatch(fetchGrades());
+    dispatch(fetchAcademicYears());
+
+    const grade = grades.find((g) => g._id === id); // الصف المناسب
+    const academicYear = academicYears.find((year) => year._id === id); // السنة المناسبة
+
+    if (grade && academicYear) {
       setFormData({
-        year: grade.year,
         gradeName: grade.gradeName,
-        color: grade.color,
+        startYear: academicYear.startYear,
+        endYear: academicYear.endYear,
       });
     }
-  }, [id]);
+  }, [id, grades, academicYears, dispatch]);
 
+  // تحديث الحقول عند التغيير
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  // إرسال التحديث
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
-    setFormData({
-      year: "",
-      gradeName: "",
-      color: "",
-    });
-  };
 
-  const uniqueYears = [...new Set(grades.map((grade) => grade.year))];
-  const gradeNames = grades.filter((grade) => grade.year === formData.year);
+    // تحديث gradeName
+    dispatch(
+      editGradeAsync({
+        id,
+        updatedGrade: { gradeName: formData.gradeName },
+      })
+    );
+
+    // تحديث startYear و endYear
+    dispatch(
+      editAcademicYear({
+        id,
+        updatedAcademicYear: {
+          startYear: formData.startYear,
+          endYear: formData.endYear,
+        },
+      })
+    );
+
+    // الرجوع إلى صفحة القائمة بعد الإرسال
+    navigate("/admin/allgrades");
+  };
 
   return (
     <>
@@ -57,27 +83,7 @@ function EditGradeForm() {
       <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-10 shadow-md">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <label className="block mb-2 font-poppins text-gray-700">
-                Year
-              </label>
-              <select
-                name="year"
-                value={formData.year}
-                onChange={handleChange}
-                className="w-full p-3 border rounded-full text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                required
-              >
-                <option value="" disabled>
-                  Select Year
-                </option>
-                {uniqueYears.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Grade Name */}
             <div>
               <label className="block mb-2 font-poppins text-gray-700">
                 Grade Name
@@ -88,29 +94,56 @@ function EditGradeForm() {
                 onChange={handleChange}
                 className="w-full p-3 border rounded-full text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 required
-                disabled={!formData.year} // Disable until a year is selected
               >
-                <option value="" disabled>
-                  Select Grade Name
-                </option>
-                {gradeNames.map((grade) => (
-                  <option key={grade.id} value={grade.gradeName}>
+                <option value="">Select Grade</option>
+                {grades.map((grade) => (
+                  <option key={grade._id} value={grade.gradeName}>
                     {grade.gradeName}
                   </option>
                 ))}
               </select>
             </div>
+
+            {/* Start Year */}
             <div>
               <label className="block mb-2 font-poppins text-gray-700">
-                Color
+                Start Year
               </label>
-              <input
-                type="color"
-                name="color"
-                value={formData.color}
+              <select
+                name="startYear"
+                value={formData.startYear}
                 onChange={handleChange}
                 className="w-full p-3 border rounded-full text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              />
+                required
+              >
+                <option value="">Select Start Year</option>
+                {academicYears.map((year) => (
+                  <option key={year._id} value={year.startYear}>
+                    {year.startYear}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* End Year */}
+            <div>
+              <label className="block mb-2 font-poppins text-gray-700">
+                End Year
+              </label>
+              <select
+                name="endYear"
+                value={formData.endYear}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-full text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                required
+              >
+                <option value="">Select End Year</option>
+                {academicYears.map((year) => (
+                  <option key={year._id} value={year.endYear}>
+                    {year.endYear}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -126,6 +159,6 @@ function EditGradeForm() {
       </div>
     </>
   );
-}
+};
 
 export default EditGradeForm;

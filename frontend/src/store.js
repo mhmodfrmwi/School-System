@@ -12,6 +12,7 @@ import bossReducer from "./Features/Admin/components/AdminRedux/managerSlice";
 // import courseReducer from "./Features/Admin/components/AdminRedux/courseSlice";
 import coursesReducer from "./Features/Admin/components/AdminRedux/coursesSlice";
 import academicYearReducer from "./Features/Admin/components/AdminRedux/academicYearSlice";
+import gradeReducer from "./Features/Admin/components/AdminRedux/gradeSlice";
 
 const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ const store = configureStore({
     // courses: courseReducer,
     courses: coursesReducer,
     academicYears: academicYearReducer,
+    grades:gradeReducer,
   },
 });
 

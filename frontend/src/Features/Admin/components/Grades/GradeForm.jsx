@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import {  postGrades } from "../AdminRedux/gradeSlice";
 import GradeToggle from "./SelectPage";
 function GradeForm() {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    gradeName: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(postGrades(formData));
+    console.log("Form Submitted", formData);
+    setFormData({
+      gradeName: "",
+    });
+  };
 
   return (
     <>
@@ -13,14 +33,16 @@ function GradeForm() {
       </div>
 
       <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
-        <form >
+        <form onSubmit={handleSubmit}>
           {/* Year Selection */}
             <div>
               <label className="block mb-2 font-poppins text-gray-700">
               Grade Name
               </label>
               <input
-                name="Grade Name"
+                name="gradeName"
+                value={formData.gradeName}
+                onChange={handleChange}
                 className="w-full p-2 border font-poppins rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Enter grade nane"
                 required
