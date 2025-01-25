@@ -93,6 +93,7 @@ const SchedualTable = () => {
       )}
 
       <div className="mt-7">
+      <div className="overflow-x-auto"> 
         <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
           <thead className="bg-[#117C90]  text-white ">
           <tr>
@@ -177,6 +178,7 @@ const SchedualTable = () => {
             )}
           </tbody>
         </table>
+        </div>
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
