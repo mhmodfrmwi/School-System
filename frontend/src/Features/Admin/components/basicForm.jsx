@@ -1,5 +1,11 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudents } from "../components/AdminRedux/studentSlice";
+import { fetchTeachers } from "../components/AdminRedux/teacherSlice";
+import { fetchParents } from "../components/AdminRedux/parentSlice";
+import { fetchBosses } from "../components/AdminRedux/managerSlice";
+import { fetchAdmins } from "../components/AdminRedux/adminSlice";
 import img1 from "../../../assets/students 1.png";
 import img2 from "../../../assets/Group.png";
 import img3 from "../../../assets/people.png";
@@ -7,6 +13,21 @@ import img4 from "../../../assets/Vector.png";
 import img5 from "../../../assets/Group1.png";
 
 function BasicForm() {
+  const dispatch = useDispatch();
+  const { students } = useSelector((state) => state.students);
+  const { teachers } = useSelector((state) => state.teachers);
+  const { parents } = useSelector((state) => state.parents);
+  const { bosses } = useSelector((state) => state.bosses);
+  const { admins } = useSelector((state) => state.admins);
+
+  useEffect(() => {
+    dispatch(fetchStudents());
+    dispatch(fetchTeachers());
+    dispatch(fetchParents());
+    dispatch(fetchBosses());
+    dispatch(fetchAdmins());
+  }, [dispatch]);
+
   const navigate = useNavigate();
 
   const handleCardClick = (path) => {
@@ -15,12 +36,13 @@ function BasicForm() {
 
   return (
     <>
-      <div className="mb-6 ms-14 mt-2 md:ms-16">
-        <h2 className="w-52 font-poppins text-3xl font-bold text-[#043B44]">
-          All Members
-        </h2>
-        <p className="mt-3 w-28 rounded-2xl border-b-4 border-[#117C90]"></p>
-      </div>
+   <div className="px-6 sm:px-12 md:px-16 lg:px-28 py-8 mb-6 ms-14 mt-2 md:ms-16">
+  <h2 className="w-full sm:w-52 font-poppins text-3xl font-bold text-[#043B44]">
+    All Members
+  </h2>
+  <div className="mt-1 h-[4px] w-24 sm:w-36 md:w-48 rounded-t-md bg-[#244856] mb-4"></div>
+</div>
+
 
       <div className="flex flex-col items-center px-4">
         <div className="grid gap-x-14 gap-y-8 sm:grid-cols-2 md:gap-x-16 lg:grid-cols-3 xl:gap-x-32">
@@ -37,7 +59,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#3CB878]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-              50000
+            {students?.length || 0}
             </p>
           </div>
 
@@ -54,7 +76,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#7CA6FD]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-              1500
+            {teachers?.length || 0}
             </p>
           </div>
 
@@ -71,7 +93,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#F61414]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-              2
+            {bosses?.length || 0}
             </p>
           </div>
 
@@ -88,7 +110,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#F48301]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-              60000
+            {parents?.length || 0}
             </p>
           </div>
 
@@ -105,7 +127,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#30F587]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-              1
+            {admins?.length || 0} 
             </p>
           </div>
         </div>
