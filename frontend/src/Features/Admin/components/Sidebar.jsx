@@ -19,7 +19,7 @@ const Sidebar = () => {
   const currentPath = location.pathname;
 
   const menuItems = [
-    { label: "Dashboard", icon: faHome, href: "/admin/dashboard" },
+    { label: "Dashboard", icon: faHome, href: "/admin" },
     { label: "Members", icon: faUsers, href: "/admin/basicform" },
     { label: "Term Management", icon: faCalendar, href: "/admin/allTerms" },
     { label: "Course Management", icon: faPen, href: "/admin/allsubjects" },
