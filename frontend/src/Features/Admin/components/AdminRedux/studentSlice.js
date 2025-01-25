@@ -3,171 +3,194 @@ import { toast } from "react-toastify";
 
 const initialState = {
   students: [],
-  fullName: "",
-  email: "",
-  password: "",
-  phoneNumber: "",
-  studentClass: "",
-  gender: "",
   status: "idle",
-  message: "",
+  error: null,
+  loading: false,
+  message: null,
 };
 
-export const postStudent = createAsyncThunk(
-  "addstudent/postStudent",
-  async (studentData, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        "http://localhost:4000/api/v1/auth/register",
-        {
-          method: "POST",
-          body: JSON.stringify(studentData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        return toast.error(error.message);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message || "Failed to post student data");
-    }
-  },
-);
-
+// Fetch all students
 export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        "http://localhost:4000/api/v1/getUsers/students",
-      );
+      const response = await fetch("http://localhost:4000/api/v1/admin/student");
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
-      const data = await response.json();
-      const students = data.students;
 
-      return students;
-    } catch (error) {}
-  },
+      const data = await response.json();
+      return data.students;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to fetch students");
+    }
+  }
 );
 
+// Add a new student
+export const postStudent = createAsyncThunk(
+  "students/postStudent",
+  async (studentData, { rejectWithValue }) => {
+    try {
+      const response = await fetch("http://localhost:4000/api/v1/admin/student/createStudent", {
+        method: "POST",
+        body: JSON.stringify(studentData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
+
+      const data = await response.json();
+      return data.student;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to add student");
+    }
+  }
+);
+
+// Edit an existing student
+export const editStudent = createAsyncThunk(
+  "students/editStudent",
+  async ({ id, updatedStudent }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/v1/admin/student/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(updatedStudent),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
+
+      const data = await response.json();
+      return data.student;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to edit student");
+    }
+  }
+);
+
+// Delete a student
 export const removeStudent = createAsyncThunk(
   "students/removeStudent",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/v1/getUsers/students/${id}`,
-        {
-          method: "DELETE",
+      const response = await fetch(`http://localhost:4000/api/v1/admin/student/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
+
+      dispatch(fetchStudents());
       return id;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Failed to remove student");
     }
-  },
+  }
 );
 
-const studentSlice = createSlice({
+const studentsSlice = createSlice({
   name: "students",
   initialState,
   reducers: {
-    addStudent: (state, action) => {
-      state.students.push(action.payload);
-    },
-    editStudent: (state, action) => {
-      const index = state.students.findIndex(
-        (student) => student.id === action.payload.id,
-      );
-      if (index !== -1) {
-        state.students[index] = action.payload;
-      }
-    },
     clearMessage: (state) => {
-      state.message = "";
-    },
-    addStudenttoserver: {
-      prepare(fullName, email, password, phoneNumber, studentClass, gender) {
-        return {
-          payload: {
-            fullName,
-            email,
-            password,
-            phoneNumber,
-            studentClass,
-            gender,
-          },
-        };
-      },
-      reducer(state, action) {
-        state.fullName = action.payload.fullName;
-        state.email = action.payload.email;
-        state.password = action.payload.password;
-        state.phoneNumber = action.payload.phoneNumber;
-        state.studentClass = action.payload.studentClass;
-        state.gender = action.payload.gender;
-      },
+      state.message = null;
     },
   },
-
   extraReducers: (builder) => {
     builder
-      .addCase(postStudent.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
-      .addCase(postStudent.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        Object.assign(state, action.payload);
-      })
-      .addCase(postStudent.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
-      })
       .addCase(fetchStudents.pending, (state) => {
         state.status = "loading";
+        state.loading = true;
       })
       .addCase(fetchStudents.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.students = action.payload;
+        state.loading = false;
       })
-      .addCase(fetchStudents.rejected, (state) => {
+      .addCase(fetchStudents.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload || "Failed to fetch students";
+        state.loading = false;
+        toast.error(state.error);
       })
-
+      .addCase(postStudent.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+      })
+      .addCase(postStudent.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.students.push(action.payload);
+        state.message = "Student added successfully!";
+        state.loading = false;
+        toast.success(state.message);
+      })
+      .addCase(postStudent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to add student";
+        state.loading = false;
+        toast.error(state.error);
+      })
+      .addCase(editStudent.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+      })
+      .addCase(editStudent.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.students.findIndex(
+          (student) => student._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.students[index] = action.payload;
+        }
+        state.message = "Student updated successfully!";
+        state.loading = false;
+        toast.success(state.message);
+      })
+      .addCase(editStudent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to edit student";
+        state.loading = false;
+        toast.error(state.error);
+      })
       .addCase(removeStudent.pending, (state) => {
         state.status = "loading";
+        state.loading = true;
       })
       .addCase(removeStudent.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.students = state.students.filter(
-          (student) => student.id !== action.payload,
+          (student) => student._id !== action.payload
         );
-        state.message = "Student deleted successfully";
+        state.message = "Student removed successfully!";
+        state.loading = false;
+        toast.success(state.message);
       })
       .addCase(removeStudent.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
+        state.error = action.payload || "Failed to remove student";
+        state.loading = false;
+        toast.error(state.error);
       });
   },
 });
 
-export const { addStudent, editStudent, clearMessage, addStudenttoserver } =
-  studentSlice.actions;
-
-export default studentSlice.reducer;
+export const { clearMessage } = studentsSlice.actions;
+export default studentsSlice.reducer;

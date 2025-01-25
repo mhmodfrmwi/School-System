@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { postStudent, addStudenttoserver } from "../AdminRedux/studentSlice";
+import { postStudent } from "../AdminRedux/studentSlice";
 
 function StudentForm() {
   const dispatch = useDispatch();
-  const { students } = useSelector((state) => state.students); // Assuming you have all parents' data in Redux
+  const { students } = useSelector((state) => state.students);
   const [formData, setFormData] = useState({
     fullName: "",
-    email: "",
+    emailAddress: "",
+    phoneNumber: "",
     password: "",
-    academicYear: "",
-    studentClass: "",
+    dateOfBirth: "",
     gender: "",
+    grade: "",
+    address: "",
   });
 
   const handleChange = (e) => {
@@ -22,11 +24,16 @@ function StudentForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validation
     if (
       !formData.fullName ||
-      !formData.email ||
+      !formData.emailAddress ||
+      !formData.phoneNumber ||
       !formData.password ||
-      !formData.academicYear
+      !formData.dateOfBirth ||
+      !formData.gender ||
+      !formData.grade ||
+      !formData.address
     ) {
       Swal.fire({
         icon: "error",
@@ -35,39 +42,20 @@ function StudentForm() {
       });
       return;
     }
-    // Check for duplicate email
+
     const emailExists = students.some(
-      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase()
+      (student) =>
+        student.emailAddress.toLowerCase() ===
+        formData.emailAddress.toLowerCase()
     );
 
     if (emailExists) {
       Swal.fire("Error", "Email already exists. Please use another email.", "error");
       return;
     }
-    try {
-      dispatch(
-        postStudent({
-          name: formData.fullName,
-          email: formData.email,
-          class: formData.studentClass,
-          gender: formData.gender,
-          SSN: "30403000000000",
-          password: formData.password,
-          academicYear: Number(formData.academicYear),
-          role: "Student",
-        })
-      );
 
-      dispatch(
-        addStudenttoserver(
-          formData.fullName,
-          formData.email,
-          formData.password,
-          formData.phoneNumber,
-          formData.studentClass,
-          formData.gender
-        )
-      );
+    try {
+      dispatch(postStudent(formData));
 
       Swal.fire({
         icon: "success",
@@ -77,11 +65,13 @@ function StudentForm() {
 
       setFormData({
         fullName: "",
-        email: "",
-        password: "",
+        emailAddress: "",
         phoneNumber: "",
-        studentClass: "",
+        password: "",
+        dateOfBirth: "",
         gender: "",
+        grade: "",
+        address: "",
       });
     } catch (error) {
       Swal.fire({
@@ -93,160 +83,108 @@ function StudentForm() {
   };
 
   return (
-    <>
-      <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
-        <h2 className="font-poppins text-3xl font-bold text-[#043B44]">
+    <div>
+      <h2 className="font-bold text-2xl mb-4">Add Student</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label>Full Name</label>
+          <input
+            type="text"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label>Email Address</label>
+          <input
+            type="email"
+            name="emailAddress"
+            value={formData.emailAddress}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label>Phone Number</label>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label>Date of Birth</label>
+          <input
+            type="date"
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label>Gender</label>
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          >
+            <option value="">Select gender</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+          </select>
+        </div>
+        <div>
+          <label>Grade</label>
+          <input
+            type="text"
+            name="grade"
+            value={formData.grade}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label>Address</label>
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
           Add Student
-        </h2>
-        <p className="mt-3 rounded-2xl border-b-4 border-[#117C90]"></p>
-      </div>
-
-      <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
-        <form className="space-y-6" onSubmit={handleSubmit}>
-
-          <div>
-            <label className="mb-2 block font-poppins font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter full name"
-              required
-            />
-          </div>
-
-          <div className="col-span-12 md:col-span-3">
-            <label className="mb-2 block font-poppins font-medium text-gray-700">
-              Subject
-            </label>
-            <select
-              name="studentClass"
-              value={formData.subject}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-            >
-              <option value="" className="font-poppins" disabled>
-                Select Subject
-              </option>
-              <option value="English">English</option>
-              <option value="Arabic">Arabic</option>
-              <option value="Math">Math</option>
-            </select>
-          </div>
-
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-            <div className="col-span-12 md:col-span-6">
-              <label className="mb-2 block font-poppins font-medium text-gray-700">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter email address"
-                required
-              />
-            </div>
-
-            <div className="col-span-12 md:col-span-3">
-              <label className="mb-2 block font-poppins font-medium text-gray-700">
-                Class
-              </label>
-              <select
-                name="studentClass"
-                value={formData.classes}
-                onChange={handleChange}
-                className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              >
-                <option value="" className="font-poppins" disabled>
-                  Select class
-                </option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-              </select>
-            </div>
-
-            <div className="col-span-12 md:col-span-3">
-              <label className="mb-2 block font-poppins font-medium text-gray-700">
-                Gender
-              </label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              >
-                <option value="" className="font-poppins" disabled>
-                  Select gender
-                </option>
-                <option value="Male" className="font-poppins">
-                  Male
-                </option>
-                <option value="Female" className="font-poppins">
-                  Female
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-            <div className="col-span-12 md:col-span-6">
-              <label className="mb-2 block font-poppins font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter password"
-                required
-              />
-            </div>
-
-            <div className="col-span-12 md:col-span-6">
-              <label className="mb-2 block font-poppins font-medium text-gray-700">
-                Academic Year
-              </label>
-              <select
-                name="academicYear"
-                value={formData.academicYear}
-                onChange={handleChange}
-                className="w-full rounded-lg border p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                required
-              >
-                <option value="" disabled>
-                  Select academic year
-                </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="text-start">
-            <button
-              type="submit"
-              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
-            >
-              Add Student
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
+        </button>
+      </form>
+    </div>
   );
 }
 
