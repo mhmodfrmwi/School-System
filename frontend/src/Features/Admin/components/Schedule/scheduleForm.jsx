@@ -6,7 +6,6 @@ import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Fetch teachers
 function ScheduleForm() {
   const dispatch = useDispatch();
 
-  
   const [formData, setFormData] = useState({
     courseName: "",
     teacherName: "",
@@ -23,21 +22,15 @@ function ScheduleForm() {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ensure grade is a valid number
     if (isNaN(formData.grade)) {
       alert("Grade must be a valid number.");
       return;
     }
 
     console.log("Schedule Submitted", formData);
-    
-    // Dispatch action to post schedule
     dispatch(postSchedual(formData)); // Updated dispatch action
-
-    // Reset form data after submission
     setFormData({
       courseName: "",
       teacherName: "",
@@ -50,26 +43,18 @@ function ScheduleForm() {
     });
   };
 
-  // Fetch teachers when the component mounts
   useEffect(() => {
     dispatch(fetchTeachers());
   }, [dispatch]);
 
   return (
-    <>
-     <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
-        <h2 className="font-poppins text-2xl font-bold text-[#043B44]">
-          Add Schedule
-        </h2>
-        <p className="mt-1 h-[3px] w-[170px] rounded-t-md bg-[#117C90] lg:h-[4px] lg:w-[10px]"></p>
-      </div>
-
-    <div className="mx-auto mt-10 w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {/* Course Name */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">
+    <div className="w-[80%] mx-auto my-10 font-poppins">
+      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Add Schedule</h1>
+      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
+      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Course Name
             </label>
             <input
@@ -77,15 +62,14 @@ function ScheduleForm() {
               name="courseName"
               value={formData.courseName}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter course name"
               required
             />
           </div>
 
-          {/* Teacher Name */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Teacher Name
             </label>
             <input
@@ -93,20 +77,21 @@ function ScheduleForm() {
               name="teacherName"
               value={formData.teacherName}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter teacher name"
               required
             />
           </div>
 
-          {/* Grade */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">Grade</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              Grade
+            </label>
             <select
               name="grade"
               value={formData.grade}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins bg-[#117C90] text-white focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select grade
@@ -117,14 +102,15 @@ function ScheduleForm() {
             </select>
           </div>
 
-          {/* Class */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">Class</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              Class
+            </label>
             <select
               name="class"
               value={formData.class}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins bg-[#117C90] text-white focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select class
@@ -135,16 +121,15 @@ function ScheduleForm() {
             </select>
           </div>
 
-          {/* Term */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Term - Year
             </label>
             <select
               name="term"
               value={formData.term}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins bg-[#117C90] text-white focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select term
@@ -154,14 +139,15 @@ function ScheduleForm() {
             </select>
           </div>
 
-          {/* Day */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">Day</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              Day
+            </label>
             <select
               name="day"
               value={formData.day}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins bg-[#117C90] text-white focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select day
@@ -174,45 +160,45 @@ function ScheduleForm() {
             </select>
           </div>
 
-          {/* From */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">From</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              From
+            </label>
             <input
               type="time"
               name="from"
               value={formData.from}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
           </div>
 
-          {/* To */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">To</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              To
+            </label>
             <input
               type="time"
               name="to"
               value={formData.to}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
           </div>
-        </div>
 
-        {/* Submit Button */}
-        <div className="mt-8 flex justify-center">
-          <button
-            type="submit"
-            className="rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#0D5F6A]"
-          >
-            Add Schedule
-          </button>
-        </div>
-      </form>
+          <div className="col-span-1 sm:col-span-2 mt-6">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-[#117C90] text-white rounded-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+            >
+              Add Schedule
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    </>
   );
 }
 
