@@ -38,7 +38,7 @@ const ParentTable = () => {
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
 
-  const [selectedParentId, setSelectedParentId] = useState(null);
+  const [ setSelectedParentId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchParents());
@@ -179,8 +179,8 @@ const ParentTable = () => {
       )}
 
       <div className="mt-7">
-        <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
-          <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
+        <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+          <thead className="bg-[#117C90]  text-white">
             <tr>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Name
@@ -212,7 +212,7 @@ const ParentTable = () => {
                   key={parent._id || index}
                   className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
                 >
-                  <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="flex items-center font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
                     <img
                       src={parent.profileImage}
                       alt="Profile"
@@ -222,18 +222,18 @@ const ParentTable = () => {
                       {parent.fullName}
                     </span>
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {parent.studentName}
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {parent.studentID}
                   </td>
 
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {parent.email}
                   </td>
 
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {parent.gender}
                   </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">

@@ -3,13 +3,13 @@ import { NavLink } from "react-router-dom";
 
 const SubjectsHeader = () => {
   return (
-    <div className="mx-auto px-4 md:px-6 lg:px-0 w-4/5"> {/* 80% width */}
-      <div className="mb-4 flex flex-row gap-2 justify-between items-center"> 
-        <div className="flex flex-col items-start">
-          <h1 className="text-2xl font-semibold text-[#244856]">
+    <div className="mx-auto px-4 md:px-6 lg:px-0 w-3/5"> {/* 80% width */}
+      <div className="space-y-2 mb-4 flex flex-row gap-2  justify-between items-center sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6"> 
+        <div className="flex flex-col ">
+          <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
             Subjects
           </h1>
-          <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] "></div> 
+          <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[80px]"></div> 
         </div>
 
         <div className="flex items-center gap-2">

@@ -73,8 +73,8 @@ const AdminTable = () => {
         </div>
       )}
       <div className="mt-7">
-        <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
-          <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
+        <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+          <thead className="bg-[#117C90]  text-white">
             <tr>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
               Name</th>
@@ -96,7 +96,7 @@ const AdminTable = () => {
                   index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                 } hover:bg-[#117C90]/70`}>
                  
-                <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                <td className="flex items-center font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
                     <img
                       src={admin.profileImage}
                       alt="Profile"
@@ -106,9 +106,9 @@ const AdminTable = () => {
                       {admin.name}
                     </span>
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{admin.email}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{admin.gender}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{admin.phone}</td>
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{admin.email}</td>
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{admin.gender}</td>
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{admin.phone}</td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button  className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                     onClick={() => handleEditClick(admin._id)}>

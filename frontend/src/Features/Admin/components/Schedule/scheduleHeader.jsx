@@ -19,7 +19,7 @@ const ScheduleHeader = ({ onSearchChange, onFilterChange }) => {
     <div className="mx-auto px-4 md:px-6 lg:px-0">
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
-          <h1 className="text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+          <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
             Schedule
           </h1>
           <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[120px]"></div>
@@ -62,11 +62,11 @@ const ScheduleHeader = ({ onSearchChange, onFilterChange }) => {
         </div>
 
         <div className="relative flex-grow">
-          <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-white sm:text-sm"></i>
+          <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-black sm:text-sm"></i>
           <input
             type="text"
             placeholder="Search for a schedule by subject, day, or time"
-            className="w-full rounded-md bg-[#117C90] px-3 py-2 pl-10 font-poppins text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
+            className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
             value={searchText}
             onChange={handleSearchChange}
           />

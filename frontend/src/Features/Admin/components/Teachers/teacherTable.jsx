@@ -203,8 +203,8 @@ const TeacherTable = () => {
       )}
 
       <div className="mt-7">
-        <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
-          <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
+      <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+          <thead className="bg-[#117C90]  text-white ">
             <tr>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                 Name
@@ -246,20 +246,20 @@ const TeacherTable = () => {
                       {teacher.fullName}
                     </span>
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {teacher.subject}
                   </td>
                   {/* <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {teacher.classes}
                   </td> */}
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {teacher.class}
                   </td>
 
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {teacher.email}
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                     {teacher.gender}
                   </td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">

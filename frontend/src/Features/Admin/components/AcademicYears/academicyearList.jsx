@@ -70,27 +70,29 @@ const AcademicYearList = () => {
 
 
   return (
-    <div className="overflow-x-hidden">
-      {loading && <Loader />}
-      <Header />
-      <div className="p-5 max-w-full">
-        {paginatedAcademicYears.map((year, index) => (
+    <div>
+     <Header />
+     <div className="flex justify-center">
+     <div className="space-y-4 w-4/5">
+       {loading ? (
+         <p>Loading subjects...</p>
+       ) : (
+        paginatedAcademicYears.map((year, index) => (
           <div
             key={year._id} 
             className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full"
           >
-            {/* Icon and Info */}
             <div className="flex items-center">
-              {/* Circle Icon */}
               <div
                 className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
                 style={{ backgroundColor: `${getColor(index)}33` }} 
               >
                 <FontAwesomeIcon icon={faCalendar} style={{ color: getColor(index) }} />
               </div>
-
-              {/* Year Info */}
-              <p className="m-0 text-lg font-bold text-gray-700">{year.startYear} - {year.endYear}</p>
+              <div className="flex items-center">
+              <span className="text-gray-600 text-xl mx-2 h-7 border-l-2 border-gray-600"></span>
+              <p className="m-0 text-xs sm:text-lg font-bold text-gray-700">{year.startYear} - {year.endYear}</p>
+            </div>
             </div>
 
             {/* Actions */}
@@ -109,6 +111,7 @@ const AcademicYearList = () => {
               </button>
             </div>
           </div>
+        )
         ))}
           <Pagination
           totalItems={totalItems}
@@ -116,7 +119,9 @@ const AcademicYearList = () => {
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
+      
       </div>
+    </div>
     </div>
   );
 };

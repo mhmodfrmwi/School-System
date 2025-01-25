@@ -9,7 +9,7 @@ const GradeHeader = () => {
           <h1 className="text-2xl font-semibold text-[#244856]">
             Grades
           </h1>
-          <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] "></div> 
+          <div className="mt-1 h-[4px] w-[90px] rounded-t-md bg-[#244856] "></div> 
         </div>
 
         <div className="flex items-center gap-2">

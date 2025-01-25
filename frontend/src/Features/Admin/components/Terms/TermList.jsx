@@ -51,16 +51,17 @@ const TermList = () => {
   };
 
   return (
-    <div className="mx-auto px-4 lg:px-0">
+    <div >
       <TermHeader />
-      <div className="p-5 max-w-full">
+      <div className="flex justify-center">
+      <div className="space-y-4 w-4/5">
         {loading ? (
           <p>Loading terms...</p>
         ) : (
           paginatedTerms.map((term, index) => (
             <div
               key={term._id}
-              className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4"
+              className="flex items-center font-poppins justify-between bg-white rounded-lg shadow-md mb-4 p-4"
             >
               <div className="flex items-center">
                 <div
@@ -72,12 +73,14 @@ const TermList = () => {
                     style={{ color: getColor(index) }}
                   />
                 </div>
+                <span className="text-gray-600 text-xl mx-2 h-7 border-l-2 border-gray-600"></span>
 
                 <div className="flex flex-col">
-                  <p className="m-0 text-sm text-gray-500">
+                <p className="m-0 font-poppins text-xs sm:text-sm text-gray-500">
+
                     {term.academicYear_id.startYear} - {term.academicYear_id.endYear}
                   </p>
-                  <h3 className="m-0 text-lg font-bold text-gray-600">
+                  <h3 className="m-0 font-poppins text-xs sm:text-lg font-semibold text-gray-600">
                     {term.semesterName &&
                     typeof term.semesterName === "string" &&
                     term.semesterName.trim() !== ""
@@ -116,6 +119,7 @@ const TermList = () => {
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
+      </div>
       </div>
     </div>
   );

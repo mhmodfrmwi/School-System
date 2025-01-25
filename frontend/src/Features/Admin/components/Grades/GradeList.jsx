@@ -58,17 +58,15 @@ const GradeList = () => {
     navigate(`/admin/editGradeform/${id}`);
   };
 
-  return (
-    <div className="overflow-x-hidden">
-      {loading && <Loader />}
-      <Header />
-      {message && (
-        <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">
-          {message}
-        </div>
-      )}
-      <div className="p-5 max-w-full">
-        {paginatedGrades.map((grade,index) => (
+  return (    
+    <div>
+    <Header />
+    <div className="flex justify-center">
+    <div className="space-y-4 w-4/5">
+      {loading ? (
+        <p>Loading subjects...</p>
+      ) : (
+        paginatedGrades.map((grade,index) => (
           <div
             key={grade._id}
             className= "flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full"
@@ -80,10 +78,11 @@ const GradeList = () => {
               >
                 <FontAwesomeIcon icon={faCalendar} style={{ color: getColor(index) }} />
               </div>
+              <span className="text-gray-600 text-xl mx-2 h-7 border-l-2 border-gray-600"></span>
 
               <div className="flex flex-col">
-                <p className="m-0 text-sm text-gray-500">2022-2023</p>
-                <p className="m-0 text-lg font-bold text-gray-600">
+                <p className="m-0 text-xs sm:text-sm text-gray-500">2022-2023</p>
+                <p className="m-0 text-sm sm:text-lg  font-bold text-gray-600">
                   {grade.gradeName}
                 </p>
               </div>
@@ -104,7 +103,7 @@ const GradeList = () => {
               </button>
             </div>
           </div>
-        ))}
+   ) ))}
 
         <Pagination
           totalItems={grade.length}
@@ -113,7 +112,7 @@ const GradeList = () => {
           onPageChange={handlePageChange}
         />
       </div>
-
+     </div>
     </div>
   );
 };
