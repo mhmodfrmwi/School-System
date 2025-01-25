@@ -7,7 +7,7 @@ const Admins = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-[#117C90]">
+    <div className="flex  bg-[#117C90]">
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
@@ -15,7 +15,7 @@ const Admins = () => {
 
       <div className="my-5 ml-0 mr-5 flex flex-1 flex-col rounded-lg bg-white shadow-lg">
         <Navbar setIsSidebarOpen={setIsSidebarOpen} />
-        <div className="flex-1 p-8">
+        <div className="flex-1 min-h-screen p-8">
           <Outlet />
         </div>
       </div>

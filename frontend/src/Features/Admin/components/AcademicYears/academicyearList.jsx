@@ -6,7 +6,7 @@ import Header from "./AcademicYearHeader";
 import { useNavigate } from "react-router-dom";
 import { fetchAcademicYears, removeAcademicYear } from "../AdminRedux/academicYearSlice";
 import Pagination from "../Pagination";
-import Loader from "@/ui/Loader";
+// import Loader from "@/ui/Loader";
 
 
 const AcademicYearList = () => {

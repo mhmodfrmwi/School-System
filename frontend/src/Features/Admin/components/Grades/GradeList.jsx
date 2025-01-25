@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faEdit } from "@fortawesome/free-solid-svg-icons";
 import Header from "./GradeHeader";
-import Loader from "@/ui/Loader";
+// import Loader from "@/ui/Loader";
 import Pagination from "../Pagination";
 import { useNavigate } from "react-router-dom";
 
@@ -15,9 +15,13 @@ const GradeList = () => {
   const getColor = (index) => {
     return colors[index % colors.length]; 
   };
+  // const {
+  //   grade = [], 
+  //   message,
+  //   loading,
+  // } = useSelector((state) => state.grades || {}); 
   const {
     grade = [], 
-    message,
     loading,
   } = useSelector((state) => state.grades || {}); 
 

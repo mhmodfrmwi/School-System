@@ -64,14 +64,14 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-12">
           {[
-            { label: "Students", value:  loadingStudents ? "Loading...": students.length, icon: "/src/assets/students 1.png" , bgColor:" #D1F3E0"},
-            { label: "Teachers", value: loadingTeachers ? "Loading..." : teachers.length, icon: "/src/assets/Group.png" , bgColor:"#E1F1FF" },
-            { label: "Parents", value:  loadingParents ? "Loading..." :  parents.length, icon: "/src/assets/vector.png" , bgColor:"#FFF2D8" },
-            { label: "Manager", value:loadingBosses ? "Loading..." : bosses.length, icon: "/src/assets/people.png"  , bgColor:"#FFEAEA"},
-            { label: "Admin", value:  loadingAdmins ? "Loading..." :admins.length, icon: "/src/assets/Group1.png"  , bgColor:"#D1F3E0"},
-            { label: "Terms", value:  loadingTerms ? "Loading..." :terms.length, icon: "/src/assets/Term.png" , bgColor:"#E1F1FF"},
-            { label: "Courses", value: loadingSubjects ? "Loading..." :subjects.length, icon: "/src/assets/Course.png" , bgColor:"#FFF2D8"},
-            { label: "Schedule", value: loadingSchedules ? "Loading..." :scheduals.length, icon: "/src/assets/Schedule.png", bgColor:"#FFEAEA" },
+            { label: "Students", value:  loadingStudents ? 0: students.length, icon: "/src/assets/students 1.png" , bgColor:" #D1F3E0"},
+            { label: "Teachers", value: loadingTeachers ? 0 : teachers.length, icon: "/src/assets/Group.png" , bgColor:"#E1F1FF" },
+            { label: "Parents", value:  loadingParents ? 0 :  parents.length, icon: "/src/assets/vector.png" , bgColor:"#FFF2D8" },
+            { label: "Manager", value:loadingBosses ? 0 : bosses.length, icon: "/src/assets/people.png"  , bgColor:"#FFEAEA"},
+            { label: "Admin", value:  loadingAdmins ? 0 :admins.length, icon: "/src/assets/Group1.png"  , bgColor:"#D1F3E0"},
+            { label: "Terms", value:  loadingTerms ? 0 :terms.length, icon: "/src/assets/Term.png" , bgColor:"#E1F1FF"},
+            { label: "Courses", value: loadingSubjects ? 0 :subjects.length, icon: "/src/assets/Course.png" , bgColor:"#FFF2D8"},
+            { label: "Schedule", value: loadingSchedules ? 0 :scheduals.length, icon: "/src/assets/Schedule.png", bgColor:"#FFEAEA" },
           ].map((item, index) => (
             <div
               key={index}
