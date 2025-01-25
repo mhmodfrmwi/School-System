@@ -181,6 +181,7 @@ const ClassTeacherTable = () => {
         </div>
       )}
       <div className="mt-7">
+      <div className="overflow-x-auto"> 
         <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
           <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
             <tr>
@@ -250,6 +251,7 @@ const ClassTeacherTable = () => {
             )}
           </tbody>
         </table>
+        </div>
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination

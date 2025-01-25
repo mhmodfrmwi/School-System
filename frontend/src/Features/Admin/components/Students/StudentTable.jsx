@@ -90,8 +90,9 @@ const StudentTable = () => {
       )}
 
       <div className="mt-7">
-        <table className="w-full table-auto border-collapse rounded-2xl bg-[#FBE9D1]">
-          <thead className="bg-[#FFFFFF] text-black shadow-md shadow-[#117C90]">
+      <div className="overflow-x-auto"> 
+        <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+          <thead className="bg-[#117C90] text-white  ">
             <tr>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Name</th>
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Student ID</th>
@@ -101,11 +102,11 @@ const StudentTable = () => {
               <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="relative">
             {paginatedStudents.length > 0 ? (
-              paginatedStudents.map((student) => (
-                <tr key={student._id} className="hover:bg-[#117C90]/70">
-                  <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+              paginatedStudents.map((student,index) => (
+                <tr key={student._id} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
+                  <td className="flex items-center font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
                     <img
                       src={student.profileImage}
                       alt="Profile"
@@ -113,10 +114,10 @@ const StudentTable = () => {
                     />
                     {student.name}
                   </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.SSN}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.email}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.class}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.gender}</td>
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{student.SSN}</td>
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{student.email}</td>
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{student.class}</td>
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{student.gender}</td>
                   <td className="px-3 py-2 space-x-2 text-xs sm:text-sm md:text-base">
                     <button className="text-[#117C90] transition hover:text-[#244856]">
                       <i className="far fa-edit" />
@@ -142,6 +143,7 @@ const StudentTable = () => {
             )}
           </tbody>
         </table>
+        </div>
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
