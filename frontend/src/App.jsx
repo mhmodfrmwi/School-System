@@ -49,6 +49,8 @@ import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
 import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
+import ClassTeacherForm from "./Features/Admin/components/ClassTeacher.jsx/classTeacherForm";
+import AllClassTeacher from "./Features/Admin/Pages/classTeacherTablePage";
 function App() {
   return (
     <BrowserRouter>
@@ -85,6 +87,8 @@ function App() {
           <Route path="teacherform" element={<TeacherForm />} />
           <Route path="editteacher/:id" element={<EditTeacher />} />
           <Route path="teacherinfo" element={<TeacherInfo />} />
+          <Route path="classteacherform" element={<ClassTeacherForm />} />
+          <Route path="allclassteacher" element={<AllClassTeacher />} />
           <Route path="adminform" element={<AdminForm />} />
           <Route path="alladmins" element={<AllAdmins />} />
           <Route path="allacademicyears" element={<AllAcademicYears />} />
@@ -93,7 +97,7 @@ function App() {
             path="editacademicyearform/:id"
             element={<EditAcademicYearForm />}
           />
-          <Route path="editadminform/:id" element={<EditAdminForm />}/>
+          <Route path="editadminform/:id" element={<EditAdminForm />} />
           <Route path="allgrades" element={<AllGrades />} />
           <Route path="gradeform" element={<GradeForm />} />
           <Route path="editGradeForm/:id" element={<EditGradeForm />} />
@@ -103,9 +107,10 @@ function App() {
           <Route path="addsubject" element={<AddSubject />} />
           <Route path="assignSubject" element={<AssignSubject />} />
           <Route path="edit-subject/:id" element={<EditSubject />} />
-          <Route path="edit-assigned-subject/:id" element={<EditAssignedSubject />} />
-
-
+          <Route
+            path="edit-assigned-subject/:id"
+            element={<EditAssignedSubject />}
+          />
         </Route>
         {/* /////////////////studentpage//////////////////// */}
         <Route path="student" element={<Students />}>
