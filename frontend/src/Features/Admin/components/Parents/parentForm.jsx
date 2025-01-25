@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postParent } from "../AdminRedux/parentSlice";
 import Swal from "sweetalert2";
-import Loader from "@/ui/Loader";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function ParentForm() {
   const dispatch = useDispatch();
-  const { parents, loading } = useSelector((state) => state.parents); // Assuming you have all parents' data in Redux
+  const { parents} = useSelector((state) => state.parents); 
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -64,13 +65,9 @@ function ParentForm() {
           email: formData.email,
           phone: formData.phone,
           gender: formData.gender,
-          // SSN: "30403000000000",
           password: formData.password,
-          // role: "Parent",
         }),
       );
-
-      // Swal.fire("Success", "Parent added successfully!", "success");
 
       setFormData({
         fullName: "",
@@ -86,138 +83,105 @@ function ParentForm() {
   };
 
   return (
-    <div className="relative">
-      {loading && <Loader />}
-      <div className="mb-6 ms-10 mt-6">
-        <h2 className="w-52 font-poppins text-3xl font-bold text-[#043B44]">
-          Add Parent
-        </h2>
-        <p className="mt-3 w-24 rounded-2xl border-b-4 border-[#117C90]"></p>
-      </div>
-
-      <div className="mx-auto w-[95%] max-w-4xl rounded-2xl bg-gray-100 p-14 shadow-md">
-        <form onSubmit={handleSubmit}>
+    <div className="w-[80%] mx-auto my-10 font-poppins">
+      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Add Parent</h1>
+      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
+      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
           <div className="mb-4">
-            <label className="mb-2 block font-semibold text-[#117C90]">
-              Full Name
-            </label>
+            <label className="block text-md font-medium text-gray-700 mb-2">Full Name</label>
             <input
               type="text"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <label className="mb-2 block font-semibold text-[#117C90]">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter email address"
-                required
-              />
-            </div>
-            <div>
-              <label className="mb-2 block font-semibold text-[#117C90]">
-                Gender
-              </label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              >
-                <option value="" disabled className="font-poppins">
-                  Select gender
-                </option>
-                <option value="M" className="font-poppins">
-                  M
-                </option>
-                <option value="F" className="font-poppins">
-                  F
-                </option>
-              </select>
-            </div>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">Email Address</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              placeholder="Enter email address"
+              required
+            />
           </div>
 
-          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <label className="mb-2 block font-semibold text-[#117C90]">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter password"
-                required
-              />
-            </div>
-            <div>
-              <label className="mb-2 block font-semibold text-[#117C90]">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter phone number"
-                required
-              />
-            </div>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              placeholder="Enter password"
+              required
+            />
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-            {formData.students.map((student, index) => (
-              <div key={index} className="mt-4">
-                <div>
-                  <label className="mb-2 block font-semibold text-[#117C90]">
-                    Student ID
-                  </label>
-                  <input
-                    type="number"
-                    name="studentID"
-                    value={student.studentID}
-                    onChange={(e) => handleStudentChange(index, e)}
-                    className="w-full rounded-2xl border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                    placeholder="Enter student ID"
-                    required
-                  />
-                </div>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addStudent}
-              className="mt-8 font-semibold text-[#117C90]"
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">Phone Number</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              placeholder="Enter phone number"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">Gender</label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
-              <div className="mt-2 flex w-44 flex-row justify-between text-center">
-                <p className="rounded-full border-2 border-black px-3 py-1 text-black">
-                  +
-                </p>
-                <p className="mt-2"> Add another</p>
-              </div>
-            </button>
+              <option value="">Select gender</option>
+              <option value="M">M</option>
+              <option value="F">F</option>
+            </select>
           </div>
 
-          <div className="mt-8 flex justify-end">
+          {formData.students.map((student, index) => (
+            <div key={index} className="mb-4">
+              <label className="block text-md font-medium text-gray-700 mb-2">Student ID</label>
+              <input
+                type="number"
+                name="studentID"
+                value={student.studentID}
+                onChange={(e) => handleStudentChange(index, e)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                placeholder="Enter student ID"
+                required
+              />
+            </div>
+          ))}
+          
+          <button
+            type="button"
+            onClick={addStudent}
+            className="mt-4 text-[#117C90] font-semibold flex items-center"
+          >
+            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+            Add another student
+          </button>
+
+          <div className="col-span-1 sm:col-span-2 mt-6">
             <button
               type="submit"
-              className="mt-8 rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#117C90]"
+              className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
             >
               Add Parent
             </button>

@@ -53,20 +53,20 @@ function AssignSubject() {
   };
 
   return (
-    <div className="w-[80%] mx-auto">
+    <div className="w-[80%] mx-auto my-10 font-poppins">
       <h1 className="text-2xl font-semibold text-[#244856] pl-5">Assign Subject</h1>
       <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
-        <form onSubmit={handleAssignSubject} className="m-6">
+        <form onSubmit={handleAssignSubject} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
           {/* Subject Dropdown */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="mb-4 sm:col-span-2">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Select Subject
             </label>
             <select
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="">-- Select Subject --</option>
               {subjects.map((subject, index) => (
@@ -78,14 +78,14 @@ function AssignSubject() {
           </div>
 
           {/* Grade Dropdown */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="mb-4 sm:col-span-2">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Select Grade
             </label>
             <select
               value={gradeName}
               onChange={(e) => setGradeName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="">-- Select Grade --</option>
               {grade.map((grade, index) => (
@@ -97,14 +97,14 @@ function AssignSubject() {
           </div>
 
           {/* Semester Dropdown */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="mb-4 sm:col-span-2">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Select Semester
             </label>
             <select
               value={semesterName}
               onChange={handleSemesterChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="">-- Select Semester --</option>
               {semesters.map((semester, index) => (
@@ -123,13 +123,15 @@ function AssignSubject() {
           />
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="px-6 py-2 bg-[#117C90] text-white rounded-md text-sm font-medium hover:bg-[#0f6b7c] transition mx-auto block"
-            disabled={loading}
-          >
-            {loading ? "Loading..." : "Assign Subject"}
-          </button>
+          <div className="col-span-1 sm:col-span-2 mt-6">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Assign Subject"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
