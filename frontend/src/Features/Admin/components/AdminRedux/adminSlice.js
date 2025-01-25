@@ -33,7 +33,9 @@ export const postAdmin = createAsyncThunk(
         const error = await response.json();
         throw new Error(error.message);
       }
-      return await response.json();
+      const data = await response.json();
+      toast.success("Admin added successfully!"); // Notify success
+      return data;
     } catch (error) {
       toast.error(error.message || "Failed to post admin data");
       return rejectWithValue(error.message);
@@ -77,6 +79,7 @@ export const editAdmin = createAsyncThunk(
       }
 
       const data = await response.json(); // Make sure this matches your API response structure
+      toast.success("Admin updated successfully!");
       return { id, updatedAdmin: data }; // Return updated admin data
     } catch (error) {
       return rejectWithValue(error.message);
@@ -104,6 +107,7 @@ export const removeAdmin = createAsyncThunk(
       }
 
       dispatch(fetchAdmins());
+      toast.success("Admin deleted successfully!"); 
       return id;
     } catch (error) {
       toast.error(error.message || "Failed to delete admin");
