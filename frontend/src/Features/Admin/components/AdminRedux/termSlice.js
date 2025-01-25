@@ -16,9 +16,8 @@ const initialState = {
 export const postTerm = createAsyncThunk(
   "terms/postTerm",
   async (termData, { rejectWithValue }) => {
+    console.log(termData);
     try {
-      console.log("Sending term data:", termData); // Log payload
-
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/semester/createSemester",
         {
@@ -27,7 +26,7 @@ export const postTerm = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -44,16 +43,17 @@ export const postTerm = createAsyncThunk(
       toast.error(error.message || "Failed to post term data");
       return rejectWithValue(error.message || "Failed to post term data");
     }
-  }
+  },
 );
-
 
 // Fetch all terms
 export const fetchTerms = createAsyncThunk(
   "terms/fetchTerms",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/semester");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/semester",
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch terms");
@@ -81,7 +81,7 @@ export const editTermAsync = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -110,7 +110,7 @@ export const removeTerm = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -138,7 +138,7 @@ const termsSlice = createSlice({
     },
     editTerm: (state, action) => {
       const index = state.terms.findIndex(
-        (term) => term.id === action.payload.id
+        (term) => term.id === action.payload.id,
       );
       if (index !== -1) {
         state.terms[index] = action.payload;
@@ -209,7 +209,9 @@ const termsSlice = createSlice({
       .addCase(editTermAsync.fulfilled, (state, action) => {
         state.loading = false;
         const updatedTerm = action.payload;
-        const index = state.terms.findIndex((term) => term.id === updatedTerm.id);
+        const index = state.terms.findIndex(
+          (term) => term.id === updatedTerm.id,
+        );
         if (index !== -1) {
           state.terms[index] = updatedTerm;
         }
@@ -222,6 +224,7 @@ const termsSlice = createSlice({
   },
 });
 
-export const { clearMessage, addTerm, editTerm, addTermToServer } = termsSlice.actions;
+export const { clearMessage, addTerm, editTerm, addTermToServer } =
+  termsSlice.actions;
 
 export default termsSlice.reducer;
