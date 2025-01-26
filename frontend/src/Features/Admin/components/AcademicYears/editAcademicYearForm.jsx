@@ -35,12 +35,10 @@ const EditAcademicYearForm = () => {
 
   return (
     <>
-      <div className="mb-6 ms-20 w-52 md:ms-24">
-      <h2 className="text-2xl font-poppins font-semibold text-[#244856]">Edit Year</h2>
-      <div className="mt-1 h-[4px] w-[110px] rounded-t-md bg-[#244856]"></div>
-      </div>
-  
-      <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-10 shadow-md">
+      <div className="w-[80%] mx-auto my-10 font-poppins">
+      <h2 className="text-2xl font-semibold text-[#244856] pl-5">Edit Year</h2>
+      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
+      <div className="mx-auto bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
@@ -83,6 +81,9 @@ const EditAcademicYearForm = () => {
           </div>
         </form>
       </div>
+      </div>
+  
+    
     </>
   );
   
