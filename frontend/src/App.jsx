@@ -51,6 +51,8 @@ import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
 import ClassTeacherForm from "./Features/Admin/components/ClassTeacher.jsx/classTeacherForm";
 import AllClassTeacher from "./Features/Admin/Pages/classTeacherTablePage";
+
+import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
 function App() {
   return (
     <BrowserRouter>
@@ -93,10 +95,7 @@ function App() {
           <Route path="alladmins" element={<AllAdmins />} />
           <Route path="allacademicyears" element={<AllAcademicYears />} />
           <Route path="academicyearform" element={<AcademicYearForm />} />
-          <Route
-            path="editacademicyearform/:id"
-            element={<EditAcademicYearForm />}
-          />
+          <Route path="editacademicyearform/:id" element={<EditAcademicYearForm />} />
           <Route path="editadminform/:id" element={<EditAdminForm />} />
           <Route path="allgrades" element={<AllGrades />} />
           <Route path="gradeform" element={<GradeForm />} />
@@ -107,10 +106,8 @@ function App() {
           <Route path="addsubject" element={<AddSubject />} />
           <Route path="assignSubject" element={<AssignSubject />} />
           <Route path="edit-subject/:id" element={<EditSubject />} />
-          <Route
-            path="edit-assigned-subject/:id"
-            element={<EditAssignedSubject />}
-          />
+          <Route path="edit-assigned-subject/:id" element={<EditAssignedSubject />}/>
+          <Route path="edit-profile" element={<EditProfilePage />} />
         </Route>
         {/* /////////////////studentpage//////////////////// */}
         <Route path="student" element={<Students />}>

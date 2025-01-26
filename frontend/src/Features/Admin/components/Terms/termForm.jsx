@@ -25,7 +25,10 @@ function TermForm() {
           "http://localhost:4000/api/v1/admin/semester",
         );
         const data = await response.json();
-        setSemesters(data.semesters);
+        const uniqueSemesters = [
+          ...new Map(data.semesters.map(item => [item.semesterName, item])).values()
+        ];
+        setSemesters(uniqueSemesters);
       } catch (error) {
         console.error("Error fetching semesters:", error);
       }

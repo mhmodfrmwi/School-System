@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef , useEffect} from "react";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -7,7 +7,7 @@ import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { ReactSVG } from "react-svg";
 import InfoIcon from "../../../assets/icons/Info.svg";
-import Mode from "../../../assets/icons/Mode.svg";
+// import Mode from "../../../assets/icons/Mode.svg";
 import userImage from "../../../assets/user.jpeg";
 import language from "../../../assets/icons/language.svg";
 import Vector from "../../../assets/icons/Vector.svg";
@@ -17,12 +17,26 @@ import ThemeSwitcher from "@/ui/ThemeSwitcher";
 const Navbar = () => {
   const navigate = useNavigate();
   const [settingToggle, setSettingToggle] = useState(false);
+  const settingsRef = useRef(null);
   const handleBack = () => {
     navigate(-1); // Navigates to the previous page
   };
 
   const url = window.location.pathname; // e.g., "/user/john"
   const name = url.split("/").pop(); // Gets the last part: "john"
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+        setSettingToggle(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="relative">
@@ -111,9 +125,12 @@ const Navbar = () => {
           </button>
 
           {settingToggle && (
-            <div className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]">
+            <div
+             ref={settingsRef}
+             className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]">
               <div>
-                <div className="mx-auto ms-7 mt-3 flex flex-row items-center">
+                <div className="mx-auto ms-7 mt-3 flex flex-row items-center cursor-pointer"
+                 onClick={() => navigate("edit-profile")}>
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
                   </button>
