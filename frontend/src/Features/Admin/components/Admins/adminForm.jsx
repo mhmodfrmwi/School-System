@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { postAdmin } from "../AdminRedux/adminSlice";
+import { toast } from "react-toastify";
 
 function AdminForm() {
   const dispatch = useDispatch();
@@ -19,28 +20,29 @@ function AdminForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate form fields
+  
     if (!formData.fullName || !formData.email || !formData.password || !formData.phoneNumber || !formData.gender) {
+      alert("Please fill in all the fields.");
       return;
     }
-
-    // Map gender to valid schema values
+     const phoneRegex = /^[0-9]{11}$/; 
+     if (!phoneRegex.test(formData.phoneNumber)) {
+       toast.error("Phone number must be exactly 11 digits.");
+       return;
+     }
+  
     const genderMap = { Male: "M", Female: "F", Other: "O" };
-
-    // Prepare payload
+  
     const payload = {
       fullName: formData.fullName,
       email: formData.email,
       password: formData.password,
       phone: formData.phoneNumber,
-      gender: genderMap[formData.gender], // Map gender
+      gender: genderMap[formData.gender],
     };
-
+  
     try {
-      // Dispatch Redux action
       await dispatch(postAdmin(payload));
-      // Reset form fields
       setFormData({
         fullName: "",
         email: "",
@@ -49,11 +51,11 @@ function AdminForm() {
         gender: "",
       });
     } catch (error) {
-      // Display error
       const errorMessage = error.response?.data?.message || "Something went wrong. Please try again.";
       alert(errorMessage);
     }
   };
+  
 
   return (
     <div className="w-[80%] mx-auto my-10 font-poppins">

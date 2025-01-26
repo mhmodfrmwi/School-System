@@ -24,18 +24,21 @@ const ManagerTable = () => {
     dispatch(fetchManagers());
   }, [dispatch]);
 
-  const filteredManagers = managers.filter((manager) => {
-    if (!manager) return false;
-    const lowerSearchText = searchText.toLowerCase();
-    if (filterOption) {
-      return manager[filterOption]?.toLowerCase().includes(lowerSearchText);
-    }
-    return (
-      manager.fullName.toLowerCase().includes(lowerSearchText) ||
-      manager.email.toLowerCase().includes(lowerSearchText)
-    );
-  });
+const filteredManagers = managers.filter((manager) => {
+  const lowerSearchText = searchText.toLowerCase();
 
+  if (filterOption) {
+    const value = manager[filterOption];
+    return value && value.toLowerCase().includes(lowerSearchText); 
+  }
+
+  return (
+    (manager.fullName?.toLowerCase().includes(lowerSearchText) || // Safely check `name`
+    manager.email?.toLowerCase().includes(lowerSearchText)) // Safely check `email`
+  );
+});
+
+  
   const paginatedManagers = filteredManagers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage

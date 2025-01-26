@@ -46,7 +46,7 @@ import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBo
 import Parents from "./Features/Parent/pages/Parents";
 import DashboardParent from "./Features/Parent/pages/DashboardParent";
 import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
-
+import GradesDetails from "./Features/Admin/components/Grades/AllAssignedGrades";
 import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
@@ -95,6 +95,7 @@ function App() {
           <Route path="allteachers" element={<AllTeachers />} />
           <Route path="teacherform" element={<TeacherForm />} />
           <Route path="edit-teacher/:id" element={<EditTeacher />} />
+          <Route path="allgrades/:id" element={<GradesDetails />} />
           <Route path="teacherinfo" element={<TeacherInfo />} />
           <Route path="allteachers/:id" element={<AllClassTeacher />} />
           <Route path="edit-class-teacher/:id" element={<EditClassTeacher />} />

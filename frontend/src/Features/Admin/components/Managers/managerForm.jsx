@@ -22,21 +22,28 @@ function ManagerForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData.fullName || !formData.email || !formData.password) {
+  
+    if (!formData.fullName || !formData.email || !formData.password || !formData.phoneNumber) {
       toast.warning("Please fill in all required fields.");
       return;
     }
-
+  
+    // Validate phone number format
+    const phoneRegex = /^[0-9]{11}$/; // Adjust this pattern as needed
+    if (!phoneRegex.test(formData.phoneNumber)) {
+      toast.error("Phone number must be exactly 11 digits.");
+      return;
+    }
+  
     const emailExists = managers.some(
       (manager) => manager.email.toLowerCase() === formData.email.toLowerCase()
     );
-
+  
     if (emailExists) {
       toast.error("Email already exists. Please use another email.");
       return;
     }
-
+  
     try {
       await dispatch(
         postManager({
@@ -47,7 +54,7 @@ function ManagerForm() {
           password: formData.password,
         })
       ).unwrap();
-
+  
       setFormData({
         fullName: "",
         email: "",
@@ -60,6 +67,7 @@ function ManagerForm() {
       toast.error(error.message || "An error occurred while submitting the form.");
     }
   };
+  
 
   return (
     <div className="w-[80%] mx-auto my-10 font-poppins">

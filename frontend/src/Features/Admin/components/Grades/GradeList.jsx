@@ -60,16 +60,12 @@ const GradeList = () => {
   };
 
   return (
-    <div >
-    <Header />
+    <div className="overflow-x-hidden">
       {loading && <Loader />}
-      <div className="flex justify-center">
-      <div className="space-y-4 w-4/5">
-        {loading ? (
-          <p>Loading terms...</p>
-        ) : (
+      <Header />
       
-        paginatedGrades.map((grade, index) => (
+      <div className="p-5 max-w-full">
+        {paginatedGrades.map((grade, index) => (
           <div
             key={grade._id}
             className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full"
@@ -110,7 +106,7 @@ const GradeList = () => {
               </button>
             </div>
           </div>
-  )))}
+        ))}
 
         <Pagination
           totalItems={grade.length}
@@ -119,7 +115,7 @@ const GradeList = () => {
           onPageChange={handlePageChange}
         />
       </div>
-    </div>
+
     </div>
   );
 };

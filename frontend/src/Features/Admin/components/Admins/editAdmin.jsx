@@ -21,11 +21,11 @@ const EditAdminForm = () => {
     const admin = admins.find((admin) => admin._id === id);
     if (admin) {
       setFormData({
-        fullName: admin.name || "",
+        fullName: admin.fullName || "",
         email: admin.email || "",
         phone: admin.phone || "",
         gender: admin.gender || "",
-        password: "", // Leave this empty for security reasons
+        password:admin.password || "",  // Leave this empty for security reasons
       });
     }
   }, [id, admins]);

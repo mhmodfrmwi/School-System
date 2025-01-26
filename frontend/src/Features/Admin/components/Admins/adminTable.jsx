@@ -97,16 +97,16 @@ const AdminTable = () => {
                   index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
                 } hover:bg-[#117C90]/70`}>
                  
-                <td className="flex items-center font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <img
-                      src={admin.profileImage}
-                      alt="Profile"
-                      className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
-                    />
-                    <span className="truncate font-poppins">
-                      {admin.name}
-                    </span>
-                  </td>
+                <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                      <img
+                        src={admin.profileImage}
+                        alt="Profile"
+                        className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
+                      />
+                      <span className="truncate font-poppins">
+                        {admin.fullName}
+                      </span>
+                    </td>
                   <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{admin.email}</td>
                   <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{admin.gender}</td>
                   <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{admin.phone}</td>
