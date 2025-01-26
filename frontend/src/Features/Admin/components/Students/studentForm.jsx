@@ -54,7 +54,7 @@ function AddStudent() {
   return (
     <div className="w-[80%] mx-auto my-10 font-poppins">
       <h1 className="text-2xl font-semibold text-[#244856] pl-5">Add Student</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
+      <div className="mt-1 h-[4px] w-[160px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
         <form onSubmit={handleAddStudent} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
           {Object.keys(studentData).map((key) => (

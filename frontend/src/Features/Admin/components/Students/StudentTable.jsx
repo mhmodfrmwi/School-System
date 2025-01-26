@@ -52,11 +52,10 @@ const StudentTable = () => {
     currentPage * itemsPerPage
   );
 
-  const handleDelete = (id) => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this student?");
-    if (isConfirmed) {
-      dispatch(removeStudent(id));
-    }
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this manager?")) {
+            await dispatch(removeStudent(id));
+          }
   };
 
   const handlePageChange = (page) => {
