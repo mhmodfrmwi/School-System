@@ -22,7 +22,7 @@ const Dashboard = () => {
   const { admins, loading: loadingAdmins } = useSelector((state) => state.admins);
   const { terms, loading: loadingTerms } = useSelector((state) => state.terms);
   const { subjects, loading: loadingSubjects } = useSelector((state) => state.subject);
-  const { scheduals, loading: loadingSchedules } = useSelector((state) => state.schedule);
+  const { schedules, loading: loadingSchedules } = useSelector((state) => state.schedules);
 
 
 
@@ -71,7 +71,7 @@ const Dashboard = () => {
             { label: "Admin", value:  loadingAdmins ? 0 :admins.length, icon: "/src/assets/Group1.png"  , bgColor:"#D1F3E0"},
             { label: "Terms", value:  loadingTerms ? 0 :terms.length, icon: "/src/assets/Term.png" , bgColor:"#E1F1FF"},
             { label: "Courses", value: loadingSubjects ? 0 :subjects.length, icon: "/src/assets/Course.png" , bgColor:"#FFF2D8"},
-            { label: "Schedule", value: loadingSchedules ? 0 :scheduals.length, icon: "/src/assets/Schedule.png", bgColor:"#FFEAEA" },
+            { label: "Schedule", value: loadingSchedules ? 0 : (schedules ? schedules.length : 0), icon: "/src/assets/Schedule.png", bgColor:"#FFEAEA" },
           ].map((item, index) => (
             <div
               key={index}

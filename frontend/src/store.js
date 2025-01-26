@@ -27,7 +27,7 @@ const store = configureStore({
     teachers: teacherReducer,
     classTeacher: classTeacherReducer,
     terms: termReducer,
-    schedule: scheduleReducer,
+    schedules: scheduleReducer,
     subject: subjectsReducer,
     assignSubject: assignSubjectReducer,
     academicYears: academicYearReducer,
