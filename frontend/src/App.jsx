@@ -50,8 +50,8 @@ import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
 import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
-import ClassTeacherForm from "./Features/Admin/components/ClassTeacher.jsx/classTeacherForm";
 import AllClassTeacher from "./Features/Admin/Pages/classTeacherTablePage";
+import EditClassTeacher  from "./Features/Admin/components/classTeacher/editClassTeacher";
 
 import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
 import EditSchedule from "./Features/Admin/components/Schedule/editScheduleForm";
@@ -95,8 +95,8 @@ function App() {
           <Route path="teacherform" element={<TeacherForm />} />
           <Route path="edit-teacher/:id" element={<EditTeacher />} />
           <Route path="teacherinfo" element={<TeacherInfo />} />
-          <Route path="classteacherform" element={<ClassTeacherForm />} />
-          <Route path="allclassteacher" element={<AllClassTeacher />} />
+          <Route path="allteachers/:id" element={<AllClassTeacher />} />
+          <Route path="edit-class-teacher/:id" element={<EditClassTeacher />} />
           <Route path="adminform" element={<AdminForm />} />
           <Route path="alladmins" element={<AllAdmins />} />
           <Route path="allacademicyears" element={<AllAcademicYears />} />

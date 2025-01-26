@@ -1,87 +1,87 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchClasses } from "../AdminRedux/classSlice"; // Fetch classes
-import { fetchSubjects } from "../AdminRedux/subjectSlice"; // Fetch subjects
-import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Fetch teachers
-import { fetchAcademicYears } from "../AdminRedux/academicYearSlice"; // Fetch academic years
-import { postClassTeacher } from "../AdminRedux/classTeacherSlice"; // Add class teacher
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+import { fetchClasses } from "../AdminRedux/classSlice";
+import { fetchSubjects } from "../AdminRedux/subjectSlice";
+import { fetchTeachers } from "../AdminRedux/teacherSlice";
+import { editClassTeacher } from "../AdminRedux/classTeacherSlice";
+import Loader from "@/ui/Loader";
 
-function AcademicData() {
+const EditClassTeacherForm = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  
-  // State to hold form data
-  const [academicData, setAcademicData] = useState({
+  const navigate = useNavigate();
+
+  // Data from the Redux store
+  const { classes } = useSelector((state) => state.classes);
+  const { subjects } = useSelector((state) => state.subject);
+  const { teachers } = useSelector((state) => state.teachers);
+  const { classTeachers, loading } = useSelector((state) => state.classTeacher);
+
+
+  // State to hold the form data
+  const [formData, setFormData] = useState({
     className: "",
     subjectName: "",
     teacherName: "",
     academicYear: "",
   });
 
-  // Fetch data from Redux store
-  const { classes } = useSelector((state) => state.classes);
-  const { subjects } = useSelector((state) => state.subject);
-  const { teachers } = useSelector((state) => state.teachers);
-  const { academicYears } = useSelector((state) => state.academicYears);
-
-  // Load data on component mount
   useEffect(() => {
     dispatch(fetchClasses());
     dispatch(fetchSubjects());
     dispatch(fetchTeachers());
-    dispatch(fetchAcademicYears());
   }, [dispatch]);
 
-  // Handle form data change
+  useEffect(() => {
+    // Find the class teacher to edit
+    const classTeacherToEdit = classTeachers.find(
+      (teacher) => teacher._id === id
+    );
+    console.log(classTeacherToEdit);
+    if (classTeacherToEdit) {
+      setFormData({
+        className: classTeacherToEdit.classId._id, // Use classId._id to set the value
+        subjectName: classTeacherToEdit.subjectId._id, // Use subjectId._id to set the value
+        teacherName: classTeacherToEdit.teacherId._id, // Use teacherId._id to set the value
+        academicYear: classTeacherToEdit.academicYear_id._id, // Assuming you want to store academicYear as ID
+      });
+    }
+  }, [classTeachers, id]);
+  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setAcademicData({ ...academicData, [name]: value });
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  // Handle form submission (Add Class Teacher)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const updatedClassTeacher = { ...formData };
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-
-  // Map the selected IDs to their actual values
-  const selectedClass = classes.find(cls => cls._id === academicData.className)?.className || '';
-  const selectedSubject = subjects.find(subject => subject._id === academicData.subjectName)?.subjectName || '';
-  const selectedTeacher = teachers.find(teacher => teacher._id === academicData.teacherName)?.fullName || '';
-  const selectedAcademicYear = academicYears.find(year => year._id === academicData.academicYear)?.startYear + '-' + academicYears.find(year => year._id === academicData.academicYear)?.endYear || '';
-
-  // Create the data object with the names
-  const classTeacherData = {
-    className: selectedClass,
-    subjectName: selectedSubject,
-    teacherName: selectedTeacher,
-    academicYear: selectedAcademicYear,
+    dispatch(editClassTeacher({ id, updatedClassTeacher }))
+      .unwrap()
+      .then(() => {
+        navigate("/admin/allclassTeachers");
+      })
+      .catch((error) => {
+        console.error("Error updating class teacher", error);
+      });
   };
-
-
-  // Dispatch action to post class teacher
-  dispatch(postClassTeacher(classTeacherData));
-
-  // Reset the form
-  setAcademicData({
-    className: "",
-    subjectName: "",
-    teacherName: "",
-    academicYear: "",
-  });
-};
-
 
   return (
-    <div className="w-[80%] mx-auto my-10 font-poppins">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Academic Data</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
+    <div className="w-[80%] mx-auto mt-10">
+      {loading && <Loader />}
+      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Class Teacher</h1>
+      <div className="mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
-          {/* Select Class - Dynamic options */}
+          {/* Select Class */}
           <div className="mb-4">
             <label className="block text-md font-medium text-gray-700 mb-2">Class</label>
             <select
               name="className"
-              value={academicData.className}
+              value={formData.className}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
@@ -94,12 +94,12 @@ const handleSubmit = (e) => {
             </select>
           </div>
 
-          {/* Select Subject - Dynamic options */}
+          {/* Select Subject */}
           <div className="mb-4">
             <label className="block text-md font-medium text-gray-700 mb-2">Subject</label>
             <select
               name="subjectName"
-              value={academicData.subjectName}
+              value={formData.subjectName}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
@@ -112,12 +112,12 @@ const handleSubmit = (e) => {
             </select>
           </div>
 
-          {/* Select Teacher - Dynamic options */}
+          {/* Select Teacher */}
           <div className="mb-4">
             <label className="block text-md font-medium text-gray-700 mb-2">Teacher</label>
             <select
               name="teacherName"
-              value={academicData.teacherName}
+              value={formData.teacherName}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
@@ -130,21 +130,17 @@ const handleSubmit = (e) => {
             </select>
           </div>
 
-          {/* Select Academic Year - Dynamic options */}
+          {/* Select Academic Year */}
           <div className="mb-4">
             <label className="block text-md font-medium text-gray-700 mb-2">Academic Year</label>
             <select
               name="academicYear"
-              value={academicData.academicYear}
+              value={formData.academicYear}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="">Select Academic Year</option>
-              {academicYears?.map((year) => (
-                <option key={year._id} value={year._id}>
-                  {year.startYear} - {year.endYear}
-                </option>
-              ))}
+              {/* Optionally, you can map academicYears here if they are available */}
             </select>
           </div>
 
@@ -154,13 +150,13 @@ const handleSubmit = (e) => {
               type="submit"
               className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
             >
-              Submit Academic Data
+              Save Changes
             </button>
           </div>
         </form>
       </div>
     </div>
   );
-}
+};
 
-export default AcademicData;
+export default EditClassTeacherForm;

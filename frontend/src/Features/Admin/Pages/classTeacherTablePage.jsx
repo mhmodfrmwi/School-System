@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { fetchClassTeacher } from "../components/AdminRedux/classTeacherSlice";
-import ClassTeacherTable from "../components/ClassTeacher.jsx/classTeacherTable";
+import { fetchClassTeachers } from "../components/AdminRedux/classTeacherSlice";
+import ClassTeacherTable from "../components/ClassTeacher/classTeacherTable";
 
 const AllClassTeacher = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchClassTeacher());
+    dispatch(fetchClassTeachers());
   }, [dispatch]);
 
   return (

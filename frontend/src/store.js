@@ -15,6 +15,7 @@ import academicYearReducer from "./Features/Admin/components/AdminRedux/academic
 import gradeReducer from "./Features/Admin/components/AdminRedux/gradeSlice";
 import assignSubjectReducer from "./Features/Admin/components/AdminRedux/AssignSubjectSlice";
 import assignGradeReducer from "./Features/Admin/components/AdminRedux/AssignGradeSlice"; 
+import classReducer from "./Features/Admin/components/AdminRedux/classSlice";
 
 const store = configureStore({
   reducer: {
@@ -33,6 +34,7 @@ const store = configureStore({
     academicYears: academicYearReducer,
     grades: gradeReducer,
     assignGrade: assignGradeReducer,
+    classes: classReducer,
   },
 });
 

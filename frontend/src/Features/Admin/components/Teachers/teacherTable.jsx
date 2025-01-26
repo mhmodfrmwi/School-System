@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchTeachers, removeTeacher } from "../AdminRedux/teacherSlice";
 import Pagination from "../Pagination";
 import Header from "../Teachers/teacherHeader";
-import Swal from "sweetalert2";
 import Loader from "@/ui/Loader";
 import { Link } from "react-router-dom";
 
@@ -55,17 +54,7 @@ const TeacherTable = () => {
   const handleSearchChange = (search) => setSearchText(search);
   const handleFilterChange = (filter) => setFilterOption(filter);
 
-  const handleViewClick = (teacher) => {
-    Swal.fire({
-      title: `${teacher.fullName}`,
-      html: `
-        <p><strong>Email:</strong> ${teacher.email}</p>
-        <p><strong>Subject:</strong> ${teacher.subjectId?.subjectName}</p>
-        <p><strong>Academic Number:</strong> ${teacher.academicNumber}</p>
-        <p><strong>Gender:</strong> ${teacher.gender}</p>
-      `,
-    });
-  };
+
 
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
@@ -99,13 +88,12 @@ const TeacherTable = () => {
                     <td className="px-3 py-2">{teacher.gender}</td>
                     <td className="px-3 py-2">
                       <div className="inline-flex space-x-2">
-                        <button
-                          aria-label="View teacher"
-                          onClick={() => handleViewClick(teacher)}
+                      <Link
+                          to={`/admin/allteachers/${teacher._id}`}
                           className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                         >
                           <i className="fas fa-eye text-lg" />
-                        </button>
+                        </Link>
                         <Link
                           to={`/admin/edit-teacher/${teacher._id}`}
                           className="text-[#117C90] transition duration-300 hover:text-[#244856]"

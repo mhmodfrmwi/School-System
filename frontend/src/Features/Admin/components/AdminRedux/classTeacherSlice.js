@@ -2,235 +2,189 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
-  className: "",
-  subjectName: "",
-  teacherName: "",
-  academicYear: "",
+  classTeachers: [],
   status: "idle",
-  classesTeacher: "",
   error: null,
-  grade: [],
-  message: "",
   loading: false,
 };
 
-export const postClassTeacher = createAsyncThunk(
-  "classTeacher/postClassTeacher",
-  async (classTeacherData, { rejectWithValue }) => {
-    console.log(classTeacherData);
-    try {
-      const response = await fetch(
-        "http://localhost:4000/api/v1/admin/classTeacher/createClassTeacher",
-        {
-          method: "POST",
-          body: JSON.stringify(classTeacherData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        toast.error(error.message || "Failed to create class teacher ");
-        return toast.error(error.message);
-      }
-
-      const data = await response.json();
-      toast.success("Class Teacher created successfully");
-      return data;
-    } catch (error) {
-      toast.error("Something went wrong while creating the class Teacher");
-      console.log(error);
-    }
-  },
-);
-
-export const fetchClassTeacher = createAsyncThunk(
-  "classTeacher/fetchClassTeacher",
-
+// Fetch all class teachers
+export const fetchClassTeachers = createAsyncThunk(
+  "classTeachers/fetchClassTeachers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        "http://localhost:4000/api/v1/admin/classTeacher/",
-      );
+      const response = await fetch("http://localhost:4000/api/v1/admin/classTeacher");
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
 
       const data = await response.json();
       return data.classTeachers;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Failed to fetch class teachers");
     }
-  },
+  }
 );
 
-export const editClassTeacherAsync = createAsyncThunk(
-  "classTeacher/editClassTeacherAsync",
-  async ({ id, updatedClassTeacher }, { rejectWithValue }) => {
-    console.log(updatedClassTeacher);
+// Add a new class teacher
+export const postClassTeacher = createAsyncThunk(
+  "classTeachers/postClassTeacher",
+  async (classTeacherData, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/v1/admin/classTeacher/${id}`,
-        {
-          method: "PATCH",
-          body: JSON.stringify(updatedClassTeacher),
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await fetch("http://localhost:4000/api/v1/admin/classTeacher/createClassTeacher", {
+        method: "POST",
+        body: JSON.stringify(classTeacherData),
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to edit class Teacher");
-      }
-
-      const data = await response.json();
-      toast.success("class Teacher updated successfully");
-      return data.classTeacher;
-    } catch (error) {
-      toast.error("Failed to update class Teacher");
-      return rejectWithValue(error.message);
-    }
-  },
-);
-
-export const removeClassTeacher = createAsyncThunk(
-  "classTeacher/removeClassTeacher",
-  async (id, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4000/api/v1/admin/classTeacher/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
+      });
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.message || "Failed to delete class Teacher");
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
 
-      dispatch(fetchClassTeacher());
-      toast.success("class Teacher deleted successfully");
+      const data = await response.json();
+      return data.classTeacher;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to add class teacher");
+    }
+  }
+);
+
+// Edit an existing class teacher
+export const editClassTeacher = createAsyncThunk(
+  "classTeachers/editClassTeacher",
+  async ({ id, updatedClassTeacher }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/v1/admin/classTeacher/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(updatedClassTeacher),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
+
+      const data = await response.json();
+      return data.classTeacher;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to edit class teacher");
+    }
+  }
+);
+
+// Delete a class teacher
+export const removeClassTeacher = createAsyncThunk(
+  "classTeachers/removeClassTeacher",
+  async (id, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/v1/admin/classTeacher/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
+
+      dispatch(fetchClassTeachers());
       return id;
     } catch (error) {
-      toast.error("Failed to delete class teacher ");
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Failed to remove class teacher");
     }
-  },
+  }
 );
 
 const classTeacherSlice = createSlice({
-  name: "classTeacher",
+  name: "classTeachers",
   initialState,
   reducers: {
-    addClassTeacher: (state, action) => {
-      state.classesTeacher.push(action.payload);
-    },
-    editClassTeacher: (state, action) => {
-      const index = state.classesTeacher.findIndex(
-        (classTeacher) => classTeacher.id === action.payload.id,
-      );
-      if (index !== -1) {
-        state.classesTeacher[index] = action.payload;
-      }
-    },
     clearMessage: (state) => {
       state.message = "";
-    },
-    addClassTeachertoServer: {
-      prepare(className, subjectName, teacherName, academicYear) {
-        return {
-          payload: {
-            className,
-            subjectName,
-            teacherName,
-            academicYear,
-          },
-        };
-      },
-      reducer(state, action) {
-        state.className = action.payload.className;
-        state.subjectName = action.payload.subjectName;
-        state.teacherName = action.payload.teacherName;
-        state.academicYear = action.payload.academicYear;
-      },
     },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchClassTeachers.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+      })
+      .addCase(fetchClassTeachers.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.classTeachers = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchClassTeachers.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to fetch class teachers";
+        state.loading = false;
+        toast.error(state.error);
+      })
       .addCase(postClassTeacher.pending, (state) => {
         state.status = "loading";
-        state.error = null;
         state.loading = true;
       })
       .addCase(postClassTeacher.fulfilled, (state, action) => {
         state.status = "succeeded";
-        Object.assign(state, action.payload);
+        state.classTeachers.push(action.payload);
+        toast.success("Class Teacher added successfully");
         state.loading = false;
       })
       .addCase(postClassTeacher.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.payload || "Failed to add class teacher";
         state.loading = false;
+        toast.error(state.error);
       })
-      .addCase(fetchClassTeacher.pending, (state) => {
+      .addCase(editClassTeacher.pending, (state) => {
+        state.status = "loading";
         state.loading = true;
       })
-      .addCase(fetchClassTeacher.fulfilled, (state, action) => {
+      .addCase(editClassTeacher.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.classTeachers.findIndex(
+          (classTeacher) => classTeacher._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.classTeachers[index] = action.payload;
+        }
         state.loading = false;
-        state.classesTeacher = action.payload;
       })
-      .addCase(fetchClassTeacher.rejected, (state) => {
+      .addCase(editClassTeacher.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to edit class teacher";
         state.loading = false;
+        toast.error(state.error);
       })
       .addCase(removeClassTeacher.pending, (state) => {
+        state.status = "loading";
         state.loading = true;
       })
       .addCase(removeClassTeacher.fulfilled, (state, action) => {
-        state.loading = false;
-        state.bosses = state.bosses.filter(
-          (bosse) => bosse.id !== action.payload,
+        state.status = "succeeded";
+        state.classTeachers = state.classTeachers.filter(
+          (classTeacher) => classTeacher._id !== action.payload
         );
-        state.message = "classTeacher deleted successfully";
-      })
-      .addCase(removeClassTeacher.rejected, (state) => {
+        toast.success("Class Teacher removed successfully");
         state.loading = false;
       })
-      .addCase(editClassTeacherAsync.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(editClassTeacherAsync.fulfilled, (state, action) => {
+      .addCase(removeClassTeacher.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to remove class teacher";
         state.loading = false;
-        const updatedClassTeacher = action.payload;
-        const index = state.classesTeacher.findIndex(
-          (classTeacher) => classTeacher._id === updatedClassTeacher._id,
-        );
-        if (index !== -1) {
-          state.bosses[index] = updatedClassTeacher;
-        }
-        state.message = "classTeacher updated successfully";
-      })
-      .addCase(editClassTeacherAsync.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        toast.error(state.error);
       });
   },
 });
-
-export const {
-  clearMessage,
-  addClassTeacher,
-  editClassTeacher,
-  addClassTeachertoServer,
-} = classTeacherSlice.actions;
 
 export default classTeacherSlice.reducer;
