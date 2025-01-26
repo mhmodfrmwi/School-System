@@ -6,7 +6,6 @@ import { fetchGrades } from "../AdminRedux/gradeSlice";
 import Loader from "@/ui/Loader";
 import SubjectsHeader from "./AssignSubjectHeader";
 import Pagination from "../Pagination";
-import { toast } from "react-toastify";
 
 const AssignedSubjects = () => {
   const dispatch = useDispatch();

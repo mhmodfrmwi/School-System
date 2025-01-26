@@ -93,7 +93,7 @@ function App() {
           <Route path="edit-term/:id" element={<EditTermForm />} />
           <Route path="allteachers" element={<AllTeachers />} />
           <Route path="teacherform" element={<TeacherForm />} />
-          <Route path="editteacher/:id" element={<EditTeacher />} />
+          <Route path="edit-teacher/:id" element={<EditTeacher />} />
           <Route path="teacherinfo" element={<TeacherInfo />} />
           <Route path="classteacherform" element={<ClassTeacherForm />} />
           <Route path="allclassteacher" element={<AllClassTeacher />} />
