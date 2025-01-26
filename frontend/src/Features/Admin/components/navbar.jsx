@@ -1,4 +1,4 @@
-import React, { useState,useRef , useEffect} from "react";
+import React, { useState } from "react";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -7,7 +7,6 @@ import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { ReactSVG } from "react-svg";
 import InfoIcon from "../../../assets/icons/Info.svg";
-// import Mode from "../../../assets/icons/Mode.svg";
 import userImage from "../../../assets/user.jpeg";
 import language from "../../../assets/icons/language.svg";
 import Vector from "../../../assets/icons/Vector.svg";
@@ -17,33 +16,88 @@ import ThemeSwitcher from "@/ui/ThemeSwitcher";
 const Navbar = () => {
   const navigate = useNavigate();
   const [settingToggle, setSettingToggle] = useState(false);
-  const settingsRef = useRef(null);
-  const handleBack = () => {
-    navigate(-1); // Navigates to the previous page
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const routes = [
+    { path: "basicform" },
+    { path: "studentform" },
+    { path: "allstudent" },
+    { path: "managerform" },
+    { path: "allmanagers" },
+    { path: "parentform" },
+    { path: "allparents" },
+    { path: "scheduleform" },
+    { path: "allschedules" },
+    { path: "allTerms" },
+    { path: "termform" },
+    { path: "allteachers" },
+    { path: "teacherform" },
+    { path: "editteacher/:id" },
+    { path: "teacherinfo" },
+    { path: "classteacherform" },
+    { path: "allclassteacher" },
+    { path: "adminform" },
+    { path: "alladmins" },
+    { path: "allacademicyears" },
+    { path: "academicyearform" },
+    { path: "editacademicyearform/:id" },
+    { path: "editadminform/:id" },
+    { path: "allgrades" },
+    { path: "gradeform" },
+    { path: "editGradeForm/:id" },
+    { path: "assigngrade" },
+    { path: "allsubjects" },
+    { path: "allsubjects/:id" },
+    { path: "addsubject" },
+    { path: " assignSubject" },
+    { path: "edit-subject/:id" },
+    { path: "editmanagerform/:id" },
+    { path: "editparentform/:id" },
+    { path: "edit-assigned-subject/:id" },
+    { path: "allsubjects" },
+    { path: "edit-assigned-subject/:id" },
+  ];
+
+  const filteredRoutes = routes.filter((route) =>
+    route.path.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
+  const handleSelect = (path) => {
+    setSearchTerm("");
+    setIsDropdownOpen(false);
+    navigate(path);
   };
 
-  const url = window.location.pathname; // e.g., "/user/john"
-  const name = url.split("/").pop(); // Gets the last part: "john"
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      const route = routes.find((r) =>
+        r.path.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      const count = searchTerm.length;
+      setSearchTerm("");
+      setIsDropdownOpen(false);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (settingsRef.current && !settingsRef.current.contains(event.target)) {
-        setSettingToggle(false);
+      if (route.path.length === count) {
+        navigate(`/admin/${searchTerm}`);
+      } else {
+        alert("No matching page found.");
       }
-    };
+    }
+  };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  const url = window.location.pathname;
+  const name = url.split("/").pop();
+  console.log(name);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="relative">
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md">
-        {/* Left Section - Back Button */}
         <div className="flex items-center space-x-3">
-          {/* Back Button */}
           <button
             onClick={handleBack}
             className="hidden rounded-lg bg-dashboard-bg p-2 text-white lg:flex"
@@ -60,38 +114,54 @@ const Navbar = () => {
           </p>
         </div>
 
-        {/* Search Section */}
-        <div className="mx-4 flex flex-1 items-center space-x-2">
-          {/* Full Search (Visible on md and above) */}
-          <div className="relative ml-auto hidden w-full max-w-sm sm:flex">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 transform">
-              <FaSearch className="text-lg text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search items, collections, and users"
-              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none md:text-left md:text-base"
-              style={{
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-              }}
-            />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 transform">
-              <FontAwesomeIcon
-                icon={faSliders}
-                className="text-lg text-gray-400"
-              />
-            </div>
+        <div
+          className="relative ml-auto hidden w-full max-w-sm sm:flex"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          <div className="absolute left-4 top-1/2 z-10 -translate-y-1/2 transform">
+            <FaSearch className="text-lg text-gray-400" />
           </div>
 
-          {/* Search Icon (Visible on smaller screens) */}
-          <button className="ml-auto flex text-gray-500 sm:hidden">
-            <FaSearch className="text-xl" />
-          </button>
+          <div className="mx-auto w-full max-w-md">
+            <input
+              type="text"
+              placeholder="Search Admin Page"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none md:text-left md:text-base"
+            />
+
+            {isDropdownOpen && (
+              <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-y-scroll rounded-lg border bg-white shadow-md">
+                {filteredRoutes.length > 0 ? (
+                  filteredRoutes.map((route) => (
+                    <li
+                      key={route.path}
+                      onClick={() => handleSelect(route.path)}
+                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] hover:bg-blue-100"
+                    >
+                      {route.path}
+                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#117C90]"></p>
+                    </li>
+                  ))
+                ) : (
+                  <li className="px-4 py-2 text-red-900">
+                    No matches found pages
+                  </li>
+                )}
+              </ul>
+            )}
+          </div>
+
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 transform">
+            <FontAwesomeIcon
+              icon={faSliders}
+              className="text-lg text-gray-400"
+            />
+          </div>
         </div>
 
-        {/* Right Section - Notifications, Profile, Dark Mode */}
         <div className="flex items-center space-x-2 md:space-x-4">
           <button className="relative p-2 text-gray-500">
             <FaBell className="text-xl" />
@@ -104,9 +174,7 @@ const Navbar = () => {
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
           </button>
           <ThemeSwitcher />
-          {/* <button className="p-2 text-gray-500">
-            <ReactSVG src={Mode} className="h-auto w-auto" />
-          </button> */}
+
           <div className="flex items-center space-x-2">
             <img
               src={userImage}
@@ -125,12 +193,12 @@ const Navbar = () => {
           </button>
 
           {settingToggle && (
-            <div
-             ref={settingsRef}
-             className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]">
+            <div className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]">
               <div>
-                <div className="mx-auto ms-7 mt-3 flex flex-row items-center cursor-pointer"
-                 onClick={() => navigate("edit-profile")}>
+                <div
+                  className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
+                  onClick={() => navigate("edit-profile")}
+                >
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
                   </button>
@@ -138,9 +206,7 @@ const Navbar = () => {
                 </div>
                 <p className="mx-auto my-2 w-40 border-b-2 border-white"></p>
               </div>
-              {/* <button className="ms-14 p-2 text-gray-500">
-                <ReactSVG src={Mode} className="r h-auto w-auto" />
-              </button> */}
+
               <div className="ms-20">
                 <ThemeSwitcher />
               </div>
@@ -166,5 +232,4 @@ const Navbar = () => {
     </div>
   );
 };
-
 export default Navbar;
