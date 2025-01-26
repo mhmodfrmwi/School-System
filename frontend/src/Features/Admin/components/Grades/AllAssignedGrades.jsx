@@ -41,7 +41,7 @@ function AssignGrade() {
   return (
     <>
     <GradeToggle/>
-    <div className="w-[86%] mx-auto">
+    <div className="w-[80%] mx-auto">
     <h2 className="text-2xl font-poppins text-[#244856] ">
            Grade Mangement
         </h2>
@@ -52,14 +52,14 @@ function AssignGrade() {
         <form onSubmit={handleAssignGrade}>
           {/* Grade Selection */}
           <div className="mt-4">
-            <label className="block text-md font-poppins font-medium text-gray-700 mb-2">
+            <label className="block mb-2 font-poppins text-gray-700">
               Select Grade
             </label>
             <select
               name="grade"
               value={gradeName}
               onChange={(e) => setGradeName(e.target.value)}
-              className="w-full px-4 py-2 border font-poppins text-gray-400 border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>Select Grade</option>
@@ -79,17 +79,17 @@ function AssignGrade() {
 
           {/* Academic Year Selection */}
           <div className="mt-4">
-            <label className="block text-md font-poppins font-medium text-gray-700 mb-2">
+            <label className="block mb-2 font-poppins text-gray-700">
               Select Academic Year
             </label>
             <select
               name="year"
               value={academicYear}
               onChange={(e) => setAcademicYear(e.target.value)}
-              className="w-full px-4 py-2 border font-poppins text-gray-400 border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full p-2 border rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
-              <option value="" disabled >Select Academic Year</option>
+              <option value="" disabled>Select Academic Year</option>
               {yearLoading ? (
                 <option>Loading academic years...</option>
               ) : yearError ? (

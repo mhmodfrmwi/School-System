@@ -1,33 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   fetchBosses,
   removeBosse,
   clearMessage,
-  editManagerAsync,
 } from "../AdminRedux/managerSlice";
 import Pagination from "../Pagination";
 import Header from "../Managers/managerHeader";
 import Loader from "@/ui/Loader";
-import Swal from "sweetalert2";
 
 const ManagerTable = () => {
+  const navigate = useNavigate();
   const {
     bosses = [],
     message,
     loading,
   } = useSelector((state) => state.bosses || {});
 
-  const [managerData, setManagerData] = useState({
-    fullName: "",
-    email: "",
-    gender: "",
-    phone: "",
-    password: "",
-  });
-
-  const [editingManager, setEditingManager] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useDispatch();
   console.log(bosses);
@@ -39,8 +29,6 @@ const ManagerTable = () => {
   const [filterOption, setFilterOption] = useState("");
 
   // const [selectedBosseId, setSelectedBosseId] = useState(null);
-  
-  const [setSelectedBosseId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchBosses());
@@ -63,20 +51,9 @@ const ManagerTable = () => {
   );
 
   const handleDelete = async (id) => {
-    setSelectedBosseId(id);
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this manager?",
-    );
-    if (confirmDelete) {
-      try {
-        await dispatch(removeBosse(id));
-        alert("manager deleted successfully");
-      } catch (error) {
-        console.error("Failed to delete manager:", error);
-        alert("Error occurred while deleting");
-      }
-    }
+     if (window.confirm("Are you sure you want to delete this manager?")) {
+         await dispatch(removeBosse(id));
+       }
   };
 
   const handlePageChange = (page) => {
@@ -99,67 +76,8 @@ const ManagerTable = () => {
     }
   }, [message, dispatch]);
 
-  const handleEditClick = (manager) => {
-    setEditingManager(manager._id);
-    setManagerData({
-      fullName: manager.fullName,
-      email: manager.email,
-      gender: manager.gender,
-      phone: manager.phone,
-      password: manager.password,
-    });
-    setIsModalOpen(true);
-  };
-
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setManagerData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!managerData.fullName || !managerData.email || !managerData.gender) {
-      Swal.fire({
-        icon: "warning",
-        title: "Validation Error",
-        text: "Please fill in all required fields.",
-      });
-      return;
-    }
-
-    const updatedManager = {
-      fullName: managerData.fullName,
-      email: managerData.email,
-      gender: managerData.gender,
-      phone: managerData.phone,
-      password: managerData.password,
-    };
-
-    try {
-      await dispatch(
-        editManagerAsync({ id: editingManager, updatedManager }),
-      ).unwrap();
-      setIsModalOpen(false);
-      Swal.fire(
-        "Success!",
-        "The manager has been updated successfully.",
-        "success",
-      );
-    } catch (error) {
-      Swal.fire(
-        "Error!",
-        error.message || "Failed to update the manager.",
-        "error",
-      );
-    }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleEditClick = (id) => {
+    navigate(`/admin/editmanagerform/${id}`);
   };
 
   return (
@@ -223,7 +141,7 @@ const ManagerTable = () => {
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                     <button
                       aria-label="Edit manager"
-                      onClick={() => handleEditClick(manager)}
+                      onClick={() => handleEditClick(manager._id)}
                       className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                     >
                       <i className="far fa-edit text-lg" />
@@ -261,114 +179,6 @@ const ManagerTable = () => {
           />
         </div>
       </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="h-[85vh] w-96 overflow-y-scroll bg-white p-6 shadow-lg">
-            <h3 className="mb-4 text-lg font-semibold">Edit Manager</h3>
-            <form onSubmit={handleEditSubmit}>
-              <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="mb-2 block font-semibold text-gray-700"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={managerData.fullName}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="email"
-                  className="mb-2 block font-semibold text-gray-700"
-                >
-                  Email
-                </label>
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  value={managerData.email}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                />
-              </div>
-
-              <div>
-                <label className="mb-2 block font-semibold text-gray-700">
-                  Gender
-                </label>
-                <select
-                  name="gender"
-                  value={managerData.gender}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none"
-                >
-                  <option value="" disabled>
-                    Select gender
-                  </option>
-                  <option value="M" className="font-poppins">
-                    M
-                  </option>
-                  <option value="F" className="font-poppins">
-                    F
-                  </option>
-                </select>
-              </div>
-
-              <div className="my-2">
-                <label className="mb-2 block font-semibold text-gray-700">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={managerData.password}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                  placeholder="Enter password"
-                  required
-                />
-              </div>
-              <div className="my-2">
-                <label className="mb-2 block font-semibold text-gray-700">
-                  Phone Number
-                </label>
-                <input
-                  type="text"
-                  name="phone"
-                  value={managerData.phone}
-                  onChange={handleEditChange}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                  placeholder="Enter phone number"
-                  required
-                />
-              </div>
-
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={handleCloseModal}
-                  className="rounded-md bg-gray-300 p-2 text-black"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="rounded-md bg-blue-500 p-2 text-white"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

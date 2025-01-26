@@ -36,6 +36,7 @@ export const postBosse = createAsyncThunk(
       }
 
       const data = await response.json();
+      toast.success("manager added successfully!");
       return data;
     } catch (error) {
       console.log(error);
@@ -85,6 +86,7 @@ export const editManagerAsync = createAsyncThunk(
       }
 
       const data = await response.json();
+      toast.success("manager updated successfully!");
       return data.manager;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -112,10 +114,10 @@ export const removeBosse = createAsyncThunk(
       }
 
       dispatch(fetchBosses());
-
+      toast.success("Academic year deleted successfully!");
       return id;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return toast.error(error.message);
     }
   },
 );

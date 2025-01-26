@@ -60,7 +60,7 @@ function AssignSubject() {
         <form onSubmit={handleAssignSubject} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
           {/* Subject Dropdown */}
           <div className="mb-4 sm:col-span-2">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="block text-md font-poppins font-medium text-gray-700 mb-2">
               Select Subject
             </label>
             <select

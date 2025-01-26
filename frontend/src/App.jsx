@@ -53,6 +53,8 @@ import ClassTeacherForm from "./Features/Admin/components/ClassTeacher.jsx/class
 import AllClassTeacher from "./Features/Admin/Pages/classTeacherTablePage";
 
 import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
+import EditManagerForm from "./Features/Admin/components/Managers/editManager";
+import EditParentForm from "./Features/Admin/components/Parents/editParent";
 function App() {
   return (
     <BrowserRouter>
@@ -106,6 +108,8 @@ function App() {
           <Route path="addsubject" element={<AddSubject />} />
           <Route path="assignSubject" element={<AssignSubject />} />
           <Route path="edit-subject/:id" element={<EditSubject />} />
+          <Route path="editmanagerform/:id" element={<EditManagerForm />} />
+          <Route path="editparentform/:id" element={<EditParentForm />} />
           <Route path="edit-assigned-subject/:id" element={<EditAssignedSubject />}/>
           <Route path="edit-profile" element={<EditProfilePage />} />
         </Route>

@@ -36,10 +36,8 @@ const EditAcademicYearForm = () => {
   return (
     <>
       <div className="mb-6 ms-20 w-52 md:ms-24">
-        <h2 className="font-poppins text-3xl font-bold text-[#043B44]">
-          Edit Year
-        </h2>
-        <p className="mt-3 rounded-2xl border-b-4 border-[#117C90]"></p>
+      <h2 className="text-2xl font-poppins font-semibold text-[#244856]">Edit Year</h2>
+      <div className="mt-1 h-[4px] w-[110px] rounded-t-md bg-[#244856]"></div>
       </div>
   
       <div className="mx-auto w-[95%] max-w-4xl rounded-lg bg-gray-100 p-10 shadow-md">

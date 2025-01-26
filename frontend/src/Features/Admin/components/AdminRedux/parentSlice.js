@@ -35,7 +35,7 @@ export const postParent = createAsyncThunk(
         return toast.error(error.message);
       }
       const data = await response.json();
-
+      toast.success("parent added successfully!");
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -84,6 +84,7 @@ export const editParentAsync = createAsyncThunk(
       }
 
       const data = await response.json();
+      toast.success("manager updated successfully!");
       return data.parent;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -111,6 +112,7 @@ export const removeParent = createAsyncThunk(
       }
 
       dispatch(fetchParents());
+      toast.success("parent deleted successfully!");
 
       return id;
     } catch (error) {
