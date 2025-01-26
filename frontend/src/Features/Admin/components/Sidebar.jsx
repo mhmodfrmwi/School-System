@@ -15,7 +15,7 @@ import logo from "../../../assets/logologin.png";
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const location = useLocation(); // Get the current route
+  const location = useLocation();
   const currentPath = location.pathname;
 
   const menuItems = [
@@ -99,9 +99,13 @@ const SidebarContent = ({
             key={index}
             href={item.href}
             className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${
-              currentPath === item.href || hoveredIndex === index
-                ? "bg-white text-dashboard-bg"
+              currentPath === item.href
+                ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg"
                 : "text-white"
+            } ${
+              hoveredIndex === index && currentPath !== item.href
+                ? "bg-white text-dashboard-bg"
+                : ""
             }`}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
@@ -109,30 +113,27 @@ const SidebarContent = ({
             {typeof item.icon === "string" ? (
               <Icon
                 icon={item.icon}
-                className={`mr-3 transition-colors ${
-                  currentPath === item.href || hoveredIndex === index
-                    ? "text-dashboard-bg"
-                    : "text-white"
+                className={`mr-3 transition-colors group-hover:text-dashboard-bg ${
+                  currentPath === item.href ? "text-dashboard-bg" : "text-white"
                 } text-xl`}
                 style={{ fontSize: "1.5rem" }}
               />
             ) : (
               <FontAwesomeIcon
                 icon={item.icon}
-                className={`mr-3 transition-colors ${
-                  currentPath === item.href || hoveredIndex === index
-                    ? "text-dashboard-bg"
-                    : "text-white"
+                className={`mr-3 transition-colors group-hover:text-dashboard-bg ${
+                  currentPath === item.href ? "text-dashboard-bg" : "text-white"
                 }`}
               />
             )}
-            <span className="font-poppins text-sm transition-colors group-hover:text-dashboard-bg">
+
+            <span className="font-poppins text-sm transition-colors group-hover:font-semibold group-hover:text-dashboard-bg">
               {item.label}
             </span>
-            {(currentPath === item.href || hoveredIndex === index) && (
+            {currentPath === item.href && (
               <>
-                <div className="pointer-events-none absolute right-4 top-[-48px] h-12 w-12 rounded-full bg-transparent shadow-[34px_34px_0_9px_white]"></div>
-                <div className="pointer-events-none absolute bottom-[-48px] right-4 h-12 w-12 rounded-full bg-transparent shadow-[34px_-34px_0_9px_white]"></div>
+                <div className="pointer-events-none absolute right-4 top-[-48px] h-12 w-12 bg-transparent shadow-[34px_34px_0_9px_white] lg:rounded-full"></div>
+                <div className="pointer-events-none absolute bottom-[-48px] right-4 h-12 w-12 bg-transparent shadow-[34px_-34px_0_9px_white] lg:rounded-full"></div>
               </>
             )}
           </a>

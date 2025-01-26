@@ -115,14 +115,14 @@ const Navbar = () => {
         </div>
 
         <div
-          className="relative ml-auto hidden w-full max-w-sm sm:flex"
+          className="relative ml-auto hidden max-w-sm sm:flex"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
-          <div className="absolute left-4 top-1/2 z-10 -translate-y-1/2 transform">
+          <div className="absolute left-14 top-1/2 z-10 -translate-y-1/2 transform lg:left-6">
             <FaSearch className="text-lg text-gray-400" />
           </div>
 
-          <div className="mx-auto w-full max-w-md">
+          <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
             <input
               type="text"
               placeholder="Search Admin Page"
@@ -154,7 +154,7 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 transform">
+          <div className="absolute right-14 top-1/2 -translate-y-1/2 transform lg:right-7">
             <FontAwesomeIcon
               icon={faSliders}
               className="text-lg text-gray-400"
@@ -162,12 +162,12 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 md:space-x-4">
+        <div className="flex items-center space-x-2 md:space-x-6">
           <button className="relative p-2 text-gray-500">
             <FaBell className="text-xl" />
             <span className="absolute right-2 top-1 block h-3.5 w-3.5 rounded-full bg-red-500"></span>
           </button>
-          <button className="p-2 text-xl text-gray-500">
+          <button className="text-xl text-gray-500">
             <FontAwesomeIcon icon={faEnvelope} className="text-2xl" />
           </button>
           <button className="p-2 text-gray-500">
