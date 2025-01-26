@@ -1,6 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+import { fetchTeachers } from "../AdminRedux/teacherSlice";
+import { fetchSubjects } from "../AdminRedux/subjectSlice";
+import { fetchGrades } from "../AdminRedux/gradeSlice";
+import { fetchTerms } from "../AdminRedux/termSlice";
+import { editSchedualAsync } from "../AdminRedux/scheduleSlice"; // Action for updating schedule
 
-function ScheduleForm() {
+function EditScheduleForm({ existingData }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const schedules = useSelector((state) => state.schedules.schedules); // الحصول على جميع الجداول
+  const teachers = useSelector((state) => state.teachers.teachers);
+  const subjects = useSelector((state) => state.subject.subjects);
+  const grades = useSelector((state) => state.grades.grade);
+  const terms = useSelector((state) => state.terms.terms);
+
   const [formData, setFormData] = useState({
     courseName: "",
     teacherName: "",
@@ -12,6 +29,29 @@ function ScheduleForm() {
     to: "",
   });
 
+  useEffect(() => {
+    dispatch(fetchTeachers());
+    dispatch(fetchSubjects());
+    dispatch(fetchGrades());
+    dispatch(fetchTerms());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const schedule = schedules.find((item) => item._id === id); // البحث عن الجدول المطلوب
+    if (schedule) {
+      setFormData({
+        courseName: schedule.courseName,
+        teacherName: schedule.teacherName,
+        grade: schedule.grade,
+        class: schedule.class,
+        term: schedule.term,
+        day: schedule.day,
+        from: schedule.from,
+        to: schedule.to,
+      });
+    }
+  }, [id, schedules]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -19,89 +59,92 @@ function ScheduleForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Schedule Submitted", formData);
-    setFormData({
-      courseName: "",
-      teacherName: "",
-      grade: "",
-      class: "",
-      term: "",
-      day: "",
-      from: "",
-      to: "",
-    });
+    dispatch(editSchedualAsync({ id, updatedSchedule: formData }));
+    navigate("/admin/allschedules"); // إعادة التوجيه إلى صفحة الجداول
   };
 
-  return (
-    <>
-     <div className="mb-6 ms-20 mt-10 w-52 md:ms-24">
-        <h2 className="font-poppins text-2xl font-bold text-[#043B44]">
-          Edit Schedule
-        </h2>
-        <p className="mt-1 h-[3px] w-[170px] rounded-t-md bg-[#117C90] lg:h-[4px] lg:w-[10px]"></p>
-      </div>
 
-    <div className="mx-auto mt-10 w-[95%] max-w-4xl rounded-lg bg-gray-100 p-14 shadow-md">
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {/* Course Name */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">
+  return (
+    <div className="w-[80%] mx-auto my-10 font-poppins">
+      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Schedule</h1>
+      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
+      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Course Name
             </label>
-            <input
-              type="text"
+            <select
               name="courseName"
               value={formData.courseName}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter course name"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
-            />
+            >
+              <option value="" disabled>
+                Select course
+              </option>
+              {Array.isArray(subjects) && subjects.map((subject) => (
+                <option key={subject._id} value={subject.subjectName}>
+                  {subject.subjectName}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Teacher Name */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Teacher Name
             </label>
-            <input
-              type="text"
+            <select
               name="teacherName"
               value={formData.teacherName}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter teacher name"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
-            />
+            >
+              <option value="" disabled>
+                Select teacher
+              </option>
+              {Array.isArray(teachers) && teachers.map((teacher) => (
+                <option key={teacher._id} value={teacher.fullName}>
+                  {teacher.fullName}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Grade */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">Grade</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              Grade
+            </label>
             <select
               name="grade"
               value={formData.grade}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins bg-[#117C90] text-white focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
             >
               <option value="" disabled>
                 Select grade
               </option>
-              <option value="1">Grade 1</option>
-              <option value="2">Grade 2</option>
-              <option value="3">Grade 3</option>
+              {Array.isArray(grades) && grades.map((grade) => (
+                <option key={grade._id} value={grade.gradeName}>
+                  {grade.gradeName}
+                </option>
+              ))}
             </select>
           </div>
 
-          {/* Class */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">Class</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              Class
+            </label>
             <select
               name="class"
               value={formData.class}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins bg-[#117C90] text-white focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select class
@@ -112,33 +155,41 @@ function ScheduleForm() {
             </select>
           </div>
 
-          {/* Term */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
               Term - Year
             </label>
             <select
               name="term"
               value={formData.term}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins bg-[#117C90] text-white focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
             >
               <option value="" disabled>
                 Select term
               </option>
-              <option value="Term 1">Term 1</option>
-              <option value="Term 2">Term 2</option>
+              {Array.isArray(terms) && terms.length > 0 ? (
+                terms.map((term) => (
+                  <option key={term._id} value={term._id}>
+                    {term.semesterName} - {term.academicYear_id?.startYear} / {term.academicYear_id?.endYear}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Loading terms...</option>
+              )}
             </select>
           </div>
 
-          {/* Day */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">Day</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              Day
+            </label>
             <select
               name="day"
               value={formData.day}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins bg-[#117C90] text-white focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select day
@@ -151,46 +202,46 @@ function ScheduleForm() {
             </select>
           </div>
 
-          {/* From */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">From</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              From
+            </label>
             <input
               type="time"
               name="from"
               value={formData.from}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
           </div>
 
-          {/* To */}
-          <div>
-            <label className="mb-2 block font-poppins text-gray-700">To</label>
+          <div className="mb-4">
+            <label className="block text-md font-medium text-gray-700 mb-2">
+              To
+            </label>
             <input
               type="time"
               name="to"
               value={formData.to}
               onChange={handleChange}
-              className="w-full rounded-md border p-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
           </div>
-        </div>
 
-        {/* Submit Button */}
-        <div className="mt-8 flex justify-center">
-          <button
-            type="submit"
-            className="rounded-3xl bg-[#117C90] px-6 py-2 font-poppins font-medium text-white hover:bg-[#0D5F6A]"
-          >
-            Update Schedule
-          </button>
-        </div>
-      </form>
+          <div className="col-span-1 sm:col-span-2 mt-6">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-[#117C90] text-white rounded-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+            >
+              Update Schedule
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    </>
   );
 }
 
-export default ScheduleForm;
+export default EditScheduleForm;

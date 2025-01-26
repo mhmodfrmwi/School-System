@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
-  scheduals: [],
+  schedules: [],
   status: "idle",
   error: null,
   message: "",
@@ -11,11 +11,11 @@ const initialState = {
 
 // Post a new schedule
 export const postSchedual = createAsyncThunk(
-  "scheduals/postSchedual",
+  "schedules/postSchedual",
   async (schedualData, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/admin/addSchedual",
+        "http://localhost:4000/api/v1/admin/schedule/createSchedule",
         {
           method: "POST",
           body: JSON.stringify(schedualData),
@@ -27,12 +27,15 @@ export const postSchedual = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        toast.error(error.message);  // Toast error message
+        return rejectWithValue(error.message);
       }
 
       const data = await response.json();
+      toast.success("Schedule added successfully");
       return data;
     } catch (error) {
+      toast.error(error.message || "Failed to post schedule data"); 
       return rejectWithValue(error.message || "Failed to post schedule data");
     }
   }
@@ -40,18 +43,19 @@ export const postSchedual = createAsyncThunk(
 
 // Fetch all schedules
 export const fetchScheduals = createAsyncThunk(
-  "scheduals/fetchScheduals",
+  "schedules/fetchScheduals",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/scheduals");
+      const response = await fetch("http://localhost:4000/api/v1/admin/schedule");
 
       if (!response.ok) {
         throw new Error("Failed to fetch schedules");
       }
 
       const data = await response.json();
-      return data.scheduals;
+      return data.schedules;
     } catch (error) {
+      toast.error(error.message || "Failed to fetch schedules"); 
       return rejectWithValue(error.message);
     }
   }
@@ -59,13 +63,13 @@ export const fetchScheduals = createAsyncThunk(
 
 // Edit an existing schedule
 export const editSchedualAsync = createAsyncThunk(
-  "scheduals/editSchedualAsync",
+  "schedules/editSchedualAsync",
   async ({ id, updatedSchedual }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/admin/scheduals/${id}`,
+        `http://localhost:4000/api/v1/admin/schedule/${id}`,
         {
-          method: "PUT",
+          method: "PATCH",
           body: JSON.stringify(updatedSchedual),
           headers: {
             "Content-Type": "application/json",
@@ -78,8 +82,10 @@ export const editSchedualAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.schedual;
+      toast.success("Schedule updated successfully"); 
+      return data.schedule;
     } catch (error) {
+      toast.error(error.message || "Failed to edit schedule");
       return rejectWithValue(error.message);
     }
   }
@@ -87,11 +93,11 @@ export const editSchedualAsync = createAsyncThunk(
 
 // Remove a schedule
 export const removeSchedual = createAsyncThunk(
-  "scheduals/removeSchedual",
+  "schedules/removeSchedual",
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/admin/scheduals/${id}`,
+        `http://localhost:4000/api/v1/admin/schedule/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -102,31 +108,33 @@ export const removeSchedual = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
+        toast.error(error.message || "Failed to delete schedule");
         return toast.error(error.message);
       }
 
       dispatch(fetchScheduals());
-
+      toast.success("Schedule deleted successfully");  
       return id;
     } catch (error) {
+      toast.error(error.message || "Failed to delete schedule");
       return rejectWithValue(error.message);
     }
   }
 );
 
 const scheduleSlice = createSlice({
-  name: "scheduals",
+  name: "schedules",
   initialState,
   reducers: {
     addSchedual: (state, action) => {
-      state.scheduals.push(action.payload);
+      state.schedules.push(action.payload);
     },
     editSchedual: (state, action) => {
-      const index = state.scheduals.findIndex(
-        (schedual) => schedual._id === action.payload._id
+      const index = state.schedules.findIndex(
+        (schedule) => schedule._id === action.payload._id
       );
       if (index !== -1) {
-        state.scheduals[index] = action.payload;
+        state.schedules[index] = action.payload;
       }
     },
     clearMessage: (state) => {
@@ -148,7 +156,7 @@ const scheduleSlice = createSlice({
       },
       reducer(state, action) {
         const newSchedual = action.payload;
-        state.scheduals.push(newSchedual);
+        state.schedules.push(newSchedual);
       },
     },
   },
@@ -160,7 +168,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(postSchedual.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.scheduals.push(action.payload);
+        state.schedules.push(action.payload);
       })
       .addCase(postSchedual.rejected, (state, action) => {
         state.status = "failed";
@@ -171,7 +179,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(fetchScheduals.fulfilled, (state, action) => {
         state.loading = false;
-        state.scheduals = action.payload;
+        state.schedules = action.payload;
       })
       .addCase(fetchScheduals.rejected, (state) => {
         state.loading = false;
@@ -181,8 +189,8 @@ const scheduleSlice = createSlice({
       })
       .addCase(removeSchedual.fulfilled, (state, action) => {
         state.loading = false;
-        state.scheduals = state.scheduals.filter(
-          (schedual) => schedual._id !== action.payload
+        state.schedules = state.schedules.filter(
+          (schedule) => schedule._id !== action.payload
         );
         state.message = "Schedule deleted successfully";
       })
@@ -196,11 +204,11 @@ const scheduleSlice = createSlice({
       .addCase(editSchedualAsync.fulfilled, (state, action) => {
         state.loading = false;
         const updatedSchedual = action.payload;
-        const index = state.scheduals.findIndex(
-          (schedual) => schedual._id === updatedSchedual._id
+        const index = state.schedules.findIndex(
+          (schedule) => schedule._id === updatedSchedual._id
         );
         if (index !== -1) {
-          state.scheduals[index] = updatedSchedual;
+          state.schedules[index] = updatedSchedual;
         }
         state.message = "Schedule updated successfully";
       })

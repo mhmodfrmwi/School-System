@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { postSchedual } from "../AdminRedux/scheduleSlice"; // Updated action import
+import { useDispatch, useSelector } from "react-redux";
+import { postSchedual } from "../AdminRedux/scheduleSlice";
 import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Fetch teachers
+import { fetchSubjects } from "../AdminRedux/subjectSlice"; // Fetch courses
+import { fetchGrades } from "../AdminRedux/gradeSlice"; // Fetch grades
+import { fetchTerms } from "../AdminRedux/termSlice"; // Fetch terms
+
+
 
 function ScheduleForm() {
   const dispatch = useDispatch();
+
+  const teachers = useSelector((state) => state.teachers.teachers);
+  const subjects = useSelector((state) => state.subject.subjects);
+  const grades = useSelector((state) => state.grades.grade);
+  const terms = useSelector((state) => state.terms.terms);
+
 
   const [formData, setFormData] = useState({
     courseName: "",
@@ -45,6 +56,9 @@ function ScheduleForm() {
 
   useEffect(() => {
     dispatch(fetchTeachers());
+    dispatch(fetchSubjects());
+    dispatch(fetchGrades());
+    dispatch(fetchTerms());
   }, [dispatch]);
 
   return (
@@ -57,30 +71,48 @@ function ScheduleForm() {
             <label className="block text-md font-medium text-gray-700 mb-2">
               Course Name
             </label>
-            <input
-              type="text"
+            <select
               name="courseName"
               value={formData.courseName}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter course name"
               required
-            />
+            >
+              <option value="" disabled>
+                Select course
+              </option>
+              {Array.isArray(subjects) && subjects.map((subject) => (
+                <option key={subject._id} value={subject.subjectName}>
+                  {subject.subjectName}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="mb-4">
             <label className="block text-md font-medium text-gray-700 mb-2">
               Teacher Name
             </label>
-            <input
-              type="text"
+            <select
               name="teacherName"
               value={formData.teacherName}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter teacher name"
               required
-            />
+            >
+              <option value="" disabled>
+                Select teacher
+              </option>
+              {Array.isArray(teachers) && teachers.length > 0 ? (
+                teachers.map((teacher) => (
+                  <option key={teacher._id} value={teacher.fullName}>
+                    {teacher.fullName}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Loading teachers...</option>
+              )}
+            </select>
           </div>
 
           <div className="mb-4">
@@ -92,13 +124,16 @@ function ScheduleForm() {
               value={formData.grade}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
             >
               <option value="" disabled>
                 Select grade
               </option>
-              <option value="1">Grade 1</option>
-              <option value="2">Grade 2</option>
-              <option value="3">Grade 3</option>
+              {Array.isArray(grades) && grades.map((grade) => (
+                <option key={grade._id} value={grade.gradeName}>
+                  {grade.gradeName}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -130,12 +165,20 @@ function ScheduleForm() {
               value={formData.term}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
             >
               <option value="" disabled>
                 Select term
               </option>
-              <option value="Term 1">Term 1</option>
-              <option value="Term 2">Term 2</option>
+              {Array.isArray(terms) && terms.length > 0 ? (
+                terms.map((term) => (
+                  <option key={term._id} value={term._id}>
+                    {term.semesterName} - {term.academicYear_id?.startYear} / {term.academicYear_id?.endYear}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Loading terms...</option>
+              )}
             </select>
           </div>
 
