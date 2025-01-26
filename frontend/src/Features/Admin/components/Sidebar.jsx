@@ -23,9 +23,21 @@ const Sidebar = () => {
     { label: "Members", icon: faUsers, href: "/admin/basicform" },
     { label: "Term Management", icon: faCalendar, href: "/admin/allTerms" },
     { label: "Course Management", icon: faPen, href: "/admin/allsubjects" },
-    { label: "Academic Year", icon: "fluent:number-row-24-regular", href: "/admin/allacademicyears" },
-    { label: "Grade Management", icon: "octicon:number-16", href: "/admin/allGrades" },
-    { label: "Schedule Management", icon: faClock, href: "/admin/allschedules" },
+    {
+      label: "Academic Year",
+      icon: "fluent:number-row-24-regular",
+      href: "/admin/allacademicyears",
+    },
+    {
+      label: "Grade Management",
+      icon: "octicon:number-16",
+      href: "/admin/allGrades",
+    },
+    {
+      label: "Schedule Management",
+      icon: faClock,
+      href: "/admin/allschedules",
+    },
   ];
 
   return (
