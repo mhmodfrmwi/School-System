@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postBosse } from "../AdminRedux/managerSlice";
-import Swal from "sweetalert2";
+import { postManager } from "../AdminRedux/managerSlice"; // Update import
+import { toast } from "react-toastify";
 import Loader from "@/ui/Loader";
 
 function ManagerForm() {
   const dispatch = useDispatch();
-  const { bosses, loading } = useSelector((state) => state.bosses);
+  const { managers, loading } = useSelector((state) => state.managers); // Update state name to managers
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -24,35 +24,29 @@ function ManagerForm() {
     e.preventDefault();
 
     if (!formData.fullName || !formData.email || !formData.password) {
-      Swal.fire({
-        icon: "warning",
-        title: "Validation Error",
-        text: "Please fill in all required fields.",
-      });
+      toast.warning("Please fill in all required fields.");
       return;
     }
-    const emailExists = bosses.some(
-      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase(),
+
+    const emailExists = managers.some(
+      (manager) => manager.email.toLowerCase() === formData.email.toLowerCase()
     );
 
     if (emailExists) {
-      Swal.fire(
-        "Error",
-        "Email already exists. Please use another email.",
-        "error",
-      );
+      toast.error("Email already exists. Please use another email.");
       return;
     }
+
     try {
       await dispatch(
-        postBosse({
+        postManager({
           fullName: formData.fullName,
           email: formData.email,
           phone: formData.phoneNumber,
           gender: formData.gender,
           password: formData.password,
-        }),
-      );
+        })
+      ).unwrap();
 
       setFormData({
         fullName: "",
@@ -61,12 +55,9 @@ function ManagerForm() {
         phoneNumber: "",
         gender: "",
       });
+      toast.success("Manager added successfully.");
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Submission Failed",
-        text: error.message || "An error occurred while submitting the form.",
-      });
+      toast.error(error.message || "An error occurred while submitting the form.");
     }
   };
 

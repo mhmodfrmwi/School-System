@@ -9,18 +9,19 @@ import parentReducer from "./Features/Admin/components/AdminRedux/parentSlice";
 import adminReducer from "./Features/Admin/components/AdminRedux/adminSlice";
 import teacherReducer from "./Features/Admin/components/AdminRedux/teacherSlice";
 import classTeacherReducer from "./Features/Admin/components/AdminRedux/classTeacherSlice";
-import bossReducer from "./Features/Admin/components/AdminRedux/managerSlice";
+import managerReducer from "./Features/Admin/components/AdminRedux/managerSlice";
 import subjectsReducer from "./Features/Admin/components/AdminRedux/subjectSlice";
 import academicYearReducer from "./Features/Admin/components/AdminRedux/academicYearSlice";
 import gradeReducer from "./Features/Admin/components/AdminRedux/gradeSlice";
 import assignSubjectReducer from "./Features/Admin/components/AdminRedux/AssignSubjectSlice";
 import assignGradeReducer from "./Features/Admin/components/AdminRedux/AssignGradeSlice"; 
+import classReducer from "./Features/Admin/components/AdminRedux/classSlice";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     admins: adminReducer,
-    bosses: bossReducer,
+    managers: managerReducer,
     parents: parentReducer,
     students: studentReducer,
     addstudent: addstudentReducer,
@@ -33,6 +34,7 @@ const store = configureStore({
     academicYears: academicYearReducer,
     grades: gradeReducer,
     assignGrade: assignGradeReducer,
+    classes: classReducer,
   },
 });
 

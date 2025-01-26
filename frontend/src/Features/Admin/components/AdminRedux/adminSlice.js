@@ -133,7 +133,6 @@ const adminSlice = createSlice({
       .addCase(postAdmin.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.admins.push(action.payload);
-        toast.success("Admin added successfully");
       })
       .addCase(postAdmin.rejected, (state, action) => {
         state.status = "failed";
@@ -180,7 +179,6 @@ const adminSlice = createSlice({
         state.admins = state.admins.filter(
           (admin) => admin.id !== action.payload
         );
-        toast.success("Admin deleted successfully");
       })
       .addCase(removeAdmin.rejected, (state, action) => {
         state.status = "failed";

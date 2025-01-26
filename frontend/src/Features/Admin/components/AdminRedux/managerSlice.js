@@ -2,227 +2,188 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
-  fullName: "",
-  email: "",
-  password: "",
-  phoneNumber: "",
-  gender: "",
+  managers: [],
   status: "idle",
   error: null,
-  bosses: [],
-  message: "",
   loading: false,
 };
 
-export const postBosse = createAsyncThunk(
-  "bosses/postBosse",
-  async (bossesData, { rejectWithValue }) => {
-    console.log(bossesData);
-    try {
-      const response = await fetch(
-        "http://localhost:4000/api/v1/admin/manager/createManager",
-        {
-          method: "POST",
-          body: JSON.stringify(bossesData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        return toast.error(error.message);
-      }
-
-      const data = await response.json();
-      toast.success("manager added successfully!");
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-);
-
-export const fetchBosses = createAsyncThunk(
-  "bosses/fetchBosses",
+// Fetch all managers
+export const fetchManagers = createAsyncThunk(
+  "managers/fetchManagers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        "http://localhost:4000/api/v1/admin/manager/",
-      );
+      const response = await fetch("http://localhost:4000/api/v1/admin/manager");
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
 
       const data = await response.json();
       return data.managers;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Failed to fetch managers");
     }
-  },
+  }
 );
 
-export const editManagerAsync = createAsyncThunk(
-  "bosses/editManagerAsync",
-  async ({ id, updatedManager }, { rejectWithValue }) => {
-    console.log(updatedManager);
+// Add a new manager
+export const postManager = createAsyncThunk(
+  "managers/postManager",
+  async (managerData, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/v1/admin/manager/${id}`,
-        {
-          method: "PATCH",
-          body: JSON.stringify(updatedManager),
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await fetch("http://localhost:4000/api/v1/admin/manager/createManager", {
+        method: "POST",
+        body: JSON.stringify(managerData),
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to edit manager");
-      }
-
-      const data = await response.json();
-      toast.success("manager updated successfully!");
-      return data.manager;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  },
-);
-
-export const removeBosse = createAsyncThunk(
-  "bosses/removeBosse",
-  async (id, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4000/api/v1/admin/manager/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
+      });
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
 
-      dispatch(fetchBosses());
-      toast.success("Academic year deleted successfully!");
-      return id;
+      const data = await response.json();
+      return data.manager;
     } catch (error) {
-      return toast.error(error.message);
+      return rejectWithValue(error.message || "Failed to add manager");
     }
-  },
+  }
 );
 
-const bossesSlice = createSlice({
-  name: "bosses",
+// Edit an existing manager
+export const editManager = createAsyncThunk(
+  "managers/editManager",
+  async ({ id, updatedManager }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/v1/admin/manager/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(updatedManager),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
+
+      const data = await response.json();
+      return data.manager;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to edit manager");
+    }
+  }
+);
+
+// Delete a manager
+export const removeManager = createAsyncThunk(
+  "managers/removeManager",
+  async (id, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/v1/admin/manager/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
+
+      dispatch(fetchManagers());
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to remove manager");
+    }
+  }
+);
+
+const managerSlice = createSlice({
+  name: "managers",
   initialState,
   reducers: {
-    addBosse: (state, action) => {
-      state.bosses.push(action.payload);
-    },
-    editBosse: (state, action) => {
-      const index = state.bosses.findIndex(
-        (bosses) => bosses.id === action.payload.id,
-      );
-      if (index !== -1) {
-        state.bosses[index] = action.payload;
-      }
-    },
     clearMessage: (state) => {
       state.message = "";
-    },
-    addBossetoServer: {
-      prepare(fullName, email, password, phoneNumber, gender) {
-        return {
-          payload: {
-            fullName,
-            email,
-            password,
-            phoneNumber,
-            gender,
-          },
-        };
-      },
-      reducer(state, action) {
-        state.fullName = action.payload.fullName;
-        state.email = action.payload.email;
-        state.password = action.payload.password;
-        state.phoneNumber = action.payload.phoneNumber;
-        state.gender = action.payload.gender;
-      },
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(postBosse.pending, (state) => {
+      .addCase(fetchManagers.pending, (state) => {
         state.status = "loading";
-        state.error = null;
         state.loading = true;
       })
-      .addCase(postBosse.fulfilled, (state, action) => {
+      .addCase(fetchManagers.fulfilled, (state, action) => {
         state.status = "succeeded";
-        Object.assign(state, action.payload);
+        state.managers = action.payload;
         state.loading = false;
       })
-      .addCase(postBosse.rejected, (state, action) => {
+      .addCase(fetchManagers.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.payload || "Failed to fetch managers";
         state.loading = false;
+        toast.error(state.error); // here
       })
-      .addCase(fetchBosses.pending, (state) => {
+      .addCase(postManager.pending, (state) => {
+        state.status = "loading";
         state.loading = true;
       })
-      .addCase(fetchBosses.fulfilled, (state, action) => {
-        state.loading = false;
-        state.bosses = action.payload;
-      })
-      .addCase(fetchBosses.rejected, (state) => {
+      .addCase(postManager.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.managers.push(action.payload);
         state.loading = false;
       })
-      .addCase(removeBosse.pending, (state) => {
+      .addCase(postManager.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to add manager";
+        state.loading = false;
+        toast.error(state.error); // here
+      })
+      .addCase(editManager.pending, (state) => {
+        state.status = "loading";
         state.loading = true;
       })
-      .addCase(removeBosse.fulfilled, (state, action) => {
-        state.loading = false;
-        state.bosses = state.bosses.filter(
-          (bosse) => bosse.id !== action.payload,
-        );
-        state.message = "Bosses deleted successfully";
-      })
-      .addCase(removeBosse.rejected, (state) => {
-        state.loading = false;
-      })
-      .addCase(editManagerAsync.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(editManagerAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        const updatedManager = action.payload;
-        const index = state.bosses.findIndex(
-          (manager) => manager._id === updatedManager._id,
+      .addCase(editManager.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.managers.findIndex(
+          (manager) => manager._id === action.payload._id
         );
         if (index !== -1) {
-          state.bosses[index] = updatedManager;
+          state.managers[index] = action.payload;
         }
-        state.message = "Manager updated successfully";
-      })
-      .addCase(editManagerAsync.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+      })
+      .addCase(editManager.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to edit manager";
+        state.loading = false;
+        toast.error(state.error); // here
+      })
+      .addCase(removeManager.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+      })
+      .addCase(removeManager.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.managers = state.managers.filter(
+          (manager) => manager._id !== action.payload
+        );
+        toast.success("Manager removed successfully!");
+        state.loading = false;
+      })
+      .addCase(removeManager.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to remove manager";
+        state.loading = false;
+        toast.error(state.error); // here
       });
   },
 });
 
-export const { clearMessage, addBosse, editBosse, addBossetoServer } =
-  bossesSlice.actions;
-
-export default bossesSlice.reducer;
+export default managerSlice.reducer;

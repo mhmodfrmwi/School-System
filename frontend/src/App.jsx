@@ -15,6 +15,7 @@ import ManagerForm from "./Features/Admin/components/Managers/managerForm";
 import AllParents from "./Features/Admin/Pages/ParentTablePage";
 import AllTeachers from "./Features/Admin/pages/TeacherTablePage";
 import AllManagers from "./Features/Admin/pages/ManagerTablePage";
+import EditManagerForm from "./Features/Admin/components/Managers/editManager";
 import AllAdmins from "./Features/Admin/Pages/AdminTablePage";
 import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";
 import AllTerms from "./Features/Admin/Pages/TermPage";
@@ -28,7 +29,7 @@ import AcademicYearForm from "./Features/Admin/components/AcademicYears/academic
 import EditAcademicYearForm from "./Features/Admin/components/AcademicYears/editAcademicYearForm";
 import AllAcademicYears from "./Features/Admin/Pages/AcademicYearPage";
 import SubjectDetails from "./Features/Admin/components/Subjects/AllAssignedSubjects";
-import SubjectsList from "./Features/Admin/components/Subjects/AllSubjects";
+import SubjectsList from "./Features/Admin/Pages/SubjectTablePage";
 import AddSubject from "./Features/Admin/components/Subjects/AddSubjectManagement";
 import AllGrades from "./Features/Admin/Pages/GradePage";
 import GradeForm from "./Features/Admin/components/Grades/GradeForm";
@@ -49,12 +50,13 @@ import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
 import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
-import ClassTeacherForm from "./Features/Admin/components/ClassTeacher.jsx/classTeacherForm";
 import AllClassTeacher from "./Features/Admin/Pages/classTeacherTablePage";
+import EditClassTeacher  from "./Features/Admin/components/classTeacher/editClassTeacher";
 
 import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
 import EditSchedule from "./Features/Admin/components/Schedule/editScheduleForm";
 import EditTermForm from "./Features/Admin/components/Terms/editTermForm";
+import EditParentForm from "./Features/Admin/components/Parents/editParent";
 function App() {
   return (
     <BrowserRouter>
@@ -80,7 +82,8 @@ function App() {
           <Route path="studentform" element={<StudentForm />} />
           <Route path="allstudent" element={<AllStudent />} />
           <Route path="managerform" element={<ManagerForm />} />
-          <Route path="allmanagers" element={<AllManagers />} />
+          <Route path="allmanagers" element={<AllManagers />} />  
+          <Route path="editmanagerform/:id" element={<EditManagerForm />} />
           <Route path="allparents" element={<AllParents />} />
           <Route path="parentform" element={<ParentForm />} />
           <Route path="scheduleform" element={<ScheduleForm />} />
@@ -91,10 +94,10 @@ function App() {
           <Route path="edit-term/:id" element={<EditTermForm />} />
           <Route path="allteachers" element={<AllTeachers />} />
           <Route path="teacherform" element={<TeacherForm />} />
-          <Route path="editteacher/:id" element={<EditTeacher />} />
+          <Route path="edit-teacher/:id" element={<EditTeacher />} />
           <Route path="teacherinfo" element={<TeacherInfo />} />
-          <Route path="classteacherform" element={<ClassTeacherForm />} />
-          <Route path="allclassteacher" element={<AllClassTeacher />} />
+          <Route path="allteachers/:id" element={<AllClassTeacher />} />
+          <Route path="edit-class-teacher/:id" element={<EditClassTeacher />} />
           <Route path="adminform" element={<AdminForm />} />
           <Route path="alladmins" element={<AllAdmins />} />
           <Route path="allacademicyears" element={<AllAcademicYears />} />
@@ -112,6 +115,7 @@ function App() {
           <Route path="edit-subject/:id" element={<EditSubject />} />
           <Route path="edit-assigned-subject/:id" element={<EditAssignedSubject />}/>
           <Route path="edit-profile" element={<EditProfilePage />} />
+          <Route path="editparentform/:id" element={<EditParentForm />} />
         </Route>
         {/* /////////////////studentpage//////////////////// */}
         <Route path="student" element={<Students />}>

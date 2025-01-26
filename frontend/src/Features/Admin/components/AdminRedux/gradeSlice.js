@@ -28,7 +28,6 @@ export const postGrades = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.message || "Failed to create grade");
         return toast.error(error.message);
       }
 

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { postGrades } from "../AdminRedux/gradeSlice";
-import { toast } from "react-toastify";
 import GradeToggle from "./SelectPage"; // Assuming this is your toggle component
 
 function GradeForm() {
@@ -20,7 +19,6 @@ function GradeForm() {
     dispatch(postGrades(formData))
       .unwrap()
       .then(() => {
-        toast.success("Grade added successfully!");
         setFormData({ gradeName: "" });
       })
       .catch((error) => {

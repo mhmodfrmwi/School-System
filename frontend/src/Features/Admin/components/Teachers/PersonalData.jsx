@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { postTeacher } from "../AdminRedux/teacherSlice";
+import { fetchSubjects } from "../AdminRedux/subjectSlice";
 
 function AddTeacher() {
   const dispatch = useDispatch();
+  const { subjects, loading } = useSelector((state) => state.subject);
 
   const [teacherData, setTeacherData] = useState({
     fullName: "",
@@ -16,6 +18,11 @@ function AddTeacher() {
     password: "",
   });
 
+  useEffect(() => {
+    // Fetch subjects when the component is mounted
+    dispatch(fetchSubjects());
+  }, [dispatch]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTeacherData({ ...teacherData, [name]: value });
@@ -24,10 +31,10 @@ function AddTeacher() {
   const handleAddTeacher = (e) => {
     e.preventDefault();
 
-    // إرسال البيانات باستخدام Redux
-    dispatch({ type: "ADD_TEACHER", payload: teacherData }) // تعديل الإجراء حسب ما يناسب الـ Redux
+    // إرسال البيانات باستخدام postTeacher
+    dispatch(postTeacher(teacherData))
+      .unwrap()
       .then(() => {
-        toast.success("Teacher added successfully!");
         setTeacherData({
           fullName: "",
           dateOfBirth: "",
@@ -40,7 +47,6 @@ function AddTeacher() {
         });
       })
       .catch((error) => {
-        toast.error("Failed to add teacher");
         console.error(error);
       });
   };
@@ -66,6 +72,24 @@ function AddTeacher() {
                   <option value="">Select Gender</option>
                   <option value="M">Male</option>
                   <option value="F">Female</option>
+                </select>
+              ) : key === "subject" ? (
+                <select
+                  name={key}
+                  value={teacherData[key]}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                >
+                  <option value="">Select Subject</option>
+                  {loading ? (
+                    <option disabled>Loading subjects...</option>
+                  ) : (
+                    subjects.map((subject) => (
+                      <option key={subject._id} value={subject.subjectName}>
+                        {subject.subjectName}
+                      </option>
+                    ))
+                  )}
                 </select>
               ) : (
                 <input
