@@ -67,12 +67,12 @@ const AllAssignedGrades = () => {
                 <tr
                   key={gradeData._id || index}
                   className={`${
-                    index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
-                  } hover:bg-[#117C90]/70`}
+                      index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
+                    } hover:bg-[#117C90]/70`}
                 >
-                  <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">{gradeData.gradeName}</td>
-                  <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">{gradeData.startYear} - {gradeData.endYear}</td>
-                  <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{gradeData.gradeName}</td>
+                  <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{gradeData.startYear} - {gradeData.endYear}</td>
+                  <td className="px-4 py-2 text-center flex justify-center gap-4 text-[#117C90]">
                     <button className="transition duration-300 hover:text-white">
                       <i className="fa fa-pencil-alt"></i>
                     </button>

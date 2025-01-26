@@ -46,13 +46,12 @@ import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBo
 import Parents from "./Features/Parent/pages/Parents";
 import DashboardParent from "./Features/Parent/pages/DashboardParent";
 import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
-
+import GradesDetails from "./Features/Admin/components/Grades/AllAssignedGrades";
 import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
 import AllClassTeacher from "./Features/Admin/Pages/classTeacherTablePage";
 import EditClassTeacher  from "./Features/Admin/components/classTeacher/editClassTeacher";
-
 import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
 import EditSchedule from "./Features/Admin/components/Schedule/editScheduleForm";
 import EditTermForm from "./Features/Admin/components/Terms/editTermForm";
@@ -107,6 +106,7 @@ function App() {
           <Route path="editacademicyearform/:id" element={<EditAcademicYearForm />} />
           <Route path="editadminform/:id" element={<EditAdminForm />} />
           <Route path="allgrades" element={<AllGrades />} />
+          <Route path="allgrades/:id" element={<GradesDetails />} />
           <Route path="gradeform" element={<GradeForm />} />
           <Route path="editGradeForm/:id" element={<EditGradeForm />} />
           <Route path="assigngrade" element={<AssignGrade />} />
