@@ -53,7 +53,6 @@ function TermForm() {
         }),
       );
 
-      alert("Semester created successfully!");
       setFormData({ term: "", year: "" });
     } catch (error) {
       console.error("Error creating semester:", error);

@@ -63,7 +63,7 @@ const AdminTable = () => {
     navigate(`/admin/editadminform/${id}`);
   };
   return (
-    <div className="relative w-dvw px-4 sm:w-[100%] lg:px-0">
+    <div className="relative w-full px-4 sm:w-full lg:px-0">
       {loading && <Loader />}
       <Header onSearchChange={handleSearchChange} 
               onFilterChange={handleFilterChange} />
