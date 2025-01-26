@@ -3,10 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeStudent, fetchStudents, clearMessage } from "../AdminRedux/studentSlice";
 import Pagination from "../Pagination";
 import Header from "./studentHeader";
+import { useNavigate } from "react-router-dom";
+
 
 const StudentTable = () => {
   const { students, message } = useSelector((state) => state.students);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -57,6 +61,11 @@ const StudentTable = () => {
             await dispatch(removeStudent(id));
           }
   };
+
+  const handleEdit = (id) => {
+    navigate(`/admin/edit-student/${id}`);
+  };
+  
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -118,7 +127,7 @@ const StudentTable = () => {
                   <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{student.class}</td>
                   <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{student.gender}</td>
                   <td className="px-3 py-2 space-x-2 text-xs sm:text-sm md:text-base">
-                    <button className="text-[#117C90] transition hover:text-[#244856]">
+                    <button onClick={() => handleEdit(student._id)} className="text-[#117C90] transition hover:text-[#244856]">
                       <i className="far fa-edit" />
                     </button>
                     <button

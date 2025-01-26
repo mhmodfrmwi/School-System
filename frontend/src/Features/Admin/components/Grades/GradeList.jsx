@@ -18,7 +18,6 @@ const GradeList = () => {
   };
   const {
     grade = [],
-    message,
     loading,
   } = useSelector((state) => state.grades || {});
 

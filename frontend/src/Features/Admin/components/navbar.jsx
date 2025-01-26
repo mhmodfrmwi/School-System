@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useRef, useEffect  } from "react";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -15,6 +15,8 @@ import ThemeSwitcher from "@/ui/ThemeSwitcher";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const settingsRef = useRef(null);
+  const searchRef = useRef(null); 
   const [settingToggle, setSettingToggle] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -94,6 +96,25 @@ const Navbar = () => {
     navigate(-1);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+        setSettingToggle(false);
+      }
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="relative">
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md">
@@ -116,6 +137,7 @@ const Navbar = () => {
 
         <div
           className="relative ml-auto hidden max-w-sm sm:flex"
+          ref={searchRef}
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
           <div className="absolute left-14 top-1/2 z-10 -translate-y-1/2 transform lg:left-6">
@@ -193,7 +215,7 @@ const Navbar = () => {
           </button>
 
           {settingToggle && (
-            <div className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]">
+            <div  ref={settingsRef} className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]">
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"

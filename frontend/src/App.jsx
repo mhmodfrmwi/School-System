@@ -46,7 +46,7 @@ import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBo
 import Parents from "./Features/Parent/pages/Parents";
 import DashboardParent from "./Features/Parent/pages/DashboardParent";
 import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
-import GradesDetails from "./Features/Admin/components/Grades/AllAssignedGrades";
+
 import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
@@ -57,6 +57,7 @@ import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
 import EditSchedule from "./Features/Admin/components/Schedule/editScheduleForm";
 import EditTermForm from "./Features/Admin/components/Terms/editTermForm";
 import EditParentForm from "./Features/Admin/components/Parents/editParent";
+import EditStudent from "./Features/Admin/components/Students/editStudentForm";
 function App() {
   return (
     <BrowserRouter>
@@ -81,6 +82,7 @@ function App() {
           <Route path="basicform" element={<BasicForm />} />
           <Route path="studentform" element={<StudentForm />} />
           <Route path="allstudent" element={<AllStudent />} />
+          <Route path="edit-student/:id" element={<EditStudent />} />
           <Route path="managerform" element={<ManagerForm />} />
           <Route path="allmanagers" element={<AllManagers />} />  
           <Route path="editmanagerform/:id" element={<EditManagerForm />} />
@@ -95,7 +97,6 @@ function App() {
           <Route path="allteachers" element={<AllTeachers />} />
           <Route path="teacherform" element={<TeacherForm />} />
           <Route path="edit-teacher/:id" element={<EditTeacher />} />
-          <Route path="allgrades/:id" element={<GradesDetails />} />
           <Route path="teacherinfo" element={<TeacherInfo />} />
           <Route path="allteachers/:id" element={<AllClassTeacher />} />
           <Route path="edit-class-teacher/:id" element={<EditClassTeacher />} />
