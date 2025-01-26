@@ -60,12 +60,12 @@ const EditAssignedSubject = () => {
     dispatch(updateAssignedSubject({ id, updatedData }))
       .unwrap()
       .then(() => {
-        toast.success("Subject updated successfully!");
+        toast.success("Subject updated successfully");
         navigate(-1);
         // navigate("/admin/allsubjects");
       })
       .catch((error) => {
-        toast.error(error.message || "Failed to update subject");
+       console.log(error.message || "Failed to update subject");
       });
   };
 
@@ -76,7 +76,7 @@ const EditAssignedSubject = () => {
   };
 
   return (
-    <div className="w-[80%] mx-auto">
+    <div className="w-[80%] mx-auto mt-10">
       <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Assigned Subject</h1>
       <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStudents } from "../components/AdminRedux/studentSlice";
 import { fetchTeachers } from "../components/AdminRedux/teacherSlice";
 import { fetchParents } from "../components/AdminRedux/parentSlice";
-import { fetchBosses } from "../components/AdminRedux/managerSlice";
+import { fetchManagers } from "../components/AdminRedux/managerSlice";
 import { fetchAdmins } from "../components/AdminRedux/adminSlice";
 import { fetchTerms } from "../components/AdminRedux/termSlice";
 import { fetchSubjects } from "../components/AdminRedux/subjectSlice";
@@ -18,7 +18,7 @@ const Dashboard = () => {
   const { students, loading: loadingStudents } = useSelector((state) => state.students);
   const { teachers, loading: loadingTeachers } = useSelector((state) => state.teachers);
   const { parents, loading: loadingParents } = useSelector((state) => state.parents);
-  const { bosses, loading: loadingBosses } = useSelector((state) => state.bosses);
+  const { managers, loading: loadingmanagers } = useSelector((state) => state.managers);
   const { admins, loading: loadingAdmins } = useSelector((state) => state.admins);
   const { terms, loading: loadingTerms } = useSelector((state) => state.terms);
   const { subjects, loading: loadingSubjects } = useSelector((state) => state.subject);
@@ -33,7 +33,7 @@ const Dashboard = () => {
     dispatch(fetchStudents());
     dispatch(fetchTeachers());
     dispatch(fetchParents());
-    dispatch(fetchBosses());
+    dispatch(fetchManagers());
     dispatch(fetchAdmins());
     dispatch(fetchTerms());
     dispatch(fetchSubjects());
@@ -50,7 +50,7 @@ const Dashboard = () => {
     { name: "Students", value: loadingStudents ? 0 : students?.length || 0, color: "#4CAF50" },
     { name: "Parents", value: loadingParents ? 0 : parents?.length || 0, color: "#FF9800" },
     { name: "Teachers", value: loadingTeachers ? 0 : teachers?.length || 0, color: "#2196F3" },
-    { name: "Managers", value: loadingBosses ? 0 : bosses?.length || 0, color: "#F44336" },
+    { name: "Managers", value: loadingmanagers ? 0 : managers?.length || 0, color: "#F44336" },
     { name: "Admins", value: loadingAdmins ? 0 : admins?.length || 0, color: "#9C27B0" },
   ];
   
@@ -67,7 +67,7 @@ const Dashboard = () => {
             { label: "Students", value:  loadingStudents ? 0: students.length, icon: "/src/assets/students 1.png" , bgColor:" #D1F3E0"},
             { label: "Teachers", value: loadingTeachers ? 0 : teachers.length, icon: "/src/assets/Group.png" , bgColor:"#E1F1FF" },
             { label: "Parents", value:  loadingParents ? 0 :  parents.length, icon: "/src/assets/vector.png" , bgColor:"#FFF2D8" },
-            { label: "Manager", value:loadingBosses ? 0 : bosses.length, icon: "/src/assets/people.png"  , bgColor:"#FFEAEA"},
+            { label: "Manager", value:loadingmanagers ? 0 : managers.length, icon: "/src/assets/people.png"  , bgColor:"#FFEAEA"},
             { label: "Admin", value:  loadingAdmins ? 0 :admins.length, icon: "/src/assets/Group1.png"  , bgColor:"#D1F3E0"},
             { label: "Terms", value:  loadingTerms ? 0 :terms.length, icon: "/src/assets/Term.png" , bgColor:"#E1F1FF"},
             { label: "Courses", value: loadingSubjects ? 0 :subjects.length, icon: "/src/assets/Course.png" , bgColor:"#FFF2D8"},

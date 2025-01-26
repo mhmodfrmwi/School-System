@@ -15,6 +15,7 @@ import ManagerForm from "./Features/Admin/components/Managers/managerForm";
 import AllParents from "./Features/Admin/Pages/ParentTablePage";
 import AllTeachers from "./Features/Admin/pages/TeacherTablePage";
 import AllManagers from "./Features/Admin/pages/ManagerTablePage";
+import EditManagerForm from "./Features/Admin/components/Managers/editManager";
 import AllAdmins from "./Features/Admin/Pages/AdminTablePage";
 import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";
 import AllTerms from "./Features/Admin/Pages/TermPage";
@@ -28,7 +29,7 @@ import AcademicYearForm from "./Features/Admin/components/AcademicYears/academic
 import EditAcademicYearForm from "./Features/Admin/components/AcademicYears/editAcademicYearForm";
 import AllAcademicYears from "./Features/Admin/Pages/AcademicYearPage";
 import SubjectDetails from "./Features/Admin/components/Subjects/AllAssignedSubjects";
-import SubjectsList from "./Features/Admin/components/Subjects/AllSubjects";
+import SubjectsList from "./Features/Admin/Pages/SubjectTablePage";
 import AddSubject from "./Features/Admin/components/Subjects/AddSubjectManagement";
 import AllGrades from "./Features/Admin/Pages/GradePage";
 import GradeForm from "./Features/Admin/components/Grades/GradeForm";
@@ -80,7 +81,8 @@ function App() {
           <Route path="studentform" element={<StudentForm />} />
           <Route path="allstudent" element={<AllStudent />} />
           <Route path="managerform" element={<ManagerForm />} />
-          <Route path="allmanagers" element={<AllManagers />} />
+          <Route path="allmanagers" element={<AllManagers />} />  
+          <Route path="editmanagerform/:id" element={<EditManagerForm />} />
           <Route path="allparents" element={<AllParents />} />
           <Route path="parentform" element={<ParentForm />} />
           <Route path="scheduleform" element={<ScheduleForm />} />

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStudents } from "../components/AdminRedux/studentSlice";
 import { fetchTeachers } from "../components/AdminRedux/teacherSlice";
 import { fetchParents } from "../components/AdminRedux/parentSlice";
-import { fetchBosses } from "../components/AdminRedux/managerSlice";
+import { fetchManagers } from "../components/AdminRedux/managerSlice";
 import { fetchAdmins } from "../components/AdminRedux/adminSlice";
 import img1 from "../../../assets/students 1.png";
 import img2 from "../../../assets/Group.png";
@@ -17,14 +17,14 @@ function BasicForm() {
   const { students } = useSelector((state) => state.students);
   const { teachers } = useSelector((state) => state.teachers);
   const { parents } = useSelector((state) => state.parents);
-  const { bosses } = useSelector((state) => state.bosses);
+  const { managers } = useSelector((state) => state.managers);
   const { admins } = useSelector((state) => state.admins);
 
   useEffect(() => {
     dispatch(fetchStudents());
     dispatch(fetchTeachers());
     dispatch(fetchParents());
-    dispatch(fetchBosses());
+    dispatch(fetchManagers());
     dispatch(fetchAdmins());
   }, [dispatch]);
 
@@ -93,7 +93,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#F61414]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-            {bosses?.length || 0}
+            {managers?.length || 0}
             </p>
           </div>
 

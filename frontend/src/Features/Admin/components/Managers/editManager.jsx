@@ -1,54 +1,66 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  editManagerAsync } from "../AdminRedux/managerSlice";
+import { useParams, useNavigate } from "react-router-dom";
+import { editManager, fetchManagers } from "../AdminRedux/managerSlice";
+import { toast } from "react-toastify";
+import Loader from "@/ui/Loader";
 
 const EditManagerForm = () => {
-   const { id } = useParams(); 
-     const navigate = useNavigate();
-     const dispatch = useDispatch();
-     const { bosses } = useSelector((state) => state.bosses);
-     const [formData, setFormData] = useState({
-        fullName: "",
-        email: "",
-        gender: "",
-        phone: "",
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { managers, loading } = useSelector((state) => state.managers);
+
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    phone: "",
+    gender: "",
+  });
+
+  useEffect(() => {
+    dispatch(fetchManagers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const managerToEdit = managers.find((manager) => manager._id === id);
+    if (managerToEdit) {
+      setFormData({
+        fullName: managerToEdit.fullName,
+        email: managerToEdit.email,
         password: "",
-     });
-   
-     useEffect(() => {
-       const manager = bosses.find((manager) => manager._id === id); 
-       if (manager) {
-         setFormData({
-          fullName: manager.fullName,
-          email: manager.email,
-          gender: manager.gender,
-          phone: manager.phone,
-          password: manager.password,
-         });
-       }
-     }, [id, bosses]);
-   
-     const handleChange = (e) => {
-       const { name, value } = e.target;
-       setFormData((prevState) => ({ ...prevState, [name]: value }));
-     };
-   
-     const handleSubmit = (e) => {
-       e.preventDefault();
-       dispatch(editManagerAsync({ id, updatedManager: formData }));
-       navigate("/admin/allmanagers"); 
-     };
-    
+        phone: managerToEdit.phone,
+        gender: managerToEdit.gender,
+      });
+    }
+  }, [managers, id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const updatedManager = { ...formData };
+    dispatch(editManager({ id, updatedManager }))
+      .unwrap()
+      .then(() => {
+        toast.success("Manager updated successfully");
+        navigate("/admin/allmanagers");
+      })
+      .catch((error) => {
+      });
+  };
 
   return (
-    <div className="w-[80%] mx-auto my-10 font-poppins">
-      <div className="mb-6">
-        <h2 className="text-2xl font-poppins font-semibold text-[#244856]">Edit Manager</h2>
-        <div className="mt-1 h-[4px] w-[155px] rounded-t-md bg-[#244856]"></div>
-      </div>
+    <div className="w-[80%] mx-auto mt-10">
+      {loading && <Loader />}
+      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Manager</h1>
+      <div className="mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
+        <form onSubmit={handleSubmit} className="m-6">
           <div className="mb-4">
             <label className="block text-md font-medium text-gray-700 mb-2">Full Name</label>
             <input
@@ -83,9 +95,7 @@ const EditManagerForm = () => {
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
-              <option value="" disabled>
-                Select Gender
-              </option>
+              <option value="" disabled>Select Gender</option>
               <option value="M">Male</option>
               <option value="F">Female</option>
             </select>
@@ -100,6 +110,7 @@ const EditManagerForm = () => {
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter password"
+              required
             />
           </div>
 
@@ -116,15 +127,12 @@ const EditManagerForm = () => {
             />
           </div>
 
-          <div className="col-span-1 sm:col-span-2 flex justify-end gap-4">
-            
-            <button
-              type="submit"
-              className="px-6 py-2 bg-[#117C90] text-white rounded-md font-medium hover:bg-[#0f6b7c] transition"
-            >
-              Save Changes
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+          >
+            Save Changes
+          </button>
         </form>
       </div>
     </div>
