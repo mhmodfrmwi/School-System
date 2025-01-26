@@ -56,6 +56,7 @@ import EditClassTeacher  from "./Features/Admin/components/classTeacher/editClas
 import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
 import EditSchedule from "./Features/Admin/components/Schedule/editScheduleForm";
 import EditTermForm from "./Features/Admin/components/Terms/editTermForm";
+import EditParentForm from "./Features/Admin/components/Parents/editParent";
 function App() {
   return (
     <BrowserRouter>
@@ -114,6 +115,7 @@ function App() {
           <Route path="edit-subject/:id" element={<EditSubject />} />
           <Route path="edit-assigned-subject/:id" element={<EditAssignedSubject />}/>
           <Route path="edit-profile" element={<EditProfilePage />} />
+          <Route path="editparentform/:id" element={<EditParentForm />} />
         </Route>
         {/* /////////////////studentpage//////////////////// */}
         <Route path="student" element={<Students />}>

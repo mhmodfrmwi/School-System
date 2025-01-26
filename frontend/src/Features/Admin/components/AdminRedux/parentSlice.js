@@ -84,7 +84,7 @@ export const editParentAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-      toast.success("manager updated successfully!");
+      toast.success("parent updated successfully!");
       return data.parent;
     } catch (error) {
       return rejectWithValue(error.message);

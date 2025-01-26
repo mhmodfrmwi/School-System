@@ -5,17 +5,16 @@ import {
   removeSchedual,
   clearMessage,
 } from "../AdminRedux/scheduleSlice";
-import { fetchTeachers } from "../AdminRedux/teacherSlice"; 
+import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import Pagination from "../Pagination";
 import Header from "./scheduleHeader";
 import { useNavigate } from "react-router-dom";
-
 
 const SchedualTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { schedules = [], message } = useSelector((state) => state.schedules || {});
-  const { teachers = [] } = useSelector((state) => state.teachers || {}); 
+  const { teachers = [] } = useSelector((state) => state.teachers || {});
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -24,19 +23,18 @@ const SchedualTable = () => {
 
   useEffect(() => {
     dispatch(fetchScheduals());
-    dispatch(fetchTeachers()); 
+    dispatch(fetchTeachers());
   }, [dispatch]);
 
   const filteredScheduals = schedules.filter((schedule) => {
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
-
-      const filterValue = schedule[filterOption] || ""; 
+      const filterValue = schedule?.[filterOption] || "";
       return filterValue.toLowerCase().includes(lowerSearchText);
     }
     return (
-      (schedule.subjectName || "").toLowerCase().includes(lowerSearchText) ||
-      (schedule.teacher || "").toLowerCase().includes(lowerSearchText)
+      (schedule?.subjectName || "").toLowerCase().includes(lowerSearchText) ||
+      (schedule?.teacher || "").toLowerCase().includes(lowerSearchText)
     );
   });
 
@@ -46,14 +44,14 @@ const SchedualTable = () => {
   );
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this schedule?');
+    const confirmDelete = window.confirm("Are you sure you want to delete this schedule?");
     if (confirmDelete) {
       try {
         await dispatch(removeSchedual(id));
-        alert('Schedule deleted successfully');
+        alert("Schedule deleted successfully");
       } catch (error) {
-        console.error('Failed to delete schedule:', error);
-        alert('Error occurred while deleting');
+        console.error("Failed to delete schedule:", error);
+        alert("Error occurred while deleting");
       }
     }
   };
@@ -78,14 +76,13 @@ const SchedualTable = () => {
     }
   }, [message, dispatch]);
 
-  
   const getTeacherName = (teacherId) => {
     const teacher = teachers.find((t) => t._id === teacherId);
     return teacher ? teacher.fullName : "Unknown Teacher";
   };
 
   const handleEdit = (scheduleId) => {
-    navigate(`/admin/edit-schedule/${scheduleId}`); // التوجيه باستخدام navigate
+    navigate(`/admin/edit-schedule/${scheduleId}`);
   };
 
   return (
@@ -102,55 +99,71 @@ const SchedualTable = () => {
       )}
 
       <div className="mt-7">
-        <div className="overflow-x-auto"> 
+        <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
-            <thead className="bg-[#117C90]  text-white ">
+            <thead className="bg-[#117C90] text-white">
               <tr>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Subject Name</th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Teacher</th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Grade</th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Day</th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">From</th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">To</th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Actions</th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  Subject Name
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  Teacher
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  Grade
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  Day
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  From
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  To
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {paginatedScheduals.length > 0 ? (
                 paginatedScheduals.map((schedule, index) => (
                   <tr
-                    key={schedule._id}
-                    className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                    key={schedule?._id || index} // Fallback for missing `_id`
+                    className={`${
+                      index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
+                    } hover:bg-[#117C90]/70`}
                   >
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule.subject_id ? schedule.subject_id.name : "No subject"}
+                      {schedule?.subject_id?.name || "No subject"}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {getTeacherName(schedule.teacher_id._id)} 
+                      {schedule?.teacher_id ? getTeacherName(schedule.teacher_id._id) : "Unknown Teacher"}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule.grade_id.gradeName}
+                      {schedule?.grade_id?.gradeName || "No grade"}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule.day_of_week}
+                      {schedule?.day_of_week || "No day"}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule.start_time}
+                      {schedule?.start_time || "No start time"}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule.end_time}
+                      {schedule?.end_time || "No end time"}
                     </td>
                     <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <button
+                      <button
                         aria-label="Edit schedule"
-                        onClick={() => handleEdit(schedule._id)}
+                        onClick={() => handleEdit(schedule?._id)}
                         className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                       >
                         <i className="far fa-edit text-lg" />
                       </button>
                       <button
                         aria-label="Delete schedule"
-                        onClick={() => handleDelete(schedule._id)}
+                        onClick={() => handleDelete(schedule?._id)}
                         className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                       >
                         <i className="far fa-trash-alt text-lg" />
