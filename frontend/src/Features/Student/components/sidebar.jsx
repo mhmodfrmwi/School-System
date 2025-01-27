@@ -24,7 +24,7 @@ const Sidebar = ({ closeSidebar }) => {
         { label: "Home", icon: Icon1, path: "/student" },
         { label: "Motivation", icon: Icon2, path: "/student/motivation" },
         { label: "Courses", icon: Icon3, path: "/student/allcourses" },
-        { label: "Absence", icon: Icon4, path: "/student/absence" },
+        { label: "Absence", icon: Icon4, path: "/student/attendance" },
         { label: "Schedule", icon: Icon5, path: "/student/schedule" },
         { label: "Grade Managements", icon: Icon6, path: "/student/grades" },
         { label: "Activities", icon: Icon7, path: "/student/activities" },
