@@ -65,6 +65,7 @@ import Activities from "./Features/Student/components/Activites/Activites";
 import Contests from "./Features/Student/components/Activites/Contests";
 import VirtualRooms from "./Features/Student/components/Virtual Rooms/VirtualRooms";
 import AllCouses from "./Features/Student/components/courses/allcourses";
+import AttendancePage from "./Features/Student/components/Attendance/AttendancePage";
 function App() {
   return (
     <BrowserRouter>
@@ -146,6 +147,7 @@ function App() {
           <Route path="allcourses" element={<AllCouses />} />
 
 
+          <Route path="attendance" element={<AttendancePage />} />
         </Route>
         {/* /////////////////parentpage//////////////////// */}
         <Route path="parent" element={<Parents />}>
