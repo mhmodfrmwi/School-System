@@ -15,6 +15,18 @@ const generateAcademicNumber = async () => {
   return `${currentYear}${String(studentCount).padStart(4, "0")}`;
 };
 
+async function createClass(gradeId, academicYearId, className) {
+  const newClass = new Class({
+    className,
+    gradeId,
+    academicYear_id: academicYearId,
+  });
+
+  await newClass.save();
+
+  return newClass._id;
+}
+
 async function findClass(gradeId, academicYearId) {
   const allClasses = await Class.find({
     gradeId: gradeId,
@@ -23,7 +35,8 @@ async function findClass(gradeId, academicYearId) {
   console.log(allClasses);
 
   if (allClasses.length === 0) {
-    return "No available classes for the given grade and academic year.";
+    const firstClass = await createClass(gradeId, academicYearId, "class 1");
+    return firstClass._id;
   }
 
   const totalStudentsInGradeAndYear = await Student.countDocuments({
@@ -34,14 +47,22 @@ async function findClass(gradeId, academicYearId) {
   const studentPosition = totalStudentsInGradeAndYear + 1;
   const classIndex = Math.floor((studentPosition - 1) / 30);
 
-  if (!allClasses[classIndex]) {
-    return "No available classes to assign the student.";
+  let selectedClass;
+
+  if (allClasses[classIndex]) {
+    selectedClass = allClasses[classIndex];
+  } else {
+    const lastClass = allClasses[allClasses.length - 1].className;
+    const lastClassNumber = parseInt(lastClass.className.match(/\d+/)[0]);
+    const newClassName = `Class ${lastClassNumber + 1}`;
+    selectedClass = await createClass(gradeId, academicYearId, newClassName);
   }
 
-  const selectedClass = allClasses[classIndex];
-
   if (selectedClass.student_count >= 30) {
-    return "The class is full. Unable to assign the student.";
+    const lastClass = allClasses[allClasses.length - 1].className;
+    const lastClassNumber = parseInt(lastClass.className.match(/\d+/)[0]);
+    const newClassName = `Class ${lastClassNumber + 1}`;
+    selectedClass = await createClass(gradeId, academicYearId, newClassName);
   }
 
   return selectedClass._id;

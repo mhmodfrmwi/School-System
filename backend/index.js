@@ -8,6 +8,7 @@ const csrf = require("csurf");
 const hpp = require("hpp");
 const { connectToDB } = require("./DB/connectToDB");
 const adminRoutes = require("./routes/adminRoutes");
+const studentRoutes = require("./routes/studentRoutes");
 connectToDB();
 const app = express(xss());
 const routNode = "/api/v1";
@@ -26,6 +27,8 @@ app.get("/test", (req, res) => {
 // });
 app.use(express.json());
 app.use(`${routNode}/admin`, adminRoutes);
+app.use(`${routNode}/student`, studentRoutes);
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);

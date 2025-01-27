@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const studentSchema = new mongoose.Schema({
   academic_number: { type: String, required: true, unique: true },
   fullName: { type: String, required: true },
@@ -25,5 +26,7 @@ const studentSchema = new mongoose.Schema({
     required: true,
   },
 });
-
+studentSchema.methods.comparePasswordInDb = async function(pswd, pswdDB){
+  return await bcrypt.compare(pswd, pswdDB);
+}
 module.exports = mongoose.model("Student", studentSchema);
