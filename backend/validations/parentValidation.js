@@ -5,6 +5,7 @@ const parentValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
   gender: Joi.string().valid("M", "F", "O").required(),
+  students: Joi.array().required(),
 });
 
 module.exports = parentValidationSchema;

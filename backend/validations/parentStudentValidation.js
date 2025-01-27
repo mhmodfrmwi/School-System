@@ -1,7 +1,7 @@
+const Joi = require("joi");
 const parentStudentValidationSchema = Joi.object({
-  parent_id: Joi.string().required(),
-  student_id: Joi.string().required(),
-  academic_number: Joi.string().required(), // Add academic number
+  parentName: Joi.string().required(),
+  studentAcademicNumber: Joi.string().required(),
 });
 
 module.exports = parentStudentValidationSchema;

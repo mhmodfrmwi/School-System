@@ -6,6 +6,7 @@ const Teacher = require("../DB/teacher");
 const AcademicYear = require("../DB/academicYearModel");
 const ClassTeacher = require("../DB/classTeacherModel");
 const Class = require("../DB/classModel");
+const GradeSubjectSemester = require("../DB/gradeSubjectSemester");
 
 const createClassTeacher = expressAsyncHandler(async (req, res) => {
   const { error } = classTeacherValidationSchema.validate(req.body);
@@ -15,7 +16,10 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
       message: error.details[0].message,
     });
   }
-  const existingClass = await Class.findOne({ className: req.body.class });
+
+  const { className, subjectName, teacherName, academicYear } = req.body;
+
+  const existingClass = await Class.findOne({ className });
   if (!existingClass) {
     return res.status(404).json({
       status: 404,
@@ -23,10 +27,7 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const existingSubject = await Subject.findOne({
-    subjectName: req.body.subjectName,
-  });
-
+  const existingSubject = await Subject.findOne({ subjectName });
   if (!existingSubject) {
     return res.status(404).json({
       status: 404,
@@ -34,10 +35,7 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const existingTeacher = await Teacher.findOne({
-    fullName: req.body.fullName,
-  });
-
+  const existingTeacher = await Teacher.findOne({ fullName: teacherName });
   if (!existingTeacher) {
     return res.status(404).json({
       status: 404,
@@ -45,12 +43,25 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const startYear = req.body.academicYear.slice(0, 4);
-  const academicYear = await AcademicYear.findOne({ startYear });
-  if (!academicYear) {
+  const startYear = academicYear.slice(0, 4);
+  const existingAcademicYear = await AcademicYear.findOne({ startYear });
+  if (!existingAcademicYear) {
     return res.status(404).json({
       status: 404,
       message: "Academic year not found",
+    });
+  }
+
+  const existingClassTeacher = await ClassTeacher.findOne({
+    classId: existingClass._id,
+    subjectId: existingSubject._id,
+    teacherId: existingTeacher._id,
+    academicYear_id: existingAcademicYear._id,
+  });
+  if (existingClassTeacher) {
+    return res.status(400).json({
+      status: 400,
+      message: "Teacher already assigned to this class",
     });
   }
 
@@ -58,7 +69,7 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     classId: existingClass._id,
     subjectId: existingSubject._id,
     teacherId: existingTeacher._id,
-    academicYear_id: academicYear._id,
+    academicYear_id: existingAcademicYear._id,
   });
 
   await classTeacher.save();
@@ -88,7 +99,7 @@ const updateClassTeacher = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const existingClass = await Class.findOne({ className: req.body.class });
+  const existingClass = await Class.findOne({ className: req.body.className });
   if (!existingClass) {
     return res.status(404).json({
       status: 404,
@@ -108,7 +119,7 @@ const updateClassTeacher = expressAsyncHandler(async (req, res) => {
   }
 
   const existingTeacher = await Teacher.findOne({
-    fullName: req.body.fullName,
+    fullName: req.body.teacherName,
   });
 
   if (!existingTeacher) {
@@ -126,7 +137,18 @@ const updateClassTeacher = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
-
+  const existingClassTeacher = await ClassTeacher.findOne({
+    classId: existingClass._id,
+    subjectId: existingSubject._id,
+    teacherId: existingTeacher._id,
+    academicYear_id: academicYear._id,
+  });
+  if (existingClassTeacher) {
+    return res.status(400).json({
+      status: 400,
+      message: "Teacher already assigned to this class",
+    });
+  }
   const classTeacher = await ClassTeacher.findByIdAndUpdate(
     id,
     {
@@ -188,7 +210,7 @@ const getClassTeacher = expressAsyncHandler(async (req, res) => {
   }
 
   const classTeacher = await ClassTeacher.findById(id)
-    .populate("classId", "className")
+    .populate({ path: "classId", select: ["className", "gradeId"] })
     .populate("subjectId", "subjectName")
     .populate("teacherId", "fullName")
     .populate("academicYear_id", "startYear endYear");
@@ -209,7 +231,13 @@ const getClassTeacher = expressAsyncHandler(async (req, res) => {
 
 const getAllClassTeacher = expressAsyncHandler(async (req, res) => {
   const classTeachers = await ClassTeacher.find()
-    .populate("classId", "className")
+    .populate({
+      path: "classId",
+      select: ["className"],
+      populate: {
+        path: "gradeId",
+      },
+    })
     .populate("subjectId", "subjectName")
     .populate("teacherId", "fullName")
     .populate("academicYear_id", "startYear endYear");

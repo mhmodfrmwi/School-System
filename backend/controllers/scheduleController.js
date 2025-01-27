@@ -7,6 +7,7 @@ const Grade = require("../DB/gradeModel");
 const Teacher = require("../DB/teacher");
 const AcademicYear = require("../DB/academicYearModel");
 const Schedule = require("../DB/schedule");
+const Semester = require("../DB/semesterModel");
 
 const createSchedule = expressAsyncHandler(async (req, res) => {
   const { error } = scheduleValidationSchema.validate(req.body);
@@ -61,12 +62,21 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
-
+  const semester = await Semester.findOne({
+    semesterName: req.body.semesterName,
+  });
+  if (!semester) {
+    return res.status(404).json({
+      status: 404,
+      message: "Semester not found",
+    });
+  }
   const schedule = new Schedule({
     class_id: existingClass._id,
     subject_id: existingSubject._id,
     teacher_id: teacher._id,
     grade_id: grade._id,
+    semester_id: semester._id,
     academic_year_id: academicYear._id,
     day_of_week: req.body.day,
     start_time: req.body.startTime,
@@ -143,7 +153,15 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
-
+  const semester = await Semester.findOne({
+    semesterName: req.body.semesterName,
+  });
+  if (!semester) {
+    return res.status(404).json({
+      status: 404,
+      message: "Semester not found",
+    });
+  }
   const schedule = await Schedule.findByIdAndUpdate(
     id,
     {
@@ -152,6 +170,7 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
       teacher_id: teacher._id,
       grade_id: grade._id,
       academicYear_id: academicYear._id,
+      semester_id: semester._id,
       day_of_week: req.body.day,
       start_time: req.body.startTime,
       end_time: req.body.endTime,
@@ -213,7 +232,8 @@ const getSchedule = expressAsyncHandler(async (req, res) => {
     .populate("subject_id", "subjectName")
     .populate("teacher_id", "fullName")
     .populate("grade_id", "gradeName")
-    .populate("academic_year_id", "startYear endYear");
+    .populate("academic_year_id", "startYear endYear")
+    .populate("semester_id");
 
   if (!schedule) {
     return res.status(404).json({
@@ -235,7 +255,8 @@ const getAllSchedule = expressAsyncHandler(async (req, res) => {
     .populate("subject_id", "subjectName")
     .populate("teacher_id", "fullName")
     .populate("grade_id", "gradeName")
-    .populate("academic_year_id", "startYear endYear");
+    .populate("academic_year_id", "startYear endYear")
+    .populate("semester_id");
 
   res.status(200).json({
     status: 200,

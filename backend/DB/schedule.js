@@ -23,6 +23,11 @@ const scheduleSchema = new mongoose.Schema({
   day_of_week: { type: String, required: true },
   start_time: { type: String, required: true },
   end_time: { type: String, required: true },
+  semester_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Semester",
+    required: true,
+  },
   academic_year_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "AcademicYear",

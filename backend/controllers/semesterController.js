@@ -130,7 +130,6 @@ const deleteSemester = expressAsyncHandler(async (req, res) => {
   }
 
   const semester = await Semester.findByIdAndDelete(id);
-
   if (!semester) {
     return res.status(404).json({
       status: 404,
@@ -138,10 +137,20 @@ const deleteSemester = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  res.status(200).json({
-    status: 200,
-    message: "Semester deleted successfully",
-  });
+  try {
+    await gradeSubjectSemester.deleteMany({ semester_id: id });
+
+    res.status(200).json({
+      status: 200,
+      message: "Semester and all related records deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to delete semester or related records",
+      error: error.message,
+    });
+  }
 });
 
 const getSemester = expressAsyncHandler(async (req, res) => {
