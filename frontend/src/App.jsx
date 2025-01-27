@@ -58,6 +58,13 @@ import EditTermForm from "./Features/Admin/components/Terms/editTermForm";
 import EditParentForm from "./Features/Admin/components/Parents/editParent";
 import EditStudent from "./Features/Admin/components/Students/editStudentForm";
 import MotivationPage from "./Features/Student/pages/MotivationPage";
+import EditStudentProfile from "./Features/Student/pages/EditProfilePage";
+import DetailesActivity from "./Features/Student/components/Activites/detailesActivity";
+import PrizesActivity from "./Features/Student/components/Activites/PrizesActivity";
+import Activities from "./Features/Student/components/Activites/Activites";
+import Contests from "./Features/Student/components/Activites/Contests";
+import VirtualRooms from "./Features/Student/components/Virtual Rooms/VirtualRooms";
+import AllCouses from "./Features/Student/components/courses/allcourses";
 import AttendancePage from "./Features/Student/components/Attendance/AttendancePage";
 function App() {
   return (
@@ -118,7 +125,7 @@ function App() {
           <Route path="assignSubject" element={<AssignSubject />} />
           <Route path="edit-subject/:id" element={<EditSubject />} />
           <Route path="edit-assigned-subject/:id" element={<EditAssignedSubject />}/>
-          <Route path="edit-profile" element={<EditProfilePage />} />
+          <Route path="edit-admin-profile" element={<EditProfilePage />} />
           <Route path="editparentform/:id" element={<EditParentForm />} />
         </Route>
         {/* /////////////////studentpage//////////////////// */}
@@ -131,6 +138,14 @@ function App() {
           <Route path="schedule/exam" element={<ScheduleExam />} />
           <Route path="librarybooksenglish" element={<LibraryBooksEnglish />} />
           <Route path="motivation" element={<MotivationPage />} />
+          <Route path="edit-student-profile" element={<EditStudentProfile />} />
+          <Route path="activities/detailes" element={<DetailesActivity />} />
+          <Route path="activities/prizes" element={<PrizesActivity />} />
+          <Route path="activities/contests" element={<Contests />} />
+          <Route path="activities" element={<Activities />} />
+          <Route path="virtualrooms" element={<VirtualRooms />} />
+          <Route path="allcourses" element={<AllCouses />} />
+
 
           <Route path="attendance" element={<AttendancePage />} />
         </Route>

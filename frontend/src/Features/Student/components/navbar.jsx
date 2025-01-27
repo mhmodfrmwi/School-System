@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
+import { FaSearch, FaBell } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +13,9 @@ import language from "../../../assets/icons/languageS.svg";
 import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
 import Logo from "../../../assets/logologin.png";
+import Menu from "../../../assets/StudentIcon/Menue.png";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
+import Sidebar from "./Sidebar";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ const Navbar = () => {
   const [settingToggle, setSettingToggle] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const routes = [
     { path: "grades" },
@@ -31,6 +34,12 @@ const Navbar = () => {
     { path: "schedule/exam" },
     { path: "librarybooksenglish" },
     { path: "motivation" },
+    { path: "activities" },
+    { path: "activities/detailes" },
+    { path: "activities/prizes" },
+    { path: "activities/contests" },
+    { path: "virtualrooms" },
+    { path: "allcourses" },
   ];
 
   const filteredRoutes = routes.filter((route) =>
@@ -64,9 +73,9 @@ const Navbar = () => {
   const name = url.split("/").pop();
   console.log(name);
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+  // const handleBack = () => {
+  //   navigate(-1);
+  // };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -92,10 +101,10 @@ const Navbar = () => {
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md">
         <div className="flex items-center space-x-3">
           <button
-            onClick={handleBack}
-            className="hidden rounded-lg bg-[#FD813D] p-2 text-[#FFD4AD] lg:flex"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+            className="flex rounded-lg p-2"
           >
-            <FaArrowLeft className="text-lg" />
+            <img src={Menu} alt="Menu" className="w-8 h-8" />
           </button>
           <Link to="/student">
           <img
@@ -106,8 +115,8 @@ const Navbar = () => {
         </Link>
           <p
             className="hidden font-inter text-lg font-semibold text-[#3D52A1] lg:flex"
-            onClick={() => {
-              `${name}` !== "student" && navigate(`/student/${name}`);
+            onClick={() => {`
+              ${name}` !== "student" && navigate(`/student/${name}`);
             }}
           >
             {name}
@@ -199,7 +208,7 @@ const Navbar = () => {
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
-                  onClick={() => navigate("edit-profile")}
+                  onClick={() => navigate("edit-student-profile")}
                 >
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
@@ -231,6 +240,15 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      {isSidebarOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-10 bg-black bg-opacity-30 backdrop-blur-sm"
+            onClick={() => setIsSidebarOpen(false)}
+          ></div>
+          <Sidebar closeSidebar={() => setIsSidebarOpen(false)} />
+        </>
+      )}
     </div>
   );
 };
