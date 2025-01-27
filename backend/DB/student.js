@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const path = require("path");
 const studentSchema = new mongoose.Schema({
   academic_number: { type: String, required: true, unique: true },
   fullName: { type: String, required: true },

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const path = require("path");
 const teacherSchema = new mongoose.Schema({
   academicNumber: { type: String, required: true, unique: true },
   fullName: { type: String, required: true },
