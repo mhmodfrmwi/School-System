@@ -62,7 +62,9 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
-  const semester = await Semester.findOne({ semesterName: req.body.semester });
+  const semester = await Semester.findOne({
+    semesterName: req.body.semesterName,
+  });
   if (!semester) {
     return res.status(404).json({
       status: 404,
@@ -151,7 +153,9 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
-  const semester = await Semester.findOne({ semesterName: req.body.semester });
+  const semester = await Semester.findOne({
+    semesterName: req.body.semesterName,
+  });
   if (!semester) {
     return res.status(404).json({
       status: 404,
@@ -228,7 +232,8 @@ const getSchedule = expressAsyncHandler(async (req, res) => {
     .populate("subject_id", "subjectName")
     .populate("teacher_id", "fullName")
     .populate("grade_id", "gradeName")
-    .populate("academic_year_id", "startYear endYear");
+    .populate("academic_year_id", "startYear endYear")
+    .populate("semester_id");
 
   if (!schedule) {
     return res.status(404).json({
@@ -250,7 +255,8 @@ const getAllSchedule = expressAsyncHandler(async (req, res) => {
     .populate("subject_id", "subjectName")
     .populate("teacher_id", "fullName")
     .populate("grade_id", "gradeName")
-    .populate("academic_year_id", "startYear endYear");
+    .populate("academic_year_id", "startYear endYear")
+    .populate("semester_id");
 
   res.status(200).json({
     status: 200,
