@@ -31,6 +31,9 @@ const Navbar = () => {
     { path: "schedule/exam" },
     { path: "librarybooksenglish" },
     { path: "motivation" },
+    { path: "activities" },
+    { path: "activities/detailes" },
+    { path: "activities/prizes" },
   ];
 
   const filteredRoutes = routes.filter((route) =>
@@ -199,7 +202,7 @@ const Navbar = () => {
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
-                  onClick={() => navigate("edit-profile")}
+                  onClick={() => navigate("edit-student-profile")}
                 >
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
