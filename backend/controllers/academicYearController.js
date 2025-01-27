@@ -19,7 +19,7 @@ const createAcademicYear = expressAsyncHandler(async (req, res) => {
     });
   }
   const { startYear, endYear } = req.body;
-  if (startYear > endYear) {
+  if (startYear >= endYear) {
     return res.status(400).json({
       status: 400,
       message: "Start year must be less than or equal to end year.",
@@ -69,7 +69,12 @@ const updateAcademicYear = expressAsyncHandler(async (req, res) => {
   }
 
   const { startYear, endYear } = req.body;
-
+  if (startYear >= endYear) {
+    return res.status(400).json({
+      status: 400,
+      message: "Start year must be less than or equal to end year.",
+    });
+  }
   const existingAcademicYear = await AcademicYear.findOne({
     $and: [{ _id: { $ne: id } }, { $or: [{ startYear }, { endYear }] }],
   });
