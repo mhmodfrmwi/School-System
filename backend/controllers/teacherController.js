@@ -5,6 +5,8 @@ const Teacher = require("../DB/teacher");
 const Subject = require("../DB/subjectModel");
 const generateAcademicNumber = require("../utils/generateAcademicNumberForTeacher");
 const hashPassword = require("../utils/hashPassword");
+const ClassTeacher = require("../DB/classTeacherModel");
+const Schedule = require("../DB/schedule");
 
 const createTeacher = expressAsyncHandler(async (req, res) => {
   const { error } = teacherValidationSchema.validate(req.body);
@@ -133,7 +135,6 @@ const deleteTeacher = expressAsyncHandler(async (req, res) => {
   }
 
   const teacher = await Teacher.findByIdAndDelete(id);
-
   if (!teacher) {
     return res.status(404).json({
       status: 404,
@@ -141,10 +142,23 @@ const deleteTeacher = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  res.status(200).json({
-    status: 200,
-    message: "Teacher deleted successfully",
-  });
+  try {
+    await Promise.all([
+      ClassTeacher.deleteMany({ teacherId: id }),
+      Schedule.deleteMany({ teacher_id: id }),
+    ]);
+
+    res.status(200).json({
+      status: 200,
+      message: "Teacher and all related records deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to delete teacher or related records",
+      error: error.message,
+    });
+  }
 });
 
 const getTeacher = expressAsyncHandler(async (req, res) => {

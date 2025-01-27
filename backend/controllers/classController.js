@@ -157,12 +157,25 @@ const deleteClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  await Class.findByIdAndDelete(id);
+  try {
+    await Promise.all([
+      Student.deleteMany({ classId: id }),
+      ClassTeacher.deleteMany({ classId: id }),
+    ]);
 
-  res.status(200).json({
-    status: 200,
-    message: "Class deleted successfully",
-  });
+    await Class.findByIdAndDelete(id);
+
+    res.status(200).json({
+      status: 200,
+      message: "Class and all related records deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to delete class or related records",
+      error: error.message,
+    });
+  }
 });
 
 const getClass = expressAsyncHandler(async (req, res) => {
