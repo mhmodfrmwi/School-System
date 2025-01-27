@@ -42,6 +42,7 @@ import GradesAssignment from "./Features/Student/components/Grades/GradesAssignm
 import GradesExam from "./Features/Student/components/Grades/GradesExam";
 import Schedule from "./Features/Student/components/Schedule/schedule";
 import ScheduleExam from "./Features/Student/components/Schedule/scheduleExam";
+import LibraryPage from "./Features/Student/components/Library/LibraryPage";
 import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBooksEnglish";
 import Parents from "./Features/Parent/pages/Parents";
 import DashboardParent from "./Features/Parent/pages/DashboardParent";
@@ -138,6 +139,7 @@ function App() {
           <Route path="grades/exam" element={<GradesExam />} />
           <Route path="schedule" element={<Schedule />} />
           <Route path="schedule/exam" element={<ScheduleExam />} />
+          <Route path="library" element={<LibraryPage />} />
           <Route path="librarybooksenglish" element={<LibraryBooksEnglish />} />
           <Route path="motivation" element={<MotivationPage />} />
           <Route path="edit-student-profile" element={<EditStudentProfile />} />

@@ -28,7 +28,7 @@ const Sidebar = ({ closeSidebar }) => {
         { label: "Schedule", icon: Icon5, path: "/student/schedule" },
         { label: "Grade Managements", icon: Icon6, path: "/student/grades" },
         { label: "Activities", icon: Icon7, path: "/student/activities" },
-        { label: "Library", icon: Icon8, path: "/student/librarybooksenglish" },
+        { label: "Library", icon: Icon8, path: "/student/library" },
         { label: "Question Bank", icon: Icon9, path: "/student/question-bank" },
         { label: "Virtual Rooms", icon: Icon10, path: "/student/virtualrooms" },
         { label: "Chats", icon: Icon11, path: "/student/chats" },
