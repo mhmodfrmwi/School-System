@@ -6,51 +6,50 @@ function LibraryBooksEnglish() {
   return (
     <>
       <section>
-        <h2 className="ms-10 mt-10 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 text-xl font-semibold text-transparent">
+        <h2 className="ms-20 mt-10 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 text-xl font-semibold text-transparent md:ms-14 lg:ms-28 xl:ms-32">
           My Books
         </h2>
+        <p className="ms-20 w-24 rounded-xl border-t-4 border-[#BC6FFB] md:ms-14 lg:ms-28 xl:ms-32"></p>
 
-        <p className="ms-10 w-24 rounded-xl border-t-4 border-[#BC6FFB]"></p>
-
-        <div className="my-10 ms-10 grid w-[70%] grid-cols-2 font-semibold sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
-          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-medium text-transparent">
+        <div className="my-10 ms-20 grid w-[80%] grid-cols-2 font-semibold sm:grid-cols-4 md:ms-14 md:grid-cols-5 lg:ms-28 lg:grid-cols-6 xl:ms-28 xl:grid-cols-7">
+          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-3 py-2 text-left font-medium text-transparent">
             {" "}
             All Subjects
           </button>
 
           <button
-            className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 font-medium text-white focus:outline-none"
+            className="w-24 cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 text-left font-medium text-white focus:outline-none"
             onClick={() => navigate("/student/librarybooksenglish")}
           >
             English
           </button>
 
-          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-medium text-transparent">
+          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-3 py-2 text-left font-medium text-transparent">
             {" "}
             Science
           </button>
 
-          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-medium text-transparent">
+          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-3 py-2 text-left font-medium text-transparent">
             {" "}
             Arabic
           </button>
 
-          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-medium text-transparent">
+          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-3 py-2 text-left font-medium text-transparent">
             {" "}
             math
           </button>
 
-          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-medium text-transparent">
+          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-3 py-2 text-left font-medium text-transparent">
             {" "}
             French
           </button>
 
-          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-medium text-transparent">
+          <button className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-3 py-2 text-left font-medium text-transparent">
             {" "}
             Social Studies
           </button>
         </div>
-        <div className="mx-auto w-[90%]">
+        <div className="mx-auto w-[95%]">
           <div className="mx-auto grid w-[100%] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <div className="mx-auto">
               <div className="relative w-52">

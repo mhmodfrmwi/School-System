@@ -33,7 +33,7 @@ function GradesAssignment() {
         <div className="my-10 ms-8 md:ms-14 lg:ms-20">
           <button
             className="me-10 cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-2 py-2 font-medium text-transparent"
-            onClick={() => navigate("/student/grades/exam")}
+            onClick={() => navigate("/parent/grades/exam")}
           >
             {" "}
             Grade Exam
@@ -41,33 +41,13 @@ function GradesAssignment() {
 
           <button
             className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-2 py-2 font-medium text-white focus:outline-none"
-            onClick={() => navigate("/student/grades/assignment")}
+            onClick={() => navigate("/parent/grades/assignment")}
           >
             Grade Assignments
           </button>
         </div>
 
-        <div className="mx-auto mb-10 grid w-[90%] grid-cols-1 items-center gap-4 sm:grid-cols-3">
-          <div className="col-span-2 flex items-center justify-center">
-            <p className="text-md w-[95%] text-start font-semibold md:text-lg lg:text-2xl">
-              Dear student, your subject grades reflect your effort and
-              understanding. Strive to do your best in every subject, as each
-              grade contributes to building your academic future. Focus on
-              improving step by step, and remember that every bit of hard work
-              will bring you closer to your goals. Believe in your potential,
-              and aim high!
-            </p>
-          </div>
-          <div className="col-span-1 flex items-center justify-center">
-            <img
-              src={img1}
-              alt="img4notfound"
-              className="ms-10 rounded-t-xl lg:w-96"
-            />
-          </div>
-        </div>
-
-        <div className="mx-auto mb-10 w-[90%] px-4">
+        <div className="mx-auto mb-10 w-[90%] px-2">
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse rounded-2xl border-2 border-pink-300 shadow-lg">
               <thead>
@@ -118,4 +98,4 @@ function GradesAssignment() {
   );
 }
 
-export default GradesAssignment;
+export { GradesAssignment };

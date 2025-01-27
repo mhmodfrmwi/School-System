@@ -1,4 +1,4 @@
-import React, { useState , useRef, useEffect  } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -16,7 +16,7 @@ import ThemeSwitcher from "@/ui/ThemeSwitcher";
 const Navbar = () => {
   const navigate = useNavigate();
   const settingsRef = useRef(null);
-  const searchRef = useRef(null); 
+  const searchRef = useRef(null);
   const [settingToggle, setSettingToggle] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,7 +35,7 @@ const Navbar = () => {
     { path: "termform" },
     { path: "allteachers" },
     { path: "teacherform" },
-    { path: "editteacher/:id" },
+    { path: "edit-teacher/:id" },
     { path: "teacherinfo" },
     { path: "classteacherform" },
     { path: "allclassteacher" },
@@ -89,7 +89,7 @@ const Navbar = () => {
   };
 
   const url = window.location.pathname;
-  const name = url.split("/").pop();
+  const name = url.split("/admin/").pop();
   console.log(name);
 
   const handleBack = () => {
@@ -101,10 +101,7 @@ const Navbar = () => {
       if (settingsRef.current && !settingsRef.current.contains(event.target)) {
         setSettingToggle(false);
       }
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target)
-      ) {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
     };
@@ -128,10 +125,12 @@ const Navbar = () => {
           <p
             className="hidden font-inter text-lg font-semibold text-dashboard-header lg:flex"
             onClick={() => {
-              `${name}` !== "admin" && navigate(`/admin/${name}`);
+              if (name !== "/admin") {
+                navigate(`/admin/${name}`);
+              }
             }}
           >
-            {name}
+            {name === "/admin" ? "admin" : `${name}`}
           </p>
         </div>
 
@@ -215,7 +214,10 @@ const Navbar = () => {
           </button>
 
           {settingToggle && (
-            <div  ref={settingsRef} className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]">
+            <div
+              ref={settingsRef}
+              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]"
+            >
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"

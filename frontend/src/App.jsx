@@ -21,7 +21,6 @@ import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";
 import AllTerms from "./Features/Admin/Pages/TermPage";
 import TermForm from "./Features/Admin/components/Terms/termForm";
 import Admins from "./Features/Admin/Pages/Admins";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageNotFound from "./ui/PageNotFound";
 import EditTeacher from "./Features/Admin/components/Teachers/editTeacher";
@@ -51,7 +50,7 @@ import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
 import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
 import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
 import AllClassTeacher from "./Features/Admin/Pages/classTeacherTablePage";
-import EditClassTeacher  from "./Features/Admin/components/classTeacher/editClassTeacher";
+import EditClassTeacher from "./Features/Admin/components/classTeacher/editClassTeacher";
 import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
 import EditSchedule from "./Features/Admin/components/Schedule/editScheduleForm";
 import EditTermForm from "./Features/Admin/components/Terms/editTermForm";
@@ -66,6 +65,12 @@ import Contests from "./Features/Student/components/Activites/Contests";
 import VirtualRooms from "./Features/Student/components/Virtual Rooms/VirtualRooms";
 import AllCouses from "./Features/Student/components/courses/allcourses";
 import AttendancePage from "./Features/Student/components/Attendance/AttendancePage";
+import { ToastContainer } from "react-toastify";
+import { Grades as GradesParent } from "./Features/Parent/components/Grades/Grades";
+import { GradesAssignment as GradesAssignmentParent } from "./Features/Parent/components/Grades/GradesAssignment";
+import { GradesExam as GradesExamParent } from "./Features/Parent/components/Grades/GradesExam";
+import { Schedule as ScheduleParent } from "./Features/Parent/components/Schedule/schedule";
+import { ScheduleExam as ScheduleExamParent } from "./Features/Parent/components/Schedule/scheduleExam";
 function App() {
   return (
     <BrowserRouter>
@@ -92,7 +97,7 @@ function App() {
           <Route path="allstudent" element={<AllStudent />} />
           <Route path="edit-student/:id" element={<EditStudent />} />
           <Route path="managerform" element={<ManagerForm />} />
-          <Route path="allmanagers" element={<AllManagers />} />  
+          <Route path="allmanagers" element={<AllManagers />} />
           <Route path="editmanagerform/:id" element={<EditManagerForm />} />
           <Route path="allparents" element={<AllParents />} />
           <Route path="parentform" element={<ParentForm />} />
@@ -112,7 +117,10 @@ function App() {
           <Route path="alladmins" element={<AllAdmins />} />
           <Route path="allacademicyears" element={<AllAcademicYears />} />
           <Route path="academicyearform" element={<AcademicYearForm />} />
-          <Route path="editacademicyearform/:id" element={<EditAcademicYearForm />} />
+          <Route
+            path="editacademicyearform/:id"
+            element={<EditAcademicYearForm />}
+          />
           <Route path="editadminform/:id" element={<EditAdminForm />} />
           <Route path="allgrades" element={<AllGrades />} />
           <Route path="allgrades/:id" element={<GradesDetails />} />
@@ -124,7 +132,10 @@ function App() {
           <Route path="addsubject" element={<AddSubject />} />
           <Route path="assignSubject" element={<AssignSubject />} />
           <Route path="edit-subject/:id" element={<EditSubject />} />
-          <Route path="edit-assigned-subject/:id" element={<EditAssignedSubject />}/>
+          <Route
+            path="edit-assigned-subject/:id"
+            element={<EditAssignedSubject />}
+          />
           <Route path="edit-admin-profile" element={<EditProfilePage />} />
           <Route path="editparentform/:id" element={<EditParentForm />} />
         </Route>
@@ -145,13 +156,19 @@ function App() {
           <Route path="activities" element={<Activities />} />
           <Route path="virtualrooms" element={<VirtualRooms />} />
           <Route path="allcourses" element={<AllCouses />} />
-
-
           <Route path="attendance" element={<AttendancePage />} />
         </Route>
         {/* /////////////////parentpage//////////////////// */}
         <Route path="parent" element={<Parents />}>
           <Route index element={<DashboardParent />} />
+          <Route path="grades" element={<GradesParent />} />
+          <Route
+            path="grades/assignment"
+            element={<GradesAssignmentParent />}
+          />
+          <Route path="grades/exam" element={<GradesExamParent />} />
+          <Route path="schedule" element={<ScheduleParent />} />
+          <Route path="schedule/exam" element={<ScheduleExamParent />} />
         </Route>
 
         <Route path="*" element={<PageNotFound />} />

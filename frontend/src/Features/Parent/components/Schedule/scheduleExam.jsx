@@ -27,7 +27,7 @@ function ScheduleExam() {
             <div className="mb-10 ms-8 mt-7 md:ms-14 lg:ms-20">
               <button
                 className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-2 py-2 text-lg font-medium text-transparent"
-                onClick={() => navigate("/student/schedule")}
+                onClick={() => navigate("/parent/schedule")}
               >
                 {" "}
                 Weekly Schedule
@@ -35,7 +35,7 @@ function ScheduleExam() {
 
               <button
                 className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-2 py-2 text-lg font-medium text-white focus:outline-none"
-                onClick={() => navigate("/student/schedule/exam")}
+                onClick={() => navigate("/parent/schedule/exam")}
               >
                 Exams Schedule
               </button>
@@ -84,4 +84,4 @@ function ScheduleExam() {
   );
 }
 
-export default ScheduleExam;
+export { ScheduleExam };

@@ -25,7 +25,7 @@ function GradesExam() {
         <div className="my-10 ms-8 md:ms-14 lg:ms-20">
           <button
             className="me-10 cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-2 py-2 font-medium text-white focus:outline-none"
-            onClick={() => navigate("/student/grades/exam")}
+            onClick={() => navigate("/parent/grades/exam")}
           >
             {" "}
             Grade Exam
@@ -33,32 +33,13 @@ function GradesExam() {
 
           <button
             className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-2 py-2 font-medium text-transparent"
-            onClick={() => navigate("/student/grades/assignment")}
+            onClick={() => navigate("/parent/grades/assignment")}
           >
             Grade Assignments
           </button>
         </div>
 
-        <div className="mx-auto grid w-[90%] grid-cols-1 items-center gap-4 sm:grid-cols-3">
-          <div className="col-span-2 flex items-center justify-center">
-            <p className="text-md w-[95%] text-start font-semibold md:text-lg lg:text-2xl">
-              Dear student, remember that every effort you put in brings you
-              closer to success, and achievement comes to those who work hard
-              and pursue their dreams. Don’t give up when faced with challenges;
-              they are simply steps towards your goals. Aim for the highest
-              grades, and believe in your abilities and dedication.
-            </p>
-          </div>
-          <div className="col-span-1 flex items-center justify-center">
-            <img
-              src={img1}
-              alt="img4notfound"
-              className="ms-3 rounded-3xl rounded-t-xl bg-black lg:w-96"
-            />
-          </div>
-        </div>
-
-        <div className="mx-auto my-10 w-[90%] px-4">
+        <div className="mx-auto my-10 w-[90%] px-2">
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse rounded-2xl border-2 border-pink-300 shadow-lg">
               <thead>
@@ -103,4 +84,4 @@ function GradesExam() {
   );
 }
 
-export default GradesExam;
+export { GradesExam };

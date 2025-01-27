@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { ReactSVG } from "react-svg";
-import { Link } from 'react-router-dom'; 
+import { Link } from "react-router-dom";
 import InfoIcon from "../../../assets/icons/InfoS.svg";
 import userImage from "../../../assets/user.jpeg";
 import language from "../../../assets/icons/languageS.svg";
@@ -39,7 +39,7 @@ const Navbar = () => {
     { path: "activities/prizes" },
     { path: "activities/contests" },
     { path: "virtualrooms" },
-    { path: "allcourses" },
+    { path: "allcourses" },
   ];
 
   const filteredRoutes = routes.filter((route) =>
@@ -70,7 +70,7 @@ const Navbar = () => {
   };
 
   const url = window.location.pathname;
-  const name = url.split("/").pop();
+  const name = url.split("/student/").pop();
   console.log(name);
 
   // const handleBack = () => {
@@ -82,10 +82,7 @@ const Navbar = () => {
       if (settingsRef.current && !settingsRef.current.contains(event.target)) {
         setSettingToggle(false);
       }
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target)
-      ) {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
     };
@@ -101,28 +98,29 @@ const Navbar = () => {
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md">
         <div className="flex items-center space-x-3">
           <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="flex rounded-lg p-2"
           >
-            <img src={Menu} alt="Menu" className="w-8 h-8" />
+            <img src={Menu} alt="Menu" className="h-8 w-8" />
           </button>
           <Link to="/student">
-          <img
-            src={Logo}
-            alt="Logo"
-            className="w-9 h-9 object-contain cursor-pointer"
-          />
-        </Link>
+            <img
+              src={Logo}
+              alt="Logo"
+              className="h-9 w-9 cursor-pointer object-contain"
+            />
+          </Link>
           <p
             className="hidden font-inter text-lg font-semibold text-[#3D52A1] lg:flex"
-            onClick={() => {`
-              ${name}` !== "student" && navigate(`/student/${name}`);
+            onClick={() => {
+              if (name !== "/student") {
+                navigate(`/student/${name}`);
+              }
             }}
           >
-            {name}
+            {name === "/student" ? "student" : `${name}`}
           </p>
         </div>
-
 
         <div
           className="relative ml-auto hidden max-w-sm sm:flex"
@@ -204,7 +202,10 @@ const Navbar = () => {
           </button>
 
           {settingToggle && (
-            <div ref={settingsRef} className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#D1B5FF] to-[#AB92ED]">
+            <div
+              ref={settingsRef}
+              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#D1B5FF] to-[#AB92ED]"
+            >
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
