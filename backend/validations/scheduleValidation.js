@@ -8,6 +8,7 @@ const scheduleValidationSchema = Joi.object({
   startTime: Joi.string().required(),
   endTime: Joi.string().required(),
   academicYear: Joi.string().required(),
+  semesterName: Joi.string().required(),
 });
 
 module.exports = scheduleValidationSchema;
