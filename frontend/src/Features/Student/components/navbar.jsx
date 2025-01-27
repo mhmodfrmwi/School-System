@@ -39,12 +39,9 @@ const Navbar = () => {
     { path: "activities/prizes" },
     { path: "activities/contests" },
     { path: "virtualrooms" },
-<<<<<<< HEAD
     { path: "allcourses" },
-=======
-    { path: "allcourses" },
+    { path: "allcourses" },
     { path: "attendance" },
->>>>>>> 34f3df84ef8258c1d060ae31989c8fae71cae951
   ];
 
   const filteredRoutes = routes.filter((route) =>

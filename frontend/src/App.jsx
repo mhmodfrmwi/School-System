@@ -67,16 +67,13 @@ import VirtualRooms from "./Features/Student/components/Virtual Rooms/VirtualRoo
 import AllCouses from "./Features/Student/components/courses/allcourses";
 import StudentCourseDetails from "./Features/Student/components/courses/CourseVideoLectures";
 import AttendancePage from "./Features/Student/components/Attendance/AttendancePage";
-<<<<<<< HEAD
 import { ToastContainer } from "react-toastify";
 import { Grades as GradesParent } from "./Features/Parent/components/Grades/Grades";
 import { GradesAssignment as GradesAssignmentParent } from "./Features/Parent/components/Grades/GradesAssignment";
 import { GradesExam as GradesExamParent } from "./Features/Parent/components/Grades/GradesExam";
 import { Schedule as ScheduleParent } from "./Features/Parent/components/Schedule/schedule";
 import { ScheduleExam as ScheduleExamParent } from "./Features/Parent/components/Schedule/scheduleExam";
-=======
 
->>>>>>> 34f3df84ef8258c1d060ae31989c8fae71cae951
 function App() {
   return (
     <BrowserRouter>
@@ -163,12 +160,8 @@ function App() {
           <Route path="activities" element={<Activities />} />
           <Route path="virtualrooms" element={<VirtualRooms />} />
           <Route path="allcourses" element={<AllCouses />} />
-<<<<<<< HEAD
-=======
           <Route path="allcourses/videos" element={<StudentCourseDetails />} />
 
-
->>>>>>> 34f3df84ef8258c1d060ae31989c8fae71cae951
           <Route path="attendance" element={<AttendancePage />} />
         </Route>
         {/* /////////////////parentpage//////////////////// */}
