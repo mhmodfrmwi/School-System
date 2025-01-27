@@ -14,7 +14,9 @@ export const fetchAssignedGrades = createAsyncThunk(
   "assignGrade/fetchAssignedGrades",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/gradeSubjectSemester");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/gradeSubjectSemester",
+      );
       if (!response.ok) {
         const error = await response.json();
         return rejectWithValue(error.message);
@@ -22,9 +24,11 @@ export const fetchAssignedGrades = createAsyncThunk(
       const data = await response.json();
       return data.assignedGrades || [];
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to fetch assigned grades");
+      return rejectWithValue(
+        error.message || "Failed to fetch assigned grades",
+      );
     }
-  }
+  },
 );
 
 // Assign a grade
@@ -33,12 +37,12 @@ export const assignGrade = createAsyncThunk(
   async (gradeData, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/admin/gradeSubjectSemester/createGradeSubjectSemester",
+        "http://localhost:4000/api/v1/admin/gradeYear/createGradeYear",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(gradeData),
-        }
+        },
       );
       const data = await response.json();
 
@@ -51,7 +55,7 @@ export const assignGrade = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to assign grade");
     }
-  }
+  },
 );
 
 // Fetch academic years
@@ -59,7 +63,9 @@ export const fetchAcademicYears = createAsyncThunk(
   "assignGrade/fetchAcademicYears",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/academicYear");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/academicYear",
+      );
       if (!response.ok) {
         const error = await response.json();
         return rejectWithValue(error.message);
@@ -69,7 +75,7 @@ export const fetchAcademicYears = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch academic years");
     }
-  }
+  },
 );
 
 // Delete assigned grade
@@ -77,9 +83,12 @@ export const deleteAssignedGrade = createAsyncThunk(
   "assignGrade/deleteAssignedGrade",
   async (gradeId, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/gradeSubjectSemester/${gradeId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/gradeSubjectSemester/${gradeId}`,
+        {
+          method: "DELETE",
+        },
+      );
       if (!response.ok) {
         const error = await response.json();
         return rejectWithValue(error.message);
@@ -90,7 +99,7 @@ export const deleteAssignedGrade = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to delete grade");
     }
-  }
+  },
 );
 
 const assignGradeSlice = createSlice({
@@ -151,7 +160,7 @@ const assignGradeSlice = createSlice({
       .addCase(deleteAssignedGrade.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.assignedGrades = state.assignedGrades.filter(
-          (grade) => grade._id !== action.payload
+          (grade) => grade._id !== action.payload,
         );
         state.loading = false;
       })

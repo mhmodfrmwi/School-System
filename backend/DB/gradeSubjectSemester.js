@@ -11,8 +11,8 @@ const gradeSubjectSemesterSchema = new mongoose.Schema({
     required: true,
   },
 });
-
-module.exports = mongoose.model(
+const GradeSubjectSemester = mongoose.model(
   "GradeSubjectSemester",
   gradeSubjectSemesterSchema
 );
+module.exports = GradeSubjectSemester;

@@ -296,15 +296,23 @@ const deleteStudent = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  await Class.findByIdAndUpdate(student.classId, {
-    $inc: { student_count: -1 },
-  });
-  await Student.findByIdAndDelete(id);
+  try {
+    await Class.findByIdAndUpdate(student.classId, {
+      $inc: { student_count: -1 },
+    });
+    await Student.findByIdAndDelete(id);
 
-  res.status(200).json({
-    status: 200,
-    message: "Student deleted successfully",
-  });
+    res.status(200).json({
+      status: 200,
+      message: "Student deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to delete student",
+      error: error.message,
+    });
+  }
 });
 
 const getStudent = expressAsyncHandler(async (req, res) => {

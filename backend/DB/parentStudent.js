@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const parentStudentSchema = new mongoose.Schema({
   parent_id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -9,7 +10,7 @@ const parentStudentSchema = new mongoose.Schema({
     ref: "Student",
     required: true,
   },
-  academic_number: { type: String, required: true },
 });
+const ParentStudent = mongoose.model("ParentStudent", parentStudentSchema);
 
-module.exports = mongoose.model("ParentStudent", parentStudentSchema);
+module.exports = ParentStudent;

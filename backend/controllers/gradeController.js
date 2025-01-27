@@ -2,6 +2,10 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../utils/validateObjectId");
 const gradeValidationSchema = require("../validations/gradeValidation");
 const Grade = require("../DB/gradeModel");
+const GradeSubject = require("../DB/gradeSubject");
+const GradeYear = require("../DB/gradeYearModel");
+const Schedule = require("../DB/schedule");
+const GradeSubjectSemester = require("../DB/gradeSubjectSemester");
 
 const createGrade = expressAsyncHandler(async (req, res) => {
   const { error } = gradeValidationSchema.validate(req.body);
@@ -90,12 +94,11 @@ const deleteGrade = expressAsyncHandler(async (req, res) => {
   if (!validateObjectId(id)) {
     return res.status(400).json({
       status: 400,
-      message: "Error getting this page",
+      message: "Invalid grade ID",
     });
   }
 
   const grade = await Grade.findByIdAndDelete(id);
-
   if (!grade) {
     return res.status(404).json({
       status: 404,
@@ -103,10 +106,33 @@ const deleteGrade = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  res.status(200).json({
-    status: 200,
-    message: "Grade deleted successfully",
-  });
+  try {
+    await Promise.all([
+      Schedule.deleteMany({ grade_id: id }),
+      GradeYear.deleteMany({ gradeId: id }),
+      Student.deleteMany({ gradeId: id }),
+    ]);
+
+    const gradeSubjects = await GradeSubject.find({ gradeId: id });
+
+    await Promise.all(
+      gradeSubjects.map(async (gs) => {
+        await GradeSubjectSemester.deleteMany({ gradeSubjectId: gs._id });
+        await GradeSubject.findByIdAndDelete(gs._id);
+      })
+    );
+
+    res.status(200).json({
+      status: 200,
+      message: "Grade, students, and all related records deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to delete grade or related records",
+      error: error.message,
+    });
+  }
 });
 
 const getGrade = expressAsyncHandler(async (req, res) => {

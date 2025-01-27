@@ -93,6 +93,20 @@ const {
   getStudent,
   getAllStudents,
 } = require("../controllers/studentController");
+const {
+  createGradeYear,
+  getGradeYear,
+  updateGradeYear,
+  deleteGradeYear,
+  getAllGradeYear,
+} = require("../controllers/gradeYearController");
+const {
+  createParentStudent,
+  deleteParentStudent,
+  getParentsStudent,
+  updateParentStudent,
+  getAllParentsStudent,
+} = require("../controllers/parentStudentController");
 
 const router = express.Router();
 
@@ -159,6 +173,15 @@ router.post(
   "/gradeSubjectSemester/createGradeSubjectSemester",
   createGradeSubjectSemester
 );
+
+//grade-year routes
+router.post("/gradeYear/createGradeYear", createGradeYear);
+router
+  .route("/gradeYear/:id")
+  .get(getGradeYear)
+  .patch(updateGradeYear)
+  .delete(deleteGradeYear);
+router.get("/gradeYear", getAllGradeYear);
 router
   .route("/gradeSubjectSemester/:id")
   .get(getGradeSubjectSemester)
@@ -206,7 +229,8 @@ router
   .patch(updateParent)
   .delete(deleteParent);
 router.get("/parent", getAllParent);
-
+//parent-student routes
+router.delete("/parentStudent/:id", deleteParentStudent);
 //manager routes
 router.post("/manager/createManager", createManager);
 router

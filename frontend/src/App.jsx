@@ -42,6 +42,7 @@ import GradesAssignment from "./Features/Student/components/Grades/GradesAssignm
 import GradesExam from "./Features/Student/components/Grades/GradesExam";
 import Schedule from "./Features/Student/components/Schedule/schedule";
 import ScheduleExam from "./Features/Student/components/Schedule/scheduleExam";
+import LibraryPage from "./Features/Student/components/Library/LibraryPage";
 import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBooksEnglish";
 import Parents from "./Features/Parent/pages/Parents";
 import DashboardParent from "./Features/Parent/pages/DashboardParent";
@@ -65,6 +66,9 @@ import Activities from "./Features/Student/components/Activites/Activites";
 import Contests from "./Features/Student/components/Activites/Contests";
 import VirtualRooms from "./Features/Student/components/Virtual Rooms/VirtualRooms";
 import AllCouses from "./Features/Student/components/courses/allcourses";
+import StudentCourseDetails from "./Features/Student/components/courses/CourseVideoLectures";
+import AttendancePage from "./Features/Student/components/Attendance/AttendancePage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -135,6 +139,7 @@ function App() {
           <Route path="grades/exam" element={<GradesExam />} />
           <Route path="schedule" element={<Schedule />} />
           <Route path="schedule/exam" element={<ScheduleExam />} />
+          <Route path="library" element={<LibraryPage />} />
           <Route path="librarybooksenglish" element={<LibraryBooksEnglish />} />
           <Route path="motivation" element={<MotivationPage />} />
           <Route path="edit-student-profile" element={<EditStudentProfile />} />
@@ -144,8 +149,10 @@ function App() {
           <Route path="activities" element={<Activities />} />
           <Route path="virtualrooms" element={<VirtualRooms />} />
           <Route path="allcourses" element={<AllCouses />} />
+          <Route path="allcourses/videos" element={<StudentCourseDetails />} />
 
 
+          <Route path="attendance" element={<AttendancePage />} />
         </Route>
         {/* /////////////////parentpage//////////////////// */}
         <Route path="parent" element={<Parents />}>

@@ -32,7 +32,7 @@ const Navbar = () => {
     { path: "grades/exam" },
     { path: "schedule" },
     { path: "schedule/exam" },
-    { path: "librarybooksenglish" },
+    { path: "library" },
     { path: "motivation" },
     { path: "activities" },
     { path: "activities/detailes" },
@@ -40,6 +40,7 @@ const Navbar = () => {
     { path: "activities/contests" },
     { path: "virtualrooms" },
     { path: "allcourses" },
+    { path: "attendance" },
   ];
 
   const filteredRoutes = routes.filter((route) =>
