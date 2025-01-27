@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { ReactSVG } from "react-svg";
+import { Link } from 'react-router-dom'; 
 import InfoIcon from "../../../assets/icons/InfoS.svg";
 import userImage from "../../../assets/user.jpeg";
 import language from "../../../assets/icons/languageS.svg";
@@ -29,6 +30,7 @@ const Navbar = () => {
     { path: "schedule" },
     { path: "schedule/exam" },
     { path: "librarybooksenglish" },
+    { path: "motivation" },
   ];
 
   const filteredRoutes = routes.filter((route) =>
@@ -95,12 +97,13 @@ const Navbar = () => {
           >
             <FaArrowLeft className="text-lg" />
           </button>
+          <Link to="/student">
           <img
-            src={Logo} 
+            src={Logo}
             alt="Logo"
-            className="w-9 h-9 object-contain" 
+            className="w-9 h-9 object-contain cursor-pointer"
           />
-
+        </Link>
           <p
             className="hidden font-inter text-lg font-semibold text-[#3D52A1] lg:flex"
             onClick={() => {

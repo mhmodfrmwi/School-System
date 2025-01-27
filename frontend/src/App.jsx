@@ -57,6 +57,8 @@ import EditSchedule from "./Features/Admin/components/Schedule/editScheduleForm"
 import EditTermForm from "./Features/Admin/components/Terms/editTermForm";
 import EditParentForm from "./Features/Admin/components/Parents/editParent";
 import EditStudent from "./Features/Admin/components/Students/editStudentForm";
+import HeaderInfoPage from "./Features/Student/pages/MotivationPage";
+import MotivationPage from "./Features/Student/pages/MotivationPage";
 function App() {
   return (
     <BrowserRouter>
@@ -128,6 +130,8 @@ function App() {
           <Route path="schedule" element={<Schedule />} />
           <Route path="schedule/exam" element={<ScheduleExam />} />
           <Route path="librarybooksenglish" element={<LibraryBooksEnglish />} />
+          <Route path="motivation" element={<MotivationPage />} />
+
         </Route>
         {/* /////////////////parentpage//////////////////// */}
         <Route path="parent" element={<Parents />}>
