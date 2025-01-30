@@ -1,9 +1,9 @@
 const expressAsyncHandler = require("express-async-handler");
-const validateObjectId = require("../utils/validateObjectId");
-const classValidationSchema = require("../validations/classValidation");
-const Class = require("../DB/classModel");
-const Grade = require("../DB/gradeModel");
-const AcademicYear = require("../DB/academicYearModel");
+const validateObjectId = require("../../utils/validateObjectId");
+const classValidationSchema = require("../../validations/classValidation");
+const Class = require("../../DB/classModel");
+const Grade = require("../../DB/gradeModel");
+const AcademicYear = require("../../DB/academicYearModel");
 
 const createClass = expressAsyncHandler(async (req, res) => {
   const { error } = classValidationSchema.validate(req.body);

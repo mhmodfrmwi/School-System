@@ -1,10 +1,8 @@
 const express = require("express");
-const authStudentConttroller = require("../controllers/authStudentController");
-
+const { login } = require("../controllers/auth/authStudentController");
+const validateJwt = require("../middlewares/validateJWT");
 
 const router = express.Router();
-router.route('/login').post(authStudentConttroller.login);
-
-
+router.route("/login").post(login);
 
 module.exports = router;

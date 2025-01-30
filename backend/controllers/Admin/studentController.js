@@ -1,12 +1,12 @@
 const expressAsyncHandler = require("express-async-handler");
 const moment = require("moment");
-const validateObjectId = require("../utils/validateObjectId");
-const studentValidationSchema = require("../validations/studentValidation");
-const Student = require("../DB/student");
-const Grade = require("../DB/gradeModel");
-const Class = require("../DB/classModel");
-const AcademicYear = require("../DB/academicYearModel");
-const hashPassword = require("../utils/hashPassword");
+const validateObjectId = require("../../utils/validateObjectId");
+const studentValidationSchema = require("../../validations/studentValidation");
+const Student = require("../../DB/student");
+const Grade = require("../../DB/gradeModel");
+const Class = require("../../DB/classModel");
+const AcademicYear = require("../../DB/academicYearModel");
+const hashPassword = require("../../utils/hashPassword");
 
 const generateAcademicNumber = async () => {
   const currentYear = moment().year().toString().slice(-2);

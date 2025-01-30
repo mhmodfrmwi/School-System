@@ -1,11 +1,11 @@
 const expressAsyncHandler = require("express-async-handler");
-const validateObjectId = require("../utils/validateObjectId");
-const adminValidationSchema = require("../validations/adminValidation");
-const Admin = require("../DB/Admin");
-const hashPassword = require("../utils/hashPassword");
+const validateObjectId = require("../../utils/validateObjectId");
+const managerValidationSchema = require("../../validations/managerValidation");
+const Manager = require("../../DB/managerModel");
+const hashPassword = require("../../utils/hashPassword");
 
-const createAdmin = expressAsyncHandler(async (req, res) => {
-  const { error } = adminValidationSchema.validate(req.body);
+const createManager = expressAsyncHandler(async (req, res) => {
+  const { error } = managerValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
       status: 400,
@@ -13,17 +13,17 @@ const createAdmin = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const existingAdmin = await Admin.findOne({
+  const existingManager = await Manager.findOne({
     $or: [{ email: req.body.email }, { phone: req.body.phone }],
   });
-  if (existingAdmin) {
+  if (existingManager) {
     return res.status(400).json({
       status: 400,
       message: "Email or phone number already exists",
     });
   }
 
-  const admin = new Admin({
+  const manager = new Manager({
     fullName: req.body.fullName,
     email: req.body.email,
     password: await hashPassword(req.body.password),
@@ -31,26 +31,26 @@ const createAdmin = expressAsyncHandler(async (req, res) => {
     gender: req.body.gender,
   });
 
-  await admin.save();
+  await manager.save();
 
   res.status(201).json({
     status: 201,
-    message: "Admin created successfully",
-    admin,
+    message: "Manager created successfully",
+    manager,
   });
 });
 
-const updateAdmin = expressAsyncHandler(async (req, res) => {
+const updateManager = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!validateObjectId(id)) {
     return res.status(400).json({
       status: 400,
-      message: "Invalid Admin ID",
+      message: "Invalid Manager ID",
     });
   }
 
-  const { error } = adminValidationSchema.validate(req.body);
+  const { error } = managerValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
       status: 400,
@@ -58,20 +58,20 @@ const updateAdmin = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const existingAdmin = await Admin.findOne({
+  const existingManager = await Manager.findOne({
     $and: [
       { _id: { $ne: id } },
       { $or: [{ email: req.body.email }, { phone: req.body.phone }] },
     ],
   });
-  if (existingAdmin) {
+  if (existingManager) {
     return res.status(400).json({
       status: 400,
       message: "Email or phone number already exists",
     });
   }
 
-  const admin = await Admin.findByIdAndUpdate(
+  const manager = await Manager.findByIdAndUpdate(
     id,
     {
       fullName: req.body.fullName,
@@ -83,84 +83,84 @@ const updateAdmin = expressAsyncHandler(async (req, res) => {
     { new: true }
   );
 
-  if (!admin) {
+  if (!manager) {
     return res.status(404).json({
       status: 404,
-      message: "Admin not found",
+      message: "Manager not found",
     });
   }
 
   res.status(200).json({
     status: 200,
-    message: "Admin updated successfully",
-    admin,
+    message: "Manager updated successfully",
+    manager,
   });
 });
 
-const deleteAdmin = expressAsyncHandler(async (req, res) => {
+const deleteManager = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!validateObjectId(id)) {
     return res.status(400).json({
       status: 400,
-      message: "Invalid Admin ID",
+      message: "Invalid Manager ID",
     });
   }
 
-  const admin = await Admin.findByIdAndDelete(id);
+  const manager = await Manager.findByIdAndDelete(id);
 
-  if (!admin) {
+  if (!manager) {
     return res.status(404).json({
       status: 404,
-      message: "Admin not found",
+      message: "Manager not found",
     });
   }
 
   res.status(200).json({
     status: 200,
-    message: "Admin deleted successfully",
+    message: "Manager deleted successfully",
   });
 });
 
-const getAdmin = expressAsyncHandler(async (req, res) => {
+const getManager = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!validateObjectId(id)) {
     return res.status(400).json({
       status: 400,
-      message: "Invalid Admin ID",
+      message: "Invalid Manager ID",
     });
   }
 
-  const admin = await Admin.findById(id);
+  const manager = await Manager.findById(id);
 
-  if (!admin) {
+  if (!manager) {
     return res.status(404).json({
       status: 404,
-      message: "Admin not found",
+      message: "Manager not found",
     });
   }
 
   res.status(200).json({
     status: 200,
-    message: "Admin retrieved successfully",
-    admin,
+    message: "Manager retrieved successfully",
+    manager,
   });
 });
 
-const getAllAdmin = expressAsyncHandler(async (req, res) => {
-  const admins = await Admin.find();
+const getAllManager = expressAsyncHandler(async (req, res) => {
+  const managers = await Manager.find();
   res.status(200).json({
     status: 200,
-    message: "Admins retrieved successfully",
-    admins,
+    message: "Managers retrieved successfully",
+    managers,
   });
 });
 
 module.exports = {
-  createAdmin,
-  updateAdmin,
-  deleteAdmin,
-  getAdmin,
-  getAllAdmin,
+  createManager,
+  updateManager,
+  deleteManager,
+  getManager,
+  getAllManager,
 };

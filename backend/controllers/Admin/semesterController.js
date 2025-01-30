@@ -1,8 +1,8 @@
 const expressAsyncHandler = require("express-async-handler");
-const validateObjectId = require("../utils/validateObjectId");
-const semesterValidationSchema = require("../validations/semesterValidation");
-const AcademicYear = require("../DB/academicYearModel");
-const Semester = require("../DB/semesterModel");
+const validateObjectId = require("../../utils/validateObjectId");
+const semesterValidationSchema = require("../../validations/semesterValidation");
+const AcademicYear = require("../../DB/academicYearModel");
+const Semester = require("../../DB/semesterModel");
 
 const createSemester = expressAsyncHandler(async (req, res) => {
   const { error } = semesterValidationSchema.validate(req.body);
