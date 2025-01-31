@@ -15,7 +15,7 @@ export const fetchAssignedGrades = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/admin/gradeSubjectSemester",
+        "http://localhost:4000/api/v1/admin/gradeYear",
       );
       if (!response.ok) {
         const error = await response.json();

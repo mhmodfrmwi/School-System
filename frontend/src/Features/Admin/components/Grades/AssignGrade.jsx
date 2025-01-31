@@ -12,7 +12,7 @@ function AssignGrade() {
 
   const dispatch = useDispatch();
 
-  const { grade, loading: gradeLoading, error: gradeError } = useSelector((state) => state.grades);
+  const { grades, loading: gradeLoading, error: gradeError } = useSelector((state) => state.grades);
   const { academicYears, loading: yearLoading, error: yearError } = useSelector((state) => state.academicYears);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ function AssignGrade() {
               ) : gradeError ? (
                 <option>Error loading grades</option>
               ) : (
-                grade.map((gradeItem) => (
+                grades.map((gradeItem) => (
                   <option key={gradeItem._id} value={gradeItem.gradeName}>
                     {gradeItem.gradeName}
                   </option>
