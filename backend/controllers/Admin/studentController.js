@@ -10,9 +10,19 @@ const hashPassword = require("../../utils/hashPassword");
 
 const generateAcademicNumber = async () => {
   const currentYear = moment().year().toString().slice(-2);
-  const totalStudents = await Student.countDocuments();
-  const studentCount = totalStudents + 1;
-  return `${currentYear}${String(studentCount).padStart(4, "0")}`;
+
+  const lastStudent = await Student.findOne({
+    academic_number: { $regex: `^${currentYear}` },
+  }).sort({ academic_number: -1 });
+
+  let sequenceNumber = 1;
+
+  if (lastStudent) {
+    const lastNumber = lastStudent.academic_number.slice(2);
+    sequenceNumber = parseInt(lastNumber, 10) + 1;
+  }
+
+  return `${currentYear}${String(sequenceNumber).padStart(4, "0")}`;
 };
 
 async function createClass(gradeId, academicYearId, className) {
