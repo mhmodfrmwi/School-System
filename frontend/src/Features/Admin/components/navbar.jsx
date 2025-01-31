@@ -52,13 +52,18 @@ const Navbar = () => {
     { path: "allsubjects" },
     { path: "allsubjects/:id" },
     { path: "addsubject" },
-    { path: " assignSubject" },
+    { path: "assignSubject" },
     { path: "edit-subject/:id" },
     { path: "editmanagerform/:id" },
     { path: "editparentform/:id" },
     { path: "edit-assigned-subject/:id" },
-    { path: "allsubjects" },
-    { path: "edit-assigned-subject/:id" },
+    { path: "allgrades/:id" },
+    { path: "edit-student/:id" },
+    { path: "edit-schedule/:id" },
+    { path: "edit-term/:id" },
+    { path: "allteachers/:id" },
+    { path: "edit-class-teacher/:id" },
+    { path: "edit-admin-profile" },
   ];
 
   const filteredRoutes = routes.filter((route) =>
@@ -89,7 +94,10 @@ const Navbar = () => {
   };
 
   const url = window.location.pathname;
-  const name = url.split("/admin/").pop();
+  const adminName = url.split("/admin/").pop();
+  console.log(adminName);
+  const match = url.match(/\/admin\/([^/]+)/);
+  const name = match ? match[1] : "";
   console.log(name);
 
   const handleBack = () => {
@@ -122,15 +130,8 @@ const Navbar = () => {
           >
             <FaArrowLeft className="text-lg" />
           </button>
-          <p
-            className="hidden font-inter text-lg font-semibold text-dashboard-header lg:flex"
-            onClick={() => {
-              if (name !== "/admin") {
-                navigate(`/admin/${name}`);
-              }
-            }}
-          >
-            {name === "/admin" ? "admin" : `${name}`}
+          <p className="hidden font-inter text-lg font-semibold text-dashboard-header lg:flex">
+            {adminName === "/admin" ? "dashboard" : `${name}`}
           </p>
         </div>
 
