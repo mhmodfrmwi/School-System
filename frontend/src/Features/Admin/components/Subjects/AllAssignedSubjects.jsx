@@ -5,7 +5,7 @@ import {
   fetchAssignedSubjects,
   deleteAssignedSubject,
 } from "../AdminRedux/AssignSubjectSlice";
-import { fetchAssignedGrades } from "../AdminRedux/AssignGradeSlice";
+import { fetchGrades } from "../AdminRedux/gradeSlice";
 import Loader from "@/ui/Loader";
 import SubjectsHeader from "./AssignSubjectHeader";
 import Pagination from "../Pagination";
@@ -16,7 +16,7 @@ const AssignedSubjects = () => {
     (state) => state.assignSubject,
   );
 
-  const { grade, loading: loadingGrades } = useSelector(
+  const { grades, loading: loadingGrades } = useSelector(
     (state) => state.grades,
   );
   const { id } = useParams();
@@ -28,7 +28,7 @@ const AssignedSubjects = () => {
 
   useEffect(() => {
     dispatch(fetchAssignedSubjects());
-    dispatch(fetchAssignedGrades());
+    dispatch(fetchGrades());
   }, [dispatch]);
 
   // Apply filter and search
@@ -47,7 +47,7 @@ const AssignedSubjects = () => {
   // Add grade name to the subjects
   const subjectsWithGradeName = filteredSubjects.map((subject) => {
     const gradeName =
-      grade?.find((g) => g._id === subject.grade)?.gradeName || "Unknown";
+      grades?.find((g) => g._id === subject.grade)?.gradeName || "Unknown";
     return { ...subject, gradeName };
   });
 

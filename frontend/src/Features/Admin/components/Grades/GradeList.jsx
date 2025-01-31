@@ -44,7 +44,7 @@ const GradeList = () => {
     if (confirmDelete) {
           dispatch(removeGrade(_id))
             .unwrap()
-            .then(() => toast.success("Subject deleted successfully!"))
+            .then(() => toast.success("Grade deleted successfully!"))
             .catch((err) => console.error(err));
         }
   };

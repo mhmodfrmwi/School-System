@@ -14,7 +14,7 @@ function AssignSubject() {
 
   const dispatch = useDispatch();
   const { loading, semesters } = useSelector((state) => state.assignSubject);
-  const { grade } = useSelector((state) => state.grades);
+  const { grades } = useSelector((state) => state.grades);
   const { subjects } = useSelector((state) => state.subject);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ function AssignSubject() {
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="">-- Select Grade --</option>
-              {grade?.map((grade, index) => (
+              {grades?.map((grade, index) => (
                 <option key={index} value={grade.gradeName}>
                   {grade.gradeName}
                 </option>

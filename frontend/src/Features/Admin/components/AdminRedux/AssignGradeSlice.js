@@ -22,7 +22,7 @@ export const fetchAssignedGrades = createAsyncThunk(
         return rejectWithValue(error.message);
       }
       const data = await response.json();
-      return data.assignedGrades || [];
+      return data.gradeYears || [];
     } catch (error) {
       return rejectWithValue(
         error.message || "Failed to fetch assigned grades",
@@ -49,8 +49,6 @@ export const assignGrade = createAsyncThunk(
       if (!response.ok) {
         return rejectWithValue(data.message || "Failed to assign grade");
       }
-
-      toast.success(data.message || "Grade assigned successfully");
       return data.assignedGrade;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to assign grade");
@@ -84,7 +82,7 @@ export const deleteAssignedGrade = createAsyncThunk(
   async (gradeId, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/admin/gradeSubjectSemester/${gradeId}`,
+        `http://localhost:4000/api/v1/admin/gradeYear/${gradeId}`,
         {
           method: "DELETE",
         },
@@ -93,8 +91,6 @@ export const deleteAssignedGrade = createAsyncThunk(
         const error = await response.json();
         return rejectWithValue(error.message);
       }
-      const data = await response.json();
-      toast.success(data.message || "Grade deleted successfully");
       return gradeId;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to delete grade");
@@ -102,10 +98,45 @@ export const deleteAssignedGrade = createAsyncThunk(
   },
 );
 
+// Edit assigned grade
+export const editAssignedGrade = createAsyncThunk(
+  "assignGrade/editAssignedGrade",
+  async ({ id, updatedGrade }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/gradeYear/${id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedGrade),
+        },
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to edit assigned grade");
+    }
+  },
+);
+
 const assignGradeSlice = createSlice({
   name: "assignGrade",
   initialState,
-  reducers: {},
+  reducers: {
+    editAssignedGrade: (state, action) => {
+      const { id, updatedGrade } = action.payload;
+      const index = state.assignedGrades.findIndex((grade) => grade.id === id);
+      if (index !== -1) {
+        state.assignedGrades[index] = { ...state.assignedGrades[index], ...updatedGrade };
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAssignedGrades.pending, (state) => {
@@ -114,7 +145,7 @@ const assignGradeSlice = createSlice({
       })
       .addCase(fetchAssignedGrades.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.assignedGrades = action.payload;
+        state.assignedGrades = action.payload.filter((grade) => grade.gradeId !== null);
         state.loading = false;
       })
       .addCase(fetchAssignedGrades.rejected, (state, action) => {
@@ -146,6 +177,7 @@ const assignGradeSlice = createSlice({
         state.status = "succeeded";
         state.assignedGrades.push(action.payload);
         state.loading = false;
+        toast.success("Grade assigned successfully");
       })
       .addCase(assignGrade.rejected, (state, action) => {
         state.status = "failed";
@@ -163,10 +195,32 @@ const assignGradeSlice = createSlice({
           (grade) => grade._id !== action.payload,
         );
         state.loading = false;
+        toast.success("Assigned Grade deleted successfully");
       })
       .addCase(deleteAssignedGrade.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to delete grade";
+        state.loading = false;
+        toast.error(state.error);
+      })
+      .addCase(editAssignedGrade.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+      })
+      .addCase(editAssignedGrade.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.assignedGrades.findIndex(
+          (grade) => grade._id === action.payload._id,
+        );
+        if (index !== -1) {
+          state.assignedGrades[index] = action.payload;
+        }
+        state.loading = false;
+        toast.success("Assigned Grade updated successfully");
+      })
+      .addCase(editAssignedGrade.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to edit assigned grade";
         state.loading = false;
         toast.error(state.error);
       });
