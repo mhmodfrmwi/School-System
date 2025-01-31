@@ -95,10 +95,8 @@ const Navbar = () => {
 
   const url = window.location.pathname;
   const adminName = url.split("/admin/").pop();
-  console.log(adminName);
   const match = url.match(/\/admin\/([^/]+)/);
   const name = match ? match[1] : "";
-  console.log(name);
 
   const handleBack = () => {
     navigate(-1);

@@ -8,13 +8,14 @@ import { postClassTeacher } from "../AdminRedux/classTeacherSlice"; // Add class
 
 function AcademicData() {
   const dispatch = useDispatch();
-  
+
   // State to hold form data
   const [academicData, setAcademicData] = useState({
     className: "",
     subjectName: "",
     teacherName: "",
     academicYear: "",
+    gradeName: "",
   });
 
   // Fetch data from Redux store
@@ -22,6 +23,7 @@ function AcademicData() {
   const { subjects } = useSelector((state) => state.subject);
   const { teachers } = useSelector((state) => state.teachers);
   const { academicYears } = useSelector((state) => state.academicYears);
+
 
   // Load data on component mount
   useEffect(() => {
@@ -39,35 +41,35 @@ function AcademicData() {
 
   // Handle form submission (Add Class Teacher)
 
-const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  // Map the selected IDs to their actual values
-  const selectedClass = classes.find(cls => cls._id === academicData.className)?.className || '';
-  const selectedSubject = subjects.find(subject => subject._id === academicData.subjectName)?.subjectName || '';
-  const selectedTeacher = teachers.find(teacher => teacher._id === academicData.teacherName)?.fullName || '';
-  const selectedAcademicYear = academicYears.find(year => year._id === academicData.academicYear)?.startYear + '-' + academicYears.find(year => year._id === academicData.academicYear)?.endYear || '';
+    // Map the selected IDs to their actual values
+    const selectedClass = classes.find(cls => cls._id === academicData.className)?.className || '';
+    const selectedSubject = subjects.find(subject => subject._id === academicData.subjectName)?.subjectName || '';
+    const selectedTeacher = teachers.find(teacher => teacher._id === academicData.teacherName)?.fullName || '';
+    const selectedAcademicYear = academicYears.find(year => year._id === academicData.academicYear)?.startYear + '-' + academicYears.find(year => year._id === academicData.academicYear)?.endYear || '';
 
-  // Create the data object with the names
-  const classTeacherData = {
-    className: selectedClass,
-    subjectName: selectedSubject,
-    teacherName: selectedTeacher,
-    academicYear: selectedAcademicYear,
+    // Create the data object with the names
+    const classTeacherData = {
+      className: selectedClass,
+      subjectName: selectedSubject,
+      teacherName: selectedTeacher,
+      academicYear: selectedAcademicYear,
+    };
+
+
+    // Dispatch action to post class teacher
+    dispatch(postClassTeacher(classTeacherData));
+
+    // Reset the form
+    setAcademicData({
+      className: "",
+      subjectName: "",
+      teacherName: "",
+      academicYear: "",
+    });
   };
-
-
-  // Dispatch action to post class teacher
-  dispatch(postClassTeacher(classTeacherData));
-
-  // Reset the form
-  setAcademicData({
-    className: "",
-    subjectName: "",
-    teacherName: "",
-    academicYear: "",
-  });
-};
 
 
   return (
@@ -147,6 +149,7 @@ const handleSubmit = (e) => {
               ))}
             </select>
           </div>
+
 
           {/* Submit Button */}
           <div className="col-span-1 sm:col-span-2">

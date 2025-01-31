@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { editManager, fetchManagers } from "../AdminRedux/managerSlice";
-import { toast } from "react-toastify";
 import Loader from "@/ui/Loader";
 
 const EditManagerForm = () => {
@@ -47,7 +46,6 @@ const EditManagerForm = () => {
     dispatch(editManager({ id, updatedManager }))
       .unwrap()
       .then(() => {
-        toast.success("Manager updated successfully");
         navigate("/admin/allmanagers");
       })
       .catch((error) => {});

@@ -66,7 +66,6 @@ function ManagerForm() {
         phoneNumber: "",
         gender: "",
       });
-      toast.success("Manager added successfully.");
     } catch (error) {
       toast.error(
         error.message || "An error occurred while submitting the form.",

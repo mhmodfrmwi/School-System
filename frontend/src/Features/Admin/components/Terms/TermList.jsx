@@ -4,7 +4,6 @@ import { removeTerm, fetchTerms } from "../AdminRedux/termSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import TermHeader from "./termHeader";
-import { toast } from "react-toastify";
 import Pagination from "../Pagination";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +31,7 @@ const TermList = () => {
     const handleDelete = async (id) => {
       if (window.confirm("Are you sure you want to delete this term?")) {
         await dispatch(removeTerm(id));
-          toast.success(" Term deleted successfully!");
+       
       }
     };
 
