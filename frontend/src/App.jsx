@@ -1,78 +1,202 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./Features/Auth/Login";
-import OnBoarding from "./Features/Auth/OnBoarding";
-import ChooseRole from "./Features/Auth/ChooseRole";
-import StudentForm from "./Features/Admin/components/Students/studentForm";
-import BasicForm from "./Features/Admin/components/basicForm";
-import DashboardAdmin from "./Features/Admin/Pages/DashboardAdmin";
-import AllStudent from "./Features/Admin/Pages/StudentTablePage";
-import ParentForm from "./Features/Admin/components/Parents/parentForm";
-import ScheduleForm from "./Features/Admin/components/Schedule/scheduleForm";
-import TeacherForm from "./Features/Admin/components/Teachers/teacherForm";
-import TeacherInfo from "./Features/Admin/components/Teachers/teacherInfo";
-import AdminForm from "./Features/Admin/components/Admins/adminForm";
-import ManagerForm from "./Features/Admin/components/Managers/managerForm";
-import AllParents from "./Features/Admin/Pages/ParentTablePage";
-import AllTeachers from "./Features/Admin/pages/TeacherTablePage";
-import AllManagers from "./Features/Admin/pages/ManagerTablePage";
-import EditManagerForm from "./Features/Admin/components/Managers/editManager";
-import AllAdmins from "./Features/Admin/Pages/AdminTablePage";
-import AllSchedules from "./Features/Admin/Pages/ScheduleTablePage";
-import AllTerms from "./Features/Admin/Pages/TermPage";
-import TermForm from "./Features/Admin/components/Terms/termForm";
-import Admins from "./Features/Admin/Pages/Admins";
+import { lazy, Suspense } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import PageNotFound from "./ui/PageNotFound";
-import EditTeacher from "./Features/Admin/components/Teachers/editTeacher";
-import AcademicYearForm from "./Features/Admin/components/AcademicYears/academicYearForm";
-import EditAcademicYearForm from "./Features/Admin/components/AcademicYears/editAcademicYearForm";
-import AllAcademicYears from "./Features/Admin/Pages/AcademicYearPage";
-import SubjectDetails from "./Features/Admin/components/Subjects/AllAssignedSubjects";
-import SubjectsList from "./Features/Admin/Pages/SubjectTablePage";
-import AddSubject from "./Features/Admin/components/Subjects/AddSubjectManagement";
-import AllGrades from "./Features/Admin/Pages/GradePage";
-import GradeForm from "./Features/Admin/components/Grades/GradeForm";
-import EditGradeForm from "./Features/Admin/components/Grades/EditGradeForm";
-import AssignGrade from "./Features/Admin/components/Grades/AssignGrade";
-import Students from "./Features/Student/pages/Students";
-import DashboardStudent from "./Features/Student/pages/DashboardStudent";
-import Grades from "./Features/Student/components/Grades/Grades";
-import GradesAssignment from "./Features/Student/components/Grades/GradesAssignment";
-import GradesExam from "./Features/Student/components/Grades/GradesExam";
-import Schedule from "./Features/Student/components/Schedule/schedule";
-import ScheduleExam from "./Features/Student/components/Schedule/scheduleExam";
-import LibraryPage from "./Features/Student/components/Library/LibraryPage";
-import LibraryBooksEnglish from "./Features/Student/components/Library/LibraryBooksEnglish";
-import Parents from "./Features/Parent/pages/Parents";
-import DashboardParent from "./Features/Parent/pages/DashboardParent";
-import EditAdminForm from "./Features/Admin/components/Admins/editAdmin";
-import GradesDetails from "./Features/Admin/components/Grades/AllAssignedGrades";
-import AssignSubject from "./Features/Admin/components/Subjects/AssignSubject";
-import EditSubject from "./Features/Admin/components/Subjects/EditSubject";
-import EditAssignedSubject from "./Features/Admin/components/Subjects/EditAssignedSubject";
-import AllClassTeacher from "./Features/Admin/Pages/classTeacherTablePage";
-import EditClassTeacher from "./Features/Admin/components/classTeacher/editClassTeacher";
-import EditProfilePage from "./Features/Admin/Pages/EditProfilePage";
-import EditSchedule from "./Features/Admin/components/Schedule/editScheduleForm";
-import EditTermForm from "./Features/Admin/components/Terms/editTermForm";
-import EditParentForm from "./Features/Admin/components/Parents/editParent";
-import EditStudent from "./Features/Admin/components/Students/editStudentForm";
-import MotivationPage from "./Features/Student/pages/MotivationPage";
-import EditStudentProfile from "./Features/Student/pages/EditProfilePage";
-import DetailesActivity from "./Features/Student/components/Activites/detailesActivity";
-import PrizesActivity from "./Features/Student/components/Activites/PrizesActivity";
-import Activities from "./Features/Student/components/Activites/Activites";
-import Contests from "./Features/Student/components/Activites/Contests";
-import VirtualRooms from "./Features/Student/components/Virtual Rooms/VirtualRooms";
-import AllCouses from "./Features/Student/components/courses/allcourses";
-import StudentCourseDetails from "./Features/Student/components/courses/CourseVideoLectures";
-import AttendancePage from "./Features/Student/components/Attendance/AttendancePage";
 import { ToastContainer } from "react-toastify";
-import { Grades as GradesParent } from "./Features/Parent/components/Grades/Grades";
-import { GradesAssignment as GradesAssignmentParent } from "./Features/Parent/components/Grades/GradesAssignment";
-import { GradesExam as GradesExamParent } from "./Features/Parent/components/Grades/GradesExam";
-import { Schedule as ScheduleParent } from "./Features/Parent/components/Schedule/schedule";
-import { ScheduleExam as ScheduleExamParent } from "./Features/Parent/components/Schedule/scheduleExam";
+import PageNotFound from "./ui/PageNotFound";
+import Loader from "./ui/Loader";
+
+const Login = lazy(() => import("./Features/Auth/Login"));
+const OnBoarding = lazy(() => import("./Features/Auth/OnBoarding"));
+const ChooseRole = lazy(() => import("./Features/Auth/ChooseRole"));
+const StudentForm = lazy(
+  () => import("./Features/Admin/components/Students/studentForm"),
+);
+const BasicForm = lazy(() => import("./Features/Admin/components/basicForm"));
+const DashboardAdmin = lazy(
+  () => import("./Features/Admin/Pages/DashboardAdmin"),
+);
+const AllStudent = lazy(
+  () => import("./Features/Admin/Pages/StudentTablePage"),
+);
+const ParentForm = lazy(
+  () => import("./Features/Admin/components/Parents/parentForm"),
+);
+const ScheduleForm = lazy(
+  () => import("./Features/Admin/components/Schedule/scheduleForm"),
+);
+const TeacherForm = lazy(
+  () => import("./Features/Admin/components/Teachers/teacherForm"),
+);
+const TeacherInfo = lazy(
+  () => import("./Features/Admin/components/Teachers/teacherInfo"),
+);
+const AdminForm = lazy(
+  () => import("./Features/Admin/components/Admins/adminForm"),
+);
+const ManagerForm = lazy(
+  () => import("./Features/Admin/components/Managers/managerForm"),
+);
+const AllParents = lazy(() => import("./Features/Admin/Pages/ParentTablePage"));
+const AllTeachers = lazy(
+  () => import("./Features/Admin/pages/TeacherTablePage"),
+);
+const AllManagers = lazy(
+  () => import("./Features/Admin/pages/ManagerTablePage"),
+);
+const EditManagerForm = lazy(
+  () => import("./Features/Admin/components/Managers/editManager"),
+);
+const AllAdmins = lazy(() => import("./Features/Admin/Pages/AdminTablePage"));
+const AllSchedules = lazy(
+  () => import("./Features/Admin/Pages/ScheduleTablePage"),
+);
+const AllTerms = lazy(() => import("./Features/Admin/Pages/TermPage"));
+const TermForm = lazy(
+  () => import("./Features/Admin/components/Terms/termForm"),
+);
+const Admins = lazy(() => import("./Features/Admin/Pages/Admins"));
+const EditTeacher = lazy(
+  () => import("./Features/Admin/components/Teachers/editTeacher"),
+);
+const AcademicYearForm = lazy(
+  () => import("./Features/Admin/components/AcademicYears/academicYearForm"),
+);
+const EditAcademicYearForm = lazy(
+  () =>
+    import("./Features/Admin/components/AcademicYears/editAcademicYearForm"),
+);
+const AllAcademicYears = lazy(
+  () => import("./Features/Admin/Pages/AcademicYearPage"),
+);
+const SubjectDetails = lazy(
+  () => import("./Features/Admin/components/Subjects/AllAssignedSubjects"),
+);
+const SubjectsList = lazy(
+  () => import("./Features/Admin/Pages/SubjectTablePage"),
+);
+const AddSubject = lazy(
+  () => import("./Features/Admin/components/Subjects/AddSubjectManagement"),
+);
+const AllGrades = lazy(() => import("./Features/Admin/Pages/GradePage"));
+const GradeForm = lazy(
+  () => import("./Features/Admin/components/Grades/GradeForm"),
+);
+const EditGradeForm = lazy(
+  () => import("./Features/Admin/components/Grades/EditGradeForm"),
+);
+const AssignGrade = lazy(
+  () => import("./Features/Admin/components/Grades/AssignGrade"),
+);
+const Students = lazy(() => import("./Features/Student/pages/Students"));
+const DashboardStudent = lazy(
+  () => import("./Features/Student/pages/DashboardStudent"),
+);
+const Grades = lazy(
+  () => import("./Features/Student/components/Grades/Grades"),
+);
+const GradesAssignment = lazy(
+  () => import("./Features/Student/components/Grades/GradesAssignment"),
+);
+const GradesExam = lazy(
+  () => import("./Features/Student/components/Grades/GradesExam"),
+);
+const Schedule = lazy(
+  () => import("./Features/Student/components/Schedule/schedule"),
+);
+const ScheduleExam = lazy(
+  () => import("./Features/Student/components/Schedule/scheduleExam"),
+);
+const LibraryPage = lazy(
+  () => import("./Features/Student/components/Library/LibraryPage"),
+);
+const LibraryBooksEnglish = lazy(
+  () => import("./Features/Student/components/Library/LibraryBooksEnglish"),
+);
+const Parents = lazy(() => import("./Features/Parent/pages/Parents"));
+const DashboardParent = lazy(
+  () => import("./Features/Parent/pages/DashboardParent"),
+);
+const EditAdminForm = lazy(
+  () => import("./Features/Admin/components/Admins/editAdmin"),
+);
+const GradesDetails = lazy(
+  () => import("./Features/Admin/components/Grades/AllAssignedGrades"),
+);
+const AssignSubject = lazy(
+  () => import("./Features/Admin/components/Subjects/AssignSubject"),
+);
+const EditSubject = lazy(
+  () => import("./Features/Admin/components/Subjects/EditSubject"),
+);
+const EditAssignedSubject = lazy(
+  () => import("./Features/Admin/components/Subjects/EditAssignedSubject"),
+);
+const AllClassTeacher = lazy(
+  () => import("./Features/Admin/Pages/classTeacherTablePage"),
+);
+const EditClassTeacher = lazy(
+  () => import("./Features/Admin/components/classTeacher/editClassTeacher"),
+);
+const EditProfilePage = lazy(
+  () => import("./Features/Admin/Pages/EditProfilePage"),
+);
+const EditSchedule = lazy(
+  () => import("./Features/Admin/components/Schedule/editScheduleForm"),
+);
+const EditTermForm = lazy(
+  () => import("./Features/Admin/components/Terms/editTermForm"),
+);
+const EditParentForm = lazy(
+  () => import("./Features/Admin/components/Parents/editParent"),
+);
+const EditStudent = lazy(
+  () => import("./Features/Admin/components/Students/editStudentForm"),
+);
+const MotivationPage = lazy(
+  () => import("./Features/Student/pages/MotivationPage"),
+);
+const EditStudentProfile = lazy(
+  () => import("./Features/Student/pages/EditProfilePage"),
+);
+const DetailesActivity = lazy(
+  () => import("./Features/Student/components/Activites/detailesActivity"),
+);
+const PrizesActivity = lazy(
+  () => import("./Features/Student/components/Activites/PrizesActivity"),
+);
+const Activities = lazy(
+  () => import("./Features/Student/components/Activites/Activites"),
+);
+const Contests = lazy(
+  () => import("./Features/Student/components/Activites/Contests"),
+);
+const VirtualRooms = lazy(
+  () => import("./Features/Student/components/Virtual Rooms/VirtualRooms"),
+);
+const AllCouses = lazy(
+  () => import("./Features/Student/components/courses/allcourses"),
+);
+const StudentCourseDetails = lazy(
+  () => import("./Features/Student/components/courses/CourseVideoLectures"),
+);
+const AttendancePage = lazy(
+  () => import("./Features/Student/components/Attendance/AttendancePage"),
+);
+const GradesParent = lazy(
+  () => import("./Features/Parent/components/Grades/Grades"),
+);
+const GradesAssignmentParent = lazy(
+  () => import("./Features/Parent/components/Grades/GradesAssignment"),
+);
+const GradesExamParent = lazy(
+  () => import("./Features/Parent/components/Grades/GradesExam"),
+);
+const ScheduleParent = lazy(
+  () => import("./Features/Parent/components/Schedule/schedule"),
+);
+const ScheduleExamParent = lazy(
+  () => import("./Features/Parent/components/Schedule/scheduleExam"),
+);
 
 function App() {
   return (
@@ -88,97 +212,110 @@ function App() {
         draggable
         pauseOnHover
       />
-      <Routes>
-        <Route index element={<OnBoarding />} />
-        <Route path="login" element={<Login />} />
-        <Route path="role" element={<ChooseRole />} />
-        {/* /////////////////adminpage//////////////////// */}
-        <Route path="admin" element={<Admins />}>
-          <Route index element={<DashboardAdmin />} />
-          <Route path="basicform" element={<BasicForm />} />
-          <Route path="studentform" element={<StudentForm />} />
-          <Route path="allstudent" element={<AllStudent />} />
-          <Route path="edit-student/:id" element={<EditStudent />} />
-          <Route path="managerform" element={<ManagerForm />} />
-          <Route path="allmanagers" element={<AllManagers />} />
-          <Route path="editmanagerform/:id" element={<EditManagerForm />} />
-          <Route path="allparents" element={<AllParents />} />
-          <Route path="parentform" element={<ParentForm />} />
-          <Route path="scheduleform" element={<ScheduleForm />} />
-          <Route path="allschedules" element={<AllSchedules />} />
-          <Route path="edit-schedule/:id" element={<EditSchedule />} />
-          <Route path="allTerms" element={<AllTerms />} />
-          <Route path="termform" element={<TermForm />} />
-          <Route path="edit-term/:id" element={<EditTermForm />} />
-          <Route path="allteachers" element={<AllTeachers />} />
-          <Route path="teacherform" element={<TeacherForm />} />
-          <Route path="edit-teacher/:id" element={<EditTeacher />} />
-          <Route path="teacherinfo" element={<TeacherInfo />} />
-          <Route path="allteachers/:id" element={<AllClassTeacher />} />
-          <Route path="edit-class-teacher/:id" element={<EditClassTeacher />} />
-          <Route path="adminform" element={<AdminForm />} />
-          <Route path="alladmins" element={<AllAdmins />} />
-          <Route path="allacademicyears" element={<AllAcademicYears />} />
-          <Route path="academicyearform" element={<AcademicYearForm />} />
-          <Route
-            path="editacademicyearform/:id"
-            element={<EditAcademicYearForm />}
-          />
-          <Route path="editadminform/:id" element={<EditAdminForm />} />
-          <Route path="allgrades" element={<AllGrades />} />
-          <Route path="allgrades/:id" element={<GradesDetails />} />
-          <Route path="gradeform" element={<GradeForm />} />
-          <Route path="editGradeForm/:id" element={<EditGradeForm />} />
-          <Route path="assigngrade" element={<AssignGrade />} />
-          <Route path="allsubjects" element={<SubjectsList />} />
-          <Route path="allsubjects/:id" element={<SubjectDetails />} />
-          <Route path="addsubject" element={<AddSubject />} />
-          <Route path="assignSubject" element={<AssignSubject />} />
-          <Route path="edit-subject/:id" element={<EditSubject />} />
-          <Route
-            path="edit-assigned-subject/:id"
-            element={<EditAssignedSubject />}
-          />
-          <Route path="edit-admin-profile" element={<EditProfilePage />} />
-          <Route path="editparentform/:id" element={<EditParentForm />} />
-        </Route>
-        {/* /////////////////studentpage//////////////////// */}
-        <Route path="student" element={<Students />}>
-          <Route index element={<DashboardStudent />} />
-          <Route path="grades" element={<Grades />} />
-          <Route path="grades/assignment" element={<GradesAssignment />} />
-          <Route path="grades/exam" element={<GradesExam />} />
-          <Route path="schedule" element={<Schedule />} />
-          <Route path="schedule/exam" element={<ScheduleExam />} />
-          <Route path="library" element={<LibraryPage />} />
-          <Route path="librarybooksenglish" element={<LibraryBooksEnglish />} />
-          <Route path="motivation" element={<MotivationPage />} />
-          <Route path="edit-student-profile" element={<EditStudentProfile />} />
-          <Route path="activities/detailes" element={<DetailesActivity />} />
-          <Route path="activities/prizes" element={<PrizesActivity />} />
-          <Route path="activities/contests" element={<Contests />} />
-          <Route path="activities" element={<Activities />} />
-          <Route path="virtualrooms" element={<VirtualRooms />} />
-          <Route path="allcourses" element={<AllCouses />} />
-          <Route path="allcourses/videos" element={<StudentCourseDetails />} />
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route index element={<OnBoarding />} />
+          <Route path="login" element={<Login />} />
+          <Route path="role" element={<ChooseRole />} />
+          {/* /////////////////adminpage//////////////////// */}
+          <Route path="admin" element={<Admins />}>
+            <Route index element={<DashboardAdmin />} />
+            <Route path="basicform" element={<BasicForm />} />
+            <Route path="studentform" element={<StudentForm />} />
+            <Route path="allstudent" element={<AllStudent />} />
+            <Route path="edit-student/:id" element={<EditStudent />} />
+            <Route path="managerform" element={<ManagerForm />} />
+            <Route path="allmanagers" element={<AllManagers />} />
+            <Route path="editmanagerform/:id" element={<EditManagerForm />} />
+            <Route path="allparents" element={<AllParents />} />
+            <Route path="parentform" element={<ParentForm />} />
+            <Route path="scheduleform" element={<ScheduleForm />} />
+            <Route path="allschedules" element={<AllSchedules />} />
+            <Route path="edit-schedule/:id" element={<EditSchedule />} />
+            <Route path="allTerms" element={<AllTerms />} />
+            <Route path="termform" element={<TermForm />} />
+            <Route path="edit-term/:id" element={<EditTermForm />} />
+            <Route path="allteachers" element={<AllTeachers />} />
+            <Route path="teacherform" element={<TeacherForm />} />
+            <Route path="edit-teacher/:id" element={<EditTeacher />} />
+            <Route path="teacherinfo" element={<TeacherInfo />} />
+            <Route path="allteachers/:id" element={<AllClassTeacher />} />
+            <Route
+              path="edit-class-teacher/:id"
+              element={<EditClassTeacher />}
+            />
+            <Route path="adminform" element={<AdminForm />} />
+            <Route path="alladmins" element={<AllAdmins />} />
+            <Route path="allacademicyears" element={<AllAcademicYears />} />
+            <Route path="academicyearform" element={<AcademicYearForm />} />
+            <Route
+              path="editacademicyearform/:id"
+              element={<EditAcademicYearForm />}
+            />
+            <Route path="editadminform/:id" element={<EditAdminForm />} />
+            <Route path="allgrades" element={<AllGrades />} />
+            <Route path="allgrades/:id" element={<GradesDetails />} />
+            <Route path="gradeform" element={<GradeForm />} />
+            <Route path="editGradeForm/:id" element={<EditGradeForm />} />
+            <Route path="assigngrade" element={<AssignGrade />} />
+            <Route path="allsubjects" element={<SubjectsList />} />
+            <Route path="allsubjects/:id" element={<SubjectDetails />} />
+            <Route path="addsubject" element={<AddSubject />} />
+            <Route path="assignSubject" element={<AssignSubject />} />
+            <Route path="edit-subject/:id" element={<EditSubject />} />
+            <Route
+              path="edit-assigned-subject/:id"
+              element={<EditAssignedSubject />}
+            />
+            <Route path="edit-admin-profile" element={<EditProfilePage />} />
+            <Route path="editparentform/:id" element={<EditParentForm />} />
+          </Route>
+          {/* /////////////////studentpage//////////////////// */}
+          <Route path="student" element={<Students />}>
+            <Route index element={<DashboardStudent />} />
+            <Route path="grades" element={<Grades />} />
+            <Route path="grades/assignment" element={<GradesAssignment />} />
+            <Route path="grades/exam" element={<GradesExam />} />
+            <Route path="schedule" element={<Schedule />} />
+            <Route path="schedule/exam" element={<ScheduleExam />} />
+            <Route path="library" element={<LibraryPage />} />
+            <Route
+              path="librarybooksenglish"
+              element={<LibraryBooksEnglish />}
+            />
+            <Route path="motivation" element={<MotivationPage />} />
+            <Route
+              path="edit-student-profile"
+              element={<EditStudentProfile />}
+            />
+            <Route path="activities/detailes" element={<DetailesActivity />} />
+            <Route path="activities/prizes" element={<PrizesActivity />} />
+            <Route path="activities/contests" element={<Contests />} />
+            <Route path="activities" element={<Activities />} />
+            <Route path="virtualrooms" element={<VirtualRooms />} />
+            <Route path="allcourses" element={<AllCouses />} />
+            <Route
+              path="allcourses/videos"
+              element={<StudentCourseDetails />}
+            />
+            <Route path="attendance" element={<AttendancePage />} />
+          </Route>
+          {/* /////////////////parentpage//////////////////// */}
+          <Route path="parent" element={<Parents />}>
+            <Route index element={<DashboardParent />} />
+            <Route path="grades" element={<GradesParent />} />
+            <Route
+              path="grades/assignment"
+              element={<GradesAssignmentParent />}
+            />
+            <Route path="grades/exam" element={<GradesExamParent />} />
+            <Route path="schedule" element={<ScheduleParent />} />
+            <Route path="schedule/exam" element={<ScheduleExamParent />} />
+          </Route>
 
-          <Route path="attendance" element={<AttendancePage />} />
-        </Route>
-        {/* /////////////////parentpage//////////////////// */}
-        <Route path="parent" element={<Parents />}>
-          <Route index element={<DashboardParent />} />
-          <Route path="grades" element={<GradesParent />} />
-          <Route
-            path="grades/assignment"
-            element={<GradesAssignmentParent />}
-          />
-          <Route path="grades/exam" element={<GradesExamParent />} />
-          <Route path="schedule" element={<ScheduleParent />} />
-          <Route path="schedule/exam" element={<ScheduleExamParent />} />
-        </Route>
-
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

@@ -98,4 +98,4 @@ function GradesAssignment() {
   );
 }
 
-export { GradesAssignment };
+export default GradesAssignment;

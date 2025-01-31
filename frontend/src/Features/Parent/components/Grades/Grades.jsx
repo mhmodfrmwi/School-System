@@ -104,4 +104,4 @@ function Grades() {
   );
 }
 
-export { Grades };
+export default Grades;
