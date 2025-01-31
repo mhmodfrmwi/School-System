@@ -5,70 +5,70 @@ const {
   updateAcademicYear,
   deleteAcademicYear,
   getAllAcademicYear,
-} = require("../controllers/academicYearController");
+} = require("../controllers/Admin/academicYearController");
 const {
   createGrade,
   getGrade,
   updateGrade,
   deleteGrade,
   getAllGrade,
-} = require("../controllers/gradeController");
+} = require("../controllers/Admin/gradeController");
 const {
   createSubject,
   getSubject,
   updateSubject,
   deleteSubject,
   getAllSubject,
-} = require("../controllers/subjectController");
+} = require("../controllers/Admin/subjectController");
 const {
   createSemester,
   getSemester,
   updateSemester,
   deleteSemester,
   getAllSemester,
-} = require("../controllers/semesterController");
+} = require("../controllers/Admin/semesterController");
 const {
   createTeacher,
   getTeacher,
   updateTeacher,
   deleteTeacher,
   getAllTeacher,
-} = require("../controllers/teacherController");
+} = require("../controllers/Admin/teacherController");
 const {
   createClassTeacher,
   getClassTeacher,
   updateClassTeacher,
   deleteClassTeacher,
   getAllClassTeacher,
-} = require("../controllers/classTeacherController");
+} = require("../controllers/Admin/classTeacherController");
 const {
   createParent,
   getParent,
   updateParent,
   deleteParent,
   getAllParent,
-} = require("../controllers/parentController");
+} = require("../controllers/Admin/parentController");
 const {
   createManager,
   getManager,
   updateManager,
   deleteManager,
   getAllManager,
-} = require("../controllers/managerController");
+} = require("../controllers/Admin/managerController");
 const {
   createAdmin,
   getAdmin,
   updateAdmin,
   deleteAdmin,
   getAllAdmin,
-} = require("../controllers/adminController");
+} = require("../controllers/Admin/adminController");
 const {
   createSchedule,
   deleteSchedule,
   updateSchedule,
   getSchedule,
   getAllSchedule,
-} = require("../controllers/scheduleController");
+} = require("../controllers/Admin/scheduleController");
 
 const {
   createGradeSubjectSemester,
@@ -76,7 +76,7 @@ const {
   updateGradeSubjectSemester,
   getGradeSubjectSemester,
   getAllGradeSubjectSemesters,
-} = require("../controllers/gradeSubjectSemester");
+} = require("../controllers/Admin/gradeSubjectSemester");
 
 const {
   createClass,
@@ -84,7 +84,7 @@ const {
   deleteClass,
   getClass,
   getAllClasses,
-} = require("../controllers/classController");
+} = require("../controllers/Admin/classController");
 
 const {
   createStudent,
@@ -92,21 +92,21 @@ const {
   deleteStudent,
   getStudent,
   getAllStudents,
-} = require("../controllers/studentController");
+} = require("../controllers/Admin/studentController");
 const {
   createGradeYear,
   getGradeYear,
   updateGradeYear,
   deleteGradeYear,
   getAllGradeYear,
-} = require("../controllers/gradeYearController");
+} = require("../controllers/Admin/gradeYearController");
 const {
   createParentStudent,
   deleteParentStudent,
   getParentsStudent,
   updateParentStudent,
   getAllParentsStudent,
-} = require("../controllers/parentStudentController");
+} = require("../controllers/Admin/parentStudentController");
 
 const router = express.Router();
 

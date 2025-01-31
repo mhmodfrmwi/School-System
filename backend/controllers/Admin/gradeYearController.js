@@ -1,8 +1,8 @@
 const expressAsyncHandler = require("express-async-handler");
-const validateObjectId = require("../utils/validateObjectId");
-const AcademicYear = require("../DB/academicYearModel");
-const GradeYear = require("../DB/gradeYearModel");
-const Grade = require("../DB/gradeModel");
+const validateObjectId = require("../../utils/validateObjectId");
+const AcademicYear = require("../../DB/academicYearModel");
+const GradeYear = require("../../DB/gradeYearModel");
+const Grade = require("../../DB/gradeModel");
 const createGradeYear = expressAsyncHandler(async (req, res) => {
   const { gradeName, academicYear } = req.body;
   if (!gradeName || !academicYear) {

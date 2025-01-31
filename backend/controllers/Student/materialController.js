@@ -1,0 +1,34 @@
+const expressAsyncHandler = require("express-async-handler");
+const validateObjectId = require("../../utils/validateObjectId");
+const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const Material = require("../../DB/materielModel");
+const getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear =
+  expressAsyncHandler(async (req, res) => {
+    const gradeSubjectSemesterId = req.params.id;
+    if (validateObjectId(gradeSubjectSemesterId) === false) {
+      return res.status(400).json({ status: 400, message: "Invalid ID" });
+    }
+    const gradeSubjectSemester = await GradeSubjectSemester.findById(
+      gradeSubjectSemesterId
+    ).populate("grade_subject_id");
+    if (!gradeSubjectSemester) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Grade Subject Semester not found" });
+    }
+
+    const subjectMateriels = await Material.find({
+      subject_id: gradeSubjectSemester.grade_subject_id.subjectId,
+      grade_id: gradeSubjectSemester.grade_subject_id.gradeId,
+      semester_id: gradeSubjectSemester.semester_id,
+      academic_year_id: gradeSubjectSemester.grade_subject_id.academicYear_id,
+    });
+    return res.status(200).json({
+      status: 200,
+      message: "Materiel retrieved successfully",
+      materiels: subjectMateriels,
+    });
+  });
+module.exports = {
+  getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear,
+};
