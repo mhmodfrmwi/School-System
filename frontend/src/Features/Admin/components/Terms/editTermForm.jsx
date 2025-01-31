@@ -9,7 +9,7 @@ const EditTermForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const [termName, setTermName] = useState("");
   const [academicYear, setAcademicYear] = useState("");
   
@@ -31,22 +31,29 @@ const EditTermForm = () => {
 
   const handleUpdateTerm = (e) => {
     e.preventDefault();
-
+  
     if (!termName || !academicYear) {
       toast.error("Please fill in all fields");
       return;
     }
-
-    const updatedData = { semesterName: termName, academicYear };
-
+  
+    const updatedData = {
+      semesterName: termName,
+      academicYear: academicYear, // استخدام academicYear بدلاً من academicYear_id
+    };
+  
+    console.log("Data being sent to server:", updatedData); // تسجيل البيانات المرسلة
+  
     dispatch(editTermAsync({ id, updatedData }))
       .unwrap()
       .then(() => {
         toast.success("Term updated successfully");
+        dispatch(fetchTerms()); // إعادة جلب البيانات من الخادم
         navigate(-1);
       })
       .catch((error) => {
-        console.log(error.message || "Failed to update term");
+        console.error("Error updating term:", error);
+        toast.error(error.message || "Failed to update term");
       });
   };
 

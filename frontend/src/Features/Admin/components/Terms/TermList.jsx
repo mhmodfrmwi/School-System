@@ -4,6 +4,7 @@ import { removeTerm, fetchTerms } from "../AdminRedux/termSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import TermHeader from "./termHeader";
+import { toast } from "react-toastify";
 import Pagination from "../Pagination";
 import { useNavigate } from "react-router-dom";
 
@@ -28,18 +29,12 @@ const TermList = () => {
     setCurrentPage(page);
   };
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this term?"
-    );
-    if (confirmDelete) {
-      try {
+    const handleDelete = async (id) => {
+      if (window.confirm("Are you sure you want to delete this term?")) {
         await dispatch(removeTerm(id));
-        alert("The term has been deleted.");
-      } catch (error) {
+          toast.success(" Term deleted successfully!");
       }
-    }
-  };
+    };
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const getColor = (index) => {
