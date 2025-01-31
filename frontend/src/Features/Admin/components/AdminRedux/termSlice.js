@@ -71,62 +71,57 @@ export const fetchTerms = createAsyncThunk(
 // Edit a term
 export const editTermAsync = createAsyncThunk(
   "terms/editTermAsync",
-  async ({ id, updatedTerm }, { rejectWithValue }) => {
+  async ({ id, updatedData }, { rejectWithValue }) => {
     try {
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/semester/${id}`,
         {
           method: "PATCH",
-          body: JSON.stringify(updatedTerm),
+          body: JSON.stringify(updatedData),
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to edit term");
+        const errorData = await response.json();
+        console.error("Server error:", errorData);
+        throw new Error(errorData.message || "Failed to edit term");
       }
 
       const data = await response.json();
-      toast.success("Term updated successfully");
-      return data.term;
+      console.log("Server response:", data);
+      return data;
     } catch (error) {
       toast.error(error.message || "Failed to edit term");
       return rejectWithValue(error.message);
     }
-  },
+  }
 );
-
 // Remove a term
 export const removeTerm = createAsyncThunk(
   "terms/removeTerm",
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/v1/admin/semester/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await fetch(`http://localhost:4000/api/v1/admin/semester/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.message || "Failed to delete term");
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
-
+      toast.success(" Term deleted successfully!");
       dispatch(fetchTerms());
-      toast.success("Term deleted successfully");
       return id;
     } catch (error) {
-      toast.error(error.message || "Failed to delete term");
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Failed to remove manager");
     }
-  },
+  }
 );
 
 const termsSlice = createSlice({
@@ -192,17 +187,22 @@ const termsSlice = createSlice({
         state.loading = false;
       })
       .addCase(removeTerm.pending, (state) => {
+        state.status = "loading";
         state.loading = true;
       })
       .addCase(removeTerm.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.managers = state.managers.filter(
+          (term) => term._id !== action.payload
+        );
+        toast.success("Term deleted successfully!");
         state.loading = false;
-        state.terms = state.terms.filter((term) => term.id !== action.payload);
-        state.message = "Term deleted successfully";
-        toast.success(state.message);
       })
-      .addCase(removeTerm.rejected, (state) => {
+      .addCase(removeTerm.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to remove manager";
         state.loading = false;
-        toast.error("Failed to delete term");
+        toast.error(state.error); // here
       })
       .addCase(editTermAsync.pending, (state) => {
         state.loading = true;
@@ -210,10 +210,8 @@ const termsSlice = createSlice({
       })
       .addCase(editTermAsync.fulfilled, (state, action) => {
         state.loading = false;
-        const updatedTerm = action.payload;
-        const index = state.terms.findIndex(
-          (term) => term.id === updatedTerm.id,
-        );
+        const updatedTerm = action.payload.semester;
+        const index = state.terms.findIndex((term) => term._id === updatedTerm._id);
         if (index !== -1) {
           state.terms[index] = updatedTerm;
         }

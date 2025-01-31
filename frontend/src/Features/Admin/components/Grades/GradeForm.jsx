@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { postGrades } from "../AdminRedux/gradeSlice";
-import GradeToggle from "./SelectPage"; // Assuming this is your toggle component
+import { postGrade } from "../AdminRedux/gradeSlice"; 
+import GradeToggle from "./SelectPage"; 
 
 function GradeForm() {
   const dispatch = useDispatch();
@@ -16,13 +16,13 @@ function GradeForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(postGrades(formData))
+    dispatch(postGrade(formData))
       .unwrap()
       .then(() => {
         setFormData({ gradeName: "" });
       })
       .catch((error) => {
-        console.error(error || "Failed to add grade");
+        // Optionally handle error here (e.g., show a toast message)
       });
   };
 

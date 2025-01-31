@@ -3,7 +3,6 @@ import React from "react";
 const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  // Handle pagination for next and previous buttons
   const handlePrevPage = () => {
     if (currentPage > 1) onPageChange(currentPage - 1);
   };
@@ -12,9 +11,8 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
     if (currentPage < totalPages) onPageChange(currentPage + 1);
   };
 
-  // Generate page numbers with a limit
   const pageNumbers = [];
-  const pageLimit = 3; // Show a maximum of 3 page numbers at a time
+  const pageLimit = 3;
   let startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2));
   let endPage = Math.min(totalPages, startPage + pageLimit - 1);
 
@@ -27,11 +25,10 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
   }
 
   return (
-    <div className="flex justify-center items-center space-x-1 mt-4 mb-6">
-      {/* Previous Button */}
+    <div className="flex justify-center items-center mt-4 pt-4 mb-6">
       <button
         onClick={handlePrevPage}
-        className={`w-6 h-6 text-center rounded-full ${
+        className={`px-3 py-2 text-center rounded-lg ${
           currentPage === 1
             ? "text-[#117C90] cursor-not-allowed"
             : "bg-[#90AEAE] text-white hover:bg-[#117C90]"
@@ -40,26 +37,22 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
       >
         &lt;
       </button>
-
-      {/* Page Numbers */}
       {pageNumbers.map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`w-6 h-6 text-center rounded-full mx-1 text-sm ${
+          className={`px-3 py-2 text-center rounded-lg mx-0 text-sm ${
             currentPage === page
-              ? "bg-[#117C90] text-white"  // Active page background
+              ? "bg-[#117C90] text-white"
               : "bg-transparent text-[#117C90] hover:bg-[#117C90] hover:text-white"
           }`}
         >
           {page}
         </button>
       ))}
-
-      {/* Next Button */}
       <button
         onClick={handleNextPage}
-        className={`w-6 h-6 text-center rounded-full ${
+        className={`px-3 py-2 text-center rounded-lg ${
           currentPage === totalPages
             ? "text-[#117C90] cursor-not-allowed"
             : "bg-[#90AEAE] text-white hover:bg-[#117C90]"
