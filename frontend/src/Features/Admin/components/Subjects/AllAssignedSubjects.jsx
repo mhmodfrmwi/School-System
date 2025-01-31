@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import { fetchAssignedSubjects, deleteAssignedSubject } from "../AdminRedux/AssignSubjectSlice";
-import { fetchGrades } from "../AdminRedux/gradeSlice";
+import { fetchAssignedGrades } from "../AdminRedux/AssignGradeSlice";
 import Loader from "@/ui/Loader";
 import SubjectsHeader from "./AssignSubjectHeader";
 import Pagination from "../Pagination";
@@ -10,6 +10,7 @@ import Pagination from "../Pagination";
 const AssignedSubjects = () => {
   const dispatch = useDispatch();
   const { assignedSubjects, loading: loadingSubjects } = useSelector((state) => state.assignSubject);
+  
   const { grade, loading: loadingGrades } = useSelector((state) => state.grades);
   const { id } = useParams();
 
@@ -20,7 +21,7 @@ const AssignedSubjects = () => {
 
   useEffect(() => {
     dispatch(fetchAssignedSubjects());
-    dispatch(fetchGrades());
+    dispatch(fetchAssignedGrades());
   }, [dispatch]);
 
   // Apply filter and search

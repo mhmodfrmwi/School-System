@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import Header from "./GradeHeader";
-import Loader from "@/ui/Loader";
 import Pagination from "../Pagination";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 const GradeList = () => {
@@ -17,10 +17,8 @@ const GradeList = () => {
     return colors[index % colors.length];
   };
   const {
-    grade = [],
-    message,
-    loading,
-  } = useSelector((state) => state.grades || {});
+    grades = [],
+  } = useSelector((state) => state.grades);
 
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,41 +30,37 @@ const GradeList = () => {
     dispatch(fetchGrades());
   }, [dispatch]);
 
-  const paginatedGrades = grade.slice(
+  const paginatedGrades = grades.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+ 
 
-  const handleDelete = async (id) => {
+  const handleDelete = (_id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this grade?"
     );
     if (confirmDelete) {
-      try {
-        await dispatch(removeGrade(id));
-
-      } catch (error) {
-        console.error("Failed to delete grade:", error);
-        alert("Error occurred while deleting");
-      }
-    }
+          dispatch(removeGrade(_id))
+            .unwrap()
+            .then(() => toast.success("Subject deleted successfully!"))
+            .catch((err) => console.error(err));
+        }
   };
   const handleEditClick = (id) => {
     navigate(`/admin/editGradeform/${id}`);
   };
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
-    <div className="">
+    <div>
       <Header />
       <div className="flex justify-center">
-      <div className="space-y-4 w-4/5">
-        {loading ? (
-          <p>Loading terms...</p>
-        ) : ( paginatedGrades.map((grade, index) => (
+        <div className="space-y-4 w-[90%]">
+        {paginatedGrades.map((grade, index) => (
           <div
             key={grade._id}
             className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full"
@@ -80,6 +74,7 @@ const GradeList = () => {
               </div>
 
               <div className="flex flex-col">
+                
                 <p className="m-0 text-lg font-bold text-gray-600">
                   {grade.gradeName}
                 </p>
@@ -103,14 +98,14 @@ const GradeList = () => {
                 className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                 onClick={() => handleDelete(grade._id)}
               >
-                <i className="far fa-trash-alt" style={{ fontSize: "16px" }} />
+                <i className="far fa-trash-alt" style={{ fontSize: "18px" }} />
               </button>
             </div>
           </div>
-        )))}
+        ))}
 
         <Pagination
-          totalItems={grade.length}
+          totalItems={grades.length}
           itemsPerPage={itemsPerPage}
           currentPage={currentPage}
           onPageChange={handlePageChange}

@@ -12,7 +12,7 @@ const AllAssignedGrades = () => {
   const { assignedGrades, loading: loadingGrades } = useSelector(
     (state) => state.assignGrade
   );
-  const { grade, loading: loadingGradeData } = useSelector(
+  const { grades, loading: loadingGradeData } = useSelector(
     (state) => state.grades
   );
   const { id } = useParams();
@@ -28,7 +28,7 @@ const AllAssignedGrades = () => {
 
   const gradesWithGradeName = filteredGrades.map((gradeData) => {
     const gradeName =
-      grade.find((g) => g._id === gradeData.grade)?.gradeName || "Unknown";
+      grades.find((g) => g._id === gradeData.grade)?.gradeName || "Unknown";
     return { ...gradeData, gradeName };
   });
 
