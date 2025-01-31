@@ -31,16 +31,13 @@ export const postTerm = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error response from server:", errorData); // Log server error
         throw new Error(errorData.message || "Failed to post term data");
       }
 
       const data = await response.json();
-      toast.success("Term added successfully");
+    
       return data;
     } catch (error) {
-      console.error("Error in postTerm:", error); // Log client-side error
-      toast.error(error.message || "Failed to post term data");
       return rejectWithValue(error.message || "Failed to post term data");
     }
   },
@@ -62,7 +59,6 @@ export const fetchTerms = createAsyncThunk(
       const data = await response.json();
       return data.semesters;
     } catch (error) {
-      toast.error(error.message || "Failed to fetch terms");
       return rejectWithValue(error.message);
     }
   },
@@ -86,15 +82,12 @@ export const editTermAsync = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Server error:", errorData);
         throw new Error(errorData.message || "Failed to edit term");
       }
 
       const data = await response.json();
-      console.log("Server response:", data);
       return data;
     } catch (error) {
-      toast.error(error.message || "Failed to edit term");
       return rejectWithValue(error.message);
     }
   }
@@ -115,7 +108,6 @@ export const removeTerm = createAsyncThunk(
         const error = await response.json();
         return rejectWithValue(error.message);
       }
-      toast.success(" Term deleted successfully!");
       dispatch(fetchTerms());
       return id;
     } catch (error) {
@@ -170,11 +162,13 @@ const termsSlice = createSlice({
         state.status = "succeeded";
         state.loading = false;
         state.terms.push(action.payload);
+        toast.success("Term added successfully");
       })
       .addCase(postTerm.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
         state.loading = false;
+        toast.error(action.payload || "Failed to post term data");
       })
       .addCase(fetchTerms.pending, (state) => {
         state.loading = true;
@@ -183,8 +177,9 @@ const termsSlice = createSlice({
         state.loading = false;
         state.terms = action.payload;
       })
-      .addCase(fetchTerms.rejected, (state) => {
+      .addCase(fetchTerms.rejected, (state,action) => {
         state.loading = false;
+        toast.error(action.payload || "Failed to fetch terms");
       })
       .addCase(removeTerm.pending, (state) => {
         state.status = "loading";
@@ -192,7 +187,7 @@ const termsSlice = createSlice({
       })
       .addCase(removeTerm.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.managers = state.managers.filter(
+        state.terms = state.terms.filter(
           (term) => term._id !== action.payload
         );
         toast.success("Term deleted successfully!");
@@ -200,9 +195,9 @@ const termsSlice = createSlice({
       })
       .addCase(removeTerm.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to remove manager";
+        state.error = action.payload || "Failed to remove term";
         state.loading = false;
-        toast.error(state.error); // here
+        toast.error(action.payload || "Failed to remove term");
       })
       .addCase(editTermAsync.pending, (state) => {
         state.loading = true;
@@ -216,10 +211,12 @@ const termsSlice = createSlice({
           state.terms[index] = updatedTerm;
         }
         state.message = "Term updated successfully";
+        toast.success("Term updated successfully");
       })
       .addCase(editTermAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        toast.error(action.payload || "Failed to edit term");
       });
   },
 });

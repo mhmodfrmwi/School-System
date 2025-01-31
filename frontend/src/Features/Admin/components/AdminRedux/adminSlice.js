@@ -34,10 +34,8 @@ export const postAdmin = createAsyncThunk(
         throw new Error(error.message);
       }
       const data = await response.json();
-      toast.success("Admin added successfully!"); // Notify success
       return data;
     } catch (error) {
-      toast.error(error.message || "Failed to post admin data");
       return rejectWithValue(error.message);
     }
   }
@@ -59,7 +57,6 @@ export const fetchAdmins = createAsyncThunk(
       const data = await response.json();
       return data.admins;
     } catch (error) {
-      toast.error(error.message || "Failed to fetch admins");
       return rejectWithValue(error.message);
     }
   }
@@ -79,7 +76,6 @@ export const editAdmin = createAsyncThunk(
       }
 
       const data = await response.json(); // Make sure this matches your API response structure
-      toast.success("Admin updated successfully!");
       return { id, updatedAdmin: data }; // Return updated admin data
     } catch (error) {
       return rejectWithValue(error.message);
@@ -107,10 +103,8 @@ export const removeAdmin = createAsyncThunk(
       }
 
       dispatch(fetchAdmins());
-      toast.success("Admin deleted successfully!"); 
       return id;
     } catch (error) {
-      toast.error(error.message || "Failed to delete admin");
       return rejectWithValue(error.message);
     }
   }
@@ -133,10 +127,12 @@ const adminSlice = createSlice({
       .addCase(postAdmin.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.admins.push(action.payload);
+        toast.success("Admin added successfully!");
       })
       .addCase(postAdmin.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        toast.error(action.payload || "Failed to post admin data");
       })
       .addCase(fetchAdmins.pending, (state) => {
         state.status = "loading";
@@ -151,6 +147,7 @@ const adminSlice = createSlice({
         state.status = "failed";
         state.message = action.payload;
         state.loading = false;
+        toast.error(action.payload || "Failed to fetch admins");
       })
       // Edit
       .addCase(editAdmin.pending, (state) => {
@@ -164,11 +161,12 @@ const adminSlice = createSlice({
         if (index !== -1) {
           state.admins[index] = { ...state.admins[index], ...updatedAdmin }; // Update specific admin
         }
-        state.message = "Admin updated successfully!";
+        toast.success("Admin updated successfully!");
       })
       .addCase(editAdmin.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        toast.error(action.payload || "Failed to update admin");
       })
 
       .addCase(removeAdmin.pending, (state) => {
@@ -179,10 +177,12 @@ const adminSlice = createSlice({
         state.admins = state.admins.filter(
           (admin) => admin.id !== action.payload
         );
+        toast.success("Admin deleted successfully!");
       })
       .addCase(removeAdmin.rejected, (state, action) => {
         state.status = "failed";
         state.message = action.payload;
+        toast.error(action.payload || "Failed to delete admin"); 
       });
   },
 });

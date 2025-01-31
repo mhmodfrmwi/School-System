@@ -128,7 +128,7 @@ const classTeacherSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch class teachers";
         state.loading = false;
-        toast.error(state.error);
+        toast.error(action.payload || "Failed to fetch class teachers");
       })
       .addCase(postClassTeacher.pending, (state) => {
         state.status = "loading";
@@ -144,7 +144,7 @@ const classTeacherSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to add class teacher";
         state.loading = false;
-        toast.error(state.error);
+        toast.error(action.payload || "Failed to add class teacher");
       })
       .addCase(editClassTeacher.pending, (state) => {
         state.status = "loading";
@@ -159,12 +159,13 @@ const classTeacherSlice = createSlice({
           state.classTeachers[index] = action.payload;
         }
         state.loading = false;
+        toast.success("Class Teacher updated successfully");
       })
       .addCase(editClassTeacher.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to edit class teacher";
         state.loading = false;
-        toast.error(state.error);
+        toast.error(action.payload || "Failed to edit class teacher");
       })
       .addCase(removeClassTeacher.pending, (state) => {
         state.status = "loading";
@@ -182,7 +183,7 @@ const classTeacherSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to remove class teacher";
         state.loading = false;
-        toast.error(state.error);
+        toast.error(action.payload || "Failed to remove class teacher");
       });
   },
 });

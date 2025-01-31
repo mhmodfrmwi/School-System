@@ -48,7 +48,7 @@ const EditClassTeacherForm = () => {
       });
     }
   }, [classTeachers, id]);
-  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -140,7 +140,13 @@ const EditClassTeacherForm = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="">Select Academic Year</option>
-              {/* Optionally, you can map academicYears here if they are available */}
+              {/* Assuming you have academicYears available in your state */}
+              {classTeachers.map((ct) => (
+                <option key={ct.academicYear_id._id} value={ct.academicYear_id._id}>
+                  {ct.academicYear_id.startYear} - {ct.academicYear_id.endYear}
+                </option>
+              ))}
+
             </select>
           </div>
 

@@ -47,7 +47,7 @@ const EditTermForm = () => {
     dispatch(editTermAsync({ id, updatedData }))
       .unwrap()
       .then(() => {
-        toast.success("Term updated successfully");
+       
         dispatch(fetchTerms()); // إعادة جلب البيانات من الخادم
         navigate(-1);
       })
