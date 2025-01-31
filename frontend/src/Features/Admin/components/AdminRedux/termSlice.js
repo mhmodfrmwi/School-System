@@ -198,9 +198,11 @@ const termsSlice = createSlice({
         state.loading = false;
         state.terms = state.terms.filter((term) => term.id !== action.payload);
         state.message = "Term deleted successfully";
+        toast.success(state.message);
       })
       .addCase(removeTerm.rejected, (state) => {
         state.loading = false;
+        toast.error("Failed to delete term");
       })
       .addCase(editTermAsync.pending, (state) => {
         state.loading = true;
