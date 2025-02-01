@@ -1,4 +1,6 @@
 const express = require("express");
+const validateJwt = require("../middlewares/validateJWT");
+
 const { createMateriel } = require("../controllers/Teacher/materialController");
 const {
   createQuestion,
@@ -26,7 +28,7 @@ const {
 } = require("../controllers/Student/attendanceController");
 const router = express.Router();
 
-router.post("/material", createMateriel);
+router.post("/material", validateJwt, createMateriel);
 
 router.post("/questionBank", createQuestion);
 router

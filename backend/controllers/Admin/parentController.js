@@ -52,10 +52,7 @@ const createParent = expressAsyncHandler(async (req, res) => {
   try {
     const parentStudents = await Promise.all(
       studentsAcademicNumbers.map(async (studentAcademicNumber) => {
-        return await createParentStudent(
-          parent._id,
-          studentAcademicNumber.studentID
-        );
+        return await createParentStudent(parent._id, studentAcademicNumber);
       })
     );
 

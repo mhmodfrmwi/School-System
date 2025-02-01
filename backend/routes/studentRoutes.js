@@ -16,6 +16,10 @@ const {
 const {
   getScheduleForSpecificStudent,
 } = require("../controllers/Student/scheduleController");
+const {
+  addMaterialForBookMarks,
+  getAllBookmarksForStudent,
+} = require("../controllers/Student/MaterialBookMarksController");
 
 const router = express.Router();
 
@@ -45,4 +49,11 @@ router.get("/contest", getAllContests);
 
 router.get("/get-attendance", validateJwt, getStudentAttendanceUsingStudentId);
 router.get("/get-schedule", validateJwt, getScheduleForSpecificStudent);
+
+router.post(
+  "/add-to-bookmark/:materialId",
+  validateJwt,
+  addMaterialForBookMarks
+);
+router.get("/get-bookmarks", validateJwt, getAllBookmarksForStudent);
 module.exports = router;

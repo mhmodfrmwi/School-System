@@ -22,7 +22,11 @@ const getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear =
       grade_id: gradeSubjectSemester.grade_subject_id.gradeId,
       semester_id: gradeSubjectSemester.semester_id,
       academic_year_id: gradeSubjectSemester.grade_subject_id.academicYear_id,
-    });
+    })
+      .populate("subject_id")
+      .populate("grade_id")
+      .populate("academic_year_id")
+      .populate("semester_id");
     return res.status(200).json({
       status: 200,
       message: "Materiel retrieved successfully",
