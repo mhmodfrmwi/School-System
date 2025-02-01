@@ -19,14 +19,6 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const existingClass = await Class.findOne({ className: req.body.className });
-  if (!existingClass) {
-    return res.status(404).json({
-      status: 404,
-      message: "Class not found",
-    });
-  }
-
   const existingSubject = await Subject.findOne({
     subjectName: req.body.subjectName,
   });
@@ -45,14 +37,6 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const grade = await Grade.findOne({ gradeName: req.body.grade });
-  if (!grade) {
-    return res.status(404).json({
-      status: 404,
-      message: "Grade not found",
-    });
-  }
-
   const academicYear = await AcademicYear.findOne({
     startYear: req.body.academicYear.slice(0, 4),
   });
@@ -62,8 +46,16 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
+  const grade = await Grade.findOne({ gradeName: req.body.grade });
+  if (!grade) {
+    return res.status(404).json({
+      status: 404,
+      message: "Grade not found",
+    });
+  }
   const semester = await Semester.findOne({
     semesterName: req.body.semesterName,
+    academicYear_id: academicYear._id,
   });
   if (!semester) {
     return res.status(404).json({
@@ -72,6 +64,17 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
     });
   }
 
+  const existingClass = await Class.findOne({
+    className: req.body.className,
+    gradeId: grade._id,
+    academicYear_id: academicYear._id,
+  });
+  if (!existingClass) {
+    return res.status(404).json({
+      status: 404,
+      message: "Class not found",
+    });
+  }
   const existingConflict = await Schedule.findOne({
     $or: [
       {
@@ -84,6 +87,9 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
       },
       {
         class_id: existingClass._id,
+        grade_id: grade._id,
+        semester_id: semester._id,
+        academic_year_id: academicYear._id,
         day_of_week: req.body.day,
         $nor: [
           { end_time: { $lte: req.body.startTime } },
@@ -91,12 +97,15 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
         ],
       },
     ],
-  });
+  }).populate(
+    "class_id subject_id teacher_id grade_id semester_id academic_year_id"
+  );
 
   if (existingConflict) {
     return res.status(409).json({
       status: 409,
       message: "there is a conflict with another schedule",
+      conflictSchedule: existingConflict,
     });
   }
 
@@ -139,14 +148,6 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const existingClass = await Class.findOne({ className: req.body.className });
-  if (!existingClass) {
-    return res.status(404).json({
-      status: 404,
-      message: "Class not found",
-    });
-  }
-
   const existingSubject = await Subject.findOne({
     subjectName: req.body.subjectName,
   });
@@ -164,7 +165,6 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
       message: "Teacher not found",
     });
   }
-
   const grade = await Grade.findOne({ gradeName: req.body.grade });
   if (!grade) {
     return res.status(404).json({
@@ -191,9 +191,19 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
       message: "Semester not found",
     });
   }
+  const existingClass = await Class.findOne({
+    className: req.body.className,
+    gradeId: grade._id,
+    academicYear_id: academicYear._id,
+  });
+  if (!existingClass) {
+    return res.status(404).json({
+      status: 404,
+      message: "Class not found",
+    });
+  }
 
   const existingConflict = await Schedule.findOne({
-    _id: { $ne: id }, // Exclude the current schedule
     $or: [
       {
         teacher_id: teacher._id,
@@ -205,6 +215,9 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
       },
       {
         class_id: existingClass._id,
+        grade_id: grade._id,
+        semester_id: semester._id,
+        academic_year_id: academicYear._id,
         day_of_week: req.body.day,
         $nor: [
           { end_time: { $lte: req.body.startTime } },
@@ -212,12 +225,14 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
         ],
       },
     ],
-  });
-
+  }).populate(
+    "class_id subject_id teacher_id grade_id semester_id academic_year_id"
+  );
   if (existingConflict) {
     return res.status(409).json({
       status: 409,
-      message: "Schedule overlaps with an existing entry",
+      message: "there is a conflict with another schedule",
+      conflictSchedule: existingConflict,
     });
   }
   const schedule = await Schedule.findByIdAndUpdate(

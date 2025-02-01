@@ -88,7 +88,7 @@ const deleteSubject = expressAsyncHandler(async (req, res) => {
 
   try {
     await ClassTeacher.deleteMany({ subjectId: subject._id });
-    await Schedule.deleteMany({ subjectId: subject._id });
+    await Schedule.deleteMany({ subject_id: subject._id });
     const gradeSubjects = await GradeSubject.find({ subject_id: id });
 
     await Promise.all(
