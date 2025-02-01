@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { editSchedualAsync } from "../AdminRedux/scheduleSlice";
+import { editSchedualAsync, fetchScheduals } from "../AdminRedux/scheduleSlice";
 import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
@@ -24,8 +24,7 @@ function EditScheduleForm() {
   const academicYears = useSelector(
     (state) => state.academicYears.academicYears,
   );
-  const { loading } = useSelector((state) => state.schedules);
-  const { schedules } = useSelector((state) => state.schedules);
+  const { loading, schedules } = useSelector((state) => state.schedules);
 
   const [formData, setFormData] = useState({
     className: "",
@@ -38,24 +37,25 @@ function EditScheduleForm() {
     endTime: "",
     semesterName: "",
   });
-
+  console.log(schedules);
   useEffect(() => {
     const schedule = schedules.find((item) => item._id === id);
     if (schedule) {
       setFormData({
-        className: schedule.className,
-        subjectName: schedule.subjectName,
-        teacherName: schedule.teacherName,
-        grade: schedule.grade,
-        academicYear: schedule.academicYear,
-        day: schedule.day,
-        startTime: schedule.startTime,
-        endTime: schedule.endTime,
-        semesterName: schedule.semesterName,
+        className: schedule.class_id.className,
+        subjectName: schedule.subject_id.subjectName,
+        teacherName: schedule.teacher_id.fullName,
+        grade: schedule.grade_id.gradeName,
+        academicYear: schedule.academic_year_id,
+        day: schedule.day_of_week,
+        startTime: schedule.start_time,
+        endTime: schedule.end_time,
+        semesterName: schedule.semester_id.semesterName,
       });
     }
   }, [id, schedules]);
 
+  console.log(formData);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -82,6 +82,7 @@ function EditScheduleForm() {
     dispatch(fetchTerms());
     dispatch(fetchClasses());
     dispatch(fetchAcademicYears());
+    dispatch(fetchScheduals());
   }, [dispatch, id]);
 
   return (
