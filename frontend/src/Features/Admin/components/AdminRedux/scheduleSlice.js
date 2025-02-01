@@ -9,10 +9,10 @@ const initialState = {
   loading: false,
 };
 
-// Post a new schedule
 export const postSchedual = createAsyncThunk(
   "schedules/postSchedual",
   async (schedualData, { rejectWithValue }) => {
+    console.log(schedualData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/schedule/createSchedule",
@@ -22,31 +22,30 @@ export const postSchedual = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.message);  // Toast error message
         return rejectWithValue(error.message);
       }
 
       const data = await response.json();
-      toast.success("Schedule added successfully");
+
       return data;
     } catch (error) {
-      toast.error(error.message || "Failed to post schedule data"); 
       return rejectWithValue(error.message || "Failed to post schedule data");
     }
-  }
+  },
 );
 
-// Fetch all schedules
 export const fetchScheduals = createAsyncThunk(
   "schedules/fetchScheduals",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/schedule");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/schedule",
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch schedules");
@@ -55,16 +54,15 @@ export const fetchScheduals = createAsyncThunk(
       const data = await response.json();
       return data.schedules;
     } catch (error) {
-      toast.error(error.message || "Failed to fetch schedules"); 
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
-// Edit an existing schedule
 export const editSchedualAsync = createAsyncThunk(
   "schedules/editSchedualAsync",
   async ({ id, updatedSchedual }, { rejectWithValue }) => {
+    console.log(updatedSchedual);
     try {
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/schedule/${id}`,
@@ -74,7 +72,7 @@ export const editSchedualAsync = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -82,16 +80,14 @@ export const editSchedualAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-      toast.success("Schedule updated successfully"); 
+      console.log(data.schedule);
       return data.schedule;
     } catch (error) {
-      toast.error(error.message || "Failed to edit schedule");
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
-// Remove a schedule
 export const removeSchedual = createAsyncThunk(
   "schedules/removeSchedual",
   async (id, { rejectWithValue, dispatch }) => {
@@ -103,23 +99,21 @@ export const removeSchedual = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.message || "Failed to delete schedule");
-        return toast.error(error.message);
+        console.log(error);
       }
 
       dispatch(fetchScheduals());
-      toast.success("Schedule deleted successfully");  
+
       return id;
     } catch (error) {
-      toast.error(error.message || "Failed to delete schedule");
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const scheduleSlice = createSlice({
@@ -131,7 +125,7 @@ const scheduleSlice = createSlice({
     },
     editSchedual: (state, action) => {
       const index = state.schedules.findIndex(
-        (schedule) => schedule._id === action.payload._id
+        (schedule) => schedule._id === action.payload._id,
       );
       if (index !== -1) {
         state.schedules[index] = action.payload;
@@ -190,9 +184,10 @@ const scheduleSlice = createSlice({
       .addCase(removeSchedual.fulfilled, (state, action) => {
         state.loading = false;
         state.schedules = state.schedules.filter(
-          (schedule) => schedule._id !== action.payload
+          (schedule) => schedule._id !== action.payload,
         );
         state.message = "Schedule deleted successfully";
+        toast.success("Schedule deleted successfully");
       })
       .addCase(removeSchedual.rejected, (state) => {
         state.loading = false;
@@ -205,7 +200,7 @@ const scheduleSlice = createSlice({
         state.loading = false;
         const updatedSchedual = action.payload;
         const index = state.schedules.findIndex(
-          (schedule) => schedule._id === updatedSchedual._id
+          (schedule) => schedule._id === updatedSchedual._id,
         );
         if (index !== -1) {
           state.schedules[index] = updatedSchedual;
@@ -219,6 +214,7 @@ const scheduleSlice = createSlice({
   },
 });
 
-export const { clearMessage, addSchedual, editSchedual, addSchedualToServer } = scheduleSlice.actions;
+export const { clearMessage, addSchedual, editSchedual, addSchedualToServer } =
+  scheduleSlice.actions;
 
 export default scheduleSlice.reducer;

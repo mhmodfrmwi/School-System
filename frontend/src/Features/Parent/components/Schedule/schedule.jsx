@@ -109,4 +109,4 @@ function Schedule() {
   );
 }
 
-export { Schedule };
+export default Schedule;

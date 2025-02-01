@@ -4,6 +4,7 @@ const classValidationSchema = require("../../validations/classValidation");
 const Class = require("../../DB/classModel");
 const Grade = require("../../DB/gradeModel");
 const AcademicYear = require("../../DB/academicYearModel");
+const student = require("../../DB/student");
 
 const createClass = expressAsyncHandler(async (req, res) => {
   const { error } = classValidationSchema.validate(req.body);
@@ -159,7 +160,7 @@ const deleteClass = expressAsyncHandler(async (req, res) => {
 
   try {
     await Promise.all([
-      Student.deleteMany({ classId: id }),
+      student.deleteMany({ classId: id }),
       ClassTeacher.deleteMany({ classId: id }),
     ]);
 

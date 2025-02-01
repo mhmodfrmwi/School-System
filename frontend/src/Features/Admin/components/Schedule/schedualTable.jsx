@@ -9,11 +9,16 @@ import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import Pagination from "../Pagination";
 import Header from "./scheduleHeader";
 import { useNavigate } from "react-router-dom";
+import Loader from "@/ui/Loader";
 
 const SchedualTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { schedules = [], message } = useSelector((state) => state.schedules || {});
+  const {
+    schedules = [],
+    message,
+    loading,
+  } = useSelector((state) => state.schedules || {});
   const { teachers = [] } = useSelector((state) => state.teachers || {});
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,11 +45,13 @@ const SchedualTable = () => {
 
   const paginatedScheduals = filteredScheduals.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this schedule?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this schedule?",
+    );
     if (confirmDelete) {
       try {
         await dispatch(removeSchedual(id));
@@ -86,21 +93,16 @@ const SchedualTable = () => {
   };
 
   return (
-    <div className="mx-auto px-4 lg:px-0">
+    <div className="relative mx-auto px-4 lg:px-0">
+      {loading && <Loader />}
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
       />
 
-      {message && (
-        <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">
-          {message}
-        </div>
-      )}
-
       <div className="mt-7">
         <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+          <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
             <thead className="bg-[#117C90] text-white">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
@@ -136,10 +138,12 @@ const SchedualTable = () => {
                     } hover:bg-[#117C90]/70`}
                   >
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.subject_id?.name || "No subject"}
+                      {schedule.subject_id.subjectName}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.teacher_id ? getTeacherName(schedule.teacher_id._id) : "Unknown Teacher"}
+                      {schedule?.teacher_id
+                        ? getTeacherName(schedule.teacher_id._id)
+                        : "Unknown Teacher"}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       {schedule?.grade_id?.gradeName || "No grade"}

@@ -18,7 +18,7 @@ const EditAssignedSubject = () => {
 
   const dispatch = useDispatch();
   const { assignedSubjects } = useSelector((state) => state.assignSubject);
-  const { grade } = useSelector((state) => state.grades);
+  const { grades } = useSelector((state) => state.grades);
   const { subjects } = useSelector((state) => state.subject);
   const { semesters } = useSelector((state) => state.assignSubject);
 
@@ -34,7 +34,7 @@ const EditAssignedSubject = () => {
     // Find the subject by ID and set the form fields with the current data
     const subject = assignedSubjects.find((subject) => subject._id === id);
     if (subject) {
-      const gradeObject = grade.find((g) => g._id === subject.grade);
+      const gradeObject = grades.find((g) => g._id === subject.grade);
       setGradeName(gradeObject ? gradeObject.gradeName : "");
       setSubjectName(subject.subject || "");
       setSemesterName(subject.term || "");
@@ -45,7 +45,7 @@ const EditAssignedSubject = () => {
         setAcademicYear(selectedSemester.academicYear_id?.startYear?.toString() || "");
       }
     }
-  }, [assignedSubjects, id, grade, semesters]);
+  }, [assignedSubjects, id, grades, semesters]);
 
   const handleUpdateSubject = (e) => {
     e.preventDefault();
@@ -111,7 +111,7 @@ const EditAssignedSubject = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="">-- Select Grade --</option>
-              {grade.map((grade, index) => (
+              {grades.map((grade, index) => (
                 <option key={index} value={grade.gradeName}>
                   {grade.gradeName}
                 </option>

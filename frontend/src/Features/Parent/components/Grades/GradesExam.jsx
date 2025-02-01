@@ -3,7 +3,6 @@ import img1 from "../../../../assets/gradeexam.png";
 import { useState } from "react";
 function GradesExam() {
   const navigate = useNavigate();
-
   const [schedule, setSchedule] = useState([
     { day: "Monday", date: "2025-01-20", grade: "A", score: "95" },
     { day: "Tuesday", date: "2025-01-21", grade: "B+", score: "85" },
@@ -84,4 +83,4 @@ function GradesExam() {
   );
 }
 
-export { GradesExam };
+export default GradesExam;

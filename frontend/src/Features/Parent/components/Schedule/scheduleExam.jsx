@@ -84,4 +84,4 @@ function ScheduleExam() {
   );
 }
 
-export { ScheduleExam };
+export default ScheduleExam;

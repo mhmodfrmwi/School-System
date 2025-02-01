@@ -13,7 +13,7 @@ import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 
-const Navbar = () => {
+const NavTeacher = () => {
   const navigate = useNavigate();
   const settingsRef = useRef(null);
   const searchRef = useRef(null);
@@ -22,48 +22,8 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const routes = [
-    { path: "basicform" },
-    { path: "studentform" },
-    { path: "allstudent" },
-    { path: "managerform" },
-    { path: "allmanagers" },
-    { path: "parentform" },
-    { path: "allparents" },
-    { path: "scheduleform" },
-    { path: "allschedules" },
-    { path: "allTerms" },
-    { path: "termform" },
-    { path: "allteachers" },
-    { path: "teacherform" },
-    { path: "edit-teacher/:id" },
-    { path: "teacherinfo" },
-    { path: "classteacherform" },
-    { path: "allclassteacher" },
-    { path: "adminform" },
-    { path: "alladmins" },
-    { path: "allacademicyears" },
-    { path: "academicyearform" },
-    { path: "editacademicyearform/:id" },
-    { path: "editadminform/:id" },
-    { path: "allgrades" },
-    { path: "gradeform" },
-    { path: "editGradeForm/:id" },
-    { path: "assigngrade" },
-    { path: "allsubjects" },
-    { path: "allsubjects/:id" },
-    { path: "addsubject" },
-    { path: "assignSubject" },
-    { path: "edit-subject/:id" },
-    { path: "editmanagerform/:id" },
-    { path: "editparentform/:id" },
-    { path: "edit-assigned-subject/:id" },
-    { path: "allgrades/:id" },
-    { path: "edit-student/:id" },
-    { path: "edit-schedule/:id" },
-    { path: "edit-term/:id" },
-    { path: "allteachers/:id" },
-    { path: "edit-class-teacher/:id" },
-    { path: "edit-admin-profile" },
+    { path: "#" },
+
   ];
 
   const filteredRoutes = routes.filter((route) =>
@@ -255,4 +215,4 @@ const Navbar = () => {
     </div>
   );
 };
-export default Navbar;
+export default NavTeacher;

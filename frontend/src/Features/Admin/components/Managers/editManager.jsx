@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { editManager, fetchManagers } from "../AdminRedux/managerSlice";
-import { toast } from "react-toastify";
 import Loader from "@/ui/Loader";
 
 const EditManagerForm = () => {
@@ -47,81 +46,93 @@ const EditManagerForm = () => {
     dispatch(editManager({ id, updatedManager }))
       .unwrap()
       .then(() => {
-        toast.success("Manager updated successfully");
         navigate("/admin/allmanagers");
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
 
   return (
-    <div className="w-[80%] mx-auto mt-10">
+    <div className="relative mx-auto mt-10 w-[80%]">
       {loading && <Loader />}
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Manager</h1>
-      <div className="mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
+      <h1 className="pl-5 text-2xl font-poppins font-semibold text-[#244856]">
+        Edit Manager
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
         <form onSubmit={handleSubmit} className="m-6">
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Full Name</label>
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700">
+              Full Name
+            </label>
             <input
               type="text"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border font-poppins border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter full name"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Email Address</label>
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700">
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border font-poppins border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter email address"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Gender</label>
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700">
+              Gender
+            </label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border font-poppins border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
-              <option value="" disabled>Select Gender</option>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
+              <option value="" disabled>
+                Select Gender
+              </option>
+              <option value="M" className="font-poppins">Male</option>
+              <option value="F" className="font-poppins">Female</option>
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Password</label>
+            <label className="text-md mb-2 font-poppins block font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl font-poppins border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter password"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Phone Number</label>
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700">
+              Phone Number
+            </label>
             <input
               type="text"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border font-poppins border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               placeholder="Enter phone number"
               required
             />
@@ -129,7 +140,7 @@ const EditManagerForm = () => {
 
           <button
             type="submit"
-            className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+            className="text-md mx-auto block font-poppins rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
           >
             Save Changes
           </button>

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
-import { fetchAssignedSubjects, deleteAssignedSubject } from "../AdminRedux/AssignSubjectSlice";
+import {
+  fetchAssignedSubjects,
+  deleteAssignedSubject,
+} from "../AdminRedux/AssignSubjectSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import Loader from "@/ui/Loader";
 import SubjectsHeader from "./AssignSubjectHeader";
@@ -9,8 +12,13 @@ import Pagination from "../Pagination";
 
 const AssignedSubjects = () => {
   const dispatch = useDispatch();
-  const { assignedSubjects, loading: loadingSubjects } = useSelector((state) => state.assignSubject);
-  const { grade, loading: loadingGrades } = useSelector((state) => state.grades);
+  const { assignedSubjects, loading: loadingSubjects } = useSelector(
+    (state) => state.assignSubject,
+  );
+
+  const { grades, loading: loadingGrades } = useSelector(
+    (state) => state.grades,
+  );
   const { id } = useParams();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,14 +46,15 @@ const AssignedSubjects = () => {
 
   // Add grade name to the subjects
   const subjectsWithGradeName = filteredSubjects.map((subject) => {
-    const gradeName = grade.find((g) => g._id === subject.grade)?.gradeName || "Unknown";
+    const gradeName =
+      grades?.find((g) => g._id === subject.grade)?.gradeName || "Unknown";
     return { ...subject, gradeName };
   });
 
   // Paginate the subjects
   const paginatedSubjects = subjectsWithGradeName.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDeleteSubject = (_id) => {
@@ -68,7 +77,7 @@ const AssignedSubjects = () => {
 
   if (loadingSubjects || loadingGrades) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex min-h-screen items-center justify-center">
         <Loader />
       </div>
     );
@@ -84,9 +93,9 @@ const AssignedSubjects = () => {
               onFilterChange={handleFilterChange}
             />
 
-        <div className="mt-7">
-          <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+            <div className="mt-7">
+              <div className="overflow-x-auto">
+                <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
                   <thead className="bg-[#117C90] text-white">
                     <tr>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
@@ -110,13 +119,13 @@ const AssignedSubjects = () => {
                           key={subject._id || index}
                           className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
                         >
-                          <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                          <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                             {subject.subject}
                           </td>
-                          <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                          <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                             {subject.gradeName}
                           </td>
-                          <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                          <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                             {subject.term}
                           </td>
                           <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
@@ -141,7 +150,9 @@ const AssignedSubjects = () => {
                           colSpan="4"
                           className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                         >
-                          <span className="font-poppins">No Subjects Found</span>
+                          <span className="font-poppins">
+                            No Subjects Found
+                          </span>
                         </td>
                       </tr>
                     )}

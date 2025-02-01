@@ -128,7 +128,7 @@ const managerSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch managers";
         state.loading = false;
-        toast.error(state.error); // here
+        toast.error(action.payload || "Failed to fetch managers");
       })
       .addCase(postManager.pending, (state) => {
         state.status = "loading";
@@ -137,13 +137,14 @@ const managerSlice = createSlice({
       .addCase(postManager.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.managers.push(action.payload);
+        toast.success("Manager added successfully");
         state.loading = false;
       })
       .addCase(postManager.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to add manager";
         state.loading = false;
-        toast.error(state.error); // here
+        toast.error(action.payload || "Failed to add manager");
       })
       .addCase(editManager.pending, (state) => {
         state.status = "loading";
@@ -157,13 +158,14 @@ const managerSlice = createSlice({
         if (index !== -1) {
           state.managers[index] = action.payload;
         }
+        toast.success("Manager updated successfully");
         state.loading = false;
       })
       .addCase(editManager.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to edit manager";
         state.loading = false;
-        toast.error(state.error); // here
+        toast.error(action.payload || "Failed to edit manager");
       })
       .addCase(removeManager.pending, (state) => {
         state.status = "loading";
@@ -181,7 +183,7 @@ const managerSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to remove manager";
         state.loading = false;
-        toast.error(state.error); // here
+        toast.error(action.payload || "Failed to remove manager");
       });
   },
 });

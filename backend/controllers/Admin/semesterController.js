@@ -3,6 +3,7 @@ const validateObjectId = require("../../utils/validateObjectId");
 const semesterValidationSchema = require("../../validations/semesterValidation");
 const AcademicYear = require("../../DB/academicYearModel");
 const Semester = require("../../DB/semesterModel");
+const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 
 const createSemester = expressAsyncHandler(async (req, res) => {
   const { error } = semesterValidationSchema.validate(req.body);
@@ -138,7 +139,7 @@ const deleteSemester = expressAsyncHandler(async (req, res) => {
   }
 
   try {
-    await gradeSubjectSemester.deleteMany({ semester_id: id });
+    await GradeSubjectSemester.deleteMany({ semester_id: id });
 
     res.status(200).json({
       status: 200,

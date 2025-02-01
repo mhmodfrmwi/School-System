@@ -1,20 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postParent } from "../AdminRedux/parentSlice";
-import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { fetchStudents } from "../AdminRedux/studentSlice";
+import { toast } from "react-toastify";
+import Loader from "@/ui/Loader";
 
 function ParentForm() {
   const dispatch = useDispatch();
-  const { parents } = useSelector((state) => state.parents);
+  const { students } = useSelector((state) => state.students);
+  const { loading } = useSelector((state) => state.parents);
+
+  useEffect(() => {
+    console.log(fetchStudents);
+    dispatch(fetchStudents());
+  }, [dispatch]);
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     phone: "",
     gender: "",
-    students: [{ studentID: "" }],
+    students: [],
   });
 
   const handleChange = (e) => {
@@ -23,68 +32,44 @@ function ParentForm() {
   };
 
   const handleStudentChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedStudents = formData.students.map((student, i) =>
-      i === index ? { ...student, [name]: value } : student,
-    );
+    const { value } = e.target;
+    const updatedStudents = [...formData.students];
+    updatedStudents[index] = value;
     setFormData({ ...formData, students: updatedStudents });
   };
 
   const addStudent = () => {
     setFormData((prevState) => ({
       ...prevState,
-      students: [...prevState.students, { studentID: "" }],
+      students: [...prevState.students, ""],
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.password) {
-      Swal.fire("Error", "All fields are required!", "error");
-      return;
-    }
+    dispatch(postParent(formData))
+      .unwrap()
+      .then(() => {
+        toast.success("parent added successfully!");
 
-    const emailExists = parents.some(
-      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase(),
-    );
-
-    if (emailExists) {
-      Swal.fire(
-        "Error",
-        "Email already exists. Please use another email.",
-        "error",
-      );
-      return;
-    }
-
-    try {
-      await dispatch(
-        postParent({
-          fullName: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          gender: formData.gender,
-          password: formData.password,
-          students: formData.students,
-        }),
-      );
-
-      setFormData({
-        fullName: "",
-        email: "",
-        password: "",
-        phone: "",
-        gender: "",
-        students: [{ studentID: "" }],
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          phone: "",
+          gender: "",
+          students: [],
+        });
+      })
+      .catch((error) => {
+        toast.error(error);
       });
-    } catch (error) {
-      Swal.fire("Error", "Something went wrong. Please try again.", "error");
-    }
   };
 
   return (
-    <div className="mx-auto my-10 w-[80%] font-poppins">
+    <div className="relative mx-auto my-10 w-[80%] font-poppins">
+      {loading && <Loader />}
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Add Parent</h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
@@ -173,15 +158,18 @@ function ParentForm() {
               <label className="text-md mb-2 block font-medium text-gray-700">
                 Student ID
               </label>
-              <input
-                type="number"
-                name="studentID"
-                value={student.studentID}
+              <select
+                value={student}
                 onChange={(e) => handleStudentChange(index, e)}
-                className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Enter student ID"
-                required
-              />
+                className="z-10 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              >
+                <option value=""> Select StudentID </option>
+                {students.map((AN, index) => (
+                  <option key={index} value={AN.academic_number}>
+                    {AN.academic_number}
+                  </option>
+                ))}
+              </select>
             </div>
           ))}
 
@@ -191,7 +179,7 @@ function ParentForm() {
             className="mt-4 flex items-center font-semibold text-[#117C90]"
           >
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
-            Add another student
+            Add student
           </button>
 
           <div className="col-span-1 mt-6 sm:col-span-2">
