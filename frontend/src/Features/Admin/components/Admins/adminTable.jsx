@@ -67,11 +67,6 @@ const AdminTable = () => {
       {loading && <Loader />}
       <Header onSearchChange={handleSearchChange} 
               onFilterChange={handleFilterChange} />
-      {message && (
-        <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">
-          {message}
-        </div>
-      )}
       <div className="mt-7">
       <div className="overflow-x-auto"> 
         <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">

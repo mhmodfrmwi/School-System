@@ -88,7 +88,7 @@ const ClassTeacherTable = () => {
 
   const getTeacherName = (teacherId) => {
     const teacher = teachers.find((t) => t._id === teacherId);
-    return teacher ? teacher.name : "No Teacher Assigned";
+    return teacher ? teacher.fullName : "No Teacher Assigned";
   };
 
   return (

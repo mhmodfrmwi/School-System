@@ -6,6 +6,7 @@ const GradeSubject = require("../../DB/gradeSubject");
 const GradeYear = require("../../DB/gradeYearModel");
 const Schedule = require("../../DB/schedule");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const student = require("../../DB/student");
 
 const createGrade = expressAsyncHandler(async (req, res) => {
   const { error } = gradeValidationSchema.validate(req.body);
@@ -110,7 +111,7 @@ const deleteGrade = expressAsyncHandler(async (req, res) => {
     await Promise.all([
       Schedule.deleteMany({ grade_id: id }),
       GradeYear.deleteMany({ gradeId: id }),
-      Student.deleteMany({ gradeId: id }),
+      student.deleteMany({ gradeId: id }),
     ]);
 
     const gradeSubjects = await GradeSubject.find({ gradeId: id });

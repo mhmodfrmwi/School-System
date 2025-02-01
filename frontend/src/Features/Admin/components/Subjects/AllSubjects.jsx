@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const SubjectsList = () => {
   const dispatch = useDispatch();
-  const { subjects = [], loading } = useSelector((state) => state.subject);
+  const { subjects = []} = useSelector((state) => state.subject);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
 
@@ -47,11 +47,8 @@ const SubjectsList = () => {
     <div>
       <SubjectsHeader />
       <div className="flex justify-center">
-        <div className="space-y-4 w-3/5">
-          {loading ? (
-            <p>Loading subjects...</p>
-          ) : (
-            paginatedSubjects.map((subject, index) => (
+        <div className="space-y-4 w-[90%]">
+          {paginatedSubjects.map((subject, index) => (
               <div
                 key={subject._id}
                 className="flex items-center font-poppins justify-between bg-white rounded-lg shadow-md mb-4 p-4"
@@ -68,7 +65,7 @@ const SubjectsList = () => {
                   </div>
                   <div className="flex items-center">
                   <span className="text-gray-600 text-xl mx-2 h-7 border-l-2 border-gray-600"></span>
-                    <h3 className="m-0 font-poppins text-sm sm:text-lg  font-semibold text-gray-600">
+                    <h3 className="m-0 font-poppins text-lg  font-semibold text-gray-600">
                       {subject.subjectName}
                     </h3>
                   </div>
@@ -78,24 +75,23 @@ const SubjectsList = () => {
                     to={`/admin/allsubjects/${subject._id}`}
                     className="text-[#3C8D99] hover:text-[#2C6E79] mr-2"
                   >
-                    <FontAwesomeIcon icon={faEye} className="text-sm sm:text-lg " />
+                    <FontAwesomeIcon icon={faEye} className="text-lg " />
                   </Link>
                   <Link
                     to={`/admin/edit-subject/${subject._id}`}
                     className="text-[#117C90] hover:text-[#0B5964] mr-2"
                   >
-                    <FontAwesomeIcon icon={faEdit} className="text-sm sm:text-lg " />
+                    <FontAwesomeIcon icon={faEdit} className="text-lg " />
                   </Link>
                   <button
                     onClick={() => handleDelete(subject._id)}
                     className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                   >
-                    <i className="far fa-trash-alt" style={{ fontSize: "text-sm sm:text-lg " }} />
+                    <i className="far fa-trash-alt" style={{ fontSize: "text-lg " }} />
                   </button>
                 </div>
               </div>
-            ))
-          )}
+            ))}
           <Pagination
             totalItems={subjects.length}
             itemsPerPage={itemsPerPage}

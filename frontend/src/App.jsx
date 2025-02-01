@@ -122,6 +122,9 @@ const EditAdminForm = lazy(
 const GradesDetails = lazy(
   () => import("./Features/Admin/components/Grades/AllAssignedGrades"),
 );
+const EditAssignedGrade = lazy(
+  () => import("./Features/Admin/components/Grades/EditAssignedGrade"),
+)
 const AssignSubject = lazy(
   () => import("./Features/Admin/components/Subjects/AssignSubject"),
 );
@@ -257,6 +260,7 @@ function App() {
             <Route path="allgrades/:id" element={<GradesDetails />} />
             <Route path="gradeform" element={<GradeForm />} />
             <Route path="editGradeForm/:id" element={<EditGradeForm />} />
+            <Route path="editAssignedGrade/:id" element={<EditAssignedGrade />} />
             <Route path="assigngrade" element={<AssignGrade />} />
             <Route path="allsubjects" element={<SubjectsList />} />
             <Route path="allsubjects/:id" element={<SubjectDetails />} />

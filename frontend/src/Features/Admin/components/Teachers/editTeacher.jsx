@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchTeachers, editTeacher } from "../AdminRedux/teacherSlice";
-import { toast } from "react-toastify";
 import Loader from "@/ui/Loader";
 
 const EditTeacherForm = () => {
@@ -63,7 +62,6 @@ const EditTeacherForm = () => {
     dispatch(editTeacher({ id, updatedTeacher }))
       .unwrap()
       .then(() => {
-        toast.success("Teacher updated successfully");
         navigate("/admin/allteachers");
       })
       .catch((error) => {

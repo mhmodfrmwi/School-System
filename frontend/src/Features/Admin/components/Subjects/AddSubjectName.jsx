@@ -21,7 +21,6 @@ function AddSubject() {
         setSubjectName("");
       })
       .catch((error) => {
-        console.log(error || "Failed to add subject");
       });
   };
 

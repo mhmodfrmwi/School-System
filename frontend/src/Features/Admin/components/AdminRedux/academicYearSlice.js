@@ -17,8 +17,6 @@ export const fetchAcademicYears = createAsyncThunk(
       const response = await fetch(`${BASE_URL}`);
       if (!response.ok) throw new Error("Failed to fetch academic years");
       const data = await response.json();
-
-      
       return data.academicYears; 
     } catch (error) {
     
@@ -39,11 +37,8 @@ export const addAcademicYear = createAsyncThunk(
       });
       if (!response.ok) throw new Error("Failed to add academic year");
       const data = await response.json();
-
-      toast.success("Academic year added successfully!");
       return data.academicYear; 
     } catch (error) {
-      toast.error(error.message || "Failed to add academic year");
       return rejectWithValue(error.message);
     }
   }
@@ -60,10 +55,8 @@ export const editAcademicYear = createAsyncThunk(
       });
       if (!response.ok) throw new Error("Failed to update academic year");
 
-      toast.success("Academic year updated successfully!");
       return { id, ...updatedAcademicYear };  
     } catch (error) {
-      toast.error(error.message || "Failed to update academic year");
       return rejectWithValue(error.message);
     }
   }
@@ -79,11 +72,8 @@ export const removeAcademicYear = createAsyncThunk(
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete academic year");
-
-      toast.success("Academic year deleted successfully!");
       return id; 
     } catch (error) {
-      toast.error(error.message || "Failed to delete academic year");
       return rejectWithValue(error.message);
     }
   }
@@ -107,11 +97,11 @@ const academicYearSlice = createSlice({
       .addCase(fetchAcademicYears.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.academicYears = action.payload;
-        // console.log("Updated academic years in Redux:", state.academicYears); 
       })
       .addCase(fetchAcademicYears.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        toast.error(action.payload || "Failed to fetch academic years");
       })
 
       // Add
@@ -121,10 +111,12 @@ const academicYearSlice = createSlice({
       .addCase(addAcademicYear.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.academicYears.push(action.payload);
+        toast.success("Academic year added successfully!");
       })
       .addCase(addAcademicYear.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        toast.error(action.payload || "Failed to add academic year");
       })
 
       // Edit
@@ -139,10 +131,12 @@ const academicYearSlice = createSlice({
         if (index !== -1) {
           state.academicYears[index] = { ...state.academicYears[index], ...action.payload };
         }
+        toast.success("Academic year updated successfully!"); 
       })
       .addCase(editAcademicYear.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        toast.error(action.payload || "Failed to update academic year");
       })
 
       // Remove
@@ -154,10 +148,12 @@ const academicYearSlice = createSlice({
         state.academicYears = state.academicYears.filter(
           (item) => item._id !== action.payload
         );
+        toast.success("Academic year deleted successfully!");
       })
       .addCase(removeAcademicYear.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        toast.error(action.payload || "Failed to delete academic year"); 
       });
   },
 });
