@@ -71,6 +71,35 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
       message: "Semester not found",
     });
   }
+
+  const existingConflict = await Schedule.findOne({
+    $or: [
+      {
+        teacher_id: teacher._id,
+        day_of_week: req.body.day,
+        $nor: [
+          { end_time: { $lte: req.body.startTime } },
+          { start_time: { $gte: req.body.endTime } },
+        ],
+      },
+      {
+        class_id: existingClass._id,
+        day_of_week: req.body.day,
+        $nor: [
+          { end_time: { $lte: req.body.startTime } },
+          { start_time: { $gte: req.body.endTime } },
+        ],
+      },
+    ],
+  });
+
+  if (existingConflict) {
+    return res.status(409).json({
+      status: 409,
+      message: "there is a conflict with another schedule",
+    });
+  }
+
   const schedule = new Schedule({
     class_id: existingClass._id,
     subject_id: existingSubject._id,
@@ -136,7 +165,7 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const grade = await Grade.findOne({ gradeName: req.body.gradeName });
+  const grade = await Grade.findOne({ gradeName: req.body.grade });
   if (!grade) {
     return res.status(404).json({
       status: 404,
@@ -160,6 +189,35 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
     return res.status(404).json({
       status: 404,
       message: "Semester not found",
+    });
+  }
+
+  const existingConflict = await Schedule.findOne({
+    _id: { $ne: id }, // Exclude the current schedule
+    $or: [
+      {
+        teacher_id: teacher._id,
+        day_of_week: req.body.day,
+        $nor: [
+          { end_time: { $lte: req.body.startTime } },
+          { start_time: { $gte: req.body.endTime } },
+        ],
+      },
+      {
+        class_id: existingClass._id,
+        day_of_week: req.body.day,
+        $nor: [
+          { end_time: { $lte: req.body.startTime } },
+          { start_time: { $gte: req.body.endTime } },
+        ],
+      },
+    ],
+  });
+
+  if (existingConflict) {
+    return res.status(409).json({
+      status: 409,
+      message: "Schedule overlaps with an existing entry",
     });
   }
   const schedule = await Schedule.findByIdAndUpdate(
