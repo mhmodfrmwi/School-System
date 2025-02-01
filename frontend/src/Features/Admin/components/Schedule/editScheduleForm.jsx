@@ -1,53 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { editSchedualAsync } from "../AdminRedux/scheduleSlice";
 import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchTerms } from "../AdminRedux/termSlice";
-import { editSchedualAsync } from "../AdminRedux/scheduleSlice";
+import { fetchClasses } from "../AdminRedux/classSlice";
+import { fetchAcademicYears } from "../AdminRedux/academicYearSlice";
+import { toast } from "react-toastify";
+import Loader from "@/ui/Loader";
+import { useNavigate, useParams } from "react-router-dom";
 
-function EditScheduleForm({ existingData }) {
+function EditScheduleForm() {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const schedules = useSelector((state) => state.schedules.schedules);
   const teachers = useSelector((state) => state.teachers.teachers);
   const subjects = useSelector((state) => state.subject.subjects);
-  const grades = useSelector((state) => state.grades.grade);
+  const grades = useSelector((state) => state.grades.grades);
   const terms = useSelector((state) => state.terms.terms);
+  const classes = useSelector((state) => state.classes.classes);
+  const academicYears = useSelector(
+    (state) => state.academicYears.academicYears,
+  );
+  const { loading } = useSelector((state) => state.schedules);
+  const { schedules } = useSelector((state) => state.schedules);
 
   const [formData, setFormData] = useState({
-    courseName: "",
+    className: "",
+    subjectName: "",
     teacherName: "",
     grade: "",
-    class: "",
-    term: "",
+    academicYear: "",
     day: "",
-    from: "",
-    to: "",
+    startTime: "",
+    endTime: "",
+    semesterName: "",
   });
-
-  useEffect(() => {
-    dispatch(fetchTeachers());
-    dispatch(fetchSubjects());
-    dispatch(fetchGrades());
-    dispatch(fetchTerms());
-  }, [dispatch]);
 
   useEffect(() => {
     const schedule = schedules.find((item) => item._id === id);
     if (schedule) {
       setFormData({
-        courseName: schedule.courseName,
+        className: schedule.className,
+        subjectName: schedule.subjectName,
         teacherName: schedule.teacherName,
         grade: schedule.grade,
-        class: schedule.class,
-        term: schedule.term,
+        academicYear: schedule.academicYear,
         day: schedule.day,
-        from: schedule.from,
-        to: schedule.to,
+        startTime: schedule.startTime,
+        endTime: schedule.endTime,
+        semesterName: schedule.semesterName,
       });
     }
   }, [id, schedules]);
@@ -59,14 +63,32 @@ function EditScheduleForm({ existingData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(editSchedualAsync({ id, updatedSchedule: formData }));
-    navigate("/admin/allschedules");
+
+    dispatch(editSchedualAsync({ id, updatedSchedual: formData }))
+      .unwrap()
+      .then(() => {
+        toast.success("Schedule updated successfully!");
+        navigate("/admin/allschedules");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
   };
 
+  useEffect(() => {
+    dispatch(fetchTeachers());
+    dispatch(fetchSubjects());
+    dispatch(fetchGrades());
+    dispatch(fetchTerms());
+    dispatch(fetchClasses());
+    dispatch(fetchAcademicYears());
+  }, [dispatch, id]);
+
   return (
-    <div className="mx-auto my-10 w-[80%] font-poppins">
+    <div className="relative mx-auto my-10 w-[80%] font-poppins">
+      {loading && <Loader />}
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Edit Schedule
+        Update Schedule
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
@@ -76,24 +98,75 @@ function EditScheduleForm({ existingData }) {
         >
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Course Name
+              Academic Year
             </label>
             <select
-              name="courseName"
-              value={formData.courseName}
+              name="academicYear"
+              value={formData.academicYear}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
-                Select course
+                Select Academic Year
               </option>
-              {Array.isArray(subjects) &&
-                subjects.map((subject) => (
-                  <option key={subject._id} value={subject.subjectName}>
-                    {subject.subjectName}
+              {academicYears?.map((year) => (
+                <option
+                  key={year._id}
+                  value={`${year.startYear}/${year.endYear}`}
+                >
+                  {year.startYear} / {year.endYear}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Semester Name
+            </label>
+            <select
+              name="semesterName"
+              value={formData.semesterName}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select semester
+              </option>
+              {terms
+                .filter((term) => {
+                  const academicYearValue = `${term.academicYear_id.startYear}/${term.academicYear_id.endYear}`;
+                  return academicYearValue === formData.academicYear;
+                })
+                .map((term) => (
+                  <option key={term._id} value={term.semesterName}>
+                    {term.semesterName}
                   </option>
                 ))}
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Subject Name
+            </label>
+            <select
+              name="subjectName"
+              value={formData.subjectName}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select subject
+              </option>
+              {subjects?.map((subject) => (
+                <option key={subject._id} value={subject.subjectName}>
+                  {subject.subjectName}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -111,12 +184,24 @@ function EditScheduleForm({ existingData }) {
               <option value="" disabled>
                 Select teacher
               </option>
-              {Array.isArray(teachers) &&
-                teachers.map((teacher) => (
-                  <option key={teacher._id} value={teacher.fullName}>
-                    {teacher.fullName}
-                  </option>
-                ))}
+              {(() => {
+                const selectedSubject = subjects.find(
+                  (s) => s.subjectName === formData.subjectName,
+                );
+                return teachers
+                  ?.filter((teacher) =>
+                    selectedSubject
+                      ? teacher.subjectId.subjectName.includes(
+                          selectedSubject.subjectName,
+                        )
+                      : true,
+                  )
+                  .map((teacher) => (
+                    <option key={teacher._id} value={teacher.fullName}>
+                      {teacher.fullName}
+                    </option>
+                  ));
+              })()}
             </select>
           </div>
 
@@ -134,12 +219,11 @@ function EditScheduleForm({ existingData }) {
               <option value="" disabled>
                 Select grade
               </option>
-              {Array.isArray(grades) &&
-                grades.map((grade) => (
-                  <option key={grade._id} value={grade.gradeName}>
-                    {grade.gradeName}
-                  </option>
-                ))}
+              {grades?.map((grade) => (
+                <option key={grade._id} value={grade.gradeName}>
+                  {grade.gradeName}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -148,44 +232,29 @@ function EditScheduleForm({ existingData }) {
               Class
             </label>
             <select
-              name="class"
-              value={formData.class}
-              onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-            >
-              <option value="" disabled>
-                Select class
-              </option>
-              <option value="A">Class A</option>
-              <option value="B">Class B</option>
-              <option value="C">Class C</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
-              Term - Year
-            </label>
-            <select
-              name="term"
-              value={formData.term}
+              name="className"
+              value={formData.className}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
-                Select term
+                Select class
               </option>
-              {Array.isArray(terms) && terms.length > 0 ? (
-                terms.map((term) => (
-                  <option key={term._id} value={term._id}>
-                    {term.semesterName} - {term.academicYear_id?.startYear} /{" "}
-                    {term.academicYear_id?.endYear}
-                  </option>
-                ))
-              ) : (
-                <option disabled>Loading terms...</option>
-              )}
+              {(() => {
+                const selectedGrade = grades.find(
+                  (g) => g.gradeName === formData.grade,
+                );
+                return classes
+                  ?.filter((c) =>
+                    selectedGrade ? c.gradeId._id === selectedGrade._id : true,
+                  )
+                  .map((classItem) => (
+                    <option key={classItem._id} value={classItem.className}>
+                      {classItem.className}
+                    </option>
+                  ));
+              })()}
             </select>
           </div>
 
@@ -198,6 +267,7 @@ function EditScheduleForm({ existingData }) {
               value={formData.day}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
             >
               <option value="" disabled>
                 Select day
@@ -216,8 +286,8 @@ function EditScheduleForm({ existingData }) {
             </label>
             <input
               type="time"
-              name="from"
-              value={formData.from}
+              name="startTime"
+              value={formData.startTime}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
@@ -230,8 +300,8 @@ function EditScheduleForm({ existingData }) {
             </label>
             <input
               type="time"
-              name="to"
-              value={formData.to}
+              name="endTime"
+              value={formData.endTime}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required

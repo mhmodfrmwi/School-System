@@ -17,8 +17,10 @@ function ScheduleForm() {
   const subjects = useSelector((state) => state.subject.subjects);
   const grades = useSelector((state) => state.grades.grades);
   const terms = useSelector((state) => state.terms.terms);
-  const classes = useSelector((state) => state.classes);
-  const academicYears = useSelector((state) => state.academicYears);
+  const classes = useSelector((state) => state.classes.classes);
+  const academicYears = useSelector(
+    (state) => state.academicYears.academicYears,
+  );
   const { loading } = useSelector((state) => state.schedules);
 
   const [formData, setFormData] = useState({
@@ -35,12 +37,19 @@ function ScheduleForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
+    setFormData((prevState) => {
+      const newState = { ...prevState, [name]: value };
+
+      if (name === "academicYear") newState.semesterName = "";
+      if (name === "subjectName") newState.teacherName = "";
+      if (name === "grade") newState.className = "";
+      return newState;
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log(formData);
     dispatch(postSchedual(formData))
       .unwrap()
       .then(() => {
@@ -85,96 +94,26 @@ function ScheduleForm() {
         >
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Subject Name
+              Academic Year
             </label>
             <select
-              name="subjectName"
-              value={formData.subjectName}
+              name="academicYear"
+              value={formData.academicYear}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
-                Select subject
+                Select Academic Year
               </option>
-              {Array.isArray(subjects) &&
-                subjects.map((subject) => (
-                  <option key={subject._id} value={subject.subjectName}>
-                    {subject.subjectName}
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
-              Teacher Name
-            </label>
-            <select
-              name="teacherName"
-              value={formData.teacherName}
-              onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              required
-            >
-              <option value="" disabled>
-                Select teacher
-              </option>
-              {Array.isArray(teachers) && teachers.length > 0 ? (
-                teachers.map((teacher) => (
-                  <option key={teacher._id} value={teacher.fullName}>
-                    {teacher.fullName}
-                  </option>
-                ))
-              ) : (
-                <option disabled>Loading teachers...</option>
-              )}
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
-              Grade
-            </label>
-            <select
-              name="grade"
-              value={formData.grade}
-              onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              required
-            >
-              <option value="" disabled>
-                Select grade
-              </option>
-              {Array.isArray(grades) &&
-                grades.map((grade) => (
-                  <option key={grade._id} value={grade.gradeName}>
-                    {grade.gradeName}
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
-              Class
-            </label>
-            <select
-              name="className"
-              value={formData.className}
-              onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-            >
-              <option value="" disabled>
-                Select class
-              </option>
-
-              {Array.isArray(classes.classes) &&
-                classes.classes.map((classItem) => (
-                  <option key={classItem._id} value={classItem.className}>
-                    {classItem.className}
-                  </option>
-                ))}
+              {academicYears?.map((year) => (
+                <option
+                  key={year._id}
+                  value={`${year.startYear}/${year.endYear}`}
+                >
+                  {year.startYear} / {year.endYear}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -192,53 +131,126 @@ function ScheduleForm() {
               <option value="" disabled>
                 Select semester
               </option>
-              {Array.isArray(terms) && terms.length > 0 ? (
-                terms.map((term) => (
+              {terms
+                .filter((term) => {
+                  const academicYearValue = `${term.academicYear_id.startYear}/${term.academicYear_id.endYear}`;
+                  return academicYearValue === formData.academicYear;
+                })
+                .map((term) => (
                   <option key={term._id} value={term.semesterName}>
                     {term.semesterName}
                   </option>
-                ))
-              ) : (
-                <option disabled>Loading semesters...</option>
-              )}
+                ))}
             </select>
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Academic Year
+              Subject Name
             </label>
             <select
-              name="academicYear"
-              value={formData.academicYear}
-              onChange={(e) => {
-                const selectedYear = academicYears.academicYears.find(
-                  (year) => year._id === e.target.value,
-                );
-                setFormData((prevState) => ({
-                  ...prevState,
-                  academicYear: selectedYear
-                    ? `${selectedYear.startYear}/${selectedYear.endYear}`
-                    : "",
-                }));
-              }}
+              name="subjectName"
+              value={formData.subjectName}
+              onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
-                Select Academic Year
+                Select subject
               </option>
+              {subjects?.map((subject) => (
+                <option key={subject._id} value={subject.subjectName}>
+                  {subject.subjectName}
+                </option>
+              ))}
+            </select>
+          </div>
 
-              {Array.isArray(academicYears.academicYears) &&
-              academicYears.academicYears.length > 0 ? (
-                academicYears.academicYears.map((year) => (
-                  <option key={year._id} value={year._id}>
-                    {year.startYear} / {year.endYear}
-                  </option>
-                ))
-              ) : (
-                <option disabled>Loading academic years...</option>
-              )}
+          <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Teacher Name
+            </label>
+            <select
+              name="teacherName"
+              value={formData.teacherName}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select teacher
+              </option>
+              {(() => {
+                const selectedSubject = subjects.find(
+                  (s) => s.subjectName === formData.subjectName,
+                );
+                return teachers
+                  ?.filter((teacher) =>
+                    selectedSubject
+                      ? teacher.subjectId.subjectName.includes(
+                          selectedSubject.subjectName,
+                        )
+                      : true,
+                  )
+                  .map((teacher) => (
+                    <option key={teacher._id} value={teacher.fullName}>
+                      {teacher.fullName}
+                    </option>
+                  ));
+              })()}
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Grade
+            </label>
+            <select
+              name="grade"
+              value={formData.grade}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select grade
+              </option>
+              {grades?.map((grade) => (
+                <option key={grade._id} value={grade.gradeName}>
+                  {grade.gradeName}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Class
+            </label>
+            <select
+              name="className"
+              value={formData.className}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select class
+              </option>
+              {(() => {
+                const selectedGrade = grades.find(
+                  (g) => g.gradeName === formData.grade,
+                );
+                return classes
+                  ?.filter((c) =>
+                    selectedGrade ? c.gradeId._id === selectedGrade._id : true,
+                  )
+                  .map((classItem) => (
+                    <option key={classItem._id} value={classItem.className}>
+                      {classItem.className}
+                    </option>
+                  ));
+              })()}
             </select>
           </div>
 
@@ -251,6 +263,7 @@ function ScheduleForm() {
               value={formData.day}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
             >
               <option value="" disabled>
                 Select day
@@ -279,7 +292,7 @@ function ScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              to
+              To
             </label>
             <input
               type="time"
