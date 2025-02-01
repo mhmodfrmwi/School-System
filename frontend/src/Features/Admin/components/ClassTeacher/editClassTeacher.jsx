@@ -18,13 +18,10 @@ const EditClassTeacherForm = () => {
   const { teachers } = useSelector((state) => state.teachers);
   const { classTeachers, loading } = useSelector((state) => state.classTeacher);
 
-
   // State to hold the form data
   const [formData, setFormData] = useState({
-    className: "",
-    subjectName: "",
-    teacherName: "",
-    academicYear: "",
+    teacherSubject: "", // Combines teacher and subject
+    classAcademicYear: "", // Combines class and academic year
   });
 
   useEffect(() => {
@@ -38,17 +35,13 @@ const EditClassTeacherForm = () => {
     const classTeacherToEdit = classTeachers.find(
       (teacher) => teacher._id === id
     );
-    console.log(classTeacherToEdit);
     if (classTeacherToEdit) {
       setFormData({
-        className: classTeacherToEdit.classId._id, // Use classId._id to set the value
-        subjectName: classTeacherToEdit.subjectId._id, // Use subjectId._id to set the value
-        teacherName: classTeacherToEdit.teacherId._id, // Use teacherId._id to set the value
-        academicYear: classTeacherToEdit.academicYear_id._id, // Assuming you want to store academicYear as ID
+        teacherSubject: `${classTeacherToEdit.teacherId._id}-${classTeacherToEdit.subjectId._id}`,
+        classAcademicYear: `${classTeacherToEdit.classId._id}-${classTeacherToEdit.academicYear_id._id}`,
       });
     }
   }, [classTeachers, id]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,12 +50,33 @@ const EditClassTeacherForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedClassTeacher = { ...formData };
+
+    // Split the combined values back into individual IDs
+    const [teacherId, subjectId] = formData.teacherSubject.split("-");
+    const [classId, academicYearId] = formData.classAcademicYear.split("-");
+
+    // Find the corresponding names for the IDs
+    const selectedTeacher = teachers.find((teacher) => teacher._id === teacherId);
+    const selectedSubject = subjects.find((subject) => subject._id === subjectId);
+    const selectedClass = classes.find((cls) => cls._id === classId);
+    const selectedAcademicYear = classTeachers.find(
+      (ct) => ct.academicYear_id._id === academicYearId
+    )?.academicYear_id;
+
+    // Prepare the data to match the server's expectations
+    const updatedClassTeacher = {
+      className: selectedClass?.className || "",
+      subjectName: selectedSubject?.subjectName || "",
+      teacherName: selectedTeacher?.fullName || "",
+      academicYear: selectedAcademicYear
+        ? `${selectedAcademicYear.startYear}-${selectedAcademicYear.endYear}`
+        : "",
+    };
 
     dispatch(editClassTeacher({ id, updatedClassTeacher }))
       .unwrap()
       .then(() => {
-        navigate("/admin/allclassTeachers");
+        navigate(`/admin/allteachers/${id}`);
       })
       .catch((error) => {
         console.error("Error updating class teacher", error);
@@ -76,77 +90,49 @@ const EditClassTeacherForm = () => {
       <div className="mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
-          {/* Select Class */}
+          {/* Teacher-Subject Field */}
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Class</label>
+            <label className="block text-md font-medium text-gray-700 mb-2">Teacher-Subject</label>
             <select
-              name="className"
-              value={formData.className}
+              name="teacherSubject"
+              value={formData.teacherSubject}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
-              <option value="">Select Class</option>
-              {classes?.map((cls) => (
-                <option key={cls._id} value={cls._id}>
-                  {cls.className}
-                </option>
-              ))}
+              <option value="">Select Teacher-Subject</option>
+              {teachers?.map((teacher) =>
+                subjects?.map((subject) => (
+                  <option
+                    key={`${teacher._id}-${subject._id}`}
+                    value={`${teacher._id}-${subject._id}`}
+                  >
+                    {teacher.fullName} - {subject.subjectName}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
-          {/* Select Subject */}
+          {/* Class-Academic Year Field */}
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Subject</label>
+            <label className="block text-md font-medium text-gray-700 mb-2">Class-Academic Year</label>
             <select
-              name="subjectName"
-              value={formData.subjectName}
+              name="classAcademicYear"
+              value={formData.classAcademicYear}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
-              <option value="">Select Subject</option>
-              {subjects?.map((subject) => (
-                <option key={subject._id} value={subject._id}>
-                  {subject.subjectName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Select Teacher */}
-          <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Teacher</label>
-            <select
-              name="teacherName"
-              value={formData.teacherName}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-            >
-              <option value="">Select Teacher</option>
-              {teachers?.map((teacher) => (
-                <option key={teacher._id} value={teacher._id}>
-                  {teacher.fullName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Select Academic Year */}
-          <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Academic Year</label>
-            <select
-              name="academicYear"
-              value={formData.academicYear}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-            >
-              <option value="">Select Academic Year</option>
-              {/* Assuming you have academicYears available in your state */}
-              {classTeachers.map((ct) => (
-                <option key={ct.academicYear_id._id} value={ct.academicYear_id._id}>
-                  {ct.academicYear_id.startYear} - {ct.academicYear_id.endYear}
-                </option>
-              ))}
-
+              <option value="">Select Class-Academic Year</option>
+              {classes?.map((cls) =>
+                classTeachers.map((ct) => (
+                  <option
+                    key={`${cls._id}-${ct.academicYear_id._id}`}
+                    value={`${cls._id}-${ct.academicYear_id._id}`}
+                  >
+                    {cls.className} - {ct.academicYear_id.startYear} - {ct.academicYear_id.endYear}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
