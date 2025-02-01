@@ -7,6 +7,7 @@ const Grade = require("../../DB/gradeModel");
 const Class = require("../../DB/classModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const hashPassword = require("../../utils/hashPassword");
+const Attendance = require("../../DB/attendenceModel");
 
 const generateAcademicNumber = async () => {
   const currentYear = moment().year().toString().slice(-2);
@@ -311,7 +312,7 @@ const deleteStudent = expressAsyncHandler(async (req, res) => {
       $inc: { student_count: -1 },
     });
     await Student.findByIdAndDelete(id);
-
+    await Attendance.deleteMany({student_id: id });
     res.status(200).json({
       status: 200,
       message: "Student deleted successfully",

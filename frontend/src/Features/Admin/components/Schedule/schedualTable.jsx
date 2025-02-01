@@ -138,7 +138,7 @@ const SchedualTable = () => {
                     } hover:bg-[#117C90]/70`}
                   >
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule.subject_id.subjectName}
+                      {schedule.subject_id?.subjectName}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       {schedule?.teacher_id

@@ -5,8 +5,8 @@ const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Stude
 const {
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear,
 } = require("../controllers/Student/materialController");
-const{
-  getQuestionsBySubjectForStudent
+const {
+  getQuestionsBySubjectForStudent,
 } = require("../controllers/Student/questionBankController");
 const{
   getAllTrips
@@ -17,6 +17,18 @@ const{
 const{
   getVirtualRoomsForStudent
 } = require("../controllers/Student/virtualRoomController");
+const { getAllTrips } = require("../controllers/Student/tripController");
+const { getAllContests } = require("../controllers/manager/contestController");
+const {
+  getStudentAttendanceUsingStudentId,
+} = require("../controllers/Student/attendanceController");
+const {
+  getScheduleForSpecificStudent,
+} = require("../controllers/Student/scheduleController");
+const {
+  addMaterialForBookMarks,
+  getAllBookmarksForStudent,
+} = require("../controllers/Student/MaterialBookMarksController");
 
 const router = express.Router();
 
@@ -36,7 +48,8 @@ router.get(
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear
 );
 
-router.get("/questionBank/:gradeSubjectSemesterId",
+router.get(
+  "/questionBank/:gradeSubjectSemesterId",
   validateJwt,
   getQuestionsBySubjectForStudent
 );
@@ -52,4 +65,16 @@ router.get("/virtualRoom/:gradeSubjectSemesterId",
   validateJwt,
   getVirtualRoomsForStudent
 );
+router.get("/trip", getAllTrips);
+router.get("/contest", getAllContests);
+
+router.get("/get-attendance", validateJwt, getStudentAttendanceUsingStudentId);
+router.get("/get-schedule", validateJwt, getScheduleForSpecificStudent);
+
+router.post(
+  "/add-to-bookmark/:materialId",
+  validateJwt,
+  addMaterialForBookMarks
+);
+router.get("/get-bookmarks", validateJwt, getAllBookmarksForStudent);
 module.exports = router;

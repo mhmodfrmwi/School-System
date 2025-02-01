@@ -1,8 +1,8 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const Attendance = require("../../validations/attendanceValidation");
 const attendanceValidationSchema = require("../../validations/attendanceValidation");
 const Student = require("../../DB/student");
+const Attendance = require("../../DB/attendenceModel");
 const createStudentAttendance = expressAsyncHandler(async (req, res) => {
   const { error } = attendanceValidationSchema.validate(req.body);
   if (error) {
@@ -13,8 +13,8 @@ const createStudentAttendance = expressAsyncHandler(async (req, res) => {
   }
   const { studentName, academicNumber, status } = req.body;
   const existingStudent = await Student.findOne({
-    studentName,
-    academicNumber,
+    fullName: studentName,
+    academic_number: academicNumber,
   });
   if (!existingStudent) {
     return res.status(404).json({
@@ -22,6 +22,7 @@ const createStudentAttendance = expressAsyncHandler(async (req, res) => {
       message: "Student not found",
     });
   }
+
   const existingAttendance = await Attendance.findOne({
     student_id: existingStudent._id,
     date: Date.now(),
@@ -34,8 +35,10 @@ const createStudentAttendance = expressAsyncHandler(async (req, res) => {
   }
   const attendance = new Attendance({
     student_id: existingStudent._id,
+    academic_number: academicNumber,
     date: Date.now(),
     status,
+    class_id: existingStudent.classId,
   });
   await attendance.save();
   res.status(201).json({
@@ -83,10 +86,10 @@ const getStudentAttendanceUsingStudentId = expressAsyncHandler(
         message: "Invalid Student ID",
       });
     }
-    const studentAttendance = await Attendance.find({ studentId });
+    const studentAttendance = await Attendance.find({ student_id: studentId });
     res.status(200).json({
       status: 200,
-      data: studentAttendance,
+      studentAttendance,
     });
   }
 );
