@@ -5,6 +5,15 @@ const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Stude
 const {
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear,
 } = require("../controllers/Student/materialController");
+const{
+  getQuestionsBySubjectForStudent
+} = require("../controllers/Student/questionBankController");
+const{
+  getAllTrips
+} = require("../controllers/Student/tripController");
+const{
+  getAllContests
+} = require("../controllers/manager/contestController");
 
 const router = express.Router();
 
@@ -22,5 +31,16 @@ router.get(
   "/materiel/:id",
   validateJwt,
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear
+);
+
+router.get("/questionBank/:gradeSubjectSemesterId",
+  validateJwt,
+  getQuestionsBySubjectForStudent
+);
+router.get("/trip",
+  getAllTrips
+);
+router.get("/contest",
+  getAllContests
 );
 module.exports = router;
