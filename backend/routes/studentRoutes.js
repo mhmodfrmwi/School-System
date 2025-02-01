@@ -13,7 +13,10 @@ const{
 } = require("../controllers/Student/tripController");
 const{
   getAllContests
-} = require("../controllers/manager/contestController");
+} = require("../controllers/Student/contestController");
+const{
+  getVirtualRoomsForStudent
+} = require("../controllers/Student/virtualRoomController");
 
 const router = express.Router();
 
@@ -38,9 +41,15 @@ router.get("/questionBank/:gradeSubjectSemesterId",
   getQuestionsBySubjectForStudent
 );
 router.get("/trip",
+  validateJwt,
   getAllTrips
 );
 router.get("/contest",
+  validateJwt,
   getAllContests
+);
+router.get("/virtualRoom/:gradeSubjectSemesterId",
+  validateJwt,
+  getVirtualRoomsForStudent
 );
 module.exports = router;
