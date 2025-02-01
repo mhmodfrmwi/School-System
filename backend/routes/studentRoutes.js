@@ -5,6 +5,12 @@ const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Stude
 const {
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear,
 } = require("../controllers/Student/materialController");
+const {
+  getStudentAttendanceUsingStudentId,
+} = require("../controllers/Student/attendanceController");
+const {
+  getScheduleForSpecificStudent,
+} = require("../controllers/Student/scheduleController");
 
 const router = express.Router();
 
@@ -23,4 +29,7 @@ router.get(
   validateJwt,
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear
 );
+
+router.get("/get-attendance", validateJwt, getStudentAttendanceUsingStudentId);
+router.get("/get-schedule", validateJwt, getScheduleForSpecificStudent);
 module.exports = router;
