@@ -18,6 +18,7 @@ const initialState = {
 export const postParent = createAsyncThunk(
   "parents/postParent",
   async (parentData, { rejectWithValue }) => {
+    console.log(parentData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/parent/createParent",
@@ -32,8 +33,9 @@ export const postParent = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
+
       const data = await response.json();
       toast.success("parent added successfully!");
       return data;

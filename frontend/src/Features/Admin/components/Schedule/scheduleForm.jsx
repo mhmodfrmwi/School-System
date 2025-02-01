@@ -5,8 +5,8 @@ import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Fetch teachers
 import { fetchSubjects } from "../AdminRedux/subjectSlice"; // Fetch courses
 import { fetchGrades } from "../AdminRedux/gradeSlice"; // Fetch grades
 import { fetchTerms } from "../AdminRedux/termSlice"; // Fetch terms
-
-
+import { fetchClasses } from "../AdminRedux/classSlice";
+import { fetchAcademicYears } from "../AdminRedux/academicYearSlice";
 
 function ScheduleForm() {
   const dispatch = useDispatch();
@@ -15,17 +15,19 @@ function ScheduleForm() {
   const subjects = useSelector((state) => state.subject.subjects);
   const grades = useSelector((state) => state.grades.grade);
   const terms = useSelector((state) => state.terms.terms);
-
+  const classes = useSelector((state) => state.classes);
+  const academicYears = useSelector((state) => state.academicYears);
 
   const [formData, setFormData] = useState({
-    courseName: "",
+    className: "",
+    subjectName: "",
     teacherName: "",
     grade: "",
-    class: "",
-    term: "",
+    academicYear: "",
     day: "",
-    from: "",
-    to: "",
+    startTime: "",
+    endTime: "",
+    semesterName: "",
   });
 
   const handleChange = (e) => {
@@ -35,22 +37,18 @@ function ScheduleForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isNaN(formData.grade)) {
-      alert("Grade must be a valid number.");
-      return;
-    }
 
-    console.log("Schedule Submitted", formData);
-    dispatch(postSchedual(formData)); // Updated dispatch action
+    dispatch(postSchedual(formData));
     setFormData({
-      courseName: "",
+      className: "",
+      subjectName: "",
       teacherName: "",
       grade: "",
-      class: "",
-      term: "",
+      academicYear: "",
       day: "",
-      from: "",
-      to: "",
+      startTime: "",
+      endTime: "",
+      semesterName: "",
     });
   };
 
@@ -59,45 +57,53 @@ function ScheduleForm() {
     dispatch(fetchSubjects());
     dispatch(fetchGrades());
     dispatch(fetchTerms());
+    dispatch(fetchClasses());
+    dispatch(fetchAcademicYears());
   }, [dispatch]);
 
   return (
-    <div className="w-[80%] mx-auto my-10 font-poppins">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Add Schedule</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
+    <div className="mx-auto my-10 w-[80%] font-poppins">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        Add Schedule
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+        <form
+          onSubmit={handleSubmit}
+          className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+        >
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
-              Course Name
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Subject Name
             </label>
             <select
-              name="courseName"
-              value={formData.courseName}
+              name="subjectName"
+              value={formData.subjectName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
-                Select course
+                Select subject
               </option>
-              {Array.isArray(subjects) && subjects.map((subject) => (
-                <option key={subject._id} value={subject.subjectName}>
-                  {subject.subjectName}
-                </option>
-              ))}
+              {Array.isArray(subjects) &&
+                subjects.map((subject) => (
+                  <option key={subject._id} value={subject.subjectName}>
+                    {subject.subjectName}
+                  </option>
+                ))}
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Teacher Name
             </label>
             <select
               name="teacherName"
               value={formData.teacherName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
@@ -116,81 +122,152 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Grade
             </label>
             <select
               name="grade"
               value={formData.grade}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
                 Select grade
               </option>
-              {Array.isArray(grades) && grades.map((grade) => (
-                <option key={grade._id} value={grade.gradeName}>
-                  {grade.gradeName}
-                </option>
-              ))}
+              {Array.isArray(grades) &&
+                grades.map((grade) => (
+                  <option key={grade._id} value={grade.gradeName}>
+                    {grade.gradeName}
+                  </option>
+                ))}
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Class
             </label>
             <select
-              name="class"
-              value={formData.class}
+              name="className"
+              value={formData.className}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select class
               </option>
-              <option value="A">Class A</option>
-              <option value="B">Class B</option>
-              <option value="C">Class C</option>
+
+              {Array.isArray(classes.classes) &&
+                classes.classes.map((classItem) => (
+                  <option key={classItem._id} value={classItem.className}>
+                    {classItem.className}
+                  </option>
+                ))}
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
-              Term - Year
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Semester Name
             </label>
             <select
-              name="term"
-              value={formData.term}
+              name="semesterName"
+              value={formData.semesterName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
-                Select term
+                Select semester
               </option>
               {Array.isArray(terms) && terms.length > 0 ? (
                 terms.map((term) => (
-                  <option key={term._id} value={term._id}>
-                    {term.semesterName} - {term.academicYear_id?.startYear} / {term.academicYear_id?.endYear}
+                  <option key={term._id} value={term.semesterName}>
+                    {term.semesterName}
                   </option>
                 ))
               ) : (
-                <option disabled>Loading terms...</option>
+                <option disabled>Loading semesters...</option>
               )}
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Academic Year
+            </label>
+            <select
+              name="academicYear"
+              value={formData.academicYear}
+              onChange={(e) => {
+                const selectedYear = academicYears.academicYears.find(
+                  (year) => year._id === e.target.value,
+                );
+                setFormData((prevState) => ({
+                  ...prevState,
+                  academicYear: selectedYear
+                    ? `${selectedYear.startYear}/${selectedYear.endYear}`
+                    : "",
+                }));
+              }}
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select Academic Year
+              </option>
+
+              {Array.isArray(academicYears.academicYears) &&
+              academicYears.academicYears.length > 0 ? (
+                academicYears.academicYears.map((year) => (
+                  <option key={year._id} value={year._id}>
+                    {year.startYear} / {year.endYear}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Loading academic years...</option>
+              )}
+            </select>
+          </div>
+
+          {/* <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Academic Year (Class)
+            </label>
+            <select
+              name="academicYear"
+              value={formData.academicYear || ""}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              required
+            >
+              <option value="" disabled>
+                Select Academic Year
+              </option>
+
+              {Array.isArray(academicYears.academicYears) &&
+              academicYears.academicYears.length > 0 ? (
+                academicYears.academicYears.map((year) => (
+                  <option key={year._id} value={year._id}>
+                    {year.startYear} / {year.endYear}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Loading academic years...</option>
+              )}
+            </select>
+          </div> */}
+
+          <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Day
             </label>
             <select
               name="day"
               value={formData.day}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select day
@@ -204,37 +281,37 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               From
             </label>
             <input
               type="time"
-              name="from"
-              value={formData.from}
+              name="startTime"
+              value={formData.startTime}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
-              To
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              to
             </label>
             <input
               type="time"
-              name="to"
-              value={formData.to}
+              name="endTime"
+              value={formData.endTime}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
           </div>
 
-          <div className="col-span-1 sm:col-span-2 mt-6">
+          <div className="col-span-1 mt-6 sm:col-span-2">
             <button
               type="submit"
-              className="px-6 py-2 bg-[#117C90] text-white rounded-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
             >
               Add Schedule
             </button>

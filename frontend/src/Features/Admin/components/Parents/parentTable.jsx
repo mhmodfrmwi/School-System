@@ -20,7 +20,6 @@ const ParentTable = () => {
   const dispatch = useDispatch();
   // console.log(parents);
 
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -80,30 +79,28 @@ const ParentTable = () => {
     navigate(`/admin/editparentform/${id}`);
   };
 
-
-
   return (
     <div className="lg:px-0">
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
       />
-      
+
       <div className="mt-7">
         <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
-            <thead className="bg-[#117C90]  text-white">
+          <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
+            <thead className="bg-[#117C90] text-white">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                   Name
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                {/* <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                   Student Name
-                </th>
+                </th> */}
 
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                {/* <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                   Student ID
-                </th>
+                </th> */}
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                   Email
                 </th>
@@ -124,7 +121,7 @@ const ParentTable = () => {
                     key={parent._id || index}
                     className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
                   >
-                    <td className="flex items-center font-poppins px-3 py-2 text-xs sm:text-sm md:text-base">
+                    <td className="flex items-center px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       <img
                         src={parent.profileImage}
                         alt="Profile"
@@ -134,18 +131,18 @@ const ParentTable = () => {
                         {parent.fullName}
                       </span>
                     </td>
-                    <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                    {/* <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       {parent.studentName}
-                    </td>
-                    <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                    </td> */}
+                    {/* <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                       {parent.studentID}
-                    </td>
+                    </td> */}
 
-                    <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       {parent.email}
                     </td>
 
-                    <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       {parent.gender}
                     </td>
                     <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">

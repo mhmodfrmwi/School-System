@@ -9,12 +9,14 @@ const initialState = {
   message: null,
 };
 
-// Fetch all students
 export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
+
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/student");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/student",
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -22,25 +24,29 @@ export const fetchStudents = createAsyncThunk(
       }
 
       const data = await response.json();
+
       return data.students;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch students");
     }
-  }
+  },
 );
 
-// Add a new student
 export const postStudent = createAsyncThunk(
   "students/postStudent",
   async (studentData, { rejectWithValue }) => {
+    console.log(studentData);
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/student/createStudent", {
-        method: "POST",
-        body: JSON.stringify(studentData),
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/student/createStudent",
+        {
+          method: "POST",
+          body: JSON.stringify(studentData),
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -48,25 +54,30 @@ export const postStudent = createAsyncThunk(
       }
 
       const data = await response.json();
+      console.log(data.student);
       return data.student;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to add student");
     }
-  }
+  },
 );
 
-// Edit an existing student
 export const editStudent = createAsyncThunk(
   "students/editStudent",
+
   async ({ id, updatedStudent }, { rejectWithValue }) => {
+    console.log(updatedStudent);
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/student/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(updatedStudent),
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/student/${id}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify(updatedStudent),
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -74,24 +85,26 @@ export const editStudent = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.student;
+      return data.updatedStudent;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit student");
     }
-  }
+  },
 );
 
-// Delete a student
 export const removeStudent = createAsyncThunk(
   "students/removeStudent",
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/student/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/student/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -103,7 +116,7 @@ export const removeStudent = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove student");
     }
-  }
+  },
 );
 
 const studentsSlice = createSlice({
@@ -155,7 +168,7 @@ const studentsSlice = createSlice({
       .addCase(editStudent.fulfilled, (state, action) => {
         state.status = "succeeded";
         const index = state.students.findIndex(
-          (student) => student._id === action.payload._id
+          (student) => student._id === action.payload._id,
         );
         if (index !== -1) {
           state.students[index] = action.payload;
@@ -177,7 +190,7 @@ const studentsSlice = createSlice({
       .addCase(removeStudent.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.students = state.students.filter(
-          (student) => student._id !== action.payload
+          (student) => student._id !== action.payload,
         );
         state.message = "Student removed successfully!";
         state.loading = false;
