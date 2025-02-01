@@ -65,8 +65,12 @@ router.get("/virtualRoom/:gradeSubjectSemesterId",
   validateJwt,
   getVirtualRoomsForStudent
 );
-router.get("/trip", getAllTrips);
-router.get("/contest", getAllContests);
+router.get("/trip", 
+  validateJwt,
+  getAllTrips);
+router.get("/contest", 
+  validateJwt,
+  getAllContests);
 
 router.get("/get-attendance", validateJwt, getStudentAttendanceUsingStudentId);
 router.get("/get-schedule", validateJwt, getScheduleForSpecificStudent);
