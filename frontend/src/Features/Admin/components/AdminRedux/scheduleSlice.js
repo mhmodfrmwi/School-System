@@ -62,6 +62,7 @@ export const fetchScheduals = createAsyncThunk(
 export const editSchedualAsync = createAsyncThunk(
   "schedules/editSchedualAsync",
   async ({ id, updatedSchedual }, { rejectWithValue }) => {
+    console.log(updatedSchedual);
     try {
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/schedule/${id}`,
@@ -79,7 +80,7 @@ export const editSchedualAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-
+      console.log(data.schedule);
       return data.schedule;
     } catch (error) {
       return rejectWithValue(error.message);

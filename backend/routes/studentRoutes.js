@@ -6,6 +6,11 @@ const {
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear,
 } = require("../controllers/Student/materialController");
 const {
+  getQuestionsBySubjectForStudent,
+} = require("../controllers/Student/questionBankController");
+const { getAllTrips } = require("../controllers/Student/tripController");
+const { getAllContests } = require("../controllers/manager/contestController");
+const {
   getStudentAttendanceUsingStudentId,
 } = require("../controllers/Student/attendanceController");
 const {
@@ -29,6 +34,14 @@ router.get(
   validateJwt,
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear
 );
+
+router.get(
+  "/questionBank/:gradeSubjectSemesterId",
+  validateJwt,
+  getQuestionsBySubjectForStudent
+);
+router.get("/trip", getAllTrips);
+router.get("/contest", getAllContests);
 
 router.get("/get-attendance", validateJwt, getStudentAttendanceUsingStudentId);
 router.get("/get-schedule", validateJwt, getScheduleForSpecificStudent);

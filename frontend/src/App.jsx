@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 
+const Teachers = lazy(() => import( "./Features/Teacher/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
 const OnBoarding = lazy(() => import("./Features/Auth/OnBoarding"));
 const ChooseRole = lazy(() => import("./Features/Auth/ChooseRole"));
@@ -308,13 +309,13 @@ function App() {
           <Route path="parent" element={<Parents />}>
             <Route index element={<DashboardParent />} />
             <Route path="grades" element={<GradesParent />} />
-            <Route
-              path="grades/assignment"
-              element={<GradesAssignmentParent />}
-            />
+            <Route path="grades/assignment" element={<GradesAssignmentParent />} />
             <Route path="grades/exam" element={<GradesExamParent />} />
             <Route path="schedule" element={<ScheduleParent />} />
             <Route path="schedule/exam" element={<ScheduleExamParent />} />
+          </Route>
+          {/* /////////////////teacher pages//////////////////// */}
+          <Route path="teacher" element={<Teachers />}>
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
