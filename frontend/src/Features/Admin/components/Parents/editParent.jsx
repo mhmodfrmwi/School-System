@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editParentAsync } from "../AdminRedux/parentSlice";
+import { toast } from "react-toastify";
+import Loader from "@/ui/Loader";
 
 const EditParentForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { parents } = useSelector((state) => state.parents);
+  const { parents, loading } = useSelector((state) => state.parents);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -44,12 +46,19 @@ const EditParentForm = () => {
     };
     console.log("ahmed", updatedData);
 
-    dispatch(editParentAsync({ id, updatedParent: updatedData }));
-    navigate("/admin/allparents");
+    dispatch(editParentAsync({ id, updatedParent: updatedData }))
+      .unwrap()
+      .then(() => {
+        toast.success("parent updated successfully!");
+        navigate("/admin/allparents");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
   };
-
   return (
-    <div className="mx-auto my-10 w-[80%] font-poppins">
+    <div className="relative mx-auto my-10 w-[80%] font-poppins">
+      {loading && <Loader />}
       <div className="mb-6">
         <h2 className="font-poppins text-2xl font-semibold text-[#244856]">
           Edit Parent

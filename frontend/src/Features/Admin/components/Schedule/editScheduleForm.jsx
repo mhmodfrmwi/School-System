@@ -5,14 +5,14 @@ import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchTerms } from "../AdminRedux/termSlice";
-import { editSchedualAsync } from "../AdminRedux/scheduleSlice"; // Action for updating schedule
+import { editSchedualAsync } from "../AdminRedux/scheduleSlice";
 
 function EditScheduleForm({ existingData }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const schedules = useSelector((state) => state.schedules.schedules); // الحصول على جميع الجداول
+  const schedules = useSelector((state) => state.schedules.schedules);
   const teachers = useSelector((state) => state.teachers.teachers);
   const subjects = useSelector((state) => state.subject.subjects);
   const grades = useSelector((state) => state.grades.grade);
@@ -37,7 +37,7 @@ function EditScheduleForm({ existingData }) {
   }, [dispatch]);
 
   useEffect(() => {
-    const schedule = schedules.find((item) => item._id === id); // البحث عن الجدول المطلوب
+    const schedule = schedules.find((item) => item._id === id);
     if (schedule) {
       setFormData({
         courseName: schedule.courseName,
@@ -60,91 +60,98 @@ function EditScheduleForm({ existingData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(editSchedualAsync({ id, updatedSchedule: formData }));
-    navigate("/admin/allschedules"); // إعادة التوجيه إلى صفحة الجداول
+    navigate("/admin/allschedules");
   };
 
-
   return (
-    <div className="w-[80%] mx-auto my-10 font-poppins">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Schedule</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
+    <div className="mx-auto my-10 w-[80%] font-poppins">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        Edit Schedule
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+        <form
+          onSubmit={handleSubmit}
+          className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+        >
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Course Name
             </label>
             <select
               name="courseName"
               value={formData.courseName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
                 Select course
               </option>
-              {Array.isArray(subjects) && subjects.map((subject) => (
-                <option key={subject._id} value={subject.subjectName}>
-                  {subject.subjectName}
-                </option>
-              ))}
+              {Array.isArray(subjects) &&
+                subjects.map((subject) => (
+                  <option key={subject._id} value={subject.subjectName}>
+                    {subject.subjectName}
+                  </option>
+                ))}
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Teacher Name
             </label>
             <select
               name="teacherName"
               value={formData.teacherName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
                 Select teacher
               </option>
-              {Array.isArray(teachers) && teachers.map((teacher) => (
-                <option key={teacher._id} value={teacher.fullName}>
-                  {teacher.fullName}
-                </option>
-              ))}
+              {Array.isArray(teachers) &&
+                teachers.map((teacher) => (
+                  <option key={teacher._id} value={teacher.fullName}>
+                    {teacher.fullName}
+                  </option>
+                ))}
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Grade
             </label>
             <select
               name="grade"
               value={formData.grade}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
                 Select grade
               </option>
-              {Array.isArray(grades) && grades.map((grade) => (
-                <option key={grade._id} value={grade.gradeName}>
-                  {grade.gradeName}
-                </option>
-              ))}
+              {Array.isArray(grades) &&
+                grades.map((grade) => (
+                  <option key={grade._id} value={grade.gradeName}>
+                    {grade.gradeName}
+                  </option>
+                ))}
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Class
             </label>
             <select
               name="class"
               value={formData.class}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select class
@@ -156,14 +163,14 @@ function EditScheduleForm({ existingData }) {
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Term - Year
             </label>
             <select
               name="term"
               value={formData.term}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="" disabled>
@@ -172,7 +179,8 @@ function EditScheduleForm({ existingData }) {
               {Array.isArray(terms) && terms.length > 0 ? (
                 terms.map((term) => (
                   <option key={term._id} value={term._id}>
-                    {term.semesterName} - {term.academicYear_id?.startYear} / {term.academicYear_id?.endYear}
+                    {term.semesterName} - {term.academicYear_id?.startYear} /{" "}
+                    {term.academicYear_id?.endYear}
                   </option>
                 ))
               ) : (
@@ -182,14 +190,14 @@ function EditScheduleForm({ existingData }) {
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               Day
             </label>
             <select
               name="day"
               value={formData.day}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="" disabled>
                 Select day
@@ -203,7 +211,7 @@ function EditScheduleForm({ existingData }) {
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               From
             </label>
             <input
@@ -211,13 +219,13 @@ function EditScheduleForm({ existingData }) {
               name="from"
               value={formData.from}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">
+            <label className="text-md mb-2 block font-medium text-gray-700">
               To
             </label>
             <input
@@ -225,15 +233,15 @@ function EditScheduleForm({ existingData }) {
               name="to"
               value={formData.to}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
           </div>
 
-          <div className="col-span-1 sm:col-span-2 mt-6">
+          <div className="col-span-1 mt-6 sm:col-span-2">
             <button
               type="submit"
-              className="px-6 py-2 bg-[#117C90] text-white rounded-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
             >
               Update Schedule
             </button>

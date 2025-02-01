@@ -29,12 +29,6 @@ const StudentHeader = ({ onSearchChange, onFilterChange }) => {
           <button className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white sm:text-sm">
             Export CSV
           </button>
-          {/* <button
-            className="rounded-md bg-[#117C90] px-4 py-2 text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
-            onClick={() => navigate("/students/studentform")}
-          >
-            Add Student
-          </button> */}
 
           <NavLink
             to="/admin/studentform"

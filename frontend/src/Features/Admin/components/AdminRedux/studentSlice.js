@@ -22,9 +22,7 @@ export const fetchStudents = createAsyncThunk(
         const error = await response.json();
         return rejectWithValue(error.message);
       }
-
       const data = await response.json();
-
       return data.students;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch students");
@@ -85,6 +83,7 @@ export const editStudent = createAsyncThunk(
       }
 
       const data = await response.json();
+
       return data.updatedStudent;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit student");
@@ -112,6 +111,7 @@ export const removeStudent = createAsyncThunk(
       }
 
       dispatch(fetchStudents());
+      toast.success("Student removed successfully!");
       return id;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove student");
@@ -153,13 +153,11 @@ const studentsSlice = createSlice({
         state.students.push(action.payload);
         state.message = "Student added successfully!";
         state.loading = false;
-        toast.success(state.message);
       })
       .addCase(postStudent.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to add student";
         state.loading = false;
-        toast.error(state.error);
       })
       .addCase(editStudent.pending, (state) => {
         state.status = "loading";
@@ -175,13 +173,11 @@ const studentsSlice = createSlice({
         }
         state.message = "Student updated successfully!";
         state.loading = false;
-        toast.success(state.message);
       })
       .addCase(editStudent.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to edit student";
         state.loading = false;
-        toast.error(state.error);
       })
       .addCase(removeStudent.pending, (state) => {
         state.status = "loading";
@@ -194,13 +190,11 @@ const studentsSlice = createSlice({
         );
         state.message = "Student removed successfully!";
         state.loading = false;
-        toast.success(state.message);
       })
       .addCase(removeStudent.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to remove student";
         state.loading = false;
-        toast.error(state.error);
       });
   },
 });

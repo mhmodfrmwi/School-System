@@ -18,7 +18,6 @@ const ParentTable = () => {
     loading,
   } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
-  // console.log(parents);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -29,8 +28,6 @@ const ParentTable = () => {
   useEffect(() => {
     dispatch(fetchParents());
   }, [dispatch]);
-
-  // console.log(parents);
 
   const filteredParents = parents.filter((parent) => {
     const lowerSearchText = searchText.toLowerCase();
@@ -43,12 +40,11 @@ const ParentTable = () => {
     );
   });
 
-  // console.log("Filtered Parents:", filteredParents);
   const paginatedParents = filteredParents.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
-  // console.log(paginatedParents);
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this parent?")) {
       await dispatch(removeParent(id));
@@ -80,7 +76,8 @@ const ParentTable = () => {
   };
 
   return (
-    <div className="lg:px-0">
+    <div className="relative lg:px-0">
+      {loading && <Loader />}
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -94,13 +91,7 @@ const ParentTable = () => {
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                   Name
                 </th>
-                {/* <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Student Name
-                </th> */}
 
-                {/* <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Student ID
-                </th> */}
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                   Email
                 </th>
@@ -113,8 +104,7 @@ const ParentTable = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="relative">
-              {loading && <Loader />}
+            <tbody className=" ">
               {[paginatedParents].length > 0 ? (
                 paginatedParents.map((parent, index) => (
                   <tr
@@ -131,12 +121,6 @@ const ParentTable = () => {
                         {parent.fullName}
                       </span>
                     </td>
-                    {/* <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {parent.studentName}
-                    </td> */}
-                    {/* <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
-                      {parent.studentID}
-                    </td> */}
 
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       {parent.email}

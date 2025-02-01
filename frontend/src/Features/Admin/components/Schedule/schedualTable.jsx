@@ -9,13 +9,16 @@ import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import Pagination from "../Pagination";
 import Header from "./scheduleHeader";
 import { useNavigate } from "react-router-dom";
+import Loader from "@/ui/Loader";
 
 const SchedualTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { schedules = [], message } = useSelector(
-    (state) => state.schedules || {},
-  );
+  const {
+    schedules = [],
+    message,
+    loading,
+  } = useSelector((state) => state.schedules || {});
   const { teachers = [] } = useSelector((state) => state.teachers || {});
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -90,17 +93,12 @@ const SchedualTable = () => {
   };
 
   return (
-    <div className="mx-auto px-4 lg:px-0">
+    <div className="relative mx-auto px-4 lg:px-0">
+      {loading && <Loader />}
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
       />
-
-      {message && (
-        <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">
-          {message}
-        </div>
-      )}
 
       <div className="mt-7">
         <div className="overflow-x-auto">

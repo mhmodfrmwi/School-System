@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postParent } from "../AdminRedux/parentSlice";
-import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { fetchStudents } from "../AdminRedux/studentSlice";
+import { toast } from "react-toastify";
+import Loader from "@/ui/Loader";
 
 function ParentForm() {
   const dispatch = useDispatch();
-  const { parents } = useSelector((state) => state.parents);
   const { students } = useSelector((state) => state.students);
+  const { loading } = useSelector((state) => state.parents);
 
   useEffect(() => {
     console.log(fetchStudents);
@@ -47,46 +48,28 @@ function ParentForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.password) {
-      Swal.fire("Error", "All fields are required!", "error");
-      return;
-    }
+    dispatch(postParent(formData))
+      .unwrap()
+      .then(() => {
+        toast.success("parent added successfully!");
 
-    const emailExists = parents.some(
-      (parent) => parent.email.toLowerCase() === formData.email.toLowerCase(),
-    );
-
-    if (emailExists) {
-      Swal.fire(
-        "Error",
-        "Email already exists. Please use another email.",
-        "error",
-      );
-      return;
-    }
-
-    console.log(formData);
-
-    try {
-      await dispatch(postParent(formData));
-
-      setFormData({
-        fullName: "",
-        email: "",
-        password: "",
-        phone: "",
-        gender: "",
-        students: [],
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          phone: "",
+          gender: "",
+          students: [],
+        });
+      })
+      .catch((error) => {
+        toast.error(error);
       });
-
-      Swal.fire("Success", "Parent added successfully!", "success");
-    } catch (error) {
-      Swal.fire("Error", "Something went wrong. Please try again.", "error");
-    }
   };
 
   return (
-    <div className="mx-auto my-10 w-[80%] font-poppins">
+    <div className="relative mx-auto my-10 w-[80%] font-poppins">
+      {loading && <Loader />}
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Add Parent</h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">

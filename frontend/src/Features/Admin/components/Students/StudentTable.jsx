@@ -8,10 +8,11 @@ import {
 import Pagination from "../Pagination";
 import Header from "./studentHeader";
 import { useNavigate } from "react-router-dom";
+import Loader from "@/ui/Loader";
 
 const StudentTable = () => {
-  const { students, message } = useSelector((state) => state.students);
-  const { classes } = useSelector((state) => state.classes);
+  const { students, message, loading } = useSelector((state) => state.students);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -30,20 +31,19 @@ const StudentTable = () => {
   const filteredStudents = students.filter((student) => {
     const lowerSearchText = searchText.toLowerCase();
 
-    // Check for required properties to avoid runtime errors
-    if (!student.gender || !student.FullName || !student.email) {
+    if (!student.gender || !student.fullName || !student.email) {
       return false;
     }
 
     if (!filterOption || filterOption === "") {
       return (
-        student.name.toLowerCase().includes(lowerSearchText) ||
+        student.fullName.toLowerCase().includes(lowerSearchText) ||
         student.email.toLowerCase().includes(lowerSearchText)
       );
     }
 
     if (filterOption === "fullName") {
-      return student.name.toLowerCase().includes(lowerSearchText);
+      return student.fullName.toLowerCase().includes(lowerSearchText);
     }
     if (filterOption === "class") {
       return (
@@ -95,18 +95,17 @@ const StudentTable = () => {
   }, [message, dispatch]);
 
   return (
-    <div className="mx-auto px-4 lg:px-0">
+    <div className="relative mx-auto px-4 lg:px-0">
+      {loading && <Loader />}
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
       />
-
-      {message && (
+      {/* {message && (
         <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">
           {message}
         </div>
-      )}
-
+      )} */}
       <div className="mt-7">
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
@@ -133,8 +132,8 @@ const StudentTable = () => {
               </tr>
             </thead>
             <tbody className="relative">
-              {students.length > 0 ? (
-                students.map((student, index) => (
+              {paginatedStudents.length > 0 ? (
+                paginatedStudents.map((student, index) => (
                   <tr
                     key={student._id}
                     className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}

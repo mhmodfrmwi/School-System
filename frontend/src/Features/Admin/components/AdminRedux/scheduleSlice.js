@@ -9,7 +9,6 @@ const initialState = {
   loading: false,
 };
 
-// Post a new schedule
 export const postSchedual = createAsyncThunk(
   "schedules/postSchedual",
   async (schedualData, { rejectWithValue }) => {
@@ -28,21 +27,18 @@ export const postSchedual = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.message); // Toast error message
         return rejectWithValue(error.message);
       }
 
       const data = await response.json();
-      toast.success("Schedule added successfully");
+
       return data;
     } catch (error) {
-      toast.error(error.message || "Failed to post schedule data");
       return rejectWithValue(error.message || "Failed to post schedule data");
     }
   },
 );
 
-// Fetch all schedules
 export const fetchScheduals = createAsyncThunk(
   "schedules/fetchScheduals",
   async (_, { rejectWithValue }) => {
@@ -58,13 +54,11 @@ export const fetchScheduals = createAsyncThunk(
       const data = await response.json();
       return data.schedules;
     } catch (error) {
-      toast.error(error.message || "Failed to fetch schedules");
       return rejectWithValue(error.message);
     }
   },
 );
 
-// Edit an existing schedule
 export const editSchedualAsync = createAsyncThunk(
   "schedules/editSchedualAsync",
   async ({ id, updatedSchedual }, { rejectWithValue }) => {
@@ -85,16 +79,14 @@ export const editSchedualAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-      toast.success("Schedule updated successfully");
+
       return data.schedule;
     } catch (error) {
-      toast.error(error.message || "Failed to edit schedule");
       return rejectWithValue(error.message);
     }
   },
 );
 
-// Remove a schedule
 export const removeSchedual = createAsyncThunk(
   "schedules/removeSchedual",
   async (id, { rejectWithValue, dispatch }) => {
@@ -111,15 +103,13 @@ export const removeSchedual = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.message || "Failed to delete schedule");
-        return toast.error(error.message);
+        console.log(error);
       }
 
       dispatch(fetchScheduals());
-      toast.success("Schedule deleted successfully");
+
       return id;
     } catch (error) {
-      toast.error(error.message || "Failed to delete schedule");
       return rejectWithValue(error.message);
     }
   },
@@ -196,6 +186,7 @@ const scheduleSlice = createSlice({
           (schedule) => schedule._id !== action.payload,
         );
         state.message = "Schedule deleted successfully";
+        toast.success("Schedule deleted successfully");
       })
       .addCase(removeSchedual.rejected, (state) => {
         state.loading = false;

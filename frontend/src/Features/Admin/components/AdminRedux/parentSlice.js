@@ -1,4 +1,3 @@
-import { faL } from "@fortawesome/free-solid-svg-icons";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
@@ -37,7 +36,7 @@ export const postParent = createAsyncThunk(
       }
 
       const data = await response.json();
-      toast.success("parent added successfully!");
+
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -54,7 +53,7 @@ export const fetchParents = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
 
       const data = await response.json();
@@ -86,7 +85,7 @@ export const editParentAsync = createAsyncThunk(
       }
 
       const data = await response.json();
-      toast.success("parent updated successfully!");
+
       return data.parent;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -110,11 +109,9 @@ export const removeParent = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
-        return toast.error(error.message);
+        return rejectWithValue(error.message);
       }
-
       dispatch(fetchParents());
-      toast.success("parent deleted successfully!");
 
       return id;
     } catch (error) {
@@ -191,6 +188,7 @@ const parentSlice = createSlice({
       .addCase(fetchParents.rejected, (state) => {
         state.status = "failed";
         state.loading = false;
+        toast.error(state.error);
       })
 
       .addCase(removeParent.pending, (state) => {
@@ -204,6 +202,7 @@ const parentSlice = createSlice({
         );
         state.message = "Parent deleted successfully";
         state.loading = false;
+        toast.success("Parent deleted successfully");
       })
       .addCase(removeParent.rejected, (state, action) => {
         state.status = "failed";
