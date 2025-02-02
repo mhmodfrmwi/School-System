@@ -36,7 +36,7 @@ const SidebarTeacher = () => {
   const menuItems = [
     { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/teacher" },
     { label: "Motivation", icon: AwardIcon, hoverIcon: AwardIconH, href: "#" },
-    { label: "Courses", icon: CourseIcon, hoverIcon: CourseIconH, href: "#" },
+    { label: "Courses", icon: CourseIcon, hoverIcon: CourseIconH, href: "/teacher/currentcourse" },
     { label: "Absence", icon: AbsenceIcon, hoverIcon: AbsenceIconH, href: "#" },
     { label: "Schedule", icon: ScheduleIcon, hoverIcon: ScheduleIconH, href: "/teacher/weekly-schedule" },
     { label: "Grade Management", icon: GradeIcon, hoverIcon: GradeIconH, href: "#" },

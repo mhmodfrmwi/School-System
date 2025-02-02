@@ -229,7 +229,11 @@ const WeeklySchedule = lazy(
 const ExamSchedule = lazy(
   () => import("./Features/Teacher/components/Schedule/ExamSchedule"),
 );
-
+const AddMaterial = lazy(() => import( "./Features/Teacher/components/courses/AddMaterial"));
+const AllCourses = lazy(() => import("./Features/Teacher/components/courses/AllCourses"));
+const CurrentCourse = lazy(() => import( "./Features/Teacher/components/courses/CurrentCourses"));
+const MaterialForm = lazy(() => import( "./Features/Teacher/components/courses/FormCourse"));
+const SeeMaterial = lazy(() => import( "./Features/Teacher/components/courses/SeeMaterial"));
 
 
 function App() {
@@ -355,6 +359,12 @@ function App() {
           <Route path="contests/edit-activity-form/:id" element={<EditActivityForm  />} /> 
           <Route path="weekly-schedule" element={<WeeklySchedule />} /> 
           <Route path="exam-schedule" element={<ExamSchedule />} /> 
+          <Route path="currentCourse" element={<CurrentCourse />} />
+          <Route path="allcourses" element={<AllCourses />} />
+          <Route path="addmaterial" element={<AddMaterial/>} />
+          <Route path="materialform" element={<MaterialForm/>} />
+          <Route path="seematerial" element={<SeeMaterial/>} />
+
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
