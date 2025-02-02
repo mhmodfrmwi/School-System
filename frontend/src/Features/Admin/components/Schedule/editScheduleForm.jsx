@@ -46,7 +46,7 @@ function EditScheduleForm() {
         subjectName: schedule.subject_id.subjectName,
         teacherName: schedule.teacher_id.fullName,
         grade: schedule.grade_id.gradeName,
-        academicYear: schedule.academic_year_id,
+        academicYear: `${schedule.academic_year_id.startYear}/${schedule.academic_year_id.endYear}`,
         day: schedule.day_of_week,
         startTime: schedule.start_time,
         endTime: schedule.end_time,
@@ -56,6 +56,7 @@ function EditScheduleForm() {
   }, [id, schedules]);
 
   console.log(formData);
+  console.log(formData.academicYear);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
