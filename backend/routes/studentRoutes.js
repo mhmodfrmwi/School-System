@@ -17,8 +17,6 @@ const{
 const{
   getVirtualRoomsForStudent
 } = require("../controllers/Student/virtualRoomController");
-const { getAllTrips } = require("../controllers/Student/tripController");
-const { getAllContests } = require("../controllers/manager/contestController");
 const {
   getStudentAttendanceUsingStudentId,
 } = require("../controllers/Student/attendanceController");
@@ -53,14 +51,7 @@ router.get(
   validateJwt,
   getQuestionsBySubjectForStudent
 );
-router.get("/trip",
-  validateJwt,
-  getAllTrips
-);
-router.get("/contest",
-  validateJwt,
-  getAllContests
-);
+
 router.get("/virtualRoom/:gradeSubjectSemesterId",
   validateJwt,
   getVirtualRoomsForStudent
