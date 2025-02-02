@@ -137,10 +137,12 @@ const ClassTeacherTable = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="rounded-lg bg-[#FFEBEB] py-28 text-center">
-                    No Class Teachers Found
-                  </td>
-                </tr>
+                <td colSpan="5" className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]">
+                  <p className="text-lg font-semibold text-gray-600">No Class Teachers Found</p>
+                  <p className="text-sm text-gray-500 mt-2">It seems like there are no class teachers in the database at the moment.</p>
+                  
+                </td>
+              </tr>
               )}
             </tbody>
           </table>

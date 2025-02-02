@@ -146,13 +146,12 @@ const ParentTable = () => {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="7"
-                    className="rounded-lg bg-[#FFEBEB] py-28 text-center text-xs text-[#244856] sm:text-sm md:text-base"
-                  >
-                    <span className="font-poppins">No Parents Found</span>
-                  </td>
-                </tr>
+                <td colSpan="4" className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]">
+                  <p className="text-lg font-semibold text-gray-600">No Parents Found</p>
+                  <p className="text-sm text-gray-500 mt-2">It seems like there are no parents in the database at the moment.</p>
+                  
+                </td>
+              </tr>
               )}
             </tbody>
           </table>
