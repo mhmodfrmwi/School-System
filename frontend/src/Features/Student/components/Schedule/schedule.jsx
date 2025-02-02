@@ -1,9 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import img1 from "../../../../assets/schedule 1.png";
 import img2 from "../../../../assets/icon.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudentSchedule } from "../StudentRedux/studentScheduleSlice";
 function Schedule() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { studentSchedule } = useSelector((state) => state.studentSchedule);
+  useEffect(() => {
+    dispatch(fetchStudentSchedule());
+  }, [dispatch]);
 
   const [timetable, setTimetable] = useState([
     [
@@ -25,6 +32,8 @@ function Schedule() {
     ["15:00", "", "", "", "", "", "", ""],
     ["16:00", "", "", "", "", "", "", ""],
   ]);
+
+  console.log(studentSchedule);
   return (
     <>
       <section>

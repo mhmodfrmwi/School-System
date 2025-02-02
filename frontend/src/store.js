@@ -14,8 +14,9 @@ import subjectsReducer from "./Features/Admin/components/AdminRedux/subjectSlice
 import academicYearReducer from "./Features/Admin/components/AdminRedux/academicYearSlice";
 import gradeReducer from "./Features/Admin/components/AdminRedux/gradeSlice";
 import assignSubjectReducer from "./Features/Admin/components/AdminRedux/AssignSubjectSlice";
-import assignGradeReducer from "./Features/Admin/components/AdminRedux/AssignGradeSlice"; 
+import assignGradeReducer from "./Features/Admin/components/AdminRedux/AssignGradeSlice";
 import classReducer from "./Features/Admin/components/AdminRedux/classSlice";
+import studentScheduleReducer from "./Features/Student/components/StudentRedux/studentScheduleSlice";
 
 const store = configureStore({
   reducer: {
@@ -35,6 +36,7 @@ const store = configureStore({
     grades: gradeReducer,
     assignGrade: assignGradeReducer,
     classes: classReducer,
+    studentSchedule: studentScheduleReducer,
   },
 });
 
