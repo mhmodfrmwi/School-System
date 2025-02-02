@@ -46,68 +46,80 @@ const TermList = () => {
   
   
   return (
-    <div >
+    <div>
       <TermHeader />
       <div className="flex justify-center">
         <div className="space-y-4 w-[90%]">
-          {paginatedTerms.map((term, index) => (
-            <div
-              key={term._id}
-              className="flex items-center font-poppins justify-between bg-white rounded-lg shadow-md mb-4 p-4"
-            >
-              <div className="flex items-center">
-                <div
-                  className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
-                  style={{ backgroundColor: `${getColor(index)}33` }}
-                >
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    style={{ color: getColor(index) }}
-                  />
-                </div>
-                <span className="text-gray-600 text-xl mx-2 h-8 border-l-2 border-gray-600"></span>
-
-                <div className="flex flex-col ml-3">
-                  <p className="m-0 font-poppins text-sm text-gray-500">
-                    {term.academicYear_id ? `${term.academicYear_id.startYear} - ${term.academicYear_id.endYear}` : "No Academic Year Available"}
-                  </p>
-
-                  <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600">
-                    {term.semesterName &&
+          {paginatedTerms.length > 0 ? (
+            paginatedTerms.map((term, index) => (
+              <div
+                key={term._id}
+                className="flex items-center font-poppins justify-between bg-white rounded-lg shadow-md mb-4 p-4"
+              >
+                <div className="flex items-center">
+                  <div
+                    className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
+                    style={{ backgroundColor: `${getColor(index)}33` }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faCalendar}
+                      style={{ color: getColor(index) }}
+                    />
+                  </div>
+                  <span className="text-gray-600 text-xl mx-2 h-8 border-l-2 border-gray-600"></span>
+  
+                  <div className="flex flex-col ml-3">
+                    <p className="m-0 font-poppins text-sm text-gray-500">
+                      {term.academicYear_id
+                        ? `${term.academicYear_id.startYear} - ${term.academicYear_id.endYear}`
+                        : "No Academic Year Available"}
+                    </p>
+  
+                    <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600">
+                      {term.semesterName &&
                       typeof term.semesterName === "string" &&
                       term.semesterName.trim() !== ""
-                      ? term.semesterName
-                      : "No Semester Available"}
-                  </h3>
+                        ? term.semesterName
+                        : "No Semester Available"}
+                    </h3>
+                  </div>
+                </div>
+  
+                <div className="flex">
+                  <button
+                    className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+                    onClick={() => handleEdit(term)}
+                  >
+                    <FontAwesomeIcon icon={faEdit} className="text-lg" />
+                  </button>
+                  <button
+                    className="text-[#E74833] transition duration-300 hover:text-[#244856]"
+                    onClick={() => handleDelete(term._id)}
+                  >
+                    <i className="far fa-trash-alt" style={{ fontSize: "18px" }} />
+                  </button>
                 </div>
               </div>
-
-              <div className="flex">
-                <button
-                  className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
-                  onClick={() => handleEdit(term)}
-                >
-                  <FontAwesomeIcon icon={faEdit} className="text-lg" />
-                </button>
-                <button
-                  className="text-[#E74833] transition duration-300 hover:text-[#244856]"
-                  onClick={() => handleDelete(term._id)}
-                >
-                  <i className="far fa-trash-alt" style={{ fontSize: "18px" }} />
-                </button>
-              </div>
+            ))
+          ) : (
+            <div className="bg-[#FFEBEB] py-20 text-center rounded-lg">
+              <p className="text-xl font-semibold text-gray-600">No Terms Available</p>
             </div>
-          ))}
+          )}
+          {paginatedTerms.length > 0 ? (
           <Pagination
             totalItems={terms.length}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
             onPageChange={handlePageChange}
           />
+        ) : null}
         </div>
       </div>
     </div>
   );
+  
+  
 };
 
 export default TermList;

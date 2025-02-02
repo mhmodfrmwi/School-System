@@ -8,7 +8,6 @@ import { fetchTerms } from "../AdminRedux/termSlice";
 import { fetchClasses } from "../AdminRedux/classSlice";
 import { fetchAcademicYears } from "../AdminRedux/academicYearSlice";
 import { toast } from "react-toastify";
-import Loader from "@/ui/Loader";
 
 function ScheduleForm() {
   const dispatch = useDispatch();
@@ -21,7 +20,6 @@ function ScheduleForm() {
   const academicYears = useSelector(
     (state) => state.academicYears.academicYears,
   );
-  const { loading } = useSelector((state) => state.schedules);
 
   const [formData, setFormData] = useState({
     className: "",
@@ -82,7 +80,7 @@ function ScheduleForm() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-      {loading && <Loader />}
+    
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
         Add Schedule
       </h1>

@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { editSubject, fetchSubjects } from "../AdminRedux/subjectSlice";
 import { toast } from "react-toastify";
-import Loader from "@/ui/Loader"; // استيراد الـ Loader
 
 const EditSubject = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { subjects, loading } = useSelector((state) => state.subject);
+  const { subjects} = useSelector((state) => state.subject);
 
   const [subjectName, setSubjectName] = useState("");
 
@@ -47,9 +46,6 @@ const EditSubject = () => {
       <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
         <form onSubmit={handleSubmit} className="m-6">
-          {loading ? (
-            <Loader /> // عرض الـ Loader أثناء التحميل
-          ) : (
             <>
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -70,7 +66,7 @@ const EditSubject = () => {
                 Save Changes
               </button>
             </>
-          )}
+          
         </form>
       </div>
     </div>

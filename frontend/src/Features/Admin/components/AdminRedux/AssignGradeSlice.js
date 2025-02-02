@@ -167,7 +167,10 @@ const assignGradeSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch academic years";
         state.loading = false;
-        toast.error(state.error);
+        if(state.error.includes("NetworkError")){
+
+        }else{
+        toast.error(state.error);}
       })
       .addCase(assignGrade.pending, (state) => {
         state.status = "loading";

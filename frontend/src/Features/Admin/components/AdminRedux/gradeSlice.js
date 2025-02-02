@@ -136,7 +136,10 @@ const gradeSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch grades";
         state.loading = false;
-        toast.error(state.error); // هنا فقط
+        if(state.error.includes("NetworkError")){
+
+        }else{
+        toast.error(state.error);}
       })
       .addCase(postGrade.pending, (state) => {
         state.status = "loading";

@@ -8,10 +8,9 @@ import {
 import Pagination from "../Pagination";
 import Header from "./studentHeader";
 import { useNavigate } from "react-router-dom";
-import Loader from "@/ui/Loader";
 
 const StudentTable = () => {
-  const { students, message, loading } = useSelector((state) => state.students);
+  const { students, message} = useSelector((state) => state.students);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,7 +23,6 @@ const StudentTable = () => {
   const [filterOption, setFilterOption] = useState("");
 
   useEffect(() => {
-    console.log(fetchStudents);
     dispatch(fetchStudents());
   }, [dispatch]);
 
@@ -96,7 +94,6 @@ const StudentTable = () => {
 
   return (
     <div className="relative mx-auto px-4 lg:px-0">
-      {loading && <Loader />}
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -176,28 +173,29 @@ const StudentTable = () => {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="6"
-                    className="py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
-                  >
-                    No Students Found
-                  </td>
-                </tr>
+                <td colSpan="6" className="rounded-lg bg-[#FFEBEB] py-12 text-center">
+                  No Students Found
+                </td>
+              </tr>
               )}
             </tbody>
           </table>
         </div>
-
-        <div className="mt-7 flex justify-center lg:justify-end">
-          <Pagination
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
+{paginatedStudents.length>0 ? (
+    <div className="mt-7 flex justify-center lg:justify-end">
+    <Pagination
+      totalItems={totalItems}
+      itemsPerPage={itemsPerPage}
+      currentPage={currentPage}
+      onPageChange={handlePageChange}
+    />
+  </div>
+):(
+  null
+)}
       </div>
     </div>
+      
   );
 };
 

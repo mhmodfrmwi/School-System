@@ -101,7 +101,10 @@ const academicYearSlice = createSlice({
       .addCase(fetchAcademicYears.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-        toast.error(action.payload || "Failed to fetch academic years");
+        if(state.error.includes("NetworkError")){
+
+        }else{
+        toast.error(action.payload || "Failed to fetch academic years");}
       })
 
       // Add

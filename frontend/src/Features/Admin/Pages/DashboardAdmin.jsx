@@ -1,5 +1,6 @@
-import React , { useEffect } from "react";
+import React, { useEffect,  useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { fetchStudents } from "../components/AdminRedux/studentSlice";
 import { fetchTeachers } from "../components/AdminRedux/teacherSlice";
 import { fetchParents } from "../components/AdminRedux/parentSlice";
@@ -14,21 +15,19 @@ import "react-calendar/dist/Calendar.css";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const networkErrorShownRef = useRef(false); // Use a ref to track if network error toast is shown
 
-  const { students, loading: loadingStudents } = useSelector((state) => state.students);
-  const { teachers, loading: loadingTeachers } = useSelector((state) => state.teachers);
-  const { parents, loading: loadingParents } = useSelector((state) => state.parents);
-  const { managers, loading: loadingmanagers } = useSelector((state) => state.managers);
-  const { admins, loading: loadingAdmins } = useSelector((state) => state.admins);
-  const { terms, loading: loadingTerms } = useSelector((state) => state.terms);
-  const { subjects, loading: loadingSubjects } = useSelector((state) => state.subject);
-  const { schedules, loading: loadingSchedules } = useSelector((state) => state.schedules);
+  // Fetch data from slices
+  const { students, loading: loadingStudents, error: studentError } = useSelector((state) => state.students);
+  const { teachers, loading: loadingTeachers, error: teacherError } = useSelector((state) => state.teachers);
+  const { parents, loading: loadingParents, error: parentError } = useSelector((state) => state.parents);
+  const { managers, loading: loadingManagers, error: managerError } = useSelector((state) => state.managers);
+  const { admins, loading: loadingAdmins, error: adminError } = useSelector((state) => state.admins);
+  const { terms, loading: loadingTerms, error: termError } = useSelector((state) => state.terms);
+  const { subjects, loading: loadingSubjects, error: subjectError } = useSelector((state) => state.subject);
+  const { schedules, loading: loadingSchedules, error: scheduleError } = useSelector((state) => state.schedules);
 
-
-
-
-
-
+  // Fetch data on component mount
   useEffect(() => {
     dispatch(fetchStudents());
     dispatch(fetchTeachers());
@@ -40,23 +39,56 @@ const Dashboard = () => {
     dispatch(fetchScheduals());
   }, [dispatch]);
 
-  const maleTeachers = teachers.filter(teacher => teacher.gender === 'M').length;
-  const femaleTeachers = teachers.filter(teacher => teacher.gender === 'F').length;
-  const maleStudents = students.filter(student => student.gender === 'M').length;
-  const femaleStudents = students.filter(student => student.gender === 'F').length;
+  // Handle network errors centrally
+  useEffect(() => {
+    const errors = [
+      studentError,
+      teacherError,
+      parentError,
+      managerError,
+      adminError,
+      termError,
+      subjectError,
+      scheduleError,
+    ];
 
+    // Check if any error is a network error
+    const hasNetworkError = errors.some(
+      (error) => error && error.includes("NetworkError")
+    );
 
+    // Show toast only once for network error
+    if (hasNetworkError && !networkErrorShownRef.current) {
+      toast.error("NetworkError: Failed to fetch Some data. Please check your connection.");
+      networkErrorShownRef.current = true; // Mark network error toast as shown
+    }
+  }, [
+    studentError,
+    teacherError,
+    parentError,
+    managerError,
+    adminError,
+    termError,
+    subjectError,
+    scheduleError,
+  ]);
+
+  // Rest of your component code...
+  const maleTeachers = teachers?.filter(teacher => teacher.gender === 'M').length || 0;
+  const femaleTeachers = teachers?.filter(teacher => teacher.gender === 'F').length || 0;
+  const maleStudents = students?.filter(student => student.gender === 'M').length || 0;
+  const femaleStudents = students?.filter(student => student.gender === 'F').length || 0;
+  
   const pieData = [
     { name: "Students", value: loadingStudents ? 0 : students?.length || 0, color: "#4CAF50" },
     { name: "Parents", value: loadingParents ? 0 : parents?.length || 0, color: "#FF9800" },
     { name: "Teachers", value: loadingTeachers ? 0 : teachers?.length || 0, color: "#2196F3" },
-    { name: "Managers", value: loadingmanagers ? 0 : managers?.length || 0, color: "#F44336" },
+    { name: "Managers", value: loadingManagers ? 0 : managers?.length || 0, color: "#F44336" },
     { name: "Admins", value: loadingAdmins ? 0 : admins?.length || 0, color: "#9C27B0" },
   ];
-  
 
   return (
-    <div className="p-6 ">
+    <div className="p-6">
       {/* Overview Section */}
       <section>
         <h2 className="text-2xl font-semibold font-poppins text-gray-700 mb-2">Overview</h2>
@@ -64,22 +96,22 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-12">
           {[
-            { label: "Students", value:  loadingStudents ? 0: students.length, icon: "/src/assets/students 1.png" , bgColor:" #D1F3E0"},
-            { label: "Teachers", value: loadingTeachers ? 0 : teachers.length, icon: "/src/assets/Group.png" , bgColor:"#E1F1FF" },
-            { label: "Parents", value:  loadingParents ? 0 :  parents.length, icon: "/src/assets/vector.png" , bgColor:"#FFF2D8" },
-            { label: "Manager", value:loadingmanagers ? 0 : managers.length, icon: "/src/assets/people.png"  , bgColor:"#FFEAEA"},
-            { label: "Admin", value:  loadingAdmins ? 0 :admins.length, icon: "/src/assets/Group1.png"  , bgColor:"#D1F3E0"},
-            { label: "Terms", value:  loadingTerms ? 0 :terms.length, icon: "/src/assets/Term.png" , bgColor:"#E1F1FF"},
-            { label: "Courses", value: loadingSubjects ? 0 :subjects.length, icon: "/src/assets/Course.png" , bgColor:"#FFF2D8"},
-            { label: "Schedule", value: loadingSchedules ? 0 : (schedules ? schedules.length : 0), icon: "/src/assets/Schedule.png", bgColor:"#FFEAEA" },
+            { label: "Students", value: loadingStudents ? 0 : students.length, icon: "/src/assets/students 1.png", bgColor: "#D1F3E0" },
+            { label: "Teachers", value: loadingTeachers ? 0 : teachers.length, icon: "/src/assets/Group.png", bgColor: "#E1F1FF" },
+            { label: "Parents", value: loadingParents ? 0 : parents.length, icon: "/src/assets/vector.png", bgColor: "#FFF2D8" },
+            { label: "Manager", value: loadingManagers ? 0 : managers.length, icon: "/src/assets/people.png", bgColor: "#FFEAEA" },
+            { label: "Admin", value: loadingAdmins ? 0 : admins.length, icon: "/src/assets/Group1.png", bgColor: "#D1F3E0" },
+            { label: "Terms", value: loadingTerms ? 0 : terms.length, icon: "/src/assets/Term.png", bgColor: "#E1F1FF" },
+            { label: "Courses", value: loadingSubjects ? 0 : subjects.length, icon: "/src/assets/Course.png", bgColor: "#FFF2D8" },
+            { label: "Schedule", value: loadingSchedules ? 0 : (schedules ? schedules.length : 0), icon: "/src/assets/Schedule.png", bgColor: "#FFEAEA" },
           ].map((item, index) => (
             <div
               key={index}
               className="bg-white shadow-md rounded-lg p-4 text-center flex items-center justify-start"
             >
-              <div className="w-16 h-16  rounded-full flex items-center justify-center mb-2" 
-               style={{ backgroundColor: item.bgColor }}>
-              <img src={item.icon} alt={item.label} className="w-9 h-9" />
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-2"
+                style={{ backgroundColor: item.bgColor }}>
+                <img src={item.icon} alt={item.label} className="w-9 h-9" />
               </div>
 
               <span className="mx-4 text-xl text-gray-700" style={{ borderLeft: '2px solid #ccc', height: '30px' }}></span>
@@ -107,58 +139,94 @@ const Dashboard = () => {
               Students
             </h3>
             <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie
-                  data={[
-                    { name: "Female", value: femaleStudents, color: "#4CAF50" },
-                    { name: "Male", value: maleStudents, color: "#2196F3" },
-                  ]}
-                  dataKey="value"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  label
-                >
-                  <Cell fill="#4CAF50" />
-                  <Cell fill="#2196F3" />
-                </Pie>
-              </PieChart>
+            {students.length > 0 ? (
+                 <PieChart>
+                 <Pie
+                   data={[
+                     { name: "Female", value: femaleStudents, color: "#4CAF50" },
+                     { name: "Male", value: maleStudents, color: "#2196F3" },
+                   ]}
+                   dataKey="value"
+                   cx="50%"
+                   cy="50%"
+                   outerRadius={80}
+                   fill="#8884d8"
+                   label
+                 >
+                   <Cell fill="#4CAF50" />
+                   <Cell fill="#2196F3" />
+                 </Pie>
+               </PieChart>
+              ) : (
+                <div className="flex items-center justify-center h-full w-full bg-[#f9f9f9] rounded-lg shadow-md">
+        <div className="text-center text-gray-600">
+          <div className="text-4xl mb-4">
+            <i className="fas fa-exclamation-circle"></i>
+          </div>
+          <h5 className="font-poppins text-lg font-medium text-gray-800 mb-2">
+            No data available
+          </h5>
+          <p className="text-sm text-gray-500">
+            We couldn't retrieve any data at this time. Please try again later.
+          </p>
+        </div>
+      </div>
+
+              )}
+             
             </ResponsiveContainer>
           </div>
 
-          {/* Teachers Chart */}
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h3 className="text-center  font-poppins text-lg font-medium text-gray-600 mb-4">
-              Teachers
-            </h3>
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie
-                  data={[
-                    { name: "Female", value: femaleTeachers, color: "#4CAF50" },
-                    { name: "Male", value: maleTeachers, color: "#2196F3" },
-                  ]}
-                  dataKey="value"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  label
-                >
-                  <Cell fill="#4CAF50" />
-                  <Cell fill="#2196F3" />
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+         {/* Teachers Chart */}
+<div className="bg-white shadow-md rounded-lg p-6">
+  <h3 className="text-center font-poppins text-lg font-medium text-gray-600 mb-4">
+    Teachers
+  </h3>
+  <ResponsiveContainer width="100%" height={200}>
+    {teachers.length > 0 ? (
+      <PieChart>
+        <Pie
+          data={[
+            { name: "Female", value: femaleTeachers, color: "#4CAF50" },
+            { name: "Male", value: maleTeachers, color: "#2196F3" },
+          ]}
+          dataKey="value"
+          cx="50%"
+          cy="50%"
+          outerRadius={80}
+          fill="#8884d8"
+          label
+        >
+          <Cell fill="#4CAF50" />
+          <Cell fill="#2196F3" />
+        </Pie>
+      </PieChart>
+    ) : (
+      <div className="flex items-center justify-center h-full w-full bg-[#f9f9f9] rounded-lg shadow-md">
+        <div className="text-center text-gray-600">
+          <div className="text-4xl mb-4">
+            <i className="fas fa-exclamation-circle"></i>
           </div>
+          <h5 className="font-poppins text-lg font-medium text-gray-800 mb-2">
+            No data available
+          </h5>
+          <p className="text-sm text-gray-500">
+            We couldn't retrieve any data at this time. Please try again later.
+          </p>
+        </div>
+      </div>
+    )}
+  </ResponsiveContainer>
+</div>
+
 
           {/* Pie Chart */}
           <div className="bg-white shadow-md rounded-lg p-6 col-span-1 sm:col-span-2 lg:col-span-1">
-            <h3 className="text-center  font-poppins text-lg font-medium text-gray-600 mb-4">
+            <h3 className="text-center font-poppins text-lg font-medium text-gray-600 mb-4">
               Percentage Of Users By Type
             </h3>
             <ResponsiveContainer width="100%" height={250}>
+              {pieData > 0 ? (
               <PieChart>
                 <Pie
                   data={pieData}
@@ -175,34 +243,47 @@ const Dashboard = () => {
                   ))}
                 </Pie>
               </PieChart>
+              ) : (
+                <div className="flex items-center justify-center h-full w-full bg-[#f9f9f9] rounded-lg shadow-md">
+        <div className="text-center text-gray-600">
+          <div className="text-4xl mb-4">
+            <i className="fas fa-exclamation-circle"></i>
+          </div>
+          <h5 className="font-poppins text-lg font-medium text-gray-800 mb-2">
+            No data available
+          </h5>
+          <p className="text-sm text-gray-500">
+            We couldn't retrieve any data at this time. Please try again later.
+          </p>
+        </div>
+      </div>
+              )}
+              
             </ResponsiveContainer>
           </div>
         </div>
       </section>
 
       {/* Calendar Section */}
-<section className="mt-12">
-  <h2 className="text-2xl font-semibold font-poppins text-gray-700 mb-2">
-    Calendar
-  </h2>
-  <div className="mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856] mb-6"></div>
-  <div className="bg-white shadow-md rounded-lg p-6 max-w-[400px]">
-  <div>
-  <Calendar
-    tileClassName={({ date, view }) => {
-      const today = new Date();
-      if (view === "month" && date.toDateString() === today.toDateString()) {
-        return "bg-[#117C90] rounded-lg text-white hover:text-gray-700 cursor-pointer"; 
-      }
-      return "";
-    }}
-  />
-</div>
-
-
-  </div>
-</section>
-
+      <section className="mt-12">
+        <h2 className="text-2xl font-semibold font-poppins text-gray-700 mb-2">
+          Calendar
+        </h2>
+        <div className="mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856] mb-6"></div>
+        <div className="bg-white shadow-md rounded-lg p-6 max-w-[400px]">
+          <div>
+            <Calendar
+              tileClassName={({ date, view }) => {
+                const today = new Date();
+                if (view === "month" && date.toDateString() === today.toDateString()) {
+                  return "bg-[#117C90] rounded-lg text-white hover:text-gray-700 cursor-pointer";
+                }
+                return "";
+              }}
+            />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

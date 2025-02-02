@@ -3,12 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { postStudent } from "../AdminRedux/studentSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { toast } from "react-toastify";
-import Loader from "@/ui/Loader";
 
 function AddStudent() {
   const dispatch = useDispatch();
   const { grades } = useSelector((state) => state.grades);
-  const { loading } = useSelector((state) => state.students);
 
   const [studentData, setStudentData] = useState({
     fullName: "",
@@ -55,7 +53,7 @@ function AddStudent() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-      {loading && <Loader />}
+     
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
         Add Student
       </h1>

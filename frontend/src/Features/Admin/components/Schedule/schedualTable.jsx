@@ -9,15 +9,13 @@ import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import Pagination from "../Pagination";
 import Header from "./scheduleHeader";
 import { useNavigate } from "react-router-dom";
-import Loader from "@/ui/Loader";
 
 const SchedualTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     schedules = [],
-    message,
-    loading,
+    message
   } = useSelector((state) => state.schedules || {});
   const { teachers = [] } = useSelector((state) => state.teachers || {});
 
@@ -94,7 +92,7 @@ const SchedualTable = () => {
 
   return (
     <div className="relative mx-auto px-4 lg:px-0">
-      {loading && <Loader />}
+      
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -188,6 +186,8 @@ const SchedualTable = () => {
             </tbody>
           </table>
         </div>
+{paginatedScheduals.length > 0 ?(
+  
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
@@ -197,6 +197,7 @@ const SchedualTable = () => {
             onPageChange={handlePageChange}
           />
         </div>
+):null}
       </div>
     </div>
   );

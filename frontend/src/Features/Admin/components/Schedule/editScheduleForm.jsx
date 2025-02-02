@@ -8,7 +8,6 @@ import { fetchTerms } from "../AdminRedux/termSlice";
 import { fetchClasses } from "../AdminRedux/classSlice";
 import { fetchAcademicYears } from "../AdminRedux/academicYearSlice";
 import { toast } from "react-toastify";
-import Loader from "@/ui/Loader";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditScheduleForm() {
@@ -24,7 +23,7 @@ function EditScheduleForm() {
   const academicYears = useSelector(
     (state) => state.academicYears.academicYears,
   );
-  const { loading, schedules } = useSelector((state) => state.schedules);
+  const { schedules } = useSelector((state) => state.schedules);
 
   const [formData, setFormData] = useState({
     className: "",
@@ -88,7 +87,7 @@ function EditScheduleForm() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-      {loading && <Loader />}
+      
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
         Update Schedule
       </h1>

@@ -163,18 +163,20 @@ const parentSlice = createSlice({
     builder
       .addCase(postParent.pending, (state) => {
         state.status = "loading";
-        state.error = null;
+        state.error = ""; // Ensure error is not null
         state.loading = true;
       })
       .addCase(postParent.fulfilled, (state, action) => {
         state.status = "succeeded";
         Object.assign(state, action.payload);
         state.loading = false;
+        toast.success("Parent added successfully!");
       })
       .addCase(postParent.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.payload || "Failed to post parent"; // Fallback error message
         state.loading = false;
+        toast.error(state.error); // Show toast with error message
       })
       .addCase(fetchParents.pending, (state) => {
         state.status = "loading";
@@ -185,12 +187,16 @@ const parentSlice = createSlice({
         state.parents = action.payload;
         state.loading = false;
       })
-      .addCase(fetchParents.rejected, (state) => {
+      .addCase(fetchParents.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload || "Failed to fetch parents"; // Fallback error message
         state.loading = false;
-        toast.error(state.error);
+        if (state.error.includes("NetworkError")) {
+          // Optionally handle network error case
+        } else {
+          toast.error(state.error); // Show toast with error message
+        }
       })
-
       .addCase(removeParent.pending, (state) => {
         state.status = "loading";
         state.loading = true;
@@ -198,7 +204,7 @@ const parentSlice = createSlice({
       .addCase(removeParent.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.parents = state.parents.filter(
-          (parent) => parent.id !== action.payload,
+          (parent) => parent._id !== action.payload
         );
         state.message = "Parent deleted successfully";
         state.loading = false;
@@ -206,8 +212,9 @@ const parentSlice = createSlice({
       })
       .addCase(removeParent.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
+        state.error = action.payload || "Failed to delete parent"; // Fallback error message
         state.loading = false;
+        toast.error(state.error); // Show toast with error message
       })
       .addCase(editParentAsync.pending, (state) => {
         state.loading = true;
@@ -216,18 +223,21 @@ const parentSlice = createSlice({
         state.loading = false;
         const updatedParent = action.payload;
         const index = state.parents.findIndex(
-          (Parent) => Parent._id === updatedParent._id,
+          (parent) => parent._id === updatedParent._id
         );
         if (index !== -1) {
           state.parents[index] = updatedParent;
         }
         state.message = "Parent updated successfully";
+        toast.success("Parent updated successfully");
       })
       .addCase(editParentAsync.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload || "Failed to update parent"; // Fallback error message
+        toast.error(state.error); // Show toast with error message
       });
-  },
+  }
+  
 });
 
 export const { addParent, editParent, clearMessage, addParenttoserver } =

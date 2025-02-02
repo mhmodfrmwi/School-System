@@ -1,18 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchAssignedGrades, deleteAssignedGrade } from "../AdminRedux/AssignGradeSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
-import Loader from "@/ui/Loader";
 import Header from "./GradeHeader";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import Pagination from "../Pagination";
 
 const AllAssignedGrades = () => {
   const dispatch = useDispatch();
-  const { assignedGrades, loading: loadingGrades } = useSelector((state) => state.assignGrade);
-  const { loading: loadingGradeData } = useSelector((state) => state.grades);
+  const { assignedGrades } = useSelector((state) => state.assignGrade);
   const { id } = useParams();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     dispatch(fetchAssignedGrades());
@@ -40,13 +42,12 @@ const AllAssignedGrades = () => {
     }
   };
 
-  if (loadingGrades || loadingGradeData) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader />
-      </div>
-    );
-  }
+  const paginatedGrades = gradesWithGradeName.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page) => setCurrentPage(page);
 
   return (
     <div className="lg:px-0">
@@ -61,8 +62,8 @@ const AllAssignedGrades = () => {
             </tr>
           </thead>
           <tbody>
-            {gradesWithGradeName.length > 0 ? (
-              gradesWithGradeName.map((gradeData, index) => (
+            {paginatedGrades.length > 0 ? (
+              paginatedGrades.map((gradeData, index) => (
                 <tr
                   key={gradeData._id || index}
                   className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70 transition duration-300`}
@@ -70,12 +71,12 @@ const AllAssignedGrades = () => {
                   <td className="px-4 py-2 text-xs sm:text-sm md:text-base">{gradeData.gradeName}</td>
                   <td className="px-4 py-2 text-xs sm:text-sm md:text-base">{gradeData.startYear} - {gradeData.endYear}</td>
                   <td className="px-4 py-2 flex justify-center gap-4 text-[#117C90]">
-                   <Link
-                                                to={`/admin/editAssignedGrade/${gradeData._id}`}
-                                                className="text-[#117C90] transition duration-300 hover:text-[#244856]"
-                                              >
-                                                <i className="far fa-edit text-lg" />
-                                              </Link>
+                    <Link
+                      to={`/admin/editAssignedGrade/${gradeData._id}`}
+                      className="text-[#117C90] transition duration-300 hover:text-[#244856]"
+                    >
+                      <i className="far fa-edit text-lg" />
+                    </Link>
 
                     <button
                       className="transition duration-300 hover:text-white"
@@ -88,13 +89,25 @@ const AllAssignedGrades = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="3" className="py-4 text-center text-xs sm:text-sm md:text-base bg-[#FFEBEB]">
-                  No grades found
-                </td>
-              </tr>
+                  <td colSpan="6" className="rounded-lg bg-[#FFEBEB] py-12 text-center">
+                    No Grades Found
+                  </td>
+                </tr>
             )}
           </tbody>
         </table>
+        
+        {/* Pagination */}
+        {filteredGrades.length > 0 && (
+          <div className="mt-7 flex justify-center lg:justify-end">
+            <Pagination
+              totalItems={filteredGrades.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

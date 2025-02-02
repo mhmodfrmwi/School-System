@@ -1,11 +1,11 @@
-import Loader from "@/ui/Loader";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchTeachers, postTeacher } from "../AdminRedux/teacherSlice";
 
 function TeacherInfo() {
-  const { teachers = [], loading } = useSelector(
+  const { teachers = []} = useSelector(
     (state) => state.teachers || {},
   );
   const dispatch = useDispatch();
@@ -52,7 +52,6 @@ function TeacherInfo() {
 
   return (
     <>
-      {loading && <Loader />}
       <div className="m-auto grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"

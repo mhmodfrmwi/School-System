@@ -159,6 +159,8 @@ const AssignedSubjects = () => {
                   </tbody>
                 </table>
               </div>
+{paginatedSubjects.length > 0 ? (
+  
 
               <div className="mt-7 flex justify-center lg:justify-end">
                 <Pagination
@@ -168,6 +170,7 @@ const AssignedSubjects = () => {
                   onPageChange={handlePageChange}
                 />
               </div>
+            ) : null}
             </div>
           </div>
         </div>

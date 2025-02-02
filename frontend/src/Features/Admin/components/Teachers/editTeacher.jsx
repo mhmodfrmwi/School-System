@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchTeachers, editTeacher } from "../AdminRedux/teacherSlice";
-import Loader from "@/ui/Loader";
 
 const EditTeacherForm = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { subjects, loading } = useSelector((state) => state.subject);
+  const { subjects } = useSelector((state) => state.subject);
   const { teachers } = useSelector((state) => state.teachers);
 
   const [formData, setFormData] = useState({
@@ -71,7 +70,6 @@ const EditTeacherForm = () => {
 
   return (
     <div className="w-[80%] mx-auto mt-10">
-      {loading && <Loader />}
       <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Teacher</h1>
       <div className="mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">

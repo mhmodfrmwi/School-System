@@ -5,12 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { fetchStudents } from "../AdminRedux/studentSlice";
 import { toast } from "react-toastify";
-import Loader from "@/ui/Loader";
 
 function ParentForm() {
   const dispatch = useDispatch();
   const { students } = useSelector((state) => state.students);
-  const { loading } = useSelector((state) => state.parents);
 
   useEffect(() => {
     console.log(fetchStudents);
@@ -69,7 +67,7 @@ function ParentForm() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-      {loading && <Loader />}
+    
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Add Parent</h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">

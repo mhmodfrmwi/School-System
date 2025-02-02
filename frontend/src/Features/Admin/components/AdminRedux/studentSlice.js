@@ -33,7 +33,6 @@ export const fetchStudents = createAsyncThunk(
 export const postStudent = createAsyncThunk(
   "students/postStudent",
   async (studentData, { rejectWithValue }) => {
-    console.log(studentData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/student/createStudent",
@@ -52,7 +51,6 @@ export const postStudent = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log(data.student);
       return data.student;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to add student");
@@ -64,7 +62,6 @@ export const editStudent = createAsyncThunk(
   "students/editStudent",
 
   async ({ id, updatedStudent }, { rejectWithValue }) => {
-    console.log(updatedStudent);
     try {
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/student/${id}`,
@@ -142,7 +139,10 @@ const studentsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch students";
         state.loading = false;
-        toast.error(state.error);
+        if(state.error.includes("NetworkError")){
+          
+        }else{
+        toast.error(state.error);}
       })
       .addCase(postStudent.pending, (state) => {
         state.status = "loading";

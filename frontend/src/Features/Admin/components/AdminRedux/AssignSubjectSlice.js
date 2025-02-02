@@ -159,7 +159,10 @@ const assignSubjectSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch assigned subjects";
         state.loading = false;
-        toast.error(state.error);
+        if(state.error.includes("NetworkError")){
+
+        }else{
+        toast.error(state.error);}
       })
       .addCase(fetchSemesters.pending, (state) => {
         state.status = "loading";

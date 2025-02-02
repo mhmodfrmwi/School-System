@@ -5,8 +5,6 @@ import { fetchClasses } from "../AdminRedux/classSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import { editClassTeacher } from "../AdminRedux/classTeacherSlice";
-import Loader from "@/ui/Loader";
-
 const EditClassTeacherForm = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -16,7 +14,7 @@ const EditClassTeacherForm = () => {
   const { classes } = useSelector((state) => state.classes);
   const { subjects } = useSelector((state) => state.subject);
   const { teachers } = useSelector((state) => state.teachers);
-  const { classTeachers, loading } = useSelector((state) => state.classTeacher);
+  const { classTeachers} = useSelector((state) => state.classTeacher);
 
   // State to hold the form data
   const [formData, setFormData] = useState({
@@ -85,7 +83,6 @@ const EditClassTeacherForm = () => {
 
   return (
     <div className="w-[80%] mx-auto mt-10">
-      {loading && <Loader />}
       <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Class Teacher</h1>
       <div className="mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">

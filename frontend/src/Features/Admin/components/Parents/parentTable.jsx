@@ -7,15 +7,13 @@ import {
 } from "../AdminRedux/parentSlice";
 import Pagination from "../Pagination";
 import Header from "../Parents/parentHeader";
-import Loader from "@/ui/Loader";
 import { useNavigate } from "react-router-dom";
 
 const ParentTable = () => {
   const navigate = useNavigate();
   const {
     parents = [],
-    message,
-    loading,
+    message
   } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
 
@@ -77,7 +75,6 @@ const ParentTable = () => {
 
   return (
     <div className="relative lg:px-0">
-      {loading && <Loader />}
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -105,7 +102,7 @@ const ParentTable = () => {
               </tr>
             </thead>
             <tbody className=" ">
-              {[paginatedParents].length > 0 ? (
+              {paginatedParents.length > 0 ? (
                 paginatedParents.map((parent, index) => (
                   <tr
                     key={parent._id || index}
@@ -150,7 +147,7 @@ const ParentTable = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan="7"
+                    colSpan="4"
                     className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                   >
                     <span className="font-poppins">No Parents Found</span>
@@ -160,6 +157,9 @@ const ParentTable = () => {
             </tbody>
           </table>
         </div>
+        {paginatedParents.length > 0 ? (
+          
+        
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
@@ -169,6 +169,7 @@ const ParentTable = () => {
             onPageChange={handlePageChange}
           />
         </div>
+      ) : null}
       </div>
     </div>
   );

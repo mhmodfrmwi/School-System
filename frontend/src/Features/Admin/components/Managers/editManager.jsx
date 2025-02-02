@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { editManager, fetchManagers } from "../AdminRedux/managerSlice";
-import Loader from "@/ui/Loader";
 
 const EditManagerForm = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { managers, loading } = useSelector((state) => state.managers);
+  const { managers} = useSelector((state) => state.managers);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -53,7 +52,6 @@ const EditManagerForm = () => {
 
   return (
     <div className="relative mx-auto mt-10 w-[80%]">
-      {loading && <Loader />}
       <h1 className="pl-5 text-2xl font-poppins font-semibold text-[#244856]">
         Edit Manager
       </h1>

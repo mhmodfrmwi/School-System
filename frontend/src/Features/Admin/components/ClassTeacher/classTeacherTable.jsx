@@ -4,13 +4,12 @@ import { fetchClassTeachers, removeClassTeacher } from "../AdminRedux/classTeach
 import { fetchClasses } from "../AdminRedux/classSlice"; 
 import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Fetch teachers
 import Pagination from "../Pagination";
-import Header from "./classTeacherHeader"; 
-import Loader from "@/ui/Loader";
+import Header from "./classTeacherHeader";
 import { Link, useParams } from "react-router-dom";
 
 const ClassTeacherTable = () => {
-  const { classTeachers = [], loading: classTeacherLoading } = useSelector((state) => state.classTeacher || {});
-  const { classes = [], loading: classLoading } = useSelector((state) => state.classes || {}); 
+  const { classTeachers = []} = useSelector((state) => state.classTeacher || {});
+  const { classes = [] } = useSelector((state) => state.classes || {}); 
   const { teachers = [] } = useSelector((state) => state.teachers || {}); // Fetch teachers from the store
   const dispatch = useDispatch();
 
@@ -93,7 +92,6 @@ const ClassTeacherTable = () => {
 
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
-      {(classTeacherLoading || classLoading) && <Loader />}
       <Header onSearchChange={handleSearchChange} onFilterChange={handleFilterChange} />
 
       <div className="mt-7">
@@ -147,7 +145,8 @@ const ClassTeacherTable = () => {
             </tbody>
           </table>
         </div>
-
+{paginatedClassTeachers.length > 0 ? (
+  
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
             totalItems={filteredClassTeachers.length}
@@ -156,6 +155,7 @@ const ClassTeacherTable = () => {
             onPageChange={handlePageChange}
           />
         </div>
+      ) : null}
       </div>
     </div>
   );

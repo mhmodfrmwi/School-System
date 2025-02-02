@@ -53,13 +53,14 @@ export const fetchTerms = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch terms");
+        const error = await response.json();
+        return rejectWithValue(error.message);
       }
 
       const data = await response.json();
       return data.semesters;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Failed to fetch terms");
     }
   },
 );
@@ -155,7 +156,7 @@ const termsSlice = createSlice({
     builder
       .addCase(postTerm.pending, (state) => {
         state.status = "loading";
-        state.error = null;
+        state.error = ""; // Ensure error is not null
         state.loading = true;
       })
       .addCase(postTerm.fulfilled, (state, action) => {
@@ -166,9 +167,9 @@ const termsSlice = createSlice({
       })
       .addCase(postTerm.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.payload || "Failed to post term data"; // Fallback to default error
         state.loading = false;
-        toast.error(action.payload || "Failed to post term data");
+        toast.error(state.error);
       })
       .addCase(fetchTerms.pending, (state) => {
         state.loading = true;
@@ -177,9 +178,14 @@ const termsSlice = createSlice({
         state.loading = false;
         state.terms = action.payload;
       })
-      .addCase(fetchTerms.rejected, (state,action) => {
+      .addCase(fetchTerms.rejected, (state, action) => {
         state.loading = false;
-        toast.error(action.payload || "Failed to fetch terms");
+        state.error = action.payload || "Failed to fetch terms"; // Fallback to default error
+        if (state.error.includes("NetworkError")) {
+          // Optionally handle network error case
+        } else {
+          toast.error(state.error); // Show toast with the error message
+        }
       })
       .addCase(removeTerm.pending, (state) => {
         state.status = "loading";
@@ -195,13 +201,13 @@ const termsSlice = createSlice({
       })
       .addCase(removeTerm.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to remove term";
+        state.error = action.payload || "Failed to remove term"; // Fallback to default error
         state.loading = false;
-        toast.error(action.payload || "Failed to remove term");
+        toast.error(state.error); // Show toast with the error message
       })
       .addCase(editTermAsync.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = ""; // Ensure error is not null
       })
       .addCase(editTermAsync.fulfilled, (state, action) => {
         state.loading = false;
@@ -215,10 +221,11 @@ const termsSlice = createSlice({
       })
       .addCase(editTermAsync.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        toast.error(action.payload || "Failed to edit term");
+        state.error = action.payload || "Failed to edit term"; // Fallback to default error
+        toast.error(state.error); // Show toast with the error message
       });
-  },
+  }
+  
 });
 
 export const { clearMessage, addTerm, editTerm, addTermToServer } =

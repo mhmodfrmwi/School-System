@@ -16,7 +16,7 @@ const ParentHeader = ({ onSearchChange, onFilterChange }) => {
   };
 
   return (
-    <div className="mx-auto px-4 md:px-6 lg:px-0">
+    <div className="px-0">
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
           <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">

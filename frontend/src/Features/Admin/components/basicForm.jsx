@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudents } from "../components/AdminRedux/studentSlice";
@@ -6,6 +6,7 @@ import { fetchTeachers } from "../components/AdminRedux/teacherSlice";
 import { fetchParents } from "../components/AdminRedux/parentSlice";
 import { fetchManagers } from "../components/AdminRedux/managerSlice";
 import { fetchAdmins } from "../components/AdminRedux/adminSlice";
+import { toast } from "react-toastify";
 import img1 from "../../../assets/students 1.png";
 import img2 from "../../../assets/Group.png";
 import img3 from "../../../assets/people.png";
@@ -14,11 +15,12 @@ import img5 from "../../../assets/Group1.png";
 
 function BasicForm() {
   const dispatch = useDispatch();
-  const { students } = useSelector((state) => state.students);
-  const { teachers } = useSelector((state) => state.teachers);
-  const { parents } = useSelector((state) => state.parents);
-  const { managers } = useSelector((state) => state.managers);
-  const { admins } = useSelector((state) => state.admins);
+  const networkErrorShownRef = useRef(false);
+  const { students, error: studentsError } = useSelector((state) => state.students);
+  const { teachers, error: teachersError } = useSelector((state) => state.teachers);
+  const { parents, error: parentsError } = useSelector((state) => state.parents);
+  const { managers, error: managersError } = useSelector((state) => state.managers);
+  const { admins, error: adminsError } = useSelector((state) => state.admins);
 
   useEffect(() => {
     dispatch(fetchStudents());
@@ -28,6 +30,33 @@ function BasicForm() {
     dispatch(fetchAdmins());
   }, [dispatch]);
 
+useEffect(() => {
+    const errors = [
+      studentsError,
+      teachersError,
+      parentsError,
+      managersError,
+      adminsError,
+    ];
+
+    // Check if any error is a network error
+    const hasNetworkError = errors.some(
+      (error) => error && error.includes("NetworkError")
+    );
+
+    // Show toast only once for network error
+    if (hasNetworkError && !networkErrorShownRef.current) {
+      toast.error("NetworkError: Failed to fetch Some data. Please check your connection.");
+      networkErrorShownRef.current = true; // Mark network error toast as shown
+    }
+  }, [
+    studentsError,
+    teachersError,
+    parentsError,
+    managersError,
+    adminsError,
+  ]);
+
   const navigate = useNavigate();
 
   const handleCardClick = (path) => {
@@ -36,13 +65,12 @@ function BasicForm() {
 
   return (
     <>
-   <div className="px-6 sm:px-12 md:px-16 lg:px-28 py-8 mb-6 ms-14 mt-2 md:ms-16">
-  <h2 className="w-full sm:w-52 font-poppins text-3xl font-bold text-[#043B44]">
-    All Members
-  </h2>
-  <div className="mt-1 h-[4px] w-24 sm:w-36 md:w-48 rounded-t-md bg-[#244856] mb-4"></div>
-</div>
-
+      <div className="px-6 sm:px-12 md:px-16 lg:px-28 py-8 mb-6 ms-14 mt-2 md:ms-16">
+        <h2 className="w-full sm:w-52 font-poppins text-3xl font-bold text-[#043B44]">
+          All Members
+        </h2>
+        <div className="mt-1 h-[4px] w-24 sm:w-36 md:w-48 rounded-t-md bg-[#244856] mb-4"></div>
+      </div>
 
       <div className="flex flex-col items-center px-4">
         <div className="grid gap-x-14 gap-y-8 sm:grid-cols-2 md:gap-x-16 lg:grid-cols-3 xl:gap-x-32">
@@ -59,7 +87,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#3CB878]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-            {students?.length || 0}
+              {students?.length || 0}
             </p>
           </div>
 
@@ -76,7 +104,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#7CA6FD]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-            {teachers?.length || 0}
+              {teachers?.length || 0}
             </p>
           </div>
 
@@ -93,7 +121,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#F61414]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-            {managers?.length || 0}
+              {managers?.length || 0}
             </p>
           </div>
 
@@ -110,7 +138,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#F48301]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-            {parents?.length || 0}
+              {parents?.length || 0}
             </p>
           </div>
 
@@ -127,7 +155,7 @@ function BasicForm() {
             </div>
             <p className="border-t-2 border-[#30F587]"></p>
             <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
-            {admins?.length || 0} 
+              {admins?.length || 0}
             </p>
           </div>
         </div>

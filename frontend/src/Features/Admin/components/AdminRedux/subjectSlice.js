@@ -136,7 +136,10 @@ const subjectSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch subjects";
         state.loading = false;
-        toast.error(state.error); // هنا فقط
+        if(state.error.includes("NetworkError")){
+
+        }else{
+        toast.error(state.error);} // هنا فقط
       })
       .addCase(postSubject.pending, (state) => {
         state.status = "loading";

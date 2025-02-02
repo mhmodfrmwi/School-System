@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postManager } from "../AdminRedux/managerSlice";
 import { toast } from "react-toastify";
-import Loader from "@/ui/Loader";
 
 function ManagerForm() {
   const dispatch = useDispatch();
-  const { managers, loading } = useSelector((state) => state.managers);
+  const { managers } = useSelector((state) => state.managers);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -75,7 +74,6 @@ function ManagerForm() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-      {loading && <Loader />}
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
         Add Manager
       </h1>

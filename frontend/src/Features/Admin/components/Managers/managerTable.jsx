@@ -7,11 +7,10 @@ import {
 } from "../AdminRedux/managerSlice";
 import Pagination from "../Pagination";
 import Header from "../Managers/managerHeader";
-import Loader from "@/ui/Loader";
 
 const ManagerTable = () => {
   const navigate = useNavigate();
-  const { managers = [], loading } = useSelector((state) => state.managers || {});
+  const { managers = [] } = useSelector((state) => state.managers || {});
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,7 +71,6 @@ const filteredManagers = managers.filter((manager) => {
 
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
-      {loading && <Loader />}
       <Header onSearchChange={handleSearchChange} onFilterChange={handleFilterChange} />
 
       <div className="mt-7">
@@ -150,7 +148,8 @@ const filteredManagers = managers.filter((manager) => {
             </tbody>
           </table>
         </div>
-
+{paginatedManagers.length > 0 ? (
+  
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
             totalItems={filteredManagers.length}
@@ -159,6 +158,7 @@ const filteredManagers = managers.filter((manager) => {
             onPageChange={handlePageChange}
           />
         </div>
+      ) : null}
       </div>
     </div>
   );

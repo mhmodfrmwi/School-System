@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { editGrade, fetchGrades } from "../AdminRedux/gradeSlice";
 import { toast } from "react-toastify";
-import Loader from "@/ui/Loader"; // Import the Loader component
 
 const EditGradeForm = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const { grades, loading } = useSelector((state) => state.grades);
+  const { grades } = useSelector((state) => state.grades);
 
   const [formData, setFormData] = useState({
     gradeName: "",
@@ -57,9 +56,7 @@ const EditGradeForm = () => {
       <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
       <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
         <form onSubmit={handleSubmit} className="m-6">
-          {loading ? (
-            <Loader /> // Display the Loader while loading
-          ) : (
+          
             <>
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -81,7 +78,7 @@ const EditGradeForm = () => {
                 Save Changes
               </button>
             </>
-          )}
+          
         </form>
       </div>
     </div>

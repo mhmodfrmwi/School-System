@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const SubjectsList = () => {
   const dispatch = useDispatch();
-  const { subjects = []} = useSelector((state) => state.subject);
+  const { subjects = [] } = useSelector((state) => state.subject);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
 
@@ -48,7 +48,8 @@ const SubjectsList = () => {
       <SubjectsHeader />
       <div className="flex justify-center">
         <div className="space-y-4 w-[90%]">
-          {paginatedSubjects.map((subject, index) => (
+          {paginatedSubjects.length > 0 ? (
+            paginatedSubjects.map((subject, index) => (
               <div
                 key={subject._id}
                 className="flex items-center font-poppins justify-between bg-white rounded-lg shadow-md mb-4 p-4"
@@ -64,8 +65,8 @@ const SubjectsList = () => {
                     />
                   </div>
                   <div className="flex items-center">
-                  <span className="text-gray-600 text-xl mx-2 h-7 border-l-2 border-gray-600"></span>
-                    <h3 className="m-0 font-poppins text-lg  font-semibold text-gray-600">
+                    <span className="text-gray-600 text-xl mx-2 h-7 border-l-2 border-gray-600"></span>
+                    <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600">
                       {subject.subjectName}
                     </h3>
                   </div>
@@ -91,13 +92,21 @@ const SubjectsList = () => {
                   </button>
                 </div>
               </div>
-            ))}
-          <Pagination
-            totalItems={subjects.length}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
+            ))
+          ) : (
+            <div className="bg-[#FFEBEB] py-20 text-center rounded-lg">
+              <p className="text-xl font-semibold text-gray-600">No Subjects Found</p>
+            </div>
+          )}
+
+          {paginatedSubjects.length > 0 && (
+            <Pagination
+              totalItems={subjects.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
     </div>

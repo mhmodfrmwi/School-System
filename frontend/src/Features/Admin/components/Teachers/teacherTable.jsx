@@ -3,11 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchTeachers, removeTeacher } from "../AdminRedux/teacherSlice";
 import Pagination from "../Pagination";
 import Header from "../Teachers/teacherHeader";
-import Loader from "@/ui/Loader";
 import { Link } from "react-router-dom";
 
 const TeacherTable = () => {
-  const { teachers = [], loading } = useSelector((state) => state.teachers || {});
+  const { teachers = [] } = useSelector((state) => state.teachers || {});
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,7 +57,6 @@ const TeacherTable = () => {
 
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
-      {loading && <Loader />}
       <Header onSearchChange={handleSearchChange} onFilterChange={handleFilterChange} />
 
       <div className="mt-7">
@@ -121,6 +119,7 @@ const TeacherTable = () => {
             </tbody>
           </table>
         </div>
+        {filteredTeachers.length > 0 ? (
 
         <div className="mt-7 flex justify-center lg:justify-end">
           <Pagination
@@ -130,6 +129,7 @@ const TeacherTable = () => {
             onPageChange={handlePageChange}
           />
         </div>
+        ) : null}
       </div>
     </div>
   );

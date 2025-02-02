@@ -128,7 +128,10 @@ const managerSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch managers";
         state.loading = false;
-        toast.error(action.payload || "Failed to fetch managers");
+        if(state.error.includes("NetworkError")){
+
+        }else{
+        toast.error(action.payload || "Failed to fetch managers");}
       })
       .addCase(postManager.pending, (state) => {
         state.status = "loading";

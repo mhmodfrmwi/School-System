@@ -4,14 +4,13 @@ import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchStudents, editStudent } from "../AdminRedux/studentSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loader from "@/ui/Loader";
 
 function EditStudent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const { grades } = useSelector((state) => state.grades);
-  const { students, loading } = useSelector((state) => state.students);
+  const { students} = useSelector((state) => state.students);
 
   const [studentData, setStudentData] = useState({
     fullName: "",
@@ -54,7 +53,6 @@ function EditStudent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(studentData);
     dispatch(editStudent({ id, updatedStudent: studentData }))
       .unwrap()
       .then(() => {
@@ -68,7 +66,6 @@ function EditStudent() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-      {loading && <Loader />}
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
         Edit Student
       </h1>

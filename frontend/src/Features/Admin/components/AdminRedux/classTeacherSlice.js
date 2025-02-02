@@ -128,7 +128,10 @@ const classTeacherSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch class teachers";
         state.loading = false;
-        toast.error(action.payload || "Failed to fetch class teachers");
+        if(state.error.includes("NetworkError")){
+
+        }else{
+        toast.error(action.payload || "Failed to fetch class teachers");}
       })
       .addCase(postClassTeacher.pending, (state) => {
         state.status = "loading";

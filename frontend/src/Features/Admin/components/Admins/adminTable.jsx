@@ -3,13 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeAdmin, fetchAdmins, clearMessage } from "../AdminRedux/adminSlice";
 import Pagination from "../Pagination";
 import Header from "../Admins/adminHeader";
-import Loader from "@/ui/Loader";
 import { useNavigate } from "react-router-dom";
 
 
 const AdminTable = () => {
   const navigate = useNavigate();
-  const { admins, message, loading } = useSelector((state) => state.admins);
+  const { admins, message } = useSelector((state) => state.admins);
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,7 +63,6 @@ const AdminTable = () => {
   };
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
-      {loading && <Loader />}
       <Header onSearchChange={handleSearchChange} 
               onFilterChange={handleFilterChange} />
       <div className="mt-7">
@@ -106,12 +104,14 @@ const AdminTable = () => {
                   <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{admin.gender}</td>
                   <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">{admin.phone}</td>
                   <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
-                    <button  className="text-[#117C90] transition duration-300 hover:text-[#244856]"
-                    onClick={() => handleEditClick(admin._id)}>
+                    <button  aria-label="Edit admin"
+                    onClick={() => handleEditClick(admin._id)}
+                    className="text-[#E74833] transition duration-300 hover:text-[#244856]">
                     <i className="far fa-edit text-lg" />
                     </button>
-                    <button  className="text-[#E74833] transition duration-300 hover:text-[#244856]"
-                    onClick={() => handleDelete(admin._id)}>
+                    <button aria-label="Delete admin"
+                    onClick={() => handleDelete(admin._id)}
+                    className="text-[#E74833] transition duration-300 hover:text-[#244856]">
                     <i className="far fa-trash-alt text-lg" />
                     </button>
                   </td>
@@ -119,19 +119,29 @@ const AdminTable = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4">No Admins Found</td>
-              </tr>
+              <td
+                colSpan="4"
+                className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
+              >
+                <span className="font-poppins">No Admin Found</span>
+              </td>
+            </tr>
             )}
           </tbody>
         </table>
         </div>
+        {paginatedAdmins.length > 0 ? (
+          
+        
         <Pagination
           totalItems={filteredAdmins.length}
           itemsPerPage={itemsPerPage}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
+      ) : null}
       </div>
+        
     </div>
   );
 };

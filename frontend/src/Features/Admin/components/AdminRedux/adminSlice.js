@@ -122,7 +122,7 @@ const adminSlice = createSlice({
     builder
       .addCase(postAdmin.pending, (state) => {
         state.status = "loading";
-        state.error = null;
+        state.error = ""; // Ensure error is not null
       })
       .addCase(postAdmin.fulfilled, (state, action) => {
         state.status = "succeeded";
@@ -131,8 +131,8 @@ const adminSlice = createSlice({
       })
       .addCase(postAdmin.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
-        toast.error(action.payload || "Failed to post admin data");
+        state.error = action.payload || "Failed to post admin data"; // Fallback to default error
+        toast.error(state.error);
       })
       .addCase(fetchAdmins.pending, (state) => {
         state.status = "loading";
@@ -145,18 +145,21 @@ const adminSlice = createSlice({
       })
       .addCase(fetchAdmins.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
+        state.error = action.payload || "Failed to fetch admins"; // Fallback to default error
         state.loading = false;
-        toast.error(action.payload || "Failed to fetch admins");
+        if (state.error.includes("NetworkError")) {
+          // Optionally handle network error case
+        } else {
+          toast.error(state.error); // Show toast with the error message
+        }
       })
-      // Edit
       .addCase(editAdmin.pending, (state) => {
         state.status = "loading";
       })
       .addCase(editAdmin.fulfilled, (state, action) => {
         state.status = "succeeded";
         const { id, updatedAdmin } = action.payload;
-
+  
         const index = state.admins.findIndex((admin) => admin._id === id);
         if (index !== -1) {
           state.admins[index] = { ...state.admins[index], ...updatedAdmin }; // Update specific admin
@@ -165,26 +168,26 @@ const adminSlice = createSlice({
       })
       .addCase(editAdmin.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
-        toast.error(action.payload || "Failed to update admin");
+        state.error = action.payload || "Failed to update admin"; // Fallback to default error
+        toast.error(state.error);
       })
-
       .addCase(removeAdmin.pending, (state) => {
         state.status = "loading";
       })
       .addCase(removeAdmin.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.admins = state.admins.filter(
-          (admin) => admin.id !== action.payload
+          (admin) => admin._id !== action.payload
         );
         toast.success("Admin deleted successfully!");
       })
       .addCase(removeAdmin.rejected, (state, action) => {
         state.status = "failed";
-        state.message = action.payload;
-        toast.error(action.payload || "Failed to delete admin"); 
+        state.error = action.payload || "Failed to delete admin"; // Fallback to default error
+        toast.error(state.error); // Show toast with the error message
       });
-  },
+  }
+  
 });
 
 export const { clearMessage,addAdmintoServer } = adminSlice.actions;
