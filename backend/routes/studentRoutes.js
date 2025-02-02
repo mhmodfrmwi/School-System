@@ -51,14 +51,7 @@ router.get(
   validateJwt,
   getQuestionsBySubjectForStudent
 );
-router.get("/trip",
-  validateJwt,
-  getAllTrips
-);
-router.get("/contest",
-  validateJwt,
-  getAllContests
-);
+
 router.get("/virtualRoom/:gradeSubjectSemesterId",
   validateJwt,
   getVirtualRoomsForStudent
