@@ -17,8 +17,6 @@ const{
 const{
   getVirtualRoomsForStudent
 } = require("../controllers/Student/virtualRoomController");
-const { getAllTrips } = require("../controllers/Student/tripController");
-const { getAllContests } = require("../controllers/manager/contestController");
 const {
   getStudentAttendanceUsingStudentId,
 } = require("../controllers/Student/attendanceController");

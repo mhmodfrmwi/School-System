@@ -69,7 +69,11 @@ const Sidebar = ({ closeSidebar }) => {
                 {menuItems.map((item, index) => (
                     <li
                         key={index}
-                        onClick={() => navigate(item.path)}
+                        onClick={() =>{
+                            navigate(item.path)
+                        closeSidebar()
+                    }
+                        }
                         className="cursor-pointer p-2 flex items-center transition-transform duration-200 hover:bg-gray-100 hover:shadow-sm font-poppins"
                     >
                         <img src={item.icon} alt={`${item.label} icon`} className="h-6 w-6 mr-2" />

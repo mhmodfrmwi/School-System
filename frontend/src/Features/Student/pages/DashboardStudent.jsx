@@ -163,49 +163,47 @@ function DashboardStudent() {
 
 
 
-      {/*Qick Menu */}
+     {/* Quick Menu */}
+<div className="w-[95%] mx-auto bg-white py-8 px-4 rounded-lg">
+  <div className="flex items-center py-4">
+    <p className="mr-2 w-2 h-8 border-l-8 border-[#BC6FFB] rounded-lg"></p>
+    <button className="text-2xl font-poppins cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-bold text-transparent">
+      Quick Menu
+    </button>
+  </div>
 
-      <div className="bg-white py-8 px-4 rounded-lg ">
-        <div className="flex items-center py-4">
-          <p className="mr-2 w-2 h-8 border-l-8 border-[#BC6FFB] rounded-lg"></p>
-          <button className="text-2xl font-poppins cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-bold text-transparent">
-            Quick Menu
-          </button>
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    {[
+      { label: "Awards", icon: AwardIcon },
+      { label: "Courses", icon: CourseIcon },
+      { label: "Absence", icon: AbsenceIcon },
+      { label: "Schedule", icon: ScheduleIcon },
+      { label: "Grade Mngments", icon: GradeIcon },
+      { label: "Activities", icon: ActivityIcon },
+      { label: "Library", icon: LibraryIcon },
+      { label: "Question Bank", icon: QuestionsIcon },
+      { label: "Virtual Rooms", icon: VirtualIcon },
+      { label: "Chats", icon: ChatIcon },
+    ].map((item, index) => (
+      <div
+        key={index}
+        className="flex flex-col hover:cursor-pointer items-center justify-center bg-[#F3F4F6] w-full h-36 rounded-xl font-poppins font-semibold text-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-md"
+      >
+        <div className="w-12 h-12 bg-[#BC6FFB] rounded-full flex items-center justify-center mb-2 transition-all duration-300 ease-in-out">
+          <img src={item.icon} alt={item.label} className="w-6 h-6" />
         </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {[
-            { color: "bg-[#F5F5F5]", label: "Awards", icon: AwardIcon },
-            { color: "bg-[#F5F5F5]", label: "Courses", icon: CourseIcon },
-            { color: "bg-[#F5F5F5]", label: "Absence", icon: AbsenceIcon },
-            { color: "bg-[#F5F5F5]", label: "Schedule", icon: ScheduleIcon },
-            { color: "bg-[#F5F5F5]", label: "Grade Mngments", icon: GradeIcon },
-            { color: "bg-[#F5F5F5]", label: "Activities", icon: ActivityIcon },
-            { color: "bg-[#F5F5F5]", label: "Library", icon: LibraryIcon },
-            { color: "bg-[#F5F5F5]", label: "Question Bank", icon: QuestionsIcon },
-            { color: "bg-[#F5F5F5]", label: "Virtual Rooms", icon: VirtualIcon },
-            { color: "bg-[#F5F5F5]", label: "Chats", icon: ChatIcon },
-          ].map((item, index) => (
-            <div
-              key={index}
-              className={`flex flex-col items-center justify-center ${item.color} w-full h-24 rounded-xl font-poppins font-semibold text-[#BC6FFB] transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:opacity-80 hover:cursor-pointer`} // إضافة hover:cursor-pointer
-            >
-              <div
-                className="w-12 h-12 bg-gradient-to-r from-[#FD813D] via-[#E47986] to-[#BC6FFB]  rounded-full flex items-center justify-center mb-2 transition-all duration-300 ease-in-out"
-              >
-                <img src={item.icon} alt={item.label} className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium">{item.label}</p>
-            </div>
-          ))}
-        </div>
+        <p className="text-sm font-medium">{item.label}</p>
       </div>
+    ))}
+  </div>
+</div>
+
 
 
 
 
       {/* Main Categories */}
-      <div className=" p-4 bg-white rounded-lg  mt-8">
+      <div className="w-[95%] mx-auto p-4 bg-white rounded-lg  mt-8">
 
         <div className="flex items-center ">
           <p className="mr-2 w-2 h-8 border-l-8 border-[#BC6FFB] rounded-lg"></p>
@@ -232,7 +230,7 @@ function DashboardStudent() {
               <h3 className="mt-2 text-lg font-poppins text-gray-700">{category.label}</h3>
               <div className="w-full bg-gray-200 h-2 rounded-full mt-4">
                 <div
-                  className="h-2 rounded-full bg-gradient-to-r from-[#FD813D] to-[#BC6FFB]"
+                  className="h-2 rounded-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"
                   style={{ width: category.progress }}
                 ></div>
               </div>
@@ -247,7 +245,7 @@ function DashboardStudent() {
 
       {/* Diffrent Categories */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 px-8">
+      <div className="w-[95%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 px-8">
         {/* Continue Reading Section */}
         <div className="p-4 rounded-lg shadow-md border-4 border-transparent"
           style={{ borderImage: "linear-gradient(to right, #FD813D, #CF72C0, #BC6FFB) 1" }}>
