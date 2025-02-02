@@ -12,7 +12,7 @@ const AcademicYearList = () => {
   const dispatch = useDispatch();
   const academicYears = useSelector((state) => state.academicYears.academicYears); 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); 
+  const [ setError] = useState(null); 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -43,13 +43,7 @@ const AcademicYearList = () => {
     return colors[index % colors.length]; 
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+ 
 
   
 
@@ -62,7 +56,9 @@ const AcademicYearList = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
   return (
     <div>
       <Header />

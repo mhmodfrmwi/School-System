@@ -54,23 +54,23 @@ function AssignGrade() {
               Select Grade
             </label>
             <select
-              value={gradeName}
-              onChange={(e) => setGradeName(e.target.value)}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-            >
-              <option value="">-- Select Grade --</option>
-              {gradeLoading ? (
-                <option>Loading grades...</option>
-              ) : gradeError ? (
-                <option>Error loading grades</option>
-              ) : (
-                grades.map((gradeItem) => (
-                  <option key={gradeItem._id} value={gradeItem.gradeName}>
-                    {gradeItem.gradeName}
-                  </option>
-                ))
-              )}
-            </select>
+  value={gradeName}
+  onChange={(e) => setGradeName(e.target.value)}
+  className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+>
+  <option value="">-- Select Grade --</option>
+  {gradeLoading ? (
+    <option>Loading grades...</option>
+  ) : gradeError ? (
+    <option>Error loading grades</option>
+  ) : (
+    grades.map((gradeItem) => (
+      <option key={gradeItem._id || gradeItem.gradeName} value={gradeItem.gradeName}>
+        {gradeItem.gradeName}
+      </option>
+    ))
+  )}
+</select>
           </div>
 
           {/* Academic Year Dropdown */}
@@ -79,23 +79,23 @@ function AssignGrade() {
               Select Academic Year
             </label>
             <select
-              value={academicYear}
-              onChange={(e) => setAcademicYear(e.target.value)}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-            >
-              <option value="">-- Select Academic Year --</option>
-              {yearLoading ? (
-                <option>Loading academic years...</option>
-              ) : yearError ? (
-                <option>Error loading academic years</option>
-              ) : (
-                academicYears.map((year) => (
-                  <option key={year.id} value={year.yearName}>
-                    {year.startYear} - {year.endYear}
-                  </option>
-                ))
-              )}
-            </select>
+  value={academicYear}
+  onChange={(e) => setAcademicYear(e.target.value)}
+  className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+>
+  <option value="">-- Select Academic Year --</option>
+  {yearLoading ? (
+    <option>Loading academic years...</option>
+  ) : yearError ? (
+    <option>Error loading academic years</option>
+  ) : (
+    academicYears.map((year) => (
+      <option key={year._id || year.yearName} value={year.yearName}>
+        {year.startYear} - {year.endYear}
+      </option>
+    ))
+  )}
+</select>
           </div>
 
           {/* Submit Button */}

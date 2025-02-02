@@ -55,9 +55,6 @@ const ParentHeader = ({ onSearchChange, onFilterChange }) => {
             <option value="email" className="font-poppins">
               Email
             </option>
-            <option value="studentName" className="font-poppins">
-              Student Name
-            </option>
             <option value="gender" className="font-poppins">
               Gender
             </option>
@@ -68,7 +65,7 @@ const ParentHeader = ({ onSearchChange, onFilterChange }) => {
           <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-black sm:text-sm"></i>
           <input
             type="text"
-            placeholder="Search for a parent by name, email, or student name"
+            placeholder="Search for a parent by name, email"
             className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
             value={searchText}
             onChange={handleSearchChange}

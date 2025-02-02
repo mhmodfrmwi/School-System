@@ -17,7 +17,6 @@ function AcademicYearForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(addAcademicYear(formData));
-    console.log("Form Submitted", formData);
     setFormData({
       startYear: "",
       endYear: "",

@@ -35,7 +35,10 @@ export const addAcademicYear = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newAcademicYear),
       });
-      if (!response.ok) throw new Error("Failed to add academic year");
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
       const data = await response.json();
       return data.academicYear; 
     } catch (error) {
@@ -53,7 +56,10 @@ export const editAcademicYear = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedAcademicYear),
       });
-      if (!response.ok) throw new Error("Failed to update academic year");
+      if (!response.ok){
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
 
       return { id, ...updatedAcademicYear };  
     } catch (error) {

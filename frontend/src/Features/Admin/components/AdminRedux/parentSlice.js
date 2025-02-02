@@ -17,7 +17,6 @@ const initialState = {
 export const postParent = createAsyncThunk(
   "parents/postParent",
   async (parentData, { rejectWithValue }) => {
-    console.log(parentData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/parent/createParent",
@@ -67,7 +66,6 @@ export const fetchParents = createAsyncThunk(
 export const editParentAsync = createAsyncThunk(
   "parents/editParentAsync",
   async ({ id, updatedParent }, { rejectWithValue }) => {
-    console.log(updatedParent);
     try {
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/parent/${id}`,
@@ -81,7 +79,8 @@ export const editParentAsync = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to edit Parent");
+        const error = await response.json();
+        return rejectWithValue(error.message);
       }
 
       const data = await response.json();

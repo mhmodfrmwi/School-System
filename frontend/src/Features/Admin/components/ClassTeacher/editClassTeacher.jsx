@@ -5,6 +5,7 @@ import { fetchClasses } from "../AdminRedux/classSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import { editClassTeacher } from "../AdminRedux/classTeacherSlice";
+
 const EditClassTeacherForm = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const EditClassTeacherForm = () => {
   const { classes } = useSelector((state) => state.classes);
   const { subjects } = useSelector((state) => state.subject);
   const { teachers } = useSelector((state) => state.teachers);
-  const { classTeachers} = useSelector((state) => state.classTeacher);
+  const { classTeachers } = useSelector((state) => state.classTeacher);
 
   // State to hold the form data
   const [formData, setFormData] = useState({
@@ -51,14 +52,14 @@ const EditClassTeacherForm = () => {
 
     // Split the combined values back into individual IDs
     const [teacherId, subjectId] = formData.teacherSubject.split("-");
-    const [classId, academicYearId] = formData.classAcademicYear.split("-");
+    const [classId] = formData.classAcademicYear.split("-");
 
     // Find the corresponding names for the IDs
     const selectedTeacher = teachers.find((teacher) => teacher._id === teacherId);
     const selectedSubject = subjects.find((subject) => subject._id === subjectId);
     const selectedClass = classes.find((cls) => cls._id === classId);
-    const selectedAcademicYear = classTeachers.find(
-      (ct) => ct.academicYear_id._id === academicYearId
+    const selectedAcademicYear = classes.find(
+      (cls) => cls._id === classId
     )?.academicYear_id;
 
     // Prepare the data to match the server's expectations
@@ -66,9 +67,7 @@ const EditClassTeacherForm = () => {
       className: selectedClass?.className || "",
       subjectName: selectedSubject?.subjectName || "",
       teacherName: selectedTeacher?.fullName || "",
-      academicYear: selectedAcademicYear
-        ? `${selectedAcademicYear.startYear}-${selectedAcademicYear.endYear}`
-        : "",
+      academicYear: `${selectedAcademicYear?.startYear}-${selectedAcademicYear?.endYear}` || "",
     };
 
     dispatch(editClassTeacher({ id, updatedClassTeacher }))
@@ -120,16 +119,11 @@ const EditClassTeacherForm = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
               <option value="">Select Class-Academic Year</option>
-              {classes?.map((cls) =>
-                classTeachers.map((ct) => (
-                  <option
-                    key={`${cls._id}-${ct.academicYear_id._id}`}
-                    value={`${cls._id}-${ct.academicYear_id._id}`}
-                  >
-                    {cls.className} - {ct.academicYear_id.startYear} - {ct.academicYear_id.endYear}
-                  </option>
-                ))
-              )}
+              {classes?.map((cls) => (
+                <option key={cls._id} value={`${cls._id}-${cls.academicYear_id._id}`}>
+                  {cls.className} - {cls.academicYear_id.startYear} - {cls.academicYear_id.endYear}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const AdminTable = () => {
   const navigate = useNavigate();
-  const { admins, message } = useSelector((state) => state.admins);
+  const { admins, message,loading } = useSelector((state) => state.admins);
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,14 +23,16 @@ const AdminTable = () => {
   const filteredAdmins = admins.filter((admin) => {
     const lowerSearchText = searchText.toLowerCase();
   
+    // Handle filter option when selected
     if (filterOption) {
       const value = admin[filterOption];
-      return value && value.toLowerCase().includes(lowerSearchText); // Check if value exists
+      return value && value.toLowerCase().includes(lowerSearchText);
     }
   
+    // Default behavior if no filter is selected (name or email)
     return (
-      (admin.name?.toLowerCase().includes(lowerSearchText) || // Safely check `name`
-      admin.email?.toLowerCase().includes(lowerSearchText)) // Safely check `email`
+      (admin.fullName?.toLowerCase().includes(lowerSearchText) || 
+      admin.email?.toLowerCase().includes(lowerSearchText))
     );
   });
   
@@ -61,6 +63,10 @@ const AdminTable = () => {
   const handleEditClick = (id) => {
     navigate(`/admin/editadminform/${id}`);
   };
+
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
       <Header onSearchChange={handleSearchChange} 

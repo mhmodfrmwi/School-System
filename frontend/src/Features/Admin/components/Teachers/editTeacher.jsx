@@ -38,7 +38,7 @@ const EditTeacherForm = () => {
         phone: teacherToEdit.phone,
         email: teacherToEdit.email,
         subject: teacherToEdit.subjectId ? teacherToEdit.subjectId._id : "", // Set the subject _id here
-        password: "",
+        password: teacherToEdit.password,
       });
     }
   }, [teachers, id]);

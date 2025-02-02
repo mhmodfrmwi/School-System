@@ -13,11 +13,10 @@ import Pagination from "../Pagination";
 const AssignedSubjects = () => {
   const dispatch = useDispatch();
   const { assignedSubjects, loading: loadingSubjects } = useSelector(
-    (state) => state.assignSubject,
+    (state) => state.assignSubject
   );
-
   const { grades, loading: loadingGrades } = useSelector(
-    (state) => state.grades,
+    (state) => state.grades
   );
   const { id } = useParams();
 
@@ -38,10 +37,17 @@ const AssignedSubjects = () => {
       const lowerSearchText = searchText.toLowerCase();
       // Apply filter based on filterOption and searchText
       if (filterOption) {
-        return subject[filterOption]?.toLowerCase().includes(lowerSearchText);
+        if (subject[filterOption]) {
+          return subject[filterOption]?.toLowerCase().includes(lowerSearchText);
+        }
+        return false; // If filterOption is not found in the subject
       }
       // Default search on subject name
-      return subject.subject.toLowerCase().includes(lowerSearchText);
+      return (
+        subject.subject.toLowerCase().includes(lowerSearchText) ||
+        subject.gradeName?.toLowerCase().includes(lowerSearchText) ||
+        subject.term?.toLowerCase().includes(lowerSearchText)
+      );
     });
 
   // Add grade name to the subjects
@@ -54,7 +60,7 @@ const AssignedSubjects = () => {
   // Paginate the subjects
   const paginatedSubjects = subjectsWithGradeName.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleDeleteSubject = (_id) => {
@@ -75,12 +81,18 @@ const AssignedSubjects = () => {
     setFilterOption(filter);
   };
 
+  // Show loading state while data is being fetched
   if (loadingSubjects || loadingGrades) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Loader />
       </div>
     );
+  }
+
+  // Show empty div while loading subjects
+  if (loadingSubjects) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
   }
 
   return (
@@ -117,7 +129,9 @@ const AssignedSubjects = () => {
                       paginatedSubjects.map((subject, index) => (
                         <tr
                           key={subject._id || index}
-                          className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                          className={`${
+                            index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
+                          } hover:bg-[#117C90]/70`}
                         >
                           <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                             {subject.subject}
@@ -146,28 +160,32 @@ const AssignedSubjects = () => {
                       ))
                     ) : (
                       <tr>
-                      <td colSpan="4" className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]">
-                        <p className="text-lg font-semibold text-gray-600">No Subjects Found</p>
-                        <p className="text-sm text-gray-500 mt-2">It seems like there are no subjects in the database at the moment.</p>
-                        
-                      </td>
-                    </tr>
+                        <td
+                          colSpan="4"
+                          className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]"
+                        >
+                          <p className="text-lg font-semibold text-gray-600">
+                            No Subjects Found
+                          </p>
+                          <p className="text-sm text-gray-500 mt-2">
+                            It seems like there are no subjects in the database at the moment.
+                          </p>
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
               </div>
-{paginatedSubjects.length > 0 ? (
-  
-
-              <div className="mt-7 flex justify-center lg:justify-end">
-                <Pagination
-                  totalItems={subjectsWithGradeName.length}
-                  itemsPerPage={itemsPerPage}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                />
-              </div>
-            ) : null}
+              {paginatedSubjects.length > 0 ? (
+                <div className="mt-7 flex justify-center lg:justify-end">
+                  <Pagination
+                    totalItems={subjectsWithGradeName.length}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

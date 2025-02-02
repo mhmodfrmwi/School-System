@@ -13,7 +13,7 @@ const ParentTable = () => {
   const navigate = useNavigate();
   const {
     parents = [],
-    message
+    message,loading
   } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
 
@@ -72,7 +72,9 @@ const ParentTable = () => {
   const handleEditClick = (id) => {
     navigate(`/admin/editparentform/${id}`);
   };
-
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
   return (
     <div className="relative lg:px-0">
       <Header

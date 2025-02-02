@@ -223,7 +223,7 @@ const Dashboard = () => {
               Percentage Of Users By Type
             </h3>
             <ResponsiveContainer width="100%" height={250}>
-              {pieData > 0 ? (
+              {pieData[0].value > 0 || pieData[1].value > 0 || pieData[2].value > 0 || pieData[3].value > 0 ? (
               <PieChart>
                 <Pie
                   data={pieData}

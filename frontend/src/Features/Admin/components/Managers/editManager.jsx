@@ -27,7 +27,7 @@ const EditManagerForm = () => {
       setFormData({
         fullName: managerToEdit.fullName,
         email: managerToEdit.email,
-        password: "",
+        password: managerToEdit.password,
         phone: managerToEdit.phone,
         gender: managerToEdit.gender,
       });

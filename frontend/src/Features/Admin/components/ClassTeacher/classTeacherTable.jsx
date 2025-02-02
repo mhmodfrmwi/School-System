@@ -8,7 +8,7 @@ import Header from "./classTeacherHeader";
 import { Link, useParams } from "react-router-dom";
 
 const ClassTeacherTable = () => {
-  const { classTeachers = []} = useSelector((state) => state.classTeacher || {});
+  const { classTeachers = [], loading } = useSelector((state) => state.classTeacher || {});
   const { classes = [] } = useSelector((state) => state.classes || {}); 
   const { teachers = [] } = useSelector((state) => state.teachers || {}); // Fetch teachers from the store
   const dispatch = useDispatch();
@@ -28,23 +28,52 @@ const ClassTeacherTable = () => {
 
   const filteredClassTeachers = classTeachers.filter((classTeacher) => {
     const lowerSearchText = searchText.toLowerCase();
-
+  
     if (teacherId) {
       // Filter by teacherId if it's provided in the URL
       return classTeacher.teacherId?._id === teacherId;
     }
-
+  
     if (filterOption) {
-      const filterValue = classTeacher[filterOption];
-      return filterValue && filterValue.toLowerCase().includes(lowerSearchText);
+      if (filterOption === "class") {
+        return classTeacher.classId?.className?.toLowerCase().includes(lowerSearchText);
+      }
+      if (filterOption === "subject") {
+        return classTeacher.subjectId?.subjectName?.toLowerCase().includes(lowerSearchText);
+      }
+      if (filterOption === "teacher") {
+        return classTeacher.teacherId?.fullName?.toLowerCase().includes(lowerSearchText);
+      }
+      if (filterOption === "academicYear") {
+        return (
+          classTeacher.academicYear_id?.startYear
+            .toString()
+            .toLowerCase()
+            .includes(lowerSearchText) ||
+          classTeacher.academicYear_id?.endYear
+            .toString()
+            .toLowerCase()
+            .includes(lowerSearchText)
+        );
+      }
     }
-
+  
+    // Default search (if no filter selected)
     return (
       classTeacher.classId?.className?.toLowerCase().includes(lowerSearchText) ||
       classTeacher.teacherId?.fullName?.toLowerCase().includes(lowerSearchText) ||
-      classTeacher.subjectId?.subjectName?.toLowerCase().includes(lowerSearchText)
+      classTeacher.subjectId?.subjectName?.toLowerCase().includes(lowerSearchText) ||
+      classTeacher.academicYear_id?.startYear
+        .toString()
+        .toLowerCase()
+        .includes(lowerSearchText) ||
+      classTeacher.academicYear_id?.endYear
+        .toString()
+        .toLowerCase()
+        .includes(lowerSearchText)
     );
   });
+  
 
   const paginatedClassTeachers = filteredClassTeachers.slice(
     (currentPage - 1) * itemsPerPage,
@@ -89,7 +118,9 @@ const ClassTeacherTable = () => {
     const teacher = teachers.find((t) => t._id === teacherId);
     return teacher ? teacher.fullName : "No Teacher Assigned";
   };
-
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
       <Header onSearchChange={handleSearchChange} onFilterChange={handleFilterChange} />

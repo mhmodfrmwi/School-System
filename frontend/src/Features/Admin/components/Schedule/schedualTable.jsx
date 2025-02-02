@@ -13,10 +13,7 @@ import { useNavigate } from "react-router-dom";
 const SchedualTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {
-    schedules = [],
-    message
-  } = useSelector((state) => state.schedules || {});
+  const { schedules = [], message, loading } = useSelector((state) => state.schedules || {});
   const { teachers = [] } = useSelector((state) => state.teachers || {});
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,15 +28,30 @@ const SchedualTable = () => {
 
   const filteredScheduals = schedules.filter((schedule) => {
     const lowerSearchText = searchText.toLowerCase();
+  
     if (filterOption) {
-      const filterValue = schedule?.[filterOption] || "";
+      let filterValue = "";
+      
+      if (filterOption === "subject") {
+        filterValue = schedule.subject_id?.subjectName || "";
+      } else if (filterOption === "day") {
+        filterValue = schedule.day_of_week || "";
+      } else if (filterOption === "time") {
+        filterValue = `${schedule.start_time} - ${schedule.end_time}`;
+      }
+  
       return filterValue.toLowerCase().includes(lowerSearchText);
     }
+  
+    // Default search if no filter is selected
     return (
-      (schedule?.subjectName || "").toLowerCase().includes(lowerSearchText) ||
-      (schedule?.teacher || "").toLowerCase().includes(lowerSearchText)
+      (schedule.subject_id?.subjectName || "").toLowerCase().includes(lowerSearchText) ||
+      (schedule.teacher_id?.fullName || "").toLowerCase().includes(lowerSearchText) ||
+      (schedule.day_of_week || "").toLowerCase().includes(lowerSearchText) ||
+      (schedule.start_time || "").toLowerCase().includes(lowerSearchText)
     );
   });
+  
 
   const paginatedScheduals = filteredScheduals.slice(
     (currentPage - 1) * itemsPerPage,
@@ -53,10 +65,7 @@ const SchedualTable = () => {
     if (confirmDelete) {
       try {
         await dispatch(removeSchedual(id));
-        alert("Schedule deleted successfully");
       } catch (error) {
-        console.error("Failed to delete schedule:", error);
-        alert("Error occurred while deleting");
       }
     }
   };
@@ -90,6 +99,9 @@ const SchedualTable = () => {
     navigate(`/admin/edit-schedule/${scheduleId}`);
   };
 
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
   return (
     <div className="relative mx-auto px-4 lg:px-0">
       
@@ -97,7 +109,7 @@ const SchedualTable = () => {
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
       />
-
+      
       <div className="mt-7">
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
@@ -185,18 +197,16 @@ const SchedualTable = () => {
             </tbody>
           </table>
         </div>
-{paginatedScheduals.length > 0 ?(
-  
-
-        <div className="mt-7 flex justify-center lg:justify-end">
-          <Pagination
-            totalItems={filteredScheduals.length}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
-):null}
+        {paginatedScheduals.length > 0 && (
+          <div className="mt-7 flex justify-center lg:justify-end">
+            <Pagination
+              totalItems={filteredScheduals.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
