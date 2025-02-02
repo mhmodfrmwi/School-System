@@ -87,6 +87,27 @@ const Dashboard = () => {
     { name: "Admins", value: loadingAdmins ? 0 : admins?.length || 0, color: "#9C27B0" },
   ];
 
+  const NoDataPieChart = () => (
+      <ResponsiveContainer width="100%" height={200}>
+        <PieChart>
+          <Pie
+            data={[{ name: "No Data", value: 1 }]}
+            dataKey="value"
+            cx="50%"
+            cy="50%"
+            outerRadius={70}
+            fill="#8884d8"
+            label={({name})=>name}
+          >
+            <Cell fill="#117C90" />
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+   
+  );
+
+
+
   return (
     <div className="p-6">
       {/* Overview Section */}
@@ -158,19 +179,7 @@ const Dashboard = () => {
                  </Pie>
                </PieChart>
               ) : (
-                <div className="flex items-center justify-center h-full w-full bg-[#f9f9f9] rounded-lg shadow-md">
-        <div className="text-center text-gray-600">
-          <div className="text-4xl mb-4">
-            <i className="fas fa-exclamation-circle"></i>
-          </div>
-          <h5 className="font-poppins text-lg font-medium text-gray-800 mb-2">
-            No data available
-          </h5>
-          <p className="text-sm text-gray-500">
-            We couldn't retrieve any data at this time. Please try again later.
-          </p>
-        </div>
-      </div>
+      <NoDataPieChart />
 
               )}
              
@@ -202,19 +211,7 @@ const Dashboard = () => {
         </Pie>
       </PieChart>
     ) : (
-      <div className="flex items-center justify-center h-full w-full bg-[#f9f9f9] rounded-lg shadow-md">
-        <div className="text-center text-gray-600">
-          <div className="text-4xl mb-4">
-            <i className="fas fa-exclamation-circle"></i>
-          </div>
-          <h5 className="font-poppins text-lg font-medium text-gray-800 mb-2">
-            No data available
-          </h5>
-          <p className="text-sm text-gray-500">
-            We couldn't retrieve any data at this time. Please try again later.
-          </p>
-        </div>
-      </div>
+      <NoDataPieChart />
     )}
   </ResponsiveContainer>
 </div>
@@ -244,19 +241,7 @@ const Dashboard = () => {
                 </Pie>
               </PieChart>
               ) : (
-                <div className="flex items-center justify-center h-full w-full bg-[#f9f9f9] rounded-lg shadow-md">
-        <div className="text-center text-gray-600">
-          <div className="text-4xl mb-4">
-            <i className="fas fa-exclamation-circle"></i>
-          </div>
-          <h5 className="font-poppins text-lg font-medium text-gray-800 mb-2">
-            No data available
-          </h5>
-          <p className="text-sm text-gray-500">
-            We couldn't retrieve any data at this time. Please try again later.
-          </p>
-        </div>
-      </div>
+                <NoDataPieChart />
               )}
               
             </ResponsiveContainer>

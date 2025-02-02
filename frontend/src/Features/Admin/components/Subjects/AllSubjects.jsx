@@ -94,9 +94,16 @@ const SubjectsList = () => {
               </div>
             ))
           ) : (
-            <div className="bg-[#FFEBEB] py-20 text-center rounded-lg">
-              <p className="text-xl font-semibold text-gray-600">No Subjects Found</p>
-            </div>
+             <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
+                          <FontAwesomeIcon
+                            icon={faBook}
+                            className="text-6xl text-gray-400 mb-4"
+                          />
+                          <p className="text-xl font-semibold text-gray-600 mb-2">No Subjects Found</p>
+                          <p className="text-gray-500 mb-4 text-center max-w-xl">
+                            It seems like there are no subjects available at the moment. Please check back later or add new subjects.
+                          </p>
+                        </div>
           )}
 
           {paginatedSubjects.length > 0 && (

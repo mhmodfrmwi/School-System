@@ -177,7 +177,7 @@ const SchedualTable = () => {
                 <tr>
                   <td
                     colSpan="7"
-                    className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
+                    className="rounded-lg bg-[#FFEBEB] py-28 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                   >
                     <span className="font-poppins">No Schedules Found</span>
                   </td>

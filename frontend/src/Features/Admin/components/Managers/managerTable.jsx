@@ -139,7 +139,7 @@ const filteredManagers = managers.filter((manager) => {
                 <tr>
                   <td
                     colSpan="4"
-                    className="rounded-lg bg-[#FFEBEB] py-12 text-center text-xs text-[#244856] sm:text-sm md:text-base"
+                    className="rounded-lg bg-[#FFEBEB] py-28 text-center text-xs text-[#244856] sm:text-sm md:text-base"
                   >
                     <span className="font-poppins">No Managers Found</span>
                   </td>

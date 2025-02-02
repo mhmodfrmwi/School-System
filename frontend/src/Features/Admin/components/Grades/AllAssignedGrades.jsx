@@ -89,7 +89,7 @@ const AllAssignedGrades = () => {
               ))
             ) : (
               <tr>
-                  <td colSpan="6" className="rounded-lg bg-[#FFEBEB] py-12 text-center">
+                  <td colSpan="6" className="rounded-lg bg-[#FFEBEB] py-28 text-center">
                     No Grades Found
                   </td>
                 </tr>

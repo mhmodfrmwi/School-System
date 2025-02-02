@@ -137,7 +137,7 @@ const ClassTeacherTable = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="rounded-lg bg-[#FFEBEB] py-12 text-center">
+                  <td colSpan="5" className="rounded-lg bg-[#FFEBEB] py-28 text-center">
                     No Class Teachers Found
                   </td>
                 </tr>
