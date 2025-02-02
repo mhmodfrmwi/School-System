@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/NavTeacher";
-import Sidebar from "./components/SidebarTeacher";
+import Navbar from "../components/NavTeacher";
+import Sidebar from "../components/SidebarTeacher";
 function Teacher() {
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (

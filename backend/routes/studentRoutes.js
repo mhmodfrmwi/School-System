@@ -8,6 +8,15 @@ const {
 const {
   getQuestionsBySubjectForStudent,
 } = require("../controllers/Student/questionBankController");
+const{
+  getAllTrips
+} = require("../controllers/Student/tripController");
+const{
+  getAllContests
+} = require("../controllers/Student/contestController");
+const{
+  getVirtualRoomsForStudent
+} = require("../controllers/Student/virtualRoomController");
 const { getAllTrips } = require("../controllers/Student/tripController");
 const { getAllContests } = require("../controllers/manager/contestController");
 const {
@@ -44,8 +53,24 @@ router.get(
   validateJwt,
   getQuestionsBySubjectForStudent
 );
-router.get("/trip", getAllTrips);
-router.get("/contest", getAllContests);
+router.get("/trip",
+  validateJwt,
+  getAllTrips
+);
+router.get("/contest",
+  validateJwt,
+  getAllContests
+);
+router.get("/virtualRoom/:gradeSubjectSemesterId",
+  validateJwt,
+  getVirtualRoomsForStudent
+);
+router.get("/trip", 
+  validateJwt,
+  getAllTrips);
+router.get("/contest", 
+  validateJwt,
+  getAllContests);
 
 router.get("/get-attendance", validateJwt, getStudentAttendanceUsingStudentId);
 router.get("/get-schedule", validateJwt, getScheduleForSpecificStudent);

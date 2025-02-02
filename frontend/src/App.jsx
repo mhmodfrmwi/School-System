@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 
-const Teachers = lazy(() => import( "./Features/Teacher/Teacher"));
+const Teachers = lazy(() => import( "./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
 const OnBoarding = lazy(() => import("./Features/Auth/OnBoarding"));
 const ChooseRole = lazy(() => import("./Features/Auth/ChooseRole"));
@@ -201,6 +201,40 @@ const ScheduleParent = lazy(
 const ScheduleExamParent = lazy(
   () => import("./Features/Parent/components/Schedule/scheduleExam"),
 );
+const EditTeacherProfile = lazy(
+  () => import("./Features/Teacher/pages/EditProfilePage"),
+);
+const SchoolHubs = lazy(
+  () => import("./Features/Teacher/components/Activities/SchoolHubs"),
+);
+const SchoolHubsDetailes = lazy(
+  () => import("./Features/Teacher/components/Activities/SchoolHubsDetailes"),
+);
+const SchoolHubsPrizes = lazy(
+  () => import("./Features/Teacher/components/Activities/SchoolHubsPrizes"),
+);
+const ActivityContests = lazy(
+  () => import("./Features/Teacher/components/Activities/Contests"),
+);
+const ActivityForm = lazy(
+  () => import("./Features/Teacher/components/Activities/AddActivityForm"),
+);
+const EditActivityForm = lazy(
+  () => import("./Features/Teacher/components/Activities/EditActivityForm"),
+);
+const WeeklySchedule = lazy(
+  () => import("./Features/Teacher/components/Schedule/WeekSchedule"),
+);
+
+const ExamSchedule = lazy(
+  () => import("./Features/Teacher/components/Schedule/ExamSchedule"),
+);
+const AddMaterial = lazy(() => import( "./Features/Teacher/components/courses/AddMaterial"));
+const AllCourses = lazy(() => import("./Features/Teacher/components/courses/AllCourses"));
+const CurrentCourse = lazy(() => import( "./Features/Teacher/components/courses/CurrentCourses"));
+const MaterialForm = lazy(() => import( "./Features/Teacher/components/courses/FormCourse"));
+const SeeMaterial = lazy(() => import( "./Features/Teacher/components/courses/SeeMaterial"));
+
 
 function App() {
   return (
@@ -316,6 +350,21 @@ function App() {
           </Route>
           {/* /////////////////teacher pages//////////////////// */}
           <Route path="teacher" element={<Teachers />}>
+          <Route  path="edit-teacher-profile" element={<EditTeacherProfile />} /> 
+          <Route path="school-hubs" element={<SchoolHubs />} />  
+          <Route path="school-hubs/detailes" element={<SchoolHubsDetailes />} />  
+          <Route path="school-hubs/prizes" element={<SchoolHubsPrizes />} />  
+          <Route path="contests" element={<ActivityContests />} /> 
+          <Route path="contests/activity-form" element={<ActivityForm />} /> 
+          <Route path="contests/edit-activity-form/:id" element={<EditActivityForm  />} /> 
+          <Route path="weekly-schedule" element={<WeeklySchedule />} /> 
+          <Route path="exam-schedule" element={<ExamSchedule />} /> 
+          <Route path="currentCourse" element={<CurrentCourse />} />
+          <Route path="allcourses" element={<AllCourses />} />
+          <Route path="addmaterial" element={<AddMaterial/>} />
+          <Route path="materialform" element={<MaterialForm/>} />
+          <Route path="seematerial" element={<SeeMaterial/>} />
+
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

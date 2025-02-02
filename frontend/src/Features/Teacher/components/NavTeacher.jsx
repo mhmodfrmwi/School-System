@@ -22,7 +22,8 @@ const NavTeacher = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const routes = [
-    { path: "#" },
+    { path: "edit-teacher-profile" },
+    { path: "school-hubs" },
 
   ];
 
@@ -46,7 +47,7 @@ const NavTeacher = () => {
       setIsDropdownOpen(false);
 
       if (route.path.length === count) {
-        navigate(`/admin/${searchTerm}`);
+        navigate(`/teacher/${searchTerm}`);
       } else {
         alert("No matching page found.");
       }
@@ -54,8 +55,8 @@ const NavTeacher = () => {
   };
 
   const url = window.location.pathname;
-  const adminName = url.split("/admin/").pop();
-  const match = url.match(/\/admin\/([^/]+)/);
+  const teacherName = url.split("/teacher/").pop();
+  const match = url.match(/\/teacher\/([^/]+)/);
   const name = match ? match[1] : "";
 
   const handleBack = () => {
@@ -89,7 +90,7 @@ const NavTeacher = () => {
             <FaArrowLeft className="text-lg" />
           </button>
           <p className="hidden font-inter text-lg font-semibold text-dashboard-header lg:flex">
-            {adminName === "/admin" ? "dashboard" : `${name}`}
+            {teacherName === "/teacher" ? "dashboard" : `${name}`}
           </p>
         </div>
 
@@ -180,7 +181,7 @@ const NavTeacher = () => {
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
-                  onClick={() => navigate("edit-admin-profile")}
+                  onClick={() => navigate("edit-teacher-profile")}
                 >
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />

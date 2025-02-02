@@ -35,7 +35,7 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const gradeDoc = await Grade.findOne({ grade });
+  const gradeDoc = await Grade.findOne({gradeName: grade });
   console.log(grade);
   if (!gradeDoc) {
     return res.status(404).json({
@@ -44,7 +44,7 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const semesterDoc = await Semester.findOne({ semester });
+  const semesterDoc = await Semester.findOne({ semesterName:semester });
   if (!semesterDoc) {
     return res.status(404).json({
       status: 404,
@@ -103,7 +103,7 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
   }
 
   const { title, subjectName, academicYear, grade, semester, startTime, duration, link } = req.body;
-
+  console.log(grade);
   const [startYear, endYear] = academicYear.split("-").map(Number);
 
   const academicYearRecord = await AcademicYear.findOne({ startYear, endYear });
@@ -130,7 +130,7 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const gradeDoc = await Grade.findOne({ grade });
+  const gradeDoc = await Grade.findOne({ gradeName : grade });
   if (!gradeDoc) {
     return res.status(404).json({
       status: 404,
@@ -138,7 +138,7 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const semesterDoc = await Semester.findOne({ semester });
+  const semesterDoc = await Semester.findOne({ semesterName:semester });
   if (!semesterDoc) {
     return res.status(404).json({
       status: 404,

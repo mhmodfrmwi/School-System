@@ -2,15 +2,30 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
-  faUsers,
-  faCalendar,
-  faPen,
-  faClock,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
-import { Icon } from "@iconify/react";
 import { useLocation } from "react-router-dom";
 import logo from "../../../assets/logologin.png";
+
+import GradeIconH from "../../../assets/TeacherIcon/Grade.png";
+import AwardIconH from "../../../assets/TeacherIcon/Awards.png";
+import ActivityIconH from "../../../assets/TeacherIcon/Activites.png";
+import VirtualIconH from "../../../assets/TeacherIcon/Virtual.png";
+import ScheduleIconH from "../../../assets/TeacherIcon/Schedule.png";
+import QuestionsIconH from "../../../assets/TeacherIcon/Questions.png";
+import LibraryIconH from "../../../assets/TeacherIcon/Library.png";
+import CourseIconH from "../../../assets/TeacherIcon/Course.png";
+import AbsenceIconH from "../../../assets/TeacherIcon/Absence.png";
+
+import GradeIcon from "../../../assets/StudentIcon/Grade.png";
+import AwardIcon from "../../../assets/StudentIcon/Awards.png";
+import ActivityIcon from "../../../assets/StudentIcon/Activites.png";
+import VirtualIcon from "../../../assets/StudentIcon/Virtual.png";
+import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
+import QuestionsIcon from "../../../assets/StudentIcon/Questions.png";
+import LibraryIcon from "../../../assets/StudentIcon/Library.png";
+import CourseIcon from "../../../assets/StudentIcon/Course.png";
+import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
 
 const SidebarTeacher = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,16 +34,16 @@ const SidebarTeacher = () => {
   const currentPath = location.pathname;
 
   const menuItems = [
-    { label: "Dashboard", icon: faHome, href: "/teacher" },
-    { label: "Motivation", icon: faUsers, href: "#" },
-    { label: "Courses", icon: faCalendar, href: "#" },
-    { label: "Absence", icon: faPen, href: "#" },
-    { label: "Schedule", icon: "fluent:number-row-24-regular", href: "#",},
-    { label: "Grade Management", icon: "octicon:number-16", href: "#",},
-    { label: "Activites", icon: faClock, href: "#", },
-    { label: "Library", icon: faClock, href: "#", },
-    { label: "Question Bank", icon: faClock, href: "#", },
-    { label: "Virtual Rooms", icon: faClock, href: "#", },
+    { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/teacher" },
+    { label: "Motivation", icon: AwardIcon, hoverIcon: AwardIconH, href: "#" },
+    { label: "Courses", icon: CourseIcon, hoverIcon: CourseIconH, href: "/teacher/currentcourse" },
+    { label: "Absence", icon: AbsenceIcon, hoverIcon: AbsenceIconH, href: "#" },
+    { label: "Schedule", icon: ScheduleIcon, hoverIcon: ScheduleIconH, href: "/teacher/weekly-schedule" },
+    { label: "Grade Management", icon: GradeIcon, hoverIcon: GradeIconH, href: "#" },
+    { label: "Activities", icon: ActivityIcon, hoverIcon: ActivityIconH, href: "/teacher/school-hubs" },
+    { label: "Library", icon: LibraryIcon, hoverIcon: LibraryIconH, href: "#" },
+    { label: "Question Bank", icon: QuestionsIcon, hoverIcon: QuestionsIconH, href: "#" },
+    { label: "Virtual Rooms", icon: VirtualIcon, hoverIcon: VirtualIconH, href: "#" },
   ];
 
   return (
@@ -89,32 +104,27 @@ const SidebarContent = ({
           <a
             key={index}
             href={item.href}
-            className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${
-              currentPath === item.href
+            className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${currentPath === item.href
                 ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg"
                 : "text-white"
-            } ${
-              hoveredIndex === index && currentPath !== item.href
+              } ${hoveredIndex === index && currentPath !== item.href
                 ? "bg-white text-dashboard-bg"
                 : ""
-            }`}
+              }`}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {typeof item.icon === "string" ? (
-              <Icon
-                icon={item.icon}
-                className={`mr-3 transition-colors group-hover:text-dashboard-bg ${
-                  currentPath === item.href ? "text-dashboard-bg" : "text-white"
-                } text-xl`}
-                style={{ fontSize: "1.5rem" }}
+              <img
+              src={hoveredIndex === index || currentPath === item.href ? item.hoverIcon : item.icon}
+                alt="icon"
+                className="mr-3 h-6 w-6 object-contain transition-all duration-300"
+                loading="lazy"
               />
             ) : (
               <FontAwesomeIcon
                 icon={item.icon}
-                className={`mr-3 transition-colors group-hover:text-dashboard-bg ${
-                  currentPath === item.href ? "text-dashboard-bg" : "text-white"
-                }`}
+                className="mr-3 text-lg transition-colors group-hover:text-dashboard-bg"
               />
             )}
 
