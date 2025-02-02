@@ -47,7 +47,6 @@ function ScheduleForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     dispatch(postSchedual(formData))
       .unwrap()
       .then(() => {

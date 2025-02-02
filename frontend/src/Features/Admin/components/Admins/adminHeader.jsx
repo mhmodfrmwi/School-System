@@ -22,7 +22,7 @@ const AdminHeader = ({ onSearchChange, onFilterChange }) => {
           <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
             Admins
           </h1>
-          <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[95px]"></div>
+          <div className="mt-1 rounded-t-md bg-[#244856] h-[4px] w-[90px]"></div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
@@ -49,7 +49,7 @@ const AdminHeader = ({ onSearchChange, onFilterChange }) => {
             <option value="" className="font-poppins">
               Select Filter
             </option>
-            <option value="name" className="font-poppins">
+            <option value="fullName" className="font-poppins">
               Name
             </option>
             <option value="email" className="font-poppins">

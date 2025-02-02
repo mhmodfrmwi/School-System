@@ -10,7 +10,7 @@ import Pagination from "../Pagination";
 
 const AllAssignedGrades = () => {
   const dispatch = useDispatch();
-  const { assignedGrades } = useSelector((state) => state.assignGrade);
+  const { assignedGrades, loading } = useSelector((state) => state.assignGrade);
   const { id } = useParams();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,11 +36,15 @@ const AllAssignedGrades = () => {
 
   const handleDeleteGrade = (_id) => {
     if (_id) {
-      dispatch(deleteAssignedGrade(_id));
+      const confirmDelete = window.confirm("Are you sure you want to delete this grade?");
+      if (confirmDelete) {
+        dispatch(deleteAssignedGrade(_id));
+      }
     } else {
       toast.error("Invalid grade ID. Cannot delete grade.");
     }
   };
+  
 
   const paginatedGrades = gradesWithGradeName.slice(
     (currentPage - 1) * itemsPerPage,
@@ -48,7 +52,9 @@ const AllAssignedGrades = () => {
   );
 
   const handlePageChange = (page) => setCurrentPage(page);
-
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
   return (
     <div className="lg:px-0">
       <Header />

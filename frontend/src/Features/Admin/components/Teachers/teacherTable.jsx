@@ -13,9 +13,14 @@ const TeacherTable = () => {
   const itemsPerPage = 10;
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
-    dispatch(fetchTeachers());
+    const fetchData = async () => {
+      await dispatch(fetchTeachers());
+      setLoading(false); // Set loading to false after teachers are fetched
+    };
+    fetchData();
   }, [dispatch]);
 
   const filteredTeachers = teachers.filter((teacher) => {
@@ -53,7 +58,9 @@ const TeacherTable = () => {
   const handleSearchChange = (search) => setSearchText(search);
   const handleFilterChange = (filter) => setFilterOption(filter);
 
-
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
 
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
@@ -86,7 +93,7 @@ const TeacherTable = () => {
                     <td className="px-3 py-2">{teacher.gender}</td>
                     <td className="px-3 py-2">
                       <div className="inline-flex space-x-2">
-                      <Link
+                        <Link
                           to={`/admin/allteachers/${teacher._id}`}
                           className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                         >
@@ -111,26 +118,24 @@ const TeacherTable = () => {
                 ))
               ) : (
                 <tr>
-                <td colSpan="6" className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]">
-                  <p className="text-lg font-semibold text-gray-600">No Teachers Found</p>
-                  <p className="text-sm text-gray-500 mt-2">It seems like there are no Teachers in the database at the moment.</p>
-                  
-                </td>
-              </tr>
+                  <td colSpan="6" className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]">
+                    <p className="text-lg font-semibold text-gray-600">No Teachers Found</p>
+                    <p className="text-sm text-gray-500 mt-2">It seems like there are no Teachers in the database at the moment.</p>
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
         </div>
         {filteredTeachers.length > 0 ? (
-
-        <div className="mt-7 flex justify-center lg:justify-end">
-          <Pagination
-            totalItems={filteredTeachers.length}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
+          <div className="mt-7 flex justify-center lg:justify-end">
+            <Pagination
+              totalItems={filteredTeachers.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
         ) : null}
       </div>
     </div>

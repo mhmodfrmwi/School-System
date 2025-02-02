@@ -29,8 +29,13 @@ const EditAcademicYearForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(editAcademicYear({ id, updatedAcademicYear: formData }));
-    navigate("/admin/allacademicyears"); 
+    dispatch(editAcademicYear({ id, updatedAcademicYear: formData }))
+    .unwrap()
+    .then(() => {
+      navigate("/admin/allacademicyears");
+    })
+    .catch((error) => {
+    });
   };
 
   return (

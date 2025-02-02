@@ -14,9 +14,14 @@ const TermList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    dispatch(fetchTerms());
+    const fetchData = async () => {
+      await dispatch(fetchTerms());
+      setLoading(false); // Set loading to false after terms are fetched
+    };
+    fetchData();
   }, [dispatch]);
 
   const paginatedTerms = terms.slice(
@@ -28,12 +33,11 @@ const TermList = () => {
     setCurrentPage(page);
   };
 
-    const handleDelete = async (id) => {
-      if (window.confirm("Are you sure you want to delete this term?")) {
-        await dispatch(removeTerm(id));
-       
-      }
-    };
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this term?")) {
+      await dispatch(removeTerm(id));
+    }
+  };
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const getColor = (index) => {
@@ -43,8 +47,11 @@ const TermList = () => {
   const handleEdit = (term) => {
     navigate(`/admin/edit-term/${term._id}`, { state: { term } });
   };
-  
-  
+
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
+
   return (
     <div>
       <TermHeader />
@@ -67,14 +74,14 @@ const TermList = () => {
                     />
                   </div>
                   <span className="text-gray-600 text-xl mx-2 h-8 border-l-2 border-gray-600"></span>
-  
+
                   <div className="flex flex-col ml-3">
                     <p className="m-0 font-poppins text-sm text-gray-500">
                       {term.academicYear_id
                         ? `${term.academicYear_id.startYear} - ${term.academicYear_id.endYear}`
                         : "No Academic Year Available"}
                     </p>
-  
+
                     <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600">
                       {term.semesterName &&
                       typeof term.semesterName === "string" &&
@@ -84,7 +91,7 @@ const TermList = () => {
                     </h3>
                   </div>
                 </div>
-  
+
                 <div className="flex">
                   <button
                     className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
@@ -102,31 +109,29 @@ const TermList = () => {
               </div>
             ))
           ) : (
-             <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
-                          <FontAwesomeIcon
-                            icon={faCalendar}
-                            className="text-6xl text-gray-400 mb-4"
-                          />
-                          <p className="text-xl font-semibold text-gray-600 mb-2">No Terms Found</p>
-                          <p className="text-gray-500 mb-4 text-center max-w-xl">
-                            It seems like there are no Terms available at the moment. Please check back later or add new terms.
-                          </p>
-                        </div>
+            <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
+              <FontAwesomeIcon
+                icon={faCalendar}
+                className="text-6xl text-gray-400 mb-4"
+              />
+              <p className="text-xl font-semibold text-gray-600 mb-2">No Terms Found</p>
+              <p className="text-gray-500 mb-4 text-center max-w-xl">
+                It seems like there are no Terms available at the moment. Please check back later or add new terms.
+              </p>
+            </div>
           )}
           {paginatedTerms.length > 0 ? (
-          <Pagination
-            totalItems={terms.length}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        ) : null}
+            <Pagination
+              totalItems={terms.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          ) : null}
         </div>
       </div>
     </div>
   );
-  
-  
 };
 
 export default TermList;

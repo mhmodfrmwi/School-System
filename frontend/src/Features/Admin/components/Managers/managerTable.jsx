@@ -10,7 +10,7 @@ import Header from "../Managers/managerHeader";
 
 const ManagerTable = () => {
   const navigate = useNavigate();
-  const { managers = [] } = useSelector((state) => state.managers || {});
+  const { managers = [] , loading} = useSelector((state) => state.managers || {});
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,7 +68,9 @@ const filteredManagers = managers.filter((manager) => {
   const handleEditClick = (id) => {
     navigate(`/admin/editmanagerform/${id}`);
   };
-
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
       <Header onSearchChange={handleSearchChange} onFilterChange={handleFilterChange} />

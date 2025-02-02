@@ -49,11 +49,8 @@ const StudentHeader = ({ onSearchChange, onFilterChange }) => {
             <option value="" className="font-poppins">
               Select Filter
             </option>
-            <option value="name" className="font-poppins">
+            <option value="fullName" className="font-poppins">
               Name
-            </option>
-            <option value="class" className="font-poppins">
-              Class
             </option>
             <option value="gender" className="font-poppins">
               Gender

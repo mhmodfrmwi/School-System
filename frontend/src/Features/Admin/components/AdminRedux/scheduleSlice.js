@@ -12,7 +12,6 @@ const initialState = {
 export const postSchedual = createAsyncThunk(
   "schedules/postSchedual",
   async (schedualData, { rejectWithValue }) => {
-    console.log(schedualData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/schedule/createSchedule",
@@ -62,7 +61,6 @@ export const fetchScheduals = createAsyncThunk(
 export const editSchedualAsync = createAsyncThunk(
   "schedules/editSchedualAsync",
   async ({ id, updatedSchedual }, { rejectWithValue }) => {
-    console.log(updatedSchedual);
     try {
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/schedule/${id}`,
@@ -76,11 +74,11 @@ export const editSchedualAsync = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Failed to edit schedule");
+        const error = await response.json();
+        return rejectWithValue(error.message);
       }
 
       const data = await response.json();
-      console.log(data.schedule);
       return data.schedule;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -191,6 +189,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(removeSchedual.rejected, (state) => {
         state.loading = false;
+        state.error = "Failed to delete schedule";
       })
       .addCase(editSchedualAsync.pending, (state) => {
         state.loading = true;

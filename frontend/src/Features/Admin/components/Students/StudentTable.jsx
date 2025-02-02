@@ -10,7 +10,7 @@ import Header from "./studentHeader";
 import { useNavigate } from "react-router-dom";
 
 const StudentTable = () => {
-  const { students, message} = useSelector((state) => state.students);
+  const { students, message, loading } = useSelector((state) => state.students);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,10 +29,10 @@ const StudentTable = () => {
   const filteredStudents = students.filter((student) => {
     const lowerSearchText = searchText.toLowerCase();
 
-    if (!student.gender || !student.fullName || !student.email) {
-      return false;
-    }
+    // Check if student is valid before accessing its properties
+    if (!student) return false;
 
+    // Filter by fullName or email if no filter option is selected
     if (!filterOption || filterOption === "") {
       return (
         student.fullName.toLowerCase().includes(lowerSearchText) ||
@@ -40,18 +40,17 @@ const StudentTable = () => {
       );
     }
 
+    // Filter by specific field if a filter option is selected
     if (filterOption === "fullName") {
       return student.fullName.toLowerCase().includes(lowerSearchText);
     }
     if (filterOption === "class") {
       return (
-        student.class && student.class.toLowerCase().includes(lowerSearchText)
+        student.classId?.className?.toLowerCase().includes(lowerSearchText)
       );
     }
     if (filterOption === "gender") {
-      return (
-        student.gender && student.gender.toLowerCase().includes(lowerSearchText)
-      );
+      return student.gender?.toLowerCase().includes(lowerSearchText);
     }
 
     return false;
@@ -59,7 +58,7 @@ const StudentTable = () => {
 
   const paginatedStudents = filteredStudents.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleDelete = async (id) => {
@@ -104,101 +103,112 @@ const StudentTable = () => {
         </div>
       )} */}
       <div className="mt-7">
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
-            <thead className="bg-[#117C90] text-white">
-              <tr>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Name
-                </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Student ID
-                </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Email
-                </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Class
-                </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Gender
-                </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="relative">
-              {paginatedStudents.length > 0 ? (
-                paginatedStudents.map((student, index) => (
-                  <tr
-                    key={student._id}
-                    className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
-                  >
-                    <td className="flex items-center px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      <img
-                        src={student.profileImage}
-                        alt="Profile"
-                        className="mr-2 h-8 w-8 rounded-full sm:h-10 sm:w-10"
-                      />
-                      {student.FullName}
-                    </td>
-                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {student.academic_number}
-                    </td>
-                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {student.email}
-                    </td>
-                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {student.classId.className}
-                    </td>
-                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {student.gender}
-                    </td>
-                    <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
-                      <button
-                        onClick={() => handleEdit(student._id)}
-                        className="text-[#117C90] transition hover:text-[#244856]"
-                      >
-                        <i className="far fa-edit" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(student._id)}
-                        className="text-[#E74833] transition hover:text-[#244856]"
-                      >
-                        <i className="far fa-trash-alt" />
-                      </button>
+        {/* Loading state check */}
+        {loading ? (
+          <div className="w-full h-full"></div> // Show loading text or spinner
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
+              <thead className="bg-[#117C90] text-white">
+                <tr>
+                  <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    Name
+                  </th>
+                  <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    Student ID
+                  </th>
+                  <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    Email
+                  </th>
+                  <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    Class
+                  </th>
+                  <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    Gender
+                  </th>
+                  <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="relative">
+                {paginatedStudents.length > 0 ? (
+                  paginatedStudents.map((student, index) => (
+                    <tr
+                      key={student._id}
+                      className={`${
+                        index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
+                      } hover:bg-[#117C90]/70`}
+                    >
+                      <td className="flex items-center px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        <img
+                          src={student.profileImage}
+                          alt="Profile"
+                          className="mr-2 h-8 w-8 rounded-full sm:h-10 sm:w-10"
+                        />
+                        {student.fullName}
+                      </td>
+                      <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        {student.academic_number}
+                      </td>
+                      <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        {student.email}
+                      </td>
+                      <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        {student.classId.className}
+                      </td>
+                      <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        {student.gender}
+                      </td>
+                      <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
+                        <button
+                          onClick={() => handleEdit(student._id)}
+                          className="text-[#117C90] transition hover:text-[#244856]"
+                        >
+                          <i className="far fa-edit" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(student._id)}
+                          className="text-[#E74833] transition hover:text-[#244856]"
+                        >
+                          <i className="far fa-trash-alt" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="6"
+                      className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]"
+                    >
+                      <p className="text-lg font-semibold text-gray-600">
+                        No Students Found
+                      </p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        It seems like there are no students in the database at
+                        the moment.
+                      </p>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                <td colSpan="6" className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]">
-                  <p className="text-lg font-semibold text-gray-600">No Students Found</p>
-                  <p className="text-sm text-gray-500 mt-2">It seems like there are no students in the database at the moment.</p>
-                  
-                </td>
-              </tr>
-              
-              )}
-            </tbody>
-          </table>
-        </div>
-{paginatedStudents.length>0 ? (
-    <div className="mt-7 flex justify-center lg:justify-end">
-    <Pagination
-      totalItems={totalItems}
-      itemsPerPage={itemsPerPage}
-      currentPage={currentPage}
-      onPageChange={handlePageChange}
-    />
-  </div>
-):(
-  null
-)}
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {/* Pagination only shows when students are found */}
+        {paginatedStudents.length > 0 && !loading && (
+          <div className="mt-7 flex justify-center lg:justify-end">
+            <Pagination
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
     </div>
-      
   );
 };
 

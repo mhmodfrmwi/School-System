@@ -4,7 +4,6 @@ import { postParent } from "../AdminRedux/parentSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { fetchStudents } from "../AdminRedux/studentSlice";
-import { toast } from "react-toastify";
 
 function ParentForm() {
   const dispatch = useDispatch();
@@ -49,7 +48,6 @@ function ParentForm() {
     dispatch(postParent(formData))
       .unwrap()
       .then(() => {
-        toast.success("parent added successfully!");
 
         setFormData({
           fullName: "",
@@ -61,7 +59,6 @@ function ParentForm() {
         });
       })
       .catch((error) => {
-        toast.error(error);
       });
   };
 

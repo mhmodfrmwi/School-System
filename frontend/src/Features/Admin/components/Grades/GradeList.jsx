@@ -15,7 +15,7 @@ const GradeList = () => {
   const getColor = (index) => {
     return colors[index % colors.length];
   };
-  const { grades = [] } = useSelector((state) => state.grades);
+  const { grades = [], loading } = useSelector((state) => state.grades);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -50,7 +50,9 @@ const GradeList = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
+  if (loading) {
+    return <div className="w-full h-full"></div>; // Empty div during loading
+  }
   return (
     <div>
       <Header />

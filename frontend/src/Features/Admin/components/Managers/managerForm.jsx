@@ -66,9 +66,6 @@ function ManagerForm() {
         gender: "",
       });
     } catch (error) {
-      toast.error(
-        error.message || "An error occurred while submitting the form.",
-      );
     }
   };
 

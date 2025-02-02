@@ -36,7 +36,6 @@ function EditScheduleForm() {
     endTime: "",
     semesterName: "",
   });
-  console.log(schedules);
   useEffect(() => {
     const schedule = schedules.find((item) => item._id === id);
     if (schedule) {
@@ -53,9 +52,6 @@ function EditScheduleForm() {
       });
     }
   }, [id, schedules]);
-
-  console.log(formData);
-  console.log(formData.academicYear);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -63,7 +59,30 @@ function EditScheduleForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
+    const schedule = schedules.find((item) => item._id === id);
+    
+    // Convert objects to JSON strings for deep comparison
+    const originalData = JSON.stringify({
+      className: schedule.class_id.className,
+      subjectName: schedule.subject_id.subjectName,
+      teacherName: schedule.teacher_id.fullName,
+      grade: schedule.grade_id.gradeName,
+      academicYear: `${schedule.academic_year_id.startYear}/${schedule.academic_year_id.endYear}`,
+      day: schedule.day_of_week,
+      startTime: schedule.start_time,
+      endTime: schedule.end_time,
+      semesterName: schedule.semester_id.semesterName,
+    });
+  
+    const updatedData = JSON.stringify(formData);
+  
+    // If data hasn't changed, do not send the request
+    if (originalData === updatedData) {
+      toast.info("No changes detected.");
+      return;
+    }
+  
     dispatch(editSchedualAsync({ id, updatedSchedual: formData }))
       .unwrap()
       .then(() => {
@@ -74,6 +93,7 @@ function EditScheduleForm() {
         toast.error(error);
       });
   };
+  
 
   useEffect(() => {
     dispatch(fetchTeachers());

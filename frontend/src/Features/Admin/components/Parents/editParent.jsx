@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editParentAsync } from "../AdminRedux/parentSlice";
-import { toast } from "react-toastify";
 
 const EditParentForm = () => {
   const { id } = useParams();
@@ -43,16 +42,13 @@ const EditParentForm = () => {
       ...formData,
       students: [],
     };
-    console.log("ahmed", updatedData);
 
     dispatch(editParentAsync({ id, updatedParent: updatedData }))
       .unwrap()
       .then(() => {
-        toast.success("parent updated successfully!");
         navigate("/admin/allparents");
       })
       .catch((error) => {
-        toast.error(error);
       });
   };
   return (
