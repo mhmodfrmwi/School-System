@@ -2,6 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const Material = require("../../DB/materielModel");
+const BookMarkForMaterial = require("../../DB/bookMarkForMaterialModel");
 const getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear =
   expressAsyncHandler(async (req, res) => {
     const gradeSubjectSemesterId = req.params.id;
@@ -27,10 +28,24 @@ const getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear =
       .populate("grade_id")
       .populate("academic_year_id")
       .populate("semester_id");
+
+    const subjectMaterielsWithBookmarkAttribute = await Promise.all(
+      subjectMateriels.map(async (materiel) => {
+        const isBookmarked = await BookMarkForMaterial.findOne({
+          student_id: req.user.id,
+          material_id: materiel._id,
+        });
+
+        return {
+          ...materiel.toObject(),
+          isBookmarked: !!isBookmarked,
+        };
+      })
+    );
     return res.status(200).json({
       status: 200,
       message: "Materiel retrieved successfully",
-      materiels: subjectMateriels,
+      materiels: subjectMaterielsWithBookmarkAttribute,
     });
   });
 module.exports = {
