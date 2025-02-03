@@ -15,7 +15,16 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { title, subjectName, academicYear, grade, semester, startTime, duration, link } = req.body;
+  const {
+    title,
+    subjectName,
+    academicYear,
+    grade,
+    semester,
+    startTime,
+    duration,
+    link,
+  } = req.body;
 
   const [startYear, endYear] = academicYear.split("-").map(Number);
 
@@ -35,7 +44,7 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const gradeDoc = await Grade.findOne({gradeName: grade });
+  const gradeDoc = await Grade.findOne({ gradeName: grade });
   console.log(grade);
   if (!gradeDoc) {
     return res.status(404).json({
@@ -44,7 +53,10 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const semesterDoc = await Semester.findOne({ semesterName:semester });
+  const semesterDoc = await Semester.findOne({
+    semesterName: semester,
+    academicYear_id: academicYearRecord._id,
+  });
   if (!semesterDoc) {
     return res.status(404).json({
       status: 404,
@@ -102,7 +114,16 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { title, subjectName, academicYear, grade, semester, startTime, duration, link } = req.body;
+  const {
+    title,
+    subjectName,
+    academicYear,
+    grade,
+    semester,
+    startTime,
+    duration,
+    link,
+  } = req.body;
   console.log(grade);
   const [startYear, endYear] = academicYear.split("-").map(Number);
 
@@ -130,7 +151,7 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const gradeDoc = await Grade.findOne({ gradeName : grade });
+  const gradeDoc = await Grade.findOne({ gradeName: grade });
   if (!gradeDoc) {
     return res.status(404).json({
       status: 404,
@@ -138,7 +159,10 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const semesterDoc = await Semester.findOne({ semesterName:semester });
+  const semesterDoc = await Semester.findOne({
+    semesterName: semester,
+    academicYear_id: academicYearRecord._id,
+  });
   if (!semesterDoc) {
     return res.status(404).json({
       status: 404,
