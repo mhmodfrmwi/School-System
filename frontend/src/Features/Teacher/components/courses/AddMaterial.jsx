@@ -1,14 +1,17 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faVideo,faBook,faTasks,faFileAlt,faPlus,faEye,} from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { faVideo, faBook, faTasks, faFileAlt, faPlus, faEye } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddMaterial = () => {
   const navigate = useNavigate();
-  const handleAddClick = () => {
-        navigate("/teacher/materialform");
-      };
+
+  const handleAddClick = (courseName) => {
+    if (courseName === "Video Lectures" || courseName === "Course Material") {
+      navigate("/teacher/materialform");
+    }
+  };
+
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
     { id: 1, name: "Video Lectures", total: 26, icon: faVideo },
@@ -16,9 +19,7 @@ const AddMaterial = () => {
     { id: 3, name: "Assignments", total: 100, icon: faTasks },
     { id: 4, name: "Exams", total: 19, icon: faFileAlt },
   ];
-  const getColor = (index) => {
-    return colors[index % colors.length];
-  };
+  const getColor = (index) => colors[index % colors.length];
 
   return (
     <div>
@@ -28,39 +29,23 @@ const AddMaterial = () => {
             English Language - Grade 1
           </div>
           {courses.map((course, index) => (
-            <div
-              key={course.id}
-              className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full"
-            >
+            <div key={course.id} className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full">
               <div className="flex items-center">
-                <div
-                  className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
-                  style={{ backgroundColor: `${getColor(index)}33` }}
-                >
-                  <FontAwesomeIcon className="h-5 w-5"
-                    icon={course.icon} 
-                    style={{ color: getColor(index) }}
-                  />
+                <div className="flex items-center justify-center w-10 h-10 rounded-full mr-4" style={{ backgroundColor: `${getColor(index)}33` }}>
+                  <FontAwesomeIcon className="h-5 w-5" icon={course.icon} style={{ color: getColor(index) }} />
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="m-0 text-lg font-poppins font-semibold text-gray-600">
-                    {course.name}
-                  </p>
+                  <p className="m-0 text-lg font-poppins font-semibold text-gray-600">{course.name}</p>
                   <p className="text-gray-500 font-poppins text-sm">Total: {course.total}</p>
                 </div>
               </div>
 
               <div className="flex">
-                <Link
-                  to={`/teacher/seematerial`}
-                  className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
-                >
+                <Link to={`/teacher/seematerial`} className="border-none bg-none text-[#117C90] cursor-pointer mr-2">
                   <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
                 </Link>
-                <button onClick={handleAddClick} 
-                  className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
-                >
+                <button onClick={() => handleAddClick(course.name)} className="border-none bg-none text-[#117C90] cursor-pointer mr-2">
                   <FontAwesomeIcon icon={faPlus} className="text-lg" />
                 </button>
               </div>
