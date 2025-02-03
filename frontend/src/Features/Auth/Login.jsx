@@ -1,58 +1,28 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "./AuthRedux/loginSlice";
 import Img2 from "../../assets/loginImg2.png";
 import logo from "../../assets/logologin.png";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "./AuthRedux/userSlice";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
   const dispatch = useDispatch();
-  const { email: userEmail, password: userPassword } = useSelector(
-    (state) => state.user
-  );
-
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password) => {
-    return password.length >= 6; // Example: Minimum 6 characters
-  };
+  const { loading, error } = useSelector((state) => state.login);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Reset errors
-    setEmailError("");
-    setPasswordError("");
-
-    // Validate inputs
-    let isValid = true;
-    if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address.");
-      isValid = false;
+    if (!email.includes("@")) {
+      alert("Please enter a valid email address.");
+      return;
     }
-    if (!validatePassword(password)) {
-      setPasswordError("Password must be at least 6 characters long.");
-      isValid = false;
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
     }
 
-    if (!isValid) return;
-
-    // Mock authentication logic
-    if (email === userEmail && password === userPassword) {
-      alert("Login successful!");
-      dispatch(updateUser(email, password)); // Save user session
-    } else {
-      alert("Invalid email or password.");
-    }
-
-    setEmail("");
-    setPassword("");
+    dispatch(loginUser({ email, password }));
   };
 
   return (
@@ -67,7 +37,9 @@ function Login() {
             <h2 className="text-2xl font-poppins text-[#F25019]">Learnova</h2>
           </div>
 
-          <h1 className="mb-8 text-3xl font-poppins font-bold text-[#F25019]">Login</h1>
+          <h1 className="mb-8 text-3xl font-poppins font-bold text-[#F25019]">
+            Login
+          </h1>
 
           <div className="mb-4 w-full">
             <label htmlFor="email" className="mb-1 font-poppins block font-semibold">
@@ -79,14 +51,9 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="username@gmail.com"
-              className={`w-full rounded-lg font-poppins border ${
-                emailError ? "border-red-500" : "border-gray-300"
-              } px-4 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500`}
+              className="w-full rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
               required
             />
-            {emailError && (
-              <p className="mt-1 text-sm text-red-500">{emailError}</p>
-            )}
           </div>
 
           <div className="mb-6 w-full">
@@ -99,34 +66,24 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className={`w-full font-poppins rounded-lg border ${
-                passwordError ? "border-red-500" : "border-gray-300"
-              } px-4 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500`}
+              className="w-full rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
               required
             />
-            {passwordError && (
-              <p className="mt-1 text-sm text-red-500">{passwordError}</p>
-            )}
           </div>
 
-          <p className="mb-6 w-full font-poppins text-right text-sm  text-[#F25019]">
-            Forgot password?
-          </p>
+          {error && <p className="text-red-500">{error}</p>}
 
           <button
             type="submit"
-            className="w-full font-poppins rounded-lg bg-[#F25019] px-4 py-2 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
+            className="w-full rounded-lg bg-[#F25019] px-4 py-2 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-500"
+            disabled={loading}
           >
-            Sign In
+            {loading ? "Logging in..." : "Sign In"}
           </button>
         </form>
 
         <div className="hidden h-full w-full lg:flex lg:items-center lg:justify-center">
-          <img
-            src={Img2}
-            alt="Login Illustration"
-            className="h-full w-full rounded-r-lg object-cover"
-          />
+          <img src={Img2} alt="Login Illustration" className="h-full w-full rounded-r-lg object-cover" />
         </div>
       </div>
     </section>

@@ -17,6 +17,7 @@ import assignSubjectReducer from "./Features/Admin/components/AdminRedux/AssignS
 import assignGradeReducer from "./Features/Admin/components/AdminRedux/AssignGradeSlice";
 import classReducer from "./Features/Admin/components/AdminRedux/classSlice";
 import studentScheduleReducer from "./Features/Student/components/StudentRedux/studentScheduleSlice";
+import loginReducer from "./Features/Auth/AuthRedux/loginSlice";
 
 const store = configureStore({
   reducer: {
@@ -37,6 +38,7 @@ const store = configureStore({
     assignGrade: assignGradeReducer,
     classes: classReducer,
     studentSchedule: studentScheduleReducer,
+    login: loginReducer,
   },
 });
 
