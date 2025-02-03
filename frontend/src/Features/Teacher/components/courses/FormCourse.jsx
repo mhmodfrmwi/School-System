@@ -22,19 +22,19 @@ const MaterialForm = () => {
     fileUrl: "",
     academicYear: "",
     grade: "",
-    subject: "", 
-    semester: "" 
+    subject: "",
+    semester: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
 
     if (name === "academicYear") {
-      const formattedYear = value.replace("-", "/"); 
+      const formattedYear = value.replace("-", "/");
       console.log("Selected Academic Year:", formattedYear);
     }
   };
@@ -48,41 +48,38 @@ const MaterialForm = () => {
       return;
     }
 
-  
     if (formData.type !== "Link" && !formData.fileUrl) {
       toast.error("File URL is required for this type");
       return;
     }
 
-
-    if (!formData.subject) { 
+    if (!formData.subject) {
       toast.error("Subject is required");
       return;
     }
 
-
-    if (!formData.semester) { 
+    if (!formData.semester) {
       toast.error("Semester is required");
       return;
     }
 
-   
+    console.log("Form Data:", formData); 
+
     dispatch(postPdfMaterial(formData))
       .unwrap()
       .then(() => {
-        toast.success("Material added successfully!");
         setFormData({
           title: "",
           type: "PDF",
           fileUrl: "",
           academicYear: "",
           grade: "",
-          subject: "", 
-          semester: "" 
+          subject: "",
+          semester: "",
         });
       })
       .catch((error) => {
-        toast.error(error);
+        toast.error(error.message || "An error occurred"); 
       });
   };
 
@@ -95,7 +92,7 @@ const MaterialForm = () => {
 
   return (
     <>
-      <ToastContainer /> 
+      <ToastContainer />
       <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
         <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
           Upload Material
