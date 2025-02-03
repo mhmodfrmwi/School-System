@@ -66,7 +66,10 @@ const createGradeSubjectSemester = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const semester = await Semester.findOne({ semesterName });
+  const semester = await Semester.findOne({
+    semesterName,
+    academicYear_id: academicYearRecord._id,
+  });
   if (!semester) {
     return res.status(404).json({
       status: 404,
@@ -164,7 +167,10 @@ const updateGradeSubjectSemester = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const semester = await Semester.findOne({ semesterName });
+  const semester = await Semester.findOne({
+    semesterName,
+    academicYear_id: academicYearRecord._id,
+  });
   if (!semester) {
     return res.status(404).json({
       status: 404,

@@ -8,6 +8,8 @@ const Teacher = require("../../DB/teacher");
 const AcademicYear = require("../../DB/academicYearModel");
 const Schedule = require("../../DB/schedule");
 const Semester = require("../../DB/semesterModel");
+const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const GradeSubject = require("../../DB/gradeSubject");
 
 const createSchedule = expressAsyncHandler(async (req, res) => {
   const { error } = scheduleValidationSchema.validate(req.body);
@@ -63,7 +65,29 @@ const createSchedule = expressAsyncHandler(async (req, res) => {
       message: "Semester not found",
     });
   }
+  const existingGradeSubject = await GradeSubject.findOne({
+    subjectId: existingSubject._id,
+    gradeId: grade._id,
+    academicYear_id: academicYear._id,
+  });
+  if (!existingGradeSubject) {
+    return res.status(404).json({
+      status: 404,
+      message: "This subject not found for this grade",
+    });
+  }
 
+  const existingGradeSubjectSemester = await GradeSubjectSemester.findOne({
+    grade_subject_id: existingGradeSubject._id,
+    semester_id: semester._id,
+  });
+
+  if (!existingGradeSubjectSemester) {
+    return res.status(404).json({
+      status: 404,
+      message: "This grade subject not found for this semester",
+    });
+  }
   const existingClass = await Class.findOne({
     className: req.body.className,
     gradeId: grade._id,
@@ -184,6 +208,7 @@ const updateSchedule = expressAsyncHandler(async (req, res) => {
   }
   const semester = await Semester.findOne({
     semesterName: req.body.semesterName,
+    academicYear_id: academicYear._id,
   });
   if (!semester) {
     return res.status(404).json({

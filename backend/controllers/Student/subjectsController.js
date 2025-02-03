@@ -1,20 +1,15 @@
 const expressAsyncHandler = require("express-async-handler");
+const moment = require("moment");
+
 const student = require("../../DB/student");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const GradeSubject = require("../../DB/gradeSubject");
 const Semester = require("../../DB/semesterModel");
+const AcademicYear = require("../../DB/academicYearModel");
 
 const getSubjectsAcademicYearAndGradeAndSemester = expressAsyncHandler(
   async (req, res) => {
     const studentId = req.user.id;
-    const semesterName = req.body.semester;
-
-    if (!semesterName) {
-      return res.status(400).json({
-        status: 400,
-        message: "Semester is required",
-      });
-    }
 
     const studentRecord = await student
       .findById(studentId)
@@ -27,11 +22,34 @@ const getSubjectsAcademicYearAndGradeAndSemester = expressAsyncHandler(
         message: "Student not found",
       });
     }
+    const currentYear = moment().year().toString().slice(-2);
+    const currentMonth = moment().month() + 1;
+    let startYear;
+    if (currentMonth >= 9 && currentMonth <= 12) {
+      startYear = "20" + parseInt(currentYear);
+      endYear = "20" + (parseInt(currentYear) + 1);
+    } else {
+      startYear = "20" + (parseInt(currentYear) - 1);
+      endYear = "20" + parseInt(currentYear);
+    }
 
-    const { gradeId, academicYear_id: academicYearId } = studentRecord;
+    let semester_name;
+    if (currentMonth >= 9 && currentMonth <= 12) {
+      semester_name = "Semester 1";
+    } else {
+      semester_name = "Semester 2";
+    }
 
+    const academic_year = await AcademicYear.findOne({ startYear, endYear });
+    if (!academic_year) {
+      return res.status(404).json({
+        status: 404,
+        message: "Academic year not found",
+      });
+    }
+    const academicYearId = academic_year._id;
     const semester = await Semester.findOne({
-      semesterName,
+      semesterName: semester_name,
       academicYear_id: academicYearId,
     });
 
@@ -41,6 +59,7 @@ const getSubjectsAcademicYearAndGradeAndSemester = expressAsyncHandler(
         message: "Semester not found in the given academic year",
       });
     }
+    const gradeId = studentRecord.gradeId._id;
 
     const gradeSubjectIds = await GradeSubject.find({
       gradeId,

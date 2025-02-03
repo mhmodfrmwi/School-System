@@ -52,7 +52,15 @@ const getScheduleForSpecificStudent = expressAsyncHandler(async (req, res) => {
     grade_id,
     academic_year_id,
     semester_id: semester._id,
-  });
+  })
+    .populate("subject_id")
+    .populate("grade_id")
+    .populate("academic_year_id")
+    .populate("semester_id")
+    .populate("teacher_id")
+    .populate("class_id")
+    .populate("grade_id")
+    .populate("academic_year_id");
   res.status(200).json({ status: 200, schedules });
 });
 module.exports = { getScheduleForSpecificStudent };
