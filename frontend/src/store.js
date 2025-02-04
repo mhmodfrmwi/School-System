@@ -20,6 +20,7 @@ import loginReducer from "./Features/Auth/AuthRedux/loginSlice";
 import attendanceTeacheReducer from "./Features/Teacher/components/TeacherRedux/takeAttendanceSlice";
 import allSubjectsStudentReducer from "./Features/Student/components/StudentRedux/allSubjectsStudentSlice";
 import pdfMaterialsReducer from "./Features/Teacher/components/TeacherRedux/PdfMaterialSlice";
+import tripsReducer from "./Features/Teacher/components/TeacherRedux/TripsSlice";
 
 const store = configureStore({
   reducer: {
@@ -44,6 +45,7 @@ const store = configureStore({
     login: loginReducer,
     allSubjectsStudent: allSubjectsStudentReducer,
     pdfMaterials: pdfMaterialsReducer,
+    trips:tripsReducer,
   },
 });
 

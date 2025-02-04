@@ -173,7 +173,7 @@ const Activities = lazy(
   () => import("./Features/Student/components/Activites/Activites"),
 );
 const Contests = lazy(
-  () => import("./Features/Student/components/Activites/Contests"),
+  () => import("./Features/Student/components/Activites/Trips"),
 );
 const VirtualRooms = lazy(
   () => import("./Features/Student/components/Virtual Rooms/VirtualRooms"),
@@ -218,7 +218,7 @@ const SchoolHubsPrizes = lazy(
   () => import("./Features/Teacher/components/Activities/SchoolHubsPrizes"),
 );
 const ActivityContests = lazy(
-  () => import("./Features/Teacher/components/Activities/Contests"),
+  () => import("./Features/Teacher/components/Activities/TripsOfTeacher"),
 );
 const ActivityForm = lazy(
   () => import("./Features/Teacher/components/Activities/AddActivityForm"),

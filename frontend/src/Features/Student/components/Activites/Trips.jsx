@@ -1,27 +1,37 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import activityImage from "../../../../assets/activity3.png";
-
+import React, { useEffect  } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTrips, clearMessage } from "../../../Teacher/components/TeacherRedux/TripsSlice";
 const Contests = () => {
   const navigate = useNavigate();
-  const [score] = useState([
-    {},
-    {},
-    {},
-    {},
-    {},
-  ]);
+  const { trips, message, loading } = useSelector((state) => state.trips);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+      dispatch(fetchTrips());
+  }, [dispatch]);
+
+  useEffect(() => {
+      if (message) {
+          setTimeout(() => {
+              dispatch(clearMessage());
+          }, 5000);
+      }
+  }, [message, dispatch]);
+
+
+  if (loading) {
+      return <div className="w-full h-full"></div>; 
+  }
+
   return (
     <>
       <div className="col-span-2 flex flex-col justify-between ms-5">
-        {/* العنوان */}
         <div className="text-2xl font-poppins cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-1 font-bold text-transparent ms-7 mt-5">
           Activities
         </div>
-        {/* الخط */}
         <p className="w-24 rounded-xl mb-2 border-t-4 border-[#BC6FFB] ms-7"></p>
-
-        {/* الأزرار */}
         <div className="mb-6 mt-4 flex flex-col sm:flex-row items-center gap-4">
           <button
             className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 text-lg font-medium text-transparent"
@@ -34,7 +44,7 @@ const Contests = () => {
             className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 text-lg font-medium text-white focus:outline-none"
             onClick={() => navigate("/student/activities/contests")}
           >
-            Contests
+            Trips
           </button>
         </div>
 
@@ -66,15 +76,15 @@ const Contests = () => {
             </tr>
           </thead>
           <tbody>
-            {score.map((row, index) => (
+            {trips.map((row, index) => (
               <tr key={index} className="hover:bg-gray-100">
-                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
+                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{index.title}</td>
+                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{index.coach}</td>
+                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{index.startDate}</td>
+                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{index.endDate}</td>
+                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{index.numberOfSeats}</td>
+                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{index.fees}</td>
+                <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{index.requirements}</td>
                 <td className="border flex items-center justify-center border-[#FFA4A4] px-4 py-2">
                   <button className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-2xl px-4 py-2 text-xs text-white sm:text-sm">
                     Enter
