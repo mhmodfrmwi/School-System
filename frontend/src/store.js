@@ -1,6 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-import userReducer from "./Features/Auth/AuthRedux/userSlice";
 import studentReducer from "./Features/Admin/components/AdminRedux/studentSlice";
 import addstudentReducer from "./Features/Admin/components/AdminRedux/studentSlice";
 import termReducer from "./Features/Admin/components/AdminRedux/termSlice";
@@ -17,13 +15,14 @@ import assignSubjectReducer from "./Features/Admin/components/AdminRedux/AssignS
 import assignGradeReducer from "./Features/Admin/components/AdminRedux/AssignGradeSlice";
 import classReducer from "./Features/Admin/components/AdminRedux/classSlice";
 import studentAttendanceReducer from "./Features/Student/components/StudentRedux/studentAttendanceSlice";
+import studentScheduleReducer from "./Features/Student/components/StudentRedux/studentAttendanceSlice";
 import loginReducer from "./Features/Auth/AuthRedux/loginSlice";
 import attendanceTeacheReducer from "./Features/Teacher/components/TeacherRedux/takeAttendanceSlice";
+import allSubjectsStudentReducer from "./Features/Student/components/StudentRedux/allSubjectsStudentSlice";
+import pdfMaterialsReducer from "./Features/Teacher/components/TeacherRedux/PdfMaterialSlice";
 
 const store = configureStore({
   reducer: {
-    login: loginReducer,
-    user: userReducer,
     admins: adminReducer,
     managers: managerReducer,
     parents: parentReducer,
@@ -41,6 +40,10 @@ const store = configureStore({
     classes: classReducer,
     studentAttendance: studentAttendanceReducer,
     attendanceTeacher: attendanceTeacheReducer,
+    studentSchedule: studentScheduleReducer,
+    login: loginReducer,
+    allSubjectsStudent: allSubjectsStudentReducer,
+    pdfMaterials: pdfMaterialsReducer,
   },
 });
 
