@@ -1,6 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-import userReducer from "./Features/Auth/AuthRedux/userSlice";
 import studentReducer from "./Features/Admin/components/AdminRedux/studentSlice";
 import addstudentReducer from "./Features/Admin/components/AdminRedux/studentSlice";
 import termReducer from "./Features/Admin/components/AdminRedux/termSlice";
@@ -23,7 +21,6 @@ import pdfMaterialsReducer from "./Features/Teacher/components/TeacherRedux/PdfM
 
 const store = configureStore({
   reducer: {
-    user: userReducer,
     admins: adminReducer,
     managers: managerReducer,
     parents: parentReducer,
@@ -41,6 +38,8 @@ const store = configureStore({
     classes: classReducer,
     studentSchedule: studentScheduleReducer,
     login: loginReducer,
+    allSubjectsStudent: allSubjectsStudentReducer,
+    pdfMaterials: pdfMaterialsReducer,
   },
 });
 
