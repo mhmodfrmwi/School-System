@@ -15,7 +15,7 @@ import assignSubjectReducer from "./Features/Admin/components/AdminRedux/AssignS
 import assignGradeReducer from "./Features/Admin/components/AdminRedux/AssignGradeSlice";
 import classReducer from "./Features/Admin/components/AdminRedux/classSlice";
 import studentAttendanceReducer from "./Features/Student/components/StudentRedux/studentAttendanceSlice";
-import studentScheduleReducer from "./Features/Student/components/StudentRedux/studentAttendanceSlice";
+import studentScheduleReducer from "./Features/Student/components/StudentRedux/studentScheduleSlice";
 import loginReducer from "./Features/Auth/AuthRedux/loginSlice";
 import attendanceTeacheReducer from "./Features/Teacher/components/TeacherRedux/takeAttendanceSlice";
 import allSubjectsStudentReducer from "./Features/Student/components/StudentRedux/allSubjectsStudentSlice";
