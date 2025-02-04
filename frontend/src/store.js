@@ -16,11 +16,13 @@ import gradeReducer from "./Features/Admin/components/AdminRedux/gradeSlice";
 import assignSubjectReducer from "./Features/Admin/components/AdminRedux/AssignSubjectSlice";
 import assignGradeReducer from "./Features/Admin/components/AdminRedux/AssignGradeSlice";
 import classReducer from "./Features/Admin/components/AdminRedux/classSlice";
-import studentScheduleReducer from "./Features/Student/components/StudentRedux/studentScheduleSlice";
+import studentAttendanceReducer from "./Features/Student/components/StudentRedux/studentAttendanceSlice";
 import loginReducer from "./Features/Auth/AuthRedux/loginSlice";
+import attendanceTeacheReducer from "./Features/Teacher/components/TeacherRedux/takeAttendanceSlice";
 
 const store = configureStore({
   reducer: {
+    login: loginReducer,
     user: userReducer,
     admins: adminReducer,
     managers: managerReducer,
@@ -37,8 +39,8 @@ const store = configureStore({
     grades: gradeReducer,
     assignGrade: assignGradeReducer,
     classes: classReducer,
-    studentSchedule: studentScheduleReducer,
-    login: loginReducer,
+    studentAttendance: studentAttendanceReducer,
+    attendanceTeacher: attendanceTeacheReducer,
   },
 });
 

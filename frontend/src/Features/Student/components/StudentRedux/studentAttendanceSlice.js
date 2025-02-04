@@ -2,27 +2,27 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
-  studentSchedule: [],
+  studentAttendance: [],
   status: "idle",
   error: null,
   loading: false,
   message: null,
 };
 
-export const fetchStudentSchedule = createAsyncThunk(
-  "studentSchedule/fetchStudentSchedule",
+export const fetchStudentAttendance = createAsyncThunk(
+  "studentAttendance/fetchStudentAttendance",
   async (_, { rejectWithValue }) => {
     try {
       // const token =
-      //   localStorage.getItem("token") || sessionStorage.getItem("token");
+      //   localStorage.getItem("token")
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OWY2ZjliYmNjNzkwYTA1MWYyZTc5YSIsImVtYWlsIjoiYWhtZWR6YWthcmlhQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzM4NTAzMjg4LCJleHAiOjE3Mzg1MDQyODh9.-ZG611JXsMSJtmZVnzhOXzp781NyZmKGC1AwTUmNgI4";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTE4ODI2NjIyYjQ2Y2U5ZTM0NzJmYyIsImVtYWlsIjoiQWhtZWRoYWJpYkBnbWFpbC5jb20iLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTczODYzOTQwOCwiZXhwIjoxNzM4NzI1ODA4fQ.Ns_-QYUmtWRNiKLT_NgqNTuTBhdMDBErnEnWZcO4T4s";
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
 
       const response = await fetch(
-        "http://localhost:4000/api/v1/student/get-schedule",
+        "http://localhost:4000/api/v1/student/get-attendance",
         {
           method: "GET",
           headers: {
@@ -42,7 +42,7 @@ export const fetchStudentSchedule = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.schedules;
+      return data.studentAttendance;
     } catch (error) {
       return rejectWithValue(
         error.message || "Network error. Please check your connection.",
@@ -51,8 +51,8 @@ export const fetchStudentSchedule = createAsyncThunk(
   },
 );
 
-const studentScheduleSlice = createSlice({
-  name: "studentSchedule",
+const studentAttendanceSlice = createSlice({
+  name: "studentAttendance",
   initialState,
   reducers: {
     clearMessage: (state) => {
@@ -61,18 +61,18 @@ const studentScheduleSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchStudentSchedule.pending, (state) => {
+      .addCase(fetchStudentAttendance.pending, (state) => {
         state.status = "loading";
         state.loading = true;
       })
-      .addCase(fetchStudentSchedule.fulfilled, (state, action) => {
+      .addCase(fetchStudentAttendance.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.studentSchedule = action.payload;
+        state.studentAttendance = action.payload;
         state.loading = false;
       })
-      .addCase(fetchStudentSchedule.rejected, (state, action) => {
+      .addCase(fetchStudentAttendance.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to fetch studentSchedule";
+        state.error = action.payload || "Failed to fetch studentAttendance";
         state.loading = false;
         if (state.error.includes("NetworkError")) {
         } else {
@@ -82,5 +82,5 @@ const studentScheduleSlice = createSlice({
   },
 });
 
-export const { clearMessage } = studentScheduleSlice.actions;
-export default studentScheduleSlice.reducer;
+export const { clearMessage } = studentAttendanceSlice.actions;
+export default studentAttendanceSlice.reducer;

@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { FaRegHourglass } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudentAttendance } from "../StudentRedux/studentAttendanceSlice";
 
 const AttendancePage = () => {
+  const { studentAttendance } = useSelector((state) => state.studentAttendance);
   const [currentDate, setCurrentDate] = useState(dayjs());
+  const dispatch = useDispatch();
 
-  const totalSessions = 7;
-  const presentCount = 6;
-  const absentCount = 1;
+  useEffect(() => {
+    dispatch(fetchStudentAttendance());
+  }, [dispatch]);
 
+  const totalSessions = 90;
+  const presentCount = studentAttendance.filter((s) => s.status === "P").length;
+  const absentCount = totalSessions - presentCount;
   const presentPercentage = (presentCount / totalSessions) * 100;
 
   const startOfWeek = currentDate.startOf("week");
   const days = Array.from({ length: 7 }, (_, i) =>
-    startOfWeek.add(i, "day").format("dddd DD"),
+    startOfWeek.add(i, "day").format("YYYY-MM-DD"),
   );
 
   const handlePreviousWeek = () => {
@@ -24,22 +30,17 @@ const AttendancePage = () => {
     setCurrentDate(currentDate.add(7, "day"));
   };
 
-  const schedule = [
-    { time: "08:00", subject: "English", day: "Monday", attended: true },
-    { time: "10:00", subject: "Art", day: "Monday", attended: true },
-    { time: "11:00", subject: "Arabic", day: "Monday", attended: false },
-    { time: "12:00", subject: "Math", day: "Monday", attended: true },
-    { time: "01:00", subject: "History", day: "Monday", attended: true },
-    { time: "02:00", subject: "Science", day: "Monday", attended: true },
-    { time: "03:00", subject: "Music", day: "Monday", attended: false },
-  ];
-
-  const today = dayjs().format("dddd DD");
+  const groupedAttendance = studentAttendance.reduce((acc, record) => {
+    const key = record.academic_number;
+    if (!acc[key]) acc[key] = { academic_number: key, attendance: {} };
+    acc[key].attendance[dayjs(record.date).format("YYYY-MM-DD")] =
+      record.status;
+    return acc;
+  }, {});
 
   return (
     <div className="mt-10 flex min-h-screen items-start justify-center p-8 font-poppins">
       <div className="w-[90%]">
-        {/* Attendance Level Section */}
         <div className="mb-8">
           <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-3xl font-semibold text-transparent">
             Attendance Level
@@ -68,7 +69,6 @@ const AttendancePage = () => {
           </div>
         </div>
 
-        {/* Calendar Section */}
         <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md">
           <table className="min-w-full table-auto bg-white p-6 shadow-md">
             <thead>
@@ -77,7 +77,7 @@ const AttendancePage = () => {
                   <div className="mb-6 mr-6 mt-6 flex flex-nowrap items-center justify-end">
                     <button
                       onClick={handlePreviousWeek}
-                      className="rounded-xl border border-2 border-[#FFB7B7] bg-white px-2 py-2 font-medium text-[#FFB7B7] hover:text-gray-800"
+                      className="rounded-xl border-2 border-[#FFB7B7] bg-white px-2 py-2 font-medium text-[#FFB7B7] hover:text-gray-800"
                     >
                       &lt;
                     </button>
@@ -87,7 +87,7 @@ const AttendancePage = () => {
                     </h2>
                     <button
                       onClick={handleNextWeek}
-                      className="rounded-xl border border-2 border-[#FFB7B7] bg-white px-2 py-2 font-medium text-[#FFB7B7] hover:text-gray-800"
+                      className="rounded-xl border-2 border-[#FFB7B7] bg-white px-2 py-2 font-medium text-[#FFB7B7] hover:text-gray-800"
                     >
                       &gt;
                     </button>
@@ -98,53 +98,40 @@ const AttendancePage = () => {
 
             <tbody>
               <tr>
-                <th className="border-b border-gray-200 px-4 py-4 text-left text-gray-700">
-                  <FaRegHourglass className="inline-block h-5 w-5 text-teal-500" />{" "}
-                  {/* Hourglass Icon */}
+                <th className="border-b border-gray-200 px-2 py-4 text-center text-gray-700">
+                  Academic Number
                 </th>
                 {days.map((day, index) => (
                   <th
                     key={index}
-                    className={`border-b border-l border-gray-200 px-4 py-2 text-center text-gray-700 ${
-                      day === today ? "bg-gray-100" : ""
-                    }`}
+                    className="border-b border-l border-gray-200 px-4 py-2 text-center text-gray-700"
                   >
-                    {day}
+                    {dayjs(day).format("dddd DD")}
                   </th>
                 ))}
               </tr>
-              {/* Time Slots */}
-              {schedule.map((session, index) => (
+
+              {Object.values(groupedAttendance).map((student, index) => (
                 <tr key={index} className="border-b border-gray-200">
                   <td className="px-4 py-4 font-medium text-gray-700">
-                    {session.time}
+                    {student.academic_number}
                   </td>
-                  {days.map((day, dayIndex) => (
-                    <td
-                      key={dayIndex}
-                      className={`border-l border-gray-200 px-4 py-4 text-center ${
-                        day === today ? "bg-gray-100" : ""
-                      }`}
-                    >
-                      {day.includes(session.day) && (
-                        <div
-                          className={`flex items-center justify-center rounded-lg p-4 ${
-                            session.attended ? "bg-green-100" : "bg-red-100"
-                          } ${session.attended ? "border border-green-400" : "border border-red-400"}`}
-                        >
-                          <span
-                            className={`font-medium ${
-                              session.attended
-                                ? "text-green-600"
-                                : "text-red-600"
-                            }`}
-                          >
-                            {session.subject}
-                          </span>
-                        </div>
-                      )}
-                    </td>
-                  ))}
+
+                  {days.map((day, dayIndex) => {
+                    const status = student.attendance[day] || "";
+                    return (
+                      <td
+                        key={dayIndex}
+                        className={`border-l border-gray-200 px-4 py-4 text-center ${
+                          status === "P"
+                            ? "bg-green-600 font-bold text-white"
+                            : "bg-red-600 font-bold text-white"
+                        }`}
+                      >
+                        {status === "P" ? "P" : "A"}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>

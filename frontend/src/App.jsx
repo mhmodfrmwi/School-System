@@ -4,8 +4,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
+import TakeAttendance from "./Features/Teacher/components/Attendance/takeAttendance";
 
-const Teachers = lazy(() => import( "./Features/Teacher/pages/Teacher"));
+const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
 const OnBoarding = lazy(() => import("./Features/Auth/OnBoarding"));
 const ChooseRole = lazy(() => import("./Features/Auth/ChooseRole"));
@@ -125,7 +126,7 @@ const GradesDetails = lazy(
 );
 const EditAssignedGrade = lazy(
   () => import("./Features/Admin/components/Grades/EditAssignedGrade"),
-)
+);
 const AssignSubject = lazy(
   () => import("./Features/Admin/components/Subjects/AssignSubject"),
 );
@@ -229,12 +230,21 @@ const WeeklySchedule = lazy(
 const ExamSchedule = lazy(
   () => import("./Features/Teacher/components/Schedule/ExamSchedule"),
 );
-const AddMaterial = lazy(() => import( "./Features/Teacher/components/courses/AddMaterial"));
-const AllCourses = lazy(() => import("./Features/Teacher/components/courses/AllCourses"));
-const CurrentCourse = lazy(() => import( "./Features/Teacher/components/courses/CurrentCourses"));
-const MaterialForm = lazy(() => import( "./Features/Teacher/components/courses/FormCourse"));
-const SeeMaterial = lazy(() => import( "./Features/Teacher/components/courses/SeeMaterial"));
-
+const AddMaterial = lazy(
+  () => import("./Features/Teacher/components/courses/AddMaterial"),
+);
+const AllCourses = lazy(
+  () => import("./Features/Teacher/components/courses/AllCourses"),
+);
+const CurrentCourse = lazy(
+  () => import("./Features/Teacher/components/courses/CurrentCourses"),
+);
+const MaterialForm = lazy(
+  () => import("./Features/Teacher/components/courses/FormCourse"),
+);
+const SeeMaterial = lazy(
+  () => import("./Features/Teacher/components/courses/SeeMaterial"),
+);
 
 function App() {
   return (
@@ -295,7 +305,10 @@ function App() {
             <Route path="allgrades/:id" element={<GradesDetails />} />
             <Route path="gradeform" element={<GradeForm />} />
             <Route path="editGradeForm/:id" element={<EditGradeForm />} />
-            <Route path="editAssignedGrade/:id" element={<EditAssignedGrade />} />
+            <Route
+              path="editAssignedGrade/:id"
+              element={<EditAssignedGrade />}
+            />
             <Route path="assigngrade" element={<AssignGrade />} />
             <Route path="allsubjects" element={<SubjectsList />} />
             <Route path="allsubjects/:id" element={<SubjectDetails />} />
@@ -343,28 +356,40 @@ function App() {
           <Route path="parent" element={<Parents />}>
             <Route index element={<DashboardParent />} />
             <Route path="grades" element={<GradesParent />} />
-            <Route path="grades/assignment" element={<GradesAssignmentParent />} />
+            <Route
+              path="grades/assignment"
+              element={<GradesAssignmentParent />}
+            />
             <Route path="grades/exam" element={<GradesExamParent />} />
             <Route path="schedule" element={<ScheduleParent />} />
             <Route path="schedule/exam" element={<ScheduleExamParent />} />
           </Route>
           {/* /////////////////teacher pages//////////////////// */}
           <Route path="teacher" element={<Teachers />}>
-          <Route  path="edit-teacher-profile" element={<EditTeacherProfile />} /> 
-          <Route path="school-hubs" element={<SchoolHubs />} />  
-          <Route path="school-hubs/detailes" element={<SchoolHubsDetailes />} />  
-          <Route path="school-hubs/prizes" element={<SchoolHubsPrizes />} />  
-          <Route path="contests" element={<ActivityContests />} /> 
-          <Route path="contests/activity-form" element={<ActivityForm />} /> 
-          <Route path="contests/edit-activity-form/:id" element={<EditActivityForm  />} /> 
-          <Route path="weekly-schedule" element={<WeeklySchedule />} /> 
-          <Route path="exam-schedule" element={<ExamSchedule />} /> 
-          <Route path="currentCourse" element={<CurrentCourse />} />
-          <Route path="allcourses" element={<AllCourses />} />
-          <Route path="addmaterial" element={<AddMaterial/>} />
-          <Route path="materialform" element={<MaterialForm/>} />
-          <Route path="seematerial" element={<SeeMaterial/>} />
-
+            <Route
+              path="edit-teacher-profile"
+              element={<EditTeacherProfile />}
+            />
+            <Route path="school-hubs" element={<SchoolHubs />} />
+            <Route
+              path="school-hubs/detailes"
+              element={<SchoolHubsDetailes />}
+            />
+            <Route path="school-hubs/prizes" element={<SchoolHubsPrizes />} />
+            <Route path="contests" element={<ActivityContests />} />
+            <Route path="contests/activity-form" element={<ActivityForm />} />
+            <Route
+              path="contests/edit-activity-form/:id"
+              element={<EditActivityForm />}
+            />
+            <Route path="weekly-schedule" element={<WeeklySchedule />} />
+            <Route path="exam-schedule" element={<ExamSchedule />} />
+            <Route path="currentCourse" element={<CurrentCourse />} />
+            <Route path="allcourses" element={<AllCourses />} />
+            <Route path="addmaterial" element={<AddMaterial />} />
+            <Route path="materialform" element={<MaterialForm />} />
+            <Route path="seematerial" element={<SeeMaterial />} />
+            <Route path="takeattendance" element={<TakeAttendance />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
