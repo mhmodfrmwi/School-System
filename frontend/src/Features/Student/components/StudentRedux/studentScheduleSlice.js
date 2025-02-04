@@ -16,7 +16,7 @@ export const fetchStudentSchedule = createAsyncThunk(
       // const token =
       //   localStorage.getItem("token") || sessionStorage.getItem("token");
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OWY2ZjliYmNjNzkwYTA1MWYyZTc5YSIsImVtYWlsIjoiYWhtZWR6YWthcmlhQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzM4NTAzMjg4LCJleHAiOjE3Mzg1MDQyODh9.-ZG611JXsMSJtmZVnzhOXzp781NyZmKGC1AwTUmNgI4";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTA4NjNjY2YyYWExYWMwYjBlOTYxMiIsImVtYWlsIjoic2hpbWFhMTIzQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzM4NjEyODY4LCJleHAiOjE3Mzg2OTkyNjh9.HMY2C6NAw8DKZa1AAjoFNdXQaPi2SWJmDhGCMYW_w0I";
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }

@@ -1,17 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import img1 from "../../../../assets/schedule 1.png";
 import { useState } from "react";
+
 function ScheduleExam() {
   const navigate = useNavigate();
   const [schedule, setSchedule] = useState([
     ["Subject", "Day", "Date", "Time", "Place"],
-    [" ", "", "", "", ""],
-    ["", "", "", "", ""],
-    ["", "", "", "", ""],
-    ["", "", "", "", ""],
-    ["", "", "", "", ""],
-    ["", "", "", "", ""],
+    ["Math", "Monday", "2025-02-03", "10:00 AM - 12:00 PM", "Room 101"],
+    ["Physics", "Tuesday", "2025-02-04", "12:00 PM - 02:00 PM", "Room 202"],
+    ["Chemistry", "Wednesday", "2025-02-05", "02:00 PM - 04:00 PM", "Room 303"],
+    ["Biology", "Thursday", "2025-02-06", "10:00 AM - 12:00 PM", "Room 404"],
+    ["English", "Friday", "2025-02-07", "08:00 AM - 10:00 AM", "Room 505"],
   ]);
+
   return (
     <>
       <section>
@@ -29,7 +30,6 @@ function ScheduleExam() {
                 className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-2 py-2 text-lg font-medium text-transparent"
                 onClick={() => navigate("/student/schedule")}
               >
-                {" "}
                 Weekly Schedule
               </button>
 
@@ -49,14 +49,14 @@ function ScheduleExam() {
           />
         </div>
 
-        <div className="mx-auto w-[88%] overflow-x-auto bg-[#F5F6F7]">
+        <div className="mx-auto w-[88%] overflow-x-auto bg-[#F5F6F7] shadow-lg rounded-xl">
           <table className="w-full table-auto">
             <thead>
               <tr>
                 {schedule[0].map((header, index) => (
                   <th
                     key={index}
-                    className="border border-gray-300 px-4 py-2 text-center text-black sm:text-sm md:text-base lg:text-lg"
+                    className="border border-gray-300 px-6 py-4 text-center text-[#303030] text-lg font-semibold bg-[#D6A3E1] rounded-tl-xl rounded-tr-xl"
                   >
                     {header}
                   </th>
@@ -65,13 +65,18 @@ function ScheduleExam() {
             </thead>
             <tbody>
               {schedule.slice(1).map((row, rowIndex) => (
-                <tr key={rowIndex}>
+                <tr
+                  key={rowIndex}
+                  className={`${
+                    rowIndex % 2 === 0 ? "bg-white" : "bg-[#F9F9F9]"
+                  } hover:bg-[#F3E5F5] transition duration-200`}
+                >
                   {row.map((cell, cellIndex) => (
                     <td
                       key={cellIndex}
-                      className="border border-gray-300 px-4 py-7 text-center text-[#E47986] sm:text-sm md:text-base lg:text-lg"
+                      className="border border-gray-300 px-6 py-4 text-center text-[#5e5b63] text-sm sm:text-base lg:text-lg"
                     >
-                      {cell}
+                      {cell || "--"}
                     </td>
                   ))}
                 </tr>

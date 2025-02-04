@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaSearch, FaBell } from "react-icons/fa";
+import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -75,9 +75,9 @@ const Navbar = () => {
   const name = url.split("/student/").pop();
   console.log(name);
 
-  // const handleBack = () => {
-  //   navigate(-1);
-  // };
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -104,6 +104,12 @@ const Navbar = () => {
             className="flex rounded-lg p-2"
           >
             <img src={Menu} alt="Menu" className="h-8 w-8" />
+          </button>
+          <button
+            onClick={handleBack}
+            className="hidden rounded-lg bg-[#FFD4AD] p-1 text-[#FD813D] lg:flex border-2 border-[#FD813D]"
+          >
+            <FaArrowLeft className="text-lg" />
           </button>
           <Link to="/student">
             <img
