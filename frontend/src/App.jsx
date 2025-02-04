@@ -183,6 +183,9 @@ const AllCouses = lazy(
 const StudentCourseDetails = lazy(
   () => import("./Features/Student/components/courses/CourseVideoLectures"),
 );
+const StudentMaterialDetails = lazy(
+  () => import("./Features/Student/components/courses/CourseMaterialPDF"),
+);
 const AttendancePage = lazy(
   () => import("./Features/Student/components/Attendance/AttendancePage"),
 );
@@ -334,9 +337,14 @@ function App() {
             <Route path="virtualrooms" element={<VirtualRooms />} />
             <Route path="allcourses" element={<AllCouses />} />
             <Route
-              path="allcourses/videos"
+              path="allcourses/videos/:subjectId"
               element={<StudentCourseDetails />}
             />
+            <Route
+              path="allcourses/materials/:subjectId"
+              element={<StudentMaterialDetails />}
+            />
+            
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}

@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMaterials, addToBookmark, fetchBookmarks, fetchSubjects , clearError } from "../../components/StudentRedux/allSubjectsStudentSlice";
+import { fetchMaterials, addToBookmark, fetchBookmarks, fetchSubjects, clearError } from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaBookmark, FaEdit, FaDownload, FaSpinner } from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2'; 
+import { useParams, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
-const VideoSection = () => {
+const MaterialSection = () => {
   const dispatch = useDispatch();
   const { subjectId } = useParams();
   const { materials, bookmarks, loading, error, subjects } = useSelector((state) => state.allSubjectsStudent);
   const navigate = useNavigate();
-
   const [activeTab, setActiveTab] = useState("all");
   const [subjectName, setSubjectName] = useState("");
 
@@ -23,7 +21,7 @@ const VideoSection = () => {
 
   useEffect(() => {
     if (subjects.length > 0 && subjectId) {
-      const subject = subjects.find((subject) => subject.id === subjectId); 
+      const subject = subjects.find((subject) => subject.id === subjectId);
       if (subject) {
         setSubjectName(subject.subjectName);
       }
@@ -37,18 +35,17 @@ const VideoSection = () => {
     }
   }, [dispatch, subjectId]);
 
-  
-    const handleBookmark = (materialId) => {
-      dispatch(addToBookmark(materialId));
-      dispatch(fetchBookmarks());
-    };
-  
+  const handleBookmark = (materialId) => {
+    dispatch(addToBookmark(materialId));
+    dispatch(fetchBookmarks());
+  };
 
-  const videoMaterials = materials.filter((material) => material.type === "Video") || [];
-  const bookmarkedMaterials = videoMaterials.filter((material) =>
+  const pdfMaterials = materials.filter((material) => material.type === "PDF") || [];
+  const bookmarkedMaterials = pdfMaterials.filter((material) =>
     bookmarks.some((bookmark) => bookmark.material_id._id === material._id)
   );
-  const displayedMaterials = activeTab === "bookmarks" ? bookmarkedMaterials : videoMaterials;
+
+  const displayedMaterials = activeTab === "bookmarks" ? bookmarkedMaterials : pdfMaterials;
 
   useEffect(() => {
     if (error) {
@@ -58,11 +55,14 @@ const VideoSection = () => {
         icon: 'error',
         confirmButtonText: 'OK'
       }).then(() => {
-        dispatch(clearError()); 
+        dispatch(clearError());
       });
     }
   }, [error, dispatch]);
   
+  const handleCourseVideoClick = (material) => {
+    navigate(`/student/allcourses/videos/${subjectId}`);
+  };
 
   return (
     <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
@@ -74,16 +74,12 @@ const VideoSection = () => {
         </h2>
         <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-[#BFBFBF] text-white font-medium py-4 rounded-lg">
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg" onClick={() => handleCourseVideoClick()}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> Video Lectures
             </Button>
           </li>
           <li>
-            <Button
-              variant="solid"
-              className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-              onClick={() => navigate(`/student/allcourses/materials/${subjectId}`)} 
-            >
+            <Button variant="solid" className="md:w-11/12 bg-[#BFBFBF] text-white font-medium py-4 rounded-lg">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">02</span> Course Material
             </Button>
           </li>
@@ -107,7 +103,7 @@ const VideoSection = () => {
 
       {/* Main Content */}
       <div className="flex-1 w-full md:w-3/4 p-4 mt-6">
-        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">Video Lectures</h1>
+        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">Course Material</h1>
 
         {/* Filter Buttons */}
         <div className="flex flex-wrap gap-3 mb-6">
@@ -120,7 +116,7 @@ const VideoSection = () => {
             } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("all")}
           >
-            All ({videoMaterials.length})
+            All ({pdfMaterials.length})
           </Button>
           <Button
             variant={activeTab === "bookmarks" ? "outline" : "solid"}
@@ -135,32 +131,25 @@ const VideoSection = () => {
           </Button>
         </div>
 
-        {/* Loading Message */}
-        {loading && (
-          <div className="flex items-center justify-center text-center text-gray-500 mt-10">
-            <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
-            <p className="text-gray-700 text-lg font-semibold">Loading...</p>
-          </div>
-        )}
-
-        {/* No Video Materials or Bookmarks Message */}
-        {activeTab === "all" && videoMaterials.length === 0 && !loading && !error && (
-          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-            <CardContent className="text-center p-4 text-gray-600">
-              No video materials available for this subject.
-            </CardContent>
-          </Card>
-        )}
-        {activeTab === "bookmarks" && bookmarkedMaterials.length === 0 && !loading && !error && (
-          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-            <CardContent className="text-center p-4 text-gray-600">
-              You haven't bookmarked any videos yet.
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Lecture Cards */}
+        {/* Material Cards */}
         <div className="space-y-4">
+          {loading && (
+            <div className="flex items-center justify-center text-center text-gray-500 mt-10">
+                       <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
+                       <p className="text-gray-700 text-lg font-semibold">Loading...</p>
+                     </div>
+          )}
+
+          
+
+          {!loading && displayedMaterials.length === 0 && (
+            <Card className="border border-gray-200 rounded-xl shadow-sm h-[200px] flex items-center justify-center ">
+              <CardContent className="p-4 text-center text-gray-600">
+                No materials available.
+              </CardContent>
+            </Card>
+          )}
+
           {displayedMaterials.map((material, index) => (
             <Card key={material._id} className="border border-gray-200 rounded-xl shadow-sm">
               <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
@@ -175,8 +164,11 @@ const VideoSection = () => {
                   </div>
                 </div>
                 <div className="flex gap-3 text-gray-500">
-                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full" onClick={() => handleBookmark(material._id)}>
-                    <FaBookmark className={`text-gray-800 ${material.isBookmarked ? 'text-yellow-500' : ''}`} />
+                  <div
+                    className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full"
+                    onClick={() => handleBookmark(material._id)}
+                  >
+                    <FaBookmark className={`text-gray-800 ${material.isBookmarked ? "text-yellow-500" : ""}`} />
                   </div>
                   <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
                     <FaEdit className="text-blue-600" />
@@ -194,4 +186,4 @@ const VideoSection = () => {
   );
 };
 
-export default VideoSection;
+export default MaterialSection;
