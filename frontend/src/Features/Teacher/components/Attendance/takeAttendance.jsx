@@ -4,21 +4,39 @@ import { fetchStudents } from "@/Features/Admin/components/AdminRedux/studentSli
 import { postAttendance } from "../TeacherRedux/takeAttendanceSlice";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
+import { useNavigate } from "react-router-dom";
 
 function TakeAttendance() {
   const { students } = useSelector((state) => state.students);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [attendance, setAttendance] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+
   const studentsPerPage = 10;
+
+  const [selectedGrade, setSelectedGrade] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
 
   useEffect(() => {
     dispatch(fetchStudents());
   }, [dispatch]);
 
+  console.log(students);
+
+  const grades = [...new Set(students.map((s) => s.gradeId.gradeName))];
+  const classes = [...new Set(students.map((s) => s.classId.className))];
+
+  const filteredStudents = students.filter(
+    (student) =>
+      (selectedGrade === "" || student.gradeId.gradeName === selectedGrade) &&
+      (selectedClass === "" || student.classId.className === selectedClass),
+  );
+
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
-  const currentStudents = students.slice(
+  const currentStudents = filteredStudents.slice(
     indexOfFirstStudent,
     indexOfLastStudent,
   );
@@ -35,7 +53,7 @@ function TakeAttendance() {
 
     try {
       await Promise.all(
-        students.map((student) =>
+        filteredStudents.map((student) =>
           dispatch(
             postAttendance({
               studentName: student.fullName,
@@ -59,9 +77,60 @@ function TakeAttendance() {
 
   return (
     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
-      <h2 className="mb-4 text-center text-2xl font-bold text-[#117C90]">
-        Take Attendance
-      </h2>
+      <div className="m-auto mb-7 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
+        <button
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
+          onClick={() => navigate("/teacher/takeattendance")}
+        >
+          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
+            1
+          </span>
+          Take Attendance
+        </button>
+
+        <button
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
+          onClick={() => navigate("/teacher/attendancereport")}
+        >
+          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+            2
+          </span>
+          Attendance Report
+        </button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2">
+        <h2 className="mb-4 text-left text-2xl font-bold text-[#117C90]">
+          Take Attendance
+        </h2>
+
+        <div className="mb-4 flex flex-wrap justify-start gap-4 sm:justify-end">
+          <select
+            value={selectedGrade}
+            onChange={(e) => setSelectedGrade(e.target.value)}
+            className="rounded-md border p-2"
+          >
+            <option value="">All Grades</option>
+            {grades.map((grade) => (
+              <option key={grade} value={grade}>
+                {grade}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={selectedClass}
+            onChange={(e) => setSelectedClass(e.target.value)}
+            className="rounded-md border p-2"
+          >
+            <option value="">All Classes</option>
+            {classes.map((cls) => (
+              <option key={cls} value={cls}>
+                {cls}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <div className="overflow-x-auto">
         <table className="mx-auto w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
@@ -106,7 +175,7 @@ function TakeAttendance() {
 
       <div className="mt-7 flex justify-center lg:justify-end">
         <Pagination
-          totalItems={students.length}
+          totalItems={filteredStudents.length}
           itemsPerPage={studentsPerPage}
           currentPage={currentPage}
           onPageChange={handlePageChange}

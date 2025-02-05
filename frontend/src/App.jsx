@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import TakeAttendance from "./Features/Teacher/components/Attendance/takeAttendance";
+import Attendancereport from "./Features/Teacher/components/Attendance/attendancereport";
 
 const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
@@ -366,7 +367,7 @@ function App() {
               path="allcourses/materials/:subjectId"
               element={<StudentMaterialDetails />}
             />
-            
+
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
@@ -407,6 +408,7 @@ function App() {
             <Route path="materialform" element={<MaterialForm />} />
             <Route path="seematerial" element={<SeeMaterial />} />
             <Route path="takeattendance" element={<TakeAttendance />} />
+            <Route path="attendancereport" element={<Attendancereport />} />
             <Route path="virtualroom" element={<VirtualRoom />} />
             <Route path="addvirtualroom" element={<AddVirtualRoom />} />
             <Route path="editvirtualroom/:id" element={<EditVirtualRoom />} />
