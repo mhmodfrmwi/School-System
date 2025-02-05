@@ -173,7 +173,7 @@ const Activities = lazy(
   () => import("./Features/Student/components/Activites/Activites"),
 );
 const Contests = lazy(
-  () => import("./Features/Student/components/Activites/Contests"),
+  () => import("./Features/Student/components/Activites/Trips"),
 );
 const VirtualRooms = lazy(
   () => import("./Features/Student/components/Virtual Rooms/VirtualRooms"),
@@ -218,7 +218,7 @@ const SchoolHubsPrizes = lazy(
   () => import("./Features/Teacher/components/Activities/SchoolHubsPrizes"),
 );
 const ActivityContests = lazy(
-  () => import("./Features/Teacher/components/Activities/Contests"),
+  () => import("./Features/Teacher/components/Activities/TripsOfTeacher"),
 );
 const ActivityForm = lazy(
   () => import("./Features/Teacher/components/Activities/AddActivityForm"),
@@ -247,6 +247,15 @@ const MaterialForm = lazy(
 );
 const SeeMaterial = lazy(
   () => import("./Features/Teacher/components/courses/SeeMaterial"),
+);
+const VirtualRoom = lazy(
+  () => import("./Features/Teacher/components/Virtual Rooms/virtualRooms"),
+);
+const AddVirtualRoom = lazy(
+  () => import("./Features/Teacher/components/Virtual Rooms/addVirtualRooms"),
+);
+const EditVirtualRoom = lazy(
+  () => import("./Features/Teacher/components/Virtual Rooms/editVirtualRooms"),
 );
 
 function App() {
@@ -398,6 +407,9 @@ function App() {
             <Route path="materialform" element={<MaterialForm />} />
             <Route path="seematerial" element={<SeeMaterial />} />
             <Route path="takeattendance" element={<TakeAttendance />} />
+            <Route path="virtualroom" element={<VirtualRoom />} />
+            <Route path="addvirtualroom" element={<AddVirtualRoom />} />
+            <Route path="editvirtualroom/:id" element={<EditVirtualRoom />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

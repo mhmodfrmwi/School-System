@@ -1,13 +1,26 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTeacherVirtualRooms } from "../../../Teacher/components/TeacherRedux/VirtualRoomsSlice";
+import { useNavigate } from "react-router-dom";
 
-function VirtualRooms() {
-    const [score] = useState([
-        {},
-        {},
-        {},
-        {},
-        {},
-    ]);
+// دالة لتنسيق التاريخ والوقت
+const formatStartTime = (startTime) => {
+    const date = new Date(startTime);
+    const formattedDate = date.toISOString().split('T')[0]; // التاريخ
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // الوقت
+    return `${formattedDate} (${formattedTime})`;
+};
+
+const VirtualRooms = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    // جلب بيانات الجلسات الافتراضية من Redux
+    const { teacherVirtualRooms, loading, error } = useSelector((state) => state.teacherVirtualRooms);
+
+    useEffect(() => {
+        dispatch(fetchTeacherVirtualRooms());
+    }, [dispatch]);
 
     return (
         <>
@@ -76,7 +89,6 @@ function VirtualRooms() {
                     </div>
                 </div>
 
-
                 {/* Table */}
                 <div className="mx-auto my-10 w-full max-w-7xl px-4">
                     <div className="overflow-x-auto">
@@ -92,20 +104,38 @@ function VirtualRooms() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {score.map((row, index) => (
-                                    <tr key={index} className="hover:bg-gray-100">
-                                        <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                                        <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                                        <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                                        <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                                        <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm"></td>
-                                        <td className="border flex items-center justify-center border-[#FFA4A4] px-4 py-2">
-                                            <button className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-2xl px-4 py-2 text-xs text-white sm:text-sm">
-                                                Enter
-                                            </button>
-                                        </td>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="6" className="text-center py-4">Loading...</td>
                                     </tr>
-                                ))}
+                                ) : error ? (
+                                    <tr>
+                                        <td colSpan="6" className="text-center py-4 text-red-500">{error}</td>
+                                    </tr>
+                                ) : teacherVirtualRooms.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="6" className="text-center py-4">No virtual rooms available.</td>
+                                    </tr>
+                                ) : (
+                                    teacherVirtualRooms.map((room) => (
+                                        <tr key={room._id} className="hover:bg-gray-100">
+                                            <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{room.title}</td>
+                                            <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{room.subjectName}</td>
+                                            <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{formatStartTime(room.startTime)}</td>
+                                            <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{room.duration} min</td>
+                                            <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">
+                                                <a href={room.link} target="_blank" rel="noopener noreferrer" className="text-[#BC6FFB] hover:text-[#244856]">
+                                                    Join
+                                                </a>
+                                            </td>
+                                            <td className="border flex items-center justify-center border-[#FFA4A4] px-4 py-2">
+                                                <button className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-2xl px-4 py-2 text-xs text-white sm:text-sm">
+                                                    Enter
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -113,6 +143,6 @@ function VirtualRooms() {
             </section>
         </>
     );
-}
+};
 
 export default VirtualRooms;

@@ -13,8 +13,8 @@ export const fetchPdfMaterial = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTA4NjNjY2YyYWExYWMwYjBlOTYxMiIsImVtYWlsIjoic2hpbWFhMTIzQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzM4NjE1MzkyLCJleHAiOjE3Mzg3MDE3OTJ9.FaaxQrUE8AzKMEHccOeKvK5YmB7sSoqwMbDppNZAhXE";
-      if (!token) {
+        localStorage.getItem("token") || sessionStorage.getItem("token");
+       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
       const response = await fetch("http://localhost:4000/api/v1/student/materiel/", {
@@ -42,9 +42,9 @@ export const postPdfMaterial = createAsyncThunk(
   "pdfMaterials/postPdfMaterials",
   async (pdfMaterialsData, { rejectWithValue }) => {
     try {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTA4NjNjY2YyYWExYWMwYjBlOTYxMiIsImVtYWlsIjoic2hpbWFhMTIzQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzM4NjE1MzkyLCJleHAiOjE3Mzg3MDE3OTJ9.FaaxQrUE8AzKMEHccOeKvK5YmB7sSoqwMbDppNZAhXE";
-      if (!token) {
+     const token =
+        localStorage.getItem("token") || sessionStorage.getItem("token");
+        if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
       const response = await fetch("http://localhost:4000/api/v1/teacher/material", {

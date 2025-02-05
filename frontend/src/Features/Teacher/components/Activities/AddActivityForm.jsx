@@ -1,47 +1,55 @@
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTeachers } from "../../../Admin/components/AdminRedux/teacherSlice"; 
+import { postTrips } from "../TeacherRedux/TripsSlice"; // Add class teacher
 
 function ActivityForm() {
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
-    activityName: "",
+    title: "",
+    teacherId: "",
     startDate: "",
     endDate: "",
-    activityArea: "",
-    description: "",
+    numberOfSeats: "",
     fees: "",
     requirements: "",
-    numberOfSeats: "", // إضافة عدد المقاعد
-    attachment: null,
   });
+
+  const { teachers } = useSelector((state) => state.teachers);
+  
+  useEffect(() => {
+    dispatch(fetchTeachers());
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      attachment: e.target.files[0],
-    }));
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    toast.success("Activity added successfully!");
-    // هنا يمكنك إضافة منطق إرسال البيانات إلى الخادم
-  };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      console.log(formData); // Log the form data
+      dispatch(postTrips(formData));
+      setFormData({
+        title: "",
+        teacherId: "",
+        startDate: "",
+        endDate: "",
+        numberOfSeats: "",
+        fees: "",
+        requirements: "",
+      });
+    };
+
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Add Activity</h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
-        <form onSubmit={handleSubmit} className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <form onSubmit={handleSubmit} className="m-6 ">
           {/* Activity Name */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
@@ -49,8 +57,8 @@ function ActivityForm() {
             </label>
             <input
               type="text"
-              name="activityName"
-              value={formData.activityName}
+              name="title"
+              value={formData.title}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
@@ -58,6 +66,7 @@ function ActivityForm() {
           </div>
 
           {/* Start Date */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
               Start Date
@@ -85,37 +94,6 @@ function ActivityForm() {
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             />
-          </div>
-
-          {/* Activity Area */}
-          <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
-              Activity Area
-            </label>
-            <input
-              type="text"
-              name="activityArea"
-              value={formData.activityArea}
-              onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter activity area"
-              required
-            />
-          </div>
-
-          {/* Description */}
-          <div className="mb-4 sm:col-span-2">
-            <label className="text-md mb-2 block font-medium text-gray-700">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              rows="4"
-              placeholder="Write here your description..."
-            ></textarea>
           </div>
 
           {/* Fees */}
@@ -147,7 +125,7 @@ function ActivityForm() {
               placeholder="Enter number of seats"
             />
           </div>
-
+         </div>
           {/* Requirements */}
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-medium text-gray-700">
@@ -161,21 +139,6 @@ function ActivityForm() {
               rows="4"
               placeholder="Write here your requirements..."
             ></textarea>
-          </div>
-
-          {/* Attachment */}
-          <div className="mb-4 sm:col-span-2">
-            <label className="text-md mb-2 block font-medium text-gray-700">
-              Attachment
-            </label>
-            <div className="flex items-center justify-center rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]">
-              <input
-                type="file"
-                name="attachment"
-                onChange={handleFileChange}
-                className="w-full"
-              />
-            </div>
           </div>
 
           {/* Submit Button */}
