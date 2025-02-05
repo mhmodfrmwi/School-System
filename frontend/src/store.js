@@ -21,6 +21,7 @@ import attendanceTeacheReducer from "./Features/Teacher/components/TeacherRedux/
 import allSubjectsStudentReducer from "./Features/Student/components/StudentRedux/allSubjectsStudentSlice";
 import pdfMaterialsReducer from "./Features/Teacher/components/TeacherRedux/PdfMaterialSlice";
 import tripsReducer from "./Features/Teacher/components/TeacherRedux/TripsSlice";
+import teacherVirtualRoomReducer from "./Features/Teacher/components/TeacherRedux/VirtualRoomsSlice";
 
 const store = configureStore({
   reducer: {
@@ -46,6 +47,7 @@ const store = configureStore({
     allSubjectsStudent: allSubjectsStudentReducer,
     pdfMaterials: pdfMaterialsReducer,
     trips:tripsReducer,
+    teacherVirtualRooms: teacherVirtualRoomReducer,
   },
 });
 

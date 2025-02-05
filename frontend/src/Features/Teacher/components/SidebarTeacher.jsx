@@ -37,13 +37,13 @@ const SidebarTeacher = () => {
     { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/teacher" },
     { label: "Motivation", icon: AwardIcon, hoverIcon: AwardIconH, href: "#" },
     { label: "Courses", icon: CourseIcon, hoverIcon: CourseIconH, href: "/teacher/currentcourse" },
-    { label: "Absence", icon: AbsenceIcon, hoverIcon: AbsenceIconH, href: "#" },
+    { label: "Absence", icon: AbsenceIcon, hoverIcon: AbsenceIconH, href: "/teacher/takeattendance" },
     { label: "Schedule", icon: ScheduleIcon, hoverIcon: ScheduleIconH, href: "/teacher/weekly-schedule" },
     { label: "Grade Management", icon: GradeIcon, hoverIcon: GradeIconH, href: "#" },
     { label: "Activities", icon: ActivityIcon, hoverIcon: ActivityIconH, href: "/teacher/school-hubs" },
     { label: "Library", icon: LibraryIcon, hoverIcon: LibraryIconH, href: "#" },
     { label: "Question Bank", icon: QuestionsIcon, hoverIcon: QuestionsIconH, href: "#" },
-    { label: "Virtual Rooms", icon: VirtualIcon, hoverIcon: VirtualIconH, href: "#" },
+    { label: "Virtual Rooms", icon: VirtualIcon, hoverIcon: VirtualIconH, href: "/teacher/virtualroom" },
   ];
 
   return (
