@@ -34,29 +34,23 @@ function TakeAttendance() {
     e.preventDefault();
 
     try {
-      const dispatchPromises = students
-        .filter((student) => attendance[student._id])
-        .map((student) =>
+      await Promise.all(
+        students.map((student) =>
           dispatch(
             postAttendance({
               studentName: student.fullName,
               academicNumber: student.academic_number,
-              status: "P",
+              status: attendance[student._id] ? "P" : "A",
             }),
-          ),
-        );
+          ).unwrap(),
+        ),
+      );
 
-      if (dispatchPromises.length > 0) {
-        await Promise.all(dispatchPromises);
-        toast.success("Attendance added successfully");
-      } else {
-        toast.error("No students selected for attendance");
-      }
+      toast.success("Attendance submitted successfully!");
+      setAttendance({});
     } catch (error) {
-      toast.error("Failed to submit attendance");
+      toast.error(error.message || "Failed to submit attendance");
     }
-
-    setAttendance({});
   };
 
   const handlePageChange = (page) => {
@@ -99,7 +93,7 @@ function TakeAttendance() {
                 <td className="px-3 py-2 text-center">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 sm:h-5 sm:w-5"
+                    className="h-4 w-4 cursor-pointer appearance-none rounded-md border-2 border-gray-400 transition-all checked:border-black checked:bg-black checked:ring-2 checked:ring-gray-600 checked:before:flex checked:before:h-full checked:before:w-full checked:before:items-center checked:before:justify-center checked:before:text-xs checked:before:text-white checked:before:content-['✔'] sm:h-5 sm:w-5 sm:checked:before:text-sm"
                     checked={attendance[student._id] || false}
                     onChange={() => toggleAttendance(student._id)}
                   />

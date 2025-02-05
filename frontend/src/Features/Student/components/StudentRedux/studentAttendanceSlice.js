@@ -13,10 +13,8 @@ export const fetchStudentAttendance = createAsyncThunk(
   "studentAttendance/fetchStudentAttendance",
   async (_, { rejectWithValue }) => {
     try {
-      // const token =
-      //   localStorage.getItem("token")
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YTE4ODI2NjIyYjQ2Y2U5ZTM0NzJmYyIsImVtYWlsIjoiQWhtZWRoYWJpYkBnbWFpbC5jb20iLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTczODYzOTQwOCwiZXhwIjoxNzM4NzI1ODA4fQ.Ns_-QYUmtWRNiKLT_NgqNTuTBhdMDBErnEnWZcO4T4s";
+      const token = localStorage.getItem("token");
+
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }

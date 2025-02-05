@@ -55,14 +55,12 @@ const takeAttendanceSlice = createSlice({
       .addCase(postAttendance.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.attendance.push(action.payload);
-
         state.loading = false;
       })
       .addCase(postAttendance.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to add attendance";
         state.loading = false;
-        toast.error(action.payload || "Failed to add attendance");
       });
   },
 });

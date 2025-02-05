@@ -11,26 +11,55 @@ const AttendancePage = () => {
   useEffect(() => {
     dispatch(fetchStudentAttendance());
   }, [dispatch]);
+  console.log(studentAttendance);
+  const uniqueAttendance = studentAttendance.reduce((acc, record) => {
+    const key = `${record.date.split("T")[0]}-${record.studentId}`;
+    acc.set(key, record);
+    return acc;
+  }, new Map());
 
-  const totalSessions = 90;
-  const presentCount = studentAttendance.filter((s) => s.status === "P").length;
-  const absentCount = totalSessions - presentCount;
-  const presentPercentage = (presentCount / totalSessions) * 100;
+  const attendanceArray = Array.from(uniqueAttendance.values());
+
+  const groupedByDate = attendanceArray.reduce((acc, record) => {
+    const date = record.date.split("T")[0];
+    if (!acc[date]) {
+      acc[date] = { totalSessions: 0, presentCount: 0, absentCount: 0 };
+    }
+
+    acc[date].totalSessions += 1;
+    if (record.status === "P") {
+      acc[date].presentCount += 1;
+    } else {
+      acc[date].absentCount += 1;
+    }
+
+    return acc;
+  }, {});
+
+  const attendanceStats = Object.keys(groupedByDate).map((date) => {
+    const { totalSessions, presentCount, absentCount } = groupedByDate[date];
+    return {
+      date,
+      totalSessions,
+      presentCount,
+      absentCount,
+      presentPercentage:
+        totalSessions > 0 ? (presentCount / totalSessions) * 100 : 0,
+      absentPercentage:
+        totalSessions > 0 ? (absentCount / totalSessions) * 100 : 0,
+    };
+  });
 
   const startOfWeek = currentDate.startOf("week");
   const days = Array.from({ length: 7 }, (_, i) =>
     startOfWeek.add(i, "day").format("YYYY-MM-DD"),
   );
 
-  const handlePreviousWeek = () => {
+  const handlePreviousWeek = () =>
     setCurrentDate(currentDate.subtract(7, "day"));
-  };
+  const handleNextWeek = () => setCurrentDate(currentDate.add(7, "day"));
 
-  const handleNextWeek = () => {
-    setCurrentDate(currentDate.add(7, "day"));
-  };
-
-  const groupedAttendance = studentAttendance.reduce((acc, record) => {
+  const groupedAttendance = attendanceArray.reduce((acc, record) => {
     const key = record.academic_number;
     if (!acc[key]) acc[key] = { academic_number: key, attendance: {} };
     acc[key].attendance[dayjs(record.date).format("YYYY-MM-DD")] =
@@ -46,14 +75,17 @@ const AttendancePage = () => {
             Attendance Level
             <span className="absolute bottom-[-9px] left-0 h-[4px] w-[15%] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
           </h1>
+
           <div className="flex flex-col space-y-4 sm:ml-8 sm:flex-row sm:items-center sm:space-x-8 sm:space-y-0">
             <span className="flex items-center p-4 text-lg font-medium text-green-600 sm:mr-12">
               <span className="mr-2 h-4 w-4 rounded-full bg-green-600"></span>
-              Present: {presentCount}
+              Present:{" "}
+              {attendanceStats.reduce((sum, day) => sum + day.presentCount, 0)}
             </span>
             <span className="flex items-center p-4 text-lg font-medium text-red-600 sm:mr-12">
               <span className="mr-2 h-4 w-4 rounded-full bg-red-600"></span>
-              Absent: {absentCount}
+              Absent:{" "}
+              {attendanceStats.reduce((sum, day) => sum + day.absentCount, 0)}
             </span>
           </div>
 
@@ -61,7 +93,21 @@ const AttendancePage = () => {
             <div className="h-5 rounded-full bg-gray-200">
               <div
                 className="relative h-5 rounded-full bg-gradient-to-r from-green-500 to-green-300"
-                style={{ width: `${presentPercentage}%` }}
+                style={{
+                  width: `${
+                    attendanceStats.length > 0
+                      ? (attendanceStats.reduce(
+                          (sum, day) => sum + day.presentCount,
+                          0,
+                        ) /
+                          attendanceStats.reduce(
+                            (sum, day) => sum + day.totalSessions,
+                            0,
+                          )) *
+                        100
+                      : 0
+                  }%`,
+                }}
               >
                 <span className="shadow-black-600/50 absolute right-0 top-[-6px] h-8 w-[5px] translate-x-1/2 transform rounded-full bg-green-500 shadow-xl blur-[1px] filter"></span>
               </div>
@@ -122,13 +168,9 @@ const AttendancePage = () => {
                     return (
                       <td
                         key={dayIndex}
-                        className={`border-l border-gray-200 px-4 py-4 text-center ${
-                          status === "P"
-                            ? "bg-green-600 font-bold text-white"
-                            : "bg-red-600 font-bold text-white"
-                        }`}
+                        className={`border-l border-gray-200 px-4 py-4 text-center ${status === "P" ? "bg-green-600 text-white" : status === "A" ? "bg-red-600 text-white" : ""}`}
                       >
-                        {status === "P" ? "P" : "A"}
+                        {status}
                       </td>
                     );
                   })}
