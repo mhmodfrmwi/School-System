@@ -122,19 +122,19 @@ router.post(
   createAcademicYear
 );
 router
-  .route("/academicYear/:id", validateJwt, validateAdmin)
-  .get(getAcademicYear)
-  .patch(updateAcademicYear)
-  .delete(deleteAcademicYear);
+  .route("/academicYear/:id")
+  .get(validateJwt, validateAdmin, getAcademicYear)
+  .patch(validateJwt, validateAdmin, updateAcademicYear)
+  .delete(validateJwt, validateAdmin, deleteAcademicYear);
 router.get("/academicYear", validateJwt, validateAdmin, getAllAcademicYear);
 
 //grade routes
 router.post("/grade/createGrade", validateJwt, validateAdmin, createGrade);
 router
-  .route("/grade/:id", validateJwt, validateAdmin)
-  .get(getGrade)
-  .patch(updateGrade)
-  .delete(deleteGrade);
+  .route("/grade/:id")
+  .get(validateJwt, validateAdmin, getGrade)
+  .patch(validateJwt, validateAdmin, updateGrade)
+  .delete(validateJwt, validateAdmin, deleteGrade);
 router.get("/grade", validateJwt, validateAdmin, getAllGrade);
 
 //subject routes
@@ -145,10 +145,10 @@ router.post(
   createSubject
 );
 router
-  .route("/subject/:id", validateJwt, validateAdmin)
-  .get(getSubject)
-  .patch(updateSubject)
-  .delete(deleteSubject);
+  .route("/subject/:id")
+  .get(validateJwt, validateAdmin, getSubject)
+  .patch(validateJwt, validateAdmin, updateSubject)
+  .delete(validateJwt, validateAdmin, deleteSubject);
 router.get("/subject", validateJwt, validateAdmin, getAllSubject);
 
 //semester routes
@@ -159,10 +159,10 @@ router.post(
   createSemester
 );
 router
-  .route("/semester/:id", validateJwt, validateAdmin)
-  .get(getSemester)
-  .patch(updateSemester)
-  .delete(deleteSemester);
+  .route("/semester/:id")
+  .get(validateJwt, validateAdmin, getSemester)
+  .patch(validateJwt, validateAdmin, updateSemester)
+  .delete(validateJwt, validateAdmin, deleteSemester);
 router.get("/semester", validateJwt, validateAdmin, getAllSemester);
 
 //Grade Subjects Semester Routes
@@ -173,10 +173,10 @@ router.post(
   createGradeSubjectSemester
 );
 router
-  .route("/gradeSubjectSemester/:id", validateJwt, validateAdmin)
-  .get(getGradeSubjectSemester)
-  .patch(updateGradeSubjectSemester)
-  .delete(deleteGradeSubjectSemester);
+  .route("/gradeSubjectSemester/:id")
+  .get(validateJwt, validateAdmin, getGradeSubjectSemester)
+  .patch(validateJwt, validateAdmin, updateGradeSubjectSemester)
+  .delete(validateJwt, validateAdmin, deleteGradeSubjectSemester);
 router.get(
   "/gradeSubjectSemester",
   validateJwt,
@@ -187,10 +187,10 @@ router.get(
 // class Routes
 router.post("/class/createClass", validateJwt, validateAdmin, createClass);
 router
-  .route("/class/:id", validateJwt, validateAdmin)
-  .get(getClass)
-  .patch(updateClass)
-  .delete(deleteClass);
+  .route("/class/:id")
+  .get(validateJwt, validateAdmin, getClass)
+  .patch(validateJwt, validateAdmin, updateClass)
+  .delete(validateJwt, validateAdmin, deleteClass);
 router.get("/class", validateJwt, validateAdmin, getAllClasses);
 
 //student Routes
@@ -201,10 +201,10 @@ router.post(
   createStudent
 );
 router
-  .route("/student/:id", validateJwt, validateAdmin)
-  .get(getStudent)
-  .patch(updateStudent)
-  .delete(deleteStudent);
+  .route("/student/:id")
+  .get(validateJwt, validateAdmin, getStudent)
+  .patch(validateJwt, validateAdmin, updateStudent)
+  .delete(validateJwt, validateAdmin, deleteStudent);
 router.get("/student", validateJwt, validateAdmin, getAllStudents);
 
 //Grade Subjects Semester Routes
@@ -223,16 +223,16 @@ router.post(
   createGradeYear
 );
 router
-  .route("/gradeYear/:id", validateJwt, validateAdmin)
-  .get(getGradeYear)
-  .patch(updateGradeYear)
-  .delete(deleteGradeYear);
+  .route("/gradeYear/:id")
+  .get(validateJwt, validateAdmin, getGradeYear)
+  .patch(validateJwt, validateAdmin, updateGradeYear)
+  .delete(validateJwt, validateAdmin, deleteGradeYear);
 router.get("/gradeYear", validateJwt, validateAdmin, getAllGradeYear);
 router
-  .route("/gradeSubjectSemester/:id", validateJwt, validateAdmin)
-  .get(getGradeSubjectSemester)
-  .patch(updateGradeSubjectSemester)
-  .delete(deleteGradeSubjectSemester);
+  .route("/gradeSubjectSemester/:id")
+  .get(validateJwt, validateAdmin, getGradeSubjectSemester)
+  .patch(validateJwt, validateAdmin, updateGradeSubjectSemester)
+  .delete(validateJwt, validateAdmin, deleteGradeSubjectSemester);
 router.get(
   "/gradeSubjectSemester",
   validateJwt,
@@ -243,10 +243,10 @@ router.get(
 // class Routes
 router.post("/class/createClass", validateJwt, validateAdmin, createClass);
 router
-  .route("/class/:id", validateJwt, validateAdmin)
-  .get(getClass)
-  .patch(updateClass)
-  .delete(deleteClass);
+  .route("/class/:id")
+  .get(validateJwt, validateAdmin, getClass)
+  .patch(validateJwt, validateAdmin, updateClass)
+  .delete(validateJwt, validateAdmin, deleteClass);
 router.get("/class", validateJwt, validateAdmin, getAllClasses);
 
 //student Routes
@@ -257,10 +257,10 @@ router.post(
   createStudent
 );
 router
-  .route("/student/:id", validateJwt, validateAdmin)
-  .get(getStudent)
-  .patch(updateStudent)
-  .delete(deleteStudent);
+  .route("/student/:id")
+  .get(validateJwt, validateAdmin, getStudent)
+  .patch(validateJwt, validateAdmin, updateStudent)
+  .delete(validateJwt, validateAdmin, deleteStudent);
 router.get("/student", validateJwt, validateAdmin, getAllStudents);
 
 //teacher routes
@@ -271,10 +271,10 @@ router.post(
   createTeacher
 );
 router
-  .route("/teacher/:id", validateJwt, validateAdmin)
-  .get(getTeacher)
-  .patch(updateTeacher)
-  .delete(deleteTeacher);
+  .route("/teacher/:id")
+  .get(validateJwt, validateAdmin, getTeacher)
+  .patch(validateJwt, validateAdmin, updateTeacher)
+  .delete(validateJwt, validateAdmin, deleteTeacher);
 router.get("/teacher", validateJwt, validateAdmin, getAllTeacher);
 
 //class-teacher routes
@@ -285,19 +285,19 @@ router.post(
   createClassTeacher
 );
 router
-  .route("/classTeacher/:id", validateJwt, validateAdmin)
-  .get(getClassTeacher)
-  .patch(updateClassTeacher)
-  .delete(deleteClassTeacher);
+  .route("/classTeacher/:id")
+  .get(validateJwt, validateAdmin, getClassTeacher)
+  .patch(validateJwt, validateAdmin, updateClassTeacher)
+  .delete(validateJwt, validateAdmin, deleteClassTeacher);
 router.get("/classTeacher", validateJwt, validateAdmin, getAllClassTeacher);
 
 //parent routes
 router.post("/parent/createParent", validateJwt, validateAdmin, createParent);
 router
   .route("/parent/:id")
-  .get(getParent)
-  .patch(updateParent)
-  .delete(deleteParent);
+  .get(validateJwt, validateAdmin, getParent)
+  .patch(validateJwt, validateAdmin, updateParent)
+  .delete(validateJwt, validateAdmin, deleteParent);
 router.get("/parent", validateJwt, validateAdmin, getAllParent);
 //parent-student routes
 router.delete(
@@ -314,20 +314,20 @@ router.post(
   createManager
 );
 router
-  .route("/manager/:id", validateJwt, validateAdmin)
-  .get(getManager)
-  .patch(updateManager)
-  .delete(deleteManager);
+  .route("/manager/:id")
+  .get(validateJwt, validateAdmin, getManager)
+  .patch(validateJwt, validateAdmin, updateManager)
+  .delete(validateJwt, validateAdmin, deleteManager);
 router.get("/manager", validateJwt, validateAdmin, getAllManager);
 
 //admin routes
 router.post("/admin/createAdmin", validateJwt, validateAdmin, createAdmin);
 router
-  .route("/admin/:id", validateJwt, validateAdmin)
-  .get(getAdmin)
-  .patch(updateAdmin)
-  .delete(deleteAdmin);
-router.get("/admin", getAllAdmin);
+  .route("/admin/:id")
+  .get(validateJwt, validateAdmin, getAdmin)
+  .patch(validateJwt, validateAdmin, updateAdmin)
+  .delete(validateJwt, validateAdmin, deleteAdmin);
+router.get("/admin", validateJwt, validateAdmin, getAllAdmin);
 
 //schedule routes
 router.post(
@@ -337,9 +337,9 @@ router.post(
   createSchedule
 );
 router
-  .route("/schedule/:id", validateJwt, validateAdmin)
-  .get(getSchedule)
-  .patch(updateSchedule)
-  .delete(deleteSchedule);
+  .route("/schedule/:id")
+  .get(validateJwt, validateAdmin, getSchedule)
+  .patch(validateJwt, validateAdmin, updateSchedule)
+  .delete(validateJwt, validateAdmin, deleteSchedule);
 router.get("/schedule", validateJwt, validateAdmin, getAllSchedule);
 module.exports = router;

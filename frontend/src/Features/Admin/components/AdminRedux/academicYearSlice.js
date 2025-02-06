@@ -15,7 +15,10 @@ export const fetchAcademicYears = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(`${BASE_URL}`);
-      if (!response.ok) throw new Error("Failed to fetch academic years");
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
       const data = await response.json();
       return data.academicYears; 
     } catch (error) {
@@ -107,7 +110,7 @@ const academicYearSlice = createSlice({
       .addCase(fetchAcademicYears.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-        if(state.error.includes("NetworkError")){
+        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
 
         }else{
         toast.error(action.payload || "Failed to fetch academic years");}

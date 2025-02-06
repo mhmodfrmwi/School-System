@@ -16,7 +16,7 @@ import "react-calendar/dist/Calendar.css";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const networkErrorShownRef = useRef(false); // Use a ref to track if network error toast is shown
-
+  const tokenErrorShownRef = useRef(false);
   // Fetch data from slices
   const { students, loading: loadingStudents, error: studentError } = useSelector((state) => state.students);
   const { teachers, loading: loadingTeachers, error: teacherError } = useSelector((state) => state.teachers);
@@ -56,11 +56,19 @@ const Dashboard = () => {
     const hasNetworkError = errors.some(
       (error) => error && error.includes("NetworkError")
     );
+    const hasTokenError = errors.some(
+      (error) => error && error.includes("Token is required!")
+    );
 
     // Show toast only once for network error
     if (hasNetworkError && !networkErrorShownRef.current) {
       toast.error("NetworkError: Failed to fetch Some data. Please check your connection.");
       networkErrorShownRef.current = true; // Mark network error toast as shown
+    }
+    // Show toast only once for token error
+    if (hasTokenError && !tokenErrorShownRef.current) {
+      toast.error("Token is required! Please log in again.");
+      tokenErrorShownRef.current = true;
     }
   }, [
     studentError,

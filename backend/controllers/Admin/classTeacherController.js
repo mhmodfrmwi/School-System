@@ -1,5 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const moment = require("moment");
+
 const classTeacherValidationSchema = require("../../validations/classTeacherValidation");
 const Subject = require("../../DB/subjectModel");
 const Teacher = require("../../DB/teacher");
@@ -7,6 +9,7 @@ const AcademicYear = require("../../DB/academicYearModel");
 const ClassTeacher = require("../../DB/classTeacherModel");
 const Class = require("../../DB/classModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const Semester = require("../../DB/semesterModel");
 
 const createClassTeacher = expressAsyncHandler(async (req, res) => {
   const { error } = classTeacherValidationSchema.validate(req.body);
@@ -51,12 +54,31 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
-
+  console.log(existingAcademicYear);
+  const currentMonth = moment().month() + 1;
+  let semester_name;
+  if (currentMonth >= 9 && currentMonth <= 12) {
+    semester_name = "Semester 1";
+  } else {
+    semester_name = "Semester 2";
+  }
+  const semester = await Semester.findOne({
+    semesterName : semester_name,
+    academicYear_id: existingAcademicYear._id,
+  });
+  console.log(semester_name);
+  if (!semester) {
+    return res.status(404).json({
+      status: 404,
+      message: "Semester not found in the given academic year",
+    });
+  }
   const existingClassTeacher = await ClassTeacher.findOne({
     classId: existingClass._id,
     subjectId: existingSubject._id,
     teacherId: existingTeacher._id,
     academicYear_id: existingAcademicYear._id,
+    semester_id: semester._id,
   });
   if (existingClassTeacher) {
     return res.status(400).json({
@@ -70,6 +92,7 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     subjectId: existingSubject._id,
     teacherId: existingTeacher._id,
     academicYear_id: existingAcademicYear._id,
+    semester_id: semester._id,
   });
 
   await classTeacher.save();
@@ -137,11 +160,29 @@ const updateClassTeacher = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
+  const currentMonth = moment().month() + 1;
+  let semester_name;
+  if (currentMonth >= 9 && currentMonth <= 12) {
+    semester_name = "Semester 1";
+  } else {
+    semester_name = "Semester 2";
+  }
+  const semester = await Semester.findOne({
+    semester_name,
+    academicYear_id: existingAcademicYear._id,
+  });
+  if (!semester) {
+    return res.status(404).json({
+      status: 404,
+      message: "Semester not found in the given academic year",
+    });
+  }
   const existingClassTeacher = await ClassTeacher.findOne({
     classId: existingClass._id,
     subjectId: existingSubject._id,
     teacherId: existingTeacher._id,
     academicYear_id: academicYear._id,
+    semester_id: semester._id,
   });
   if (existingClassTeacher) {
     return res.status(400).json({
@@ -256,3 +297,6 @@ module.exports = {
   getClassTeacher,
   getAllClassTeacher,
 };
+//Semester 2
+//Semester 2
+//Semester 2

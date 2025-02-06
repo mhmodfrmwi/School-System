@@ -31,32 +31,35 @@ const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teache
 const {
   getAttendanceForClassInPeriod,
 } = require("../controllers/Teacher/getAttendanceForClassInPeriod");
+const {
+  getTeacherClasses,
+}= require("../controllers/Teacher/getAllClasses");
 const router = express.Router();
 router.post("/login", login);
 router.post("/material", validateJwt, validateTeacher, createMateriel);
 
 router.post("/questionBank", validateJwt, validateTeacher, createQuestion);
 router
-  .route("/questionBank/:id", validateJwt, validateTeacher)
-  .get(getQuestion)
-  .patch(updateQuestion)
-  .delete(deleteQuestion);
+  .route("/questionBank/:id")
+  .get(validateJwt, validateTeacher, getQuestion)
+  .patch(validateJwt, validateTeacher, updateQuestion)
+  .delete(validateJwt, validateTeacher,deleteQuestion);
 router.get("/questionBank", validateJwt, validateTeacher, getAllQuestions);
 
 router.post("/virtualRoom", validateJwt, validateTeacher, createVirtualRoom);
 router
-  .route("/virtualRoom/:id", validateJwt, validateTeacher)
-  .get(getVirtualRoom)
-  .patch(updateVirtualRoom)
-  .delete(deleteVirtualRoom);
+  .route("/virtualRoom/:id")
+  .get(validateJwt, validateTeacher, getVirtualRoom)
+  .patch(validateJwt, validateTeacher, updateVirtualRoom)
+  .delete(validateJwt, validateTeacher,deleteVirtualRoom);
 router.get("/virtualRoom", validateJwt, validateTeacher, getAllVirtualRooms);
 
 router.post("/trip", validateJwt, validateTeacher, createTrip);
 router
-  .route("/trip/:id", validateJwt, validateTeacher)
-  .get(getTrip)
-  .patch(updateTrip)
-  .delete(deleteTrip);
+  .route("/trip/:id")
+  .get(validateJwt, validateTeacher, getTrip)
+  .patch(validateJwt, validateTeacher, updateTrip)
+  .delete(validateJwt, validateTeacher,deleteTrip);
 router.get("/trip", validateJwt, validateTeacher, getAllTrips);
 
 router.get(
@@ -76,5 +79,11 @@ router.get(
   validateJwt,
   validateTeacher,
   getAttendanceForClassInPeriod
+);
+router.get(
+  "/class",
+  validateJwt,
+  validateTeacher,
+  getTeacherClasses
 );
 module.exports = router;

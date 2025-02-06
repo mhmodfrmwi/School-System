@@ -13,10 +13,10 @@ const router = express.Router();
 router.post("/login", login);
 router.post("/contest", validateJwt, validateManager, createContest);
 router
-  .route("/contest/:id", validateJwt, validateManager)
-  .get(getContest)
-  .patch(updateContest)
-  .delete(deleteContest);
+  .route("/contest/:id")
+  .get(validateJwt, validateManager, getContest)
+  .patch(validateJwt, validateManager, updateContest)
+  .delete(validateJwt, validateManager, deleteContest);
 router.get("/contest", validateJwt, validateManager, getAllContests);
 
 module.exports = router;

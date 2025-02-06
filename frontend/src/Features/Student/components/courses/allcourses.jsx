@@ -6,8 +6,9 @@ import sub1 from "../../../../assets/sub1.png";
 import sub2 from "../../../../assets/sub2.png";
 import subject from "../../../../assets/subject.avif";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
-import { FaSpinner } from "react-icons/fa";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import Loader from "../../../../ui/Loader";
+import ErrorComponent from "@/ui/ErrorComponent";
 
 const images = [sub1, sub2];
 
@@ -38,96 +39,12 @@ const AllCourses = () => {
         navigate(`/student/allcourses/videos/${subjectId}`);
     };
 
-    // Error and loading handling
-    const renderError = () => {
-        if (error === "No token found") {
-            return (
-                <>
-                    {/* Blurred Background Overlay */}
-                    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"></div>
 
-                    {/* Error Modal */}
-                    <div className="fixed inset-0 flex items-center justify-center z-50">
-                        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
-                            {/* Icon */}
-                            <div className="mb-6">
-                                <FontAwesomeIcon
-                                    icon={faExclamationTriangle}
-                                    className="text-red-500 text-6xl"
-                                />
-                            </div>
-
-                            {/* Message */}
-                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                                Session Expired
-                            </h2>
-                            <p className="text-gray-600 mb-6">
-                                Your session has expired. Please log in again to continue.
-                            </p>
-
-                            {/* Button */}
-                            <button
-                                className="w-full bg-[#FD813D] text-white py-2 px-4 rounded-lg hover:bg-[#3D52A1] transition duration-300"
-                                onClick={() => navigate('/login')}
-                            >
-                                Go to Login
-                            </button>
-                        </div>
-                    </div>
-                </>
-            );
-        }
-
-        if (error) {
-            return (
-                <>
-                    {/* Blurred Background Overlay */}
-                    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"></div>
-
-                    {/* Error Modal */}
-                    <div className="fixed inset-0 flex items-center justify-center z-50">
-                        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
-                            {/* Icon */}
-                            <div className="mb-6">
-                                <FontAwesomeIcon
-                                    icon={faExclamationTriangle}
-                                    className="text-yellow-500 text-6xl"
-                                />
-                            </div>
-
-                            {/* Message */}
-                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                                Oops, Something Went Wrong
-                            </h2>
-                            <p className="text-gray-600 mb-6">
-                                We couldn't fetch the data. Please try again later.
-                            </p>
-
-                            {/* Button */}
-                            <button
-                                className="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
-                                onClick={() => dispatch(fetchSubjects())}
-                            >
-                                Retry
-                            </button>
-                        </div>
-                    </div>
-                </>
-            );
-        }
-
-        return null;
-    };
 
     const renderLoading = () => {
         if (loading) {
             return (
-                <div className="flex items-center justify-center text-center text-gray-500 mt-10">
-                    <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
-                    <p className="text-gray-700 text-lg font-semibold">
-                                Loading...
-                            </p>
-                </div>
+                <Loader/>
             );
         }
         return null;
@@ -161,8 +78,12 @@ const AllCourses = () => {
     return (
         <>
             <div className="mt-16 mb-20 min-h-[75vh] w-[95%] mx-auto">
-                {/** Error Handling */}
-                {renderError()}
+            {error && (
+                  <ErrorComponent
+                      error={error}
+                      onRetry={() => dispatch(fetchSubjects())}
+                  />
+              )}
 
                 {/** Buttons */}
                 {!loading && !error && !renderNoSubjects() && (

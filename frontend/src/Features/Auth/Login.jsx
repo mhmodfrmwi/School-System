@@ -12,24 +12,17 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
 
-  const { loading, error} = useSelector((state) => state.login);
-  const role = useSelector((state) => state.role.role); 
+  const { loading} = useSelector((state) => state.login);
+  const role = useSelector((state) => state.role.role) || localStorage.getItem("role"); 
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!role) {
       toast.error("Please select a role first!");
-      return;
-    }
-
-    if (!email.includes("@")) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    if (password.length < 6) {
-      toast.error("Password must be at least 6 characters long.");
+      localStorage.removeItem("token");
+      navigate("/role");
       return;
     }
 
@@ -37,7 +30,6 @@ function Login() {
 
    
     if (loginUser.fulfilled.match(resultAction)) {
-      toast.success("Login successful!");
       navigate(`/${role}`); 
     }
   };
@@ -87,8 +79,6 @@ function Login() {
               required
             />
           </div>
-
-          {error && <p className="text-red-500">{error}</p>}
 
           <button
             type="submit"
