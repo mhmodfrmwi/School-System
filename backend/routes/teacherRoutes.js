@@ -28,6 +28,9 @@ const {
 } = require("../controllers/Student/attendanceController");
 const login = require("../controllers/auth/authTeacherController");
 const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teacher/getStudentsForSpecificSubjectUsingClassId");
+const {
+  getAttendanceForClassInPeriod,
+} = require("../controllers/Teacher/getAttendanceForClassInPeriod");
 const router = express.Router();
 router.post("/login", login);
 router.post("/material", validateJwt, validateTeacher, createMateriel);
@@ -67,5 +70,11 @@ router.post(
   validateJwt,
   validateTeacher,
   createStudentAttendance
+);
+router.get(
+  "/get-class-attendance-in-period",
+  validateJwt,
+  validateTeacher,
+  getAttendanceForClassInPeriod
 );
 module.exports = router;
