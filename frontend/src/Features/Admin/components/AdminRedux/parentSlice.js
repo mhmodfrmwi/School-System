@@ -190,7 +190,7 @@ const parentSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch parents"; // Fallback error message
         state.loading = false;
-        if (state.error.includes("NetworkError")) {
+        if (state.error.includes("NetworkError")||state.error.includes("Token is required!")) {
           // Optionally handle network error case
         } else {
           toast.error(state.error); // Show toast with error message

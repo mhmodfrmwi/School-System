@@ -147,7 +147,7 @@ const adminSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch admins"; // Fallback to default error
         state.loading = false;
-        if (state.error.includes("NetworkError")) {
+        if (state.error.includes("NetworkError")||state.error.includes("Token is required!")) {
           // Optionally handle network error case
         } else {
           toast.error(state.error); // Show toast with the error message

@@ -128,7 +128,7 @@ const teacherSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch teachers";
         state.loading = false;
-        if(state.error.includes("NetworkError")){
+        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
 
         }else{
         toast.error(action.payload || "Failed to fetch teachers");}

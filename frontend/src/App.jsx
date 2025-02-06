@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./Features/Auth/ProtectedRoute";
 import { lazy, Suspense } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -19,6 +20,10 @@ const StudentForm = lazy(
 const BasicForm = lazy(() => import("./Features/Admin/components/basicForm"));
 const DashboardAdmin = lazy(
   () => import("./Features/Admin/Pages/DashboardAdmin"),
+);
+const Manager = lazy(() => import("./Features/Manager/pages/Manager"));
+const DashboardManager = lazy(
+  () => import("./Features/Manager/pages/DashboardManager"),
 );
 const AllStudent = lazy(
   () => import("./Features/Admin/Pages/StudentTablePage"),
@@ -278,10 +283,10 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route index element={<OnBoarding />} />
-          <Route path="login" element={<Login />} />
+          <Route path="login" element= {<Login /> }/>
           <Route path="role" element={<ChooseRole />} />
           {/* /////////////////adminpage//////////////////// */}
-          <Route path="admin" element={<Admins />}>
+          <Route path="admin"  element={<ProtectedRoute element={<Admins/>} requiredRole="admin" />} >
             <Route index element={<DashboardAdmin />} />
             <Route path="basicform" element={<BasicForm />} />
             <Route path="studentform" element={<StudentForm />} />
@@ -338,7 +343,7 @@ function App() {
             <Route path="editparentform/:id" element={<EditParentForm />} />
           </Route>
           {/* /////////////////studentpage//////////////////// */}
-          <Route path="student" element={<Students />}>
+          <Route path="student" element={<ProtectedRoute element={<Students/>} requiredRole="student" />}>
             <Route index element={<DashboardStudent />} />
             <Route path="grades" element={<Grades />} />
             <Route path="grades/assignment" element={<GradesAssignment />} />
@@ -373,7 +378,7 @@ function App() {
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
-          <Route path="parent" element={<Parents />}>
+          <Route path="parent" element={<ProtectedRoute element={<Parents/>} requiredRole="parent" />}>
             <Route index element={<DashboardParent />} />
             <Route path="grades" element={<GradesParent />} />
             <Route
@@ -385,7 +390,7 @@ function App() {
             <Route path="schedule/exam" element={<ScheduleExamParent />} />
           </Route>
           {/* /////////////////teacher pages//////////////////// */}
-          <Route path="teacher" element={<Teachers />}>
+          <Route path="teacher" element={<ProtectedRoute element={<Teachers/>} requiredRole="teacher" />}>
             <Route
               path="edit-teacher-profile"
               element={<EditTeacherProfile />}
@@ -422,6 +427,10 @@ function App() {
             <Route path="virtualroom" element={<VirtualRoom />} />
             <Route path="addvirtualroom" element={<AddVirtualRoom />} />
             <Route path="editvirtualroom/:id" element={<EditVirtualRoom />} />
+          </Route>
+          {/* ///////////////manager pages//////////////////// */}
+          <Route path="manager" element={<ProtectedRoute element={<Manager/>} requiredRole="manager"/>}>
+            <Route index element={<DashboardManager />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
