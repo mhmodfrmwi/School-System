@@ -20,7 +20,8 @@ export const loginUser = createAsyncThunk(
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+        return rejectWithValue(data.message);
+
       }
 
       localStorage.setItem("token", data.token);
@@ -57,7 +58,7 @@ const loginSlice = createSlice({
         state.loading = false;
         state.email = action.payload.email;
         state.token = action.payload.token;
-        toast.success("Login successful!");
+      //  toast.success("Login successful!");
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

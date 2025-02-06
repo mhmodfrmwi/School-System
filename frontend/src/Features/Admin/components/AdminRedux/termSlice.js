@@ -181,7 +181,7 @@ const termsSlice = createSlice({
       .addCase(fetchTerms.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch terms"; // Fallback to default error
-        if (state.error.includes("NetworkError")) {
+        if (state.error.includes("NetworkError")||state.error.includes("Token is required!")) {
           // Optionally handle network error case
         } else {
           toast.error(state.error); // Show toast with the error message
