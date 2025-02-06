@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import ProtectedRoute from "./Features/Auth/ProtectedRoute";
 import { lazy, Suspense } from "react";
 import "react-toastify/dist/ReactToastify.css";
@@ -267,6 +268,8 @@ const EditVirtualRoom = lazy(
 );
 
 function App() {
+  const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
+
   return (
     <BrowserRouter>
       <ToastContainer
@@ -283,7 +286,10 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route index element={<OnBoarding />} />
-          <Route path="login" element= {<Login /> }/>
+          <Route
+          path="/login"
+          element={role ? <Login /> : <Navigate to="/role" />}
+        />
           <Route path="role" element={<ChooseRole />} />
           {/* /////////////////adminpage//////////////////// */}
           <Route path="admin"  element={<ProtectedRoute element={<Admins/>} requiredRole="admin" />} >

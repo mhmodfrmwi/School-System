@@ -21,6 +21,8 @@ function Login() {
 
     if (!role) {
       toast.error("Please select a role first!");
+      localStorage.removeItem("token");
+      navigate("/role");
       return;
     }
 
