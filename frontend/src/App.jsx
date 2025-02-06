@@ -6,6 +6,8 @@ import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import TakeAttendance from "./Features/Teacher/components/Attendance/takeAttendance";
 import Attendancereport from "./Features/Teacher/components/Attendance/attendancereport";
+import CurrentCourseForAttendance from "./Features/Teacher/components/Attendance/CurrentCourseForAttendance";
+import AllCoursesForAttendance from "./Features/Teacher/components/Attendance/AllCoursesForAttendance";
 
 const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
@@ -404,6 +406,14 @@ function App() {
             <Route path="exam-schedule" element={<ExamSchedule />} />
             <Route path="currentCourse" element={<CurrentCourse />} />
             <Route path="allcourses" element={<AllCourses />} />
+            <Route
+              path="currentCourseforattendance"
+              element={<CurrentCourseForAttendance />}
+            />
+            <Route
+              path="allcoursesforattendance"
+              element={<AllCoursesForAttendance />}
+            />
             <Route path="addmaterial" element={<AddMaterial />} />
             <Route path="materialform" element={<MaterialForm />} />
             <Route path="seematerial" element={<SeeMaterial />} />
