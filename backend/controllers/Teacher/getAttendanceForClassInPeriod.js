@@ -40,11 +40,10 @@ const getAttendanceForClassInPeriod = expressAsyncHandler(async (req, res) => {
       message: "Invalid date range",
     });
   }
-  const attendances = await Attendance.find({
+  let attendances = await Attendance.find({
     class_id: classId,
     date: { $gte: startDateFormatted, $lte: endDateFormatted },
   });
-
   res.status(200).json({
     status: 200,
     attendances,
