@@ -54,6 +54,7 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
+  console.log(existingAcademicYear);
   const currentMonth = moment().month() + 1;
   let semester_name;
   if (currentMonth >= 9 && currentMonth <= 12) {
@@ -62,9 +63,10 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     semester_name = "Semester 2";
   }
   const semester = await Semester.findOne({
-    semester_name,
+    semesterName : semester_name,
     academicYear_id: existingAcademicYear._id,
   });
+  console.log(semester_name);
   if (!semester) {
     return res.status(404).json({
       status: 404,
@@ -90,6 +92,7 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     subjectId: existingSubject._id,
     teacherId: existingTeacher._id,
     academicYear_id: existingAcademicYear._id,
+    semester_id: semester._id,
   });
 
   await classTeacher.save();
@@ -294,3 +297,6 @@ module.exports = {
   getClassTeacher,
   getAllClassTeacher,
 };
+//Semester 2
+//Semester 2
+//Semester 2

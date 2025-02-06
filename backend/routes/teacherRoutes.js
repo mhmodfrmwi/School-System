@@ -31,6 +31,9 @@ const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teache
 const {
   getAttendanceForClassInPeriod,
 } = require("../controllers/Teacher/getAttendanceForClassInPeriod");
+const {
+  getTeacherClasses,
+}= require("../controllers/Teacher/getAllClasses");
 const router = express.Router();
 router.post("/login", login);
 router.post("/material", validateJwt, validateTeacher, createMateriel);
@@ -76,5 +79,11 @@ router.get(
   validateJwt,
   validateTeacher,
   getAttendanceForClassInPeriod
+);
+router.get(
+  "/class",
+  validateJwt,
+  validateTeacher,
+  getTeacherClasses
 );
 module.exports = router;
