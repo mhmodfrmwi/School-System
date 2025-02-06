@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import roleReducer from "./Features/Auth/AuthRedux/roleSlice";
 import studentReducer from "./Features/Admin/components/AdminRedux/studentSlice";
 import addstudentReducer from "./Features/Admin/components/AdminRedux/studentSlice";
 import termReducer from "./Features/Admin/components/AdminRedux/termSlice";
@@ -25,6 +26,7 @@ import teacherVirtualRoomReducer from "./Features/Teacher/components/TeacherRedu
 
 const store = configureStore({
   reducer: {
+    role: roleReducer,
     admins: adminReducer,
     managers: managerReducer,
     parents: parentReducer,

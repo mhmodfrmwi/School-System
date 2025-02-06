@@ -1,11 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password }, { rejectWithValue, getState }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/student/login", {
+      const role = getState().role.role; 
+      if (!role) throw new Error("No role selected! Please choose a role first.");
+
+      const response = await fetch(`http://localhost:4000/api/v1/${role}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +43,8 @@ const loginSlice = createSlice({
     logout: (state) => {
       state.email = "";
       state.token = null;
-      localStorage.removeItem("token"); 
+      localStorage.removeItem("token");
+      toast.info("Logged out successfully!");
     },
   },
   extraReducers: (builder) => {
@@ -52,10 +57,12 @@ const loginSlice = createSlice({
         state.loading = false;
         state.email = action.payload.email;
         state.token = action.payload.token;
+        toast.success("Login successful!");
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        toast.error(`Login failed: ${action.payload}`);
       });
   },
 });
