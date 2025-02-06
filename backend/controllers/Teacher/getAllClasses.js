@@ -11,7 +11,6 @@ const getTeacherClasses = expressAsyncHandler(async (req, res) => {
         return res.status(400).json({ status: 400, message: "Invalid ID" });
     }
 
-    // Find the teacher
     const teacher = await Teacher.findById(teacherId);
     if (!teacher) {
         return res.status(404).json({
@@ -20,7 +19,7 @@ const getTeacherClasses = expressAsyncHandler(async (req, res) => {
         });
     }
     const subjectId = teacher.subjectId;
-    
+
     const classTeachers = await ClassTeacher.find({ teacherId })
         .populate("classId")
         .populate("subjectId")

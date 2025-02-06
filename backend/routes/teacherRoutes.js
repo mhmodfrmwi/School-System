@@ -34,6 +34,10 @@ const {
 const {
   getTeacherClasses,
 }= require("../controllers/Teacher/getAllClasses");
+const {
+  getScheduleForSpecificTeacher,
+}= require("../controllers/Teacher/scheduleController");
+
 const router = express.Router();
 router.post("/login", login);
 router.post("/material", validateJwt, validateTeacher, createMateriel);
@@ -85,5 +89,11 @@ router.get(
   validateJwt,
   validateTeacher,
   getTeacherClasses
+);
+router.get(
+  "/get-schedule",
+  validateJwt,
+  validateTeacher,
+  getScheduleForSpecificTeacher
 );
 module.exports = router;
