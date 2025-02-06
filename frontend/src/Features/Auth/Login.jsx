@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "./AuthRedux/loginSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Img2 from "../../assets/loginImg2.png";
 import logo from "../../assets/logologin.png";
 
@@ -8,21 +10,36 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.login);
+  const navigate = useNavigate(); 
 
-  const handleSubmit = (e) => {
+  const { loading, error} = useSelector((state) => state.login);
+  const role = useSelector((state) => state.role.role); 
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email.includes("@")) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters long.");
+    if (!role) {
+      toast.error("Please select a role first!");
       return;
     }
 
-    dispatch(loginUser({ email, password }));
+    if (!email.includes("@")) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
+      return;
+    }
+
+    const resultAction = await dispatch(loginUser({ email, password }));
+
+   
+    if (loginUser.fulfilled.match(resultAction)) {
+      toast.success("Login successful!");
+      navigate(`/${role}`); 
+    }
   };
 
   return (
