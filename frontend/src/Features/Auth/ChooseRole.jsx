@@ -8,8 +8,10 @@ const ChooseRole = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+
   const handleRoleSelect = (role) => {
     dispatch(setRole(role)); 
+    localStorage.removeItem("token");
     navigate("/login"); 
   };
 
