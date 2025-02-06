@@ -21,6 +21,11 @@ const classTeacherSchema = new mongoose.Schema(
       ref: "AcademicYear",
       required: true,
     },
+    semester_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Semester",
+      required: true,
+    },
   },
   { timestamps: true }
 );
