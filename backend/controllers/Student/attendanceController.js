@@ -1,5 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const moment = require("moment");
+
 const attendanceValidationSchema = require("../../validations/attendanceValidation");
 const Student = require("../../DB/student");
 const Attendance = require("../../DB/attendenceModel");
@@ -22,27 +24,31 @@ const createStudentAttendance = expressAsyncHandler(async (req, res) => {
       message: "Student not found",
     });
   }
-
-  const existingAttendance = await Attendance.findOne({
+  const currentDAY = moment().format("YYYY-MM-DD");
+  let existingAttendance = await Attendance.findOne({
     student_id: existingStudent._id,
-    date: Date.now(),
+    date: currentDAY,
   });
   if (existingAttendance) {
-    return res.status(400).json({
-      status: 400,
-      message: "Attendance already exists for the given student and date",
+    existingAttendance.status = status;
+    await existingAttendance.save();
+    return res.status(200).json({
+      status: 200,
+      message: "Attendance updated successfully",
+      attendance: existingAttendance,
     });
   }
   const attendance = new Attendance({
     student_id: existingStudent._id,
     academic_number: academicNumber,
-    date: Date.now(),
+    date: currentDAY,
     status,
     class_id: existingStudent.classId,
   });
   await attendance.save();
   res.status(201).json({
     status: 201,
+    message: "Attendance created successfully",
     attendance,
   });
 });
