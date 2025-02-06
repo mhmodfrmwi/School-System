@@ -2,6 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
 const Attendance = require("../../DB/attendenceModel");
+const Class = require("../../DB/classModel");
 
 const getAttendanceForClassInPeriod = expressAsyncHandler(async (req, res) => {
   const { classId, startDate, endDate } = req.body;
@@ -19,13 +20,17 @@ const getAttendanceForClassInPeriod = expressAsyncHandler(async (req, res) => {
       message: "Invalid Class ID",
     });
   }
-
+  const existingClass = await Class.findById(classId);
+  if (!existingClass) {
+    return res.status(404).json({
+      status: 404,
+      message: "Class not found",
+    });
+  }
   const startDateFormatted = moment(startDate, "DD-MM-YYYY")
     .startOf("day")
     .toDate();
   const endDateFormatted = moment(endDate, "DD-MM-YYYY").endOf("day").toDate();
-
-  console.log(startDateFormatted, endDateFormatted);
 
   const attendances = await Attendance.find({
     class_id: classId,
