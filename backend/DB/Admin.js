@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const path = require("path");
+
 const adminSchema = new mongoose.Schema(
   {
     fullName: { type: String, required: true },
@@ -17,5 +19,11 @@ const adminSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+adminSchema.methods.comparePasswordInDb = async function (pswd) {
+  return await bcrypt.compare(pswd, this.password);
+};
+
 const Admin = mongoose.model("Admin", adminSchema);
+
 module.exports = Admin;
