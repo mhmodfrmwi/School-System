@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const path = require("path");
+const bcrypt = require("bcrypt");
 const parentSchema = new mongoose.Schema(
   {
     fullName: { type: String, required: true },
@@ -16,5 +17,8 @@ const parentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+parentSchema.methods.comparePasswordInDb = async function (pswd, pswdDB) {
+  return await bcrypt.compare(pswd, pswdDB);
+};
 const Parent = mongoose.model("Parent", parentSchema);
 module.exports = Parent;

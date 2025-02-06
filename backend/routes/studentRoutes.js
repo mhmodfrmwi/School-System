@@ -1,6 +1,8 @@
 const express = require("express");
 const { login } = require("../controllers/auth/authStudentController");
 const validateJwt = require("../middlewares/validateJWT");
+
+const validateStudent = require("../middlewares/validateStudent");
 const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Student/subjectsController");
 const {
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear,
@@ -8,14 +10,10 @@ const {
 const {
   getQuestionsBySubjectForStudent,
 } = require("../controllers/Student/questionBankController");
-const{
-  getAllTrips
-} = require("../controllers/Student/tripController");
-const{
-  getAllContests
-} = require("../controllers/Student/contestController");
-const{
-  getVirtualRoomsForStudent
+const { getAllTrips } = require("../controllers/Student/tripController");
+const { getAllContests } = require("../controllers/Student/contestController");
+const {
+  getVirtualRoomsForStudent,
 } = require("../controllers/Student/virtualRoomController");
 const {
   getStudentAttendanceUsingStudentId,
@@ -37,39 +35,60 @@ router.route("/login").post(login);
 router.get(
   "/get-subjects",
   validateJwt,
+  validateStudent,
   getSubjectsAcademicYearAndGradeAndSemester
 );
 
 router.get(
   "/materiel/:id",
   validateJwt,
+  validateStudent,
+
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear
 );
 
 router.get(
   "/questionBank/:gradeSubjectSemesterId",
   validateJwt,
+  validateStudent,
+
   getQuestionsBySubjectForStudent
 );
 
-router.get("/virtualRoom/:gradeSubjectSemesterId",
+router.get(
+  "/virtualRoom/:gradeSubjectSemesterId",
   validateJwt,
+  validateStudent,
+
   getVirtualRoomsForStudent
 );
-router.get("/trip", 
-  validateJwt,
-  getAllTrips);
-router.get("/contest", 
-  validateJwt,
-  getAllContests);
+router.get("/trip", validateJwt, validateStudent, getAllTrips);
+router.get("/contest", validateJwt, validateStudent, getAllContests);
 
-router.get("/get-attendance", validateJwt, getStudentAttendanceUsingStudentId);
-router.get("/get-schedule", validateJwt, getScheduleForSpecificStudent);
+router.get(
+  "/get-attendance",
+  validateJwt,
+  validateStudent,
+  getStudentAttendanceUsingStudentId
+);
+router.get(
+  "/get-schedule",
+  validateJwt,
+  validateStudent,
+  getScheduleForSpecificStudent
+);
 
 router.post(
   "/add-to-bookmark/:materialId",
   validateJwt,
+  validateStudent,
+
   addMaterialForBookMarks
 );
-router.get("/get-bookmarks", validateJwt, getAllBookmarksForStudent);
+router.get(
+  "/get-bookmarks",
+  validateJwt,
+  validateStudent,
+  getAllBookmarksForStudent
+);
 module.exports = router;

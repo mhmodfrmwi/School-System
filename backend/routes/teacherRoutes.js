@@ -1,6 +1,6 @@
 const express = require("express");
 const validateJwt = require("../middlewares/validateJWT");
-
+const validateTeacher = require("../middlewares/validateTeacher");
 const { createMateriel } = require("../controllers/Teacher/materialController");
 const {
   createQuestion,
@@ -26,29 +26,46 @@ const {
 const {
   createStudentAttendance,
 } = require("../controllers/Student/attendanceController");
+const login = require("../controllers/auth/authTeacherController");
+const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teacher/getStudentsForSpecificSubjectUsingClassId");
 const router = express.Router();
+router.post("/login", login);
+router.post("/material", validateJwt, validateTeacher, createMateriel);
 
-router.post("/material", validateJwt, createMateriel);
-
-router.post("/questionBank", createQuestion);
+router.post("/questionBank", validateJwt, validateTeacher, createQuestion);
 router
-  .route("/questionBank/:id")
+  .route("/questionBank/:id", validateJwt, validateTeacher)
   .get(getQuestion)
   .patch(updateQuestion)
   .delete(deleteQuestion);
-router.get("/questionBank", getAllQuestions);
+router.get("/questionBank", validateJwt, validateTeacher, getAllQuestions);
 
-router.post("/virtualRoom", createVirtualRoom);
+router.post("/virtualRoom", validateJwt, validateTeacher, createVirtualRoom);
 router
-  .route("/virtualRoom/:id")
+  .route("/virtualRoom/:id", validateJwt, validateTeacher)
   .get(getVirtualRoom)
   .patch(updateVirtualRoom)
   .delete(deleteVirtualRoom);
-router.get("/virtualRoom", getAllVirtualRooms);
+router.get("/virtualRoom", validateJwt, validateTeacher, getAllVirtualRooms);
 
-router.post("/trip", createTrip);
-router.route("/trip/:id").get(getTrip).patch(updateTrip).delete(deleteTrip);
-router.get("/trip", getAllTrips);
+router.post("/trip", validateJwt, validateTeacher, createTrip);
+router
+  .route("/trip/:id", validateJwt, validateTeacher)
+  .get(getTrip)
+  .patch(updateTrip)
+  .delete(deleteTrip);
+router.get("/trip", validateJwt, validateTeacher, getAllTrips);
 
-router.post("/createAttendance", createStudentAttendance);
+router.get(
+  "/get-students-for-subject/:gradeSubjectSemesterId",
+  validateJwt,
+  validateTeacher,
+  getStudentsForSpecificSubjectUsingClassId
+);
+router.post(
+  "/createAttendance",
+  validateJwt,
+  validateTeacher,
+  createStudentAttendance
+);
 module.exports = router;
