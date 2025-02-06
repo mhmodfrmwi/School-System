@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import bag from "../../../../assets/bag.png";
 import CourseToggle from "./SelectCoursePageForAttendance";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTeachers } from "@/Features/Admin/components/AdminRedux/teacherSlice";
+import { fetchSubjects } from "@/Features/Admin/components/AdminRedux/subjectSlice";
 
 const submissions = [
   { id: 1, grade: "Grade 1" },
@@ -14,13 +14,13 @@ const submissions = [
 
 const CurrentCourseForAttendance = ({ onSearchChange, grade }) => {
   const [searchText, setSearchText] = useState("");
-  const { teachers } = useSelector((state) => state.teachers);
+  const { subjects } = useSelector((state) => state.subject);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(teachers);
+  console.log(subjects);
 
   useEffect(() => {
-    dispatch(fetchTeachers());
+    dispatch(fetchSubjects());
   }, [dispatch]);
 
   const handleSearchChange = (e) => {

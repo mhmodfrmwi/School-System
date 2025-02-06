@@ -428,7 +428,7 @@ function App() {
             <Route path="addmaterial" element={<AddMaterial />} />
             <Route path="materialform" element={<MaterialForm />} />
             <Route path="seematerial" element={<SeeMaterial />} />
-            <Route path="takeattendance" element={<TakeAttendance />} />
+            <Route path="takeattendance/:id" element={<TakeAttendance />} />
             <Route path="attendancereport" element={<Attendancereport />} />
             <Route path="virtualroom" element={<VirtualRoom />} />
             <Route path="addvirtualroom" element={<AddVirtualRoom />} />
