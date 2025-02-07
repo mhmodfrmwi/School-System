@@ -74,7 +74,7 @@ const teacherScheduleSlice = createSlice({
         state.error = action.payload || "Failed to fetch teacherSchedule";
         state.loading = false;
         if (!state.error.includes("NetworkError")) {
-          toast.error(state.error);
+          // toast.error(state.error);
         }
       });
   },

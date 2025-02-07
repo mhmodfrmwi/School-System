@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherSchedule } from "../TeacherRedux/teacherScheduleSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import ScheduleToggle from "./SelectPage";
 
 const WeeklySchedule = () => {
@@ -13,7 +15,7 @@ const WeeklySchedule = () => {
         "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
     ];
     const timeslots = [
-        "08:00", "09:00", "10:00","11:00", "12:00", "13:00", "14:00"
+        "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"
     ];
 
     const semesterName = teacherSchedule?.[0]?.semester_id?.semesterName;
@@ -25,7 +27,23 @@ const WeeklySchedule = () => {
     }, [dispatch]);
 
     if (loading) return <p>Loading...</p>;
+    if (teacherSchedule.length === 0) {
+        return (
+            <>
+                <ScheduleToggle />
+                <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
+                    <FontAwesomeIcon icon={faCalendar} className="text-6xl text-gray-400 mb-4" />
+                    <p className="text-xl font-semibold text-gray-600 mb-2">No schedules Found</p>
+                    <p className="text-gray-500 mb-4 text-center max-w-xl">
+                        It seems like there are no schedules available at the moment. Please check back later .
+                    </p>
+                </div>
+            </>
+        );
+    }
     if (error) return <p>{error}</p>;
+
+
 
     const calculateDuration = (start_time, end_time) => {
         const startTime = new Date(`1970-01-01T${start_time}:00Z`);
