@@ -24,6 +24,7 @@ import pdfMaterialsReducer from "./Features/Teacher/components/TeacherRedux/PdfM
 import tripsReducer from "./Features/Teacher/components/TeacherRedux/TripsSlice";
 import teacherVirtualRoomReducer from "./Features/Teacher/components/TeacherRedux/VirtualRoomsSlice";
 import classTeachersReducer from "./Features/Teacher/components/TeacherRedux/TeacherClassSlice";
+import teacherScheduleReducer from "./Features/Teacher/components/TeacherRedux/teacherScheduleSlice";
 
 
 const store = configureStore({
@@ -53,6 +54,7 @@ const store = configureStore({
     trips:tripsReducer,
     teacherVirtualRooms: teacherVirtualRoomReducer,
     classTeachers: classTeachersReducer,
+    teacherSchedule: teacherScheduleReducer,
   },
 });
 
