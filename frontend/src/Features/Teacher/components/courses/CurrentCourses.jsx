@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import { useNavigate } from "react-router-dom";
 import bag from "../../../../assets/bag.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import CourseToggle from "./SelectCoursePage";
 
 const CurrentCourse = ({ onSearchChange }) => {
@@ -28,35 +30,54 @@ const CurrentCourse = ({ onSearchChange }) => {
         return <div>{message}</div>;
     }
     if (classTeachers.length === 0) {
-        return <div>No courses available.</div>;
+        return (
+            <>
+            <CourseToggle />
+            <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
+          
+                <FontAwesomeIcon
+                    icon={faCalendar}
+                    className="text-6xl text-gray-400 mb-4"
+                />
+                <p className="text-xl font-semibold font-poppins text-gray-600 mb-2">
+                    No Teacher Classes Found
+                </p>
+                <p className="text-gray-500 mb-4 font-poppins text-center max-w-xl">
+                    It seems like there are no teacher classes available at the moment.
+                </p>
+            </div>
+            </>
+        );
+      
     }
     return (
-        <><div className="mx-auto px-4 w-[90%] md:px-6 lg:px-0">
-            <CourseToggle />
-            <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
-                <div className="flex flex-col">
-                    <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                        All Courses
-                    </h1>
-                    <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[140px]"></div>
-                </div>
+        <>
+            <div className="mx-auto px-4 w-[90%] md:px-6 lg:px-0">
+                <CourseToggle />
+                <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
+                    <div className="flex flex-col">
+                        <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+                            All Courses
+                        </h1>
+                        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[140px]"></div>
+                    </div>
 
-                <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
-                    <div className="flex w-full flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
-                        <div className="relative flex-grow">
-                            <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-gray-500 sm:text-sm"></i>
-                            <input
-                                type="text"
-                                placeholder="Search ..."
-                                className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins border-2 border-gray-300 text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
-                                value={searchText}
-                                onChange={handleSearchChange}
-                            />
+                    <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
+                        <div className="flex w-full flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+                            <div className="relative flex-grow">
+                                <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-gray-500 sm:text-sm"></i>
+                                <input
+                                    type="text"
+                                    placeholder="Search ..."
+                                    className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins border-2 border-gray-300 text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
+                                    value={searchText}
+                                    onChange={handleSearchChange}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center p-6">
                 {classTeachers.map((classteacher, index) => (
                     <div
