@@ -1,35 +1,51 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTeacherSchedule } from "../TeacherRedux/teacherScheduleSlice";
 import ScheduleToggle from "./SelectPage";
 
 const WeeklySchedule = () => {
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
-    const timeslots = [
-        "08:00 - 08:45",
-        "09:00 - 09:45",
-        "10:00 - 10:45",
-        "11:00 - 11:45",
-        "12:00 - 12:45",
+    const dispatch = useDispatch();
+    const teacherSchedule = useSelector(state => state.teacherSchedule.teacherSchedule);
+    const loading = useSelector(state => state.teacherSchedule.loading);
+    const error = useSelector(state => state.teacherSchedule.error);
+
+    const days = [
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
     ];
-    const schedule = timeslots.map(time => (
-        days.map(day => ({
-            day,
-            time,
-            subject: "English language",
-            grade: "Gr 1",
-            section: "1A",
-            stage: "Primary stage",
-            teacher: "Ziyad Saed"
-        }))
-    )).flat();
+    const timeslots = [
+        "08:00", "09:00", "10:00","11:00", "12:00", "13:00", "14:00"
+    ];
+
+    const semesterName = teacherSchedule?.[0]?.semester_id?.semesterName;
+    const startYear = teacherSchedule?.[0]?.academic_year_id?.startYear;
+    const endYear = teacherSchedule?.[0]?.academic_year_id?.endYear;
+
+    useEffect(() => {
+        dispatch(fetchTeacherSchedule());
+    }, [dispatch]);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+
+    const calculateDuration = (start_time, end_time) => {
+        const startTime = new Date(`1970-01-01T${start_time}:00Z`);
+        const endTime = new Date(`1970-01-01T${end_time}:00Z`);
+        const durationInMinutes = (endTime - startTime) / 60000;
+        const durationInHours = durationInMinutes / 60;
+        const roundedDuration = Math.round(durationInHours);
+        return roundedDuration === 1 ? "1 hour" : `${roundedDuration} hours`;
+    };
 
     return (
         <>
             <ScheduleToggle />
             <div className="col-span-2 flex flex-col justify-between ms-5">
                 <div className="flex justify-between items-center ms-7 mt-5">
-                    <div className="text-lg sm:text-xl font-poppins cursor-text text-[#105E6A] py-1 font-bold">
-                        Weekly Schedule  2024-10-20 to 2024-10-26
+                    <div className="flex-1 text-lg sm:text-xl font-poppins cursor-text text-[#105E6A] py-1 font-bold">
+                        Weekly Schedule - {semesterName} ({startYear}-{endYear})
                     </div>
-                    <button className="bg-gradient-to-r from-[#105E6A] to-[#117C90] rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white">
+
+                    <button className="bg-gradient-to-r from-[#105E6A] to-[#117C90] font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white">
                         Export as PDF
                     </button>
                 </div>
@@ -39,30 +55,42 @@ const WeeklySchedule = () => {
             <div className="flex flex-col p-4">
                 <div className="flex-1">
                     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-full">
-
                         <div className="overflow-x-auto p-4">
                             <table className="min-w-[800px] w-full border-collapse border border-gray-300 text-sm sm:text-base">
                                 <thead>
                                     <tr className="bg-[#105E6A] text-white">
-                                        <th className="border border-gray-300 p-2">Time</th>
+                                        <th className="border border-gray-300 p-2 font-poppins">Time</th>
                                         {days.map(day => (
-                                            <th key={day} className="border border-gray-300 p-2">{day}</th>
+                                            <th key={day} className="border border-gray-300 p-2 font-poppins">{day}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {timeslots.map(time => (
                                         <tr key={time} className="bg-gray-100 even:bg-white">
-                                            <td className="border border-gray-300 p-2 text-center font-bold">{time}</td>
-                                            {days.map(day => (
-                                                <td key={`${day}-${time}`} className="border border-gray-300 p-2 text-center">
-                                                    <div className="p-2 bg-white shadow-md rounded-lg">
-                                                        <p className="font-semibold">English language</p>
-                                                        <p className="text-xs">Gr 1 | 1A | Primary stage</p>
-                                                        <p className="text-xs font-bold">Ziyad Saed</p>
-                                                    </div>
-                                                </td>
-                                            ))}
+                                            <td className="border border-gray-300 p-2 text-center font-poppins font-bold">{time}</td>
+                                            {days.map(day => {
+                                                const scheduleItem = teacherSchedule.find(item =>
+                                                    item.day_of_week === day &&
+                                                    item.start_time === time
+                                                );
+
+                                                return (
+                                                    <td key={`${day}-${time}`} className="border border-gray-300 p-2 text-center">
+                                                        <div className="p-2 bg-white shadow-md rounded-lg font-poppins">
+                                                            {scheduleItem ? (
+                                                                <>
+                                                                    <p className="font-semibold">{scheduleItem.subject_id.subjectName}</p>
+                                                                    <p className="text-xs">{scheduleItem.grade_id.gradeName} | {scheduleItem.class_id.className}</p>
+                                                                    <p className="text-xs">{calculateDuration(scheduleItem.start_time, scheduleItem.end_time)}</p>
+                                                                </>
+                                                            ) : (
+                                                                <p className="text-xs text-gray-500 font-poppins">No class</p>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                );
+                                            })}
                                         </tr>
                                     ))}
                                 </tbody>
