@@ -23,6 +23,8 @@ import allSubjectsStudentReducer from "./Features/Student/components/StudentRedu
 import pdfMaterialsReducer from "./Features/Teacher/components/TeacherRedux/PdfMaterialSlice";
 import tripsReducer from "./Features/Teacher/components/TeacherRedux/TripsSlice";
 import teacherVirtualRoomReducer from "./Features/Teacher/components/TeacherRedux/VirtualRoomsSlice";
+import classTeachersReducer from "./Features/Teacher/components/TeacherRedux/TeacherClassSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -50,6 +52,7 @@ const store = configureStore({
     pdfMaterials: pdfMaterialsReducer,
     trips:tripsReducer,
     teacherVirtualRooms: teacherVirtualRoomReducer,
+    classTeachers: classTeachersReducer,
   },
 });
 
