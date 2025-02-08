@@ -1,37 +1,57 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import { useNavigate } from "react-router-dom";
 import bag from "../../../../assets/bag.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import CourseToggle from "./SelectCoursePageForAttendance";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchSubjects } from "@/Features/Admin/components/AdminRedux/subjectSlice";
 
-const submissions = [
-  { id: 1, grade: "Grade 1" },
-  { id: 2, grade: "Grade 2" },
-  { id: 3, grade: "Grade 3" },
-  { id: 4, grade: "Grade 4" },
-];
-
-const CurrentCourseForAttendance = ({ onSearchChange, grade }) => {
-  const [searchText, setSearchText] = useState("");
-  const { subjects } = useSelector((state) => state.subject);
-  const navigate = useNavigate();
+const CurrentCourse = ({ onSearchChange }) => {
   const dispatch = useDispatch();
-  console.log(subjects);
-
-  useEffect(() => {
-    dispatch(fetchSubjects());
-  }, [dispatch]);
+  const navigate = useNavigate();
+  const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
     onSearchChange(e.target.value);
   };
 
-  const handleSectionClick = (id) => {
-    navigate("/teacher/takeattendance");
-  };
+  const {
+    classTeachers = [],
+    message,
+    loading,
+  } = useSelector((state) => state.classTeachers || {});
 
+  useEffect(() => {
+    dispatch(fetchClassTeacher());
+  }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (message) {
+    return <div>{message}</div>;
+  }
+  if (classTeachers.length === 0) {
+    return (
+      <>
+        <CourseToggle />
+        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
+          <FontAwesomeIcon
+            icon={faCalendar}
+            className="mb-4 text-6xl text-gray-400"
+          />
+          <p className="mb-2 font-poppins text-xl font-semibold text-gray-600">
+            No Teacher Classes Found
+          </p>
+          <p className="mb-4 max-w-xl text-center font-poppins text-gray-500">
+            It seems like there are no teacher classes available at the moment.
+          </p>
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <div className="mx-auto w-[90%] px-4 md:px-6 lg:px-0">
@@ -39,9 +59,9 @@ const CurrentCourseForAttendance = ({ onSearchChange, grade }) => {
         <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
           <div className="flex flex-col">
             <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-              Current Courses
+              All Courses
             </h1>
-            <div className="mt-1 h-[3px] w-[150px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[200px]"></div>
+            <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[140px]"></div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
@@ -60,22 +80,34 @@ const CurrentCourseForAttendance = ({ onSearchChange, grade }) => {
           </div>
         </div>
       </div>
-
       <div className="grid grid-cols-1 justify-items-center gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
-        {submissions.map(({ id, grade }) => (
+        {classTeachers.map((classteacher, index) => (
           <div
-            key={id}
-            onClick={() => handleSectionClick(id)}
+            key={classteacher?._id || index}
+            onClick={() =>
+              navigate(`/teacher/takeattendance/${classteacher.subject._id}`, {
+                state: { classId: classteacher._id },
+              })
+            }
             className="relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
           >
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
               <img src={bag} alt="bag" className="h-7 w-7" />
             </div>
-            <h3 className="font-poppins text-lg font-semibold">
-              English Language
-            </h3>
-            <p className="font-poppins text-gray-700">{grade}</p>
-            <p className="font-poppins text-[#197080]">2023-2024</p>
+            <p className="font-poppins text-lg font-semibold">
+              {classteacher?.subject?.subjectName || "N/A"}
+            </p>
+            <div className="flex justify-start gap-4">
+              <p className="font-poppins font-semibold text-[#197080]">
+                {classteacher?.gradeId?.gradeName || "N/A"}
+              </p>
+              <p className="font-poppins font-semibold text-[#197080]">
+                Class: {classteacher?.className || "N/A"}
+              </p>
+            </div>
+            <p className="font-poppins text-[#197080]">
+              {classteacher?.semester?.semesterName || "N/A"}
+            </p>
           </div>
         ))}
       </div>
@@ -83,4 +115,4 @@ const CurrentCourseForAttendance = ({ onSearchChange, grade }) => {
   );
 };
 
-export default CurrentCourseForAttendance;
+export default CurrentCourse;
