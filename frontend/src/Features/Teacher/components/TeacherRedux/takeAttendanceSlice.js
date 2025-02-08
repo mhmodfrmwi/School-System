@@ -13,6 +13,8 @@ export const postAttendance = createAsyncThunk(
   "attendance/postAttendance",
   async (attendanceData, { rejectWithValue }) => {
     try {
+      console.log("Submitting attendance:", attendanceData);
+
       const token = localStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
@@ -26,23 +28,22 @@ export const postAttendance = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            student: attendanceData.studentId,
-            class: attendanceData.classId,
-            subject: attendanceData.id,
-            status: attendanceData.status,
-          }),
+          body: JSON.stringify(attendanceData),
         },
       );
 
       if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || "Failed to record attendance");
+        const errorData = await response.json();
+        return rejectWithValue(
+          errorData.message || "Failed to record attendance",
+        );
       }
 
       return await response.json();
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to add attendance");
+      return rejectWithValue(
+        error?.message || "Network error. Failed to add attendance.",
+      );
     }
   },
 );
@@ -50,8 +51,6 @@ export const postAttendance = createAsyncThunk(
 export const fetchStudentsForSubject = createAsyncThunk(
   "attendance/fetchStudentsForSubjects",
   async ({ classId, id }, { rejectWithValue }) => {
-    console.log(id);
-
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -71,8 +70,6 @@ export const fetchStudentsForSubject = createAsyncThunk(
           }),
         },
       );
-
-      console.log(response);
 
       if (!response.ok) {
         const error = await response.json();
@@ -102,12 +99,10 @@ const takeAttendanceSlice = createSlice({
       .addCase(postAttendance.fulfilled, (state, action) => {
         state.loading = false;
         state.attendance.push(action.payload);
-        toast.success("Attendance recorded successfully");
       })
       .addCase(postAttendance.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        toast.error(action.payload || "Failed to record attendance");
       })
       .addCase(fetchStudentsForSubject.pending, (state) => {
         state.loading = true;

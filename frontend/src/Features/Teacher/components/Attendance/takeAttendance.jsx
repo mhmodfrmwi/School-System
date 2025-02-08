@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
   fetchStudentsForSubject,
   postAttendance,
 } from "../TeacherRedux/takeAttendanceSlice";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
-import { useNavigate } from "react-router-dom";
 
 function TakeAttendance() {
   const { studentsforsubject } = useSelector(
     (state) => state.attendanceTeacher,
   );
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -22,6 +20,7 @@ function TakeAttendance() {
   const [attendance, setAttendance] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
+
   useEffect(() => {
     if (classId && id) {
       dispatch(fetchStudentsForSubject({ classId, id }));
@@ -29,21 +28,13 @@ function TakeAttendance() {
   }, [dispatch, classId, id]);
 
   console.log(studentsforsubject);
-
-  const grades = [
-    ...new Set(studentsforsubject.map((s) => s.gradeId.gradeName)),
-  ];
-  const classes = [
-    ...new Set(studentsforsubject.map((s) => s.classId.className)),
-  ];
-
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
 
-  const toggleAttendance = (id) => {
+  const toggleAttendance = (studentId) => {
     setAttendance((prev) => ({
       ...prev,
-      [id]: !prev[id],
+      [studentId]: !prev[studentId],
     }));
   };
 
@@ -57,36 +48,30 @@ function TakeAttendance() {
 
     try {
       await Promise.all(
-        studentsforsubject.map((student) =>
-          dispatch(
+        studentsforsubject.map(async (student) => {
+          await dispatch(
             postAttendance({
-              studentId: student._id,
-              classId,
-              id,
-              status: attendance[student._id] ? "Present" : "Absent",
+              studentName: student.fullName,
+              academicNumber: student.academic_number,
+              status: attendance[student._id] ? "P" : "A",
             }),
-          ).unwrap(),
-        ),
+          ).unwrap();
+        }),
       );
 
       toast.success("Attendance submitted successfully!");
       setAttendance({});
-      navigate("/teacher/attendancereport", { state: { classId, id } });
     } catch (error) {
       toast.error(error.message || "Failed to submit attendance");
     }
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
   };
 
   return (
     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
       <div className="m-auto mb-7 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
         <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none"
-          onClick={() => navigate("/teacher/takeattendance")}
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] py-2 font-medium text-white"
+          onClick={() => navigate(`/teacher/takeattendance/${id}`)}
         >
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
             1
@@ -95,12 +80,8 @@ function TakeAttendance() {
         </button>
 
         <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
-          onClick={() =>
-            navigate("/teacher/attendancereport", {
-              state: { classId, id },
-            })
-          }
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[#EFEFEF] py-2 font-medium text-[#117C90]"
+          onClick={() => navigate("/teacher/attendancereport")}
         >
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
             2
@@ -109,32 +90,15 @@ function TakeAttendance() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2">
-        <h2 className="mb-4 text-left text-2xl font-bold text-[#117C90]">
-          Take Attendance - Class {classId}
-        </h2>
-
-        <div className="mb-4 flex flex-wrap justify-start gap-4 sm:justify-end">
-          <select
-            value={""}
-            onChange={(e) => {}}
-            className="rounded-md border p-2"
-            disabled
-          >
-            <option value="">Subject: {id}</option>
-          </select>
-        </div>
-      </div>
-
       <div className="overflow-x-auto">
         <table className="mx-auto w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
-          <thead className="bg-[#117C90] text-white">
+          <thead className="bg-[#117C90] text-left text-white">
             <tr>
               <th className="px-3 py-2">#</th>
               <th className="px-3 py-2">Name</th>
               <th className="px-3 py-2">Academic Number</th>
-              <th className="px-3 py-2">Class</th>
               <th className="px-3 py-2">Grade</th>
+              <th className="px-3 py-2">Class</th>
               <th className="px-3 py-2 text-center">Status</th>
             </tr>
           </thead>
@@ -151,8 +115,12 @@ function TakeAttendance() {
                   </td>
                   <td className="px-3 py-2">{student.fullName}</td>
                   <td className="px-3 py-2">{student.academic_number}</td>
-                  <td className="px-3 py-2">{student.classId?.className}</td>
-                  <td className="px-3 py-2">{student.gradeId?.gradeName}</td>
+                  <td className="px-3 py-2">
+                    {student.classId?.className || "N/A"}
+                  </td>
+                  <td className="px-3 py-2">
+                    {student.gradeId?.gradeName || "N/A"}
+                  </td>
                   <td className="px-3 py-2 text-center">
                     <input
                       type="checkbox"
@@ -172,7 +140,7 @@ function TakeAttendance() {
           totalItems={studentsforsubject.length}
           itemsPerPage={studentsPerPage}
           currentPage={currentPage}
-          onPageChange={handlePageChange}
+          onPageChange={setCurrentPage}
         />
       </div>
 
