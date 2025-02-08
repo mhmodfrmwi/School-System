@@ -50,7 +50,8 @@ export const postAttendance = createAsyncThunk(
 export const fetchStudentsForSubject = createAsyncThunk(
   "attendance/fetchStudentsForSubjects",
   async ({ classId, id }, { rejectWithValue }) => {
-    console.log("Fetching students for Class:", classId, "Subject:", id);
+    console.log(id);
+
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -58,13 +59,16 @@ export const fetchStudentsForSubject = createAsyncThunk(
       }
 
       const response = await fetch(
-        `http://localhost:4000/api/v1/teacher/get-students-for-subject/${id}?classId=${classId}`,
+        `http://localhost:4000/api/v1/teacher/get-students-for-subject/${id}`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            classId,
+          }),
         },
       );
 

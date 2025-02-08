@@ -31,12 +31,10 @@ const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teache
 const {
   getAttendanceForClassInPeriod,
 } = require("../controllers/Teacher/getAttendanceForClassInPeriod");
-const {
-  getTeacherClasses,
-}= require("../controllers/Teacher/getAllClasses");
+const { getTeacherClasses } = require("../controllers/Teacher/getAllClasses");
 const {
   getScheduleForSpecificTeacher,
-}= require("../controllers/Teacher/scheduleController");
+} = require("../controllers/Teacher/scheduleController");
 
 const router = express.Router();
 router.post("/login", login);
@@ -47,7 +45,7 @@ router
   .route("/questionBank/:id")
   .get(validateJwt, validateTeacher, getQuestion)
   .patch(validateJwt, validateTeacher, updateQuestion)
-  .delete(validateJwt, validateTeacher,deleteQuestion);
+  .delete(validateJwt, validateTeacher, deleteQuestion);
 router.get("/questionBank", validateJwt, validateTeacher, getAllQuestions);
 
 router.post("/virtualRoom", validateJwt, validateTeacher, createVirtualRoom);
@@ -55,7 +53,7 @@ router
   .route("/virtualRoom/:id")
   .get(validateJwt, validateTeacher, getVirtualRoom)
   .patch(validateJwt, validateTeacher, updateVirtualRoom)
-  .delete(validateJwt, validateTeacher,deleteVirtualRoom);
+  .delete(validateJwt, validateTeacher, deleteVirtualRoom);
 router.get("/virtualRoom", validateJwt, validateTeacher, getAllVirtualRooms);
 
 router.post("/trip", validateJwt, validateTeacher, createTrip);
@@ -63,10 +61,10 @@ router
   .route("/trip/:id")
   .get(validateJwt, validateTeacher, getTrip)
   .patch(validateJwt, validateTeacher, updateTrip)
-  .delete(validateJwt, validateTeacher,deleteTrip);
+  .delete(validateJwt, validateTeacher, deleteTrip);
 router.get("/trip", validateJwt, validateTeacher, getAllTrips);
 
-router.get(
+router.post(
   "/get-students-for-subject/:gradeSubjectSemesterId",
   validateJwt,
   validateTeacher,
@@ -84,12 +82,7 @@ router.get(
   validateTeacher,
   getAttendanceForClassInPeriod
 );
-router.get(
-  "/class",
-  validateJwt,
-  validateTeacher,
-  getTeacherClasses
-);
+router.get("/class", validateJwt, validateTeacher, getTeacherClasses);
 router.get(
   "/get-schedule",
   validateJwt,

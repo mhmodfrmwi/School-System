@@ -11,18 +11,22 @@ export const fetchClassTeacher = createAsyncThunk(
   "ClassTeachers/fetchClassTeacher",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      const token =
+        localStorage.getItem("token") || sessionStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
 
-      const response = await fetch("http://localhost:4000/api/v1/teacher/class", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:4000/api/v1/teacher/class",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -30,13 +34,12 @@ export const fetchClassTeacher = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log("API Response Data:", data); 
 
-      return data.data || []; 
+      return data.data || [];
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch Material");
     }
-  }
+  },
 );
 
 const TeacherClass = createSlice({
@@ -56,7 +59,7 @@ const TeacherClass = createSlice({
       .addCase(fetchClassTeacher.fulfilled, (state, action) => {
         console.log("Fetched Data:", action.payload);
         state.status = "succeeded";
-        state.classTeachers = action.payload || []; 
+        state.classTeachers = action.payload || [];
         state.loading = false;
       })
       .addCase(fetchClassTeacher.rejected, (state, action) => {

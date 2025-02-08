@@ -3,64 +3,92 @@ const validateObjectId = require("../../utils/validateObjectId");
 const Teacher = require("../../DB/teacher");
 const Class = require("../../DB/classModel");
 const ClassTeacher = require("../../DB/classTeacherModel");
+const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const GradeSubject = require("../../DB/gradeSubject");
 
 const getTeacherClasses = expressAsyncHandler(async (req, res) => {
-    const teacherId = req.user.id;
+  const teacherId = req.user.id;
 
-    if (!validateObjectId(teacherId)) {
-        return res.status(400).json({ status: 400, message: "Invalid ID" });
-    }
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({ status: 400, message: "Invalid ID" });
+  }
 
-    const teacher = await Teacher.findById(teacherId);
-    if (!teacher) {
-        return res.status(404).json({
-            status: 404,
-            message: "Teacher not found",
-        });
-    }
-    const subjectId = teacher.subjectId;
-
-    const classTeachers = await ClassTeacher.find({ teacherId })
-        .populate("classId")
-        .populate("subjectId")
-        .populate("semester_id");
-
-    if (classTeachers.length === 0) {
-        return res.status(404).json({
-            status: 404,
-            message: "No classes found for the teacher",
-        });
-    }
-
-    const classIds = classTeachers.map(ct => ct.classId);
-
-    const classes = await Class.find({ _id: { $in: classIds } }).populate("gradeId");
-
-    if (classes.length === 0) {
-        return res.status(404).json({
-            status: 404,
-            message: "No classes found for the teacher",
-        });
-    }
-
-    const classesWithDetails = classes.map(cls => {
-        
-    const classTeacherEntry = classTeachers.find(ct => ct.classId._id.toString() === cls._id.toString());
-
-        return {
-            ...cls.toObject(),
-            subject: classTeacherEntry.subjectId,
-            semester: classTeacherEntry.semester_id,
-        };
+  const teacher = await Teacher.findById(teacherId).populate("subjectId");
+  if (!teacher) {
+    return res.status(404).json({
+      status: 404,
+      message: "Teacher not found",
     });
+  }
+  const subjectId = teacher.subjectId;
 
-    return res.status(200).json({
-        status: 200,
-        message: "Classes retrieved successfully",
-        data: classesWithDetails,
+  const classTeachers = await ClassTeacher.find({ teacherId })
+    .populate("classId")
+    .populate("subjectId")
+    .populate("semester_id");
+  if (classTeachers.length === 0) {
+    return res.status(404).json({
+      status: 404,
+      message: "No classes found for the teacher",
     });
+  }
+
+  const classIds = classTeachers.map((ct) => ct.classId);
+  const classes = await Class.find({ _id: { $in: classIds } }).populate(
+    "gradeId"
+  );
+  if (classes.length === 0) {
+    return res.status(404).json({
+      status: 404,
+      message: "No classes found for the teacher",
+    });
+  }
+
+  const gradeIds = classIds.map((c) => c.gradeId);
+  const academicYearIds = classIds.map((c) => c.academicYear_id);
+  const semesterIds = classTeachers.map((c) => c.semester_id);
+
+  const gradeSubjects = await GradeSubject.find({
+    subjectId,
+    gradeId: { $in: gradeIds },
+    academicYear_id: { $in: academicYearIds },
+  }).exec();
+  console.log(gradeSubjects);
+  const gradeSubjectIds = gradeSubjects.map((gs) => gs._id);
+
+  const gradeSubjectSemesters = await GradeSubjectSemester.find({
+    grade_subject_id: { $in: gradeSubjectIds },
+    semester_id: { $in: semesterIds },
+  }).exec();
+
+  const response = gradeSubjectSemesters.map((gss, index) => {
+    const classId = classIds[index];
+    const gradeId = gradeIds[index];
+    const semesterId = semesterIds[index];
+    const subjectName = teacher.subjectId.subjectName; // Assuming subjectId has a 'name' field
+    const gradeName = classes[index].gradeId.gradeName; // Assuming gradeId has a 'name' field
+    const className = classes[index].className; // Assuming class has a 'name' field
+    const semesterName = classTeachers[index].semester_id.semesterName; // Assuming semester_id has a 'name' field
+
+    return {
+      id: gss._id,
+      gradeId,
+      semesterId,
+      classId,
+      subjectName,
+      gradeName,
+      className,
+      semesterName,
+    };
+  });
+
+  return res.status(200).json({
+    status: 200,
+    message: "Classes retrieved successfully",
+    data: response,
+  });
 });
 
 module.exports = {
-    getTeacherClasses,
+  getTeacherClasses,
 };

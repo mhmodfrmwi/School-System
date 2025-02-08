@@ -22,6 +22,7 @@ const CurrentCourse = ({ onSearchChange }) => {
     message,
     loading,
   } = useSelector((state) => state.classTeachers || {});
+  console.log(classTeachers);
 
   useEffect(() => {
     dispatch(fetchClassTeacher());
@@ -83,10 +84,10 @@ const CurrentCourse = ({ onSearchChange }) => {
       <div className="grid grid-cols-1 justify-items-center gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
         {classTeachers.map((classteacher, index) => (
           <div
-            key={classteacher?._id || index}
+            key={classteacher?.classId || index}
             onClick={() =>
-              navigate(`/teacher/takeattendance/${classteacher.subject._id}`, {
-                state: { classId: classteacher._id },
+              navigate(`/teacher/takeattendance/${classteacher.id}`, {
+                state: { classId: classteacher.classId._id },
               })
             }
             className="relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
@@ -95,18 +96,18 @@ const CurrentCourse = ({ onSearchChange }) => {
               <img src={bag} alt="bag" className="h-7 w-7" />
             </div>
             <p className="font-poppins text-lg font-semibold">
-              {classteacher?.subject?.subjectName || "N/A"}
+              {classteacher?.subjectName || "N/A"}
             </p>
             <div className="flex justify-start gap-4">
               <p className="font-poppins font-semibold text-[#197080]">
-                {classteacher?.gradeId?.gradeName || "N/A"}
+                {classteacher.gradeName || "N/A"}
               </p>
               <p className="font-poppins font-semibold text-[#197080]">
-                Class: {classteacher?.className || "N/A"}
+                Class: {classteacher.className || "N/A"}
               </p>
             </div>
             <p className="font-poppins text-[#197080]">
-              {classteacher?.semester?.semesterName || "N/A"}
+              {classteacher.semesterName || "N/A"}
             </p>
           </div>
         ))}

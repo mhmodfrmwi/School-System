@@ -7,7 +7,9 @@ const getStudentsForSpecificSubjectUsingClassId = expressAsyncHandler(
   async (req, res) => {
     const gradeSubjectSemesterId = req.params.gradeSubjectSemesterId;
     if (!validateObjectId(gradeSubjectSemesterId)) {
-      return res.status(400).json({ status: 400, message: "Invalid ID" });
+      return res
+        .status(400)
+        .json({ status: 400, message: "Invalid subject ID" });
     }
     const gradeSubjectSemester = await GradeSubjectSemester.findById(
       gradeSubjectSemesterId
@@ -17,9 +19,10 @@ const getStudentsForSpecificSubjectUsingClassId = expressAsyncHandler(
         .status(404)
         .json({ status: 404, message: "Grade Subject Semester not found" });
     }
+
     const classId = req.body.classId;
     if (!validateObjectId(classId)) {
-      return res.status(400).json({ status: 400, message: "Invalid ID" });
+      return res.status(400).json({ status: 400, message: "Invalid class ID" });
     }
     const existingClass = await Class.findById(classId);
     if (!existingClass) {

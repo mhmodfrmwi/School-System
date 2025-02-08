@@ -312,7 +312,7 @@ const deleteStudent = expressAsyncHandler(async (req, res) => {
       $inc: { student_count: -1 },
     });
     await Student.findByIdAndDelete(id);
-    await Attendance.deleteMany({student_id: id });
+    await Attendance.deleteMany({ student_id: id });
     res.status(200).json({
       status: 200,
       message: "Student deleted successfully",

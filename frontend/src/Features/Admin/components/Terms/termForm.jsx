@@ -15,28 +15,27 @@ function TermForm() {
   const academicYears = useSelector(
     (state) => state.academicYears.academicYears,
   );
-
+  console.log("academicYears", academicYears);
   useEffect(() => {
     dispatch(fetchAcademicYears());
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:4000/api/v1/admin/semester",
-        );
-        const data = await response.json();
-        const uniqueSemesters = [
-          ...new Map(
-            data.semesters.map((item) => [item.semesterName, item]),
-          ).values(),
-        ];
-        setSemesters(uniqueSemesters);
-      } catch (error) {
-        console.error("Error fetching semesters:", error);
-      }
-    };
-
-    fetchData();
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await fetch(
+    //       "http://localhost:4000/api/v1/admin/semester",
+    //     );
+    //     const data = await response.json();
+    //     const uniqueSemesters = [
+    //       ...new Map(
+    //         data.semesters.map((item) => [item.semesterName, item]),
+    //       ).values(),
+    //     ];
+    //     setSemesters(uniqueSemesters);
+    //   } catch (error) {
+    //     console.error("Error fetching semesters:", error);
+    //   }
+    // };
+    // fetchData();
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -101,6 +100,8 @@ function TermForm() {
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
+              <option value="">Select Year</option>
+
               {academicYears && academicYears.length > 0 ? (
                 academicYears.map((year) => (
                   <option
