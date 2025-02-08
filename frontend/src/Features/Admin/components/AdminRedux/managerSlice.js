@@ -8,12 +8,20 @@ const initialState = {
   loading: false,
 };
 
-// Fetch all managers
+const getToken = () => localStorage.getItem("token");
+
 export const fetchManagers = createAsyncThunk(
   "managers/fetchManagers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/manager");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/manager",
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        },
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -25,21 +33,24 @@ export const fetchManagers = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch managers");
     }
-  }
+  },
 );
 
-// Add a new manager
 export const postManager = createAsyncThunk(
   "managers/postManager",
   async (managerData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/manager/createManager", {
-        method: "POST",
-        body: JSON.stringify(managerData),
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/manager/createManager",
+        {
+          method: "POST",
+          body: JSON.stringify(managerData),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -51,21 +62,24 @@ export const postManager = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to add manager");
     }
-  }
+  },
 );
 
-// Edit an existing manager
 export const editManager = createAsyncThunk(
   "managers/editManager",
   async ({ id, updatedManager }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/manager/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(updatedManager),
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/manager/${id}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify(updatedManager),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -77,20 +91,23 @@ export const editManager = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit manager");
     }
-  }
+  },
 );
 
-// Delete a manager
 export const removeManager = createAsyncThunk(
   "managers/removeManager",
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/manager/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/manager/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -102,7 +119,7 @@ export const removeManager = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove manager");
     }
-  }
+  },
 );
 
 const managerSlice = createSlice({
@@ -128,10 +145,14 @@ const managerSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch managers";
         state.loading = false;
-        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
-
-        }else{
-        toast.error(action.payload || "Failed to fetch managers");}
+        if (
+          state.error.includes("NetworkError") ||
+          state.error.includes("Token is required!")
+        ) {
+          toast.error("Authentication error! Please log in again.");
+        } else {
+          toast.error(action.payload || "Failed to fetch managers");
+        }
       })
       .addCase(postManager.pending, (state) => {
         state.status = "loading";
@@ -156,7 +177,7 @@ const managerSlice = createSlice({
       .addCase(editManager.fulfilled, (state, action) => {
         state.status = "succeeded";
         const index = state.managers.findIndex(
-          (manager) => manager._id === action.payload._id
+          (manager) => manager._id === action.payload._id,
         );
         if (index !== -1) {
           state.managers[index] = action.payload;
@@ -177,7 +198,7 @@ const managerSlice = createSlice({
       .addCase(removeManager.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.managers = state.managers.filter(
-          (manager) => manager._id !== action.payload
+          (manager) => manager._id !== action.payload,
         );
         toast.success("Manager removed successfully!");
         state.loading = false;

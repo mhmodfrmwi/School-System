@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
+const getToken = () => localStorage.getItem("token");
+
 const initialState = {
   subjects: [],
   status: "idle",
@@ -8,12 +10,22 @@ const initialState = {
   loading: false,
 };
 
-// Fetch all subjects
 export const fetchSubjects = createAsyncThunk(
   "subjects/fetchSubjects",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/subject");
+      const token = getToken();
+      if (!token) throw new Error("Token is required!");
+
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/subject",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -25,21 +37,27 @@ export const fetchSubjects = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch subjects");
     }
-  }
+  },
 );
 
-// Add a new subject
 export const postSubject = createAsyncThunk(
   "subjects/postSubject",
   async (subjectData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/subject/createSubject", {
-        method: "POST",
-        body: JSON.stringify(subjectData),
-        headers: {
-          "Content-Type": "application/json",
+      const token = getToken();
+      if (!token) throw new Error("Token is required!");
+
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/subject/createSubject",
+        {
+          method: "POST",
+          body: JSON.stringify(subjectData),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -51,21 +69,27 @@ export const postSubject = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to add subject");
     }
-  }
+  },
 );
 
-// Edit an existing subject
 export const editSubject = createAsyncThunk(
   "subjects/editSubject",
   async ({ id, updatedSubject }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/subject/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(updatedSubject),
-        headers: {
-          "Content-Type": "application/json",
+      const token = getToken();
+      if (!token) throw new Error("Token is required!");
+
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/subject/${id}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify(updatedSubject),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -77,20 +101,26 @@ export const editSubject = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit subject");
     }
-  }
+  },
 );
 
-// Delete a subject
 export const removeSubject = createAsyncThunk(
   "subjects/removeSubject",
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/subject/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const token = getToken();
+      if (!token) throw new Error("Token is required!");
+
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/subject/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -102,7 +132,7 @@ export const removeSubject = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove subject");
     }
-  }
+  },
 );
 
 const subjectSlice = createSlice({
@@ -111,7 +141,7 @@ const subjectSlice = createSlice({
   reducers: {
     editSubject: (state, action) => {
       const index = state.subjects.findIndex(
-        (subject) => subject.id === action.payload.id
+        (subject) => subject.id === action.payload.id,
       );
       if (index !== -1) {
         state.subjects[index] = action.payload;
@@ -136,10 +166,11 @@ const subjectSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch subjects";
         state.loading = false;
-        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
-
-        }else{
-        toast.error(state.error);} // هنا فقط
+        if (state.error.includes("Token is required!")) {
+          toast.error("Authentication required. Please log in.");
+        } else {
+          toast.error(state.error);
+        }
       })
       .addCase(postSubject.pending, (state) => {
         state.status = "loading";
@@ -154,7 +185,7 @@ const subjectSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to add subject";
         state.loading = false;
-        toast.error(state.error); // هنا فقط
+        toast.error(state.error);
       })
       .addCase(editSubject.pending, (state) => {
         state.status = "loading";
@@ -163,7 +194,7 @@ const subjectSlice = createSlice({
       .addCase(editSubject.fulfilled, (state, action) => {
         state.status = "succeeded";
         const index = state.subjects.findIndex(
-          (subject) => subject._id === action.payload._id
+          (subject) => subject._id === action.payload._id,
         );
         if (index !== -1) {
           state.subjects[index] = action.payload;
@@ -174,7 +205,7 @@ const subjectSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to edit subject";
         state.loading = false;
-        toast.error(state.error); // هنا فقط
+        toast.error(state.error);
       })
       .addCase(removeSubject.pending, (state) => {
         state.status = "loading";
@@ -183,7 +214,7 @@ const subjectSlice = createSlice({
       .addCase(removeSubject.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.subjects = state.subjects.filter(
-          (subject) => subject._id !== action.payload
+          (subject) => subject._id !== action.payload,
         );
         state.loading = false;
       })
@@ -191,7 +222,7 @@ const subjectSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to remove subject";
         state.loading = false;
-        toast.error(state.error); // هنا فقط
+        toast.error(state.error);
       });
   },
 });

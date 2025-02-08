@@ -26,7 +26,9 @@ function TermForm() {
         );
         const data = await response.json();
         const uniqueSemesters = [
-          ...new Map(data.semesters.map(item => [item.semesterName, item])).values()
+          ...new Map(
+            data.semesters.map((item) => [item.semesterName, item]),
+          ).values(),
         ];
         setSemesters(uniqueSemesters);
       } catch (error) {
@@ -61,38 +63,42 @@ function TermForm() {
   };
 
   return (
-    <div className="w-[80%] mx-auto my-10 font-poppins">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Add Term</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
+    <div className="mx-auto my-10 w-[80%] font-poppins">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Add Term</h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+        <form
+          onSubmit={handleSubmit}
+          className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+        >
           {/* Term Name */}
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Term Name</label>
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Term Name
+            </label>
             <select
               name="term"
               value={formData.term}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               <option value="">Select Term</option>
-              {semesters.map((semester) => (
-                <option key={semester._id} value={semester.semesterName}>
-                  {semester.semesterName}
-                </option>
-              ))}
+              <option value="Semester 1">Semester 1</option>
+              <option value="Semester 2">Semester 2</option>
             </select>
           </div>
 
           {/* Academic Year */}
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Academic Year</label>
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Academic Year
+            </label>
             <select
               name="year"
               value={formData.year}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               required
             >
               {academicYears && academicYears.length > 0 ? (
@@ -111,10 +117,10 @@ function TermForm() {
           </div>
 
           {/* Submit Button */}
-          <div className="col-span-1 sm:col-span-2 mt-6">
+          <div className="col-span-1 mt-6 sm:col-span-2">
             <button
               type="submit"
-              className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+              className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
             >
               Add Term
             </button>

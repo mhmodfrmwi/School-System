@@ -12,11 +12,13 @@ const initialState = {
   loading: false,
 };
 
-// Post a new term
+const getAuthToken = () => {
+  return localStorage.getItem("token") || "";
+};
+
 export const postTerm = createAsyncThunk(
   "terms/postTerm",
   async (termData, { rejectWithValue }) => {
-    console.log(termData);
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/semester/createSemester",
@@ -25,6 +27,7 @@ export const postTerm = createAsyncThunk(
           body: JSON.stringify(termData),
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${getAuthToken()}`,
           },
         },
       );
@@ -35,7 +38,6 @@ export const postTerm = createAsyncThunk(
       }
 
       const data = await response.json();
-    
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to post term data");
@@ -43,13 +45,17 @@ export const postTerm = createAsyncThunk(
   },
 );
 
-// Fetch all terms
 export const fetchTerms = createAsyncThunk(
   "terms/fetchTerms",
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/semester",
+        {
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+        },
       );
 
       if (!response.ok) {
@@ -65,7 +71,6 @@ export const fetchTerms = createAsyncThunk(
   },
 );
 
-// Edit a term
 export const editTermAsync = createAsyncThunk(
   "terms/editTermAsync",
   async ({ id, updatedData }, { rejectWithValue }) => {
@@ -77,8 +82,9 @@ export const editTermAsync = createAsyncThunk(
           body: JSON.stringify(updatedData),
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${getAuthToken()}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -91,30 +97,35 @@ export const editTermAsync = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
-// Remove a term
+
 export const removeTerm = createAsyncThunk(
   "terms/removeTerm",
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/semester/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/semester/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
         return rejectWithValue(error.message);
       }
+
       dispatch(fetchTerms());
       return id;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to remove manager");
+      return rejectWithValue(error.message || "Failed to remove term");
     }
-  }
+  },
 );
 
 const termsSlice = createSlice({
@@ -156,7 +167,7 @@ const termsSlice = createSlice({
     builder
       .addCase(postTerm.pending, (state) => {
         state.status = "loading";
-        state.error = ""; // Ensure error is not null
+        state.error = "";
         state.loading = true;
       })
       .addCase(postTerm.fulfilled, (state, action) => {
@@ -167,7 +178,7 @@ const termsSlice = createSlice({
       })
       .addCase(postTerm.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to post term data"; // Fallback to default error
+        state.error = action.payload || "Failed to post term data";
         state.loading = false;
         toast.error(state.error);
       })
@@ -180,11 +191,14 @@ const termsSlice = createSlice({
       })
       .addCase(fetchTerms.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to fetch terms"; // Fallback to default error
-        if (state.error.includes("NetworkError")||state.error.includes("Token is required!")) {
-          // Optionally handle network error case
+        state.error = action.payload || "Failed to fetch terms";
+        if (
+          state.error.includes("NetworkError") ||
+          state.error.includes("Token is required!")
+        ) {
+          // Handle network error case
         } else {
-          toast.error(state.error); // Show toast with the error message
+          toast.error(state.error);
         }
       })
       .addCase(removeTerm.pending, (state) => {
@@ -193,26 +207,26 @@ const termsSlice = createSlice({
       })
       .addCase(removeTerm.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.terms = state.terms.filter(
-          (term) => term._id !== action.payload
-        );
+        state.terms = state.terms.filter((term) => term._id !== action.payload);
         toast.success("Term deleted successfully!");
         state.loading = false;
       })
       .addCase(removeTerm.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to remove term"; // Fallback to default error
+        state.error = action.payload || "Failed to remove term";
         state.loading = false;
-        toast.error(state.error); // Show toast with the error message
+        toast.error(state.error);
       })
       .addCase(editTermAsync.pending, (state) => {
         state.loading = true;
-        state.error = ""; // Ensure error is not null
+        state.error = "";
       })
       .addCase(editTermAsync.fulfilled, (state, action) => {
         state.loading = false;
         const updatedTerm = action.payload.semester;
-        const index = state.terms.findIndex((term) => term._id === updatedTerm._id);
+        const index = state.terms.findIndex(
+          (term) => term._id === updatedTerm._id,
+        );
         if (index !== -1) {
           state.terms[index] = updatedTerm;
         }
@@ -221,14 +235,12 @@ const termsSlice = createSlice({
       })
       .addCase(editTermAsync.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to edit term"; // Fallback to default error
-        toast.error(state.error); // Show toast with the error message
+        state.error = action.payload || "Failed to edit term";
+        toast.error(state.error);
       });
-  }
-  
+  },
 });
 
 export const { clearMessage, addTerm, editTerm, addTermToServer } =
   termsSlice.actions;
-
 export default termsSlice.reducer;

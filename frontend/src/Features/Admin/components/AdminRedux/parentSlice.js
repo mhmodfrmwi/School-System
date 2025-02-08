@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
+const getToken = () => localStorage.getItem("token");
+
 const initialState = {
   fullName: "",
   email: "",
@@ -18,6 +20,7 @@ export const postParent = createAsyncThunk(
   "parents/postParent",
   async (parentData, { rejectWithValue }) => {
     try {
+      const token = getToken();
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/parent/createParent",
         {
@@ -25,32 +28,44 @@ export const postParent = createAsyncThunk(
           body: JSON.stringify(parentData),
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
       if (!response.ok) {
+        if (response.status === 401)
+          throw new Error("Unauthorized, please log in again.");
         const error = await response.json();
         return rejectWithValue(error.message);
       }
 
       const data = await response.json();
-
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
 );
+
 export const fetchParents = createAsyncThunk(
   "parents/fetchParents",
   async (_, { rejectWithValue }) => {
     try {
+      const token = getToken();
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/parent/",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       if (!response.ok) {
+        if (response.status === 401)
+          throw new Error("Unauthorized, please log in again.");
         const error = await response.json();
         return rejectWithValue(error.message);
       }
@@ -67,6 +82,7 @@ export const editParentAsync = createAsyncThunk(
   "parents/editParentAsync",
   async ({ id, updatedParent }, { rejectWithValue }) => {
     try {
+      const token = getToken();
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/parent/${id}`,
         {
@@ -74,17 +90,19 @@ export const editParentAsync = createAsyncThunk(
           body: JSON.stringify(updatedParent),
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
       if (!response.ok) {
+        if (response.status === 401)
+          throw new Error("Unauthorized, please log in again.");
         const error = await response.json();
         return rejectWithValue(error.message);
       }
 
       const data = await response.json();
-
       return data.parent;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -96,22 +114,26 @@ export const removeParent = createAsyncThunk(
   "parents/removeParent",
   async (id, { rejectWithValue, dispatch }) => {
     try {
+      const token = getToken();
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/parent/${id}`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
       if (!response.ok) {
+        if (response.status === 401)
+          throw new Error("Unauthorized, please log in again.");
         const error = await response.json();
         return rejectWithValue(error.message);
       }
-      dispatch(fetchParents());
 
+      dispatch(fetchParents()); // Refresh parent list after deletion
       return id;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -137,46 +159,28 @@ const parentSlice = createSlice({
     clearMessage: (state) => {
       state.message = "";
     },
-    addParenttoserver: {
-      prepare(fullName, email, password, phoneNumber, gender) {
-        return {
-          payload: {
-            fullName,
-            email,
-            password,
-            phoneNumber,
-            gender,
-          },
-        };
-      },
-      reducer(state, action) {
-        state.fullName = action.payload.fullName;
-        state.email = action.payload.email;
-        state.password = action.payload.password;
-        state.phoneNumber = action.payload.phoneNumber;
-        state.gender = action.payload.gender;
-      },
-    },
   },
   extraReducers: (builder) => {
     builder
+
       .addCase(postParent.pending, (state) => {
         state.status = "loading";
-        state.error = ""; // Ensure error is not null
+        state.error = "";
         state.loading = true;
       })
       .addCase(postParent.fulfilled, (state, action) => {
         state.status = "succeeded";
-        Object.assign(state, action.payload);
+        state.parents.push(action.payload);
         state.loading = false;
         toast.success("Parent added successfully!");
       })
       .addCase(postParent.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to post parent"; // Fallback error message
+        state.error = action.payload || "Failed to post parent";
         state.loading = false;
-        toast.error(state.error); // Show toast with error message
+        toast.error(state.error);
       })
+
       .addCase(fetchParents.pending, (state) => {
         state.status = "loading";
         state.loading = true;
@@ -188,14 +192,18 @@ const parentSlice = createSlice({
       })
       .addCase(fetchParents.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to fetch parents"; // Fallback error message
+        state.error = action.payload || "Failed to fetch parents";
         state.loading = false;
-        if (state.error.includes("NetworkError")||state.error.includes("Token is required!")) {
-          // Optionally handle network error case
+
+        if (state.error === "Unauthorized, please log in again.") {
+          toast.error("Session expired, please log in again.");
+          localStorage.removeItem("token");
+          window.location.href = "/login";
         } else {
-          toast.error(state.error); // Show toast with error message
+          toast.error(state.error);
         }
       })
+
       .addCase(removeParent.pending, (state) => {
         state.status = "loading";
         state.loading = true;
@@ -203,7 +211,7 @@ const parentSlice = createSlice({
       .addCase(removeParent.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.parents = state.parents.filter(
-          (parent) => parent._id !== action.payload
+          (parent) => parent._id !== action.payload,
         );
         state.message = "Parent deleted successfully";
         state.loading = false;
@@ -211,10 +219,11 @@ const parentSlice = createSlice({
       })
       .addCase(removeParent.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to delete parent"; // Fallback error message
+        state.error = action.payload || "Failed to delete parent";
         state.loading = false;
-        toast.error(state.error); // Show toast with error message
+        toast.error(state.error);
       })
+
       .addCase(editParentAsync.pending, (state) => {
         state.loading = true;
       })
@@ -222,7 +231,7 @@ const parentSlice = createSlice({
         state.loading = false;
         const updatedParent = action.payload;
         const index = state.parents.findIndex(
-          (parent) => parent._id === updatedParent._id
+          (parent) => parent._id === updatedParent._id,
         );
         if (index !== -1) {
           state.parents[index] = updatedParent;
@@ -232,14 +241,11 @@ const parentSlice = createSlice({
       })
       .addCase(editParentAsync.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to update parent"; // Fallback error message
-        toast.error(state.error); // Show toast with error message
+        state.error = action.payload || "Failed to update parent";
+        toast.error(state.error);
       });
-  }
-  
+  },
 });
 
-export const { addParent, editParent, clearMessage, addParenttoserver } =
-  parentSlice.actions;
-
+export const { addParent, editParent, clearMessage } = parentSlice.actions;
 export default parentSlice.reducer;

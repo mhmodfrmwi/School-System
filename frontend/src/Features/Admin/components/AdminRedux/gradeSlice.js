@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
+const BASE_URL = "http://localhost:4000/api/v1/admin";
+
+const getToken = () => localStorage.getItem("token");
+
 const initialState = {
   grades: [],
   status: "idle",
@@ -8,12 +12,13 @@ const initialState = {
   loading: false,
 };
 
-// Fetch all grades
 export const fetchGrades = createAsyncThunk(
   "grades/fetchGrades",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/grade");
+      const response = await fetch(`${BASE_URL}/grade`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -25,19 +30,19 @@ export const fetchGrades = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch grades");
     }
-  }
+  },
 );
 
-// Add a new grade
 export const postGrade = createAsyncThunk(
   "grades/postGrade",
   async (gradeData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/grade/createGrade", {
+      const response = await fetch(`${BASE_URL}/grade/createGrade`, {
         method: "POST",
         body: JSON.stringify(gradeData),
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 
@@ -51,19 +56,19 @@ export const postGrade = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to add grade");
     }
-  }
+  },
 );
 
-// Edit an existing grade
 export const editGrade = createAsyncThunk(
   "grades/editGrade",
   async ({ id, updatedGrade }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/grade/${id}`, {
+      const response = await fetch(`${BASE_URL}/grade/${id}`, {
         method: "PATCH",
         body: JSON.stringify(updatedGrade),
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 
@@ -77,18 +82,18 @@ export const editGrade = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit grade");
     }
-  }
+  },
 );
 
-// Delete a grade
 export const removeGrade = createAsyncThunk(
   "grades/removeGrade",
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/grade/${id}`, {
+      const response = await fetch(`${BASE_URL}/grade/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 
@@ -102,7 +107,7 @@ export const removeGrade = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove grade");
     }
-  }
+  },
 );
 
 const gradeSlice = createSlice({
@@ -111,7 +116,7 @@ const gradeSlice = createSlice({
   reducers: {
     editGrade: (state, action) => {
       const index = state.grades.findIndex(
-        (grade) => grade.id === action.payload.id
+        (grade) => grade.id === action.payload.id,
       );
       if (index !== -1) {
         state.grades[index] = action.payload;
@@ -136,10 +141,13 @@ const gradeSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch grades";
         state.loading = false;
-        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
-
-        }else{
-        toast.error(state.error);}
+        if (
+          state.error.includes("NetworkError") ||
+          state.error.includes("Token is required!")
+        ) {
+        } else {
+          toast.error(state.error);
+        }
       })
       .addCase(postGrade.pending, (state) => {
         state.status = "loading";
@@ -155,7 +163,7 @@ const gradeSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to add grade";
         state.loading = false;
-        toast.error(state.error); // هنا فقط
+        toast.error(state.error);
       })
       .addCase(editGrade.pending, (state) => {
         state.status = "loading";
@@ -164,7 +172,7 @@ const gradeSlice = createSlice({
       .addCase(editGrade.fulfilled, (state, action) => {
         state.status = "succeeded";
         const index = state.grades.findIndex(
-          (grade) => grade._id === action.payload._id
+          (grade) => grade._id === action.payload._id,
         );
         if (index !== -1) {
           state.grades[index] = action.payload;
@@ -175,7 +183,7 @@ const gradeSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to edit grade";
         state.loading = false;
-        toast.error(state.error); // هنا فقط
+        toast.error(state.error);
       })
       .addCase(removeGrade.pending, (state) => {
         state.status = "loading";
@@ -184,7 +192,7 @@ const gradeSlice = createSlice({
       .addCase(removeGrade.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.grades = state.grades.filter(
-          (grade) => grade._id !== action.payload
+          (grade) => grade._id !== action.payload,
         );
         state.loading = false;
       })
@@ -192,7 +200,7 @@ const gradeSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to remove grade";
         state.loading = false;
-        toast.error(state.error); // هنا فقط
+        toast.error(state.error);
       });
   },
 });

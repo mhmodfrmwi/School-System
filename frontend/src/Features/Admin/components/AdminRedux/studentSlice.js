@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
+const getToken = () => localStorage.getItem("token");
+
 const initialState = {
   students: [],
   status: "idle",
@@ -11,17 +13,26 @@ const initialState = {
 
 export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
-
   async (_, { rejectWithValue }) => {
     try {
+      const token = getToken();
+      if (!token) throw new Error("Token is required!");
+
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/student",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
       );
 
       if (!response.ok) {
         const error = await response.json();
         return rejectWithValue(error.message);
       }
+
       const data = await response.json();
       return data.students;
     } catch (error) {
@@ -34,12 +45,16 @@ export const postStudent = createAsyncThunk(
   "students/postStudent",
   async (studentData, { rejectWithValue }) => {
     try {
+      const token = getToken();
+      if (!token) throw new Error("Token is required!");
+
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/student/createStudent",
         {
           method: "POST",
           body: JSON.stringify(studentData),
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         },
@@ -60,15 +75,18 @@ export const postStudent = createAsyncThunk(
 
 export const editStudent = createAsyncThunk(
   "students/editStudent",
-
   async ({ id, updatedStudent }, { rejectWithValue }) => {
     try {
+      const token = getToken();
+      if (!token) throw new Error("Token is required!");
+
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/student/${id}`,
         {
           method: "PATCH",
           body: JSON.stringify(updatedStudent),
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         },
@@ -80,7 +98,6 @@ export const editStudent = createAsyncThunk(
       }
 
       const data = await response.json();
-
       return data.updatedStudent;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit student");
@@ -92,11 +109,15 @@ export const removeStudent = createAsyncThunk(
   "students/removeStudent",
   async (id, { rejectWithValue, dispatch }) => {
     try {
+      const token = getToken();
+      if (!token) throw new Error("Token is required!");
+
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/student/${id}`,
         {
           method: "DELETE",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         },
@@ -139,10 +160,11 @@ const studentsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch students";
         state.loading = false;
-        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
-          
-        }else{
-        toast.error(state.error);}
+        if (state.error.includes("Token is required!")) {
+          toast.error("Authentication required. Please log in.");
+        } else {
+          toast.error(state.error);
+        }
       })
       .addCase(postStudent.pending, (state) => {
         state.status = "loading";
@@ -158,6 +180,7 @@ const studentsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to add student";
         state.loading = false;
+        toast.error(state.error);
       })
       .addCase(editStudent.pending, (state) => {
         state.status = "loading";
@@ -178,6 +201,7 @@ const studentsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to edit student";
         state.loading = false;
+        toast.error(state.error);
       })
       .addCase(removeStudent.pending, (state) => {
         state.status = "loading";
@@ -195,6 +219,7 @@ const studentsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to remove student";
         state.loading = false;
+        toast.error(state.error);
       });
   },
 });

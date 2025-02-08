@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
+const BASE_URL = "http://localhost:4000/api/v1/admin";
+
+const getToken = () => localStorage.getItem("token");
+
 const initialState = {
   classes: [],
   status: "idle",
@@ -8,12 +12,13 @@ const initialState = {
   loading: false,
 };
 
-// Fetch all classes
 export const fetchClasses = createAsyncThunk(
   "classes/fetchClasses",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/class");
+      const response = await fetch(`${BASE_URL}/class`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -25,19 +30,19 @@ export const fetchClasses = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch classes");
     }
-  }
+  },
 );
 
-// Add a new class
 export const postClass = createAsyncThunk(
   "classes/postClass",
   async (classData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/class/createClass", {
+      const response = await fetch(`${BASE_URL}/class/createClass`, {
         method: "POST",
         body: JSON.stringify(classData),
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 
@@ -51,19 +56,19 @@ export const postClass = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to add class");
     }
-  }
+  },
 );
 
-// Edit an existing class
 export const editClass = createAsyncThunk(
   "classes/editClass",
   async ({ id, updatedClass }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/class/${id}`, {
+      const response = await fetch(`${BASE_URL}/class/${id}`, {
         method: "PATCH",
         body: JSON.stringify(updatedClass),
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 
@@ -77,18 +82,18 @@ export const editClass = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit class");
     }
-  }
+  },
 );
 
-// Delete a class
 export const removeClass = createAsyncThunk(
   "classes/removeClass",
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/class/${id}`, {
+      const response = await fetch(`${BASE_URL}/class/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 
@@ -102,7 +107,7 @@ export const removeClass = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove class");
     }
-  }
+  },
 );
 
 const classSlice = createSlice({
@@ -128,10 +133,13 @@ const classSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch classes";
         state.loading = false;
-        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
-
-        }else{
-        toast.error(state.error);}
+        if (
+          state.error.includes("NetworkError") ||
+          state.error.includes("Token is required!")
+        ) {
+        } else {
+          toast.error(state.error);
+        }
       })
       .addCase(postClass.pending, (state) => {
         state.status = "loading";
@@ -155,7 +163,7 @@ const classSlice = createSlice({
       .addCase(editClass.fulfilled, (state, action) => {
         state.status = "succeeded";
         const index = state.classes.findIndex(
-          (classItem) => classItem._id === action.payload._id
+          (classItem) => classItem._id === action.payload._id,
         );
         if (index !== -1) {
           state.classes[index] = action.payload;
@@ -175,7 +183,7 @@ const classSlice = createSlice({
       .addCase(removeClass.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.classes = state.classes.filter(
-          (classItem) => classItem._id !== action.payload
+          (classItem) => classItem._id !== action.payload,
         );
         toast.success("Class removed successfully!");
         state.loading = false;

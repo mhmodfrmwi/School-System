@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
+const getToken = () => localStorage.getItem("token");
+
 const initialState = {
   schedules: [],
   status: "idle",
@@ -13,6 +15,7 @@ export const postSchedual = createAsyncThunk(
   "schedules/postSchedual",
   async (schedualData, { rejectWithValue }) => {
     try {
+      const token = getToken();
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/schedule/createSchedule",
         {
@@ -20,17 +23,19 @@ export const postSchedual = createAsyncThunk(
           body: JSON.stringify(schedualData),
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
       if (!response.ok) {
+        if (response.status === 401)
+          throw new Error("Unauthorized, please log in again.");
         const error = await response.json();
         return rejectWithValue(error.message);
       }
 
       const data = await response.json();
-
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to post schedule data");
@@ -42,11 +47,20 @@ export const fetchScheduals = createAsyncThunk(
   "schedules/fetchScheduals",
   async (_, { rejectWithValue }) => {
     try {
+      const token = getToken();
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/schedule",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       if (!response.ok) {
+        if (response.status === 401)
+          throw new Error("Unauthorized, please log in again.");
         throw new Error("Failed to fetch schedules");
       }
 
@@ -62,6 +76,7 @@ export const editSchedualAsync = createAsyncThunk(
   "schedules/editSchedualAsync",
   async ({ id, updatedSchedual }, { rejectWithValue }) => {
     try {
+      const token = getToken();
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/schedule/${id}`,
         {
@@ -69,11 +84,14 @@ export const editSchedualAsync = createAsyncThunk(
           body: JSON.stringify(updatedSchedual),
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
       if (!response.ok) {
+        if (response.status === 401)
+          throw new Error("Unauthorized, please log in again.");
         const error = await response.json();
         return rejectWithValue(error.message);
       }
@@ -90,23 +108,26 @@ export const removeSchedual = createAsyncThunk(
   "schedules/removeSchedual",
   async (id, { rejectWithValue, dispatch }) => {
     try {
+      const token = getToken();
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/schedule/${id}`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
       if (!response.ok) {
+        if (response.status === 401)
+          throw new Error("Unauthorized, please log in again.");
         const error = await response.json();
-        console.log(error);
+        return rejectWithValue(error.message);
       }
 
       dispatch(fetchScheduals());
-
       return id;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -132,28 +153,10 @@ const scheduleSlice = createSlice({
     clearMessage: (state) => {
       state.message = "";
     },
-    addSchedualToServer: {
-      prepare(subjectName, teacher, day, startTime, endTime, className, grade) {
-        return {
-          payload: {
-            subjectName,
-            teacher,
-            day,
-            startTime,
-            endTime,
-            className,
-            grade,
-          },
-        };
-      },
-      reducer(state, action) {
-        const newSchedual = action.payload;
-        state.schedules.push(newSchedual);
-      },
-    },
   },
   extraReducers: (builder) => {
     builder
+
       .addCase(postSchedual.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -166,6 +169,7 @@ const scheduleSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+
       .addCase(fetchScheduals.pending, (state) => {
         state.loading = true;
       })
@@ -173,9 +177,19 @@ const scheduleSlice = createSlice({
         state.loading = false;
         state.schedules = action.payload;
       })
-      .addCase(fetchScheduals.rejected, (state) => {
+      .addCase(fetchScheduals.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+
+        if (state.error === "Unauthorized, please log in again.") {
+          toast.error("Session expired, please log in again.");
+          localStorage.removeItem("token");
+          window.location.href = "/login"; //
+        } else {
+          toast.error(state.error);
+        }
       })
+
       .addCase(removeSchedual.pending, (state) => {
         state.loading = true;
       })
@@ -187,10 +201,12 @@ const scheduleSlice = createSlice({
         state.message = "Schedule deleted successfully";
         toast.success("Schedule deleted successfully");
       })
-      .addCase(removeSchedual.rejected, (state) => {
+      .addCase(removeSchedual.rejected, (state, action) => {
         state.loading = false;
-        state.error = "Failed to delete schedule";
+        state.error = action.payload;
+        toast.error(state.error);
       })
+
       .addCase(editSchedualAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -213,7 +229,7 @@ const scheduleSlice = createSlice({
   },
 });
 
-export const { clearMessage, addSchedual, editSchedual, addSchedualToServer } =
+export const { clearMessage, addSchedual, editSchedual } =
   scheduleSlice.actions;
 
 export default scheduleSlice.reducer;

@@ -9,12 +9,22 @@ const initialState = {
   loading: false,
 };
 
-// Fetch assigned subjects
+const getAuthToken = () => {
+  return localStorage.getItem("token") || "";
+};
+
 export const fetchAssignedSubjects = createAsyncThunk(
   "assignSubject/fetchAssignedSubjects",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/gradeSubjectSemester");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/gradeSubjectSemester",
+        {
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+        },
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -24,23 +34,27 @@ export const fetchAssignedSubjects = createAsyncThunk(
       const data = await response.json();
       return data.gradeSubjectSemesters || [];
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to fetch assigned subjects");
+      return rejectWithValue(
+        error.message || "Failed to fetch assigned subjects",
+      );
     }
-  }
+  },
 );
 
-// Assign a subject
 export const assignSubject = createAsyncThunk(
   "assignSubject/assignSubject",
-  async (subjectData, { rejectWithValue }) => {  
+  async (subjectData, { rejectWithValue }) => {
     try {
       const response = await fetch(
         "http://localhost:4000/api/v1/admin/gradeSubjectSemester/createGradeSubjectSemester",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(subjectData),  
-        }
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+          body: JSON.stringify(subjectData),
+        },
       );
 
       const data = await response.json();
@@ -54,15 +68,21 @@ export const assignSubject = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to assign subject");
     }
-  }
+  },
 );
 
-// Fetch semesters
 export const fetchSemesters = createAsyncThunk(
   "assignSubject/fetchSemesters",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/semester");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/semester",
+        {
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+        },
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -74,10 +94,9 @@ export const fetchSemesters = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch semesters");
     }
-  }
+  },
 );
 
-// Delete assigned subject
 export const deleteAssignedSubject = createAsyncThunk(
   "assignSubject/deleteAssignedSubject",
   async (gradeSubjectSemesterId, { rejectWithValue, dispatch }) => {
@@ -88,8 +107,9 @@ export const deleteAssignedSubject = createAsyncThunk(
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${getAuthToken()}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -98,26 +118,33 @@ export const deleteAssignedSubject = createAsyncThunk(
       }
 
       const data = await response.json();
-      toast.success(data.message || "GradeSubjectSemester deleted successfully");
+      toast.success(
+        data.message || "GradeSubjectSemester deleted successfully",
+      );
       return gradeSubjectSemesterId;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to delete GradeSubjectSemester");
+      return rejectWithValue(
+        error.message || "Failed to delete GradeSubjectSemester",
+      );
     }
-  }
+  },
 );
 
-// Update assigned subject
 export const updateAssignedSubject = createAsyncThunk(
   "assignSubject/updateAssignedSubject",
   async ({ id, updatedData }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/gradeSubjectSemester/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/gradeSubjectSemester/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+          body: JSON.stringify(updatedData),
         },
-        body: JSON.stringify(updatedData),
-      });
+      );
 
       const data = await response.json();
 
@@ -129,7 +156,7 @@ export const updateAssignedSubject = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to update subject");
     }
-  }
+  },
 );
 
 const assignSubjectSlice = createSlice({
@@ -145,24 +172,32 @@ const assignSubjectSlice = createSlice({
       .addCase(fetchAssignedSubjects.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.assignedSubjects = action.payload
-          .filter((subject) => subject.grade_subject_id && subject.grade_subject_id.subjectId !== null) 
+          .filter(
+            (subject) =>
+              subject.grade_subject_id &&
+              subject.grade_subject_id.subjectId !== null,
+          )
           .map((subject) => ({
             _id: subject._id,
-            subjectId: subject.grade_subject_id?.subjectId?._id, 
-            subject: subject.grade_subject_id?.subjectId?.subjectName || "Unknown", 
+            subjectId: subject.grade_subject_id?.subjectId?._id,
+            subject:
+              subject.grade_subject_id?.subjectId?.subjectName || "Unknown",
             grade: subject.grade_subject_id?.gradeId,
-            term: subject.semester_id?.semesterName || "Unknown", 
+            term: subject.semester_id?.semesterName || "Unknown",
           }));
         state.loading = false;
-      })      
+      })
       .addCase(fetchAssignedSubjects.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to fetch assigned subjects";
         state.loading = false;
-        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
-
-        }else{
-        toast.error(state.error);}
+        if (
+          state.error.includes("NetworkError") ||
+          state.error.includes("Token is required!")
+        ) {
+        } else {
+          toast.error(state.error);
+        }
       })
       .addCase(fetchSemesters.pending, (state) => {
         state.status = "loading";
@@ -201,7 +236,7 @@ const assignSubjectSlice = createSlice({
       .addCase(deleteAssignedSubject.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.assignedSubjects = state.assignedSubjects.filter(
-          (subject) => subject._id !== action.payload
+          (subject) => subject._id !== action.payload,
         );
         state.loading = false;
       })
@@ -218,7 +253,7 @@ const assignSubjectSlice = createSlice({
       .addCase(updateAssignedSubject.fulfilled, (state, action) => {
         state.status = "succeeded";
         const updatedSubjectIndex = state.assignedSubjects.findIndex(
-          (subject) => subject._id === action.payload._id
+          (subject) => subject._id === action.payload._id,
         );
         if (updatedSubjectIndex !== -1) {
           state.assignedSubjects[updatedSubjectIndex] = action.payload;

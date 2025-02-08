@@ -8,12 +8,20 @@ const initialState = {
   loading: false,
 };
 
-// Fetch all class teachers
+const getToken = () => localStorage.getItem("token");
+
 export const fetchClassTeachers = createAsyncThunk(
   "classTeachers/fetchClassTeachers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/classTeacher");
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/classTeacher",
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        },
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -25,21 +33,24 @@ export const fetchClassTeachers = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch class teachers");
     }
-  }
+  },
 );
 
-// Add a new class teacher
 export const postClassTeacher = createAsyncThunk(
   "classTeachers/postClassTeacher",
   async (classTeacherData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/admin/classTeacher/createClassTeacher", {
-        method: "POST",
-        body: JSON.stringify(classTeacherData),
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:4000/api/v1/admin/classTeacher/createClassTeacher",
+        {
+          method: "POST",
+          body: JSON.stringify(classTeacherData),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -51,21 +62,24 @@ export const postClassTeacher = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to add class teacher");
     }
-  }
+  },
 );
 
-// Edit an existing class teacher
 export const editClassTeacher = createAsyncThunk(
   "classTeachers/editClassTeacher",
   async ({ id, updatedClassTeacher }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/classTeacher/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(updatedClassTeacher),
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/classTeacher/${id}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify(updatedClassTeacher),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -77,20 +91,23 @@ export const editClassTeacher = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to edit class teacher");
     }
-  }
+  },
 );
 
-// Delete a class teacher
 export const removeClassTeacher = createAsyncThunk(
   "classTeachers/removeClassTeacher",
   async (id, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/admin/classTeacher/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/classTeacher/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -102,7 +119,7 @@ export const removeClassTeacher = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove class teacher");
     }
-  }
+  },
 );
 
 const classTeacherSlice = createSlice({
@@ -128,10 +145,13 @@ const classTeacherSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch class teachers";
         state.loading = false;
-        if(state.error.includes("NetworkError")||state.error.includes("Token is required!")){
-
-        }else{
-        toast.error(action.payload || "Failed to fetch class teachers");}
+        if (
+          state.error.includes("NetworkError") ||
+          state.error.includes("Token is required!")
+        ) {
+        } else {
+          toast.error(action.payload || "Failed to fetch class teachers");
+        }
       })
       .addCase(postClassTeacher.pending, (state) => {
         state.status = "loading";
@@ -156,7 +176,7 @@ const classTeacherSlice = createSlice({
       .addCase(editClassTeacher.fulfilled, (state, action) => {
         state.status = "succeeded";
         const index = state.classTeachers.findIndex(
-          (classTeacher) => classTeacher._id === action.payload._id
+          (classTeacher) => classTeacher._id === action.payload._id,
         );
         if (index !== -1) {
           state.classTeachers[index] = action.payload;
@@ -177,7 +197,7 @@ const classTeacherSlice = createSlice({
       .addCase(removeClassTeacher.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.classTeachers = state.classTeachers.filter(
-          (classTeacher) => classTeacher._id !== action.payload
+          (classTeacher) => classTeacher._id !== action.payload,
         );
         toast.success("Class Teacher removed successfully");
         state.loading = false;
