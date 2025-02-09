@@ -19,15 +19,16 @@ const getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear =
     }
 
     const subjectMateriels = await Material.find({
-      subject_id: gradeSubjectSemester.grade_subject_id.subjectId,
-      grade_id: gradeSubjectSemester.grade_subject_id.gradeId,
-      semester_id: gradeSubjectSemester.semester_id,
-      academic_year_id: gradeSubjectSemester.grade_subject_id.academicYear_id,
-    })
-      .populate("subject_id")
-      .populate("grade_id")
-      .populate("academic_year_id")
-      .populate("semester_id");
+      grade_subject_semester_id: gradeSubjectSemester._id,
+    }).populate({
+      path: "grade_subject_semester_id",
+      populate: [
+        {
+          path: "grade_subject_id",
+          populate: [{ path: "subjectId" }, { path: "gradeId" }],
+        },
+      ],
+    });
 
     const subjectMaterielsWithBookmarkAttribute = await Promise.all(
       subjectMateriels.map(async (materiel) => {
@@ -48,6 +49,7 @@ const getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear =
       materiels: subjectMaterielsWithBookmarkAttribute,
     });
   });
+
 module.exports = {
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear,
 };

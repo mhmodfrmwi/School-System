@@ -1,11 +1,10 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const Material = require("../../DB/materielModel");
-const AcademicYear = require("../../DB/academicYearModel");
-const Grade = require("../../DB/gradeModel");
-const Subject = require("../../DB/subjectModel");
-const Semester = require("../../DB/semesterModel");
+
 const materialValidationSchema = require("../../validations/materialValidation");
+const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const BookMarkForMaterial = require("../../DB/bookMarkForMaterialModel");
 const createMateriel = expressAsyncHandler(async (req, res) => {
   const { error } = materialValidationSchema.validate(req.body);
   if (error) {
@@ -15,73 +14,147 @@ const createMateriel = expressAsyncHandler(async (req, res) => {
     });
   }
   const title = req.body.title;
+  const description = req.body.description;
   const type = req.body.type;
   const file_url = req.body.fileUrl;
   const uploaded_by = req.user.id;
-  const academicYearName = req.body.academicYear;
-  const academic_year = await AcademicYear.findOne({
-    startYear: academicYearName.slice(0, 4),
-  });
-  if (!academic_year) {
+  const gradeSubjectSemesterId = req.params.id;
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(
+    gradeSubjectSemesterId
+  );
+  if (!gradeSubjectSemester) {
     return res.status(404).json({
       status: 404,
-      message: "Academic year not found",
+      message: "This subject is not found",
     });
   }
-  const academic_year_id = academic_year._id;
+  const class_id = req.query.classId;
+  if (!validateObjectId(class_id)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid class ID",
+    });
+  }
 
-  const gradeName = req.body.grade;
-  const grade = await Grade.findOne({ gradeName });
-  if (!grade) {
-    return res.status(404).json({
-      status: 404,
-      message: "Grade not found",
-    });
-  }
-  const grade_id = grade._id;
-  const subjectName = req.body.subject;
-  const subject = await Subject.findOne({ subjectName });
-  if (!subject) {
-    return res.status(404).json({
-      status: 404,
-      message: "Subject not found",
-    });
-  }
-  const subject_id = subject._id;
-  const semesterName = req.body.semester;
-  const semester = await Semester.findOne({
-    semesterName,
-    academicYear_id: academic_year_id,
-  });
-  if (!semester) {
-    return res.status(404).json({
-      status: 404,
-      message: "Semester not found in the given academic year",
-    });
-  }
-  const semester_id = semester._id;
   const materiel = new Material({
     title,
+    description,
     type,
     file_url,
     uploaded_by,
-    grade_id,
-    subject_id,
-    academic_year_id,
-    semester_id,
+    grade_subject_semester_id: gradeSubjectSemesterId,
+    class_id,
   });
   await materiel.save();
   res.status(201).json(materiel);
 });
-const updateMateriel = expressAsyncHandler(async (req, res) => {});
-const deleteMateriel = expressAsyncHandler(async (req, res) => {});
-const getMaterielById = expressAsyncHandler(async (req, res) => {});
-const getAllMateriels = expressAsyncHandler(async (req, res) => {});
+const getMaterielById = expressAsyncHandler(async (req, res) => {
+  const materielId = req.params.materialId;
+  console.log(materielId);
+
+  if (validateObjectId(materielId) === false) {
+    return res.status(400).json({ status: 400, message: "Invalid ID" });
+  }
+  const materiel = await Material.findById(materielId).populate({
+    path: "grade_subject_semester_id",
+    populate: [
+      {
+        path: "grade_subject_id",
+        populate: [{ path: "subjectId" }, { path: "gradeId" }],
+      },
+    ],
+  });
+  if (!materiel) {
+    return res.status(404).json({ status: 404, message: "Materiel not found" });
+  }
+  if (req.user.role !== "student") {
+    return res.status(200).json({
+      status: 200,
+      message: "Materiel retrieved successfully",
+      materiel,
+    });
+  }
+  const isBookmarked = await BookMarkForMaterial.findOne({
+    student_id: req.user.id,
+    material_id: materiel._id,
+  });
+
+  return res.status(200).json({
+    status: 200,
+    message: "Materiel retrieved successfully",
+    materiel: { ...materiel.toObject(), isBookmarked: !!isBookmarked },
+  });
+});
+const updateMateriel = expressAsyncHandler(async (req, res) => {
+  const materielId = req.params.id;
+  if (validateObjectId(materielId) === false) {
+    return res
+      .status(400)
+      .json({ status: 400, message: "Invalid material ID" });
+  }
+  const materiel = await Material.findByIdAndUpdate(materielId, req.body, {
+    new: true,
+  }).populate({
+    path: "grade_subject_semester_id",
+    populate: [
+      {
+        path: "grade_subject_id",
+        populate: [{ path: "subjectId" }, { path: "gradeId" }],
+      },
+    ],
+  });
+  if (!materiel) {
+    return res.status(404).json({ status: 404, message: "Materiel not found" });
+  }
+  res
+    .status(200)
+    .json({ status: 200, message: "Materiel updated successfully", materiel });
+});
+const deleteMateriel = expressAsyncHandler(async (req, res) => {
+  const materielId = req.params.materialId;
+  if (validateObjectId(materielId) === false) {
+    return res.status(400).json({ status: 400, message: "Invalid ID" });
+  }
+  const materiel = await Material.findByIdAndDelete(materielId);
+  if (!materiel) {
+    return res.status(404).json({ status: 404, message: "Materiel not found" });
+  }
+  res
+    .status(200)
+    .json({ status: 200, message: "Materiel deleted successfully" });
+});
+const getAllMateriels = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  if (validateObjectId(id) === false) {
+    return res.status(400).json({ status: 400, message: "Invalid ID" });
+  }
+  const materiels = await Material.find({
+    grade_subject_semester_id: id,
+  }).populate({
+    path: "grade_subject_semester_id",
+    populate: [
+      {
+        path: "grade_subject_id",
+        populate: [{ path: "subjectId" }, { path: "gradeId" }],
+      },
+    ],
+  });
+  if (!materiels) {
+    return res
+      .status(404)
+      .json({ status: 404, message: "Materiels not found" });
+  }
+  res.status(200).json({
+    status: 200,
+    message: "Materiels retrieved successfully",
+    materiels,
+  });
+});
 
 module.exports = {
   createMateriel,
   updateMateriel,
   deleteMateriel,
-  getMaterielById,
   getAllMateriels,
+  getMaterielById,
 };

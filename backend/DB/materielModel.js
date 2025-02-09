@@ -8,6 +8,17 @@ const materialSchema = new Schema(
       minlength: 5,
       maxlength: 100,
     },
+    description: {
+      type: String,
+      required: true,
+      minlength: 10,
+      maxlength: 200,
+    },
+    class_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Class",
+      required: true,
+    },
     type: {
       type: String,
       required: true,
@@ -24,24 +35,9 @@ const materialSchema = new Schema(
       ref: "Teacher",
       required: true,
     },
-    grade_id: {
+    grade_subject_semester_id: {
       type: Schema.Types.ObjectId,
-      ref: "Grade",
-      required: true,
-    },
-    subject_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Subject",
-      required: true,
-    },
-    academic_year_id: {
-      type: Schema.Types.ObjectId,
-      ref: "AcademicYear",
-      required: true,
-    },
-    semester_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Semester",
+      ref: "GradeSubjectSemester",
       required: true,
     },
   },

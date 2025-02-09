@@ -6,6 +6,11 @@ const materialValidationSchema = Joi.object({
     "string.max": "Title cannot exceed 100 characters",
     "any.required": "Title is required",
   }),
+  description: Joi.string().required().messages({
+    "string.required": "Description is required",
+    "string.min": "Description must be at least 10 characters",
+    "string.max": "Description cannot exceed 2000 characters",
+  }),
   type: Joi.string()
     .valid("PDF", "Video", "Assignment", "Link")
     .required()
@@ -21,35 +26,6 @@ const materialValidationSchema = Joi.object({
     otherwise: Joi.forbidden().messages({
       "any.unknown": "File URL is not allowed for Link type",
     }),
-  }),
-  externalLink: Joi.string()
-    .uri()
-    .when("type", {
-      // Add this field to your request body
-      is: "Link",
-      then: Joi.required().messages({
-        "any.required": "External link is required for Link type",
-        "string.uri": "Invalid URL format",
-      }),
-      otherwise: Joi.forbidden().messages({
-        "any.unknown": "External link is not allowed for non-Link types",
-      }),
-    }),
-  academicYear: Joi.string()
-    .pattern(/^\d{4}-\d{4}$/)
-    .required()
-    .messages({
-      "string.pattern.base": "Academic year must be in YYYY-YYYY format",
-      "any.required": "Academic year is required",
-    }),
-  grade: Joi.string().required().messages({
-    "any.required": "Grade is required",
-  }),
-  subject: Joi.string().required().messages({
-    "any.required": "Subject is required",
-  }),
-  semester: Joi.string().required().messages({
-    "any.required": "Semester is required",
   }),
 });
 module.exports = materialValidationSchema;

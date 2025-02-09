@@ -58,7 +58,34 @@ const getAllBookmarksForStudent = expressAsyncHandler(async (req, res) => {
     .populate("student_id", ["-__v", "-createdAt", "-updatedAt"]);
   res.status(200).json({ status: 200, bookmarks });
 });
-const deleteMaterialFromBookMarks = expressAsyncHandler(async (req, res) => {});
+const deleteMaterialFromBookMarks = expressAsyncHandler(async (req, res) => {
+  const studentId = req.user.id;
+  if (!validateObjectId(studentId)) {
+    return res.status(400).json({ status: 400, message: "Invalid Student ID" });
+  }
+  const existingStudent = await student.findById(studentId);
+  if (!existingStudent) {
+    return res.status(404).json({ status: 404, message: "Student not found" });
+  }
+  const materialId = req.params.materialId;
+  if (!validateObjectId(materialId)) {
+    return res
+      .status(400)
+      .json({ status: 400, message: "Invalid Material ID" });
+  }
+  const existingBookmark = await BookMarkForMaterial.findOneAndDelete({
+    student_id: existingStudent._id,
+    material_id: materialId,
+  });
+  if (!existingBookmark) {
+    return res
+      .status(404)
+      .json({ status: 404, message: "Material not found in bookmarks" });
+  }
+  res
+    .status(200)
+    .json({ status: 200, message: "Material deleted from bookmarks" });
+});
 module.exports = {
   addMaterialForBookMarks,
   deleteMaterialFromBookMarks,

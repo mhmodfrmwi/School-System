@@ -1,7 +1,12 @@
 const express = require("express");
 const validateJwt = require("../middlewares/validateJWT");
 const validateTeacher = require("../middlewares/validateTeacher");
-const { createMateriel } = require("../controllers/Teacher/materialController");
+const {
+  createMateriel,
+  updateMateriel,
+  deleteMateriel,
+  getAllMateriels,
+} = require("../controllers/Teacher/materialController");
 const {
   createQuestion,
   updateQuestion,
@@ -38,7 +43,12 @@ const {
 
 const router = express.Router();
 router.post("/login", login);
-router.post("/material", validateJwt, validateTeacher, createMateriel);
+router
+  .route("/material/:id")
+  .post(validateJwt, validateTeacher, createMateriel)
+  .patch(validateJwt, validateTeacher, updateMateriel)
+  .delete(validateJwt, validateTeacher, deleteMateriel)
+  .get(validateJwt, validateTeacher, getAllMateriels);
 
 router.post("/questionBank", validateJwt, validateTeacher, createQuestion);
 router

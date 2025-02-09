@@ -24,7 +24,11 @@ const {
 const {
   addMaterialForBookMarks,
   getAllBookmarksForStudent,
+  deleteMaterialFromBookMarks,
 } = require("../controllers/Student/MaterialBookMarksController");
+const {
+  getMaterielById,
+} = require("../controllers/Teacher/materialController");
 
 const router = express.Router();
 
@@ -43,15 +47,14 @@ router.get(
   "/materiel/:id",
   validateJwt,
   validateStudent,
-
   getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear
 );
+router.get("/materiel/:subjectId/:materialId", validateJwt, getMaterielById);
 
 router.get(
   "/questionBank/:gradeSubjectSemesterId",
   validateJwt,
   validateStudent,
-
   getQuestionsBySubjectForStudent
 );
 
@@ -84,6 +87,12 @@ router.post(
   validateStudent,
 
   addMaterialForBookMarks
+);
+router.delete(
+  "/remove-from-bookmark/:materialId",
+  validateJwt,
+  validateStudent,
+  deleteMaterialFromBookMarks
 );
 router.get(
   "/get-bookmarks",
