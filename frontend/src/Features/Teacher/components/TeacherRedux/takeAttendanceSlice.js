@@ -88,12 +88,28 @@ export const fetchStudentsForSubject = createAsyncThunk(
 export const fetchClassAttendance = createAsyncThunk(
   "attendance/fetchClassAttendance",
   async ({ attendanceData }, { rejectWithValue }) => {
-    console.log("zeko", attendanceData);
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
+      const formatDate = (date) => {
+        if (typeof date === "string") {
+          const [year, month, day] = date.split("-");
+          return `${day} ${month} ${year}`;
+        }
+        if (date instanceof Date) {
+          return `${date.getDate()} ${date.getMonth() + 1} ${date.getFullYear()}`;
+        }
+        const newDate = new Date(date);
+        return `${newDate.getDate()} ${newDate.getMonth() + 1} ${newDate.getFullYear()}`;
+      };
+
+      const requestBody = {
+        classId: attendanceData.classId,
+        startDate: formatDate(attendanceData.startDate),
+        endDate: formatDate(attendanceData.endDate),
+      };
 
       const response = await fetch(
         "http://localhost:4000/api/v1/teacher/get-class-attendance-in-period",
@@ -103,11 +119,7 @@ export const fetchClassAttendance = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            classId: attendanceData.classId,
-            startDate: attendanceData.startDate,
-            endDate: attendanceData.endDate,
-          }),
+          body: JSON.stringify(requestBody),
         },
       );
 
@@ -117,15 +129,12 @@ export const fetchClassAttendance = createAsyncThunk(
           errorResponse.message || "Failed to fetch attendance data",
         );
       }
-
       const data = await response.json();
-      console.log(data);
-      toast.success("Return Students Data");
-      console.log("ahmed", data.attendances);
+      console.log("Attendance Data:", data.attendances);
+
       return data.attendances;
     } catch (error) {
-      toast.error(error);
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "An unknown error occurred");
     }
   },
 );
@@ -134,7 +143,7 @@ const takeAttendanceSlice = createSlice({
   name: "attendance",
   initialState,
   reducers: {
-    resetAttendanceState: () => initialState,
+    // resetAttendanceState: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -161,7 +170,6 @@ const takeAttendanceSlice = createSlice({
       .addCase(fetchStudentsForSubject.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        toast.error(action.payload || "Failed to fetch students");
       })
       .addCase(fetchClassAttendance.pending, (state) => {
         state.loading = true;
@@ -169,9 +177,11 @@ const takeAttendanceSlice = createSlice({
       })
 
       .addCase(fetchClassAttendance.fulfilled, (state, action) => {
-        console.log("API Response:", action.payload);
-        state.attendanceRecords = action.payload.attendances || [];
+        state.attendanceRecords = action.payload;
+
+        toast.success("Attendance data retrieved successfully!");
       })
+
       .addCase(fetchClassAttendance.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
