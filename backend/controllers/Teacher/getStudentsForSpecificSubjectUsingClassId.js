@@ -28,10 +28,13 @@ const getStudentsForSpecificSubjectUsingClassId = expressAsyncHandler(
     if (!existingClass) {
       return res.status(404).json({ status: 404, message: "Class not found" });
     }
-    const students = await student.find({
-      gradeId: gradeSubjectSemester.grade_subject_id.gradeId,
-      classId,
-    });
+    const students = await student
+      .find({
+        gradeId: gradeSubjectSemester.grade_subject_id.gradeId,
+        classId,
+      })
+      .populate({ path: "gradeId" })
+      .populate({ path: "classId" });
     res.status(200).json({ status: 200, students });
   }
 );
