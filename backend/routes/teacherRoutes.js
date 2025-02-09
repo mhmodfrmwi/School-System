@@ -86,7 +86,7 @@ router.post(
   validateTeacher,
   createStudentAttendance
 );
-router.get(
+router.post(
   "/get-class-attendance-in-period",
   validateJwt,
   validateTeacher,
