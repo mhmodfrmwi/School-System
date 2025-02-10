@@ -81,15 +81,12 @@ const CurrentCourse = ({ onSearchChange }) => {
                 {classTeachers.map((classteacher, index) => (
                     <div
                         key={classteacher?.id || index}
-                    onClick={() => {
-  const classId = classteacher.classId._id; // Extract classId
-  const gradeSubjectSemesterId = classteacher.id; // Extract gradeSubjectSemesterId
+                        onClick={() => {
+                            const classId = classteacher.classId._id;
+                            const gradeSubjectSemesterId = classteacher.id;
+                            navigate(`/teacher/addmaterial/${classId}/${gradeSubjectSemesterId}`);
+                        }}
 
-  console.log("Class ID:", classId);
-  console.log("Grade Subject Semester ID:", gradeSubjectSemesterId);
-
-  navigate(`/teacher/addmaterial/${classId}/${gradeSubjectSemesterId}`);
-}}
                         className="relative bg-slate-100 rounded-xl shadow-lg p-5 w-64 text-center border border-gray-300 flex flex-col items-center cursor-pointer hover:bg-slate-200 transition-colors"
                     >
                         <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-3">
