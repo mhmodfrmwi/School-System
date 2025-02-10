@@ -11,13 +11,19 @@ const AddMaterial = () => {
       navigate("/teacher/materialform");
     }
   };
+  // const handleAddClickVR = (courseName) => {
+  //   if (courseName === "Video Lectures" || courseName === "Course Material") {
+  //     navigate("/teacher/materialform");
+  //   }
+  // };
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
     { id: 1, name: "Video Lectures", total: 26, icon: faVideo },
     { id: 2, name: "Course Material", total: 24, icon: faBook },
-    { id: 3, name: "Assignments", total: 100, icon: faTasks },
-    { id: 4, name: "Exams", total: 19, icon: faFileAlt },
+    { id: 3, name: "Virtual Room", total: 24, icon: faVideo },
+    { id: 4, name: "Assignments", total: 100, icon: faTasks },
+    { id: 5, name: "Exams", total: 19, icon: faFileAlt },
   ];
   const getColor = (index) => colors[index % colors.length];
 

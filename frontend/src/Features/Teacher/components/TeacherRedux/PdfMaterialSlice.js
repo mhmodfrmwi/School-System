@@ -40,21 +40,26 @@ export const fetchPdfMaterial = createAsyncThunk(
 
 export const postPdfMaterial = createAsyncThunk(
   "pdfMaterials/postPdfMaterials",
-  async (pdfMaterialsData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-     const token =
-        localStorage.getItem("token") || sessionStorage.getItem("token");
-        if (!token) {
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
-      const response = await fetch("http://localhost:4000/api/v1/teacher/material", {
-        method: "POST",
-        body: JSON.stringify(pdfMaterialsData),
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+
+      const { class_id,grade_subject_semester_id, ...restFormData } = formData; 
+      const response = await fetch(
+        `http://localhost:4000/api/v1/teacher/material/${grade_subject_semester_id}?classId=${class_id}`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(restFormData), 
+        }
+      );
+      
 
       if (!response.ok) {
         const error = await response.json();
@@ -62,13 +67,12 @@ export const postPdfMaterial = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.pdfMaterials;
+      return data;
     } catch (error) {
-      return rejectWithValue(error.message || "Failed to add pdfMaterialsData");
+      return rejectWithValue(error.message || "Failed to add material");
     }
   }
 );
-
 const PdfMaterial = createSlice({
   name: "pdfMaterials",
   initialState,
@@ -105,11 +109,10 @@ const PdfMaterial = createSlice({
         state.status = "succeeded";
         state.pdfMaterials.push(action.payload);
         state.loading = false;
-        toast.success("Materials added successfully", { autoClose: 3000 }); // عرض الرسالة لمدة 3 ثواني
       })
       .addCase(postPdfMaterial.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to add pdfMaterials";
+        state.error = action.payload || "Failed to add material";
         state.loading = false;
         toast.error(state.error);
       });

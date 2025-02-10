@@ -32,24 +32,23 @@ const CurrentCourse = ({ onSearchChange }) => {
     if (classTeachers.length === 0) {
         return (
             <>
-            <CourseToggle />
-            <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
-          
-                <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="text-6xl text-gray-400 mb-4"
-                />
-                <p className="text-xl font-semibold font-poppins text-gray-600 mb-2">
-                    No Teacher Classes Found
-                </p>
-                <p className="text-gray-500 mb-4 font-poppins text-center max-w-xl">
-                    It seems like there are no teacher classes available at the moment.
-                </p>
-            </div>
+                <CourseToggle />
+                <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
+                    <FontAwesomeIcon
+                        icon={faCalendar}
+                        className="text-6xl text-gray-400 mb-4"
+                    />
+                    <p className="text-xl font-semibold font-poppins text-gray-600 mb-2">
+                        No Teacher Classes Found
+                    </p>
+                    <p className="text-gray-500 mb-4 font-poppins text-center max-w-xl">
+                        It seems like there are no teacher classes available at the moment.
+                    </p>
+                </div>
             </>
         );
-      
     }
+
     return (
         <>
             <div className="mx-auto px-4 w-[90%] md:px-6 lg:px-0">
@@ -81,26 +80,34 @@ const CurrentCourse = ({ onSearchChange }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center p-6">
                 {classTeachers.map((classteacher, index) => (
                     <div
-                        key={classteacher?._id || index}
-                        onClick={() => navigate("/teacher/addmaterial")}
+                        key={classteacher?.id || index}
+                    onClick={() => {
+  const classId = classteacher.classId._id; // Extract classId
+  const gradeSubjectSemesterId = classteacher.id; // Extract gradeSubjectSemesterId
+
+  console.log("Class ID:", classId);
+  console.log("Grade Subject Semester ID:", gradeSubjectSemesterId);
+
+  navigate(`/teacher/addmaterial/${classId}/${gradeSubjectSemesterId}`);
+}}
                         className="relative bg-slate-100 rounded-xl shadow-lg p-5 w-64 text-center border border-gray-300 flex flex-col items-center cursor-pointer hover:bg-slate-200 transition-colors"
                     >
                         <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-3">
                             <img src={bag} alt="bag" className="h-7 w-7" />
                         </div>
                         <p className="text-lg font-poppins font-semibold">
-                            {classteacher?.subject?.subjectName || "N/A"}
+                            {classteacher?.subjectName || "N/A"}
                         </p>
                         <div className="flex justify-start gap-4">
                             <p className="text-[#197080] font-poppins font-semibold">
-                                {classteacher?.gradeId?.gradeName || "N/A"}
+                                {classteacher.gradeName || "N/A"}
                             </p>
                             <p className="text-[#197080] font-poppins font-semibold">
                                 Class: {classteacher?.className || "N/A"}
                             </p>
                         </div>
                         <p className="text-[#197080] font-poppins">
-                            {classteacher?.semester?.semesterName || "N/A"}
+                            {classteacher.semesterName || "N/A"}
                         </p>
                     </div>
                 ))}

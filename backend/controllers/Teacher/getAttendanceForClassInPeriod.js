@@ -43,7 +43,9 @@ const getAttendanceForClassInPeriod = expressAsyncHandler(async (req, res) => {
   let attendances = await Attendance.find({
     class_id: classId,
     date: { $gte: startDateFormatted, $lte: endDateFormatted },
-  });
+  })
+    .populate("student_id", "fullName")
+    .populate("class_id", "className");
   res.status(200).json({
     status: 200,
     attendances,

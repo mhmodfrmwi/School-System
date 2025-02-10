@@ -178,7 +178,7 @@ const takeAttendanceSlice = createSlice({
 
       .addCase(fetchClassAttendance.fulfilled, (state, action) => {
         state.attendanceRecords = action.payload;
-
+        state.loading = false;
         toast.success("Attendance data retrieved successfully!");
       })
 
