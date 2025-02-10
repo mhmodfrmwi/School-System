@@ -7,6 +7,7 @@ import {
 } from "../AdminRedux/studentSlice";
 import Pagination from "../Pagination";
 import Header from "./studentHeader";
+import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 
 const StudentTable = () => {
@@ -91,11 +92,39 @@ const StudentTable = () => {
     }
   }, [message, dispatch]);
 
+
+  const handleExportCSV = () => {
+    const csvData = students.map((student) => ({
+      "Student ID": student.academic_number,
+      Name: student.fullName,
+      Gender: student.gender,
+      "Date of Birth": student.dateOfBirth,
+      Grade: student.gradeId?.gradeName || "N/A",
+      Class: student.classId?.className || "N/A",
+      Email: student.email,
+      Phone: student.phone,
+      Address: student.address,
+    }));
+
+    const csv = Papa.unparse(csvData);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "students.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
   return (
     <div className="relative mx-auto px-4 lg:px-0">
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
+        onExportCSV={handleExportCSV} 
       />
       {/* {message && (
         <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">

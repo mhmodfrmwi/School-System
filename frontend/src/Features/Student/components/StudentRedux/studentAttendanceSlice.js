@@ -13,7 +13,7 @@ export const fetchStudentAttendance = createAsyncThunk(
   "studentAttendance/fetchStudentAttendance",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");

@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const getAuthToken = () => {
-  return localStorage.getItem("token") || "";
+  return sessionStorage.getItem("token") || "";
 };
 
 export const fetchAssignedSubjects = createAsyncThunk(

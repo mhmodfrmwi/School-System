@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  role: localStorage.getItem("role") || null, 
+  role: sessionStorage.getItem("role") || null, 
 };
 
 const roleSlice = createSlice({
@@ -10,7 +10,7 @@ const roleSlice = createSlice({
   reducers: {
     setRole: (state, action) => {
       state.role = action.payload;
-      localStorage.setItem("role", action.payload); 
+      sessionStorage.setItem("role", action.payload); 
     },
   },
 });

@@ -49,10 +49,20 @@ const WeeklySchedule = () => {
         const startTime = new Date(`1970-01-01T${start_time}:00Z`);
         const endTime = new Date(`1970-01-01T${end_time}:00Z`);
         const durationInMinutes = (endTime - startTime) / 60000;
-        const durationInHours = durationInMinutes / 60;
-        const roundedDuration = Math.round(durationInHours);
-        return roundedDuration === 1 ? "1 hour" : `${roundedDuration} hours`;
+    
+        const hours = Math.floor(durationInMinutes / 60);
+        const minutes = durationInMinutes % 60;
+    
+        if (hours > 0 && minutes > 0) {
+            return `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''}`;
+        } else if (hours > 0) {
+            return `${hours} hour${hours > 1 ? 's' : ''}`;
+        } else {
+            return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+        }
     };
+    
+ 
 
     return (
         <>

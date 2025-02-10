@@ -24,7 +24,7 @@ export const loginUser = createAsyncThunk(
 
       }
 
-      localStorage.setItem("token", data.token);
+      sessionStorage.setItem("token", data.token);
       return { email, token: data.token };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -36,7 +36,7 @@ const loginSlice = createSlice({
   name: "user",
   initialState: {
     email: "",
-    token: localStorage.getItem("token") || null,
+    token: sessionStorage.getItem("token") || null,
     loading: false,
     error: null,
   },
@@ -44,7 +44,7 @@ const loginSlice = createSlice({
     logout: (state) => {
       state.email = "";
       state.token = null;
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
       toast.info("Logged out successfully!");
     },
   },

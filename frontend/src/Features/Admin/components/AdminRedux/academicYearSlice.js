@@ -9,7 +9,7 @@ const initialState = {
   error: null,
 };
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => sessionStorage.getItem("token");
 
 export const fetchAcademicYears = createAsyncThunk(
   "academicYears/fetchAll",

@@ -1,14 +1,25 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideo, faBook, faTasks, faFileAlt, faPlus, faEye } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const AddMaterial = () => {
+  const { classId, gradeSubjectSemesterId } = useParams();
   const navigate = useNavigate();
+  const handleSeeMaterial = () => {
+    console.log("Navigating to:", `/teacher/see-material/${gradeSubjectSemesterId}`);
 
+    if (!gradeSubjectSemesterId) {
+      console.error("gradeSubjectSemesterId is undefined");
+      return;
+    }
+
+    navigate(`/teacher/see-material/${gradeSubjectSemesterId}`); 
+  };
+  
   const handleAddClick = (courseName) => {
     if (courseName === "Video Lectures" || courseName === "Course Material") {
-      navigate("/teacher/materialform");
+      navigate(`/teacher/materialform/${classId}/${gradeSubjectSemesterId}`);
     }
   };
   // const handleAddClickVR = (courseName) => {
@@ -48,10 +59,17 @@ const AddMaterial = () => {
               </div>
 
               <div className="flex">
-                <Link to={`/teacher/seematerial`} className="border-none bg-none text-[#117C90] cursor-pointer mr-2">
-                  <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
-                </Link>
-                <button onClick={() => handleAddClick(course.name)} className="border-none bg-none text-[#117C90] cursor-pointer mr-2">
+              <button
+              onClick={handleSeeMaterial}
+              className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+            >
+              <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
+            </button>
+
+                <button
+                  onClick={() => handleAddClick(course.name)}
+                  className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+                >
                   <FontAwesomeIcon icon={faPlus} className="text-lg" />
                 </button>
               </div>

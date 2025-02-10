@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchSubjects = createAsyncThunk(
   "allSubjectsStudent/fetchSubjects",
   async (_, { rejectWithValue }) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return rejectWithValue("No token found");
 
     try {
@@ -33,7 +33,7 @@ export const fetchMaterials = createAsyncThunk(
   "allSubjectsStudent/fetchMaterials",
   async (subjectId, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
       const response = await fetch(`http://localhost:4000/api/v1/student/materiel/${subjectId}`, {
@@ -56,7 +56,7 @@ export const addToBookmark = createAsyncThunk(
   "allSubjectsStudent/addToBookmark",
   async (materialId, { rejectWithValue, getState }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
       const state = getState();
@@ -91,7 +91,7 @@ export const fetchBookmarks = createAsyncThunk(
   "allSubjectsStudent/fetchBookmarks",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
       const response = await fetch("http://localhost:4000/api/v1/student/get-bookmarks", {
@@ -115,7 +115,7 @@ export const fetchMaterialDetails = createAsyncThunk(
   "allSubjectsStudent/fetchMaterialDetails",
   async ({ subjectId, materialId }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
       const response = await fetch(`http://localhost:4000/api/v1/student/materiel/${subjectId}/${materialId}`, {
         method: "GET",
