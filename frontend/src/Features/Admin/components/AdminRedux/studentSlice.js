@@ -180,7 +180,6 @@ const studentsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to add student";
         state.loading = false;
-        toast.error(state.error);
       })
       .addCase(editStudent.pending, (state) => {
         state.status = "loading";
