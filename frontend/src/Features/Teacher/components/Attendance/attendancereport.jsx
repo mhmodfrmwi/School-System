@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../Pagination";
 import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
+import Loader from "@/ui/Loader";
 
 function Attendancereport() {
   const dispatch = useDispatch();
@@ -17,9 +18,7 @@ function Attendancereport() {
   );
 
   const [filteredStudents, setFilteredStudents] = useState([]);
-  const [selectedStudents, setSelectedStudents] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [formErrors, setFormErrors] = useState({});
   const studentsPerPage = 10;
 
   const [filters, setFilters] = useState({
@@ -43,25 +42,26 @@ function Attendancereport() {
 
   useEffect(() => {
     const processRecords = () => {
-      const studentMap = attendanceRecords.reduce((acc, record) => {
-        const studentId = record.student?._id;
-        if (!studentId) return acc;
+      const studentMap = {};
 
-        if (!acc[studentId]) {
-          acc[studentId] = {
+      attendanceRecords.forEach((record) => {
+        const studentId = record.student_id?._id;
+        if (!studentId) return;
+
+        if (!studentMap[studentId]) {
+          studentMap[studentId] = {
             _id: studentId,
-            fullName: record.student?.fullName,
-            classId: record.classId,
+            fullName: record.student_id?.fullName || "Unknown",
+            academicNumber: record.academic_number || "N/A",
+            className: record.class_id?.className || "Unknown",
             absences: 0,
-            totalDays: 0,
           };
         }
 
-        acc[studentId].totalDays++;
-        if (record.status === "A") acc[studentId].absences++;
-
-        return acc;
-      }, {});
+        if (record.status === "A") {
+          studentMap[studentId].absences += 1;
+        }
+      });
 
       setFilteredStudents(Object.values(studentMap));
     };
@@ -84,7 +84,6 @@ function Attendancereport() {
         errors.dateRange = "End date cannot be before start date";
     }
 
-    setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
@@ -101,12 +100,12 @@ function Attendancereport() {
         },
       }),
     );
+
+    setFilters({ classId: "", startDate: "", endDate: "" });
   };
 
   const handleFilterChange = (e) => {
     setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
-    setFormErrors((prev) => ({ ...prev, [e.target.name]: "" }));
   };
 
   const indexOfLastStudent = currentPage * studentsPerPage;
@@ -116,11 +115,8 @@ function Attendancereport() {
     indexOfLastStudent,
   );
 
-  const toggleSelectStudent = (id) =>
-    setSelectedStudents((prev) => ({ ...prev, [id]: !prev[id] }));
-
   if (classTeacherStatus === "loading") {
-    return <div>Loading class information...</div>;
+    return <div> {<Loader />}</div>;
   }
 
   if (attendanceStatus === "failed") {
@@ -160,104 +156,84 @@ function Attendancereport() {
       <h2 className="mb-4 text-left text-2xl font-bold text-[#117C90]">
         See Attendance Summary
       </h2>
-
       <form
         onSubmit={handleSubmit}
         className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-4"
       >
-        <div className="md:col-span-1">
-          <select
-            name="classId"
-            onChange={handleFilterChange}
-            className={`h-11 w-full border p-2 ${formErrors.classId ? "border-red-500" : ""}`}
-            value={filters.classId}
-          >
-            <option value="">Select Class</option>
-            {classTeachers.map((teacher) => (
-              <option key={teacher.classId?._id} value={teacher.classId?._id}>
-                {teacher.classId?.className || "Unnamed Class"}
-              </option>
-            ))}
-          </select>
-          {formErrors.classId && (
-            <p className="text-sm text-red-500">{formErrors.classId}</p>
-          )}
-        </div>
+        <select
+          name="classId"
+          onChange={handleFilterChange}
+          value={filters.classId}
+          className="h-11 w-full border p-2"
+        >
+          <option value="">Select Class</option>
+          {classTeachers.map((teacher) => (
+            <option key={teacher.classId?._id} value={teacher.classId?._id}>
+              {teacher.classId?.className || "Unnamed Class"}
+            </option>
+          ))}
+        </select>
 
-        <div className="md:col-span-1">
-          <input
-            type="date"
-            name="startDate"
-            value={filters.startDate}
-            onChange={handleFilterChange}
-            className={`w-full border p-2 ${formErrors.startDate ? "border-red-500" : ""}`}
-          />
-          {formErrors.startDate && (
-            <p className="text-sm text-red-500">{formErrors.startDate}</p>
-          )}
-        </div>
+        <input
+          type="date"
+          name="startDate"
+          value={filters.startDate}
+          onChange={handleFilterChange}
+          className="w-full border p-2"
+        />
+        <input
+          type="date"
+          name="endDate"
+          value={filters.endDate}
+          onChange={handleFilterChange}
+          className="w-full border p-2"
+        />
 
-        <div className="md:col-span-1">
-          <input
-            type="date"
-            name="endDate"
-            value={filters.endDate}
-            onChange={handleFilterChange}
-            className={`w-full border p-2 ${formErrors.endDate ? "border-red-500" : ""}`}
-          />
-          {formErrors.endDate && (
-            <p className="text-sm text-red-500">{formErrors.endDate}</p>
-          )}
-        </div>
-
-        <div className="md:col-span-1">
-          <button
-            type="submit"
-            className="w-full rounded bg-[#117C90] px-4 py-2 text-white hover:bg-[#0f6a7d]"
-          >
-            Generate Report
-          </button>
-          {formErrors.dateRange && (
-            <p className="mt-1 text-sm text-red-500">{formErrors.dateRange}</p>
-          )}
-        </div>
+        <button
+          type="submit"
+          className="w-full rounded bg-[#117C90] px-4 py-2 text-white hover:bg-[#0f6a7d]"
+        >
+          Generate Report
+        </button>
       </form>
 
       {attendanceStatus === "loading" ? (
         <div>Loading attendance data...</div>
-      ) : attendanceRecords.length > 0 ? (
+      ) : currentStudents.length > 0 ? (
         <>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-[#117C90] text-white">
-                  <th className="border p-2">Name</th>
-                  <th className="border p-2">Class</th>
-                  <th className="border p-2">Absences</th>
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-[#117C90] text-white">
+                <th className="border p-2">Academic Number</th>
+                <th className="border p-2">Name</th>
+                <th className="border p-2">Class</th>
+                <th className="border p-2">Absences</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentStudents.map((student) => (
+                <tr key={student._id} className="border text-center">
+                  <td className="border p-2">{student.academicNumber}</td>
+                  <td className="border p-2">{student.fullName}</td>
+                  <td className="border p-2">{student.className}</td>
+                  <td className="border p-2">{student.absences}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {attendanceRecords.map((student) => (
-                  <tr key={student._id} className="border text-center">
-                    <td className="border p-2">{student.academic_number}</td>
-                    <td className="border p-2">{student.class_id}</td>
-                    <td className="border p-2">{student.absences}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
 
-          <Pagination
-            totalItems={filteredStudents.length}
-            itemsPerPage={studentsPerPage}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />
+          <div className="mt-7 flex justify-center lg:justify-end">
+            <Pagination
+              totalItems={filteredStudents.length}
+              itemsPerPage={studentsPerPage}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         </>
       ) : (
         <div className="text-center text-gray-500">
-          No attendance records found for the selected filters
+          No attendance records found
         </div>
       )}
     </div>
