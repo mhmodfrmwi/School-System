@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 const initialState = {
   attendance: [],
   studentsforsubject: [],
+  attendanceRecords: [],
   status: "idle",
   error: null,
   loading: false,
@@ -84,11 +85,65 @@ export const fetchStudentsForSubject = createAsyncThunk(
   },
 );
 
+export const fetchClassAttendance = createAsyncThunk(
+  "attendance/fetchClassAttendance",
+  async ({ attendanceData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        return rejectWithValue("Authentication required. Please log in.");
+      }
+      const formatDate = (date) => {
+        if (typeof date === "string") {
+          const [year, month, day] = date.split("-");
+          return `${day} ${month} ${year}`;
+        }
+        if (date instanceof Date) {
+          return `${date.getDate()} ${date.getMonth() + 1} ${date.getFullYear()}`;
+        }
+        const newDate = new Date(date);
+        return `${newDate.getDate()} ${newDate.getMonth() + 1} ${newDate.getFullYear()}`;
+      };
+
+      const requestBody = {
+        classId: attendanceData.classId,
+        startDate: formatDate(attendanceData.startDate),
+        endDate: formatDate(attendanceData.endDate),
+      };
+
+      const response = await fetch(
+        "http://localhost:4000/api/v1/teacher/get-class-attendance-in-period",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(requestBody),
+        },
+      );
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(
+          errorResponse.message || "Failed to fetch attendance data",
+        );
+      }
+      const data = await response.json();
+      console.log("Attendance Data:", data.attendances);
+
+      return data.attendances;
+    } catch (error) {
+      return rejectWithValue(error.message || "An unknown error occurred");
+    }
+  },
+);
+
 const takeAttendanceSlice = createSlice({
   name: "attendance",
   initialState,
   reducers: {
-    resetAttendanceState: () => initialState,
+    // resetAttendanceState: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -115,7 +170,21 @@ const takeAttendanceSlice = createSlice({
       .addCase(fetchStudentsForSubject.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        toast.error(action.payload || "Failed to fetch students");
+      })
+      .addCase(fetchClassAttendance.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchClassAttendance.fulfilled, (state, action) => {
+        state.attendanceRecords = action.payload;
+
+        toast.success("Attendance data retrieved successfully!");
+      })
+
+      .addCase(fetchClassAttendance.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
