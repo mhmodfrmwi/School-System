@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMaterials, addToBookmark, fetchBookmarks, fetchSubjects , clearError } from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FaBookmark, FaEdit, FaDownload, FaSpinner } from "react-icons/fa";
+import { FaBookmark, FaEye, FaSpinner, FaDownload } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'; 
@@ -38,12 +38,17 @@ const VideoSection = () => {
   }, [dispatch, subjectId]);
 
   
-    const handleBookmark = (materialId) => {
-      dispatch(addToBookmark(materialId));
-      dispatch(fetchBookmarks());
-    };
+  const handleBookmark = (materialId) => {
+    dispatch(addToBookmark(materialId));
+  };
+  const handleDownload = (materialLink) => {
+    window.open(materialLink, "_blank");
+  };
   
-
+  const handleViewMaterial = (materialId) => {
+    navigate(`/student/material-details/${subjectId}/${materialId}`);
+  };
+  
   const videoMaterials = materials.filter((material) => material.type === "Video") || [];
   const bookmarkedMaterials = videoMaterials.filter((material) =>
     bookmarks.some((bookmark) => bookmark.material_id._id === material._id)
@@ -175,16 +180,17 @@ const VideoSection = () => {
                   </div>
                 </div>
                 <div className="flex gap-3 text-gray-500">
-                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full" onClick={() => handleBookmark(material._id)}>
-                    <FaBookmark className={`text-gray-800 ${material.isBookmarked ? 'text-yellow-500' : ''}`} />
-                  </div>
-                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
-                    <FaEdit className="text-blue-600" />
-                  </div>
-                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
-                    <FaDownload className="text-green-600" />
-                  </div>
-                </div>
+  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full" onClick={() => handleBookmark(material._id)}>
+    <FaBookmark className={`text-gray-800 ${material.isBookmarked ? 'text-yellow-500' : ''}`} />
+  </div>
+  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer" onClick={() => handleViewMaterial(material._id)}>
+    <FaEye className="text-blue-600" />
+  </div>
+  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer" onClick={() => handleDownload(material.file_url)}>
+                      <FaDownload className="text-green-600" />
+                    </div>
+</div>
+
               </CardContent>
             </Card>
           ))}

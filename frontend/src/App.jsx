@@ -266,6 +266,9 @@ const AddVirtualRoom = lazy(
 const EditVirtualRoom = lazy(
   () => import("./Features/Teacher/components/Virtual Rooms/editVirtualRooms"),
 );
+const MaterialDetails = lazy(
+  () => import("./Features/Student/components/courses/MaterialDetails"),
+);
 
 function App() {
   const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
@@ -380,7 +383,7 @@ function App() {
               path="allcourses/materials/:subjectId"
               element={<StudentMaterialDetails />}
             />
-
+            <Route path="/student/material-details/:subjectId/:materialId" element={<MaterialDetails />} />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
