@@ -1,0 +1,119 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useLocation } from "react-router-dom";
+import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
+import Loader from "@/ui/Loader";
+
+function StudentAttendanceDetails() {
+  const { id } = useParams();
+  const location = useLocation();
+  const student = location.state?.student;
+
+  const dispatch = useDispatch();
+  const { attendanceRecords = [], status } = useSelector(
+    (state) => state.attendanceTeacher || {},
+  );
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchClassAttendance({ id }));
+    }
+  }, [dispatch, id]);
+
+  if (status === "loading") {
+    return <Loader />;
+  }
+
+  if (status === "failed") {
+    return (
+      <div className="text-center text-red-500">
+        Failed to load attendance details.
+      </div>
+    );
+  }
+
+  const studentRecords = attendanceRecords.filter(
+    (record) => record.student_id._id === id,
+  );
+
+  const attendanceStats = studentRecords.reduce((acc, record) => {
+    const formattedDate = new Date(record.date).toISOString().split("T")[0];
+
+    if (!acc[formattedDate]) {
+      acc[formattedDate] = { isAbsent: false, isPresent: false };
+    }
+
+    if (record.status === "A") {
+      acc[formattedDate].isAbsent = true;
+    } else if (record.status === "P") {
+      acc[formattedDate].isPresent = true;
+    }
+
+    return acc;
+  }, {});
+
+  const totalAbsences = Object.values(attendanceStats).filter(
+    (r) => r.isAbsent && !r.isPresent,
+  ).length;
+  const totalAttendances = Object.values(attendanceStats).filter(
+    (r) => r.isPresent && !r.isAbsent,
+  ).length;
+
+  return (
+    <div className="mx-auto w-full max-w-2xl p-6">
+      <h2 className="mb-6 text-center text-2xl font-bold text-[#117C90]">
+        Attendance Details for {student?.fullName || "Unknown"}
+      </h2>
+
+      <div className="rounded-lg border bg-white p-4 shadow-md">
+        <p className="mb-2">
+          <strong>Academic Number:</strong> {student?.academicNumber || "N/A"}
+        </p>
+        <p className="mb-2">
+          <strong>Class:</strong> {student?.className || "Unknown"}
+        </p>
+        <p className="mb-2">
+          <strong>Total Absences:</strong> {totalAbsences}
+        </p>
+        <p className="mb-2">
+          <strong>Total Attendances:</strong> {totalAttendances}
+        </p>
+      </div>
+
+      {Object.keys(attendanceStats).length > 0 ? (
+        <table className="mt-6 w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-[#117C90] text-white">
+              <th className="border p-2">Date</th>
+              <th className="border p-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(attendanceStats).map(
+              ([date, { isAbsent, isPresent }]) => (
+                <tr key={date} className="border text-center">
+                  <td className="border p-2">{date}</td>
+                  <td className="border p-2 font-bold">
+                    {isAbsent ? (
+                      <span className="text-red-500">Absent</span>
+                    ) : isPresent ? (
+                      <span className="text-green-500">Present</span>
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
+                </tr>
+              ),
+            )}
+          </tbody>
+        </table>
+      ) : (
+        <div className="mt-4 text-center text-gray-500">
+          No attendance records found.
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default StudentAttendanceDetails;

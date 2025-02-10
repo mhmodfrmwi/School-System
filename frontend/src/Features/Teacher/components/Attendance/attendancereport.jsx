@@ -50,7 +50,7 @@ function Attendancereport() {
 
         if (!studentMap[studentId]) {
           studentMap[studentId] = {
-            _id: studentId,
+            student_id: studentId, // Ensure student_id is present
             fullName: record.student_id?.fullName || "Unknown",
             academicNumber: record.academic_number || "N/A",
             className: record.class_id?.className || "Unknown",
@@ -116,7 +116,7 @@ function Attendancereport() {
   );
 
   if (classTeacherStatus === "loading") {
-    return <div> {<Loader />}</div>;
+    return <Loader />;
   }
 
   if (attendanceStatus === "failed") {
@@ -130,11 +130,13 @@ function Attendancereport() {
           <button
             key={classteacher.id}
             className="flex cursor-pointer items-center justify-center rounded-3xl bg-[#EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
-            onClick={() =>
+            onClick={() => {
               navigate(`/teacher/takeattendance/${classteacher.id}`, {
                 state: { classId: classteacher.classId._id },
-              })
-            }
+              });
+
+              window.location.reload();
+            }}
           >
             <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
               1
@@ -212,7 +214,18 @@ function Attendancereport() {
             </thead>
             <tbody>
               {currentStudents.map((student) => (
-                <tr key={student._id} className="border text-center">
+                <tr
+                  key={student?.student_id?.id}
+                  className="cursor-pointer border text-center"
+                  onClick={() =>
+                    navigate(
+                      `/teacher/student-attendance-details/${student.student_id}`,
+                      {
+                        state: { student },
+                      },
+                    )
+                  }
+                >
                   <td className="border p-2">{student.academicNumber}</td>
                   <td className="border p-2">{student.fullName}</td>
                   <td className="border p-2">{student.className}</td>
@@ -221,15 +234,12 @@ function Attendancereport() {
               ))}
             </tbody>
           </table>
-
-          <div className="mt-7 flex justify-center lg:justify-end">
-            <Pagination
-              totalItems={filteredStudents.length}
-              itemsPerPage={studentsPerPage}
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-            />
-          </div>
+          <Pagination
+            totalItems={filteredStudents.length}
+            itemsPerPage={studentsPerPage}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
         </>
       ) : (
         <div className="text-center text-gray-500">
