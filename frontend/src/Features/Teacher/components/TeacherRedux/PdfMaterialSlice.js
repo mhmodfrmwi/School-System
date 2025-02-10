@@ -80,6 +80,35 @@ export const deleteMaterial = createAsyncThunk(
   }
 );
 
+//update
+export const updateMaterial = createAsyncThunk(
+  "materials/updateMaterial",
+  async ({ materialId, formData }, { rejectWithValue }) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return rejectWithValue("Authentication required. Please log in.");
+
+      const response = await fetch(`http://localhost:4000/api/v1/teacher/material/${materialId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message);
+      }
+      return await response.json();
+      
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to update material");
+    }
+  }
+);
+
 
 // Post PDF Material
 export const postPdfMaterial = createAsyncThunk(

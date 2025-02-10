@@ -10,6 +10,8 @@ import TakeAttendance from "./Features/Teacher/components/Attendance/takeAttenda
 import Attendancereport from "./Features/Teacher/components/Attendance/attendancereport";
 import CurrentCourseForAttendance from "./Features/Teacher/components/Attendance/CurrentCourseForAttendance";
 import AllCoursesForAttendance from "./Features/Teacher/components/Attendance/AllCoursesForAttendance";
+import UpdateMaterial from "./Features/Teacher/components/courses/UpdateMaterial";
+import EditMaterial from "./Features/Teacher/components/courses/UpdateMaterial";
 
 const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
@@ -432,6 +434,7 @@ function App() {
             <Route path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId" element={<AddMaterial />} />
             <Route path="/teacher/materialform/:classId/:gradeSubjectSemesterId" element={<MaterialForm />} />
             <Route path="/teacher/see-material/:grade_subject_semester_id" element={<SeeMaterial />} />
+            <Route path="update-material/:materialId" element={<EditMaterial />} />
             <Route path="takeattendance/:id" element={<TakeAttendance />} />
             <Route path="attendancereport" element={<Attendancereport />} />
             <Route path="virtualroom" element={<VirtualRoom />} />
