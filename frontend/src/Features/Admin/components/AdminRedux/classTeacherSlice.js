@@ -8,7 +8,7 @@ const initialState = {
   loading: false,
 };
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => sessionStorage.getItem("token");
 
 export const fetchClassTeachers = createAsyncThunk(
   "classTeachers/fetchClassTeachers",

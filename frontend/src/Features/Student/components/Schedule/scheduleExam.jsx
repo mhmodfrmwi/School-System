@@ -4,7 +4,7 @@ import { useState } from "react";
 
 function ScheduleExam() {
   const navigate = useNavigate();
-  const [schedule, setSchedule] = useState([
+  const [schedule] = useState([
     ["Subject", "Day", "Date", "Time", "Place"],
     ["Math", "Monday", "2025-02-03", "10:00 AM - 12:00 PM", "Room 101"],
     ["Physics", "Tuesday", "2025-02-04", "12:00 PM - 02:00 PM", "Room 202"],

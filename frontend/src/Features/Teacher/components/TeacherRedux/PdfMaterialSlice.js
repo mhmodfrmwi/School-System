@@ -8,7 +8,7 @@ const initialState = {
   pdfMaterials: [],
 };
 
-const getToken = () => localStorage.getItem("token") || sessionStorage.getItem("token");
+const getToken = () =>  sessionStorage.getItem("token");
 
 // Fetch Materials
 export const fetchMaterials = createAsyncThunk(
