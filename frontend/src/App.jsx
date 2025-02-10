@@ -10,7 +10,6 @@ import TakeAttendance from "./Features/Teacher/components/Attendance/takeAttenda
 import Attendancereport from "./Features/Teacher/components/Attendance/attendancereport";
 import CurrentCourseForAttendance from "./Features/Teacher/components/Attendance/CurrentCourseForAttendance";
 import AllCoursesForAttendance from "./Features/Teacher/components/Attendance/AllCoursesForAttendance";
-import StudentAttendanceDetails from "./Features/Teacher/components/Attendance/StudentAttendanceDetails";
 
 const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
@@ -272,8 +271,7 @@ const MaterialDetails = lazy(
 );
 
 function App() {
-  const role =
-    useSelector((state) => state.role.role) || localStorage.getItem("role");
+  const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
 
   return (
     <BrowserRouter>
@@ -297,7 +295,7 @@ function App() {
           />
           <Route path="role" element={<ChooseRole />} />
           {/* /////////////////adminpage//////////////////// */}
-          <Route path="admin"  element={<ProtectedRoute element={<Admins/>} requiredRole="admin" />} >
+          <Route path="admin" element={<ProtectedRoute element={<Admins />} requiredRole="admin" />} >
             <Route index element={<DashboardAdmin />} />
             <Route path="basicform" element={<BasicForm />} />
             <Route path="studentform" element={<StudentForm />} />
@@ -354,7 +352,7 @@ function App() {
             <Route path="editparentform/:id" element={<EditParentForm />} />
           </Route>
           {/* /////////////////studentpage//////////////////// */}
-          <Route path="student" element={<ProtectedRoute element={<Students/>} requiredRole="student" />}>
+          <Route path="student" element={<ProtectedRoute element={<Students />} requiredRole="student" />}>
             <Route index element={<DashboardStudent />} />
             <Route path="grades" element={<Grades />} />
             <Route path="grades/assignment" element={<GradesAssignment />} />
@@ -389,7 +387,7 @@ function App() {
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
-          <Route path="parent" element={<ProtectedRoute element={<Parents/>} requiredRole="parent" />}>
+          <Route path="parent" element={<ProtectedRoute element={<Parents />} requiredRole="parent" />}>
             <Route index element={<DashboardParent />} />
             <Route path="grades" element={<GradesParent />} />
             <Route
@@ -401,7 +399,7 @@ function App() {
             <Route path="schedule/exam" element={<ScheduleExamParent />} />
           </Route>
           {/* /////////////////teacher pages//////////////////// */}
-          <Route path="teacher" element={<ProtectedRoute element={<Teachers/>} requiredRole="teacher" />}>
+          <Route path="teacher" element={<ProtectedRoute element={<Teachers />} requiredRole="teacher" />}>
             <Route
               path="edit-teacher-profile"
               element={<EditTeacherProfile />}
@@ -430,9 +428,10 @@ function App() {
               path="allcoursesforattendance"
               element={<AllCoursesForAttendance />}
             />
-            <Route path="addmaterial" element={<AddMaterial />} />
             <Route path="materialform" element={<MaterialForm />} />
-            <Route path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId" element={<MaterialForm />} />            <Route path="seematerial" element={<SeeMaterial />} />
+            <Route path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId" element={<AddMaterial />} />
+            <Route path="/teacher/materialform/:classId/:gradeSubjectSemesterId" element={<MaterialForm />} />
+            <Route path="/teacher/see-material/:grade_subject_semester_id" element={<SeeMaterial />} />
             <Route path="takeattendance/:id" element={<TakeAttendance />} />
             <Route path="attendancereport" element={<Attendancereport />} />
             <Route path="virtualroom" element={<VirtualRoom />} />
@@ -440,7 +439,7 @@ function App() {
             <Route path="editvirtualroom/:id" element={<EditVirtualRoom />} />
           </Route>
           {/* ///////////////manager pages//////////////////// */}
-          <Route path="manager" element={<ProtectedRoute element={<Manager/>} requiredRole="manager"/>}>
+          <Route path="manager" element={<ProtectedRoute element={<Manager />} requiredRole="manager" />}>
             <Route index element={<DashboardManager />} />
           </Route>
 
