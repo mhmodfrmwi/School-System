@@ -91,10 +91,10 @@ const SeeMaterial = () => {
                           </td>
                           <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
                             <a
-                              href={material.fileUrl}
+                              href={material.file_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-500 hover:underline"
+                              className="text-[#20606b] hover:underline"
                             >
                               View File
                             </a>
