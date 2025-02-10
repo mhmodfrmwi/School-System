@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMaterials, addToBookmark, fetchBookmarks, fetchSubjects, clearError } from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FaBookmark, FaEdit, FaDownload, FaSpinner } from "react-icons/fa";
+import { FaBookmark, FaEye, FaDownload, FaSpinner } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const MaterialSection = () => {
   const dispatch = useDispatch();
@@ -37,7 +37,14 @@ const MaterialSection = () => {
 
   const handleBookmark = (materialId) => {
     dispatch(addToBookmark(materialId));
-    dispatch(fetchBookmarks());
+  };
+
+  const handleViewMaterial = (materialId) => {
+    navigate(`/student/material-details/${subjectId}/${materialId}`);
+  };
+
+  const handleDownload = (materialLink) => {
+    window.open(materialLink, "_blank");
   };
 
   const pdfMaterials = materials.filter((material) => material.type === "PDF") || [];
@@ -50,19 +57,15 @@ const MaterialSection = () => {
   useEffect(() => {
     if (error) {
       Swal.fire({
-        title: 'Error!',
+        title: "Error!",
         text: error,
-        icon: 'error',
-        confirmButtonText: 'OK'
+        icon: "error",
+        confirmButtonText: "OK",
       }).then(() => {
         dispatch(clearError());
       });
     }
   }, [error, dispatch]);
-  
-  const handleCourseVideoClick = (material) => {
-    navigate(`/student/allcourses/videos/${subjectId}`);
-  };
 
   return (
     <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
@@ -74,7 +77,7 @@ const MaterialSection = () => {
         </h2>
         <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg" onClick={() => handleCourseVideoClick()}>
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg" onClick={() => navigate(`/student/allcourses/videos/${subjectId}`)}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> Video Lectures
             </Button>
           </li>
@@ -83,21 +86,21 @@ const MaterialSection = () => {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">02</span> Course Material
             </Button>
           </li>
-          <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Discussion Rooms
-            </Button>
-          </li>
-          <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Assignments
-            </Button>
-          </li>
-          <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Exams
-            </Button>
-          </li>
+           <li>
+                      <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Discussion Rooms
+                      </Button>
+                    </li>
+                    <li>
+                      <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Assignments
+                      </Button>
+                    </li>
+                    <li>
+                      <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Exams
+                      </Button>
+                    </li>
         </ul>
       </div>
 
@@ -110,9 +113,7 @@ const MaterialSection = () => {
           <Button
             variant={activeTab === "all" ? "outline" : "solid"}
             className={`${
-              activeTab === "all"
-                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
-                : "border border-gray-500 text-gray-800"
+              activeTab === "all" ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white" : "border border-gray-500 text-gray-800"
             } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("all")}
           >
@@ -121,9 +122,7 @@ const MaterialSection = () => {
           <Button
             variant={activeTab === "bookmarks" ? "outline" : "solid"}
             className={`${
-              activeTab === "bookmarks"
-                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
-                : "border border-gray-500 text-gray-800"
+              activeTab === "bookmarks" ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white" : "border border-gray-500 text-gray-800"
             } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("bookmarks")}
           >
@@ -131,25 +130,23 @@ const MaterialSection = () => {
           </Button>
         </div>
 
+        {/* Loading Message */}
+        {loading && (
+          <div className="flex items-center justify-center text-center text-gray-500 mt-10">
+            <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
+            <p className="text-gray-700 text-lg font-semibold">Loading...</p>
+          </div>
+        )}
+
+        {/* No Materials Message */}
+        {!loading && displayedMaterials.length === 0 && (
+          <Card className="border border-gray-200 rounded-xl shadow-sm h-[200px] flex items-center justify-center">
+            <CardContent className="p-4 text-center text-gray-600">No materials available.</CardContent>
+          </Card>
+        )}
+
         {/* Material Cards */}
         <div className="space-y-4">
-          {loading && (
-            <div className="flex items-center justify-center text-center text-gray-500 mt-10">
-                       <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
-                       <p className="text-gray-700 text-lg font-semibold">Loading...</p>
-                     </div>
-          )}
-
-          
-
-          {!loading && displayedMaterials.length === 0 && (
-            <Card className="border border-gray-200 rounded-xl shadow-sm h-[200px] flex items-center justify-center ">
-              <CardContent className="p-4 text-center text-gray-600">
-                No materials available.
-              </CardContent>
-            </Card>
-          )}
-
           {displayedMaterials.map((material, index) => (
             <Card key={material._id} className="border border-gray-200 rounded-xl shadow-sm">
               <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
@@ -164,16 +161,13 @@ const MaterialSection = () => {
                   </div>
                 </div>
                 <div className="flex gap-3 text-gray-500">
-                  <div
-                    className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full"
-                    onClick={() => handleBookmark(material._id)}
-                  >
+                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer" onClick={() => handleBookmark(material._id)}>
                     <FaBookmark className={`text-gray-800 ${material.isBookmarked ? "text-yellow-500" : ""}`} />
                   </div>
-                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
-                    <FaEdit className="text-blue-600" />
+                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer" onClick={() => handleViewMaterial(material._id)}>
+                    <FaEye className="text-blue-600" />
                   </div>
-                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
+                  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer" onClick={() => handleDownload(material.file_url)}>
                     <FaDownload className="text-green-600" />
                   </div>
                 </div>
