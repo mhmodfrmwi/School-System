@@ -6,12 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
-import TakeAttendance from "./Features/Teacher/components/Attendance/takeAttendance";
-import Attendancereport from "./Features/Teacher/components/Attendance/attendancereport";
-import CurrentCourseForAttendance from "./Features/Teacher/components/Attendance/CurrentCourseForAttendance";
-import AllCoursesForAttendance from "./Features/Teacher/components/Attendance/AllCoursesForAttendance";
-import UpdateMaterial from "./Features/Teacher/components/courses/UpdateMaterial";
-import EditMaterial from "./Features/Teacher/components/courses/UpdateMaterial";
+
+
+const TakeAttendance = lazy(() => import("./Features/Teacher/components/Attendance/takeAttendance"));
+const Attendancereport = lazy(() => import("./Features/Teacher/components/Attendance/attendancereport"));
+const CurrentCourseForAttendance = lazy(() => import("./Features/Teacher/components/Attendance/CurrentCourseForAttendance"));
+const AllCoursesForAttendance = lazy(() => import("./Features/Teacher/components/Attendance/AllCoursesForAttendance"));
+const StudentAttendanceDetails = lazy(() => import("./Features/Teacher/components/Attendance/StudentAttendanceDetails"));
+const EditMaterial = lazy(() => import("./Features/Teacher/components/courses/UpdateMaterial")); 
 
 const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
@@ -429,6 +431,10 @@ function App() {
             <Route
               path="allcoursesforattendance"
               element={<AllCoursesForAttendance />}
+            />
+            <Route
+              path="student-attendance-details/:id"
+              element={<StudentAttendanceDetails />}
             />
             <Route path="materialform" element={<MaterialForm />} />
             <Route path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId" element={<AddMaterial />} />

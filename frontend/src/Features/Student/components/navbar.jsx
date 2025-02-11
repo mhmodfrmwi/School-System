@@ -72,7 +72,10 @@ const Navbar = () => {
   };
 
   const url = window.location.pathname;
-  const name = url.split("/student/").pop();
+  const studentName = url.split("/student/").pop();
+  const match = url.match(/\/student\/([^/]+)/);
+  const name = match ? match[1] : "";
+  
   console.log(name);
 
   const handleBack = () => {
@@ -126,7 +129,7 @@ const Navbar = () => {
               }
             }}
           >
-            {name === "/student" ? "student" : `${name}`}
+            {studentName === "/student" ? "student" : `${name}`}
           </p>
         </div>
 

@@ -24,6 +24,10 @@ const NavTeacher = () => {
   const routes = [
     { path: "edit-teacher-profile" },
     { path: "school-hubs" },
+    { path: "weekly-schedule" },
+    { path: "currentCourseforattendance" },
+    { path: "currentcourse" },
+    { path: "school-hubs" },
 
   ];
 

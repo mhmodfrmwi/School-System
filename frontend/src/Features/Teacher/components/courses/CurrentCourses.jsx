@@ -18,6 +18,13 @@ const CurrentCourse = ({ onSearchChange }) => {
     };
 
     const { classTeachers = [], message, loading } = useSelector((state) => state.classTeachers || {});
+    const filteredTeachers = classTeachers.filter((classteacher) =>
+        classteacher.subjectName.toLowerCase().includes(searchText.toLowerCase()) ||
+        classteacher.gradeName.toLowerCase().includes(searchText.toLowerCase()) ||
+        classteacher.className.toLowerCase().includes(searchText.toLowerCase()) ||
+        classteacher.semesterName.toLowerCase().includes(searchText.toLowerCase())
+    );
+    
 
     useEffect(() => {
         dispatch(fetchClassTeacher());
@@ -78,7 +85,7 @@ const CurrentCourse = ({ onSearchChange }) => {
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center p-6">
-                {classTeachers.map((classteacher, index) => (
+                {filteredTeachers.map((classteacher, index) => (
                     <div
                         key={classteacher?.id || index}
                         onClick={() => {
