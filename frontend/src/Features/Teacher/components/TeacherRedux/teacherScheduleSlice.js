@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+
 
 const initialState = {
   teacherSchedule: [],
@@ -14,7 +14,7 @@ export const fetchTeacherSchedule = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token =
-        localStorage.getItem("token") || sessionStorage.getItem("token");
+         sessionStorage.getItem("token");
 
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");

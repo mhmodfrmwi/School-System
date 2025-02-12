@@ -6,6 +6,7 @@ import bag from "../../../../assets/bag.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import CourseToggle from "./SelectCoursePageForAttendance";
+import Loader from "@/ui/Loader";
 
 const CurrentCourse = ({ onSearchChange }) => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const CurrentCourse = ({ onSearchChange }) => {
   }, [dispatch]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{<Loader />} </div>;
   }
   if (message) {
     return <div>{message}</div>;

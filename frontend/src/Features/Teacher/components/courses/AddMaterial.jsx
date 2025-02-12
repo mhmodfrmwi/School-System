@@ -1,26 +1,63 @@
-import React from "react";
+import React, { useEffect }from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideo, faBook, faTasks, faFileAlt, faPlus, faEye } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch ,useSelector } from "react-redux";
+import {  useNavigate, useParams } from "react-router-dom";
+import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
+import { fetchMaterials } from "../TeacherRedux/PdfMaterialSlice";
 
 const AddMaterial = () => {
+  const { classId, gradeSubjectSemesterId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleSeeMaterial = () => {
+    console.log("Navigating to:", `/teacher/see-material/${gradeSubjectSemesterId}`);
 
+    if (!gradeSubjectSemesterId) {
+      console.error("gradeSubjectSemesterId is undefined");
+      return;
+    }
+
+    navigate(`/teacher/see-material/${gradeSubjectSemesterId}`); 
+  };
+  
   const handleAddClick = (courseName) => {
     if (courseName === "Video Lectures" || courseName === "Course Material") {
-      navigate("/teacher/materialform");
+      navigate(`/teacher/materialform/${classId}/${gradeSubjectSemesterId}`);
     }
   };
-  // const handleAddClickVR = (courseName) => {
-  //   if (courseName === "Video Lectures" || courseName === "Course Material") {
-  //     navigate("/teacher/materialform");
-  //   }
-  // };
+  
+  const { classTeachers = [], message, loading } = useSelector((state) => state.classTeachers || {});
+  const pdfMaterials = useSelector((state) => state.pdfMaterials.pdfMaterials || []);
+
+  useEffect(() => {
+      dispatch(fetchClassTeacher());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (gradeSubjectSemesterId) {
+      dispatch(fetchMaterials(gradeSubjectSemesterId));
+    }
+  }, [dispatch, gradeSubjectSemesterId]);
+
+  if (loading) {
+      return <div>Loading...</div>;
+  }
+  if (message) {
+      return <div>{message}</div>;
+      
+  }
+
+  const classteacher = classTeachers.length > 0 ? classTeachers[0] : null;
+
+
+   const videoCount = pdfMaterials.filter(material => material.type === "Video").length;
+  const pdfCount = pdfMaterials.filter(material => material.type === "PDF").length;
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
-    { id: 1, name: "Video Lectures", total: 26, icon: faVideo },
-    { id: 2, name: "Course Material", total: 24, icon: faBook },
+    { id: 1, name: "Video Lectures", total: videoCount, icon: faVideo },
+    { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
     { id: 3, name: "Virtual Room", total: 24, icon: faVideo },
     { id: 4, name: "Assignments", total: 100, icon: faTasks },
     { id: 5, name: "Exams", total: 19, icon: faFileAlt },
@@ -31,8 +68,8 @@ const AddMaterial = () => {
     <div>
       <div className="flex justify-center">
         <div className="space-y-4 w-[80%]">
-          <div className="w-full bg-gray-100 border-2 border-gray-200 font-poppins rounded p-3 mb-4">
-            English Language - Grade 1
+          <div className="w-full bg-gray-100 border-2 text-lg border-gray-200 font-poppins rounded p-3 mb-4">
+          {classteacher ? `${classteacher.subjectName} - ${classteacher.gradeName}` : "No Subject Assigned"}
           </div>
           {courses.map((course, index) => (
             <div key={course.id} className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full">
@@ -48,10 +85,17 @@ const AddMaterial = () => {
               </div>
 
               <div className="flex">
-                <Link to={`/teacher/seematerial`} className="border-none bg-none text-[#117C90] cursor-pointer mr-2">
-                  <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
-                </Link>
-                <button onClick={() => handleAddClick(course.name)} className="border-none bg-none text-[#117C90] cursor-pointer mr-2">
+              <button
+              onClick={handleSeeMaterial}
+              className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+            >
+              <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
+            </button>
+
+                <button
+                  onClick={() => handleAddClick(course.name)}
+                  className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+                >
                   <FontAwesomeIcon icon={faPlus} className="text-lg" />
                 </button>
               </div>

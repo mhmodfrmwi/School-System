@@ -6,10 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
-import TakeAttendance from "./Features/Teacher/components/Attendance/takeAttendance";
-import Attendancereport from "./Features/Teacher/components/Attendance/attendancereport";
-import CurrentCourseForAttendance from "./Features/Teacher/components/Attendance/CurrentCourseForAttendance";
-import AllCoursesForAttendance from "./Features/Teacher/components/Attendance/AllCoursesForAttendance";
+
+
+const TakeAttendance = lazy(() => import("./Features/Teacher/components/Attendance/takeAttendance"));
+const Attendancereport = lazy(() => import("./Features/Teacher/components/Attendance/attendancereport"));
+const CurrentCourseForAttendance = lazy(() => import("./Features/Teacher/components/Attendance/CurrentCourseForAttendance"));
+const AllCoursesForAttendance = lazy(() => import("./Features/Teacher/components/Attendance/AllCoursesForAttendance"));
+const StudentAttendanceDetails = lazy(() => import("./Features/Teacher/components/Attendance/StudentAttendanceDetails"));
+const EditMaterial = lazy(() => import("./Features/Teacher/components/courses/UpdateMaterial")); 
 
 const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
@@ -266,6 +270,9 @@ const AddVirtualRoom = lazy(
 const EditVirtualRoom = lazy(
   () => import("./Features/Teacher/components/Virtual Rooms/editVirtualRooms"),
 );
+const MaterialDetails = lazy(
+  () => import("./Features/Student/components/courses/MaterialDetails"),
+);
 
 function App() {
   const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
@@ -287,12 +294,12 @@ function App() {
         <Routes>
           <Route index element={<OnBoarding />} />
           <Route
-          path="/login"
-          element={role ? <Login /> : <Navigate to="/role" />}
-        />
+            path="/login"
+            element={role ? <Login /> : <Navigate to="/role" />}
+          />
           <Route path="role" element={<ChooseRole />} />
           {/* /////////////////adminpage//////////////////// */}
-          <Route path="admin"  element={<ProtectedRoute element={<Admins/>} requiredRole="admin" />} >
+          <Route path="admin" element={<ProtectedRoute element={<Admins />} requiredRole="admin" />} >
             <Route index element={<DashboardAdmin />} />
             <Route path="basicform" element={<BasicForm />} />
             <Route path="studentform" element={<StudentForm />} />
@@ -349,7 +356,7 @@ function App() {
             <Route path="editparentform/:id" element={<EditParentForm />} />
           </Route>
           {/* /////////////////studentpage//////////////////// */}
-          <Route path="student" element={<ProtectedRoute element={<Students/>} requiredRole="student" />}>
+          <Route path="student" element={<ProtectedRoute element={<Students />} requiredRole="student" />}>
             <Route index element={<DashboardStudent />} />
             <Route path="grades" element={<Grades />} />
             <Route path="grades/assignment" element={<GradesAssignment />} />
@@ -380,11 +387,11 @@ function App() {
               path="allcourses/materials/:subjectId"
               element={<StudentMaterialDetails />}
             />
-
+            <Route path="/student/material-details/:subjectId/:materialId" element={<MaterialDetails />} />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
-          <Route path="parent" element={<ProtectedRoute element={<Parents/>} requiredRole="parent" />}>
+          <Route path="parent" element={<ProtectedRoute element={<Parents />} requiredRole="parent" />}>
             <Route index element={<DashboardParent />} />
             <Route path="grades" element={<GradesParent />} />
             <Route
@@ -396,7 +403,7 @@ function App() {
             <Route path="schedule/exam" element={<ScheduleExamParent />} />
           </Route>
           {/* /////////////////teacher pages//////////////////// */}
-          <Route path="teacher" element={<ProtectedRoute element={<Teachers/>} requiredRole="teacher" />}>
+          <Route path="teacher" element={<ProtectedRoute element={<Teachers />} requiredRole="teacher" />}>
             <Route
               path="edit-teacher-profile"
               element={<EditTeacherProfile />}
@@ -425,9 +432,15 @@ function App() {
               path="allcoursesforattendance"
               element={<AllCoursesForAttendance />}
             />
-            <Route path="addmaterial" element={<AddMaterial />} />
+            <Route
+              path="student-attendance-details/:id"
+              element={<StudentAttendanceDetails />}
+            />
             <Route path="materialform" element={<MaterialForm />} />
-            <Route path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId" element={<MaterialForm />} />            <Route path="seematerial" element={<SeeMaterial />} />
+            <Route path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId" element={<AddMaterial />} />
+            <Route path="/teacher/materialform/:classId/:gradeSubjectSemesterId" element={<MaterialForm />} />
+            <Route path="/teacher/see-material/:grade_subject_semester_id" element={<SeeMaterial />} />
+            <Route path="update-material/:materialId" element={<EditMaterial />} />
             <Route path="takeattendance/:id" element={<TakeAttendance />} />
             <Route path="attendancereport" element={<Attendancereport />} />
             <Route path="virtualroom" element={<VirtualRoom />} />
@@ -435,7 +448,7 @@ function App() {
             <Route path="editvirtualroom/:id" element={<EditVirtualRoom />} />
           </Route>
           {/* ///////////////manager pages//////////////////// */}
-          <Route path="manager" element={<ProtectedRoute element={<Manager/>} requiredRole="manager"/>}>
+          <Route path="manager" element={<ProtectedRoute element={<Manager />} requiredRole="manager" />}>
             <Route index element={<DashboardManager />} />
           </Route>
 

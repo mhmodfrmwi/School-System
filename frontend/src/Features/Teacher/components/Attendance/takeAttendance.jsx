@@ -7,9 +7,10 @@ import {
 } from "../TeacherRedux/takeAttendanceSlice";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
+import Loader from "@/ui/Loader";
 
 function TakeAttendance() {
-  const { studentsforsubject } = useSelector(
+  const { studentsforsubject, loading } = useSelector(
     (state) => state.attendanceTeacher,
   );
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ function TakeAttendance() {
 
   return (
     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
+      {loading && <Loader />}
       <div className="mx-auto mb-7 grid w-[90%] grid-cols-1 rounded-3xl sm:grid-cols-2">
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] py-2 font-medium text-white"

@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import img1 from "../../../../assets/schedule 1.png";
 import img2 from "../../../../assets/icon.png";
+import img3 from "../../../../assets/StudentIcon/schedulei.png";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentSchedule } from "../StudentRedux/studentScheduleSlice";
+
 
 function Schedule() {
   const navigate = useNavigate();
@@ -59,16 +61,23 @@ function Schedule() {
           (s) => s.day_of_week === day && s.start_time === time,
         );
         if (session) {
-          // Calculate the duration between start_time and end_time
+
           const startTime = new Date(`1970-01-01T${session.start_time}:00Z`);
           const endTime = new Date(`1970-01-01T${session.end_time}:00Z`);
           const durationInMinutes = (endTime - startTime) / 60000;
-          // const duration = `${durationInMinutes} minute${durationInMinutes > 1 ? 's' : ''}`;
-          const durationInHours = durationInMinutes / 60;
-          const roundedDuration = Math.round(durationInHours);
 
-          const durationText =
-            roundedDuration === 1 ? "1 hour" : `${roundedDuration} hours`;
+          const hours = Math.floor(durationInMinutes / 60);
+          const minutes = durationInMinutes % 60;
+
+          let durationText = "";
+          if (hours > 0 && minutes > 0) {
+            durationText = `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''}`;
+          } else if (hours > 0) {
+            durationText = `${hours} hour${hours > 1 ? 's' : ''}`;
+          } else {
+            durationText = `${minutes} minute${minutes > 1 ? 's' : ''}`;
+          }
+
 
           row.push(
             `${session.subject_id.subjectName} - ${session.teacher_id.fullName} (${durationText})`,
@@ -95,13 +104,13 @@ function Schedule() {
             </div>
             <div className="mb-10 ms-8 mt-7 md:ms-14 lg:ms-20">
               <button
-                className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-2 py-2 text-lg font-medium text-white focus:outline-none"
+                className=" font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-2 py-2 text-lg font-medium text-white focus:outline-none"
                 onClick={() => navigate("/student/schedule")}
               >
                 Weekly Schedule
               </button>
               <button
-                className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-2 py-2 text-lg font-medium text-transparent"
+                className=" font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-2 py-2 text-lg font-medium text-transparent"
                 onClick={() => navigate("/student/schedule/exam")}
               >
                 Exams Schedule
@@ -115,12 +124,28 @@ function Schedule() {
           />
         </div>
         <div className="mx-auto w-[88%] rounded-lg border-2 border-[#F5F6F7] bg-[#F5F6F7] shadow-md">
-          <div className="mb-4 ms-6 w-60 rounded-md bg-[#FFA4A4] px-4 py-2 text-center text-white">
+          <div className="mb-4 ms-6 w-60 rounded-md bg-[#FFA4A4] px-4 py-2 font-poppins text-center text-white">
             {semesterInfo}
           </div>
           <div className="overflow-x-auto">
             {loading ? (
-              <p className="py-4 text-center">Loading schedule...</p>
+              <p className="py-4 text-center font-poppins">Loading schedule...</p>
+            ) : studentSchedule.length === 0 ? (
+              <div className="flex flex-col items-center justify-center text-center my-16 font-poppins ">
+                <div className="shadow-lg p-6 bg-gray-100 rounded-xl flex flex-col items-center font-poppins w-3/4 md:w-1/2">
+                  <img
+                    src={img3} 
+                    alt="No Schedule"
+                    className="w-1/4 mb-4 "
+                  />
+                  <h2 className="text-2xl font-semibold font-poppins text-gray-800 mb-2">
+                    No Schedule Available
+                  </h2>
+                  <p className="text-gray-600 font-poppins">
+                    It looks like there are no scheduled classes available at the moment.
+                  </p>
+                </div>
+              </div>
             ) : (
               <table className="mx-auto w-full table-auto px-4">
                 <thead>
@@ -130,10 +155,7 @@ function Schedule() {
                     </th>
                     {timetable.length > 0 &&
                       timetable[0].map((day, index) => (
-                        <th
-                          key={index}
-                          className="border border-gray-300 px-4 py-2 text-center"
-                        >
+                        <th key={index} className="border border-gray-300 px-4 py-2 font-poppins text-center">
                           {day}
                         </th>
                       ))}
@@ -145,7 +167,7 @@ function Schedule() {
                       {row.map((cell, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className="border border-gray-300 px-4 py-2 text-center text-[#E47986]"
+                          className="border border-gray-300 px-4 py-2 text-center font-poppins text-[#E47986]"
                         >
                           {cell || "--"}
                         </td>
@@ -156,6 +178,8 @@ function Schedule() {
               </table>
             )}
           </div>
+
+
         </div>
       </section>
     </>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-const StudentHeader = ({ onSearchChange, onFilterChange }) => {
+const StudentHeader = ({ onSearchChange, onFilterChange ,onExportCSV}) => {
   const [searchText, setSearchText] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
 
@@ -26,7 +26,7 @@ const StudentHeader = ({ onSearchChange, onFilterChange }) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
-          <button className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white sm:text-sm">
+          <button  onClick={onExportCSV} className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white sm:text-sm">
             Export CSV
           </button>
 

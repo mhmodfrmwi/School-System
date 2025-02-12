@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchSubjects = createAsyncThunk(
   "allSubjectsStudent/fetchSubjects",
   async (_, { rejectWithValue }) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return rejectWithValue("No token found");
 
     try {
@@ -33,7 +33,7 @@ export const fetchMaterials = createAsyncThunk(
   "allSubjectsStudent/fetchMaterials",
   async (subjectId, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
       const response = await fetch(`http://localhost:4000/api/v1/student/materiel/${subjectId}`, {
@@ -52,37 +52,46 @@ export const fetchMaterials = createAsyncThunk(
   }
 );
 
-// Add to bookmark
 export const addToBookmark = createAsyncThunk(
   "allSubjectsStudent/addToBookmark",
-  async (materialId, { rejectWithValue }) => {
+  async (materialId, { rejectWithValue, getState }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch(`http://localhost:4000/api/v1/student/add-to-bookmark/${materialId}`, {
-        method: "POST",
+      const state = getState();
+      const isBookmarked = state.allSubjectsStudent.bookmarks.some(
+        (bookmark) => bookmark.material_id._id === materialId
+      );
+
+      const url = isBookmarked
+        ? `http://localhost:4000/api/v1/student/remove-from-bookmark/${materialId}`
+        : `http://localhost:4000/api/v1/student/add-to-bookmark/${materialId}`;
+
+      const method = isBookmarked ? "DELETE" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Failed to add to bookmark");
+        throw new Error(data.message || "Failed to update bookmark");
       }
 
-      return materialId; // Return ID to update local state
+      return { materialId, isBookmarked };
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
-
 // Fetch bookmarks
 export const fetchBookmarks = createAsyncThunk(
   "allSubjectsStudent/fetchBookmarks",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
       const response = await fetch("http://localhost:4000/api/v1/student/get-bookmarks", {
@@ -102,12 +111,36 @@ export const fetchBookmarks = createAsyncThunk(
   }
 );
 
+export const fetchMaterialDetails = createAsyncThunk(
+  "allSubjectsStudent/fetchMaterialDetails",
+  async ({ subjectId, materialId }, { rejectWithValue }) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return rejectWithValue("No token found");
+      const response = await fetch(`http://localhost:4000/api/v1/student/materiel/${subjectId}/${materialId}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch material details");
+      }
+      return data.materiel;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 const allSubjectsStudentSlice = createSlice({
   name: "allSubjectsStudent",
   initialState: {
     subjects: [],
     materials: [],
     bookmarks: [],
+    materialDetails: {},
     loading: false,
     error: null,
   },
@@ -146,22 +179,36 @@ const allSubjectsStudentSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Add to Bookmark Reducers
-      .addCase(addToBookmark.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(addToBookmark.fulfilled, (state, action) => {
-        state.loading = false;
-        state.bookmarks.push({ material_id: { _id: action.payload } }); // Add to bookmarks state
-        state.materials = state.materials.map(material =>
-          material._id === action.payload ? { ...material, isBookmarked: true } : material
+     // Add to Bookmark Reducers
+    .addCase(addToBookmark.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(addToBookmark.fulfilled, (state, action) => {
+      state.loading = false;
+      const { materialId, isBookmarked } = action.payload;
+
+      if (isBookmarked) {
+        // Remove from bookmarks
+        state.bookmarks = state.bookmarks.filter(
+          (bookmark) => bookmark.material_id._id !== materialId
         );
-      })
-      
-      .addCase(addToBookmark.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+        // Update materials to reflect the removal
+        state.materials = state.materials.map((material) =>
+          material._id === materialId ? { ...material, isBookmarked: false } : material
+        );
+      } else {
+        // Add to bookmarks
+        state.bookmarks.push({ material_id: { _id: materialId } });
+        // Update materials to reflect the addition
+        state.materials = state.materials.map((material) =>
+          material._id === materialId ? { ...material, isBookmarked: true } : material
+        );
+      }
+    })
+    .addCase(addToBookmark.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
 
       // Fetch Bookmarks Reducers
       .addCase(fetchBookmarks.pending, (state) => {
@@ -175,6 +222,20 @@ const allSubjectsStudentSlice = createSlice({
       .addCase(fetchBookmarks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchMaterialDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.materialDetails = {};
+      })
+      .addCase(fetchMaterialDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.materialDetails = action.payload || {};
+      })
+      .addCase(fetchMaterialDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.materialDetails = {};
       });
   },
 });

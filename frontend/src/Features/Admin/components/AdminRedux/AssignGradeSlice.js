@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const BASE_URL = "http://localhost:4000/api/v1/admin";
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => sessionStorage.getItem("token");
 
 const initialState = {
   assignedGrades: [],

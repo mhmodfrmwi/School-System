@@ -16,7 +16,7 @@ export const postAttendance = createAsyncThunk(
     try {
       console.log("Submitting attendance:", attendanceData);
 
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
@@ -53,7 +53,7 @@ export const fetchStudentsForSubject = createAsyncThunk(
   "attendance/fetchStudentsForSubjects",
   async ({ classId, id }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
@@ -89,7 +89,7 @@ export const fetchClassAttendance = createAsyncThunk(
   "attendance/fetchClassAttendance",
   async ({ attendanceData }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
@@ -178,7 +178,7 @@ const takeAttendanceSlice = createSlice({
 
       .addCase(fetchClassAttendance.fulfilled, (state, action) => {
         state.attendanceRecords = action.payload;
-
+        state.loading = false;
         toast.success("Attendance data retrieved successfully!");
       })
 

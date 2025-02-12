@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => sessionStorage.getItem("token");
 
 const initialState = {
   students: [],
@@ -180,7 +180,6 @@ const studentsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to add student";
         state.loading = false;
-        toast.error(state.error);
       })
       .addCase(editStudent.pending, (state) => {
         state.status = "loading";
