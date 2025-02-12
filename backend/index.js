@@ -12,6 +12,7 @@ const studentRoutes = require("./routes/studentRoutes");
 const teacherRoutes = require("./routes/teacherRoutes");
 const managerRoutes = require("./routes/managerRoutes");
 const parentRoutes = require("./routes/parentRoutes");
+const generalRoutes = require("./routes/generalRoutes");
 connectToDB();
 const app = express(xss());
 const routNode = "/api/v1";
@@ -34,7 +35,7 @@ app.use(`${routNode}/student`, studentRoutes);
 app.use(`${routNode}/teacher`, teacherRoutes);
 app.use(`${routNode}/manager`, managerRoutes);
 app.use(`${routNode}/parent`, parentRoutes);
-
+app.use(`${routNode}/general`, generalRoutes);
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);

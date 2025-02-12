@@ -15,7 +15,7 @@ const updateMaterialView = expressAsyncHandler(async (req, res) => {
   try {
     const materialView = await MaterialView.findOneAndUpdate(
       { material_id: id, student_id },
-      { isViewed: true, lastViewedAt: new Date() },
+      { is_viewed: true, last_view_at: new Date() },
       { upsert: true, new: true }
     );
 
@@ -54,8 +54,8 @@ const getMaterialViewByMaterialId = expressAsyncHandler(async (req, res) => {
 
     res.status(200).json({
       status: 200,
-      isViewed: materialView.isViewed,
-      lastViewedAt: materialView.lastViewedAt,
+      isViewed: materialView.is_viewed,
+      lastViewedAt: materialView.last_view_at,
     });
   } catch (error) {
     console.error("Error fetching material view:", error);
