@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const MaterialView = require("../../DB/MaterialView");
-
+const moment = require("moment");
 const updateMaterialView = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   if (!validateObjectId(id)) {
@@ -15,7 +15,7 @@ const updateMaterialView = expressAsyncHandler(async (req, res) => {
   try {
     const materialView = await MaterialView.findOneAndUpdate(
       { material_id: id, student_id },
-      { is_viewed: true, last_view_at: new Date() },
+      { is_viewed: true, last_view_at: moment().format("YYYY-MM-DD HH:mm:ss") },
       { upsert: true, new: true }
     );
 
@@ -23,6 +23,7 @@ const updateMaterialView = expressAsyncHandler(async (req, res) => {
       .status(200)
       .json({ status: 200, message: "Material viewed successfully" });
   } catch (error) {
+    console.error("Error updating material view:", error);
     res.status(500).json({ status: 500, message: "Internal Server Error" });
   }
 });

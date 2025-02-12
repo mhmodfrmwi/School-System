@@ -1,3 +1,4 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 
 const studentLibraryItemSchema = mongoose.Schema({
@@ -12,7 +13,7 @@ const studentLibraryItemSchema = mongoose.Schema({
     required: true,
   },
   last_view_date: {
-    type: Date,
+    type: String,
     default: Date.now,
   },
 });
