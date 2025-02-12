@@ -29,6 +29,10 @@ const {
 const {
   getMaterielById,
 } = require("../controllers/Teacher/materialController");
+const {
+  updateMaterialView,
+  getMaterialViewByMaterialId,
+} = require("../controllers/Student/materialViewController");
 
 const router = express.Router();
 
@@ -100,4 +104,9 @@ router.get(
   validateStudent,
   getAllBookmarksForStudent
 );
+
+router
+  .route("/material/:id")
+  .patch(validateJwt, validateStudent, updateMaterialView)
+  .get(validateJwt, validateStudent, getMaterialViewByMaterialId);
 module.exports = router;
