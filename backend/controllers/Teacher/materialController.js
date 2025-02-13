@@ -63,7 +63,7 @@ const getMaterielById = expressAsyncHandler(async (req, res) => {
         populate: [{ path: "subjectId" }, { path: "gradeId" }],
       },
     ],
-  });
+  }).populate("uploaded_by","fullName");
   if (!materiel) {
     return res.status(404).json({ status: 404, message: "Materiel not found" });
   }

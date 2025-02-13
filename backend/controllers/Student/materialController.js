@@ -28,7 +28,7 @@ const getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear =
           populate: [{ path: "subjectId" }, { path: "gradeId" }],
         },
       ],
-    });
+    }).populate("uploaded_by");
 
     const subjectMaterielsWithBookmarkAttribute = await Promise.all(
       subjectMateriels.map(async (materiel) => {
