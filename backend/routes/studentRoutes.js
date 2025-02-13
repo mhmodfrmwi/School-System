@@ -32,6 +32,14 @@ const {
 const {
   getMaterielById,
 } = require("../controllers/Teacher/materialController");
+const {
+  updateMaterialView,
+  getMaterialViewByMaterialId,
+} = require("../controllers/Student/materialViewController");
+const {
+  updateLastUserViewForLibraryItem,
+  getLibraryItemsViewsForStudent,
+} = require("../controllers/Student/student-libraryItemController");
 
 const router = express.Router();
 
@@ -103,5 +111,23 @@ router.get(
   validateJwt,
   validateStudent,
   getAllBookmarksForStudent
+);
+
+router
+  .route("/material/:id")
+  .patch(validateJwt, validateStudent, updateMaterialView)
+  .get(validateJwt, validateStudent, getMaterialViewByMaterialId);
+
+router.patch(
+  "/library-item-view/:id",
+  validateJwt,
+  validateStudent,
+  updateLastUserViewForLibraryItem
+);
+router.get(
+  "/library-items-views",
+  validateJwt,
+  validateStudent,
+  getLibraryItemsViewsForStudent
 );
 module.exports = router;
