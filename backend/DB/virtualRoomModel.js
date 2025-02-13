@@ -34,9 +34,19 @@ const virtualRoomSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    classId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Class',
+      required: true,
+    },
     link: {
       type: String,
       required: true,
+    },
+    teacherId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Teacher",
+          required: true,
     },
   },
   { timestamps: true }

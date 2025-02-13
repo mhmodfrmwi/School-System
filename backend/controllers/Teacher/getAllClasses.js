@@ -5,8 +5,9 @@ const Class = require("../../DB/classModel");
 const ClassTeacher = require("../../DB/classTeacherModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const GradeSubject = require("../../DB/gradeSubject");
+const Grade = require("../../DB/gradeModel");
 
-const getTeacherClasses = expressAsyncHandler(async (req, res) => {
+const getTeacherClassesForCurrentSemester = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
 
   if (!validateObjectId(teacherId)) {
@@ -65,10 +66,10 @@ const getTeacherClasses = expressAsyncHandler(async (req, res) => {
     const classId = classIds[index];
     const gradeId = gradeIds[index];
     const semesterId = semesterIds[index];
-    const subjectName = teacher.subjectId.subjectName; // Assuming subjectId has a 'name' field
-    const gradeName = classes[index].gradeId.gradeName; // Assuming gradeId has a 'name' field
-    const className = classes[index].className; // Assuming class has a 'name' field
-    const semesterName = classTeachers[index].semester_id.semesterName; // Assuming semester_id has a 'name' field
+    const subjectName = teacher.subjectId.subjectName;
+    const gradeName = classes[index].gradeId.gradeName;
+    const className = classes[index].className;
+    const semesterName = classTeachers[index].semester_id.semesterName;
 
     return {
       id: gss._id,
@@ -89,6 +90,61 @@ const getTeacherClasses = expressAsyncHandler(async (req, res) => {
   });
 });
 
+const getAllTeacherClasses = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({ status: 400, message: "Invalid ID" });
+  }
+
+  const teacher = await Teacher.findById(teacherId);
+  if (!teacher) {
+    return res.status(404).json({
+      status: 404,
+      message: "Teacher not found",
+    });
+  }
+
+  const classTeachers = await ClassTeacher.find({ teacherId })
+    .populate({
+      path: "classId",
+      populate: {
+        path: "gradeId",
+        model: "Grade",
+      },
+    })
+    .populate("subjectId")
+    .populate("semester_id")
+    .populate("academicYear_id");
+
+  if (classTeachers.length === 0) {
+    return res.status(404).json({
+      status: 404,
+      message: "No classes found for the teacher",
+    });
+  }
+  const response = classTeachers.map((ct) => {
+    return {
+      classId: ct.classId._id,
+      className: ct.classId.className,
+      subjectId: ct.subjectId._id,
+      subjectName: ct.subjectId.subjectName,
+      semesterId: ct.semester_id._id,
+      semesterName: ct.semester_id.semesterName,
+      academicYearId: ct.academicYear_id,
+      gradeId: ct.classId.gradeId,
+      gradeName: ct.classId.gradeId?.gradeName,
+    };
+  });
+
+  return res.status(200).json({
+    status: 200,
+    message: "All classes retrieved successfully",
+    data: response,
+  });
+});
+
 module.exports = {
-  getTeacherClasses,
+  getTeacherClassesForCurrentSemester,
+  getAllTeacherClasses
 };

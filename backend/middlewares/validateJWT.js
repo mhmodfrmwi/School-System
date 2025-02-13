@@ -7,6 +7,7 @@ const validateJwt = (req, res, next) => {
       message: "Token is required!",
     });
   }
+  console.log(token);
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
     if (err) {
       return res.status(403).json({

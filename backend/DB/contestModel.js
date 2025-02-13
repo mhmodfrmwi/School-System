@@ -7,20 +7,49 @@ const contestSchema = new Schema(
       type: String,
       required: true,
     },
-    registrationStart: {
+    teacherId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Teacher",
+      required: true,
+    },
+    startDate: {
       type: Date,
       required: true,
     },
-    registrationEnd: {
+    endDate: {
       type: Date,
       required: true,
     },
-    details: {
+    numberOfTeamMembers: {
+      type: Number,
+      required: true,
+    },
+    requirements: {
       type: String,
+    },
+    subjectId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Subject',
       required: true,
     },
-    prizes: {
-      type: [String],
+    academicYearId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'AcademicYear',
+      required: true,
+    },
+    gradeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Grade',
+      required: true,
+    },
+    semesterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Semester',
+      required: true,
+    },
+    classId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Class',
       required: true,
     },
   },

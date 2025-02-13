@@ -1,7 +1,9 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const moment = require("moment");
 const VirtualRoom = require("../../DB/virtualRoomModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const AcademicYear = require("../../DB/academicYearModel");
 const Student = require("../../DB/student");
 
 const getVirtualRoomsForStudent = expressAsyncHandler(async (req, res) => {
@@ -23,8 +25,27 @@ const getVirtualRoomsForStudent = expressAsyncHandler(async (req, res) => {
         message: "Student not found.",
       });
     }
+    const currentYear = moment().year().toString().slice(-2);
+    const currentMonth = moment().month() + 1;
+    let startYear;
+    if (currentMonth >= 9 && currentMonth <= 12) {
+      startYear = "20" + parseInt(currentYear);
+      endYear = "20" + (parseInt(currentYear) + 1);
+    } else {
+      startYear = "20" + (parseInt(currentYear) - 1);
+      endYear = "20" + parseInt(currentYear);
+    }
 
+    const academic_year = await AcademicYear.findOne({ startYear, endYear });
+    if (!academic_year) {
+      return res.status(404).json({
+        status: 404,
+        message: "Academic year not found",
+      });
+    }
     const gradeId = student.gradeId;
+
+    const classId = student.classId;
 
     const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
       .populate({
@@ -48,11 +69,14 @@ const getVirtualRoomsForStudent = expressAsyncHandler(async (req, res) => {
       subjectId,
       gradeId,
       semesterId,
+      academicYearId:academic_year._id,
+      classId,
     })
       .populate("subjectId", "subjectName")
       .populate("academicYearId", "academicYear")
       .populate("gradeId", "gradeName")
-      .populate("semesterId", "semesterName");
+      .populate("semesterId", "semesterName")
+      .populate("teacherId","fullName");
 
     if (virtualRooms.length === 0) {
       return res.status(404).json({
@@ -75,7 +99,6 @@ const getVirtualRoomsForStudent = expressAsyncHandler(async (req, res) => {
     });
   }
 });
-
 module.exports = {
   getVirtualRoomsForStudent,
 };

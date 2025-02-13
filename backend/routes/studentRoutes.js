@@ -10,8 +10,11 @@ const {
 const {
   getQuestionsBySubjectForStudent,
 } = require("../controllers/Student/questionBankController");
-const { getAllTrips } = require("../controllers/Student/tripController");
-const { getAllContests } = require("../controllers/Student/contestController");
+const { 
+  getContestForStudent,
+  getAllContestsForStudent 
+} = require("../controllers/Student/contestController");
+const { getAllSchoolHubs } = require("../controllers/Student/schoolHubController");
 const {
   getVirtualRoomsForStudent,
 } = require("../controllers/Student/virtualRoomController");
@@ -65,8 +68,9 @@ router.get(
 
   getVirtualRoomsForStudent
 );
-router.get("/trip", validateJwt, validateStudent, getAllTrips);
-router.get("/contest", validateJwt, validateStudent, getAllContests);
+router.get("/get-subject-contest", validateJwt, validateStudent, getContestForStudent);
+router.get("/get-contests", validateJwt, validateStudent, getAllContestsForStudent);
+router.get("/school-hub", validateJwt, validateStudent, getAllSchoolHubs);
 
 router.get(
   "/get-attendance",

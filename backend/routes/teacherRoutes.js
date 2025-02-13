@@ -22,12 +22,12 @@ const {
   getAllVirtualRooms,
 } = require("../controllers/Teacher/virtualRoomController");
 const {
-  createTrip,
-  getTrip,
-  getAllTrips,
-  updateTrip,
-  deleteTrip,
-} = require("../controllers/Teacher/tripController");
+  createContest,
+  getAllContests,
+  getContest,
+  updateContest,
+  deleteContest,
+} = require("../controllers/Teacher/contestController");
 const {
   createStudentAttendance,
 } = require("../controllers/Student/attendanceController");
@@ -36,10 +36,20 @@ const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teache
 const {
   getAttendanceForClassInPeriod,
 } = require("../controllers/Teacher/getAttendanceForClassInPeriod");
-const { getTeacherClasses } = require("../controllers/Teacher/getAllClasses");
+const { getTeacherClassesForCurrentSemester , getAllTeacherClasses} = require("../controllers/Teacher/getAllClasses");
 const {
   getScheduleForSpecificTeacher,
 } = require("../controllers/Teacher/scheduleController");
+///////////////////////////////////
+const {
+  createSchoolHub,
+  getAllSchoolHubs,
+  getSchoolHub,
+  updateSchoolHub,
+  deleteSchoolHub,
+} = require("../controllers/manager/SHController");
+const validateManager = require("../middlewares/validateManager");
+
 
 const router = express.Router();
 router.post("/login", login);
@@ -58,7 +68,7 @@ router
   .delete(validateJwt, validateTeacher, deleteQuestion);
 router.get("/questionBank", validateJwt, validateTeacher, getAllQuestions);
 
-router.post("/virtualRoom", validateJwt, validateTeacher, createVirtualRoom);
+router.post("/virtualRoom/:gradeSubjectSemesterId/:classId", validateJwt, validateTeacher, createVirtualRoom);
 router
   .route("/virtualRoom/:id")
   .get(validateJwt, validateTeacher, getVirtualRoom)
@@ -66,13 +76,13 @@ router
   .delete(validateJwt, validateTeacher, deleteVirtualRoom);
 router.get("/virtualRoom", validateJwt, validateTeacher, getAllVirtualRooms);
 
-router.post("/trip", validateJwt, validateTeacher, createTrip);
+router.post("/contest", validateJwt, validateTeacher, createContest);
 router
-  .route("/trip/:id")
-  .get(validateJwt, validateTeacher, getTrip)
-  .patch(validateJwt, validateTeacher, updateTrip)
-  .delete(validateJwt, validateTeacher, deleteTrip);
-router.get("/trip", validateJwt, validateTeacher, getAllTrips);
+  .route("/contest/:id")
+  .get(validateJwt, validateTeacher, getContest)
+  .patch(validateJwt, validateTeacher, updateContest)
+  .delete(validateJwt, validateTeacher, deleteContest);
+router.get("/contest", validateJwt, validateTeacher, getAllContests);
 
 router.post(
   "/get-students-for-subject/:gradeSubjectSemesterId",
@@ -92,11 +102,21 @@ router.post(
   validateTeacher,
   getAttendanceForClassInPeriod
 );
-router.get("/class", validateJwt, validateTeacher, getTeacherClasses);
+router.get("/semester-class", validateJwt, validateTeacher, getTeacherClassesForCurrentSemester);
+router.get("/class", validateJwt, validateTeacher, getAllTeacherClasses);
 router.get(
   "/get-schedule",
   validateJwt,
   validateTeacher,
   getScheduleForSpecificTeacher
 );
+////////////////////
+router.post("/schoolhub", validateJwt, validateManager, createSchoolHub);
+router
+  .route("/school-hub/:id")
+  .get(validateJwt, validateManager, getSchoolHub)
+  .patch(validateJwt, validateManager, updateSchoolHub)
+  .delete(validateJwt, validateManager, deleteSchoolHub);
+
+router.get("/school-hub", validateJwt, validateManager, getAllSchoolHubs); 
 module.exports = router;

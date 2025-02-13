@@ -2,11 +2,19 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const virtualRoomValidationSchema = require("../../validations/virtualRoomValidation");
 const VirtualRoom = require("../../DB/virtualRoomModel");
-const Subject = require("../../DB/subjectModel");
-const AcademicYear = require("../../DB/academicYearModel");
-const Grade = require("../../DB/gradeModel");
-const Semester = require("../../DB/semesterModel");
+const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const Class = require("../../DB/classModel");
+
 const createVirtualRoom = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Teacher ID",
+    });
+  }
+
   const { error } = virtualRoomValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
@@ -15,60 +23,36 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const {
-    title,
-    subjectName,
-    academicYear,
-    grade,
-    semester,
-    startTime,
-    duration,
-    link,
-  } = req.body;
+  const { gradeSubjectSemesterId, classId } = req.params;
+  const { title, startTime, duration, link } = req.body;
 
-  const [startYear, endYear] = academicYear.split("-").map(Number);
-
-  const academicYearRecord = await AcademicYear.findOne({ startYear, endYear });
-  if (!academicYearRecord) {
-    return res.status(404).json({
-      status: 404,
-      message: "Academic Year not found",
+  if (!validateObjectId(gradeSubjectSemesterId) || !validateObjectId(classId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid GradeSubjectSemester ID, Class ID",
     });
   }
 
-  const subject = await Subject.findOne({ subjectName });
-  if (!subject) {
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
+    .populate("grade_subject_id")
+    .populate("semester_id");
+  
+  if (!gradeSubjectSemester) {
     return res.status(404).json({
       status: 404,
-      message: "Subject not found",
+      message: "GradeSubjectSemester not found",
     });
   }
 
-  const gradeDoc = await Grade.findOne({ gradeName: grade });
-  console.log(grade);
-  if (!gradeDoc) {
+  const existingClass = await Class.findById(classId);
+  if (!existingClass) {
     return res.status(404).json({
       status: 404,
-      message: "Grade not found",
+      message: "Class not found",
     });
   }
 
-  const semesterDoc = await Semester.findOne({
-    semesterName: semester,
-    academicYear_id: academicYearRecord._id,
-  });
-  if (!semesterDoc) {
-    return res.status(404).json({
-      status: 404,
-      message: "Semester not found",
-    });
-  }
-
-  const existingVirtualRoom = await VirtualRoom.findOne({
-    title,
-    startTime,
-  });
-
+  const existingVirtualRoom = await VirtualRoom.findOne({ title, startTime });
   if (existingVirtualRoom) {
     return res.status(400).json({
       status: 400,
@@ -78,13 +62,15 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
 
   const newVirtualRoom = new VirtualRoom({
     title,
-    subjectId: subject._id,
-    academicYearId: academicYearRecord._id,
-    gradeId: gradeDoc._id,
-    semesterId: semesterDoc._id,
+    subjectId: gradeSubjectSemester.grade_subject_id.subjectId,
+    academicYearId: gradeSubjectSemester.semester_id.academicYear_id,
+    gradeId: gradeSubjectSemester.grade_subject_id.gradeId,
+    semesterId: gradeSubjectSemester.semester_id._id,
+    classId,
     startTime,
     duration,
     link,
+    teacherId,
   });
 
   await newVirtualRoom.save();
@@ -97,7 +83,7 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
 });
 
 const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id} = req.params;
 
   if (!validateObjectId(id)) {
     return res.status(400).json({
@@ -114,26 +100,7 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const {
-    title,
-    subjectName,
-    academicYear,
-    grade,
-    semester,
-    startTime,
-    duration,
-    link,
-  } = req.body;
-  console.log(grade);
-  const [startYear, endYear] = academicYear.split("-").map(Number);
-
-  const academicYearRecord = await AcademicYear.findOne({ startYear, endYear });
-  if (!academicYearRecord) {
-    return res.status(404).json({
-      status: 404,
-      message: "Academic Year not found",
-    });
-  }
+  const { title, startTime, duration, link } = req.body;
 
   const existingVirtualRoom = await VirtualRoom.findById(id);
   if (!existingVirtualRoom) {
@@ -143,39 +110,7 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const subject = await Subject.findOne({ subjectName });
-  if (!subject) {
-    return res.status(404).json({
-      status: 404,
-      message: "Subject not found",
-    });
-  }
-
-  const gradeDoc = await Grade.findOne({ gradeName: grade });
-  if (!gradeDoc) {
-    return res.status(404).json({
-      status: 404,
-      message: "Grade not found",
-    });
-  }
-
-  const semesterDoc = await Semester.findOne({
-    semesterName: semester,
-    academicYear_id: academicYearRecord._id,
-  });
-  if (!semesterDoc) {
-    return res.status(404).json({
-      status: 404,
-      message: "Semester not found",
-    });
-  }
-
-  const duplicateVirtualRoom = await VirtualRoom.findOne({
-    _id: { $ne: id },
-    title,
-    startTime,
-  });
-
+  const duplicateVirtualRoom = await VirtualRoom.findOne({ _id: { $ne: id }, title, startTime });
   if (duplicateVirtualRoom) {
     return res.status(400).json({
       status: 400,
@@ -187,10 +122,6 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     id,
     {
       title,
-      subjectId: subject._id,
-      academicYearId: academicYearRecord._id,
-      gradeId: gradeDoc._id,
-      semesterId: semesterDoc._id,
       startTime,
       duration,
       link,
@@ -215,15 +146,13 @@ const deleteVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const existingVirtualRoom = await VirtualRoom.findById(id);
-  if (!existingVirtualRoom) {
+  const deletedVirtualRoom = await VirtualRoom.findByIdAndDelete(id);
+  if (!deletedVirtualRoom) {
     return res.status(404).json({
       status: 404,
       message: "Virtual room not found",
     });
   }
-
-  await VirtualRoom.findByIdAndDelete(id);
 
   res.status(200).json({
     status: 200,
@@ -241,12 +170,7 @@ const getVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const virtualRoom = await VirtualRoom.findById(id)
-    .populate("subjectId", "subjectName")
-    .populate("academicYearId", "academicYear")
-    .populate("gradeId", "grade")
-    .populate("semesterId", "semester");
-
+  const virtualRoom = await VirtualRoom.findById(id).populate("teacherId","fullName");
   if (!virtualRoom) {
     return res.status(404).json({
       status: 404,
@@ -256,24 +180,18 @@ const getVirtualRoom = expressAsyncHandler(async (req, res) => {
 
   res.status(200).json({
     status: 200,
-    message: "Virtual room retrieved successfully",
     virtualRoom,
   });
 });
 
 const getAllVirtualRooms = expressAsyncHandler(async (req, res) => {
-  const virtualRooms = await VirtualRoom.find()
-    .populate("subjectId", "subjectName")
-    .populate("academicYearId", "academicYear")
-    .populate("gradeId", "grade")
-    .populate("semesterId", "semester");
-
+  const virtualRooms = await VirtualRoom.find().populate("teacherId","fullName");
   res.status(200).json({
     status: 200,
-    message: "Virtual rooms retrieved successfully",
     virtualRooms,
   });
 });
+
 
 module.exports = {
   createVirtualRoom,

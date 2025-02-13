@@ -6,5 +6,7 @@ const validateManager = (req, res, next) => {
       message: "Unauthorized to access this route",
     });
   }
+  
+  next();
 };
 module.exports = validateManager;
