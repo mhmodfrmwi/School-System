@@ -111,7 +111,7 @@ const updateMateriel = expressAsyncHandler(async (req, res) => {
     .json({ status: 200, message: "Materiel updated successfully", materiel });
 });
 const deleteMateriel = expressAsyncHandler(async (req, res) => {
-  const materielId = req.params.materialId;
+  const materielId = req.params.id;
   if (validateObjectId(materielId) === false) {
     return res.status(400).json({ status: 400, message: "Invalid ID" });
   }
