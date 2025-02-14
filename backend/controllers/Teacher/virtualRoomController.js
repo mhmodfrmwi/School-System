@@ -3,6 +3,7 @@ const validateObjectId = require("../../utils/validateObjectId");
 const virtualRoomValidationSchema = require("../../validations/virtualRoomValidation");
 const VirtualRoom = require("../../DB/virtualRoomModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const GradeSubject = require("../../DB/gradeSubject");
 const Class = require("../../DB/classModel");
 
 const createVirtualRoom = expressAsyncHandler(async (req, res) => {
@@ -192,6 +193,65 @@ const getAllVirtualRooms = expressAsyncHandler(async (req, res) => {
   });
 });
 
+const getTeacherVirtualRooms = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Teacher ID",
+    });
+  }
+
+  const { id } = req.params;
+
+  if (!validateObjectId(id)) {
+    return res.status(400).json({ status: 400, message: "Invalid ID" });
+  }
+
+  try {
+    const gradeSubjectSemester = await GradeSubjectSemester.findById(id);
+
+    if (!gradeSubjectSemester) {
+      return res.status(404).json({
+        status: 404,
+        message: "GradeSubjectSemester not found",
+      });
+    }
+
+    const { grade_subject_id, semester_id } = gradeSubjectSemester;
+
+    const gradeSubject = await GradeSubject.findById(grade_subject_id);
+
+    if (!gradeSubject) {
+      return res.status(404).json({
+        status: 404,
+        message: "GradeSubject not found",
+      });
+    }
+
+    const { subjectId, gradeId, academicYear_id } = gradeSubject;
+
+    const virtualRooms = await VirtualRoom.find({
+      teacherId,
+      subjectId,
+      gradeId,
+      academicYearId: academicYear_id,
+      semesterId: semester_id,
+    }).populate("teacherId", "fullName");
+
+    res.status(200).json({
+      status: 200,
+      virtualRooms,
+    });
+  } catch (error) {
+    console.error("Error fetching virtual rooms:", error);
+    res.status(500).json({
+      status: 500,
+      message: "An error occurred while fetching virtual rooms",
+    });
+  }
+});
 
 module.exports = {
   createVirtualRoom,
@@ -199,4 +259,5 @@ module.exports = {
   deleteVirtualRoom,
   getVirtualRoom,
   getAllVirtualRooms,
+  getTeacherVirtualRooms
 };

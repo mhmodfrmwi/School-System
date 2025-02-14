@@ -20,6 +20,7 @@ const {
   deleteVirtualRoom,
   getVirtualRoom,
   getAllVirtualRooms,
+  getTeacherVirtualRooms,
 } = require("../controllers/Teacher/virtualRoomController");
 const {
   createContest,
@@ -75,6 +76,7 @@ router
   .patch(validateJwt, validateTeacher, updateVirtualRoom)
   .delete(validateJwt, validateTeacher, deleteVirtualRoom);
 router.get("/virtualRoom", validateJwt, validateTeacher, getAllVirtualRooms);
+router.get("/Teacher-virtualRoom/:id", validateJwt, validateTeacher, getTeacherVirtualRooms);
 
 router.post("/contest", validateJwt, validateTeacher, createContest);
 router
