@@ -15,6 +15,9 @@ const libraryItemValidationSchema = joi.object({
     "string.uri": "Library URL must be a valid URL",
     "any.required": "Library URL is required",
   }),
+  type: joi.string()
+    .valid("Video", "PDF")
+    .required(),
 });
 
 module.exports = libraryItemValidationSchema;

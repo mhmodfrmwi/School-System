@@ -4,6 +4,13 @@ const libraryItemValidationSchema = require("../../validations/libraryItemValida
 const LibraryItem = require("../../DB/LibraryItem");
 const joi = require("joi");
 const createLibraryItem = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Teacher ID",
+    });
+  }
   const { error } = libraryItemValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
@@ -12,7 +19,7 @@ const createLibraryItem = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { title, author, libraryUrl } = req.body;
+  const { title, author, libraryUrl,type } = req.body;
 
   try {
     const existingLibraryItem = await LibraryItem.findOne({
@@ -34,6 +41,8 @@ const createLibraryItem = expressAsyncHandler(async (req, res) => {
       title,
       author,
       item_url: libraryUrl,
+      type,
+      uploaded_by:teacherId
     });
 
     await libraryItem.save();
@@ -49,6 +58,13 @@ const createLibraryItem = expressAsyncHandler(async (req, res) => {
 });
 
 const updateLibraryItem = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Teacher ID",
+    });
+  }
   const { id } = req.params;
   if (!validateObjectId(id)) {
     return res.status(400).json({
@@ -62,6 +78,7 @@ const updateLibraryItem = expressAsyncHandler(async (req, res) => {
       title: joi.string().min(3).max(100).optional(),
       author: joi.string().min(3).max(100).optional(),
       libraryUrl: joi.string().uri().optional(),
+      type: joi.string().valid("Video", "PDF").optional()
     })
     .min(1);
 
@@ -73,17 +90,18 @@ const updateLibraryItem = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { title, author, libraryUrl } = req.body;
+  const { title, author, libraryUrl,type } = req.body;
 
   try {
-    if (title || author || libraryUrl) {
+    if (title || author || libraryUrl || type) {
       const existingLibraryItem = await LibraryItem.findOne({
         title: title || { $exists: true },
         author: author || { $exists: true },
         item_url: libraryUrl || { $exists: true },
+        type: type || { $exists: true },
         _id: { $ne: id },
       });
-
+      
       if (existingLibraryItem) {
         return res.status(400).json({
           status: 400,
@@ -92,19 +110,22 @@ const updateLibraryItem = expressAsyncHandler(async (req, res) => {
         });
       }
     }
+    const neededLibraryItem = await LibraryItem.findById(id);
 
-    const updatedLibraryItem = await LibraryItem.findByIdAndUpdate(
-      id,
-      { title, author, item_url: libraryUrl },
-      { new: true }
-    );
-
-    if (!updatedLibraryItem) {
+    if (!neededLibraryItem) {
       return res.status(404).json({
         status: 404,
         message: "Library item not found",
       });
     }
+    if (neededLibraryItem.uploaded_by.toString() !== teacherId) {
+      return res.status(403).json({ status: 403, message: "Unauthorized to update this Library item" });
+    }
+    const updatedLibraryItem = await LibraryItem.findByIdAndUpdate(
+      id,
+      { title, author, item_url: libraryUrl, type },
+      { new: true }
+    );
 
     res.status(200).json({
       status: 200,
@@ -117,6 +138,13 @@ const updateLibraryItem = expressAsyncHandler(async (req, res) => {
 });
 
 const deleteLibraryItem = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Teacher ID",
+    });
+  }
   const { id } = req.params;
   if (!validateObjectId(id)) {
     return res.status(400).json({
@@ -126,15 +154,19 @@ const deleteLibraryItem = expressAsyncHandler(async (req, res) => {
   }
 
   try {
-    const deletedLibraryItem = await LibraryItem.findByIdAndDelete(id);
+    const neededLibraryItem = await LibraryItem.findById(id); 
 
-    if (!deletedLibraryItem) {
-      console.log("Library item not found for deletion:", id);
+    if (!neededLibraryItem) {
       return res.status(404).json({
         status: 404,
         message: "Library item not found",
       });
     }
+    if (neededLibraryItem.uploaded_by.toString() !== teacherId) {
+      return res.status(403).json({ status: 403, message: "Unauthorized to delete this Library item" });
+    }
+
+    const deletedLibraryItem = await LibraryItem.findByIdAndDelete(id);
 
     res.status(200).json({
       status: 200,
@@ -155,7 +187,7 @@ const getLibraryItems = expressAsyncHandler(async (req, res) => {
 
     const sort = req.query.sort || "-createdAt";
 
-    const libraryItems = await LibraryItem.find(filter).sort(sort);
+    const libraryItems = await LibraryItem.find(filter).sort(sort).populate("uploaded_by","fullName");
 
     const totalItems = await LibraryItem.countDocuments(filter);
 
@@ -191,8 +223,8 @@ const getLibraryItemById = expressAsyncHandler(async (req, res) => {
 
   try {
     const libraryItem = await LibraryItem.findById(id).select(
-      "title author item_url"
-    );
+      "title author item_url type"
+    ).populate("uploaded_by","fullName");
 
     if (!libraryItem) {
       return res.status(404).json({

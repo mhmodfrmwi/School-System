@@ -12,6 +12,16 @@ const libraryItemSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  uploaded_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Teacher",
+    required: true,
+  },
+  type:{
+    type: String,
+    enum: ["Video", "PDF"],
+    required: true,
+  }
 });
 
 const LibraryItem = mongoose.model("LibraryItem", libraryItemSchema);
