@@ -6,6 +6,7 @@ const Semester = require("../../DB/semesterModel");
 const Subject = require("../../DB/subjectModel");
 const Class = require("../../DB/classModel");
 const Grade = require("../../DB/gradeModel");
+const Teacher = require("../../DB/teacher");
 const moment = require("moment");
 const expressAsyncHandler = require("express-async-handler");
 const contestValidationSchema = require("../../validations/contestValidation");
@@ -177,7 +178,7 @@ const updateContest = expressAsyncHandler(async (req, res) => {
 });
 ;
 
-const getAllContests = expressAsyncHandler(async (req, res) => {
+/*const getAllContests = expressAsyncHandler(async (req, res) => {
   const contests = await Contest.find()
   .populate("teacherId", "fullName")
   .populate("subjectId")
@@ -189,7 +190,7 @@ const getAllContests = expressAsyncHandler(async (req, res) => {
     message: "Contests retrieved successfully",
     contests,
   });
-});
+});*/
 
 const getContest = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -247,7 +248,87 @@ const deleteContest = expressAsyncHandler(async (req, res) => {
     .status(200)
     .json({ status: 200, message: "Contest deleted successfully" });
 });
+const getAllContests = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
 
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Teacher ID",
+    });
+  }
+  const currentYear = moment().year().toString().slice(-2);
+    const currentMonth = moment().month() + 1;
+    let startYear;
+    if (currentMonth >= 9 && currentMonth <= 12) {
+      startYear = "20" + parseInt(currentYear);
+      endYear = "20" + (parseInt(currentYear) + 1);
+    } else {
+      startYear = "20" + (parseInt(currentYear) - 1);
+      endYear = "20" + parseInt(currentYear);
+    }
+
+    let semester_name;
+    if (currentMonth >= 9 && currentMonth <= 12) {
+      semester_name = "Semester 1";
+    } else {
+      semester_name = "Semester 2";
+    }
+
+    const academic_year = await AcademicYear.findOne({ startYear, endYear });
+    if (!academic_year) {
+      return res.status(404).json({
+        status: 404,
+        message: "Academic year not found",
+      });
+    }
+    const academicYearId = academic_year._id;
+    const semester = await Semester.findOne({
+      semesterName: semester_name,
+      academicYear_id: academicYearId,
+    });
+
+    if (!semester) {
+      return res.status(404).json({
+        status: 404,
+        message: "Semester not found in the given academic year",
+      });
+    }
+
+  try {
+    const teacher = await Teacher.findById(teacherId);
+
+    if (!teacher) {
+      return res.status(404).json({
+        status: 404,
+        message: "Teacher not found",
+      });
+    }
+    const semesterId = semester._id;
+
+    const contests = await Contest.find({
+      teacherId,
+      academicYearId,
+      semesterId,
+    }).populate("subjectId", "subjectName")
+    .populate("gradeId", "gradeName")
+    .populate("classId", "className")
+    .populate("teacherId", "fullName")
+    .populate("academicYearId")
+    .populate("semesterId", "semesterName");
+
+    res.status(200).json({
+      status: 200,
+      contests,
+    });
+  } catch (error) {
+    console.error("Error fetching contests:", error);
+    res.status(500).json({
+      status: 500,
+      message: "An error occurred while fetching contests",
+    });
+  }
+});
 module.exports = {
   createContest,
   getAllContests,
