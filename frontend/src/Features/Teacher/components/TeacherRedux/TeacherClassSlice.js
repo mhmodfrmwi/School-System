@@ -18,7 +18,7 @@ export const fetchClassTeacher = createAsyncThunk(
       }
 
       const response = await fetch(
-        "http://localhost:4000/api/v1/teacher/class",
+        "http://localhost:4000/api/v1/teacher/semester-class",
         {
           method: "GET",
           headers: {

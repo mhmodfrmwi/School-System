@@ -7,13 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import CourseToggle from "./SelectCoursePage";
 
-const submissions = [
-    { id: 1, grade: "Grade 1", year: "2023-2024" },
-    { id: 2, grade: "Grade 2", year: "2024-2025" },
-    { id: 3, grade: "Grade 3", year: "2025-2026" },
-    { id: 4, grade: "Grade 4", year: "2026-2027" }
-];
-
 const AllCourses = ({ onSearchChange }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -98,11 +91,11 @@ const AllCourses = ({ onSearchChange }) => {
                  {filteredTeachers.map((classteacher, index) => (
                     <div
                         key={classteacher?.id || index}
-                        onClick={() => {
-                            const classId = classteacher.classId._id;
-                            const gradeSubjectSemesterId = classteacher.id;
-                            navigate(`/teacher/addmaterial/${classId}/${gradeSubjectSemesterId}`);
-                        }}
+                    //   onClick={() => {
+                    //         const classId = classteacher.classId._id;
+                    //         const gradeSubjectSemesterId = classteacher.id;
+                    //         navigate(`/teacher/addmaterial/${classId}/${gradeSubjectSemesterId}`);
+                    //     }}   
                         className="relative bg-slate-100 rounded-xl shadow-lg p-5 w-64 text-center border border-gray-300 flex flex-col items-center cursor-pointer hover:bg-slate-200 transition-colors"
                     >
                         <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-3">

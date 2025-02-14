@@ -29,7 +29,6 @@ const SeeMaterial = () => {
                 const resultAction = await dispatch(deleteMaterial(id));
 
                 if (deleteMaterial.fulfilled.match(resultAction)) {
-                    toast.success("Material deleted successfully!");
                 } else {
                     toast.error(resultAction.payload || "Failed to delete material");
                 }
