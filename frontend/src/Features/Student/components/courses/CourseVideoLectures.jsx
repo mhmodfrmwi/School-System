@@ -1,17 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMaterials, addToBookmark, fetchBookmarks, fetchSubjects , clearError } from "../../components/StudentRedux/allSubjectsStudentSlice";
+import {
+  fetchMaterials,
+  addToBookmark,
+  fetchBookmarks,
+  fetchSubjects,
+  clearError,
+  markMaterialAsViewed,
+  fetchMaterialViewStatus,
+} from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FaBookmark, FaEye, FaSpinner, FaDownload } from "react-icons/fa";
+import { FaBookmark, FaEye, FaSpinner, FaDownload, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'; 
 
 const VideoSection = () => {
+  
+  const [currentPageAll, setCurrentPageAll] = useState(1);
+
+  const [currentPageBookmarks, setCurrentPageBookmarks] = useState(1);
+  const itemsPerPage = 3;
   const dispatch = useDispatch();
   const { subjectId } = useParams();
-  const { materials, bookmarks, loading, error, subjects } = useSelector((state) => state.allSubjectsStudent);
+  const { materials, bookmarks, loading, error, subjects, viewedMaterials } = useSelector(
+    (state) => state.allSubjectsStudent
+  );
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState("all");
@@ -31,6 +46,19 @@ const VideoSection = () => {
   }, [subjectId, subjects]);
 
   useEffect(() => {
+    if (materials.length > 0) {
+      materials.forEach((material) => {
+        if (!viewedMaterials[material._id]) {
+          dispatch(fetchMaterialViewStatus(material._id));
+        }
+      });
+    }
+  }, [dispatch, materials, viewedMaterials]);
+  
+  
+  
+
+  useEffect(() => {
     if (subjectId) {
       dispatch(fetchMaterials(subjectId));
       dispatch(fetchBookmarks());
@@ -46,8 +74,13 @@ const VideoSection = () => {
   };
   
   const handleViewMaterial = (materialId) => {
+    if (!viewedMaterials[materialId]?.isViewed) {
+      dispatch(markMaterialAsViewed(materialId));
+    }
     navigate(`/student/material-details/${subjectId}/${materialId}`);
   };
+  
+
   
   const videoMaterials = materials.filter((material) => material.type === "Video") || [];
   const bookmarkedMaterials = videoMaterials.filter((material) =>
@@ -68,6 +101,31 @@ const VideoSection = () => {
     }
   }, [error, dispatch]);
   
+  // pagination
+  const currentPage = activeTab === "all" ? currentPageAll : currentPageBookmarks;
+  const totalPagesAll = Math.ceil(videoMaterials.length / itemsPerPage);
+  const totalPagesBookmarks = Math.ceil(bookmarkedMaterials.length / itemsPerPage);
+  const totalPages = activeTab === "all" ? totalPagesAll : totalPagesBookmarks;
+  
+  const paginatedMaterials = activeTab === "all"
+    ? videoMaterials.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage)
+    : bookmarkedMaterials.slice((currentPageBookmarks - 1) * itemsPerPage, currentPageBookmarks * itemsPerPage);
+
+  const nextPage = () => {
+    if (activeTab === "all" && currentPageAll < totalPagesAll) {
+      setCurrentPageAll(currentPageAll + 1);
+    } else if (activeTab === "bookmarks" && currentPageBookmarks < totalPagesBookmarks) {
+      setCurrentPageBookmarks(currentPageBookmarks + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (activeTab === "all" && currentPageAll > 1) {
+      setCurrentPageAll(currentPageAll - 1);
+    } else if (activeTab === "bookmarks" && currentPageBookmarks > 1) {
+      setCurrentPageBookmarks(currentPageBookmarks - 1);
+    }
+  };
 
   return (
     <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
@@ -166,12 +224,12 @@ const VideoSection = () => {
 
         {/* Lecture Cards */}
         <div className="space-y-4">
-          {displayedMaterials.map((material, index) => (
+          {paginatedMaterials.map((material, index) => (
             <Card key={material._id} className="border border-gray-200 rounded-xl shadow-sm">
               <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
-                    {index + 1}
+                  {index + 1 + (currentPage - 1) * itemsPerPage}
                   </div>
                   <div>
                     <h2 className="text-base md:text-lg font-semibold text-gray-800">{material.title}</h2>
@@ -183,9 +241,20 @@ const VideoSection = () => {
   <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full" onClick={() => handleBookmark(material._id)}>
     <FaBookmark className={`text-gray-800 ${material.isBookmarked ? 'text-yellow-500' : ''}`} />
   </div>
-  <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer" onClick={() => handleViewMaterial(material._id)}>
-    <FaEye className="text-blue-600" />
-  </div>
+  <div
+                className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer"
+                onClick={() => handleViewMaterial(material._id)}
+              >
+                <FaEye
+  className={`cursor-pointer text-xl ${
+    viewedMaterials[material._id] && viewedMaterials[material._id].isViewed
+      ? "text-blue-500"
+      : "text-gray-500"
+  }`}
+  onClick={() => handleViewMaterial(material._id)}
+/>
+
+              </div>
   <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer" onClick={() => handleDownload(material.file_url)}>
                       <FaDownload className="text-green-600" />
                     </div>
@@ -195,6 +264,28 @@ const VideoSection = () => {
             </Card>
           ))}
         </div>
+        {/* Pagination Controls */}
+        {displayedMaterials.length > itemsPerPage && (
+          <div className="flex justify-center items-center gap-4 mb-4 mt-6">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+            >
+              <FaChevronLeft />
+            </button>
+            <span className="text-gray-800 font-medium">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+              className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

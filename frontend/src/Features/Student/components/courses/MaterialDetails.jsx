@@ -108,7 +108,7 @@ const MaterialDetails = () => {
                   </tr>
                   <tr>
                     <td className="py-2 font-semibold text-gray-700">Uploaded By</td>
-                    <td className="py-2 text-gray-600">{materialDetails.uploaded_by}</td>
+                    <td className="py-2 text-gray-600">{materialDetails.uploaded_by?.fullName || "Unknown"}</td>
                   </tr>
                   <tr>
                     <td className="py-2 font-semibold text-gray-700">Upload Date</td>
