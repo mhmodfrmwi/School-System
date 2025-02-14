@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchVR, deleteVR } from "../TeacherRedux/VRSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 const formatStartTime = (startTime) => {
     const date = new Date(startTime);
@@ -12,20 +12,24 @@ const formatStartTime = (startTime) => {
     return `${formattedDate} (${formattedTime})`;
 };
 const SeeVR = () => {
+    const { grade_subject_semester_id } = useParams();
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { teacherVirtualRooms, error } = useSelector((state) => state.teacherVirtualRooms);
     console.log("Redux State:", teacherVirtualRooms, "Error:", error);
-        const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
-        useEffect(() => {
-            dispatch(fetchVR())
+    useEffect(() => {
+        if (grade_subject_semester_id) {
+            setIsLoading(true);
+            dispatch(fetchVR(grade_subject_semester_id))
                 .unwrap()
-                .then((data) => console.log("Dispatched fetchVR, received:", data))
-                .catch((error) => console.error("Error in dispatch:", error))
-                .finally(() => setIsLoading(false));
-        }, [dispatch]);
-        
+                .then(() => setIsLoading(false))
+                .catch(() => setIsLoading(false));
+        }
+    }, [dispatch, grade_subject_semester_id]);
+
     const handleDelete = async (id) => {
         if (!id || id.length !== 24) {
             toast.error("Invalid VR ID");
@@ -58,7 +62,7 @@ const SeeVR = () => {
                         <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
                             All Virtual Rooms
                         </h1>
-                        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></div>
+                        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[210px]"></div>
                     </div>
                     <div className="relative w-full px-4 sm:px-6 lg:px-8">
                         <div className="mt-7">
@@ -87,9 +91,9 @@ const SeeVR = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {teacherVirtualRooms.length > 0 ? (
-                                            teacherVirtualRooms.map((room, index) => (
-                                              <tr key={room._id} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
+                                            {teacherVirtualRooms.length > 0 ? (
+                                                teacherVirtualRooms.map((room, index) => (
+                                                    <tr key={room._id} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
                                                         <td className="px-3 py-2">{room.title}</td>
                                                         <td className="px-3 py-2">{formatStartTime(room.startTime)}</td>
                                                         <td className="px-3 py-2">{room.duration}</td>

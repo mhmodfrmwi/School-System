@@ -439,7 +439,7 @@ function App() {
             <Route path="update-material/:materialId" element={<EditMaterial />} />
             <Route path="takeattendance/:id" element={<TakeAttendance />} />
             <Route path="attendancereport" element={<Attendancereport />} />
-            <Route path="/teacher/virtual-room" element={<SeeVR/>}/>
+            <Route path="/teacher/virtual-room/:grade_subject_semester_id" element={<SeeVR/>}/>
             <Route path="/teacher/VR-form/:classId/:gradeSubjectSemesterId" element={<VRForm />} />
             <Route path="edit-vr/:id" element={<EditVR />} />
 

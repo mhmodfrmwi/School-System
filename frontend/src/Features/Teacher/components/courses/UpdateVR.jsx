@@ -82,9 +82,9 @@ const EditVR = () => {
         <>
             <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
                 <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                    Edit Material
+                    Edit Virtual Rooms
                 </h1>
-                <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[190px]"></div>
+                <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[220px]"></div>
             </div>
             <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
                 <form onSubmit={handleSubmit} className="space-y-4">
