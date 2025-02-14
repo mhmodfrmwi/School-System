@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { toast } from "react-toastify";
-import { updateMaterial ,fetchMaterials} from "../TeacherRedux/PdfMaterialSlice";  // Import updateMaterial action
+import { updateMaterial ,fetchMaterials} from "../TeacherRedux/PdfMaterialSlice";  
 
 
 const EditMaterial = () => {    
@@ -129,7 +129,7 @@ const EditMaterial = () => {
            type="submit"
            className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
          >
-           Uodate
+           Update
          </button>
        </form>
      </div>

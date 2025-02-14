@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
+import SeeVR from "./Features/Teacher/components/courses/SeeVR";
+import EditVR from "./Features/Teacher/components/courses/UpdateVR";
 
 
 const TakeAttendance = lazy(() => import("./Features/Teacher/components/Attendance/takeAttendance"));
@@ -261,17 +263,11 @@ const MaterialForm = lazy(
 const SeeMaterial = lazy(
   () => import("./Features/Teacher/components/courses/SeeMaterial"),
 );
-const VirtualRoom = lazy(
-  () => import("./Features/Teacher/components/Virtual Rooms/virtualRooms"),
-);
-const AddVirtualRoom = lazy(
-  () => import("./Features/Teacher/components/Virtual Rooms/addVirtualRooms"),
-);
-const EditVirtualRoom = lazy(
-  () => import("./Features/Teacher/components/Virtual Rooms/editVirtualRooms"),
-);
 const MaterialDetails = lazy(
   () => import("./Features/Student/components/courses/MaterialDetails"),
+);
+const VRForm = lazy(
+  () => import("./Features/Teacher/components/courses/FormVR"),
 );
 
 function App() {
@@ -443,9 +439,10 @@ function App() {
             <Route path="update-material/:materialId" element={<EditMaterial />} />
             <Route path="takeattendance/:id" element={<TakeAttendance />} />
             <Route path="attendancereport" element={<Attendancereport />} />
-            <Route path="virtualroom" element={<VirtualRoom />} />
-            <Route path="addvirtualroom" element={<AddVirtualRoom />} />
-            <Route path="editvirtualroom/:id" element={<EditVirtualRoom />} />
+            <Route path="/teacher/virtual-room" element={<SeeVR/>}/>
+            <Route path="/teacher/VR-form/:classId/:gradeSubjectSemesterId" element={<VRForm />} />
+            <Route path="edit-vr/:id" element={<EditVR />} />
+
           </Route>
           {/* ///////////////manager pages//////////////////// */}
           <Route path="manager" element={<ProtectedRoute element={<Manager />} requiredRole="manager" />}>

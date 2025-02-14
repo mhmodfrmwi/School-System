@@ -192,7 +192,6 @@ const PdfMaterial = createSlice({
         state.pdfMaterials = state.pdfMaterials.filter(
           (material) => material.id !== action.payload
         );
-        toast.success("Material deleted successfully");
       })
       .addCase(deleteMaterial.rejected, (state, action) => {
         state.status = "failed";

@@ -22,7 +22,7 @@ import attendanceTeacheReducer from "./Features/Teacher/components/TeacherRedux/
 import allSubjectsStudentReducer from "./Features/Student/components/StudentRedux/allSubjectsStudentSlice";
 import pdfMaterialsReducer from "./Features/Teacher/components/TeacherRedux/PdfMaterialSlice";
 import tripsReducer from "./Features/Teacher/components/TeacherRedux/TripsSlice";
-import teacherVirtualRoomReducer from "./Features/Teacher/components/TeacherRedux/VirtualRoomsSlice";
+import teacherVirtualRoomReducer from "./Features/Teacher/components/TeacherRedux/VRSlice";
 import classTeachersReducer from "./Features/Teacher/components/TeacherRedux/TeacherClassSlice";
 import teacherScheduleReducer from "./Features/Teacher/components/TeacherRedux/teacherScheduleSlice";
 
