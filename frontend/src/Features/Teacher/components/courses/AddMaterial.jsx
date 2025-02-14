@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import { fetchMaterials } from "../TeacherRedux/PdfMaterialSlice";
-
+import { fetchVR } from "../TeacherRedux/VRSlice";
 
 const AddMaterial = () => {
   const { classId, gradeSubjectSemesterId } = useParams();
@@ -25,8 +25,8 @@ const AddMaterial = () => {
         : `/teacher/materialform/${classId}/${gradeSubjectSemesterId}`;
     } else if (courseName === "Virtual Room") {
       targetUrl = actionType === "see"
-      ? `/teacher/virtual-room`
-      : `/teacher/VR-form/${classId}/${gradeSubjectSemesterId}`;
+        ? `/teacher/virtual-room/${gradeSubjectSemesterId}`
+        : `/teacher/VR-form/${classId}/${gradeSubjectSemesterId}`;
     } else if (courseName === "Assignments") {
       targetUrl = `/teacher/assignments/${gradeSubjectSemesterId}`;
     } else if (courseName === "Exams") {
@@ -41,7 +41,7 @@ const AddMaterial = () => {
 
   const { classTeachers = [], message, loading } = useSelector((state) => state.classTeachers || {});
   const pdfMaterials = useSelector((state) => state.pdfMaterials.pdfMaterials || []);
-  
+  const teacherVirtualRooms = useSelector((state) => state.teacherVirtualRooms.teacherVirtualRooms || []);
   useEffect(() => {
     dispatch(fetchClassTeacher());
   }, [dispatch]);
@@ -49,6 +49,7 @@ const AddMaterial = () => {
   useEffect(() => {
     if (gradeSubjectSemesterId) {
       dispatch(fetchMaterials(gradeSubjectSemesterId));
+      dispatch(fetchVR(gradeSubjectSemesterId));
     }
   }, [dispatch, gradeSubjectSemesterId]);
 
@@ -58,12 +59,16 @@ const AddMaterial = () => {
   const classteacher = classTeachers.length > 0 ? classTeachers[0] : null;
   const videoCount = pdfMaterials.filter((material) => material.type === "Video").length;
   const pdfCount = pdfMaterials.filter((material) => material.type === "PDF").length;
+  const vrCount = teacherVirtualRooms.length;
+
+  console.log("Teacher Virtual Rooms:", teacherVirtualRooms); // Log virtual rooms
+  console.log("VR Count:", vrCount); // Log VR count
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
     { id: 1, name: "Video Lectures", total: videoCount, icon: faVideo },
     { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
-    { id: 3, name: "Virtual Room", total: 24, icon: faVideo },
+    { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
     { id: 4, name: "Assignments", total: 100, icon: faTasks },
     { id: 5, name: "Exams", total: 19, icon: faFileAlt },
   ];

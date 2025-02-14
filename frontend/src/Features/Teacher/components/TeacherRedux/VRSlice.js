@@ -7,14 +7,17 @@ const getToken = () => sessionStorage.getItem("token");
 // Fetch Materials
 export const fetchVR = createAsyncThunk(
     "teacherVirtualRooms/getTeacherVirtualRoom",
-    async (_, { rejectWithValue }) => {
+    async (grade_subject_semester_id, { rejectWithValue }) => {
         try {
             const token = getToken();
             if (!token) {
                 return rejectWithValue("Authentication required. Please log in.");
             }
+            if (!grade_subject_semester_id) {
+                return rejectWithValue("Invalid ID: grade_subject_semester_id is missing.");
+              }
 
-            const url = `http://localhost:4000/api/v1/teacher/virtualRoom`;
+            const url = `http://localhost:4000/api/v1/teacher/Teacher-virtualRoom/${grade_subject_semester_id}`;
             console.log("Fetching virtual rooms from:", url);
 
             const response = await fetch(url, {
@@ -97,7 +100,7 @@ export const updateTeacherVirtualRoom = createAsyncThunk(
           console.error("API Error Response:", errorText);
           throw new Error(`Failed to update VR: ${errorText}`);
         }
-
+         //toast.success("Updated VR successfully"); 
         const data = await response.json();
         return { id, updatedRoom: data };
       } catch (error) {
