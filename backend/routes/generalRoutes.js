@@ -7,6 +7,10 @@ const {
   updateLibraryItem,
   deleteLibraryItem,
 } = require("../controllers/General/libraryItemController");
+const {
+  displaySubjectsInTheMaterialOfTheLibrary,
+  getMaterialsForLibraryWithGradeAndSemester,
+} = require("../controllers/Teacher/MatrialForLibrary");
 const router = express.Router();
 
 router.post("/create-library-item", validateJwt, createLibraryItem);
@@ -17,4 +21,15 @@ router
   .patch(validateJwt, updateLibraryItem)
   .delete(validateJwt, deleteLibraryItem);
 
+router.get(
+  "/get-subjects-in-library",
+  validateJwt,
+  displaySubjectsInTheMaterialOfTheLibrary
+);
+
+router.get(
+  "/get-material-for-subject-in-library/:id",
+  validateJwt,
+  getMaterialsForLibraryWithGradeAndSemester
+);
 module.exports = router;

@@ -67,6 +67,7 @@ const getTeacherClassesForCurrentSemester = expressAsyncHandler(async (req, res)
     const gradeId = gradeIds[index];
     const semesterId = semesterIds[index];
     const subjectName = teacher.subjectId.subjectName;
+    const subjectId = teacher.subjectId._id;
     const gradeName = classes[index].gradeId.gradeName;
     const className = classes[index].className;
     const semesterName = classTeachers[index].semester_id.semesterName;
@@ -76,6 +77,7 @@ const getTeacherClassesForCurrentSemester = expressAsyncHandler(async (req, res)
       gradeId,
       semesterId,
       classId,
+      subjectId,
       subjectName,
       gradeName,
       className,

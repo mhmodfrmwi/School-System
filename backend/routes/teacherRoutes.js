@@ -37,7 +37,10 @@ const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teache
 const {
   getAttendanceForClassInPeriod,
 } = require("../controllers/Teacher/getAttendanceForClassInPeriod");
-const { getTeacherClassesForCurrentSemester , getAllTeacherClasses} = require("../controllers/Teacher/getAllClasses");
+const {
+  getTeacherClassesForCurrentSemester,
+  getAllTeacherClasses,
+} = require("../controllers/Teacher/getAllClasses");
 const {
   getScheduleForSpecificTeacher,
 } = require("../controllers/Teacher/scheduleController");
@@ -50,7 +53,9 @@ const {
   deleteSchoolHub,
 } = require("../controllers/manager/SHController");
 const validateManager = require("../middlewares/validateManager");
-
+const {
+  createMaterialForLibrary,
+} = require("../controllers/Teacher/MatrialForLibrary");
 
 const router = express.Router();
 router.post("/login", login);
@@ -69,14 +74,24 @@ router
   .delete(validateJwt, validateTeacher, deleteQuestion);
 router.get("/questionBank", validateJwt, validateTeacher, getAllQuestions);
 
-router.post("/virtualRoom/:gradeSubjectSemesterId/:classId", validateJwt, validateTeacher, createVirtualRoom);
+router.post(
+  "/virtualRoom/:gradeSubjectSemesterId/:classId",
+  validateJwt,
+  validateTeacher,
+  createVirtualRoom
+);
 router
   .route("/virtualRoom/:id")
   .get(validateJwt, validateTeacher, getVirtualRoom)
   .patch(validateJwt, validateTeacher, updateVirtualRoom)
   .delete(validateJwt, validateTeacher, deleteVirtualRoom);
 router.get("/virtualRoom", validateJwt, validateTeacher, getAllVirtualRooms);
-router.get("/Teacher-virtualRoom/:id", validateJwt, validateTeacher, getTeacherVirtualRooms);
+router.get(
+  "/Teacher-virtualRoom/:id",
+  validateJwt,
+  validateTeacher,
+  getTeacherVirtualRooms
+);
 
 router.post("/contest", validateJwt, validateTeacher, createContest);
 router
@@ -104,7 +119,12 @@ router.post(
   validateTeacher,
   getAttendanceForClassInPeriod
 );
-router.get("/semester-class", validateJwt, validateTeacher, getTeacherClassesForCurrentSemester);
+router.get(
+  "/semester-class",
+  validateJwt,
+  validateTeacher,
+  getTeacherClassesForCurrentSemester
+);
 router.get("/class", validateJwt, validateTeacher, getAllTeacherClasses);
 router.get(
   "/get-schedule",
@@ -120,5 +140,13 @@ router
   .patch(validateJwt, validateManager, updateSchoolHub)
   .delete(validateJwt, validateManager, deleteSchoolHub);
 
-router.get("/school-hub", validateJwt, validateManager, getAllSchoolHubs); 
+router.get("/school-hub", validateJwt, validateManager, getAllSchoolHubs);
+
+//material for library
+router.post(
+  "/library-material",
+  validateJwt,
+  validateTeacher,
+  createMaterialForLibrary
+);
 module.exports = router;

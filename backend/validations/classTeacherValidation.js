@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const classTeacherValidationSchema = Joi.object({
-  className: Joi.string().required(),
+  classId: Joi.string().required(),
   subjectName: Joi.string().required(),
   teacherName: Joi.string().required(),
   academicYear: Joi.string().required(),
