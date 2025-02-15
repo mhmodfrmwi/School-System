@@ -76,7 +76,7 @@ const Navbar = () => {
   const match = url.match(/\/student\/([^/]+)/);
   const name = match ? match[1] : "";
   
-  console.log(name);
+
 
   const handleBack = () => {
     navigate(-1);

@@ -13,17 +13,17 @@ const Activities = () => {
                 <p className="w-24 rounded-xl mb-2 border-t-4 border-[#BC6FFB] ms-7"></p>
                 <div className="mb-6 mt-4 flex flex-col sm:flex-row items-center gap-4">
                     <button
-                        className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 text-lg font-medium text-white focus:outline-none"
+                        className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 text-lg  font-poppins font-medium text-white focus:outline-none"
                         onClick={() => navigate("/student/activities")}
                     >
                         School Hubs
                     </button>
 
                     <button
-                        className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 text-lg font-medium text-transparent"
+                        className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 text-lg font-poppins font-medium text-transparent"
                         onClick={() => navigate("/student/activities/contests")}
                     >
-                        Trips
+                        Contests
                     </button>
                 </div>
                 <div className="flex flex-col md:flex-row items-center justify-between mt-5 gap-4">

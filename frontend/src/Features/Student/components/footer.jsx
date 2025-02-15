@@ -6,7 +6,7 @@ function Footer() {
     <footer>
       <div className="m-5 grid gap-10 rounded-lg bg-[#EEE8F6] p-5 sm:grid-cols-2 xl:grid-cols-3">
         <div className="mx-auto">
-          <img src={img2} alt="logoImage not found" />
+          <img src={img2} alt="logoImage not found"  loading="lazy" />
           <h2 className="ms-6 font-poppins text-[#3D52A1] lg:ms-24">
             Learn,Graw,Success
           </h2>
@@ -14,7 +14,7 @@ function Footer() {
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[#826FB5]">
           <div className="flex items-center">
             <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
-              <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
+              <div className="h-[100%] w-[100%] rounded-full bg-white"></div>
             </p>
 
             <h2 className="ms-4 font-poppins text-[10px] md:text-sm">
@@ -24,7 +24,7 @@ function Footer() {
 
           <div className="flex items-center">
             <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
-              <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
+              <div className="h-[100%] w-[100%] rounded-full bg-white"></div>
             </p>
             <h2 className="ms-4 font-poppins text-[10px] md:text-sm">
               Inspire Learning
@@ -33,7 +33,7 @@ function Footer() {
 
           <div className="flex items-center">
             <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
-              <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
+              <div className="h-[100%] w-[100%] rounded-full bg-white"></div>
             </p>
             <h2 className="ms-4 font-poppins text-[10px] md:text-sm">
               Discover Kowledge
@@ -42,7 +42,7 @@ function Footer() {
 
           <div className="flex items-center">
             <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
-              <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
+              <div className="h-[100%] w-[100%] rounded-full bg-white"></div>
             </p>
             <h2 className="ms-4 font-poppins text-[10px] md:text-sm">
               Imagine More
@@ -51,14 +51,14 @@ function Footer() {
 
           <div className="flex items-center">
             <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
-              <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
+              <div className="h-[100%] w-[100%] rounded-full bg-white"></div>
             </p>
             <h2 className="ms-4 font-poppins text-[10px] md:text-sm">Unlock</h2>
           </div>
 
           <div className="flex items-center">
             <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
-              <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
+              <div className="h-[100%] w-[100%] rounded-full bg-white"></div>
             </p>
             <h2 className="ms-4 font-poppins text-[10px] md:text-sm">
               Dream Big
@@ -67,7 +67,7 @@ function Footer() {
 
           <div className="flex items-center">
             <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
-              <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
+             <div className="h-[100%] w-[100%] rounded-full bg-white"></div>
             </p>
             <h2 className="ms-4 font-poppins text-[10px] md:text-sm">
               Explore Ideas
@@ -75,7 +75,7 @@ function Footer() {
           </div>
           <div className="flex items-center">
             <p className="size-6 rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[6px]">
-              <p className="h-[100%] w-[100%] rounded-full bg-white"></p>
+              <div className="h-[100%] w-[100%] rounded-full bg-white"></div>
             </p>
             <h2 className="ms-4 font-poppins text-[10px] md:text-sm">
               Achieve Greatness
@@ -87,6 +87,7 @@ function Footer() {
             src={img3}
             className="mx-auto h-64 md:w-96"
             alt="imagefooter not found"
+            loading="lazy"
           />
         </div>
       </div>
