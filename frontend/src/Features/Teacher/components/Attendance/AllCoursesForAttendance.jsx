@@ -98,11 +98,11 @@ const AllCoursesForAttendance = ({ onSearchChange }) => {
         {filteredTeachers.map((classteacher, index) => (
           <div
             key={classteacher?.classId || index}
-            onClick={() =>
-              navigate(`/teacher/takeattendance/${classteacher.subjectId}`, {
-                state: { classId: classteacher.classId },
-              })
-            }
+            // onClick={() =>
+            //   navigate(`/teacher/takeattendance/${classteacher.subjectId}`, {
+            //     state: { classId: classteacher.classId },
+            //   })
+            // }
             className="relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
           >
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
