@@ -336,10 +336,12 @@ router.post(
   validateAdmin,
   createSchedule
 );
+
 router
   .route("/schedule/:id")
   .get(validateJwt, validateAdmin, getSchedule)
   .patch(validateJwt, validateAdmin, updateSchedule)
   .delete(validateJwt, validateAdmin, deleteSchedule);
 router.get("/schedule", validateJwt, validateAdmin, getAllSchedule);
+
 module.exports = router;
