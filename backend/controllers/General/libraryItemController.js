@@ -254,6 +254,10 @@ const getLibraryItemById = expressAsyncHandler(async (req, res) => {
     });
   }
 
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ status: 401, message: "Unauthorized" });
+  }
+
   try {
     const libraryItem = await LibraryItem.findById(id)
       .select("title author item_url type")
@@ -266,12 +270,23 @@ const getLibraryItemById = expressAsyncHandler(async (req, res) => {
       });
     }
 
+    const isViewed = await StudentLibraryItem.findOne({
+      student_id: req.user.id,
+      library_item_id: id,
+    });
+
+    const libraryItemWithIsViewed = {
+      ...libraryItem.toObject(),
+      isViewed: !!isViewed,
+    };
+
     res.status(200).json({
       status: 200,
       message: "Library item retrieved successfully",
-      libraryItem,
+      libraryItem: libraryItemWithIsViewed,
     });
   } catch (error) {
+    console.error("Error fetching library item by ID:", error);
     res.status(500).json({ status: 500, message: "Internal Server Error" });
   }
 });
