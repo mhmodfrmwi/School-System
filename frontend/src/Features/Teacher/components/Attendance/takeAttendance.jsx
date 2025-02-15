@@ -71,14 +71,14 @@ function TakeAttendance() {
     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
       {loading && <Loader />}
 
-      <button
+      {/* <button
         className="mb-6 flex cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] p-2 py-2 font-medium text-white focus:outline-none"
         onClick={() => navigate("/teacher/attendancereport")}
       >
         Attendance Report
-      </button>
+      </button> */}
 
-      {/* <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
+      <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
           onClick={() => navigate(`/teacher/takeattendance/${id}`)}
@@ -98,7 +98,7 @@ function TakeAttendance() {
           </span>
           Attendance Report
         </button>
-      </div> */}
+      </div>
 
       <div className="overflow-x-auto">
         <table className="mx-auto w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
