@@ -3,6 +3,8 @@ const validateObjectId = require("../../utils/validateObjectId");
 const libraryItemValidationSchema = require("../../validations/libraryItemValidation");
 const LibraryItem = require("../../DB/LibraryItem");
 const joi = require("joi");
+const MaterialView = require("../../DB/MaterialView");
+const StudentLibraryItem = require("../../DB/Student-LibraryItem");
 const createLibraryItem = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
   if (!validateObjectId(teacherId)) {
@@ -19,7 +21,7 @@ const createLibraryItem = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { title, author, libraryUrl,type } = req.body;
+  const { title, author, libraryUrl, type } = req.body;
 
   try {
     const existingLibraryItem = await LibraryItem.findOne({
@@ -42,7 +44,7 @@ const createLibraryItem = expressAsyncHandler(async (req, res) => {
       author,
       item_url: libraryUrl,
       type,
-      uploaded_by:teacherId
+      uploaded_by: teacherId,
     });
 
     await libraryItem.save();
@@ -78,7 +80,7 @@ const updateLibraryItem = expressAsyncHandler(async (req, res) => {
       title: joi.string().min(3).max(100).optional(),
       author: joi.string().min(3).max(100).optional(),
       libraryUrl: joi.string().uri().optional(),
-      type: joi.string().valid("Video", "PDF").optional()
+      type: joi.string().valid("Video", "PDF").optional(),
     })
     .min(1);
 
@@ -90,7 +92,7 @@ const updateLibraryItem = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { title, author, libraryUrl,type } = req.body;
+  const { title, author, libraryUrl, type } = req.body;
 
   try {
     if (title || author || libraryUrl || type) {
@@ -101,7 +103,7 @@ const updateLibraryItem = expressAsyncHandler(async (req, res) => {
         type: type || { $exists: true },
         _id: { $ne: id },
       });
-      
+
       if (existingLibraryItem) {
         return res.status(400).json({
           status: 400,
@@ -119,7 +121,10 @@ const updateLibraryItem = expressAsyncHandler(async (req, res) => {
       });
     }
     if (neededLibraryItem.uploaded_by.toString() !== teacherId) {
-      return res.status(403).json({ status: 403, message: "Unauthorized to update this Library item" });
+      return res.status(403).json({
+        status: 403,
+        message: "Unauthorized to update this Library item",
+      });
     }
     const updatedLibraryItem = await LibraryItem.findByIdAndUpdate(
       id,
@@ -154,7 +159,7 @@ const deleteLibraryItem = expressAsyncHandler(async (req, res) => {
   }
 
   try {
-    const neededLibraryItem = await LibraryItem.findById(id); 
+    const neededLibraryItem = await LibraryItem.findById(id);
 
     if (!neededLibraryItem) {
       return res.status(404).json({
@@ -163,7 +168,10 @@ const deleteLibraryItem = expressAsyncHandler(async (req, res) => {
       });
     }
     if (neededLibraryItem.uploaded_by.toString() !== teacherId) {
-      return res.status(403).json({ status: 403, message: "Unauthorized to delete this Library item" });
+      return res.status(403).json({
+        status: 403,
+        message: "Unauthorized to delete this Library item",
+      });
     }
 
     const deletedLibraryItem = await LibraryItem.findByIdAndDelete(id);
@@ -179,15 +187,24 @@ const deleteLibraryItem = expressAsyncHandler(async (req, res) => {
 });
 const getLibraryItems = expressAsyncHandler(async (req, res) => {
   try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ status: 401, message: "Unauthorized" });
+    }
+
     const filter = {};
     if (req.query.author) filter.author = req.query.author;
     if (req.query.title) {
       filter.title = { $regex: req.query.title, $options: "i" };
     }
 
-    const sort = req.query.sort || "-createdAt";
+    const validSortFields = ["createdAt", "-createdAt", "title", "-title"];
+    const sort = validSortFields.includes(req.query.sort)
+      ? req.query.sort
+      : "-createdAt";
 
-    const libraryItems = await LibraryItem.find(filter).sort(sort).populate("uploaded_by","fullName");
+    const libraryItems = await LibraryItem.find(filter)
+      .sort(sort)
+      .populate("uploaded_by", "fullName");
 
     const totalItems = await LibraryItem.countDocuments(filter);
 
@@ -200,10 +217,26 @@ const getLibraryItems = expressAsyncHandler(async (req, res) => {
       });
     }
 
+    const studentLibraryItems = await StudentLibraryItem.find({
+      student_id: req.user.id,
+      library_item_id: { $in: libraryItems.map((item) => item._id) },
+    });
+
+    const libraryItemsWithIsViewedAttributes = libraryItems.map((item) => {
+      const isViewed = studentLibraryItems.some(
+        (studentItem) =>
+          studentItem.library_item_id.toString() === item._id.toString()
+      );
+      return {
+        ...item.toObject(),
+        isViewed,
+      };
+    });
+
     res.status(200).json({
       status: 200,
       message: "Library items retrieved successfully",
-      libraryItems,
+      libraryItems: libraryItemsWithIsViewedAttributes,
       totalItems,
     });
   } catch (error) {
@@ -221,10 +254,14 @@ const getLibraryItemById = expressAsyncHandler(async (req, res) => {
     });
   }
 
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ status: 401, message: "Unauthorized" });
+  }
+
   try {
-    const libraryItem = await LibraryItem.findById(id).select(
-      "title author item_url type"
-    ).populate("uploaded_by","fullName");
+    const libraryItem = await LibraryItem.findById(id)
+      .select("title author item_url type")
+      .populate("uploaded_by", "fullName");
 
     if (!libraryItem) {
       return res.status(404).json({
@@ -233,12 +270,23 @@ const getLibraryItemById = expressAsyncHandler(async (req, res) => {
       });
     }
 
+    const isViewed = await StudentLibraryItem.findOne({
+      student_id: req.user.id,
+      library_item_id: id,
+    });
+
+    const libraryItemWithIsViewed = {
+      ...libraryItem.toObject(),
+      isViewed: !!isViewed,
+    };
+
     res.status(200).json({
       status: 200,
       message: "Library item retrieved successfully",
-      libraryItem,
+      libraryItem: libraryItemWithIsViewed,
     });
   } catch (error) {
+    console.error("Error fetching library item by ID:", error);
     res.status(500).json({ status: 500, message: "Internal Server Error" });
   }
 });

@@ -21,11 +21,11 @@ import loginReducer from "./Features/Auth/AuthRedux/loginSlice";
 import attendanceTeacheReducer from "./Features/Teacher/components/TeacherRedux/takeAttendanceSlice";
 import allSubjectsStudentReducer from "./Features/Student/components/StudentRedux/allSubjectsStudentSlice";
 import pdfMaterialsReducer from "./Features/Teacher/components/TeacherRedux/PdfMaterialSlice";
-import tripsReducer from "./Features/Teacher/components/TeacherRedux/TripsSlice";
+import contestsReducer from "./Features/Teacher/components/TeacherRedux/ContestSlice";
 import teacherVirtualRoomReducer from "./Features/Teacher/components/TeacherRedux/VRSlice";
 import classTeachersReducer from "./Features/Teacher/components/TeacherRedux/TeacherClassSlice";
 import teacherScheduleReducer from "./Features/Teacher/components/TeacherRedux/teacherScheduleSlice";
-
+import studentContestsReducer from "./Features/Student/components/StudentRedux/contestSlice";
 
 const store = configureStore({
   reducer: {
@@ -51,7 +51,8 @@ const store = configureStore({
     login: loginReducer,
     allSubjectsStudent: allSubjectsStudentReducer,
     pdfMaterials: pdfMaterialsReducer,
-    trips:tripsReducer,
+    contests:contestsReducer,
+    studentContests: studentContestsReducer,
     teacherVirtualRooms: teacherVirtualRoomReducer,
     classTeachers: classTeachersReducer,
     teacherSchedule: teacherScheduleReducer,

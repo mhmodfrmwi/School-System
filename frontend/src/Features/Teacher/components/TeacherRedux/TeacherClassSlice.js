@@ -92,7 +92,7 @@ const TeacherClass = createSlice({
         state.loading = true;
       })
       .addCase(fetchClassTeacher.fulfilled, (state, action) => {
-        console.log("Fetched Data:", action.payload);
+        // console.log("Fetched Data:", action.payload);
         state.status = "succeeded";
         state.classTeachers = action.payload || [];
         state.loading = false;
@@ -107,7 +107,7 @@ const TeacherClass = createSlice({
         state.loading = true;
       })
       .addCase(fetchALLClassTeacher.fulfilled, (state, action) => {
-        console.log("Fetched Data:", action.payload);
+        // console.log("Fetched Data:", action.payload);
         state.status = "succeeded";
         state.classTeachers = action.payload || [];
         state.loading = false;

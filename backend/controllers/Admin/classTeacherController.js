@@ -20,9 +20,9 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { className, subjectName, teacherName, academicYear } = req.body;
+  const { classId, subjectName, teacherName, academicYear } = req.body;
 
-  const existingClass = await Class.findOne({ className });
+  const existingClass = await Class.findById(classId);
   if (!existingClass) {
     return res.status(404).json({
       status: 404,
@@ -54,7 +54,6 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
       message: "Academic year not found",
     });
   }
-  console.log(existingAcademicYear);
   const currentMonth = moment().month() + 1;
   let semester_name;
   if (currentMonth >= 9 && currentMonth <= 12) {
@@ -63,14 +62,24 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     semester_name = "Semester 2";
   }
   const semester = await Semester.findOne({
-    semesterName : semester_name,
+    semesterName: semester_name,
     academicYear_id: existingAcademicYear._id,
   });
-  console.log(semester_name);
   if (!semester) {
     return res.status(404).json({
       status: 404,
       message: "Semester not found in the given academic year",
+    });
+  }
+  const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+    subjectId: existingSubject._id,
+    gradeId: existingClass.gradeId._id,
+    semesterId: semester._id,
+  });
+  if (!gradeSubjectSemester) {
+    return res.status(404).json({
+      status: 404,
+      message: "GradeSubjectSemester not found",
     });
   }
   const existingClassTeacher = await ClassTeacher.findOne({
@@ -79,7 +88,10 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     teacherId: existingTeacher._id,
     academicYear_id: existingAcademicYear._id,
     semester_id: semester._id,
-  });
+  })
+    .populate("classId")
+    .populate("subjectId")
+    .populate("teacherId");
   if (existingClassTeacher) {
     return res.status(400).json({
       status: 400,
