@@ -11,8 +11,7 @@ export const fetchClassTeacher = createAsyncThunk(
   "ClassTeachers/fetchClassTeacher",
   async (_, { rejectWithValue }) => {
     try {
-      const token =
-           sessionStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
@@ -46,8 +45,7 @@ export const fetchALLClassTeacher = createAsyncThunk(
   "AllClassTeachers/fetchAllClassTeacher",
   async (_, { rejectWithValue }) => {
     try {
-      const token =
-           sessionStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
@@ -102,7 +100,7 @@ const TeacherClass = createSlice({
         state.error = action.payload || "Failed to fetch classTeachers";
         state.loading = false;
       })
-       .addCase(fetchALLClassTeacher.pending, (state) => {
+      .addCase(fetchALLClassTeacher.pending, (state) => {
         state.status = "loading";
         state.loading = true;
       })

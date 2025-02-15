@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../Pagination";
 import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
-import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
+import {
+  fetchALLClassTeacher,
+  fetchClassTeacher,
+} from "../TeacherRedux/TeacherClassSlice";
 import Loader from "@/ui/Loader";
 
 function Attendancereport() {
@@ -29,6 +32,7 @@ function Attendancereport() {
 
   useEffect(() => {
     dispatch(fetchClassTeacher());
+    dispatch(fetchALLClassTeacher());
   }, [dispatch]);
 
   useEffect(() => {
@@ -125,15 +129,20 @@ function Attendancereport() {
 
   return (
     <div className="mx-auto w-[360px] p-4 sm:w-[550px] md:w-[700px] md:p-6 lg:px-0 xl:w-full">
-      <div className="m-auto mb-7 grid w-[90%] grid-cols-1 rounded-3xl sm:grid-cols-2">
+      {/* <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
         {classTeachers.map((classteacher) => (
           <button
             key={classteacher.id}
-            className="flex cursor-pointer items-center justify-center rounded-3xl bg-[#EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
+            className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
             onClick={() => {
-              navigate(`/teacher/takeattendance/${classteacher.id}`, {
-                state: { classId: classteacher.classId._id },
-              });
+              navigate(
+                `/teacher/takeattendance/${classteacher.id || classteacher.subjectId}`,
+                {
+                  state: {
+                    classId: classteacher.classId._id || classteacher.classId,
+                  },
+                },
+              );
 
               window.location.reload();
             }}
@@ -145,7 +154,7 @@ function Attendancereport() {
           </button>
         ))}
         <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none"
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
           onClick={() => navigate("/teacher/attendancereport")}
         >
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
@@ -153,8 +162,7 @@ function Attendancereport() {
           </span>
           Attendance Report
         </button>
-      </div>
-
+      </div> */}
       <h2 className="mb-4 text-left text-2xl font-bold text-[#117C90]">
         See Attendance Summary
       </h2>
@@ -198,7 +206,6 @@ function Attendancereport() {
           Generate Report
         </button>
       </form>
-
       {attendanceStatus === "loading" ? (
         <div>Loading attendance data...</div>
       ) : currentStudents.length > 0 ? (

@@ -1,27 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchALLClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import { useNavigate } from "react-router-dom";
 import bag from "../../../../assets/bag.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import CourseToggle from "./SelectCoursePageForAttendance";
 
-const submissions = [
-  { id: 1, grade: "Grade 1", year: "2023-2024" },
-  { id: 2, grade: "Grade 2", year: "2024-2025" },
-  { id: 3, grade: "Grade 3", year: "2025-2026" },
-  { id: 4, grade: "Grade 4", year: "2026-2027" },
-];
-
-const AllCoursesForAttendance = ({ onSearchChange, grade, year }) => {
-  const [searchText, setSearchText] = useState("");
+const AllCoursesForAttendance = ({ onSearchChange }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
     onSearchChange(e.target.value);
   };
 
-  const handleSectionClick = (id) => {
-    navigate("/teacher/takeattendance");
-  };
+  const {
+    classTeachers = [],
+    message,
+    loading,
+  } = useSelector((state) => state.classTeachers || {});
+
+  const filteredTeachers = classTeachers.filter(
+    (classteacher) =>
+      classteacher.subjectName
+        .toLowerCase()
+        .includes(searchText.toLowerCase()) ||
+      classteacher.gradeName.toLowerCase().includes(searchText.toLowerCase()) ||
+      classteacher.className.toLowerCase().includes(searchText.toLowerCase()) ||
+      classteacher.semesterName
+        .toLowerCase()
+        .includes(searchText.toLowerCase()),
+  );
+
+  useEffect(() => {
+    dispatch(fetchALLClassTeacher());
+  }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (message) {
+    return <div>{message}</div>;
+  }
+  if (classTeachers.length === 0) {
+    return (
+      <>
+        <CourseToggle />
+        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
+          <FontAwesomeIcon
+            icon={faCalendar}
+            className="mb-4 text-6xl text-gray-400"
+          />
+          <p className="mb-2 font-poppins text-xl font-semibold text-gray-600">
+            No Teacher Classes Found
+          </p>
+          <p className="mb-4 max-w-xl text-center font-poppins text-gray-500">
+            It seems like there are no teacher classes available at the moment.
+          </p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -53,20 +95,33 @@ const AllCoursesForAttendance = ({ onSearchChange, grade, year }) => {
       </div>
 
       <div className="grid grid-cols-1 justify-items-center gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
-        {submissions.map(({ id, grade, year }) => (
+        {filteredTeachers.map((classteacher, index) => (
           <div
-            key={id}
-            onClick={() => handleSectionClick(id)}
+            key={classteacher?.classId || index}
+            onClick={() =>
+              navigate(`/teacher/takeattendance/${classteacher.subjectId}`, {
+                state: { classId: classteacher.classId },
+              })
+            }
             className="relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
           >
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
               <img src={bag} alt="bag" className="h-7 w-7" />
             </div>
-            <h3 className="font-poppins text-lg font-semibold">
-              English Language
-            </h3>
-            <p className="font-poppins text-gray-700">{grade}</p>
-            <p className="font-poppins text-[#197080]">{year}</p>
+            <p className="font-poppins text-lg font-semibold">
+              {classteacher?.subjectName || "N/A"}
+            </p>
+            <div className="flex justify-start gap-4">
+              <p className="font-poppins font-semibold text-[#197080]">
+                {classteacher.gradeName || "N/A"}
+              </p>
+              <p className="font-poppins font-semibold text-[#197080]">
+                Class: {classteacher?.className || "N/A"}
+              </p>
+            </div>
+            <p className="font-poppins text-[#197080]">
+              {classteacher.semesterName || "N/A"}
+            </p>
           </div>
         ))}
       </div>
