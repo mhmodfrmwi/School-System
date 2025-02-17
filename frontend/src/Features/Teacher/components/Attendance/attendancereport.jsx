@@ -5,6 +5,7 @@ import Pagination from "../Pagination";
 import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import Loader from "@/ui/Loader";
+import { toast } from "react-toastify";
 
 function Attendancereport() {
   const dispatch = useDispatch();
@@ -89,6 +90,11 @@ function Attendancereport() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!filters.classId || !filters.startDate || !filters.endDate) {
+      toast.error("All fields are required!");
+      return;
+    }
     if (!validateForm()) return;
 
     dispatch(
