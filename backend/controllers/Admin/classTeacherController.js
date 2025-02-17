@@ -72,9 +72,8 @@ const createClassTeacher = expressAsyncHandler(async (req, res) => {
     });
   }
   const gradeSubjectSemester = await GradeSubjectSemester.findOne({
-    subjectId: existingSubject._id,
-    gradeId: existingClass.gradeId._id,
-    semesterId: semester._id,
+    grade_subject_id: existingSubject._id,
+    semester_id: semester._id,
   });
   if (!gradeSubjectSemester) {
     return res.status(404).json({
