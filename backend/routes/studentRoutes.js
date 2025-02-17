@@ -5,16 +5,18 @@ const validateJwt = require("../middlewares/validateJWT");
 const validateStudent = require("../middlewares/validateStudent");
 const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Student/subjectsController");
 const {
-  getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear,
+  getMaterialForSpecificSubject,
 } = require("../controllers/Student/materialController");
 const {
   getQuestionsBySubjectForStudent,
 } = require("../controllers/Student/questionBankController");
-const { 
+const {
   getContestForStudent,
-  getAllContestsForStudent 
+  getAllContestsForStudent,
 } = require("../controllers/Student/contestController");
-const { getAllSchoolHubs } = require("../controllers/Student/schoolHubController");
+const {
+  getAllSchoolHubs,
+} = require("../controllers/Student/schoolHubController");
 const {
   getVirtualRoomsForStudent,
 } = require("../controllers/Student/virtualRoomController");
@@ -58,7 +60,7 @@ router.get(
   "/materiel/:id",
   validateJwt,
   validateStudent,
-  getMaterielForSpecificSubjectUsingGradeAndSemesterAndAcademicYear
+  getMaterialForSpecificSubject
 );
 router.get("/materiel/:subjectId/:materialId", validateJwt, getMaterielById);
 
@@ -76,8 +78,18 @@ router.get(
 
   getVirtualRoomsForStudent
 );
-router.get("/get-subject-contest", validateJwt, validateStudent, getContestForStudent);
-router.get("/get-contests", validateJwt, validateStudent, getAllContestsForStudent);
+router.get(
+  "/get-subject-contest",
+  validateJwt,
+  validateStudent,
+  getContestForStudent
+);
+router.get(
+  "/get-contests",
+  validateJwt,
+  validateStudent,
+  getAllContestsForStudent
+);
 router.get("/school-hub", validateJwt, validateStudent, getAllSchoolHubs);
 
 router.get(
