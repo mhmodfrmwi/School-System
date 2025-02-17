@@ -55,6 +55,7 @@ const {
 const validateManager = require("../middlewares/validateManager");
 const {
   createMaterialForLibrary,
+  deleteMaterialForLibrary,
 } = require("../controllers/Teacher/MatrialForLibrary");
 
 const router = express.Router();
@@ -148,5 +149,12 @@ router.post(
   validateJwt,
   validateTeacher,
   createMaterialForLibrary
+);
+
+router.delete(
+  "/library-material/:id",
+  validateJwt,
+  validateTeacher,
+  deleteMaterialForLibrary
 );
 module.exports = router;
