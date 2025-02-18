@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMaterials, addToBookmark
   , fetchBookmarks, fetchSubjects, clearError
-, markMaterialAsViewed,fetchMaterialViewStatus, } from "../../components/StudentRedux/allSubjectsStudentSlice";
+, markMaterialAsViewed } from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaBookmark, FaEye, FaDownload, FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -17,7 +17,7 @@ const MaterialSection = () => {
     const itemsPerPage = 3;
   const dispatch = useDispatch();
   const { subjectId } = useParams();
-  const { materials, bookmarks, loading, error, subjects , viewedMaterials } = useSelector((state) => state.allSubjectsStudent);
+  const { materials, bookmarks, loading, error, subjects } = useSelector((state) => state.allSubjectsStudent);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
   const [subjectName, setSubjectName] = useState("");
@@ -35,15 +35,6 @@ const MaterialSection = () => {
     }
   }, [subjectId, subjects]);
 
-    useEffect(() => {
-      if (materials.length > 0) {
-        materials.forEach((material) => {
-          if (!viewedMaterials[material._id]) {
-            dispatch(fetchMaterialViewStatus(material._id));
-          }
-        });
-      }
-    }, [dispatch, materials, viewedMaterials]);
 
   useEffect(() => {
     if (subjectId) {
@@ -57,7 +48,7 @@ const MaterialSection = () => {
   };
 
  const handleViewMaterial = (materialId) => {
-    if (!viewedMaterials[materialId]?.isViewed) {
+    if (!materials.find((material) => material._id === materialId)?.isViewed) {
       dispatch(markMaterialAsViewed(materialId));
     }
     navigate(`/student/material-details/${subjectId}/${materialId}`);
@@ -67,7 +58,7 @@ const MaterialSection = () => {
     window.open(materialLink, "_blank");
   };
 
-  const pdfMaterials = materials.filter((material) => material.type === "PDF") || [];
+  const pdfMaterials = materials?.filter((material) => material.type === "PDF") || [];
   const bookmarkedMaterials = pdfMaterials.filter((material) =>
     bookmarks.some((bookmark) => bookmark.material_id._id === material._id)
   );
@@ -225,7 +216,7 @@ const MaterialSection = () => {
                                >
                                  <FaEye
                    className={`cursor-pointer text-xl ${
-                     viewedMaterials[material._id] && viewedMaterials[material._id].isViewed
+                     material.isViewed
                        ? "text-blue-500"
                        : "text-gray-500"
                    }`}

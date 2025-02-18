@@ -6,7 +6,7 @@ const GradeSubject = require("../../DB/gradeSubject");
 const GradeYear = require("../../DB/gradeYearModel");
 const Schedule = require("../../DB/schedule");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
-const student = require("../../DB/student");
+const Student = require("../../DB/student"); // Fixed casing
 
 const createGrade = expressAsyncHandler(async (req, res) => {
   const { error } = gradeValidationSchema.validate(req.body);
@@ -19,20 +19,18 @@ const createGrade = expressAsyncHandler(async (req, res) => {
 
   const { gradeName } = req.body;
 
-  const existingGrade = await Grade.findOne({ gradeName });
+  const existingGrade = await Grade.findOne({
+    gradeName: { $regex: new RegExp(`^${gradeName}$`, "i") },
+  });
 
   if (existingGrade) {
-    return res.status(400).json({
-      status: 400,
-      message: "Grade with the same name already exists.",
+    return res.status(409).json({
+      status: 409,
+      message: "Grade already exists",
     });
   }
 
-  const grade = new Grade({
-    gradeName,
-  });
-
-  await grade.save();
+  const grade = await Grade.create({ gradeName });
 
   res.status(201).json({
     status: 201,
@@ -63,17 +61,21 @@ const updateGrade = expressAsyncHandler(async (req, res) => {
 
   const existingGrade = await Grade.findOne({
     _id: { $ne: id },
-    gradeName,
+    gradeName: { $regex: new RegExp(`^${gradeName}$`, "i") },
   });
 
   if (existingGrade) {
-    return res.status(400).json({
-      status: 400,
-      message: "Grade with the same name already exists.",
+    return res.status(409).json({
+      status: 409,
+      message: "Grade already exists",
     });
   }
 
-  const grade = await Grade.findByIdAndUpdate(id, { gradeName }, { new: true });
+  const grade = await Grade.findByIdAndUpdate(
+    id,
+    { gradeName },
+    { new: true, runValidators: true }
+  );
 
   if (!grade) {
     return res.status(404).json({
@@ -99,7 +101,7 @@ const deleteGrade = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const grade = await Grade.findByIdAndDelete(id);
+  const grade = await Grade.findById(id);
   if (!grade) {
     return res.status(404).json({
       status: 404,
@@ -108,29 +110,30 @@ const deleteGrade = expressAsyncHandler(async (req, res) => {
   }
 
   try {
-    await Promise.all([
-      Schedule.deleteMany({ grade_id: id }),
-      GradeYear.deleteMany({ gradeId: id }),
-      student.deleteMany({ gradeId: id }),
-    ]);
-
     const gradeSubjects = await GradeSubject.find({ gradeId: id });
 
-    await Promise.all(
-      gradeSubjects.map(async (gs) => {
-        await GradeSubjectSemester.deleteMany({ gradeSubjectId: gs._id });
-        await GradeSubject.findByIdAndDelete(gs._id);
-      })
-    );
+    await Promise.all([
+      GradeSubjectSemester.deleteMany({
+        gradeSubjectId: { $in: gradeSubjects.map((gs) => gs._id) },
+      }),
+
+      GradeSubject.deleteMany({ gradeId: id }),
+
+      Schedule.deleteMany({ grade_id: id }),
+      GradeYear.deleteMany({ gradeId: id }),
+      Student.deleteMany({ gradeId: id }),
+    ]);
+
+    await Grade.findByIdAndDelete(id);
 
     res.status(200).json({
       status: 200,
-      message: "Grade, students, and all related records deleted successfully",
+      message: "Grade and all related records deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
       status: 500,
-      message: "Failed to delete grade or related records",
+      message: "Failed to delete grade",
       error: error.message,
     });
   }
@@ -142,12 +145,11 @@ const getGrade = expressAsyncHandler(async (req, res) => {
   if (!validateObjectId(id)) {
     return res.status(400).json({
       status: 400,
-      message: "Error getting this page",
+      message: "Invalid grade ID",
     });
   }
 
   const grade = await Grade.findById(id);
-
   if (!grade) {
     return res.status(404).json({
       status: 404,
@@ -163,7 +165,7 @@ const getGrade = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllGrade = expressAsyncHandler(async (req, res) => {
-  const grades = await Grade.find();
+  const grades = await Grade.find().sort({ gradeName: 1 });
   res.status(200).json({
     status: 200,
     message: "Grades retrieved successfully",

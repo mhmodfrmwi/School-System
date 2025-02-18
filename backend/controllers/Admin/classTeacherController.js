@@ -1,7 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
-
 const classTeacherValidationSchema = require("../../validations/classTeacherValidation");
 const Subject = require("../../DB/subjectModel");
 const Teacher = require("../../DB/teacher");
@@ -12,231 +11,252 @@ const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const Semester = require("../../DB/semesterModel");
 const GradeSubject = require("../../DB/gradeSubject");
 
-const createClassTeacher = expressAsyncHandler(async (req, res) => {
-  const { error } = classTeacherValidationSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({
-      status: 400,
-      message: error.details[0].message,
-    });
-  }
+// Common population configuration
+const populateClassTeacher = (query) =>
+  query
+    .populate({
+      path: "classId",
+      select: "className",
+      populate: { path: "gradeId", select: "gradeName" },
+    })
+    .populate("subjectId", "subjectName")
+    .populate("teacherId", "fullName")
+    .populate("academicYear_id", "startYear endYear")
+    .populate("semester_id", "semesterName");
 
-  const { classId, subjectName, teacherName, academicYear } = req.body;
-
-  const existingClass = await Class.findById(classId);
-  if (!existingClass) {
-    return res.status(404).json({
-      status: 404,
-      message: "Class not found",
-    });
+// Common validation middleware
+const validateClassTeacherInput = expressAsyncHandler(
+  async (req, res, next) => {
+    const { error } = classTeacherValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        status: 400,
+        message: error.details[0].message,
+      });
+    }
+    next();
   }
+);
 
-  const existingSubject = await Subject.findOne({ subjectName });
-  if (!existingSubject) {
-    return res.status(404).json({
-      status: 404,
-      message: "Subject not found",
-    });
-  }
-
-  const existingTeacher = await Teacher.findOne({ fullName: teacherName });
-  if (!existingTeacher) {
-    return res.status(404).json({
-      status: 404,
-      message: "Teacher not found",
-    });
-  }
-
-  const startYear = academicYear.slice(0, 4);
-  const existingAcademicYear = await AcademicYear.findOne({ startYear });
-  if (!existingAcademicYear) {
-    return res.status(404).json({
-      status: 404,
-      message: "Academic year not found",
-    });
-  }
+const getSemesterInfo = async (academicYearId) => {
   const currentMonth = moment().month() + 1;
-  let semester_name;
-  if (currentMonth >= 9 && currentMonth <= 12) {
-    semester_name = "Semester 1";
-  } else {
-    semester_name = "Semester 2";
-  }
-  const semester = await Semester.findOne({
-    semesterName: semester_name,
-    academicYear_id: existingAcademicYear._id,
+  const semesterName =
+    currentMonth >= 9 && currentMonth <= 12 ? "Semester 1" : "Semester 2";
+  return Semester.findOne({
+    semesterName,
+    academicYear_id: academicYearId,
   });
-  if (!semester) {
-    return res.status(404).json({
-      status: 404,
-      message: "Semester not found in the given academic year",
-    });
-  }
-  const existingGradeSubject = await GradeSubject.findOne({
-    subjectId: existingSubject._id,
-    gradeId: existingClass.gradeId,
-    academicYear_id: existingAcademicYear._id,
-  });
-  if (!existingGradeSubject) {
-    return res.status(404).json({
-      status: 404,
-      message: "This subject not found for this grade",
-    });
-  }
-  const gradeSubjectSemester = await GradeSubjectSemester.findOne({
-    grade_subject_id: existingGradeSubject._id,
-    semester_id: semester._id,
-  });
-  if (!gradeSubjectSemester) {
-    return res.status(404).json({
-      status: 404,
-      message: "GradeSubjectSemester not found",
-    });
-  }
-  const existingClassTeacher = await ClassTeacher.findOne({
-    classId: existingClass._id,
-    subjectId: existingSubject._id,
-    teacherId: existingTeacher._id,
-    academicYear_id: existingAcademicYear._id,
-    semester_id: semester._id,
-  })
-    .populate("classId")
-    .populate("subjectId")
-    .populate("teacherId");
-  if (existingClassTeacher) {
-    return res.status(400).json({
-      status: 400,
-      message: "Teacher already assigned to this class",
-    });
-  }
+};
 
-  const classTeacher = new ClassTeacher({
-    classId: existingClass._id,
-    subjectId: existingSubject._id,
-    teacherId: existingTeacher._id,
-    academicYear_id: existingAcademicYear._id,
-    semester_id: semester._id,
-  });
+const createClassTeacher = [
+  validateClassTeacherInput,
+  expressAsyncHandler(async (req, res) => {
+    const { classId, subjectName, teacherName, academicYear } = req.body;
 
-  await classTeacher.save();
+    // Validate academic year format
+    const [startYear, endYear] = academicYear.split("-");
+    if (!/^\d{4}-\d{4}$/.test(academicYear)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid academic year format. Use YYYY-YYYY",
+      });
+    }
 
-  res.status(201).json({
-    status: 201,
-    message: "Teacher assigned to a class successfully",
-    classTeacher,
-  });
-});
+    const [existingClass, subject, teacher, academicYearRecord] =
+      await Promise.all([
+        Class.findById(classId),
+        Subject.findOne({
+          subjectName: { $regex: new RegExp(`^${subjectName}$`, "i") },
+        }),
+        Teacher.findOne({
+          fullName: { $regex: new RegExp(`^${teacherName}$`, "i") },
+        }),
+        AcademicYear.findOne({ startYear, endYear }),
+      ]);
 
-const updateClassTeacher = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+    if (!existingClass)
+      return res.status(404).json({ status: 404, message: "Class not found" });
+    if (!subject)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Subject not found" });
+    if (!teacher)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Teacher not found" });
+    if (!academicYearRecord)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Academic year not found" });
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid ClassTeacher ID",
+    const [semester, gradeSubject] = await Promise.all([
+      getSemesterInfo(academicYearRecord._id),
+      GradeSubject.findOne({
+        subjectId: subject._id,
+        gradeId: existingClass.gradeId,
+        academicYear_id: academicYearRecord._id,
+      }),
+    ]);
+
+    if (!semester)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Semester not found" });
+    if (!gradeSubject)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Subject not available for this grade" });
+
+    const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+      grade_subject_id: gradeSubject._id,
+      semester_id: semester._id,
     });
-  }
 
-  const { error } = classTeacherValidationSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({
-      status: 400,
-      message: error.details[0].message,
-    });
-  }
+    if (!gradeSubjectSemester)
+      return res.status(404).json({
+        status: 404,
+        message: "Subject-semester combination not found",
+      });
 
-  const existingClass = await Class.findOne({ className: req.body.className });
-  if (!existingClass) {
-    return res.status(404).json({
-      status: 404,
-      message: "Class not found",
+    const existingAssignment = await ClassTeacher.findOne({
+      classId,
+      subjectId: subject._id,
+      teacherId: teacher._id,
+      academicYear_id: academicYearRecord._id,
+      semester_id: semester._id,
     });
-  }
 
-  const existingSubject = await Subject.findOne({
-    subjectName: req.body.subjectName,
-  });
+    if (existingAssignment) {
+      return res.status(409).json({
+        status: 409,
+        message: "Teacher already assigned to this class for the semester",
+      });
+    }
 
-  if (!existingSubject) {
-    return res.status(404).json({
-      status: 404,
-      message: "Subject not found",
-    });
-  }
-
-  const existingTeacher = await Teacher.findOne({
-    fullName: req.body.teacherName,
-  });
-
-  if (!existingTeacher) {
-    return res.status(404).json({
-      status: 404,
-      message: "Teacher not found",
-    });
-  }
-
-  const startYear = req.body.academicYear.slice(0, 4);
-  const academicYear = await AcademicYear.findOne({ startYear });
-  if (!academicYear) {
-    return res.status(404).json({
-      status: 404,
-      message: "Academic year not found",
-    });
-  }
-  const currentMonth = moment().month() + 1;
-  let semester_name;
-  if (currentMonth >= 9 && currentMonth <= 12) {
-    semester_name = "Semester 1";
-  } else {
-    semester_name = "Semester 2";
-  }
-  const semester = await Semester.findOne({
-    semester_name,
-    academicYear_id: existingAcademicYear._id,
-  });
-  if (!semester) {
-    return res.status(404).json({
-      status: 404,
-      message: "Semester not found in the given academic year",
-    });
-  }
-  const existingClassTeacher = await ClassTeacher.findOne({
-    classId: existingClass._id,
-    subjectId: existingSubject._id,
-    teacherId: existingTeacher._id,
-    academicYear_id: academicYear._id,
-    semester_id: semester._id,
-  });
-  if (existingClassTeacher) {
-    return res.status(400).json({
-      status: 400,
-      message: "Teacher already assigned to this class",
-    });
-  }
-  const classTeacher = await ClassTeacher.findByIdAndUpdate(
-    id,
-    {
+    const classTeacher = await ClassTeacher.create({
       classId: existingClass._id,
-      subjectId: existingSubject._id,
-      teacherId: existingTeacher._id,
-      academicYear_id: academicYear._id,
-    },
-    { new: true }
-  );
-
-  if (!classTeacher) {
-    return res.status(404).json({
-      status: 404,
-      message: "ClassTeacher not found",
+      subjectId: subject._id,
+      teacherId: teacher._id,
+      academicYear_id: academicYearRecord._id,
+      semester_id: semester._id,
     });
-  }
 
-  res.status(200).json({
-    status: 200,
-    message: "ClassTeacher updated successfully",
-    classTeacher,
-  });
-});
+    const populated = await populateClassTeacher(
+      ClassTeacher.findById(classTeacher._id)
+    );
+
+    res.status(201).json({
+      status: 201,
+      message: "Teacher assigned successfully",
+      classTeacher: populated,
+    });
+  }),
+];
+
+const updateClassTeacher = [
+  validateClassTeacherInput,
+  expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { classId, subjectName, teacherName, academicYear } = req.body;
+
+    if (!validateObjectId(id))
+      return res.status(400).json({ status: 400, message: "Invalid ID" });
+
+    const [
+      existingAssignment,
+      classInfo,
+      subject,
+      teacher,
+      academicYearRecord,
+    ] = await Promise.all([
+      ClassTeacher.findById(id),
+      Class.findById(classId),
+      Subject.findOne({
+        subjectName: { $regex: new RegExp(`^${subjectName}$`, "i") },
+      }),
+      Teacher.findOne({
+        fullName: { $regex: new RegExp(`^${teacherName}$`, "i") },
+      }),
+      ...(/^\d{4}-\d{4}$/.test(academicYear)
+        ? AcademicYear.findOne({
+            startYear: academicYear.split("-")[0],
+            endYear: academicYear.split("-")[1],
+          })
+        : [null]),
+    ]);
+
+    if (!existingAssignment)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Assignment not found" });
+    if (!classInfo)
+      return res.status(404).json({ status: 404, message: "Class not found" });
+    if (!subject)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Subject not found" });
+    if (!teacher)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Teacher not found" });
+    if (!academicYearRecord)
+      return res
+        .status(400)
+        .json({ status: 400, message: "Invalid academic year format" });
+
+    const [semester, gradeSubject] = await Promise.all([
+      getSemesterInfo(academicYearRecord._id),
+      GradeSubject.findOne({
+        subjectId: subject._id,
+        gradeId: classInfo.gradeId,
+        academicYear_id: academicYearRecord._id,
+      }),
+    ]);
+
+    if (!semester)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Semester not found" });
+    if (!gradeSubject)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Subject not available for this grade" });
+
+    const duplicate = await ClassTeacher.findOne({
+      _id: { $ne: id },
+      classId,
+      subjectId: subject._id,
+      semester_id: semester._id,
+    });
+
+    if (duplicate)
+      return res
+        .status(409)
+        .json({ status: 409, message: "Conflict: Duplicate assignment" });
+
+    const updated = await ClassTeacher.findByIdAndUpdate(
+      id,
+      {
+        classId: classInfo._id,
+        subjectId: subject._id,
+        teacherId: teacher._id,
+        academicYear_id: academicYearRecord._id,
+        semester_id: semester._id,
+      },
+      { new: true, runValidators: true }
+    );
+
+    const populated = await populateClassTeacher(
+      ClassTeacher.findById(updated._id)
+    );
+
+    res.status(200).json({
+      status: 200,
+      message: "Assignment updated successfully",
+      classTeacher: populated,
+    });
+  }),
+];
 
 const deleteClassTeacher = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -244,72 +264,47 @@ const deleteClassTeacher = expressAsyncHandler(async (req, res) => {
   if (!validateObjectId(id)) {
     return res.status(400).json({
       status: 400,
-      message: "Invalid ClassTeacher ID",
+      message: "Invalid ID",
     });
   }
 
-  const classTeacher = await ClassTeacher.findByIdAndDelete(id);
-
-  if (!classTeacher) {
-    return res.status(404).json({
-      status: 404,
-      message: "ClassTeacher not found",
-    });
-  }
+  const assignment = await ClassTeacher.findByIdAndDelete(id);
+  if (!assignment)
+    return res
+      .status(404)
+      .json({ status: 404, message: "Assignment not found" });
 
   res.status(200).json({
     status: 200,
-    message: "ClassTeacher deleted successfully",
+    message: "Assignment deleted successfully",
   });
 });
 
 const getClassTeacher = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid ClassTeacher ID",
-    });
-  }
+  if (!validateObjectId(id))
+    return res.status(400).json({ status: 400, message: "Invalid ID" });
 
-  const classTeacher = await ClassTeacher.findById(id)
-    .populate({ path: "classId", select: ["className", "gradeId"] })
-    .populate("subjectId", "subjectName")
-    .populate("teacherId", "fullName")
-    .populate("academicYear_id", "startYear endYear");
-
-  if (!classTeacher) {
-    return res.status(404).json({
-      status: 404,
-      message: "ClassTeacher not found",
-    });
-  }
+  const assignment = await populateClassTeacher(ClassTeacher.findById(id));
+  if (!assignment)
+    return res
+      .status(404)
+      .json({ status: 404, message: "Assignment not found" });
 
   res.status(200).json({
     status: 200,
-    message: "ClassTeacher retrieved successfully",
-    classTeacher,
+    message: "Assignment retrieved successfully",
+    classTeacher: assignment,
   });
 });
 
 const getAllClassTeacher = expressAsyncHandler(async (req, res) => {
-  const classTeachers = await ClassTeacher.find()
-    .populate({
-      path: "classId",
-      select: ["className"],
-      populate: {
-        path: "gradeId",
-      },
-    })
-    .populate("subjectId", "subjectName")
-    .populate("teacherId", "fullName")
-    .populate("academicYear_id", "startYear endYear");
-
+  const assignments = await populateClassTeacher(ClassTeacher.find());
   res.status(200).json({
     status: 200,
-    message: "ClassTeachers retrieved successfully",
-    classTeachers,
+    message: "Assignments retrieved successfully",
+    classTeachers: assignments,
   });
 });
 
@@ -320,6 +315,3 @@ module.exports = {
   getClassTeacher,
   getAllClassTeacher,
 };
-//Semester 2
-//Semester 2
-//Semester 2

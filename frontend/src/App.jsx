@@ -150,7 +150,7 @@ const LibraryPage = lazy(
   () => import("./Features/Student/components/Library/LibraryPage"),
 );
 const LibraryBooksEnglish = lazy(
-  () => import("./Features/Student/components/Library/LibraryBooksEnglish"),
+  () => import("./Features/Student/components/Library/LibraryBooks"),
 );
 const Parents = lazy(() => import("./Features/Parent/pages/Parents"));
 const DashboardParent = lazy(
