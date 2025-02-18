@@ -292,7 +292,10 @@ const getGradeSubjectSemester = expressAsyncHandler(async (req, res) => {
 
   const gradeSubjectSemester = await GradeSubjectSemester.findById(id).populate(
     [
-      { path: "grade_subject_id", populate: { path: "subjectId" } },
+      {
+        path: "grade_subject_id",
+        populate: { path: "subjectId", path: "gradeId" },
+      },
       { path: "semester_id", populate: { path: "academicYear_id" } },
     ]
   );

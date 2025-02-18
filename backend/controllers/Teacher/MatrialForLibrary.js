@@ -19,15 +19,17 @@ const createMaterialForLibrary = expressAsyncHandler(async (req, res) => {
   const { title, itemUrl, description, type, gradeSubjectSemesterId } =
     req.body;
 
-  const gradeSubjectSemesterExists = await GradeSubjectSemester.exists({
+  const gradeSubjectSemesterExists = await GradeSubjectSemester.findOne({
     _id: gradeSubjectSemesterId,
-  });
+  }).populate("grade_subject_id", "gradeId");
+
   if (!gradeSubjectSemesterExists) {
     return res.status(404).json({
       status: 404,
       message: "GradeSubjectSemester not found.",
     });
   }
+
   const libraryItemsForGrade = new LibraryItemsForGrade({
     title: title.trim(),
     item_url: itemUrl.trim(),

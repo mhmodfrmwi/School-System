@@ -4,7 +4,13 @@ const classValidationSchema = require("../../validations/classValidation");
 const Class = require("../../DB/classModel");
 const Grade = require("../../DB/gradeModel");
 const AcademicYear = require("../../DB/academicYearModel");
-const student = require("../../DB/student");
+const Student = require("../../DB/student");
+const ClassTeacher = require("../../DB/classTeacherModel");
+
+const populateClass = (query) =>
+  query
+    .populate("gradeId", "gradeName")
+    .populate("academicYear_id", "startYear endYear");
 
 const createClass = expressAsyncHandler(async (req, res) => {
   const { error } = classValidationSchema.validate(req.body);
@@ -17,8 +23,24 @@ const createClass = expressAsyncHandler(async (req, res) => {
 
   const { gradeName, academicYear, className } = req.body;
 
-  const startYear = academicYear.slice(0, 4);
-  const academicYearRecord = await AcademicYear.findOne({ startYear });
+  const [startYear, endYear] = academicYear.split("-");
+  if (
+    !startYear ||
+    !endYear ||
+    startYear.length !== 4 ||
+    endYear.length !== 4
+  ) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid academic year format. Use YYYY-YYYY",
+    });
+  }
+
+  const [academicYearRecord, grade] = await Promise.all([
+    AcademicYear.findOne({ startYear, endYear }),
+    Grade.findOne({ gradeName }),
+  ]);
+
   if (!academicYearRecord) {
     return res.status(404).json({
       status: 404,
@@ -26,7 +48,6 @@ const createClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const grade = await Grade.findOne({ gradeName });
   if (!grade) {
     return res.status(404).json({
       status: 404,
@@ -41,25 +62,25 @@ const createClass = expressAsyncHandler(async (req, res) => {
   });
 
   if (existingClass) {
-    return res.status(400).json({
-      status: 400,
+    return res.status(409).json({
+      status: 409,
       message:
-        "Class with the same name, grade, and academic year already exists.",
+        "Class with the same name, grade, and academic year already exists",
     });
   }
 
-  const newClass = new Class({
+  const newClass = await Class.create({
     className,
     gradeId: grade._id,
     academicYear_id: academicYearRecord._id,
   });
 
-  await newClass.save();
+  const populatedClass = await populateClass(Class.findById(newClass._id));
 
   res.status(201).json({
     status: 201,
     message: "Class created successfully",
-    newClass,
+    newClass: populatedClass,
   });
 });
 
@@ -83,7 +104,25 @@ const updateClass = expressAsyncHandler(async (req, res) => {
 
   const { gradeName, academicYear, className } = req.body;
 
-  const existingClass = await Class.findById(id);
+  const [startYear, endYear] = academicYear.split("-");
+  if (
+    !startYear ||
+    !endYear ||
+    startYear.length !== 4 ||
+    endYear.length !== 4
+  ) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid academic year format. Use YYYY-YYYY",
+    });
+  }
+
+  const [existingClass, academicYearRecord, grade] = await Promise.all([
+    Class.findById(id),
+    AcademicYear.findOne({ startYear, endYear }),
+    Grade.findOne({ gradeName }),
+  ]);
+
   if (!existingClass) {
     return res.status(404).json({
       status: 404,
@@ -91,8 +130,6 @@ const updateClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const startYear = academicYear.slice(0, 4);
-  const academicYearRecord = await AcademicYear.findOne({ startYear });
   if (!academicYearRecord) {
     return res.status(404).json({
       status: 404,
@@ -100,7 +137,6 @@ const updateClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const grade = await Grade.findOne({ gradeName });
   if (!grade) {
     return res.status(404).json({
       status: 404,
@@ -116,10 +152,10 @@ const updateClass = expressAsyncHandler(async (req, res) => {
   });
 
   if (duplicateClass) {
-    return res.status(400).json({
-      status: 400,
+    return res.status(409).json({
+      status: 409,
       message:
-        "Class with the same name, grade, and academic year already exists.",
+        "Class with the same name, grade, and academic year already exists",
     });
   }
 
@@ -130,13 +166,15 @@ const updateClass = expressAsyncHandler(async (req, res) => {
       gradeId: grade._id,
       academicYear_id: academicYearRecord._id,
     },
-    { new: true }
+    { new: true, runValidators: true }
   );
+
+  const populatedClass = await populateClass(Class.findById(updatedClass._id));
 
   res.status(200).json({
     status: 200,
     message: "Class updated successfully",
-    updatedClass,
+    updatedClass: populatedClass,
   });
 });
 
@@ -160,8 +198,9 @@ const deleteClass = expressAsyncHandler(async (req, res) => {
 
   try {
     await Promise.all([
-      student.deleteMany({ classId: id }),
+      Student.deleteMany({ classId: id }),
       ClassTeacher.deleteMany({ classId: id }),
+      // Add other related deletions here if needed
     ]);
 
     await Class.findByIdAndDelete(id);
@@ -189,9 +228,7 @@ const getClass = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const foundClass = await Class.findById(id)
-    .populate("gradeId", "gradeName")
-    .populate("academicYear_id", "startYear endYear");
+  const foundClass = await populateClass(Class.findById(id));
 
   if (!foundClass) {
     return res.status(404).json({
@@ -208,9 +245,7 @@ const getClass = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllClasses = expressAsyncHandler(async (req, res) => {
-  const classes = await Class.find()
-    .populate("gradeId", "gradeName")
-    .populate("academicYear_id", "startYear endYear");
+  const classes = await populateClass(Class.find());
 
   res.status(200).json({
     status: 200,
