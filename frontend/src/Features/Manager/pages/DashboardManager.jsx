@@ -72,7 +72,7 @@ function DashboardManager() {
   );
 
   return (
-    <div className="p-6">
+    <div className="p-6 font-poppins">
       {/* Overview Section */}
       <section>
         <h2 className="text-2xl font-semibold font-poppins text-gray-700 mb-2">Overview</h2>
