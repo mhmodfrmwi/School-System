@@ -18,6 +18,7 @@ function TakeAttendance() {
   const { id } = useParams();
   const location = useLocation();
   const classId = location.state?.classId;
+
   const [attendance, setAttendance] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
@@ -71,13 +72,6 @@ function TakeAttendance() {
     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
       {loading && <Loader />}
 
-      {/* <button
-        className="mb-6 flex cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] p-2 py-2 font-medium text-white focus:outline-none"
-        onClick={() => navigate("/teacher/attendancereport")}
-      >
-        Attendance Report
-      </button> */}
-
       <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
@@ -91,7 +85,11 @@ function TakeAttendance() {
 
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
-          onClick={() => navigate("/teacher/attendancereport")}
+          onClick={() =>
+            navigate(`/teacher/attendancereport/${id}`, {
+              state: { classId: classId },
+            })
+          }
         >
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
             2

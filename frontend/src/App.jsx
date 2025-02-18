@@ -9,13 +9,29 @@ import Loader from "./ui/Loader";
 import SeeVR from "./Features/Teacher/components/courses/SeeVR";
 import EditVR from "./Features/Teacher/components/courses/UpdateVR";
 
-
-const TakeAttendance = lazy(() => import("./Features/Teacher/components/Attendance/takeAttendance"));
-const Attendancereport = lazy(() => import("./Features/Teacher/components/Attendance/attendancereport"));
-const CurrentCourseForAttendance = lazy(() => import("./Features/Teacher/components/Attendance/CurrentCourseForAttendance"));
-const AllCoursesForAttendance = lazy(() => import("./Features/Teacher/components/Attendance/AllCoursesForAttendance"));
-const StudentAttendanceDetails = lazy(() => import("./Features/Teacher/components/Attendance/StudentAttendanceDetails"));
-const EditMaterial = lazy(() => import("./Features/Teacher/components/courses/UpdateMaterial")); 
+const TakeAttendance = lazy(
+  () => import("./Features/Teacher/components/Attendance/takeAttendance"),
+);
+const Attendancereport = lazy(
+  () => import("./Features/Teacher/components/Attendance/attendancereport"),
+);
+const CurrentCourseForAttendance = lazy(
+  () =>
+    import(
+      "./Features/Teacher/components/Attendance/CurrentCourseForAttendance"
+    ),
+);
+const AllCoursesForAttendance = lazy(
+  () =>
+    import("./Features/Teacher/components/Attendance/AllCoursesForAttendance"),
+);
+const StudentAttendanceDetails = lazy(
+  () =>
+    import("./Features/Teacher/components/Attendance/StudentAttendanceDetails"),
+);
+const EditMaterial = lazy(
+  () => import("./Features/Teacher/components/courses/UpdateMaterial"),
+);
 
 const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
@@ -288,7 +304,8 @@ const ManagerSchoolHubsEdit = lazy(
   () => import("./Features/Manager/components/Activites/EditSchoolHubs"),
 );
 function App() {
-  const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
+  const role =
+    useSelector((state) => state.role.role) || localStorage.getItem("role");
 
   return (
     <BrowserRouter>
@@ -312,7 +329,12 @@ function App() {
           />
           <Route path="role" element={<ChooseRole />} />
           {/* /////////////////adminpage//////////////////// */}
-          <Route path="admin" element={<ProtectedRoute element={<Admins />} requiredRole="admin" />} >
+          <Route
+            path="admin"
+            element={
+              <ProtectedRoute element={<Admins />} requiredRole="admin" />
+            }
+          >
             <Route index element={<DashboardAdmin />} />
             <Route path="basicform" element={<BasicForm />} />
             <Route path="studentform" element={<StudentForm />} />
@@ -369,7 +391,12 @@ function App() {
             <Route path="editparentform/:id" element={<EditParentForm />} />
           </Route>
           {/* /////////////////studentpage//////////////////// */}
-          <Route path="student" element={<ProtectedRoute element={<Students />} requiredRole="student" />}>
+          <Route
+            path="student"
+            element={
+              <ProtectedRoute element={<Students />} requiredRole="student" />
+            }
+          >
             <Route index element={<DashboardStudent />} />
             <Route path="grades" element={<Grades />} />
             <Route path="grades/assignment" element={<GradesAssignment />} />
@@ -400,11 +427,19 @@ function App() {
               path="allcourses/materials/:subjectId"
               element={<StudentMaterialDetails />}
             />
-            <Route path="/student/material-details/:subjectId/:materialId" element={<MaterialDetails />} />
+            <Route
+              path="/student/material-details/:subjectId/:materialId"
+              element={<MaterialDetails />}
+            />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
-          <Route path="parent" element={<ProtectedRoute element={<Parents />} requiredRole="parent" />}>
+          <Route
+            path="parent"
+            element={
+              <ProtectedRoute element={<Parents />} requiredRole="parent" />
+            }
+          >
             <Route index element={<DashboardParent />} />
             <Route path="grades" element={<GradesParent />} />
             <Route
@@ -416,7 +451,12 @@ function App() {
             <Route path="schedule/exam" element={<ScheduleExamParent />} />
           </Route>
           {/* /////////////////teacher pages//////////////////// */}
-          <Route path="teacher" element={<ProtectedRoute element={<Teachers />} requiredRole="teacher" />}>
+          <Route
+            path="teacher"
+            element={
+              <ProtectedRoute element={<Teachers />} requiredRole="teacher" />
+            }
+          >
             <Route
               path="edit-teacher-profile"
               element={<EditTeacherProfile />}
@@ -450,19 +490,41 @@ function App() {
               element={<StudentAttendanceDetails />}
             />
             <Route path="materialform" element={<MaterialForm />} />
-            <Route path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId" element={<AddMaterial />} />
-            <Route path="/teacher/materialform/:classId/:gradeSubjectSemesterId" element={<MaterialForm />} />
-            <Route path="/teacher/see-material/:grade_subject_semester_id" element={<SeeMaterial />} />
-            <Route path="update-material/:materialId" element={<EditMaterial />} />
+            <Route
+              path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId"
+              element={<AddMaterial />}
+            />
+            <Route
+              path="/teacher/materialform/:classId/:gradeSubjectSemesterId"
+              element={<MaterialForm />}
+            />
+            <Route
+              path="/teacher/see-material/:grade_subject_semester_id"
+              element={<SeeMaterial />}
+            />
+            <Route
+              path="update-material/:materialId"
+              element={<EditMaterial />}
+            />
             <Route path="takeattendance/:id" element={<TakeAttendance />} />
-            <Route path="attendancereport" element={<Attendancereport />} />
-            <Route path="/teacher/virtual-room/:grade_subject_semester_id" element={<SeeVR/>}/>
-            <Route path="/teacher/VR-form/:classId/:gradeSubjectSemesterId" element={<VRForm />} />
+            <Route path="attendancereport/:id" element={<Attendancereport />} />
+            <Route
+              path="/teacher/virtual-room/:grade_subject_semester_id"
+              element={<SeeVR />}
+            />
+            <Route
+              path="/teacher/VR-form/:classId/:gradeSubjectSemesterId"
+              element={<VRForm />}
+            />
             <Route path="edit-vr/:id" element={<EditVR />} />
-
           </Route>
           {/* ///////////////manager pages//////////////////// */}
-          <Route path="manager" element={<ProtectedRoute element={<Manager />} requiredRole="manager" />}>
+          <Route
+            path="manager"
+            element={
+              <ProtectedRoute element={<Manager />} requiredRole="manager" />
+            }
+          >
             <Route index element={<DashboardManager />} />
             <Route path="edit-manager-profile" element={<EditManagerProfile />}  />
             <Route path="school-hubs" element={<ManagerSchoolHubs />} />
