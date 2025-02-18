@@ -7,7 +7,6 @@ import {
   fetchSubjects,
   clearError,
   markMaterialAsViewed,
-  fetchMaterialViewStatus,
 } from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,7 @@ const VideoSection = () => {
   const itemsPerPage = 3;
   const dispatch = useDispatch();
   const { subjectId } = useParams();
-  const { materials, bookmarks, loading, error, subjects, viewedMaterials } = useSelector(
+  const { materials, bookmarks, loading, error, subjects } = useSelector(
     (state) => state.allSubjectsStudent
   );
   const navigate = useNavigate();
@@ -45,15 +44,6 @@ const VideoSection = () => {
     }
   }, [subjectId, subjects]);
 
-  useEffect(() => {
-    if (materials.length > 0) {
-      materials.forEach((material) => {
-        if (!viewedMaterials[material._id]) {
-          dispatch(fetchMaterialViewStatus(material._id));
-        }
-      });
-    }
-  }, [dispatch, materials, viewedMaterials]);
   
   
   
@@ -74,7 +64,7 @@ const VideoSection = () => {
   };
   
   const handleViewMaterial = (materialId) => {
-    if (!viewedMaterials[materialId]?.isViewed) {
+    if (!materials.find((material) => material._id === materialId)?.isViewed) {
       dispatch(markMaterialAsViewed(materialId));
     }
     navigate(`/student/material-details/${subjectId}/${materialId}`);
@@ -82,7 +72,7 @@ const VideoSection = () => {
   
 
   
-  const videoMaterials = materials.filter((material) => material.type === "Video") || [];
+  const videoMaterials = materials ? materials.filter((material) => material.type === "Video") : [];
   const bookmarkedMaterials = videoMaterials.filter((material) =>
     bookmarks.some((bookmark) => bookmark.material_id._id === material._id)
   );
@@ -247,7 +237,7 @@ const VideoSection = () => {
               >
                 <FaEye
   className={`cursor-pointer text-xl ${
-    viewedMaterials[material._id] && viewedMaterials[material._id].isViewed
+    material.isViewed
       ? "text-blue-500"
       : "text-gray-500"
   }`}

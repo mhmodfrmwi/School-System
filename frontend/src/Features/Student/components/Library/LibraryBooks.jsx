@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import img1 from "../../../../assets/cover22 1.png";
 import img2 from "../../../../assets/Rectangle 314.png";
-function LibraryBooksEnglish() {
+function LibraryBooks() {
   const navigate = useNavigate();
   return (
     <>
@@ -195,4 +195,4 @@ function LibraryBooksEnglish() {
   );
 }
 
-export default LibraryBooksEnglish;
+export default LibraryBooks;
