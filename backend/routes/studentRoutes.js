@@ -20,6 +20,8 @@ const {
 const {
   getVirtualRoomsForStudent,
   handleVrLinkClick,
+  getCompletedVirtualRooms,
+  getMissedVirtualRooms,
 } = require("../controllers/Student/virtualRoomController");
 const {
   getStudentAttendanceUsingStudentId,
@@ -77,6 +79,18 @@ router.get(
   validateJwt,
   validateStudent,
   getVirtualRoomsForStudent
+);
+router.get(
+  "/virtual-rooms/:gradeSubjectSemesterId/completed",
+  validateJwt,
+  validateStudent,
+  getCompletedVirtualRooms
+);
+router.get(
+  "/virtual-rooms/:gradeSubjectSemesterId/missed",
+  validateJwt,
+  validateStudent,
+  getMissedVirtualRooms
 );
 router.post("/virtual-rooms/:virtualRoomId/click",
   validateJwt,
