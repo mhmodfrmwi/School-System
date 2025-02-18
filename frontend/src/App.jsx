@@ -149,6 +149,12 @@ const ScheduleExam = lazy(
 const LibraryPage = lazy(
   () => import("./Features/Student/components/Library/LibraryPage"),
 );
+const LibraryVideosPage = lazy(
+  () => import("./Features/Student/components/Library/LibraryVideosPage"),
+);
+const LibraryBooksPage = lazy(
+  () => import("./Features/Student/components/Library/LibraryBooksPage"),
+);
 const LibraryBooksEnglish = lazy(
   () => import("./Features/Student/components/Library/LibraryBooks"),
 );
@@ -224,6 +230,9 @@ const StudentCourseDetails = lazy(
 );
 const StudentMaterialDetails = lazy(
   () => import("./Features/Student/components/courses/CourseMaterialPDF"),
+);
+const StudentVirtualRooms = lazy(
+  () => import("./Features/Student/components/courses/CoursesVirtualRooms"),
 );
 const AttendancePage = lazy(
   () => import("./Features/Student/components/Attendance/AttendancePage"),
@@ -310,6 +319,7 @@ const ManagerSchoolHubsAdd = lazy(
 const ManagerSchoolHubsEdit = lazy(
   () => import("./Features/Manager/components/Activites/EditSchoolHubs"),
 );
+
 function App() {
   const role =
     useSelector((state) => state.role.role) || localStorage.getItem("role");
@@ -415,6 +425,9 @@ function App() {
               path="librarybooksenglish"
               element={<LibraryBooksEnglish />}
             />
+            
+        <Route path="librarybooks" element={<LibraryBooksPage />} />
+        <Route path="libraryvideos" element={<LibraryVideosPage />} />
             <Route path="motivation" element={<MotivationPage />} />
             <Route
               path="edit-student-profile"
@@ -437,6 +450,10 @@ function App() {
             <Route
               path="/student/material-details/:subjectId/:materialId"
               element={<MaterialDetails />}
+            />
+            <Route
+              path="allcourses/virtualrooms/:subjectId"
+              element={<StudentVirtualRooms />}
             />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>

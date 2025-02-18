@@ -120,7 +120,7 @@ const VideoSection = () => {
   return (
     <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
       {/* Sidebar */}
-      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-6 md:h-[500px]">
+      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-6 md:h-[530px]">
         <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
           {subjectName}
           <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
@@ -141,20 +141,26 @@ const VideoSection = () => {
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Discussion Rooms
-            </Button>
-          </li>
-          <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Assignments
-            </Button>
-          </li>
-          <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Exams
-            </Button>
-          </li>
+                               <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+                                onClick={() => navigate(`/student/allcourses/virtualrooms/${subjectId}`)} >
+                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Virtual Rooms
+                               </Button>
+                             </li>
+                    <li>
+                               <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Discussion Rooms
+                               </Button>
+                             </li>
+                             <li>
+                               <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
+                               </Button>
+                             </li>
+                             <li>
+                               <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
+                               </Button>
+                             </li>
         </ul>
       </div>
 
@@ -256,7 +262,7 @@ const VideoSection = () => {
         </div>
         {/* Pagination Controls */}
         {displayedMaterials.length > itemsPerPage && (
-          <div className="flex justify-center items-center gap-4 mb-4 mt-6">
+          <div className="flex justify-center items-center gap-4 mb-4 mt-10">
             <button
               onClick={prevPage}
               disabled={currentPage === 1}
