@@ -25,6 +25,7 @@ import contestsReducer from "./Features/Teacher/components/TeacherRedux/ContestS
 import teacherVirtualRoomReducer from "./Features/Teacher/components/TeacherRedux/VRSlice";
 import classTeachersReducer from "./Features/Teacher/components/TeacherRedux/TeacherClassSlice";
 import teacherScheduleReducer from "./Features/Teacher/components/TeacherRedux/teacherScheduleSlice";
+import teacherLibraryReducer from "./Features/Teacher/components/TeacherRedux/teacherLibrarySlice";
 import studentContestsReducer from "./Features/Student/components/StudentRedux/contestSlice";
 
 const store = configureStore({
@@ -51,11 +52,12 @@ const store = configureStore({
     login: loginReducer,
     allSubjectsStudent: allSubjectsStudentReducer,
     pdfMaterials: pdfMaterialsReducer,
-    contests:contestsReducer,
+    contests: contestsReducer,
     studentContests: studentContestsReducer,
     teacherVirtualRooms: teacherVirtualRoomReducer,
     classTeachers: classTeachersReducer,
     teacherSchedule: teacherScheduleReducer,
+    teacherLibrary: teacherLibraryReducer,
   },
 });
 

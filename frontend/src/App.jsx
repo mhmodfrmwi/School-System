@@ -8,6 +8,9 @@ import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import SeeVR from "./Features/Teacher/components/courses/SeeVR";
 import EditVR from "./Features/Teacher/components/courses/UpdateVR";
+import LibraryForm from "./Features/Teacher/components/Library/libraryForm";
+import SubjectsInLibrary from "./Features/Teacher/components/Library/subjectsInLibrary";
+import MaterialsInLibrary from "./Features/Teacher/components/Library/materialsInLibrary";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -500,6 +503,15 @@ function App() {
               element={<VRForm />}
             />
             <Route path="edit-vr/:id" element={<EditVR />} />
+            <Route path="library-form" element={<LibraryForm />} />
+            <Route
+              path="all-subjects-library"
+              element={<SubjectsInLibrary />}
+            />
+            <Route
+              path="all-materials-library/:id"
+              element={<MaterialsInLibrary />}
+            />
           </Route>
           {/* ///////////////manager pages//////////////////// */}
           <Route
