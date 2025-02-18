@@ -130,8 +130,11 @@ export const fetchClassAttendance = createAsyncThunk(
         );
       }
       const data = await response.json();
-      console.log("Attendance Data:", data.attendances);
-
+      if (!data.attendances || data.attendances.length === 0) {
+        toast.error("No data found for this period.");
+      } else {
+        toast.success("Attendance data retrieved successfully!");
+      }
       return data.attendances;
     } catch (error) {
       return rejectWithValue(error.message || "An unknown error occurred");
@@ -179,7 +182,6 @@ const takeAttendanceSlice = createSlice({
       .addCase(fetchClassAttendance.fulfilled, (state, action) => {
         state.attendanceRecords = action.payload;
         state.loading = false;
-        toast.success("Attendance data retrieved successfully!");
       })
 
       .addCase(fetchClassAttendance.rejected, (state, action) => {

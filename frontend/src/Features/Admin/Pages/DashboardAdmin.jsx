@@ -167,7 +167,7 @@ const Dashboard = () => {
             <h3 className="text-center font-poppins text-lg font-medium text-gray-600 mb-4">
               Students
             </h3>
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={250}>
             {students.length > 0 ? (
                  <PieChart>
                  <Pie
@@ -199,7 +199,7 @@ const Dashboard = () => {
   <h3 className="text-center font-poppins text-lg font-medium text-gray-600 mb-4">
     Teachers
   </h3>
-  <ResponsiveContainer width="100%" height={200}>
+  <ResponsiveContainer width="100%" height={250}>
     {teachers.length > 0 ? (
       <PieChart>
         <Pie

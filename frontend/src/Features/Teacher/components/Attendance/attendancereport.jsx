@@ -1,14 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Pagination from "../Pagination";
 import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import Loader from "@/ui/Loader";
+import { toast } from "react-toastify";
 
 function Attendancereport() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const location = useLocation();
+  const classId = location.state?.classId;
 
   const { attendanceRecords = [], status: attendanceStatus } = useSelector(
     (state) => state.attendanceTeacher || {},
@@ -89,6 +93,11 @@ function Attendancereport() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!filters.classId || !filters.startDate || !filters.endDate) {
+      toast.error("All fields are required!");
+      return;
+    }
     if (!validateForm()) return;
 
     dispatch(
@@ -126,26 +135,24 @@ function Attendancereport() {
   return (
     <div className="mx-auto w-[360px] p-4 sm:w-[550px] md:w-[700px] md:p-6 lg:px-0 xl:w-full">
       <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
-        {classTeachers.map((classteacher) => (
-          <button
-            key={classteacher.id}
-            className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
-            onClick={() => {
-              navigate(`/teacher/takeattendance/${classteacher.id}`, {
-                state: {
-                  classId: classteacher.classId._id,
-                },
-              });
-
-              window.location.reload();
-            }}
-          >
-            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
-              1
-            </span>
-            Take Attendance
-          </button>
-        ))}
+        {/* {classTeachers.map((classteacher) => ( */}
+        <button
+          key={id}
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
+          onClick={() => {
+            navigate(`/teacher/takeattendance/${id}`, {
+              state: {
+                classId: classId,
+              },
+            });
+          }}
+        >
+          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+            1
+          </span>
+          Take Attendance
+        </button>
+        {/* ))} */}
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
           onClick={() => navigate("/teacher/attendancereport")}
