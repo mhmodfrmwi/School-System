@@ -22,12 +22,11 @@ const NavManager = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const routes = [
-    { path: "edit-teacher-profile" },
+    { path: "edit-manager-profile" },
     { path: "school-hubs" },
-    { path: "weekly-schedule" },
-    { path: "currentCourseforattendance" },
+    { path: "schedule-table" },
+    { path: "virtual-room" },
     { path: "currentcourse" },
-    { path: "school-hubs" },
 
   ];
 
@@ -51,7 +50,7 @@ const NavManager = () => {
       setIsDropdownOpen(false);
 
       if (route.path.length === count) {
-        navigate(`/teacher/${searchTerm}`);
+        navigate(`/manager/${searchTerm}`);
       } else {
         alert("No matching page found.");
       }
@@ -59,8 +58,8 @@ const NavManager = () => {
   };
 
   const url = window.location.pathname;
-  const teacherName = url.split("/teacher/").pop();
-  const match = url.match(/\/teacher\/([^/]+)/);
+  const managerName = url.split("/manager/").pop();
+  const match = url.match(/\/manager\/([^/]+)/);
   const name = match ? match[1] : "";
 
   const handleBack = () => {
@@ -94,7 +93,7 @@ const NavManager = () => {
             <FaArrowLeft className="text-lg" />
           </button>
           <p className="hidden font-inter text-lg font-semibold text-dashboard-header lg:flex">
-            {teacherName === "/teacher" ? "dashboard" : `${name}`}
+            {managerName === "/manager" ? "dashboard" : `${name}`}
           </p>
         </div>
 
@@ -110,7 +109,7 @@ const NavManager = () => {
           <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
             <input
               type="text"
-              placeholder="Search Admin Page"
+              placeholder="Search Manager Page"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -185,7 +184,7 @@ const NavManager = () => {
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
-                  onClick={() => navigate("edit-teacher-profile")}
+                  onClick={() => navigate("edit-manager-profile")}
                 >
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
