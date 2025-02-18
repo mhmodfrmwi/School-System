@@ -269,7 +269,24 @@ const MaterialDetails = lazy(
 const VRForm = lazy(
   () => import("./Features/Teacher/components/courses/FormVR"),
 );
-
+const EditManagerProfile = lazy(
+  () => import("./Features/Manager/pages/EditProfilePage"),
+);
+const ManagerSchoolHubs = lazy(
+  () => import("./Features/Manager/components/Activites/SchoolHubs"),
+);
+const ManagerSchoolHubsDetailes = lazy(
+  () => import("./Features/Manager/components/Activites/SchoolHubsDetailes"),
+);
+const ManagerSchoolHubsPrizes = lazy(
+  () => import("./Features/Manager/components/Activites/SchoolHubsPrizes"),
+);
+const ManagerSchoolHubsAdd = lazy(
+  () => import("./Features/Manager/components/Activites/AddSchoolHubs"),
+);
+const ManagerSchoolHubsEdit = lazy(
+  () => import("./Features/Manager/components/Activites/EditSchoolHubs"),
+);
 function App() {
   const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
 
@@ -447,6 +464,12 @@ function App() {
           {/* ///////////////manager pages//////////////////// */}
           <Route path="manager" element={<ProtectedRoute element={<Manager />} requiredRole="manager" />}>
             <Route index element={<DashboardManager />} />
+            <Route path="edit-manager-profile" element={<EditManagerProfile />}  />
+            <Route path="school-hubs" element={<ManagerSchoolHubs />} />
+            <Route path="school-hubs/detailes" element={<ManagerSchoolHubsDetailes />} />
+            <Route path="school-hubs/prizes" element={<ManagerSchoolHubsPrizes />} />
+            <Route path="add-school-hubs" element={<ManagerSchoolHubsAdd />} />
+            <Route path="edit-school-hubs/:id" element={<ManagerSchoolHubsEdit />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
