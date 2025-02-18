@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require("moment");
 
 const virtualRoomSchema = new mongoose.Schema(
   {
@@ -48,10 +49,29 @@ const virtualRoomSchema = new mongoose.Schema(
           ref: "Teacher",
           required: true,
     },
+    status: {
+      type: String,
+      enum: ["upcoming", "ongoing", "completed"],
+      default: "upcoming",
+    },
   },
   { timestamps: true }
 );
+virtualRoomSchema.methods.updateStatus = async function () {
+  const now = moment();
+  const startTime = moment(this.startTime);
+  const endTime = startTime.clone().add(this.duration, "minutes");
+  
+  if (now.isBefore(startTime)) {
+    this.status = "upcoming";
+  } else if (now.isBetween(startTime, endTime)) {
+    this.status = "ongoing";
+  } else {
+    this.status = "completed";
+  }
 
+  await this.save();
+};
 const VirtualRoom = mongoose.model('VirtualRoom', virtualRoomSchema);
 
 module.exports = VirtualRoom;
