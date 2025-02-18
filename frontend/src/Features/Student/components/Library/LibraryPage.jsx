@@ -18,7 +18,7 @@ const LibraryPage = () => {
       </h2>
 
       {/* Image */}
-      <div className="mt-0 w-full h-[300px] flex justify-center items-center border rounded-lg  border-[#BC6FFB]">
+      <div className="mt-0 w-full h-[300px] flex justify-center items-center border rounded-lg border-[#BC6FFB]">
         <img
           src={librarybg}
           alt="Library"
@@ -27,10 +27,10 @@ const LibraryPage = () => {
       </div>
 
       {/* Content Section */}
-      <div className="flex flex-wrap justify-between gap-8 mt-8 w-full px-4">
+      <div className="flex flex-wrap justify-center mt-8 w-full px-4 mb-12">
         {/* Books Section */}
         <div
-          className="border p-8 w-[48%] h-[250px] flex items-center justify-center text-center cursor-pointer rounded-2xl border-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] transition-all transform hover:scale-105 hover:translate-y-2"
+          className="border p-8 w-full sm:w-[80%] md:w-[48%] h-[250px] flex items-center justify-center text-center cursor-pointer rounded-2xl border-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] transition-all transform hover:scale-105 hover:translate-y-2 mx-auto mt-4"
           onClick={() => handleNavigate("/student/librarybooksenglish")}
         >
           <span className="text-[3rem] font-bold text-white gradient-stroke">
@@ -40,7 +40,7 @@ const LibraryPage = () => {
 
         {/* Videos Section */}
         <div
-          className="border p-8 w-[48%] h-[250px] flex items-center justify-center text-center cursor-pointer rounded-2xl border-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] transition-all transform hover:scale-105 hover:translate-y-2"
+          className="border p-8 w-full sm:w-[80%] md:w-[48%] h-[250px] flex items-center justify-center text-center cursor-pointer rounded-2xl border-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] transition-all transform hover:scale-105 hover:translate-y-2 mx-auto mt-4"
           onClick={() => handleNavigate("/videos")}
         >
           <span className="text-[3rem] font-bold text-white gradient-stroke">

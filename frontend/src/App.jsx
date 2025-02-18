@@ -8,6 +8,13 @@ import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import SeeVR from "./Features/Teacher/components/courses/SeeVR";
 import EditVR from "./Features/Teacher/components/courses/UpdateVR";
+import LibraryForm from "./Features/Teacher/components/Library/libraryForm";
+import SubjectsInLibrary from "./Features/Teacher/components/Library/subjectsInLibrary";
+import MaterialsInLibrary from "./Features/Teacher/components/Library/materialsInLibrary";
+import SchedualTable from "./Features/Manager/components/Schedule/ScheduleTable";
+import FormShedule from "./Features/Manager/components/Schedule/ScheduleForm";
+import ManagerVRTable from "./Features/Manager/components/VR/MangerVRTable";
+import ManagerVRForm from "./Features/Manager/components/VR/ManagerVRForm";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -143,7 +150,7 @@ const LibraryPage = lazy(
   () => import("./Features/Student/components/Library/LibraryPage"),
 );
 const LibraryBooksEnglish = lazy(
-  () => import("./Features/Student/components/Library/LibraryBooksEnglish"),
+  () => import("./Features/Student/components/Library/LibraryBooks"),
 );
 const Parents = lazy(() => import("./Features/Parent/pages/Parents"));
 const DashboardParent = lazy(
@@ -285,7 +292,24 @@ const MaterialDetails = lazy(
 const VRForm = lazy(
   () => import("./Features/Teacher/components/courses/FormVR"),
 );
-
+const EditManagerProfile = lazy(
+  () => import("./Features/Manager/pages/EditProfilePage"),
+);
+const ManagerSchoolHubs = lazy(
+  () => import("./Features/Manager/components/Activites/SchoolHubs"),
+);
+const ManagerSchoolHubsDetailes = lazy(
+  () => import("./Features/Manager/components/Activites/SchoolHubsDetailes"),
+);
+const ManagerSchoolHubsPrizes = lazy(
+  () => import("./Features/Manager/components/Activites/SchoolHubsPrizes"),
+);
+const ManagerSchoolHubsAdd = lazy(
+  () => import("./Features/Manager/components/Activites/AddSchoolHubs"),
+);
+const ManagerSchoolHubsEdit = lazy(
+  () => import("./Features/Manager/components/Activites/EditSchoolHubs"),
+);
 function App() {
   const role =
     useSelector((state) => state.role.role) || localStorage.getItem("role");
@@ -500,6 +524,15 @@ function App() {
               element={<VRForm />}
             />
             <Route path="edit-vr/:id" element={<EditVR />} />
+            <Route path="library-form" element={<LibraryForm />} />
+            <Route
+              path="all-subjects-library"
+              element={<SubjectsInLibrary />}
+            />
+            <Route
+              path="all-materials-library/:id"
+              element={<MaterialsInLibrary />}
+            />
           </Route>
           {/* ///////////////manager pages//////////////////// */}
           <Route
@@ -509,6 +542,28 @@ function App() {
             }
           >
             <Route index element={<DashboardManager />} />
+            <Route
+              path="edit-manager-profile"
+              element={<EditManagerProfile />}
+            />
+            <Route path="school-hubs" element={<ManagerSchoolHubs />} />
+            <Route
+              path="school-hubs/detailes"
+              element={<ManagerSchoolHubsDetailes />}
+            />
+            <Route
+              path="school-hubs/prizes"
+              element={<ManagerSchoolHubsPrizes />}
+            />
+            <Route path="add-school-hubs" element={<ManagerSchoolHubsAdd />} />
+            <Route
+              path="edit-school-hubs/:id"
+              element={<ManagerSchoolHubsEdit />}
+            />
+            <Route path="schedule-table" element={<SchedualTable />} />
+            <Route path="schedule-form" element={<FormShedule />} />
+            <Route path="virtual-room" element={<ManagerVRTable />} />
+            <Route path="virtual-room-form" element={<ManagerVRForm />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

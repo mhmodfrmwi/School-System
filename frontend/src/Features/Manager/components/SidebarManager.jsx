@@ -8,23 +8,15 @@ import { useLocation } from "react-router-dom";
 import logo from "../../../assets/logologin.png";
 
 import GradeIconH from "../../../assets/TeacherIcon/Grade.png";
-import AwardIconH from "../../../assets/TeacherIcon/Awards.png";
 import ActivityIconH from "../../../assets/TeacherIcon/Activites.png";
 import VirtualIconH from "../../../assets/TeacherIcon/Virtual.png";
 import ScheduleIconH from "../../../assets/TeacherIcon/Schedule.png";
-import QuestionsIconH from "../../../assets/TeacherIcon/Questions.png";
-import LibraryIconH from "../../../assets/TeacherIcon/Library.png";
-import CourseIconH from "../../../assets/TeacherIcon/Course.png";
 import AbsenceIconH from "../../../assets/TeacherIcon/Absence.png";
 
 import GradeIcon from "../../../assets/StudentIcon/Grade.png";
-import AwardIcon from "../../../assets/StudentIcon/Awards.png";
 import ActivityIcon from "../../../assets/StudentIcon/Activites.png";
 import VirtualIcon from "../../../assets/StudentIcon/Virtual.png";
 import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
-import QuestionsIcon from "../../../assets/StudentIcon/Questions.png";
-import LibraryIcon from "../../../assets/StudentIcon/Library.png";
-import CourseIcon from "../../../assets/StudentIcon/Course.png";
 import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
 
 const SidebarManager = () => {
@@ -34,16 +26,12 @@ const SidebarManager = () => {
   const currentPath = location.pathname;
 
   const menuItems = [
-    { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/teacher" },
-    { label: "Motivation", icon: AwardIcon, hoverIcon: AwardIconH, href: "#" },
-    { label: "Courses", icon: CourseIcon, hoverIcon: CourseIconH, href: "/teacher/currentcourse" },
-    { label: "Absence", icon: AbsenceIcon, hoverIcon: AbsenceIconH, href: "/teacher/currentCourseforattendance" },
-    { label: "Schedule", icon: ScheduleIcon, hoverIcon: ScheduleIconH, href: "/teacher/weekly-schedule" },
-    { label: "Grade Management", icon: GradeIcon, hoverIcon: GradeIconH, href: "#" },
-    { label: "Activities", icon: ActivityIcon, hoverIcon: ActivityIconH, href: "/teacher/school-hubs" },
-    { label: "Library", icon: LibraryIcon, hoverIcon: LibraryIconH, href: "#" },
-    { label: "Question Bank", icon: QuestionsIcon, hoverIcon: QuestionsIconH, href: "#" },
-    { label: "Virtual Rooms", icon: VirtualIcon, hoverIcon: VirtualIconH, href: "/teacher/virtualroom" },
+    { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/manager" },
+    { label: "School Hubs", icon: ActivityIcon, hoverIcon: ActivityIconH, href: "/manager/school-hubs" },
+    { label: "Absence", icon: AbsenceIcon, hoverIcon: AbsenceIconH, href: "#" },
+    { label: "Schedule", icon: ScheduleIcon, hoverIcon: ScheduleIconH, href: "/manager/schedule-table" },
+    { label: "Grades", icon: GradeIcon, hoverIcon: GradeIconH, href: "#" },
+    { label: "Virtual Rooms", icon: VirtualIcon, hoverIcon: VirtualIconH, href: "/manager/virtual-room" },
   ];
 
   return (

@@ -45,7 +45,7 @@ export const fetchMaterials = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch materials");
       }
-      return data.materiels;
+      return data.materials;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -164,39 +164,7 @@ export const markMaterialAsViewed = createAsyncThunk(
   }
 );
 
-// Fetch material viewed status
-export const fetchMaterialViewStatus = createAsyncThunk(
-  "allSubjectsStudent/fetchMaterialViewStatus",
-  async (materialId, { rejectWithValue }) => {
-    try {
-      const token = sessionStorage.getItem("token");
-      if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch(
-        `http://localhost:4000/api/v1/student/material/${materialId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-      if (response.status === 404) {
-        return { materialId, isViewed: false, lastViewedAt: null };
-      }
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch material view status");
-      }
-
-      return { materialId, isViewed: data.isViewed, lastViewedAt: data.lastViewedAt };
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-  
-);
 
 
 const allSubjectsStudentSlice = createSlice({
@@ -208,7 +176,6 @@ const allSubjectsStudentSlice = createSlice({
     materialDetails: {},
     loading: false,
     error: null,
-    viewedMaterials: {},
   },
   reducers: {
     clearError: (state) => {
@@ -313,20 +280,6 @@ const allSubjectsStudentSlice = createSlice({
         state.viewedMaterials[materialId] = { isViewed: true, lastViewedAt };
       })
       .addCase(markMaterialAsViewed.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Fetch material view status
-      .addCase(fetchMaterialViewStatus.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchMaterialViewStatus.fulfilled, (state, action) => {
-        state.loading = false;
-        const { materialId, isViewed, lastViewedAt } = action.payload;
-        state.viewedMaterials[materialId] = { isViewed, lastViewedAt };
-      })
-      .addCase(fetchMaterialViewStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
