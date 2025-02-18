@@ -8,6 +8,10 @@ import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import SeeVR from "./Features/Teacher/components/courses/SeeVR";
 import EditVR from "./Features/Teacher/components/courses/UpdateVR";
+import SchedualTable from "./Features/Manager/components/Schedule/ScheduleTable";
+import FormShedule from "./Features/Manager/components/Schedule/ScheduleForm";
+import ManagerVRTable from "./Features/Manager/components/VR/MangerVRTable";
+import ManagerVRForm from "./Features/Manager/components/VR/ManagerVRForm";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -532,6 +536,10 @@ function App() {
             <Route path="school-hubs/prizes" element={<ManagerSchoolHubsPrizes />} />
             <Route path="add-school-hubs" element={<ManagerSchoolHubsAdd />} />
             <Route path="edit-school-hubs/:id" element={<ManagerSchoolHubsEdit />} />
+            <Route path="schedule-table" element={<SchedualTable />} />
+            <Route path="schedule-form" element={<FormShedule />} />
+            <Route path="virtual-room" element={<ManagerVRTable />} />
+            <Route path="virtual-room-form" element={< ManagerVRForm />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
