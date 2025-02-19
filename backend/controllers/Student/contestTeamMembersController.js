@@ -7,6 +7,33 @@ const Student = require("../../DB/student");
 const Semester = require("../../DB/semesterModel");
 const ContestTeam = require("../../DB/contestTeamModel");
 
+const getStudentsInSameClassAndGrade = expressAsyncHandler(async (req, res) => {
+  const studentId = req.user.id;
+
+  const loggedInStudent = await Student.findById(studentId);
+  if (!loggedInStudent) {
+    return res.status(404).json({
+      status: 404,
+      message: "Logged-in student not found.",
+    });
+  }
+
+  const students = await Student.find({
+    classId: loggedInStudent.classId,
+    gradeId: loggedInStudent.gradeId,
+    academicYear_id: loggedInStudent.academicYear_id,
+    _id: { $ne: studentId },
+  })
+    .select("fullName academic_number")
+    .lean();
+
+  res.status(200).json({
+    status: 200,
+    message: "Students in the same class, grade, academic year, and semester retrieved successfully.",
+    data: students,
+  });
+});
+
 const createTeam = expressAsyncHandler(async (req, res) => {
     const { teamName, teammates } = req.body;
     const { contestId } = req.params;
@@ -168,6 +195,7 @@ const createTeam = expressAsyncHandler(async (req, res) => {
   });*/
 
 module.exports = {
+    getStudentsInSameClassAndGrade,
     createTeam,
    // addTeamMember,
 };

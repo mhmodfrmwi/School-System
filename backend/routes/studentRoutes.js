@@ -46,7 +46,8 @@ const {
   getLibraryItemsViewsForStudent,
 } = require("../controllers/Student/student-libraryItemController");
 const {
-  createTeam
+  createTeam,
+  getStudentsInSameClassAndGrade
 } = require("../controllers/Student/contestTeamMembersController");
 const router = express.Router();
 
@@ -168,5 +169,11 @@ router.post(
   validateJwt,
   validateStudent,
   createTeam
+);
+router.get(
+  "/get-teammates",
+  validateJwt,
+  validateStudent,
+  getStudentsInSameClassAndGrade
 );
 module.exports = router;

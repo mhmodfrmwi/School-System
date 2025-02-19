@@ -13,7 +13,7 @@ const {createVirtualRoom} = require("../controllers/Teacher/virtualRoomControlle
 const router = express.Router();
 
 router.post("/login", login);
-router.post("/schoolhub", createSchoolHub); // ✅ Correct POST route
+router.post("/schoolhub", validateJwt, validateManager, createSchoolHub); // ✅ Correct POST route
 
 router
   .route("/school-hub/:id")

@@ -5,7 +5,7 @@ const SchoolHub = require("../../DB/schoolHubModel");
 
 const createSchoolHub = expressAsyncHandler(async (req, res) => {
     const managerId = req.user.id;
-    console.log(req);
+    console.log(managerId.toString());
     if (!validateObjectId(managerId)) {
         return res.status(400).json({
           status: 400,
