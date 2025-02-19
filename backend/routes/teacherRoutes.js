@@ -28,6 +28,7 @@ const {
   getContest,
   updateContest,
   deleteContest,
+  getTeamsForContest
 } = require("../controllers/Teacher/contestController");
 const {
   createStudentAttendance,
@@ -101,6 +102,7 @@ router
   .patch(validateJwt, validateTeacher, updateContest)
   .delete(validateJwt, validateTeacher, deleteContest);
 router.get("/contest", validateJwt, validateTeacher, getAllContests);
+router.get("/contest/:contestId/teams", validateJwt, validateTeacher, getTeamsForContest);
 
 router.post(
   "/get-students-for-subject/:gradeSubjectSemesterId",

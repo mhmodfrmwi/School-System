@@ -45,7 +45,9 @@ const {
   updateLastUserViewForLibraryItem,
   getLibraryItemsViewsForStudent,
 } = require("../controllers/Student/student-libraryItemController");
-
+const {
+  createTeam
+} = require("../controllers/Student/contestTeamMembersController");
 const router = express.Router();
 
 //login route
@@ -160,5 +162,11 @@ router.get(
   validateJwt,
   validateStudent,
   getLibraryItemsViewsForStudent
+);
+router.post(
+  "/get-contests/:contestId/team",
+  validateJwt,
+  validateStudent,
+  createTeam
 );
 module.exports = router;

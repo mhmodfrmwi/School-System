@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const teamSchema = new Schema(
+const contestTeamSchema = new Schema(
   {
     teamName: {
       type: String,
@@ -20,12 +20,17 @@ const teamSchema = new Schema(
         required: true,
       },
     ],
+    leaderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Student",
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-teamSchema.index({ contestId: 1, teamMembers: 1 }, { unique: true });
+contestTeamSchema.index({ contestId: 1, teamMembers: 1 }, { unique: true });
 
-const Team = mongoose.model("Team", teamSchema);
+const ContestTeam = mongoose.model("ContestTeam", contestTeamSchema);
 
-module.exports = Team;
+module.exports = ContestTeam;

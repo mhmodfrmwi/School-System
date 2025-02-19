@@ -7,6 +7,7 @@ const Subject = require("../../DB/subjectModel");
 const Class = require("../../DB/classModel");
 const Grade = require("../../DB/gradeModel");
 const Teacher = require("../../DB/teacher");
+const ContestTeam = require("../../DB/contestTeamModel");
 const moment = require("moment");
 const expressAsyncHandler = require("express-async-handler");
 const contestValidationSchema = require("../../validations/contestValidation");
@@ -329,10 +330,42 @@ const getAllContests = expressAsyncHandler(async (req, res) => {
     });
   }
 });
+const getTeamsForContest = expressAsyncHandler(async (req, res) => {
+  const { contestId } = req.params;
+
+  // Validate contestId
+  if (!validateObjectId(contestId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid Contest ID",
+    });
+  }
+
+  // Check if the contest exists
+  const contest = await Contest.findById(contestId);
+  if (!contest) {
+    return res.status(404).json({
+      status: 404,
+      message: "Contest not found",
+    });
+  }
+
+  // Fetch all teams for the contest and populate teamMembers and leaderId
+  const teams = await ContestTeam.find({ contestId })
+    .populate("teamMembers", "fullName academic_number") // Populate teamMembers with fullName and academic_number
+    .populate("leaderId", "fullName academic_number"); // Populate leaderId with fullName and academic_number
+
+  res.status(200).json({
+    status: 200,
+    message: "Teams retrieved successfully",
+    teams,
+  });
+});
 module.exports = {
   createContest,
   getAllContests,
   getContest,
   updateContest,
   deleteContest,
+  getTeamsForContest,
 };
