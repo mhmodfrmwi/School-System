@@ -77,8 +77,9 @@ const Contests = () => {
                     </td>
                     <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{contest.numberOfTeamMembers}</td>
                     <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{contest.requirements}</td>
-                    <td className="border flex items-center justify-center border-[#FFA4A4] px-4 py-2">
-                      <button className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-2xl px-4 py-2 text-xs text-white sm:text-sm">
+                    <td className="border flex items-center justify-center border-[#FFA4A4] px-4 py-3">
+                      <button className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-2xl px-4 py-2 text-xs text-white sm:text-sm"
+                        onClick={() => navigate(`/student/activities/contests/createteam/${contest._id}`)}>
                         Enter
                       </button>
                     </td>

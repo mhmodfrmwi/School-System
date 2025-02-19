@@ -219,6 +219,12 @@ const Activities = lazy(
 const Contests = lazy(
   () => import("./Features/Student/components/Activites/Contests"),
 );
+const CreateTeam = lazy(
+  () => import("./Features/Student/components/Activites/CreateTeam"),
+);
+const TeamDetails = lazy(
+  () => import("./Features/Student/components/Activites/TeamDetails"),
+);
 const VirtualRooms = lazy(
   () => import("./Features/Student/components/Virtual Rooms/VirtualRooms"),
 );
@@ -266,6 +272,9 @@ const SchoolHubsPrizes = lazy(
 );
 const ActivityContests = lazy(
   () => import("./Features/Teacher/components/Activities/Contests"),
+);
+const ParticipantsContests = lazy(
+  () => import("./Features/Teacher/components/Activities/Participants"),
 );
 const ActivityForm = lazy(
   () => import("./Features/Teacher/components/Activities/AddContestForm"),
@@ -436,6 +445,8 @@ function App() {
             <Route path="activities/detailes" element={<DetailesActivity />} />
             <Route path="activities/prizes" element={<PrizesActivity />} />
             <Route path="activities/contests" element={<Contests />} />
+            <Route path="activities/contests/createteam/:contestId" element={<CreateTeam />} />
+            <Route path="activities/contests/teamdetails/:teamId" element={<TeamDetails />} />
             <Route path="activities" element={<Activities />} />
             <Route path="virtualrooms" element={<VirtualRooms />} />
             <Route path="allcourses" element={<AllCouses />} />
@@ -492,6 +503,7 @@ function App() {
             />
             <Route path="school-hubs/prizes" element={<SchoolHubsPrizes />} />
             <Route path="contests" element={<ActivityContests />} />
+            <Route path="contests/participants/:contestId" element={<ParticipantsContests />} />
             <Route path="contests/activity-form" element={<ActivityForm />} />
             <Route
               path="contests/edit-activity-form/:id"

@@ -42,25 +42,27 @@ const Contests = () => {
         }
     };
 
+    const handleEnterParticipants = (id) => {
+        navigate(`/teacher/contests/participants/${id}`);
+    };
+
     return (
         <>
             <ActivityToggle />
-            <div className="mb-4 px-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
-                <div className="flex flex-col">
-                    <h1 className="text-2xl font-poppins cursor-text font-bold text-[#105E6A] ms-7 mt-5">
+            <div className="col-span-2 flex flex-col justify-between ms-5 ">
+                <div className="flex justify-between items-center ms-7 mt-5">
+                    <div className="flex-1 text-lg sm:text-2xl font-poppins cursor-text text-[#105E6A] py-1 font-bold">
                         Contests
-                    </h1>
-                    <div className="w-24 rounded-xl mb-2 border-t-4 border-[#117C90] ms-7"></div>
-                </div>
+                    </div>
 
-                <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
-                    <button onClick={handleAddActivity}
-                        className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
-                    >
+                    <button className="bg-gradient-to-r from-[#105E6A] to-[#117C90] font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white"
+                        onClick={handleAddActivity}>
                         Add Contest
                     </button>
                 </div>
+                <p className="w-24 rounded-xl mb-2 border-t-4 border-[#117C90] ms-7"></p>
             </div>
+
 
             <div className="flex flex-col p-4">
                 <div className="flex-1">
@@ -77,6 +79,7 @@ const Contests = () => {
                                             <th className="border  border-[#117C90] px-2 sm:px-4 py-2 text-left">End Date</th>
                                             <th className="border  border-[#117C90] px-2 sm:px-4 py-2 text-left">Num of team members</th>
                                             <th className="border  border-[#117C90] px-2 sm:px-4 py-2 text-left">Requirements</th>
+                                            <th className="border border-[#117C90] px-2 sm:px-4 py-2 text-left">Participants</th>
                                             <th className="border  border-[#117C90] px-2 sm:px-4 py-2 text-left">Action</th>
                                         </tr>
                                     </thead>
@@ -99,6 +102,13 @@ const Contests = () => {
                                                     </td>
                                                     <td className="border border-[#117C90] px-2 sm:px-4 py-2">{contest.numberOfTeamMembers}</td>
                                                     <td className="border border-[#117C90] px-2 sm:px-4 py-2">{contest.requirements}</td>
+                                                    <td className="border border-[#117C90] px-2 sm:px-4 py-2 text-center">
+                                                        <button
+                                                            onClick={() => handleEnterParticipants(contest._id)}
+                                                            className="rounded-md bg-[#117C90] px-4 py-2 text-white text-md transition hover:bg-[#0E6B7A]">
+                                                            Enter
+                                                        </button>
+                                                    </td>
                                                     <td className="border border-[#117C90] px-2 sm:px-4 py-2 space-x-2 text-center">
                                                         <button
                                                             aria-label="Edit contest"
