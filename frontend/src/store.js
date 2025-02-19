@@ -27,6 +27,8 @@ import classTeachersReducer from "./Features/Teacher/components/TeacherRedux/Tea
 import teacherScheduleReducer from "./Features/Teacher/components/TeacherRedux/teacherScheduleSlice";
 import teacherLibraryReducer from "./Features/Teacher/components/TeacherRedux/teacherLibrarySlice";
 import studentContestsReducer from "./Features/Student/components/StudentRedux/contestSlice";
+import libraryStudentReducer from "./Features/Student/components/StudentRedux/libraryStudentSlice";
+import StudentVirtualRooms from "./Features/Student/components/StudentRedux/virtualRoomsSlice";
 
 const store = configureStore({
   reducer: {
@@ -58,6 +60,8 @@ const store = configureStore({
     classTeachers: classTeachersReducer,
     teacherSchedule: teacherScheduleReducer,
     teacherLibrary: teacherLibraryReducer,
+    libraryStudent: libraryStudentReducer,
+    StudentvirtualRooms: StudentVirtualRooms,
   },
 });
 
