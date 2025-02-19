@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const moment = require("moment");
+const moment = require("moment-timezone");
 
 const virtualRoomSchema = new mongoose.Schema(
   {
@@ -58,10 +58,10 @@ const virtualRoomSchema = new mongoose.Schema(
   { timestamps: true }
 );
 virtualRoomSchema.methods.updateStatus = async function () {
-  const now = moment();
+  const now = moment().tz('Africa/Cairo');
   const startTime = moment(this.startTime);
   const endTime = startTime.clone().add(this.duration, "minutes");
-  
+  console.log(now.toString())
   if (now.isBefore(startTime)) {
     this.status = "upcoming";
   } else if (now.isBetween(startTime, endTime)) {

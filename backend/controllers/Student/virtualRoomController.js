@@ -1,6 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const moment = require("moment");
+const moment = require("moment-timezone");
 const VirtualRoom = require("../../DB/virtualRoomModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const AcademicYear = require("../../DB/academicYearModel");
@@ -29,7 +29,7 @@ const handleVrLinkClick = expressAsyncHandler(async (req, res) => {
 
     await virtualRoom.updateStatus();
 
-    const now = moment();
+    const now = moment().tz('Africa/Cairo');
     const startTime = moment(virtualRoom.startTime);
     const endTime = startTime.clone().add(virtualRoom.duration, "minutes");
 
@@ -146,8 +146,8 @@ const getVirtualRoomsForStudent = expressAsyncHandler(async (req, res) => {
       .populate("teacherId", "fullName");
 
     if (virtualRooms.length === 0) {
-      return res.status(404).json({
-        status: 404,
+      return res.status(200).json({
+        status: 200,
         message: "No virtual rooms found for this subject",
       });
     }
@@ -265,8 +265,8 @@ const getCompletedVirtualRooms = expressAsyncHandler(async (req, res) => {
       .populate("teacherId", "fullName");
 
     if (virtualRooms.length === 0) {
-      return res.status(404).json({
-        status: 404,
+      return res.status(200).json({
+        status: 200,
         message: "No virtual rooms found for this subject.",
       });
     }
@@ -386,8 +386,8 @@ const getMissedVirtualRooms = expressAsyncHandler(async (req, res) => {
       .populate("teacherId", "fullName");
 
     if (virtualRooms.length === 0) {
-      return res.status(404).json({
-        status: 404,
+      return res.status(200).json({
+        status: 200,
         message: "No virtual rooms found for this subject.",
       });
     }

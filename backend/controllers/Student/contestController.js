@@ -50,13 +50,23 @@ const getContestForStudent = expressAsyncHandler(async (req, res) => {
     classId: student.classId._id,
     academicYearId: student.academicYear_id._id,
     semesterId: semester._id,
-  }).populate("teacherId", "fullName");
+  })
+    .populate("teacherId", "fullName")
+    .populate("subjectId", "subjectName");
 
   if (!contests.length) {
-    return res.status(404).json({ status: 404, message: "No contests found for this subject" });
+    return res
+      .status(404)
+      .json({ status: 404, message: "No contests found for this subject" });
   }
 
-  res.status(200).json({ status: 200, message: "Contests retrieved successfully", contests });
+  res
+    .status(200)
+    .json({
+      status: 200,
+      message: "Contests retrieved successfully",
+      contests,
+    });
 });
 
 const getAllContestsForStudent = expressAsyncHandler(async (req, res) => {
@@ -96,16 +106,24 @@ const getAllContestsForStudent = expressAsyncHandler(async (req, res) => {
     classId: student.classId._id,
     academicYearId: student.academicYear_id._id,
     semesterId: semester._id,
-  }).populate("teacherId", "fullName");
+  })
+    .populate("teacherId", "fullName")
+    .populate("subjectId", "subjectName");
 
   if (!contests.length) {
     return res.status(404).json({ status: 404, message: "No contests found" });
   }
 
-  res.status(200).json({ status: 200, message: "Contests retrieved successfully", contests });
+  res
+    .status(200)
+    .json({
+      status: 200,
+      message: "Contests retrieved successfully",
+      contests,
+    });
 });
 
 module.exports = {
   getContestForStudent,
-  getAllContestsForStudent
+  getAllContestsForStudent,
 };
