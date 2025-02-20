@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 
 const getToken = () => sessionStorage.getItem("token");
 
@@ -10,13 +9,22 @@ export const fetchVirtualRooms = createAsyncThunk(
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
-      const response = await axios.get(
+      const response = await fetch(
         `http://localhost:4000/api/v1/student/virtual-rooms/${subjectId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      return response.data;
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch virtual rooms");
+      }
+
+      return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Something went wrong");
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -28,13 +36,22 @@ export const fetchCompletedRooms = createAsyncThunk(
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
-      const response = await axios.get(
+      const response = await fetch(
         `http://localhost:4000/api/v1/student/virtual-rooms/${subjectId}/completed`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      return response.data;
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch completed rooms");
+      }
+
+      return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Failed to fetch completed rooms");
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -46,13 +63,22 @@ export const fetchMissedRooms = createAsyncThunk(
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
-      const response = await axios.get(
+      const response = await fetch(
         `http://localhost:4000/api/v1/student/virtual-rooms/${subjectId}/missed`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      return response.data;
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch missed rooms");
+      }
+
+      return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Failed to fetch missed rooms");
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -64,14 +90,22 @@ export const markRoomAsViewed = createAsyncThunk(
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
-      await axios.post(
+      const response = await fetch(
         `http://localhost:4000/api/v1/student/virtual-rooms/${roomId}/click`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to mark room as viewed");
+      }
+
       return roomId;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Failed to mark as viewed");
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -87,8 +121,8 @@ const virtualRoomsSlice = createSlice({
   },
   reducers: {
     clearError: (state) => {
-        state.error = null;
-      },
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -98,22 +132,49 @@ const virtualRoomsSlice = createSlice({
       })
       .addCase(fetchVirtualRooms.fulfilled, (state, action) => {
         state.loading = false;
-        state.virtualRooms = action.payload.virtualRooms;
+        state.virtualRooms = action.payload.virtualRooms?.length > 0 ? action.payload.virtualRooms : [];
       })
       .addCase(fetchVirtualRooms.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(fetchCompletedRooms.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchCompletedRooms.fulfilled, (state, action) => {
-        state.completedRooms = action.payload;
+        state.completedRooms = action.payload.virtualRooms?.length > 0 ? action.payload.virtualRooms : [];
+        state.loading = false;
+      })
+      .addCase(fetchCompletedRooms.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchMissedRooms.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
       .addCase(fetchMissedRooms.fulfilled, (state, action) => {
-        state.missedRooms = action.payload;
+        state.missedRooms = action.payload.virtualRooms?.length > 0 ? action.payload.virtualRooms : [];
+        state.loading = false;
+      })
+      .addCase(fetchMissedRooms.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(markRoomAsViewed.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
       .addCase(markRoomAsViewed.fulfilled, (state, action) => {
         state.virtualRooms = state.virtualRooms.map((room) =>
           room._id === action.payload ? { ...room, isViewed: true } : room
         );
+        state.loading = false;
+      })
+      .addCase(markRoomAsViewed.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

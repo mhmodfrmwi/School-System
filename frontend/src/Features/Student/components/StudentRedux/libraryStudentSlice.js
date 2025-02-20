@@ -32,7 +32,7 @@ export const fetchLibrarySubjects = createAsyncThunk(
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch("http://localhost:4000/api/v1/general/get-subjects-in-library", {
+      const response = await fetch("http://localhost:4000/api/v1/general/get-general-subjects-in-library", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -56,7 +56,7 @@ export const fetchMaterialsForSubject = createAsyncThunk(
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch(`http://localhost:4000/api/v1/general/get-material-for-subject-in-library/${subjectId}`, {
+      const response = await fetch(`http://localhost:4000/api/v1/general/get-material-for-general-subject-in-library/${subjectId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });

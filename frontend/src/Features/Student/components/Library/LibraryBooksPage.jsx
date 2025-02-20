@@ -9,17 +9,19 @@ const LibraryBooksPage = () => {
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [selectedGrade, setSelectedGrade] = useState("");
   const [selectedSemester, setSelectedSemester] = useState("");
-  
+  console.log("subjects", subjects);
   useEffect(() => {
     dispatch(fetchLibraryItems());
     dispatch(fetchLibrarySubjects());
   }, [dispatch]);
 
   useEffect(() => {
-    if (selectedSubject !== "all" && selectedSubject !== "public") {
-      dispatch(fetchMaterialsForSubject(selectedSubject));
+    if (selectedSubject !== "all" && selectedSubject !== "public" && selectedSubject.id) {
+      console.log("Fetching materials for subject ID:", selectedSubject.id);
+      dispatch(fetchMaterialsForSubject(selectedSubject.id));
     }
   }, [selectedSubject, dispatch]);
+  
 
   // فلترة المواد حسب الصف والفصل الدراسي
   const filteredMaterials = materials.filter(book => {
@@ -37,15 +39,16 @@ const LibraryBooksPage = () => {
         <ul>
           <li className="cursor-pointer p-2 hover:bg-gray-200 rounded" onClick={() => setSelectedSubject("all")}>📖 All</li>
           <li className="cursor-pointer p-2 hover:bg-gray-200 rounded" onClick={() => setSelectedSubject("public")}>🌍 Public</li>
-          {[...new Set(subjects.map(subject => subject.subject))].map((subject, index) => (
-            <li
-              key={index}
-              className="cursor-pointer p-2 hover:bg-gray-200 rounded"
-              onClick={() => setSelectedSubject(subject)}
-            >
-              {subject}
-            </li>
-          ))}
+          {subjects.map((subject, index) => (
+  <li
+    key={subject.id || index} 
+    className="cursor-pointer p-2 hover:bg-gray-200 rounded"
+    onClick={() => setSelectedSubject(subject)}
+  >
+    {subject.subject} 
+  </li>
+))}
+
         </ul>
       </div>
       
@@ -105,7 +108,8 @@ const LibraryBooksPage = () => {
             {/* Subject Materials Section */}
             {(selectedSubject === "all" || (selectedSubject !== "public" && selectedSubject !== "all")) && filteredMaterials.length > 0 && (
               <div>
-                <h2 className="text-2xl font-semibold mb-4">📚 {selectedSubject} Materials</h2>
+               <h2 className="text-2xl font-semibold mb-4">📚 {selectedSubject.subject} Materials</h2>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredMaterials.map((book) => (
                     <Card key={book._id} className="p-4 shadow-lg border rounded-lg hover:shadow-xl transition">

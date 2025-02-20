@@ -73,9 +73,9 @@ const VirtualRoomsSection = () => {
 
   const displayedRooms =
   activeTab === "completed"
-    ? completedRooms?.virtualRooms || []
+    ? completedRooms
     : activeTab === "missed"
-    ? missedRooms?.virtualRooms || []
+    ? missedRooms
     : virtualRooms;
 
     const totalPages = Math.ceil(displayedRooms.length / itemsPerPage);
@@ -180,7 +180,7 @@ const VirtualRoomsSection = () => {
     setActiveTab("completed");
   }}
 >
-  Completed ({completedRooms?.virtualRooms?.length || 0})
+  Completed ({completedRooms?.length || 0})
 </Button>
 
 <Button
@@ -194,7 +194,7 @@ const VirtualRoomsSection = () => {
     setActiveTab("missed");
   }}
 >
-  Missed ({missedRooms?.virtualRooms?.length || 0})
+  Missed ({missedRooms?.length || 0})
 </Button>
 
 </div>
@@ -224,6 +224,7 @@ const VirtualRoomsSection = () => {
           </Card>
         )}
         {activeTab === "missed" && missedRooms.length === 0 && !loading && !error && (
+          
           <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
             <CardContent className="text-center p-4 text-gray-600">
               No missed virtual rooms available for this subject.
