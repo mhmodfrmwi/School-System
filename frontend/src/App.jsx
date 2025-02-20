@@ -246,6 +246,9 @@ const AttendancePage = lazy(
 const GradesParent = lazy(
   () => import("./Features/Parent/components/Grades/Grades"),
 );
+const EditParentProfile = lazy(
+  () => import("./Features/Parent/pages/EditProfilePage"),
+);
 const GradesAssignmentParent = lazy(
   () => import("./Features/Parent/components/Grades/GradesAssignment"),
 );
@@ -477,6 +480,7 @@ function App() {
           >
             <Route index element={<DashboardParent />} />
             <Route path="grades" element={<GradesParent />} />
+            <Route path="edit-parent-profile" element={<EditParentProfile />} />
             <Route
               path="grades/assignment"
               element={<GradesAssignmentParent />}

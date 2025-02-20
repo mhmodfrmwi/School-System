@@ -4,7 +4,7 @@ import {
   faHome,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { useLocation ,useNavigate} from "react-router-dom";
 import logo from "../../../assets/logologin.png";
 
 import GradeIconH from "../../../assets/TeacherIcon/Grade.png";
@@ -27,11 +27,13 @@ import LibraryIcon from "../../../assets/StudentIcon/Library.png";
 import CourseIcon from "../../../assets/StudentIcon/Course.png";
 import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
 
+
 const SidebarTeacher = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const location = useLocation();
   const currentPath = location.pathname;
+  const navigate = useNavigate();
 
   const menuItems = [
     { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/teacher" },
@@ -68,6 +70,7 @@ const SidebarTeacher = () => {
               hoveredIndex={hoveredIndex}
               setHoveredIndex={setHoveredIndex}
               currentPath={currentPath}
+              navigate={navigate}
             />
           </div>
         </div>
@@ -79,6 +82,7 @@ const SidebarTeacher = () => {
           hoveredIndex={hoveredIndex}
           setHoveredIndex={setHoveredIndex}
           currentPath={currentPath}
+          navigate={navigate}
         />
       </div>
     </div>
@@ -90,6 +94,7 @@ const SidebarContent = ({
   hoveredIndex,
   setHoveredIndex,
   currentPath,
+  navigate,
 }) => {
   return (
     <>
@@ -145,7 +150,7 @@ const SidebarContent = ({
         <div className="mb-4 rounded-md bg-white px-4 py-1 font-poppins text-xs text-dashboard-bg">
           Term: 2023-2024
         </div>
-        <button className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300">
+        <button className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300" onClick={() => navigate("/role")}>
           Logout
         </button>
       </div>

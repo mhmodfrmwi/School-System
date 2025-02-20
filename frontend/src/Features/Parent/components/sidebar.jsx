@@ -11,7 +11,7 @@ import Icon5 from "../../../assets/StudentIcon/Icon5.png";
 import Icon6 from "../../../assets/StudentIcon/Icon6.png";
 import Icon7 from "../../../assets/StudentIcon/Icon7.png";
 import Icon10 from "../../../assets/StudentIcon/Icon10.png";
-import Icon11 from "../../../assets/StudentIcon/Icon11.png";
+// import Icon11 from "../../../assets/StudentIcon/Icon11.png";
 import Icon12 from "../../../assets/StudentIcon/Icon12.png";
 
 const Sidebar = ({ closeSidebar }) => {
@@ -25,7 +25,7 @@ const Sidebar = ({ closeSidebar }) => {
     { label: "Grade Managements", icon: Icon6, path: "/parent/grades" },
     { label: "Activities", icon: Icon7, path: "/parent/activities" },
     { label: "Virtual Rooms", icon: Icon10, path: "/parent/virtualrooms" },
-    { label: "Chats", icon: Icon11, path: "/parent/chats" },
+    // { label: "Chats", icon: Icon11, path: "/parent/chats" },
     { label: "Logout", icon: Icon12, path: "/login" },
   ];
 

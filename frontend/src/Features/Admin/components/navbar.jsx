@@ -246,7 +246,7 @@ const Navbar = () => {
                 <button className="p-2 text-gray-500">
                   <ReactSVG src={logout} className="r h-auto w-auto" />
                 </button>
-                <h2 className="font-semibold text-white">Logout</h2>
+                <h2 className="font-semibold text-white cursor-pointer" onClick={() => navigate("/role")}>Logout</h2>
               </div>
             </div>
           )}

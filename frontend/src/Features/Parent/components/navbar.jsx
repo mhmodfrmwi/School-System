@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaSearch, FaBell } from "react-icons/fa";
+import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,12 +27,13 @@ const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const routes = [
+    { path: "edit-parent-profile" },
     { path: "grades" },
     { path: "grades/assignment" },
     { path: "grades/exam" },
     { path: "schedule" },
     { path: "schedule/exam" },
-    // { path: "librarybooksenglish" },
+    // { path: "library" },
     // { path: "motivation" },
     // { path: "activities" },
     // { path: "activities/detailes" },
@@ -40,6 +41,8 @@ const Navbar = () => {
     // { path: "activities/contests" },
     // { path: "virtualrooms" },
     // { path: "allcourses" },
+    // { path: "allcourses" },
+    // { path: "attendance" },
   ];
 
   const filteredRoutes = routes.filter((route) =>
@@ -68,13 +71,17 @@ const Navbar = () => {
       }
     }
   };
-  const url = window.location.pathname;
-  const name = url.split("/parent/").pop();
-  console.log(name);
 
-  // const handleBack = () => {
-  //   navigate(-1);
-  // };
+  const url = window.location.pathname;
+  const parentName = url.split("/parent/").pop();
+  const match = url.match(/\/parent\/([^/]+)/);
+  const name = match ? match[1] : "";
+  
+
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -102,7 +109,13 @@ const Navbar = () => {
           >
             <img src={Menu} alt="Menu" className="h-8 w-8" />
           </button>
-          <Link to="/student">
+          <button
+            onClick={handleBack}
+            className="hidden rounded-lg bg-[#FFD4AD] p-1 text-[#FD813D] lg:flex border-2 border-[#FD813D]"
+          >
+            <FaArrowLeft className="text-lg" />
+          </button>
+          <Link to="/parent">
             <img
               src={Logo}
               alt="Logo"
@@ -117,7 +130,7 @@ const Navbar = () => {
               }
             }}
           >
-            {name === "/parent" ? "parent" : `${name}`}
+            {parentName === "/parent" ? "parent" : `${name}`}
           </p>
         </div>
 
@@ -133,7 +146,7 @@ const Navbar = () => {
           <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
             <input
               type="text"
-              placeholder="Search Student Page"
+              placeholder="Search Parent Page"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -208,7 +221,7 @@ const Navbar = () => {
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
-                  onClick={() => navigate("edit-student-profile")}
+                  onClick={() => navigate("edit-parent-profile")}
                 >
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
