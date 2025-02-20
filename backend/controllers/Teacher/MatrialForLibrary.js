@@ -186,9 +186,105 @@ const getMaterialsForLibraryWithGradeAndSemester = expressAsyncHandler(
   }
 );
 
+const getGeneralSubjectsThatHaveMaterialsInLibrary = expressAsyncHandler(
+  async (req, res) => {
+    const subjectsInTheLibrary = await LibraryItemsForGrade.find()
+      .select("-__v")
+      .populate({
+        path: "grade_subject_semester_id",
+        populate: {
+          path: "grade_subject_id",
+          populate: { path: "subjectId", select: "subjectName _id" },
+        },
+      });
+
+    const subjectsMap = new Map();
+
+    subjectsInTheLibrary.forEach((item) => {
+      const subject = item.grade_subject_semester_id.grade_subject_id.subjectId;
+      subjectsMap.set(subject._id.toString(), {
+        id: subject._id,
+        subject: subject.subjectName,
+      });
+    });
+
+    const transformedResponse = Array.from(subjectsMap.values());
+
+    res.status(200).json({
+      status: 200,
+      message: "General subjects that have materials in the library",
+      subjects: transformedResponse,
+    });
+  }
+);
+
+const getMaterialUsingTheIdOfTheGeneralSubjects = expressAsyncHandler(
+  async (req, res) => {
+    const { id } = req.params;
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Subject ID",
+      });
+    }
+    try {
+      const subjectsInTheLibrary = await LibraryItemsForGrade.find()
+        .select("-__v")
+        .populate({
+          path: "grade_subject_semester_id",
+          populate: [
+            {
+              path: "grade_subject_id",
+              populate: [
+                { path: "subjectId", select: "subjectName _id" },
+                { path: "gradeId", select: "-__v -createdAt -updatedAt" },
+              ],
+              select: "-__v -createdAt -updatedAt -academicYear_id",
+            },
+            {
+              path: "semester_id",
+              populate: {
+                path: "academicYear_id",
+                select: "-__v -createdAt -updatedAt",
+              },
+              select: "-__v -createdAt -updatedAt",
+            },
+          ],
+          select: "-__v -createdAt -updatedAt",
+        });
+      console.log(subjectsInTheLibrary);
+
+      const materials = subjectsInTheLibrary.filter((subject) => {
+        return (
+          subject.grade_subject_semester_id.grade_subject_id.subjectId._id.toString() ===
+          id
+        );
+      });
+      if (materials.length === 0) {
+        return res.status(404).json({
+          status: 404,
+          message: "No materials found for this subject",
+        });
+      }
+      res.status(200).json({
+        status: 200,
+        message: "Materials for the subject",
+        materials,
+      });
+    } catch (err) {
+      console.error("Error fetching materials:", err);
+      res.status(500).json({
+        status: 500,
+        message: "Internal server error",
+      });
+    }
+  }
+);
 module.exports = {
   createMaterialForLibrary,
   deleteMaterialForLibrary,
   displaySubjectsInTheMaterialOfTheLibrary,
   getMaterialsForLibraryWithGradeAndSemester,
+  getGeneralSubjectsThatHaveMaterialsInLibrary,
+  getMaterialUsingTheIdOfTheGeneralSubjects,
 };
