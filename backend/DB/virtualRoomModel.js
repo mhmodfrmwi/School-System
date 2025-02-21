@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const moment = require("moment-timezone");
+const moment = require("moment");
 
 const virtualRoomSchema = new mongoose.Schema(
   {
@@ -30,6 +30,7 @@ const virtualRoomSchema = new mongoose.Schema(
     startTime: {
       type: Date,
       required: true,
+      set: (val) => moment.utc(val).toDate(),
     },
     duration: {
       type: Number,
@@ -58,7 +59,7 @@ const virtualRoomSchema = new mongoose.Schema(
   { timestamps: true }
 );
 virtualRoomSchema.methods.updateStatus = async function () {
-  const now = moment().tz('Africa/Cairo');
+  const now = moment();
   const startTime = moment(this.startTime);
   const endTime = startTime.clone().add(this.duration, "minutes");
   if (now.isBefore(startTime)) {
