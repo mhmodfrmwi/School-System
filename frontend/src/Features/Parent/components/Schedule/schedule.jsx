@@ -5,7 +5,7 @@ import { useState } from "react";
 function Schedule() {
   const navigate = useNavigate();
 
-  const [timetable, setTimetable] = useState([
+  const [timetable] = useState([
     [
       "Sunday",
       "Monday",

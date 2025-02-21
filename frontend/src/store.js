@@ -29,6 +29,8 @@ import teacherLibraryReducer from "./Features/Teacher/components/TeacherRedux/te
 import studentContestsReducer from "./Features/Student/components/StudentRedux/contestSlice";
 import libraryStudentReducer from "./Features/Student/components/StudentRedux/libraryStudentSlice";
 import StudentVirtualRooms from "./Features/Student/components/StudentRedux/virtualRoomsSlice";
+import teamReducer from "./Features/Student/components/StudentRedux/teamSlice";
+import participantsReducer from "./Features/Teacher/components/TeacherRedux/participantsSlice";
 
 const store = configureStore({
   reducer: {
@@ -55,6 +57,7 @@ const store = configureStore({
     allSubjectsStudent: allSubjectsStudentReducer,
     pdfMaterials: pdfMaterialsReducer,
     contests: contestsReducer,
+    teams: teamReducer,
     studentContests: studentContestsReducer,
     teacherVirtualRooms: teacherVirtualRoomReducer,
     classTeachers: classTeachersReducer,
@@ -62,6 +65,7 @@ const store = configureStore({
     teacherLibrary: teacherLibraryReducer,
     libraryStudent: libraryStudentReducer,
     StudentvirtualRooms: StudentVirtualRooms,
+    participants: participantsReducer,
   },
 });
 

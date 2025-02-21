@@ -10,6 +10,8 @@ const {
 const {
   displaySubjectsInTheMaterialOfTheLibrary,
   getMaterialsForLibraryWithGradeAndSemester,
+  getGeneralSubjectsThatHaveMaterialsInLibrary,
+  getMaterialUsingTheIdOfTheGeneralSubjects,
 } = require("../controllers/Teacher/MatrialForLibrary");
 const router = express.Router();
 
@@ -31,5 +33,17 @@ router.get(
   "/get-material-for-subject-in-library/:id",
   validateJwt,
   getMaterialsForLibraryWithGradeAndSemester
+);
+
+router.get(
+  "/get-general-subjects-in-library",
+  validateJwt,
+  getGeneralSubjectsThatHaveMaterialsInLibrary
+);
+
+router.get(
+  "/get-material-for-general-subject-in-library/:id",
+  validateJwt,
+  getMaterialUsingTheIdOfTheGeneralSubjects
 );
 module.exports = router;

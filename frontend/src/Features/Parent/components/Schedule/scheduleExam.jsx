@@ -3,7 +3,7 @@ import img1 from "../../../../assets/schedule 1.png";
 import { useState } from "react";
 function ScheduleExam() {
   const navigate = useNavigate();
-  const [schedule, setSchedule] = useState([
+  const [schedule] = useState([
     ["Subject", "Day", "Date", "Time", "Place"],
     [" ", "", "", "", ""],
     ["", "", "", "", ""],

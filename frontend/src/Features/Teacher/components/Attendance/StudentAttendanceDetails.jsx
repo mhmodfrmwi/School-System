@@ -60,7 +60,7 @@ function StudentAttendanceDetails() {
   ).length;
 
   return (
-    <div className="mx-auto w-full max-w-2xl p-6">
+    <div className="mx-auto w-full max-w-2xl p-6 font-poppins">
       <h2 className="mb-6 text-center text-2xl font-bold text-[#117C90]">
         Attendance Details for {student?.fullName || "Unknown"}
       </h2>
