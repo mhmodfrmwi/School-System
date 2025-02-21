@@ -75,7 +75,7 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
   });
 
   await newVirtualRoom.save();
-
+  
   res.status(201).json({
     status: 201,
     message: "Virtual room created successfully",

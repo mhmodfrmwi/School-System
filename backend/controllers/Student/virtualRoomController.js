@@ -1,6 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const moment = require("moment-timezone");
+const moment = require("moment");
 const VirtualRoom = require("../../DB/virtualRoomModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const AcademicYear = require("../../DB/academicYearModel");
@@ -29,24 +29,28 @@ const handleVrLinkClick = expressAsyncHandler(async (req, res) => {
 
     await virtualRoom.updateStatus();
 
-    const now = moment().tz('Africa/Cairo');
+    const now = moment();
     const startTime = moment(virtualRoom.startTime);
     const endTime = startTime.clone().add(virtualRoom.duration, "minutes");
-
-    let attendanceStatus;
-    if (now.isBefore(startTime)) {
-
-      attendanceStatus = "pending";
-    } else if (now.isBetween(startTime, endTime)) {
-      attendanceStatus = "attended";
-    } else {
-      attendanceStatus = "missed";
-    }
 
     let attendance = await VirtualRoomAttendance.findOne({
       studentId,
       virtualRoomId,
     });
+
+    let attendanceStatus;
+    if (now.isBefore(startTime)) {
+      attendanceStatus = "pending";
+    } else if (now.isBetween(startTime, endTime)) {
+      attendanceStatus = "attended";
+    } else{
+      if (attendance && attendance.status === "attended") {
+        attendanceStatus = "attended";
+      } else {
+        console.log("hi")
+        attendanceStatus = "missed";
+      }
+    } 
 
     if (attendance) {
       attendance.status = attendanceStatus;
@@ -175,6 +179,8 @@ const getVirtualRoomsForStudent = expressAsyncHandler(async (req, res) => {
 
       return {
         ...room.toObject(),
+        ///////eman
+        startTime: moment.utc(room.startTime).format("YYYY-MM-DDTHH:mm:ss.SSS"),
         studentAttendanceStatus,
       };
     });
@@ -396,36 +402,37 @@ const getMissedVirtualRooms = expressAsyncHandler(async (req, res) => {
       await room.updateStatus();
     }
 
-    const missedVirtualRooms = virtualRooms.filter((room) => room.status === "completed");
+    const completedVirtualRooms = virtualRooms.filter((room) => room.status === "completed");
+
+    if (completedVirtualRooms.length === 0) {
+      return res.status(200).json({
+        status: 200,
+        message: "No completed virtual rooms found.",
+      });
+    }
 
     const attendanceRecords = await VirtualRoomAttendance.find({
       studentId,
-      virtualRoomId: { $in: missedVirtualRooms.map((room) => room._id) },
-      status: "missed",
+      virtualRoomId: { $in: completedVirtualRooms.map((room) => room._id) },
     });
 
-    const missedVirtualRoomsWithAttendance = missedVirtualRooms.map((room) => {
+    const missedVirtualRooms = completedVirtualRooms.filter((room) => {
       const attendance = attendanceRecords.find(
         (record) => record.virtualRoomId.toString() === room._id.toString()
       );
 
-      let studentAttendanceStatus = "pending";
-      if (attendance) {
-        studentAttendanceStatus = attendance.status;
-      } else if (room.status === "completed") {
-        studentAttendanceStatus = "missed";
-      }
-
-      return {
-        ...room.toObject(),
-        studentAttendanceStatus,
-      };
+      return !attendance || attendance.status === "missed";
     });
+
+    const missedVirtualRoomsWithDetails = missedVirtualRooms.map((room) => ({
+      ...room.toObject(),
+      studentAttendanceStatus: "missed",
+    }));
 
     res.status(200).json({
       status: 200,
       message: "Missed virtual rooms retrieved successfully.",
-      virtualRooms: missedVirtualRoomsWithAttendance,
+      virtualRooms: missedVirtualRoomsWithDetails,
     });
   } catch (error) {
     res.status(500).json({
@@ -435,6 +442,7 @@ const getMissedVirtualRooms = expressAsyncHandler(async (req, res) => {
     });
   }
 });
+
 module.exports = {
   getVirtualRoomsForStudent,
   handleVrLinkClick,
