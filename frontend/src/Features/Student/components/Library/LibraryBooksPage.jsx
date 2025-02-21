@@ -4,6 +4,53 @@ import { fetchLibraryItems, fetchLibrarySubjects, fetchMaterialsForSubject } fro
 import img1 from "../../../../assets/cover22 1.png"; 
 import img2 from "../../../../assets/Rectangle 314.png";
 
+// Helper function to extract file ID
+const extractFileId = (url) => {
+  const match = url.match(/\/file\/d\/([^/]+)/); 
+  return match ? match[1] : null;
+};
+const extractFileIdForGoogleSlides = (url) => {
+  const match = url.match(/presentation\/d\/([^/]+)/);
+  return match ? match[1] : null;
+};
+
+
+// Helper function to get the first page as an image
+const getFirstPageAsImage = (url) => {
+  if (!url) return img2;
+
+  // Handle Google Drive Files
+  if (url.includes("drive.google.com/file/d/")) {
+    const fileId = extractFileId(url);
+    if (fileId) {
+      return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h350`; 
+    }
+  }
+
+  // Handle Google Slides
+  if (url.includes("docs.google.com/presentation/d/")) {
+    const fileId = extractFileIdForGoogleSlides(url);
+    if (fileId) {
+      return `https://docs.google.com/presentation/d/${fileId}/export/png?id=${fileId}&pageid=p1`; 
+    }
+  }
+
+  // Handle PDFs - Show first page as an image
+  if (url.endsWith(".pdf")) {
+    return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true&a=bi&pagenumber=1`;
+  }
+
+
+  // Handle Images - Just return the image URL
+  if (url.match(/\.(jpeg|jpg|gif|png|webp)$/)) {
+    return url;
+  }
+
+  return img2; // Fallback image
+};
+
+
+
 const LibraryBooksPage = () => {
   const dispatch = useDispatch();
   const { generalItems, subjects, materials, loading, error } = useSelector((state) => state.libraryStudent);
@@ -11,7 +58,7 @@ const LibraryBooksPage = () => {
   const [selectedGrade, setSelectedGrade] = useState("");
   const [selectedSemester, setSelectedSemester] = useState("");
   const [allMaterials, setAllMaterials] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchLibraryItems());
@@ -137,7 +184,16 @@ const LibraryBooksPage = () => {
                           <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
                             {item.title}
                           </h2>
-                          <img src={img2} className="mx-auto h-[250px] object-contain" alt="" />
+                          {item.item_url ? (
+                           <img
+                           src={getFirstPageAsImage(item.item_url)}
+                           alt="First page preview"
+                           className="w-60 h-[250px] object-cover"
+                           onError={(e) => (e.target.src = img2)} // Fallback to default image
+                         />                         
+                          ) : (
+                            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                          )}
                           <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
                             1
                           </p>
@@ -157,7 +213,16 @@ const LibraryBooksPage = () => {
                           <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
                             {item.title}
                           </h2>
-                          <img src={img2} className="mx-auto h-[250px] object-contain" alt="" />
+                          {item.item_url ? (
+                           <img
+                           src={getFirstPageAsImage(item.item_url)}
+                           alt="First page preview"
+                           className="w-60 h-[250px] object-cover"
+                           onError={(e) => (e.target.src = img2)} // Fallback to default image
+                         />                         
+                          ) : (
+                            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                          )}
                           <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
                             1
                           </p>
@@ -185,7 +250,7 @@ const LibraryBooksPage = () => {
                   </h2>
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                  {generalItems.map((item) => (
+                {generalItems.map((item) => (
                     <div key={item._id} className="mx-auto w-60">
                       <div className="relative w-60 h-[350px]">
                         <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
@@ -193,7 +258,16 @@ const LibraryBooksPage = () => {
                           <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
                             {item.title}
                           </h2>
-                          <img src={img2} className="mx-auto h-[250px] object-contain" alt="" />
+                          {item.item_url ? (
+                           <img
+                           src={getFirstPageAsImage(item.item_url)}
+                           alt="First page preview"
+                           className="w-60 h-[250px] object-cover"
+                           onError={(e) => (e.target.src = img2)} // Fallback to default image
+                         />                         
+                          ) : (
+                            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                          )}
                           <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
                             1
                           </p>
@@ -244,7 +318,7 @@ const LibraryBooksPage = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                  {filteredMaterials.map((item) => (
+                {filteredMaterials.map((item) => (
                     <div key={item._id} className="mx-auto w-60">
                       <div className="relative w-60 h-[350px]">
                         <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
@@ -252,7 +326,16 @@ const LibraryBooksPage = () => {
                           <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
                             {item.title}
                           </h2>
-                          <img src={img2} className="mx-auto h-[250px] object-contain" alt="" />
+                          {item.item_url ? (
+                           <img
+                           src={getFirstPageAsImage(item.item_url)}
+                           alt="First page preview"
+                           className="w-60 h-[250px] object-cover"
+                           onError={(e) => (e.target.src = img2)} // Fallback to default image
+                         />                         
+                          ) : (
+                            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                          )}
                           <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
                             1
                           </p>
