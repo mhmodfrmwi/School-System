@@ -29,7 +29,7 @@ const handleVrLinkClick = expressAsyncHandler(async (req, res) => {
 
     await virtualRoom.updateStatus();
 
-    const now = moment();
+    const now = moment().add(2, "hours");
     const startTime = moment(virtualRoom.startTime);
     const endTime = startTime.clone().add(virtualRoom.duration, "minutes");
 
@@ -180,7 +180,7 @@ const getVirtualRoomsForStudent = expressAsyncHandler(async (req, res) => {
       return {
         ...room.toObject(),
         ///////eman
-        startTime: moment.utc(room.startTime).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+        //startTime: moment.utc(room.startTime).format("YYYY-MM-DDTHH:mm:ss.SSS"),
         studentAttendanceStatus,
       };
     });

@@ -59,7 +59,7 @@ const virtualRoomSchema = new mongoose.Schema(
   { timestamps: true }
 );
 virtualRoomSchema.methods.updateStatus = async function () {
-  const now = moment();
+  const now = moment().add(2, "hours");
   const startTime = moment(this.startTime);
   const endTime = startTime.clone().add(this.duration, "minutes");
   if (now.isBefore(startTime)) {
