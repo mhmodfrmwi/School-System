@@ -1,12 +1,13 @@
 const contestValidationSchema = require("../../validations/contestValidation");
 const expressAsyncHandler = require("express-async-handler");
+const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
 const teamValidationSchema = require("../../validations/contestTeamValidationSchema");
 const Contest = require("../../DB/contestModel");
 const Student = require("../../DB/student");
 const Semester = require("../../DB/semesterModel");
 const ContestTeam = require("../../DB/contestTeamModel");
-
+ 
 const getStudentsInSameClassAndGrade = expressAsyncHandler(async (req, res) => {
   const studentId = req.user.id;
 
@@ -123,7 +124,158 @@ const createTeam = expressAsyncHandler(async (req, res) => {
     });
   });
 
+const getTeamsForStudentInContest = expressAsyncHandler(async (req, res) => {
+  const { contestId } = req.params;
+  const studentId = req.user.id;
 
+  if (!validateObjectId(contestId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid contest ID.",
+    });
+  }
+
+  const teams = await ContestTeam.find({
+    contestId,
+    teamMembers: studentId,
+  })
+    .populate("contestId", "title")
+    .populate("teamMembers", "fullName academic_number")
+    .populate("leaderId", "fullName academic_number")
+    .lean();
+
+  if (teams.length === 0) {
+    return res.status(200).json({
+      status: 200,
+      message: "You haven't join a team yet.",
+    });
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: "Teams retrieved successfully.",
+    data: teams,
+  });
+});
+const editTeam = expressAsyncHandler(async (req, res) => {
+  const { teamId } = req.params;
+  const { teamName, teammates } = req.body;
+  const studentId = req.user.id;
+
+  const { error } = teamValidationSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ status: 400, message: error.details[0].message });
+  }
+
+  const team = await ContestTeam.findById(teamId).populate("contestId");
+  if (!team) {
+    return res.status(404).json({
+      status: 404,
+      message: "Team not found.",
+    });
+  }
+
+  if (team.leaderId.toString() !== studentId.toString()) {
+    return res.status(403).json({
+      status: 403,
+      message: "Only the team leader can edit the team.",
+    });
+  }
+
+  if (teamName && teamName !== team.teamName) {
+    const existingTeamWithName = await ContestTeam.findOne({ teamName, contestId: team.contestId._id });
+    if (existingTeamWithName) {
+      return res.status(400).json({
+        status: 400,
+        message: "Team name already exists for this contest. Please choose a different name.",
+      });
+    }
+  }
+
+  if (teammates && Array.isArray(teammates)) {
+    const teamMembers = [studentId];
+
+    for (const teammate of teammates) {
+      const { fullName, academic_number } = teammate;
+
+      const teammateStudent = await Student.findOne({ fullName, academic_number });
+      if (!teammateStudent) {
+        return res.status(404).json({
+          status: 404,
+          message: `Teammate with name ${fullName} and academic number ${academic_number} not found.`,
+        });
+      }
+
+      const existingTeamWithTeammate = await ContestTeam.findOne({
+        contestId: team.contestId._id,
+        teamMembers: teammateStudent._id,
+      });
+
+      if (existingTeamWithTeammate && existingTeamWithTeammate._id.toString() !== teamId) {
+        return res.status(400).json({
+          status: 400,
+          message: `Teammate ${fullName} (${academic_number}) is already part of another team for this contest.`,
+        });
+      }
+
+      teamMembers.push(teammateStudent._id);
+    }
+
+    if (teamMembers.length > team.contestId.numberOfTeamMembers) {
+      return res.status(400).json({
+        status: 400,
+        message: `The team cannot have more than ${team.contestId.numberOfTeamMembers} members.`,
+      });
+    }
+
+    team.teamMembers = teamMembers;
+  }
+
+  if (teamName) {
+    team.teamName = teamName;
+  }
+
+  await team.save();
+
+  res.status(200).json({
+    status: 200,
+    message: "Team updated successfully.",
+    team,
+  });
+});
+const deleteTeam = expressAsyncHandler(async (req, res) => {
+  const { teamId } = req.params;
+  const studentId = req.user.id;
+
+  if (!validateObjectId(teamId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid team ID.",
+    });
+  }
+
+  const team = await ContestTeam.findById(teamId);
+  if (!team) {
+    return res.status(404).json({
+      status: 404,
+      message: "Team not found.",
+    });
+  }
+
+  if (team.leaderId.toString() !== studentId.toString()) {
+    return res.status(403).json({
+      status: 403,
+      message: "Only the team leader can delete the team.",
+    });
+  }
+
+  await ContestTeam.findByIdAndDelete(teamId);
+
+  res.status(200).json({
+    status: 200,
+    message: "Team deleted successfully.",
+  });
+});
   /*const addTeamMember = expressAsyncHandler(async (req, res) => {
     const { teamId } = req.params;
     const { fullName, academic_number } = req.body;
@@ -197,5 +349,8 @@ const createTeam = expressAsyncHandler(async (req, res) => {
 module.exports = {
     getStudentsInSameClassAndGrade,
     createTeam,
+    getTeamsForStudentInContest,
+    editTeam,
+    deleteTeam,
    // addTeamMember,
 };

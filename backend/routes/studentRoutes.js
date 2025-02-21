@@ -47,7 +47,10 @@ const {
 } = require("../controllers/Student/student-libraryItemController");
 const {
   createTeam,
-  getStudentsInSameClassAndGrade
+  getStudentsInSameClassAndGrade,
+  getTeamsForStudentInContest,
+  editTeam,
+  deleteTeam,
 } = require("../controllers/Student/contestTeamMembersController");
 const router = express.Router();
 
@@ -164,12 +167,30 @@ router.get(
   validateStudent,
   getLibraryItemsViewsForStudent
 );
-router.post(
-  "/get-contests/:contestId/team",
-  validateJwt,
-  validateStudent,
-  createTeam
-);
+router
+  .route("/get-contests/:contestId/team")
+  .post(
+    validateJwt,
+    validateStudent,
+    createTeam
+  )
+  .get(
+    validateJwt,
+    validateStudent,
+    getTeamsForStudentInContest
+  )
+  router
+  .route("/get-contests/:teamId/team")
+  .patch(
+    validateJwt,
+    validateStudent,
+    editTeam
+  )
+  .delete(
+    validateJwt,
+    validateStudent,
+    deleteTeam
+  );
 router.get(
   "/get-teammates",
   validateJwt,
