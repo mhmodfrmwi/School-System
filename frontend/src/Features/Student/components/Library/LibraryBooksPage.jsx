@@ -278,6 +278,35 @@ const LibraryBooksPage = () => {
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
+                    {paginatedGeneralItems.map((item, index) => (
+                        <div key={item._id} className="mx-auto w-60">
+                          <div className="relative w-60 h-[350px]">
+                            <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+                            <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
+                              <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+                                {item.title}
+                              </h2>
+                              {item.item_url ? (
+                                <img
+                                  src={getFirstPageAsImage(item.item_url)}
+                                  alt="First page preview"
+                                  className="w-60 h-[250px] object-cover"
+                                  onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                />
+                              ) : (
+                                <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                              )}
+                              <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                {index + 1}
+                              </p>
+                              <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+                                {item.author}
+                              </h3>
+                            </div>
+                          </div>
+                          <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
+                        </div>
+                      ))}
                       {paginatedAllMaterials.map((item, index) => (
                         <div key={item._id} className="mx-auto w-60">
                           <div className="relative w-60 h-[350px]">
