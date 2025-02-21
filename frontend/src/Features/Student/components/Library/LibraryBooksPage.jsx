@@ -157,13 +157,16 @@ const LibraryBooksPage = () => {
 
   const { grades, semesters } = getFilteredGradesAndSemesters(filteredMaterials);
 
+  // Combine generalItems and filteredMaterials for "All" section
+  const combinedItemsForAll = selectedSubject === "all" ? [...generalItems, ...filteredMaterials] : [];
+
   // Paginated data
   const paginatedGeneralItems = generalItems.slice((currentPagePublic - 1) * itemsPerPage, currentPagePublic * itemsPerPage);
-  const paginatedAllMaterials = filteredMaterials.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage);
+  const paginatedAllMaterials = combinedItemsForAll.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage);
   const paginatedSubjectMaterials = filteredMaterials.slice((currentPageSubject - 1) * itemsPerPage, currentPageSubject * itemsPerPage);
 
   // Total pages
-  const totalPagesAll = Math.ceil(filteredMaterials.length / itemsPerPage);
+  const totalPagesAll = Math.ceil(combinedItemsForAll.length / itemsPerPage);
   const totalPagesPublic = Math.ceil(generalItems.length / itemsPerPage);
   const totalPagesSubject = Math.ceil(filteredMaterials.length / itemsPerPage);
 
@@ -269,7 +272,7 @@ const LibraryBooksPage = () => {
                     <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                   </h2>
                 </div>
-                {generalItems.length === 0 && filteredMaterials.length === 0 ? (
+                {combinedItemsForAll.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
                       No books available at the moment.
@@ -278,67 +281,40 @@ const LibraryBooksPage = () => {
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                    {paginatedGeneralItems.map((item, index) => (
-                        <div key={item._id} className="mx-auto w-60">
-                          <div className="relative w-60 h-[350px]">
-                            <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-                            <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
-                              <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-                                {item.title}
-                              </h2>
-                              {item.item_url ? (
-                                <img
-                                  src={getFirstPageAsImage(item.item_url)}
-                                  alt="First page preview"
-                                  className="w-60 h-[250px] object-cover"
-                                  onError={(e) => (e.target.src = img2)} // Fallback to default image
-                                />
-                              ) : (
-                                <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                              )}
-                              <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-                                {index + 1}
-                              </p>
-                              <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-                                {item.author}
-                              </h3>
-                            </div>
-                          </div>
-                          <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
-                        </div>
-                      ))}
-                      {paginatedAllMaterials.map((item, index) => (
-                        <div key={item._id} className="mx-auto w-60">
-                          <div className="relative w-60 h-[350px]">
-                            <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-                            <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
-                              <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-                                {item.title}
-                              </h2>
-                              {item.item_url ? (
-                                <img
-                                  src={getFirstPageAsImage(item.item_url)}
-                                  alt="First page preview"
-                                  className="w-60 h-[250px] object-cover"
-                                  onError={(e) => (e.target.src = img2)} // Fallback to default image
-                                />
-                              ) : (
-                                <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                              )}
-                              <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-                                {index + 1}
-                              </p>
-                              <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-                                {item.type}
-                              </h3>
-                            </div>
-                          </div>
-                          <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-                            {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName} -{" "}
-                            {item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName}
-                          </h2>
-                        </div>
-                      ))}
+                    {paginatedAllMaterials.map((item, index) => {
+  const globalIndex = (currentPageAll - 1) * itemsPerPage + index + 1;
+  return (
+    <div key={item._id} className="mx-auto w-60">
+      <div className="relative w-60 h-[350px]">
+        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+        <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
+        <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+            {item.title}
+          </h2>
+          {item.item_url ? (
+            <img
+              src={getFirstPageAsImage(item.item_url)}
+              alt="First page preview"
+              className="w-60 h-[250px] object-cover"
+              onError={(e) => (e.target.src = img2)} // Fallback to default image
+            />
+          ) : (
+            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+          )}
+          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+            {globalIndex} {/* Use globalIndex instead of index + 1 */}
+          </p>
+          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+            {item.author || item.type}
+          </h3>
+        </div>
+      </div>
+      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
+        {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
+      </h2>
+    </div>
+  );
+})}
                     </div>
                     <PaginationControls
                       currentPage={currentPageAll}
@@ -368,35 +344,38 @@ const LibraryBooksPage = () => {
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                      {paginatedGeneralItems.map((item, index) => (
-                        <div key={item._id} className="mx-auto w-60">
-                          <div className="relative w-60 h-[350px]">
-                            <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-                            <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
-                              <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-                                {item.title}
-                              </h2>
-                              {item.item_url ? (
-                                <img
-                                  src={getFirstPageAsImage(item.item_url)}
-                                  alt="First page preview"
-                                  className="w-60 h-[250px] object-cover"
-                                  onError={(e) => (e.target.src = img2)} // Fallback to default image
-                                />
-                              ) : (
-                                <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                              )}
-                              <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-                                {index + 1}
-                              </p>
-                              <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-                                {item.author}
-                              </h3>
-                            </div>
-                          </div>
-                          <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
-                        </div>
-                      ))}
+                    {paginatedGeneralItems.map((item, index) => {
+  const globalIndex = (currentPagePublic - 1) * itemsPerPage + index + 1;
+  return (
+    <div key={item._id} className="mx-auto w-60">
+      <div className="relative w-60 h-[350px]">
+        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+        <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
+          <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+            {item.title}
+          </h2>
+          {item.item_url ? (
+            <img
+              src={getFirstPageAsImage(item.item_url)}
+              alt="First page preview"
+              className="w-60 h-[250px] object-cover"
+              onError={(e) => (e.target.src = img2)} // Fallback to default image
+            />
+          ) : (
+            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+          )}
+          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+            {globalIndex} {/* Use globalIndex instead of index + 1 */}
+          </p>
+          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+            {item.author}
+          </h3>
+        </div>
+      </div>
+      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
+    </div>
+  );
+})}
                     </div>
                     <PaginationControls
                       currentPage={currentPagePublic}
@@ -457,38 +436,41 @@ const LibraryBooksPage = () => {
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                      {paginatedSubjectMaterials.map((item, index) => (
-                        <div key={item._id} className="mx-auto w-60">
-                          <div className="relative w-60 h-[350px]">
-                            <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-                            <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
-                              <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-                                {item.title}
-                              </h2>
-                              {item.item_url ? (
-                                <img
-                                  src={getFirstPageAsImage(item.item_url)}
-                                  alt="First page preview"
-                                  className="w-60 h-[250px] object-cover"
-                                  onError={(e) => (e.target.src = img2)} // Fallback to default image
-                                />
-                              ) : (
-                                <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                              )}
-                              <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-                                {index + 1}
-                              </p>
-                              <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-                                {item.type}
-                              </h3>
-                            </div>
-                          </div>
-                          <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-                            {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName} -{" "}
-                            {item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName}
-                          </h2>
-                        </div>
-                      ))}
+                    {paginatedSubjectMaterials.map((item, index) => {
+  const globalIndex = (currentPageSubject - 1) * itemsPerPage + index + 1;
+  return (
+    <div key={item._id} className="mx-auto w-60">
+      <div className="relative w-60 h-[350px]">
+        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+        <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
+          <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+            {item.title}
+          </h2>
+          {item.item_url ? (
+            <img
+              src={getFirstPageAsImage(item.item_url)}
+              alt="First page preview"
+              className="w-60 h-[250px] object-cover"
+              onError={(e) => (e.target.src = img2)} // Fallback to default image
+            />
+          ) : (
+            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+          )}
+          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+            {globalIndex} {/* Use globalIndex instead of index + 1 */}
+          </p>
+          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+            {item.type}
+          </h3>
+        </div>
+      </div>
+      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
+        {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName} -{" "}
+        {item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName}
+      </h2>
+    </div>
+  );
+ })}
                     </div>
                     <PaginationControls
                       currentPage={currentPageSubject}
