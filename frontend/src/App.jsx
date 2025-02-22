@@ -5,7 +5,7 @@ import { lazy, Suspense } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
-import Loader from "./ui/Loader";
+
 import SeeVR from "./Features/Teacher/components/courses/SeeVR";
 import EditVR from "./Features/Teacher/components/courses/UpdateVR";
 import LibraryForm from "./Features/Teacher/components/Library/libraryForm";
@@ -15,6 +15,8 @@ import SchedualTable from "./Features/Manager/components/Schedule/ScheduleTable"
 import FormShedule from "./Features/Manager/components/Schedule/ScheduleForm";
 import ManagerVRTable from "./Features/Manager/components/VR/MangerVRTable";
 import ManagerVRForm from "./Features/Manager/components/VR/ManagerVRForm";
+import DashboardTeacher from "./Features/Teacher/pages/DashboardTeacher";
+import TitleUpdater from "./ui/TitleUpdater";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -338,6 +340,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <TitleUpdater />
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -349,9 +352,10 @@ function App() {
         draggable
         pauseOnHover
       />
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback>
         <Routes>
-          <Route index element={<OnBoarding />} />
+          <Route index element={<Navigate replace to="onboarding" />} />
+          <Route path="onboarding" element={<OnBoarding />} />
           <Route
             path="/login"
             element={role ? <Login /> : <Navigate to="/role" />}
@@ -364,7 +368,8 @@ function App() {
               <ProtectedRoute element={<Admins />} requiredRole="admin" />
             }
           >
-            <Route index element={<DashboardAdmin />} />
+            <Route index element={<Navigate replace to="dashboard" />} />
+            <Route path="dashboard" element={<DashboardAdmin />} />
             <Route path="basicform" element={<BasicForm />} />
             <Route path="studentform" element={<StudentForm />} />
             <Route path="allstudent" element={<AllStudent />} />
@@ -426,7 +431,8 @@ function App() {
               <ProtectedRoute element={<Students />} requiredRole="student" />
             }
           >
-            <Route index element={<DashboardStudent />} />
+            <Route index element={<Navigate replace to="dashboard" />} />
+            <Route path="dashboard" element={<DashboardStudent />} />
             <Route path="grades" element={<Grades />} />
             <Route path="grades/assignment" element={<GradesAssignment />} />
             <Route path="grades/exam" element={<GradesExam />} />
@@ -437,9 +443,9 @@ function App() {
               path="librarybooksenglish"
               element={<LibraryBooksEnglish />}
             />
-            
-        <Route path="librarybooks" element={<LibraryBooksPage />} />
-        <Route path="libraryvideos" element={<LibraryVideosPage />} />
+
+            <Route path="librarybooks" element={<LibraryBooksPage />} />
+            <Route path="libraryvideos" element={<LibraryVideosPage />} />
             <Route path="motivation" element={<MotivationPage />} />
             <Route
               path="edit-student-profile"
@@ -448,8 +454,14 @@ function App() {
             <Route path="activities/detailes" element={<DetailesActivity />} />
             <Route path="activities/prizes" element={<PrizesActivity />} />
             <Route path="activities/contests" element={<Contests />} />
-            <Route path="activities/contests/createteam/:contestId" element={<CreateTeam />} />
-            <Route path="activities/contests/teamdetails/:teamId" element={<TeamDetails />} />
+            <Route
+              path="activities/contests/createteam/:contestId"
+              element={<CreateTeam />}
+            />
+            <Route
+              path="activities/contests/teamdetails/:teamId"
+              element={<TeamDetails />}
+            />
             <Route path="activities" element={<Activities />} />
             <Route path="virtualrooms" element={<VirtualRooms />} />
             <Route path="allcourses" element={<AllCouses />} />
@@ -478,7 +490,8 @@ function App() {
               <ProtectedRoute element={<Parents />} requiredRole="parent" />
             }
           >
-            <Route index element={<DashboardParent />} />
+            <Route index element={<Navigate replace to="dashboard" />} />
+            <Route path="dashboard" element={<DashboardParent />} />
             <Route path="grades" element={<GradesParent />} />
             <Route path="edit-parent-profile" element={<EditParentProfile />} />
             <Route
@@ -496,6 +509,9 @@ function App() {
               <ProtectedRoute element={<Teachers />} requiredRole="teacher" />
             }
           >
+            <Route index element={<Navigate replace to="dashboard" />} />
+            <Route path="dashboard" element={<DashboardTeacher />} />
+
             <Route
               path="edit-teacher-profile"
               element={<EditTeacherProfile />}
@@ -507,7 +523,10 @@ function App() {
             />
             <Route path="school-hubs/prizes" element={<SchoolHubsPrizes />} />
             <Route path="contests" element={<ActivityContests />} />
-            <Route path="contests/participants/:contestId" element={<ParticipantsContests />} />
+            <Route
+              path="contests/participants/:contestId"
+              element={<ParticipantsContests />}
+            />
             <Route path="contests/activity-form" element={<ActivityForm />} />
             <Route
               path="contests/edit-activity-form/:id"
@@ -574,7 +593,8 @@ function App() {
               <ProtectedRoute element={<Manager />} requiredRole="manager" />
             }
           >
-            <Route index element={<DashboardManager />} />
+            <Route index element={<Navigate replace to="dashboard" />} />
+            <Route path="dashboard" element={<DashboardManager />} />
             <Route
               path="edit-manager-profile"
               element={<EditManagerProfile />}
