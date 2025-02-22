@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createTeam, getTeammates } from "../StudentRedux/teamSlice";
+import { createTeam } from "../StudentRedux/teamSlice";
+import { getTeammates } from "../StudentRedux/studentcontestSlice"; // جلب الطلاب المتاحين
 import { fetchStudentContests } from "../StudentRedux/contestSlice";
 
 const CreateTeam = () => {
@@ -10,7 +11,9 @@ const CreateTeam = () => {
   const navigate = useNavigate();
 
   const { contests } = useSelector((state) => state.studentContests);
-  const { teammates: students } = useSelector((state) => state.teams);
+  const { students, loading: studentsLoading, error: studentsError } = useSelector(
+    (state) => state.studentcontest // استخدام studentcontest بدل teams
+  );
 
   const [teamName, setTeamName] = useState("");
   const [teammates, setTeammates] = useState([]);
@@ -20,7 +23,7 @@ const CreateTeam = () => {
 
   useEffect(() => {
     dispatch(fetchStudentContests());
-    dispatch(getTeammates());
+    dispatch(getTeammates()); // جلب الطلاب المتاحين
   }, [dispatch]);
 
   const contest = contests.find((c) => c._id === contestId);
@@ -71,6 +74,14 @@ const CreateTeam = () => {
     }
   };
 
+  if (studentsLoading) {
+    return <div className="w-full h-full flex justify-center items-center">Loading students...</div>;
+  }
+
+  if (studentsError) {
+    return <div className="text-red-500 text-center font-poppins">{studentsError}</div>;
+  }
+
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow-lg rounded-2xl border-2 border-pink-300">
       <h2 className="text-2xl font-poppins font-bold text-center bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
@@ -111,7 +122,7 @@ const CreateTeam = () => {
                       </option>
                     ))
                   ) : (
-                    <option disabled>Loading students...</option>
+                    <option disabled>No students available</option>
                   )}
                 </select>
 

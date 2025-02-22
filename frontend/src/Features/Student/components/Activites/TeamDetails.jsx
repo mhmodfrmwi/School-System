@@ -1,61 +1,61 @@
-// TeamDetails.js
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTeam, getTeammates, updateTeam } from "../StudentRedux/teamSlice";
-import { toast } from "react-toastify";
+import { getTeammatesByContestId, deleteTeam } from "../StudentRedux/teamSlice";
+import { fetchStudentContests } from "../StudentRedux/contestSlice";
 
 const TeamDetails = () => {
-  const { teamId } = useParams();
+  const { teamId } = useParams(); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { team, loading, error } = useSelector((state) => state.teams);
-  const [isEditing, setIsEditing] = useState(false);
-  const [updatedTeamName, setUpdatedTeamName] = useState("");
+  const { teammates, loading, error } = useSelector((state) => state.teams);
+  const { contests } = useSelector((state) => state.studentContests);
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    dispatch(getTeammates(teamId));
+    dispatch(getTeammatesByContestId(teamId));
+    dispatch(fetchStudentContests());
   }, [dispatch, teamId]);
 
-  useEffect(() => {
-    if (team) {
-      setUpdatedTeamName(team.teamName);
-    }
-  }, [team]);
+  const contest = contests?.find((c) => c._id === teamId);
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this team?")) {
       try {
-        await dispatch(deleteTeam(teamId)).unwrap();
-        toast.success("Team deleted successfully! 🗑️");
-        navigate("/student/activities/contests");
+        const teamToDelete = teammates[0]?._id;
+        if (!teamToDelete) {
+          throw new Error("Team ID not found.");
+        }
+
+        await dispatch(deleteTeam(teamToDelete)).unwrap();
+        setSuccessMessage("Team deleted successfully! 🗑");
+        setTimeout(() => {
+          navigate("/student/activities/contests");
+        }, 2000);
       } catch (error) {
-        toast.error("Failed to delete team: " + error.message);
+        setErrorMessage("Failed to delete team: " + error.message);
       }
     }
   };
 
-  const handleUpdate = async () => {
-    if (!updatedTeamName.trim()) {
-      toast.error("Team name cannot be empty!");
-      return;
-    }
-
-    try {
-      await dispatch(updateTeam({ teamId, updatedData: { teamName: updatedTeamName } })).unwrap();
-      toast.success("Team updated successfully! ✅");
-      setIsEditing(false);
-    } catch (error) {
-      toast.error("Failed to update team: " + error.message);
-    }
-  };
-
+ 
   if (loading) {
-    return <div className="w-full h-full flex justify-center items-center">Loading...</div>;
+    return (
+      <div className="max-w-lg mx-auto mt-32 p-6 bg-white shadow-lg rounded-2xl border-2 border-pink-300">
+        <div className="text-center text-gray-700 font-poppins">Loading...</div>
+      </div>
+    );
   }
 
+  
   if (error) {
-    return <div className="text-red-500 text-center font-poppins">{error}</div>;
+    return (
+      <div className="max-w-lg mx-auto mt-32 p-6 bg-white shadow-lg rounded-2xl border-2 border-pink-300">
+        <div className="text-center text-red-500 font-poppins">{error}</div>
+      </div>
+    );
   }
 
   return (
@@ -64,70 +64,55 @@ const TeamDetails = () => {
         Team Details
       </h2>
 
-      {team && (
-        <div className="mt-4">
-          {isEditing ? (
-            <div className="mb-4">
-              <label className="block text-gray-700 font-poppins">Team Name:</label>
-              <input
-                type="text"
-                value={updatedTeamName}
-                onChange={(e) => setUpdatedTeamName(e.target.value)}
-                className="w-full p-2 border rounded-md font-poppins focus:outline-none focus:ring-2 focus:ring-[#BC6FFB]"
-              />
-            </div>
-          ) : (
-            <p className="text-gray-700 font-poppins">
-              <strong>Team Name:</strong> {team.teamName}
-            </p>
-          )}
+      <p className="mb-2 text-gray-700 font-poppins">
+        <strong>Team Name:</strong> {teammates[0]?.teamName}
+      </p>
+      <p className="mb-4 text-gray-700 font-poppins">
+        <strong>Contest:</strong> {contest?.title || "N/A"}
+      </p>
+      <p className="mb-4 text-gray-700 font-poppins">
+        <strong>Teammates:</strong>
+      </p>
+      {teammates[0]?.teamMembers?.map((member) => {
+        const isLeader = member.academic_number === teammates[0]?.leaderId?.academic_number;
 
-          <p className="text-gray-700 font-poppins">
-            <strong>Members:</strong>
+        return (
+          <p
+            key={member.academic_number}
+            className="p-2 border rounded-md bg-gray-100 mb-1 text-gray-700 font-poppins"
+          >
+            {member.fullName} ({member.academic_number}){" "}
+            {isLeader && <span className="text-green-500">(Leader)</span>}
           </p>
-          <ul className="list-disc list-inside">
-            {team.teammates.map((member, index) => (
-              <li key={index} className="text-gray-700 font-poppins">
-                {member.fullName} - {member.academic_number}
-              </li>
-            ))}
-          </ul>
+        );
+      })}
+
+      <div className="flex space-x-4 mt-4">
+        <button
+          className="bg-rose-500 text-white px-4 py-2 rounded-md hover:bg-rose-600 font-poppins"
+          onClick={handleDelete}
+        >
+          Delete Team
+        </button>
+        <button
+          className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 font-poppins"
+          onClick={() => navigate(`/student/activities/contests/edit-team/${teamId}`)}
+        >
+          Edit Team
+        </button>
+      </div>
+
+     
+      {successMessage && (
+        <div className="mt-4 p-2 text-green-700 bg-green-100 border border-green-400 rounded-md font-poppins text-center">
+          {successMessage}
         </div>
       )}
-
-      <div className="mt-6 flex justify-between">
-        {isEditing ? (
-          <>
-            <button
-              onClick={handleUpdate}
-              className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white px-4 py-2 rounded-md font-poppins hover:opacity-90"
-            >
-              Save Changes
-            </button>
-            <button
-              onClick={() => setIsEditing(false)}
-              className="bg-gray-500 text-white px-4 py-2 rounded-md font-poppins hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              onClick={() => setIsEditing(true)}
-              className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white px-4 py-2 rounded-md font-poppins hover:opacity-90"
-            >
-              Edit Team
-            </button>
-            <button
-              onClick={handleDelete}
-              className="bg-red-500 text-white px-4 py-2 rounded-md font-poppins hover:bg-red-600"
-            >
-              Delete Team
-            </button>
-          </>
-        )}
-      </div>
+      {errorMessage && (
+        <div className="mt-4 p-2 text-red-700 bg-red-100 border border-red-400 rounded-md font-poppins text-center">
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 };

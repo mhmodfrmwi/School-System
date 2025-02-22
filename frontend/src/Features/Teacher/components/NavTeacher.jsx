@@ -24,11 +24,32 @@ const NavTeacher = () => {
   const routes = [
     { path: "edit-teacher-profile" },
     { path: "school-hubs" },
+    { path: "school-hubs/detailes" },
+    { path: "school-hubs/prizes" },
+    { path: "contests" },
+    { path: "contests/participants/:contestId" },
+    { path: "contests/activity-form" },
+    { path: "contests/edit-activity-form/:id" },
     { path: "weekly-schedule" },
+    { path: "exam-schedule" },
+    { path: "currentCourse" },
+    { path: "allcourses" },
     { path: "currentCourseforattendance" },
-    { path: "currentcourse" },
-    { path: "school-hubs" },
-
+    { path: "allcoursesforattendance" },
+    { path: "student-attendance-details/:id" },
+    { path: "materialform" },
+    { path: "/teacher/addmaterial/:classId/:gradeSubjectSemesterId" },
+    { path: "/teacher/materialform/:classId/:gradeSubjectSemesterId" },
+    { path: "/teacher/see-material/:grade_subject_semester_id" },
+    { path: "update-material/:materialId" },
+    { path: "takeattendance/:id" },
+    { path: "attendancereport/:id" },
+    { path: "/teacher/virtual-room/:grade_subject_semester_id" },
+    { path: "/teacher/VR-form/:classId/:gradeSubjectSemesterId" },
+    { path: "edit-vr/:id" },
+    { path: "library-form" },
+    { path: "all-subjects-library" },
+    { path: "all-materials-library/:id" },
   ];
 
   const filteredRoutes = routes.filter((route) =>
@@ -211,7 +232,12 @@ const NavTeacher = () => {
                 <button className="p-2 text-gray-500">
                   <ReactSVG src={logout} className="r h-auto w-auto" />
                 </button>
-                <h2 className="font-semibold text-white cursor-pointer" onClick={() => navigate("/role")}>Logout</h2>
+                <h2
+                  className="cursor-pointer font-semibold text-white"
+                  onClick={() => navigate("/role")}
+                >
+                  Logout
+                </h2>
               </div>
             </div>
           )}

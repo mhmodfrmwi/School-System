@@ -3,6 +3,7 @@ import activityImage from "../../../../assets/activity3.png";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStudentContests } from "../StudentRedux/contestSlice";
+import { getTeammatesByContestId } from "../StudentRedux/teamSlice";
 import { v4 as uuidv4 } from 'uuid';
 
 const Contests = () => {
@@ -17,6 +18,20 @@ const Contests = () => {
   if (loading) {
     return <div className="w-full h-full"></div>;
   }
+
+  const handleEnterContest = async (contestId) => {
+    try {
+      const response = await dispatch(getTeammatesByContestId(contestId)).unwrap();
+
+      if (response.message === "You haven't join a team yet.") {
+        navigate(`/student/activities/contests/createteam/${contestId}`);
+      } else if (response.message === "Teams retrieved successfully.") {
+        navigate(`/student/activities/contests/teamdetails/${contestId}`);
+      }
+    } catch (error) {
+      console.error("Error fetching team data:", error);
+    }
+  };
   
   return (
     <>
@@ -79,7 +94,7 @@ const Contests = () => {
                     <td className="border border-[#FFA4A4] px-4 py-2 text-xs sm:text-sm md:text-sm">{contest.requirements}</td>
                     <td className="border flex items-center justify-center border-[#FFA4A4] px-4 py-3">
                       <button className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-2xl px-4 py-2 text-xs text-white sm:text-sm"
-                        onClick={() => navigate(`/student/activities/contests/createteam/${contest._id}`)}>
+                        onClick={() => handleEnterContest(contest._id)}>
                         Enter
                       </button>
                     </td>

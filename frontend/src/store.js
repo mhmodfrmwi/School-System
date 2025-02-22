@@ -30,7 +30,9 @@ import studentContestsReducer from "./Features/Student/components/StudentRedux/c
 import libraryStudentReducer from "./Features/Student/components/StudentRedux/libraryStudentSlice";
 import StudentVirtualRooms from "./Features/Student/components/StudentRedux/virtualRoomsSlice";
 import teamReducer from "./Features/Student/components/StudentRedux/teamSlice";
+import studentcontestReducer from "./Features/Student/components/StudentRedux/studentcontestSlice";
 import participantsReducer from "./Features/Teacher/components/TeacherRedux/participantsSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -58,6 +60,7 @@ const store = configureStore({
     pdfMaterials: pdfMaterialsReducer,
     contests: contestsReducer,
     teams: teamReducer,
+    studentcontest: studentcontestReducer,
     studentContests: studentContestsReducer,
     teacherVirtualRooms: teacherVirtualRoomReducer,
     classTeachers: classTeachersReducer,
