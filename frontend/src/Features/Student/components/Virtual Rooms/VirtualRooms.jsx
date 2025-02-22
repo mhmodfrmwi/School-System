@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTeacherVirtualRooms } from "../../../Teacher/components/TeacherRedux/VirtualRoomsSlice";
-import { useNavigate } from "react-router-dom";
+import { fetchVR } from "../../../Teacher/components/TeacherRedux/VRSlice";
+
 
 // دالة لتنسيق التاريخ والوقت
 const formatStartTime = (startTime) => {
@@ -12,14 +12,13 @@ const formatStartTime = (startTime) => {
 };
 
 const VirtualRooms = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // جلب بيانات الجلسات الافتراضية من Redux
     const { teacherVirtualRooms, loading, error } = useSelector((state) => state.teacherVirtualRooms);
 
     useEffect(() => {
-        dispatch(fetchTeacherVirtualRooms());
+        dispatch(fetchVR());
     }, [dispatch]);
 
     return (

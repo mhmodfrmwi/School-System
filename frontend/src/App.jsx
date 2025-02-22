@@ -227,6 +227,9 @@ const CreateTeam = lazy(
 const TeamDetails = lazy(
   () => import("./Features/Student/components/Activites/TeamDetails"),
 );
+const EditTeam = lazy(
+  () => import("./Features/Student/components/Activites/EditTeam"),
+);
 const VirtualRooms = lazy(
   () => import("./Features/Student/components/Virtual Rooms/VirtualRooms"),
 );
@@ -443,7 +446,7 @@ function App() {
               path="librarybooksenglish"
               element={<LibraryBooksEnglish />}
             />
-
+            
             <Route path="librarybooks" element={<LibraryBooksPage />} />
             <Route path="libraryvideos" element={<LibraryVideosPage />} />
             <Route path="motivation" element={<MotivationPage />} />
@@ -454,14 +457,9 @@ function App() {
             <Route path="activities/detailes" element={<DetailesActivity />} />
             <Route path="activities/prizes" element={<PrizesActivity />} />
             <Route path="activities/contests" element={<Contests />} />
-            <Route
-              path="activities/contests/createteam/:contestId"
-              element={<CreateTeam />}
-            />
-            <Route
-              path="activities/contests/teamdetails/:teamId"
-              element={<TeamDetails />}
-            />
+            <Route path="activities/contests/createteam/:contestId" element={<CreateTeam />} />
+            <Route path="activities/contests/teamdetails/:teamId" element={<TeamDetails />} />
+            <Route path="activities/contests/edit-team/:teamId" element={<EditTeam />} />
             <Route path="activities" element={<Activities />} />
             <Route path="virtualrooms" element={<VirtualRooms />} />
             <Route path="allcourses" element={<AllCouses />} />
@@ -511,7 +509,6 @@ function App() {
           >
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<DashboardTeacher />} />
-
             <Route
               path="edit-teacher-profile"
               element={<EditTeacherProfile />}
@@ -523,10 +520,7 @@ function App() {
             />
             <Route path="school-hubs/prizes" element={<SchoolHubsPrizes />} />
             <Route path="contests" element={<ActivityContests />} />
-            <Route
-              path="contests/participants/:contestId"
-              element={<ParticipantsContests />}
-            />
+            <Route path="contests/participants/:contestId" element={<ParticipantsContests />} />
             <Route path="contests/activity-form" element={<ActivityForm />} />
             <Route
               path="contests/edit-activity-form/:id"

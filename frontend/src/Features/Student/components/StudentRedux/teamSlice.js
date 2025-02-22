@@ -38,17 +38,17 @@ export const createTeam = createAsyncThunk(
   }
 );
 
-// جلب الزملاء في الفريق
-export const getTeammates = createAsyncThunk(
-  "teams/getTeammates",
-  async (_, { rejectWithValue }) => {
+// جلب الزملاء في الفريق بناءً على contestId
+export const getTeammatesByContestId = createAsyncThunk(
+  "teams/getTeammatesByContestId",
+  async (contestId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       if (!token) {
         return rejectWithValue("Authentication required. Please log in.");
       }
 
-      const response = await fetch(`http://localhost:4000/api/v1/student/get-teammates`, {
+      const response = await fetch(`http://localhost:4000/api/v1/student/get-contests/${contestId}/team`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -60,7 +60,6 @@ export const getTeammates = createAsyncThunk(
         throw new Error(error.message);
       }
 
-      
       const data = await response.json();
       return data;
     } catch (error) {
@@ -69,8 +68,7 @@ export const getTeammates = createAsyncThunk(
   }
 );
 
-
-
+// حذف الفريق
 // حذف الفريق
 export const deleteTeam = createAsyncThunk(
   "teams/deleteTeam",
@@ -81,7 +79,8 @@ export const deleteTeam = createAsyncThunk(
         return rejectWithValue("Authentication required. Please log in.");
       }
 
-      const response = await fetch(`http://localhost:4000/api/v1/team/${teamId}`, {
+      // استخدام teamId بشكل صحيح
+      const response = await fetch(`http://localhost:4000/api/v1/student/get-contests/${teamId}/team`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -110,7 +109,7 @@ export const updateTeam = createAsyncThunk(
         return rejectWithValue("Authentication required. Please log in.");
       }
 
-      const response = await fetch(`http://localhost:4000/api/v1/team/${teamId}`, {
+      const response = await fetch(`http://localhost:4000/api/v1/student/get-contests/${teamId}/team`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -153,19 +152,19 @@ const teamSlice = createSlice({
         state.loading = false;
       })
       
-      // جلب الزملاء
-      .addCase(getTeammates.pending, (state) => {
+
+      // جلب الزملاء في الفريق بناءً على contestId
+      .addCase(getTeammatesByContestId.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getTeammates.fulfilled, (state, action) => {
+      .addCase(getTeammatesByContestId.fulfilled, (state, action) => {
         state.loading = false;
         state.teammates = action.payload.data || [];
       })
-      .addCase(getTeammates.rejected, (state, action) => {
+      .addCase(getTeammatesByContestId.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to fetch teammates";
+        state.error = action.payload || "Failed to fetch teammates by contestId";
       })
-
 
        // حذف الفريق
        .addCase(deleteTeam.pending, (state) => {
@@ -175,6 +174,7 @@ const teamSlice = createSlice({
       .addCase(deleteTeam.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.loading = false;
+        state.teammates = state.teammates.filter(team => team._id !== action.payload);
       })
       .addCase(deleteTeam.rejected, (state, action) => {
         state.status = "failed";
@@ -190,6 +190,11 @@ const teamSlice = createSlice({
       .addCase(updateTeam.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.loading = false;
+        const updatedTeam = action.payload;
+        const index = state.teammates.findIndex(team => team._id === updatedTeam._id);
+        if (index !== -1) {
+          state.teammates[index] = updatedTeam; // تحديث بيانات الفريق في القائمة
+        }
       })
       .addCase(updateTeam.rejected, (state, action) => {
         state.status = "failed";
