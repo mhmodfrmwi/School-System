@@ -16,6 +16,9 @@ const {
 } = require("../controllers/Student/contestController");
 const {
   getAllSchoolHubs,
+  registerInContest,
+  checkParticipation,//get my status
+  deleteRegistration
 } = require("../controllers/Student/schoolHubController");
 const {
   getVirtualRoomsForStudent,
@@ -115,7 +118,13 @@ router.get(
   validateStudent,
   getAllContestsForStudent
 );
+
 router.get("/school-hub", validateJwt, validateStudent, getAllSchoolHubs);
+router
+  .route("/school-hub/:schoolHubId")
+  .post(validateJwt, validateStudent, registerInContest)
+  .delete(validateJwt, validateStudent, deleteRegistration)
+  .get(validateJwt, validateStudent, checkParticipation);
 
 router.get(
   "/get-attendance",
@@ -134,7 +143,6 @@ router.post(
   "/add-to-bookmark/:materialId",
   validateJwt,
   validateStudent,
-
   addMaterialForBookMarks
 );
 router.delete(

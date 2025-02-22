@@ -2,6 +2,8 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const schoolHubValidationSchema = require("../../validations/schoolHubValidation");
 const SchoolHub = require("../../DB/schoolHubModel");
+const Student = require("../../DB/student"); 
+const Participation = require("../../DB/schoolHubParticipationModel");
 
 const createSchoolHub = expressAsyncHandler(async (req, res) => {
     const managerId = req.user.id;
@@ -20,13 +22,13 @@ const createSchoolHub = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const { title, registrationStart, registrationEnd, details, prizes } = req.body;
+    const { title, registrationStart, registrationEnd, contestDate, location, details, prizes } = req.body;
 
-    const existingSchoolHub = await SchoolHub.findOne({ title, registrationStart, registrationEnd });
+    const existingSchoolHub = await SchoolHub.findOne({ title, contestDate, location });
     if (existingSchoolHub) {
         return res.status(400).json({
             status: 400,
-            message: "A SchoolHub event with the same title and registration dates already exists.",
+            message: "A SchoolHub event with the same title and date and location already exists.",
         });
     }
 
@@ -34,6 +36,8 @@ const createSchoolHub = expressAsyncHandler(async (req, res) => {
         title,
         registrationStart,
         registrationEnd,
+        contestDate,
+        location,
         details,
         prizes,
     });
@@ -44,13 +48,6 @@ const createSchoolHub = expressAsyncHandler(async (req, res) => {
         status: 201,
         message: "SchoolHub created successfully",
         newSchoolHub,
-    });
-});
-const getAllSchoolHubs2 = expressAsyncHandler(async (req, res) => {
-    console.log(req.body)
-    res.status(200).json({
-        status: 200,
-        message: "SchoolHubs retrieved successfully",
     });
 });
 
@@ -64,36 +61,10 @@ const getAllSchoolHubs = expressAsyncHandler(async (req, res) => {
     });
 });
 
-
-const getSchoolHub = expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
-
-    if (!validateObjectId(id)) {
-        return res.status(400).json({
-            status: 400,
-            message: "Invalid SchoolHub ID",
-        });
-    }
-
-    const schoolHub = await SchoolHub.findById(id);
-    if (!schoolHub) {
-        return res.status(404).json({
-            status: 404,
-            message: "SchoolHub not found",
-        });
-    }
-
-    res.status(200).json({
-        status: 200,
-        message: "SchoolHub retrieved successfully",
-        schoolHub,
-    });
-});
-
 const updateSchoolHub = expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const { schoolHubId } = req.params;
 
-    if (!validateObjectId(id)) {
+    if (!validateObjectId(schoolHubId)) {
         return res.status(400).json({
             status: 400,
             message: "Invalid SchoolHub ID",
@@ -108,7 +79,7 @@ const updateSchoolHub = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const schoolHub = await SchoolHub.findById(id);
+    const schoolHub = await SchoolHub.findById(schoolHubId);
     if (!schoolHub) {
         return res.status(404).json({
             status: 404,
@@ -127,16 +98,16 @@ const updateSchoolHub = expressAsyncHandler(async (req, res) => {
 });
 
 const deleteSchoolHub = expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const { schoolHubId } = req.params;
 
-    if (!validateObjectId(id)) {
+    if (!validateObjectId(schoolHubId)) {
         return res.status(400).json({
             status: 400,
             message: "Invalid SchoolHub ID",
         });
     }
 
-    const schoolHub = await SchoolHub.findById(id);
+    const schoolHub = await SchoolHub.findById(schoolHubId);
     if (!schoolHub) {
         return res.status(404).json({
             status: 404,
@@ -152,11 +123,62 @@ const deleteSchoolHub = expressAsyncHandler(async (req, res) => {
     });
 });
 
+const getContestStudents = expressAsyncHandler(async (req, res) => {
+    const { schoolHubId } = req.params;
+  
+    if (!validateObjectId(schoolHubId)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid SchoolHub ID.",
+      });
+    }
+  
+    try {
+      const schoolHub = await SchoolHub.findById(schoolHubId);
+      if (!schoolHub) {
+        return res.status(404).json({
+          status: 404,
+          message: "Contest not found.",
+        });
+      }
+  
+      const participations = await Participation.find({
+        schoolHubId,
+        participated: true,
+      }).populate({
+          path: "studentId",
+          select: "academic_number fullName email phone gradeId classId",
+          populate: [
+            {
+              path: "gradeId",
+              select: "gradeName",
+            },
+            {
+              path: "classId",
+              select: "className",
+            },
+          ],
+        });
+  
+      res.status(200).json({
+        status: 200,
+        message: "Participating students retrieved successfully.",
+        participations,
+        count: participations.length,
+      });
+    } catch (error) {
+      console.error("Error retrieving participating students:", error);
+      res.status(500).json({
+        status: 500,
+        message: "Internal server error.",
+      });
+    }
+  });
+
 module.exports = {
     createSchoolHub,
     getAllSchoolHubs,
-    getSchoolHub,
     updateSchoolHub,
     deleteSchoolHub,
-    getAllSchoolHubs2
+    getContestStudents
 };
