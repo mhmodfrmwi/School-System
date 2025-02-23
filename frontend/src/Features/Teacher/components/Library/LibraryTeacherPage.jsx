@@ -118,17 +118,18 @@ const LibraryTeacherPage = () => {
   const [allMaterials, setAllMaterials] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+
   const handleItemClick = (itemId, type) => {
     dispatch(viewLibraryItem(itemId));
     navigate(`/teacher/library/${type}/${itemId}`);
   };
-
-  // Pagination states
+  
+  // Pagination states for each tab
   const [currentPageAll, setCurrentPageAll] = useState(1);
   const [currentPagePublic, setCurrentPagePublic] = useState(1);
   const [currentPageSubject, setCurrentPageSubject] = useState(1);
 
-  const itemsPerPage = 8; // Number of items per page
+  const itemsPerPage = 4; // Number of items per page (changed to 4)
 
   useEffect(() => {
     dispatch(fetchLibraryItems());
@@ -163,12 +164,12 @@ const LibraryTeacherPage = () => {
   // Combine generalItems and filteredMaterials for "All" section
   const combinedItemsForAll = selectedSubject === "all" ? [...teacherGeneralItems, ...filteredMaterials] : [];
 
-  // Paginated data
+  // Paginated data for each tab
   const paginatedGeneralItems = teacherGeneralItems.slice((currentPagePublic - 1) * itemsPerPage, currentPagePublic * itemsPerPage);
   const paginatedAllMaterials = combinedItemsForAll.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage);
   const paginatedSubjectMaterials = filteredMaterials.slice((currentPageSubject - 1) * itemsPerPage, currentPageSubject * itemsPerPage);
 
-  // Total pages
+  // Total pages for each tab
   const totalPagesAll = Math.ceil(combinedItemsForAll.length / itemsPerPage);
   const totalPagesPublic = Math.ceil(teacherGeneralItems.length / itemsPerPage);
   const totalPagesSubject = Math.ceil(filteredMaterials.length / itemsPerPage);
@@ -197,6 +198,7 @@ const LibraryTeacherPage = () => {
             className="flex items-center cursor-pointer p-2 hover:bg-gray-200 rounded"
             onClick={() => {
               setSelectedSubject("all");
+              setCurrentPageAll(1); // Reset pagination for "All" tab
               setIsSidebarOpen(!isSidebarOpen);
             }}
           >
@@ -215,6 +217,7 @@ const LibraryTeacherPage = () => {
             className="flex items-center cursor-pointer p-2 hover:bg-gray-200 rounded"
             onClick={() => {
               setSelectedSubject("public");
+              setCurrentPagePublic(1); // Reset pagination for "Public" tab
               setIsSidebarOpen(!isSidebarOpen);
             }}
           >
@@ -235,6 +238,7 @@ const LibraryTeacherPage = () => {
               className="flex items-center cursor-pointer p-2 hover:bg-gray-200 rounded"
               onClick={() => {
                 setSelectedSubject(subject);
+                setCurrentPageSubject(1); // Reset pagination for "Subject" tab
                 setIsSidebarOpen(!isSidebarOpen);
               }}
             >
@@ -267,86 +271,86 @@ const LibraryTeacherPage = () => {
         ) : (
           <div>
             {/* All Library Section */}
-{selectedSubject === "all" && (
-  <div>
-    <div className="flex justify-center items-center md:items-start md:justify-start">
-      <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-        Library
-        <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
-      </h2>
-    </div>
-    {combinedItemsForAll.length === 0 ? (
-      <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
-        <CardContent className="text-center p-4 text-gray-600">
-          No books available at the moment.
-        </CardContent>
-      </Card>
-    ) : (
-      <div>
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-          {paginatedAllMaterials.map((item, index) => {
-            const globalIndex = (currentPageAll - 1) * itemsPerPage + index + 1;
-            return (
-              <div key={item._id} className="mx-auto w-60">
-                <div className="relative w-60 h-[350px] cursor-pointer" onClick={() => handleItemClick(item._id, item.author ? "general" : "material")}>
-                  <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-                  <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
-                    <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-                      {item.title}
-                    </h2>
-                    {item.type === "Video" ? (
-                      item.item_url ? (
-                        <div className="relative">
-                          <img
-                            src={getYouTubeThumbnail(item.item_url)}
-                            alt="Video thumbnail"
-                            className="w-60 h-[250px] object-cover"
-                            onError={(e) => (e.target.src = img2)} // Fallback to default image
-                          />
-                          {/* Play Icon */}
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
-                          </div>
-                        </div>
-                      ) : (
-                        <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                      )
-                    ) : (
-                      item.item_url ? (
-                        <img
-                          src={getFirstPageAsImage(item.item_url)}
-                          alt="First page preview"
-                          className="w-60 h-[250px] object-cover"
-                          onError={(e) => (e.target.src = img2)} // Fallback to default image
-                        />
-                      ) : (
-                        <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                      )
-                    )}
-                    <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-                      {globalIndex}
-                    </p>
-                    <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-                      {item.author || item.type}
-                    </h3>
-                  </div>
+            {selectedSubject === "all" && (
+              <div>
+                <div className="flex justify-center items-center md:items-start md:justify-start">
+                  <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
+                    Library
+                    <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+                  </h2>
                 </div>
-                <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-                  {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
-                </h2>
+                {combinedItemsForAll.length === 0 ? (
+                  <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
+                    <CardContent className="text-center p-4 text-gray-600">
+                      No books available at the moment.
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
+                      {paginatedAllMaterials.map((item, index) => {
+                        const globalIndex = (currentPageAll - 1) * itemsPerPage + index + 1;
+                        return (
+                          <div key={item._id} className="mx-auto w-60">
+                            <div className="relative w-60 h-[350px] cursor-pointer" onClick={() => handleItemClick(item._id, item.author ? "general" : "material")}>
+                              <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+                              <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
+                                <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+                                  {item.title}
+                                </h2>
+                                {item.type === "Video" ? (
+                                  item.item_url ? (
+                                    <div className="relative">
+                                      <img
+                                        src={getYouTubeThumbnail(item.item_url)}
+                                        alt="Video thumbnail"
+                                        className="w-60 h-[250px] object-cover"
+                                        onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                      />
+                                      {/* Play Icon */}
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                  )
+                                ) : (
+                                  item.item_url ? (
+                                    <img
+                                      src={getFirstPageAsImage(item.item_url)}
+                                      alt="First page preview"
+                                      className="w-60 h-[250px] object-cover"
+                                      onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                    />
+                                  ) : (
+                                    <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                  )
+                                )}
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                  {globalIndex}
+                                </p>
+                                <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+                                  {item.author || item.type}
+                                </h3>
+                              </div>
+                            </div>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
+                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
+                            </h2>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <PaginationControls
+                      currentPage={currentPageAll}
+                      totalPages={totalPagesAll}
+                      onPageChange={setCurrentPageAll}
+                    />
+                  </div>
+                )}
               </div>
-            );
-          })}
-        </div>
-        <PaginationControls
-          currentPage={currentPageAll}
-          totalPages={totalPagesAll}
-          onPageChange={setCurrentPageAll}
-        />
-      </div>
-    )}
-  </div>
-)}
+            )}
 
             {/* General Items Section */}
             {selectedSubject === "public" && (
@@ -377,34 +381,34 @@ const LibraryTeacherPage = () => {
                                   {item.title}
                                 </h2>
                                 {item.type === "Video" ? (
-                      item.item_url ? (
-                        <div className="relative">
-                          <img
-                            src={getYouTubeThumbnail(item.item_url)}
-                            alt="Video thumbnail"
-                            className="w-60 h-[250px] object-cover"
-                            onError={(e) => (e.target.src = img2)} // Fallback to default image
-                          />
-                          {/* Play Icon */}
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
-                          </div>
-                        </div>
-                      ) : (
-                        <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                      )
-                    ) : (
-                      item.item_url ? (
-                        <img
-                          src={getFirstPageAsImage(item.item_url)}
-                          alt="First page preview"
-                          className="w-60 h-[250px] object-cover"
-                          onError={(e) => (e.target.src = img2)} // Fallback to default image
-                        />
-                      ) : (
-                        <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                      )
-                    )}
+                                  item.item_url ? (
+                                    <div className="relative">
+                                      <img
+                                        src={getYouTubeThumbnail(item.item_url)}
+                                        alt="Video thumbnail"
+                                        className="w-60 h-[250px] object-cover"
+                                        onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                      />
+                                      {/* Play Icon */}
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                  )
+                                ) : (
+                                  item.item_url ? (
+                                    <img
+                                      src={getFirstPageAsImage(item.item_url)}
+                                      alt="First page preview"
+                                      className="w-60 h-[250px] object-cover"
+                                      onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                    />
+                                  ) : (
+                                    <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                  )
+                                )}
                                 <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
                                   {globalIndex}
                                 </p>
@@ -488,34 +492,34 @@ const LibraryTeacherPage = () => {
                                   {item.title}
                                 </h2>
                                 {item.type === "Video" ? (
-                      item.item_url ? (
-                        <div className="relative">
-                          <img
-                            src={getYouTubeThumbnail(item.item_url)}
-                            alt="Video thumbnail"
-                            className="w-60 h-[250px] object-cover"
-                            onError={(e) => (e.target.src = img2)} // Fallback to default image
-                          />
-                          {/* Play Icon */}
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
-                          </div>
-                        </div>
-                      ) : (
-                        <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                      )
-                    ) : (
-                      item.item_url ? (
-                        <img
-                          src={getFirstPageAsImage(item.item_url)}
-                          alt="First page preview"
-                          className="w-60 h-[250px] object-cover"
-                          onError={(e) => (e.target.src = img2)} // Fallback to default image
-                        />
-                      ) : (
-                        <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-                      )
-                    )}
+                                  item.item_url ? (
+                                    <div className="relative">
+                                      <img
+                                        src={getYouTubeThumbnail(item.item_url)}
+                                        alt="Video thumbnail"
+                                        className="w-60 h-[250px] object-cover"
+                                        onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                      />
+                                      {/* Play Icon */}
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                  )
+                                ) : (
+                                  item.item_url ? (
+                                    <img
+                                      src={getFirstPageAsImage(item.item_url)}
+                                      alt="First page preview"
+                                      className="w-60 h-[250px] object-cover"
+                                      onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                    />
+                                  ) : (
+                                    <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                  )
+                                )}
                                 <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
                                   {globalIndex}
                                 </p>
