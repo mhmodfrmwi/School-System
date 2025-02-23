@@ -332,6 +332,9 @@ const ManagerSchoolHubsDetailes = lazy(
 const ManagerSchoolHubsPrizes = lazy(
   () => import("./Features/Manager/components/Activites/SchoolHubsPrizes"),
 );
+const ManagerSchoolHubsParticipants = lazy(
+  () => import("./Features/Manager/components/Activites/SchoolHubsParticipants"),
+);
 const ManagerSchoolHubsAdd = lazy(
   () => import("./Features/Manager/components/Activites/AddSchoolHubs"),
 );
@@ -448,7 +451,7 @@ function App() {
               path="librarybooksenglish"
               element={<LibraryBooksEnglish />}
             />
-            
+
             <Route path="librarybooks" element={<LibraryBooksPage />} />
             <Route path="libraryvideos" element={<LibraryVideosPage />} />
             <Route path="motivation" element={<MotivationPage />} />
@@ -456,8 +459,8 @@ function App() {
               path="edit-student-profile"
               element={<EditStudentProfile />}
             />
-            <Route path="activities/detailes" element={<DetailesActivity />} />
-            <Route path="activities/prizes" element={<PrizesActivity />} />
+            <Route path="activities/detailes/:id" element={<DetailesActivity />} />
+            <Route path="activities/prizes/:id" element={<PrizesActivity />} />
             <Route path="activities/contests" element={<Contests />} />
             <Route path="activities/contests/createteam/:contestId" element={<CreateTeam />} />
             <Route path="activities/contests/teamdetails/:teamId" element={<TeamDetails />} />
@@ -517,10 +520,10 @@ function App() {
             />
             <Route path="school-hubs" element={<SchoolHubs />} />
             <Route
-              path="school-hubs/detailes"
+              path="school-hubs/detailes/:id"
               element={<SchoolHubsDetailes />}
             />
-            <Route path="school-hubs/prizes" element={<SchoolHubsPrizes />} />
+            <Route path="school-hubs/prizes/:id" element={<SchoolHubsPrizes />} />
             <Route path="contests" element={<ActivityContests />} />
             <Route path="contests/participants/:contestId" element={<ParticipantsContests />} />
             <Route path="contests/activity-form" element={<ActivityForm />} />
@@ -550,9 +553,9 @@ function App() {
               element={<AddMaterial />}
             />
             <Route
-            path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
-            element={<AllMaterialPage />}
-          />
+              path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
+              element={<AllMaterialPage />}
+            />
             <Route
               path="/teacher/materialform/:classId/:gradeSubjectSemesterId"
               element={<MaterialForm />}
@@ -609,12 +612,16 @@ function App() {
             />
             <Route path="school-hubs" element={<ManagerSchoolHubs />} />
             <Route
-              path="school-hubs/detailes"
+              path="school-hubs/detailes/:id"
               element={<ManagerSchoolHubsDetailes />}
             />
             <Route
-              path="school-hubs/prizes"
+              path="school-hubs/prizes/:id"
               element={<ManagerSchoolHubsPrizes />}
+            />
+            <Route
+              path="school-hubs/participants/:schoolHubId"
+              element={<ManagerSchoolHubsParticipants />}
             />
             <Route path="add-school-hubs" element={<ManagerSchoolHubsAdd />} />
             <Route
