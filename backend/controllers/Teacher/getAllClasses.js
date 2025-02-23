@@ -128,19 +128,42 @@ const getAllTeacherClasses = expressAsyncHandler(async (req, res) => {
       message: "No classes found for the teacher",
     });
   }
-  const response = classTeachers.map((ct) => {
-    return {
-      classId: ct.classId._id,
-      className: ct.classId.className,
-      subjectId: ct.subjectId._id,
-      subjectName: ct.subjectId.subjectName,
-      semesterId: ct.semester_id._id,
-      semesterName: ct.semester_id.semesterName,
-      academicYearId: ct.academicYear_id,
-      gradeId: ct.classId.gradeId,
-      gradeName: ct.classId.gradeId?.gradeName,
-    };
-  });
+
+  const response = await Promise.all(
+    classTeachers.map(async (ct) => {
+      const gradeSubject = await GradeSubject.findOne({
+        subjectId: ct.subjectId._id,
+        gradeId: ct.classId.gradeId._id,
+        academicYear_id: ct.academicYear_id._id,
+      });
+
+      let gradeSubjectSemesterId = null;
+      if (gradeSubject) {
+        const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+          grade_subject_id: gradeSubject._id,
+          semester_id: ct.semester_id._id,
+        });
+        if (gradeSubjectSemester) {
+          gradeSubjectSemesterId = gradeSubjectSemester._id;
+        }
+      }
+
+      return {
+        classId: ct.classId._id,
+        className: ct.classId.className,
+        subjectId: ct.subjectId._id,
+        subjectName: ct.subjectId.subjectName,
+        semesterId: ct.semester_id._id,
+        semesterName: ct.semester_id.semesterName,
+        academicYearId: ct.academicYear_id._id,
+        academicYearStart: ct.academicYear_id.startYear,
+        academicYearEnd: ct.academicYear_id.endYear,
+        gradeId: ct.classId.gradeId._id,
+        gradeName: ct.classId.gradeId?.gradeName,
+        gradeSubjectSemesterId,
+      };
+    })
+  );
 
   return res.status(200).json({
     status: 200,
