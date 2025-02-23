@@ -17,6 +17,8 @@ import ManagerVRTable from "./Features/Manager/components/VR/MangerVRTable";
 import ManagerVRForm from "./Features/Manager/components/VR/ManagerVRForm";
 import DashboardTeacher from "./Features/Teacher/pages/DashboardTeacher";
 import TitleUpdater from "./ui/TitleUpdater";
+import AllMaterialPage from "./Features/Teacher/components/courses/AllYearsMaterual/AllMaterialPage";
+import SeeAllVR from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllVR";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -301,7 +303,7 @@ const AddMaterial = lazy(
   () => import("./Features/Teacher/components/courses/AddMaterial"),
 );
 const AllCourses = lazy(
-  () => import("./Features/Teacher/components/courses/AllCourses"),
+  () => import("./Features/Teacher/components/courses/AllYearsMaterual/AllCourses"),
 );
 const CurrentCourse = lazy(
   () => import("./Features/Teacher/components/courses/CurrentCourses"),
@@ -548,11 +550,19 @@ function App() {
               element={<AddMaterial />}
             />
             <Route
+            path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
+            element={<AllMaterialPage />}
+          />
+            <Route
               path="/teacher/materialform/:classId/:gradeSubjectSemesterId"
               element={<MaterialForm />}
             />
             <Route
               path="/teacher/see-material/:grade_subject_semester_id"
+              element={<SeeMaterial />}
+            />
+            <Route
+              path="/teacher/see-all-material/:grade_subject_semester_id"
               element={<SeeMaterial />}
             />
             <Route
@@ -564,6 +574,10 @@ function App() {
             <Route
               path="/teacher/virtual-room/:grade_subject_semester_id"
               element={<SeeVR />}
+            />
+            <Route
+              path="/teacher/all-virtual-room/:grade_subject_semester_id"
+              element={<SeeAllVR />}
             />
             <Route
               path="/teacher/VR-form/:classId/:gradeSubjectSemesterId"
