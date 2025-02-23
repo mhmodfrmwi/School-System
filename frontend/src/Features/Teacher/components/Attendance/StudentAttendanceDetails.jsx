@@ -81,32 +81,34 @@ function StudentAttendanceDetails() {
       </div>
 
       {Object.keys(attendanceStats).length > 0 ? (
-        <table className="mt-6 w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-[#117C90] text-white">
-              <th className="border p-2">Date</th>
-              <th className="border p-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(attendanceStats).map(
-              ([date, { isAbsent, isPresent }]) => (
-                <tr key={date} className="border text-center">
-                  <td className="border p-2">{date}</td>
-                  <td className="border p-2 font-bold">
-                    {isAbsent ? (
-                      <span className="text-red-500">Absent</span>
-                    ) : isPresent ? (
-                      <span className="text-green-500">Present</span>
-                    ) : (
-                      "N/A"
-                    )}
-                  </td>
-                </tr>
-              ),
-            )}
-          </tbody>
-        </table>
+        <div className="mt-6 max-h-[300px] overflow-auto border border-gray-300">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-[#117C90] text-white">
+                <th className="border p-2">Date</th>
+                <th className="border p-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(attendanceStats).map(
+                ([date, { isAbsent, isPresent }]) => (
+                  <tr key={date} className="border text-center">
+                    <td className="border p-2">{date}</td>
+                    <td className="border p-2 font-bold">
+                      {isAbsent ? (
+                        <span className="text-red-500">Absent</span>
+                      ) : isPresent ? (
+                        <span className="text-green-500">Present</span>
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
+                  </tr>
+                ),
+              )}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <div className="mt-4 text-center text-gray-500">
           No attendance records found.
