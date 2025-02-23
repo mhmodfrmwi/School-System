@@ -1,6 +1,13 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createSchoolHub } from "../ManagerRedux/schoolhubSlice";
 
 function AddSchoolHubForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.schoolhub);
+
   const [formData, setFormData] = useState({
     title: "",
     registrationStart: "",
@@ -8,11 +15,11 @@ function AddSchoolHubForm() {
     contestDate: "",
     location: "",
     prizes: [""],
-    details: [""],
+    details: "",
   });
 
   const handleChange = (e, index, field) => {
-    if (field === "prizes" || field === "details") {
+    if (field === "prizes") {
       const updatedArray = [...formData[field]];
       updatedArray[index] = e.target.value;
       setFormData({ ...formData, [field]: updatedArray });
@@ -25,9 +32,26 @@ function AddSchoolHubForm() {
     setFormData({ ...formData, [field]: [...formData[field], ""] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+   
+    const cleanedPrizes = formData.prizes.filter((prize) => prize.trim() !== "");
+
+   
+    try {
+      await dispatch(
+        createSchoolHub({
+          ...formData,
+          prizes: cleanedPrizes,
+        })
+      ).unwrap(); 
+
+     
+      navigate("/manager/school-hubs");
+    } catch (err) {
+      console.error("Failed to create school hub:", err);
+    }
   };
 
   return (
@@ -48,7 +72,7 @@ function AddSchoolHubForm() {
               required
             />
           </div>
-          
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700">Registration Start</label>
@@ -96,7 +120,7 @@ function AddSchoolHubForm() {
               />
             </div>
           </div>
-          
+
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">Prizes</label>
             {formData.prizes.map((prize, index) => (
@@ -109,32 +133,33 @@ function AddSchoolHubForm() {
                 className="mb-2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
               />
             ))}
-            <button type="button" onClick={() => addField("prizes")} className="mt-2 text-[#117C90] ">+ Add Prize</button>
+            <button type="button" onClick={() => addField("prizes")} className="mt-2 text-[#117C90] ">
+              + Add Prize
+            </button>
           </div>
-          
+
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">Details</label>
-            {formData.details.map((detail, index) => (
-              <textarea
-                key={index}
-                value={detail}
-                onChange={(e) => handleChange(e, index, "details")}
-                placeholder={`Level ${index + 1} Details`}
-                className="mb-2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                rows="3"
-              />
-            ))}
-            <button type="button" onClick={() => addField("details")} className="mt-2 text-[#117C90] ">+ Add Detail</button>
+            <textarea
+              value={formData.details}
+              onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+              placeholder="Enter school hub details"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              rows="3"
+            />
           </div>
-          
+
           <div className="mt-6">
             <button
               type="submit"
-              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+              disabled={loading}
+              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] disabled:bg-gray-400"
             >
-              Save
+              {loading ? "Saving..." : "Save"}
             </button>
           </div>
+
+          {error && <p className="mt-4 text-center text-red-500">{error}</p>}
         </form>
       </div>
     </div>

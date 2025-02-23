@@ -32,6 +32,11 @@ import StudentVirtualRooms from "./Features/Student/components/StudentRedux/virt
 import teamReducer from "./Features/Student/components/StudentRedux/teamSlice";
 import studentcontestReducer from "./Features/Student/components/StudentRedux/studentcontestSlice";
 import participantsReducer from "./Features/Teacher/components/TeacherRedux/participantsSlice";
+import schoolhubReducer from "./Features/Manager/components/ManagerRedux/schoolhubSlice";
+import participantReducer from "./Features/Manager/components/ManagerRedux/participantSlice";
+import teacherSchoolHubReducer from "./Features/Teacher/components/TeacherRedux/schoolhubSlice";
+import studentSchoolHubReducer from "./Features/Student/components/StudentRedux/schoolhubSlice";
+import LibraryTeacherReducer from "./Features/Teacher/components/TeacherRedux/LibraryTeacherSlice";
 
 
 const store = configureStore({
@@ -66,9 +71,14 @@ const store = configureStore({
     classTeachers: classTeachersReducer,
     teacherSchedule: teacherScheduleReducer,
     teacherLibrary: teacherLibraryReducer,
+    libraryTeacher: LibraryTeacherReducer,
     libraryStudent: libraryStudentReducer,
     StudentvirtualRooms: StudentVirtualRooms,
     participants: participantsReducer,
+    schoolhub: schoolhubReducer,
+    participant: participantReducer,
+    teacherSchoolHub: teacherSchoolHubReducer,
+    studentSchoolHub: studentSchoolHubReducer,
   },
 });
 

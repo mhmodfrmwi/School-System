@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Fetch general library items (PDFs)
+// Fetch general library items
 export const fetchLibraryItems = createAsyncThunk(
-  "libraryStudent/fetchLibraryItems",
+  "libraryTeacher/fetchLibraryItems",
   async (_, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
@@ -17,44 +17,16 @@ export const fetchLibraryItems = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch library items");
       }
-      // Filter general items to include only PDFs
-      const pdfItems = data.libraryItems.filter(item => item.type === "PDF");
-      return pdfItems;
+      return data.libraryItems;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Fetch general library items (Videos)
-export const fetchLibraryVideoItems = createAsyncThunk(
-  "libraryStudent/fetchLibraryVideoItems",
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = sessionStorage.getItem("token");
-      if (!token) return rejectWithValue("No token found");
-
-      const response = await fetch("http://localhost:4000/api/v1/general/get-library-items", {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch library items");
-      }
-      // Filter general items to include only videos
-      const videoItems = data.libraryItems.filter(item => item.type === "Video");
-      return videoItems;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-// Fetch subjects in the library (filtered to include only subjects with PDF materials)
+// Fetch subjects in the library
 export const fetchLibrarySubjects = createAsyncThunk(
-  "libraryStudent/fetchLibrarySubjects",
+  "libraryTeacher/fetchLibrarySubjects",
   async (_, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
@@ -69,87 +41,17 @@ export const fetchLibrarySubjects = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch subjects");
       }
-
-      // Fetch materials for each subject and filter subjects with at least one PDF material
-      const subjectsWithPDF = await Promise.all(
-        data.subjects.map(async (subject) => {
-          const materialsResponse = await fetch(
-            `http://localhost:4000/api/v1/general/get-material-for-general-subject-in-library/${subject.id}`,
-            {
-              method: "GET",
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          const materialsData = await materialsResponse.json();
-          if (!materialsResponse.ok) {
-            throw new Error(materialsData.message || "Failed to fetch materials");
-          }
-
-          // Check if the subject has at least one PDF material
-          const hasPDF = materialsData.materials.some(material => material.type === "PDF");
-          return hasPDF ? subject : null;
-        })
-      );
-
-      // Filter out null values (subjects without PDF materials)
-      return subjectsWithPDF.filter(subject => subject !== null);
+      return data.subjects;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Fetch subjects in the library (filtered to include only subjects with video materials)
-export const fetchLibraryVideoSubjects = createAsyncThunk(
-  "libraryStudent/fetchLibraryVideoSubjects",
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = sessionStorage.getItem("token");
-      if (!token) return rejectWithValue("No token found");
-
-      const response = await fetch("http://localhost:4000/api/v1/general/get-general-subjects-in-library", {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch subjects");
-      }
-
-      // Fetch materials for each subject and filter subjects with at least one video material
-      const subjectsWithVideo = await Promise.all(
-        data.subjects.map(async (subject) => {
-          const materialsResponse = await fetch(
-            `http://localhost:4000/api/v1/general/get-material-for-general-subject-in-library/${subject.id}`,
-            {
-              method: "GET",
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          const materialsData = await materialsResponse.json();
-          if (!materialsResponse.ok) {
-            throw new Error(materialsData.message || "Failed to fetch materials");
-          }
-
-          // Check if the subject has at least one video material
-          const hasVideo = materialsData.materials.some(material => material.type === "Video");
-          return hasVideo ? subject : null;
-        })
-      );
-
-      // Filter out null values (subjects without video materials)
-      return subjectsWithVideo.filter(subject => subject !== null);
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-// Fetch materials for a subject with type filter
+// Fetch materials for a subject
 export const fetchMaterialsForSubject = createAsyncThunk(
-  "libraryStudent/fetchMaterialsForSubject",
-  async ({ subjectId, type }, { rejectWithValue }) => {
+  "libraryTeacher/fetchMaterialsForSubject",
+  async (subjectId, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
@@ -163,10 +65,7 @@ export const fetchMaterialsForSubject = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch materials");
       }
-
-      // Filter materials by type if type is provided
-      const filteredMaterials = type ? data.materials.filter(material => material.type === type) : data.materials;
-      return filteredMaterials;
+      return data.materials;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -175,7 +74,7 @@ export const fetchMaterialsForSubject = createAsyncThunk(
 
 // Fetch details of a library item
 export const fetchLibraryItemDetails = createAsyncThunk(
-  "libraryStudent/fetchLibraryItemDetails",
+  "libraryTeacher/fetchLibraryItemDetails",
   async (itemId, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
@@ -199,7 +98,7 @@ export const fetchLibraryItemDetails = createAsyncThunk(
 
 // Fetch details of a material
 export const fetchMaterialDetails = createAsyncThunk(
-  "libraryStudent/fetchMaterialDetails",
+  "libraryTeacher/fetchMaterialDetails",
   async (materialId, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
@@ -223,7 +122,7 @@ export const fetchMaterialDetails = createAsyncThunk(
 
 // View Library Item (Mark as Viewed)
 export const viewLibraryItem = createAsyncThunk(
-  "libraryStudent/viewLibraryItem",
+  "libraryTeacher/viewLibraryItem",
   async (itemId, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
@@ -245,130 +144,91 @@ export const viewLibraryItem = createAsyncThunk(
   }
 );
 
-const libraryStudentSlice = createSlice({
-  name: "libraryStudent",
+const libraryTeacherSlice = createSlice({
+  name: "libraryTeacher",
   initialState: {
-    generalItems: [], // For PDFs
-    videoItems: [], // For Videos
-    subjects: [], // For PDF subjects
-    videoSubjects: [], // For Video subjects
-    materials: [], // For PDF, Video materials
-    itemDetails: null,
-    materialDetails: null,
+    teacherGeneralItems: [],
+    teacherSubjects: [],
+    teacherMaterials: [],
+    teacherItemDetails: null,
+    teacherMaterialDetails: null,
     loading: false,
     error: null,
-    viewedItems: {},
+    teacherViewedItems: {},
   },
   reducers: {
     clearLibraryError: (state) => {
       state.error = null;
     },
     clearDetails: (state) => {
-      state.itemDetails = null;
-      state.materialDetails = null;
+      state.teacherItemDetails = null;
+      state.teacherMaterialDetails = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Fetch PDF Items
       .addCase(fetchLibraryItems.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchLibraryItems.fulfilled, (state, action) => {
         state.loading = false;
-        state.generalItems = action.payload;
+        state.teacherGeneralItems = action.payload;
       })
       .addCase(fetchLibraryItems.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-      // Fetch Video Items
-      .addCase(fetchLibraryVideoItems.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchLibraryVideoItems.fulfilled, (state, action) => {
-        state.loading = false;
-        state.videoItems = action.payload;
-      })
-      .addCase(fetchLibraryVideoItems.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Fetch PDF Subjects
       .addCase(fetchLibrarySubjects.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchLibrarySubjects.fulfilled, (state, action) => {
         state.loading = false;
-        state.subjects = action.payload;
+        state.teacherSubjects = action.payload;
       })
       .addCase(fetchLibrarySubjects.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-      // Fetch Video Subjects
-      .addCase(fetchLibraryVideoSubjects.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchLibraryVideoSubjects.fulfilled, (state, action) => {
-        state.loading = false;
-        state.videoSubjects = action.payload;
-      })
-      .addCase(fetchLibraryVideoSubjects.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Fetch Materials for Subject
       .addCase(fetchMaterialsForSubject.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchMaterialsForSubject.fulfilled, (state, action) => {
         state.loading = false;
-        state.materials = action.payload;
+        state.teacherMaterials = action.payload;
       })
       .addCase(fetchMaterialsForSubject.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-      // Fetch Library Item Details
       .addCase(fetchLibraryItemDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchLibraryItemDetails.fulfilled, (state, action) => {
         state.loading = false;
-        state.itemDetails = action.payload;
+        state.teacherItemDetails = action.payload;
       })
       .addCase(fetchLibraryItemDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-      // Fetch Material Details
       .addCase(fetchMaterialDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchMaterialDetails.fulfilled, (state, action) => {
         state.loading = false;
-        state.materialDetails = action.payload;
+        state.teacherMaterialDetails = action.payload;
       })
       .addCase(fetchMaterialDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-      // View Library Item
       .addCase(viewLibraryItem.pending, (state) => {
         state.loading = true;
       })
       .addCase(viewLibraryItem.fulfilled, (state, action) => {
         state.loading = false;
         const { library_item_id, last_view_date } = action.payload;
-        state.viewedItems[library_item_id] = last_view_date;
+        state.teacherViewedItems[library_item_id] = last_view_date;
       })
       .addCase(viewLibraryItem.rejected, (state, action) => {
         state.loading = false;
@@ -377,5 +237,5 @@ const libraryStudentSlice = createSlice({
   },
 });
 
-export const { clearLibraryError, clearDetails } = libraryStudentSlice.actions;
-export default libraryStudentSlice.reducer;
+export const { clearLibraryError, clearDetails } = libraryTeacherSlice.actions;
+export default libraryTeacherSlice.reducer;
