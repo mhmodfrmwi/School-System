@@ -15,6 +15,14 @@ const schoolHubSchema = new Schema(
       type: Date,
       required: true,
     },
+    contestDate: {
+      type: Date,
+      required: true,
+    },
+    location: {
+      type: String,
+      required: true,
+    },
     details: {
       type: String,
       required: true,

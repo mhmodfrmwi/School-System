@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchVR, deleteVR } from "../TeacherRedux/VRSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { fetchVR } from "../../TeacherRedux/VRSlice";
+import { useParams } from "react-router-dom";
 const formatStartTime = (startTime) => {
     const date = new Date(startTime);
-    const formattedDate = date.toISOString().split('T')[0]; // التاريخ
-    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // الوقت
+    const formattedDate = date.toISOString().split('T')[0]; 
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); 
     return `${formattedDate} (${formattedTime})`;
 };
-const SeeVR = () => {
+const SeeAllVR = () => {
     const { grade_subject_semester_id } = useParams();
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { teacherVirtualRooms, error } = useSelector((state) => state.teacherVirtualRooms);
     console.log("Redux State:", teacherVirtualRooms, "Error:", error);
     const [isLoading, setIsLoading] = useState(true);
@@ -30,29 +26,6 @@ const SeeVR = () => {
         }
     }, [dispatch, grade_subject_semester_id]);
 
-    const handleDelete = async (id) => {
-        if (!id || id.length !== 24) {
-            toast.error("Invalid VR ID");
-            return;
-        }
-
-        if (window.confirm("Are you sure you want to delete this VR?")) {
-            try {
-                const resultAction = await dispatch(deleteVR(id));
-
-                if (deleteVR.fulfilled.match(resultAction)) {
-                } else {
-                    toast.error(resultAction.payload || "Failed to delete material");
-                }
-            } catch (error) {
-                toast.error(error.message || "An unexpected error occurred");
-            }
-        }
-    };
-
-    const handleEdit = (id) => {
-        navigate(`/teacher/edit-vr/${id}`);
-    };
 
     return (
         <div className="flex flex-col p-4">
@@ -102,14 +75,6 @@ const SeeVR = () => {
                                                                 View File
                                                             </a>
                                                         </td>
-                                                        <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
-                                                            <button onClick={() => handleEdit(room._id)} className="text-[#117C90] hover:text-[#244856]">
-                                                                <FontAwesomeIcon icon={faEdit} />
-                                                            </button>
-                                                            <button onClick={() => handleDelete(room._id)} className="text-[#E74833] hover:text-[#244856]">
-                                                                <FontAwesomeIcon icon={faTrashAlt} />
-                                                            </button>
-                                                        </td>
                                                     </tr>
                                                 ))
                                             ) : (
@@ -132,4 +97,4 @@ const SeeVR = () => {
     );
 };
 
-export default SeeVR;
+export default SeeAllVR;

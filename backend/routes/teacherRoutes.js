@@ -45,19 +45,13 @@ const {
 const {
   getScheduleForSpecificTeacher,
 } = require("../controllers/Teacher/scheduleController");
-///////////////////////////////////
-const {
-  createSchoolHub,
-  getAllSchoolHubs,
-  getSchoolHub,
-  updateSchoolHub,
-  deleteSchoolHub,
-} = require("../controllers/manager/SHController");
-const validateManager = require("../middlewares/validateManager");
 const {
   createMaterialForLibrary,
   deleteMaterialForLibrary,
 } = require("../controllers/Teacher/MatrialForLibrary");
+const {
+  getAllSchoolHubs
+} = require("../controllers/Teacher/schoolHubController");
 
 const router = express.Router();
 router.post("/login", login);
@@ -135,15 +129,6 @@ router.get(
   validateTeacher,
   getScheduleForSpecificTeacher
 );
-////////////////////
-router.post("/schoolhub", validateJwt, validateManager, createSchoolHub);
-router
-  .route("/school-hub/:id")
-  .get(validateJwt, validateManager, getSchoolHub)
-  .patch(validateJwt, validateManager, updateSchoolHub)
-  .delete(validateJwt, validateManager, deleteSchoolHub);
-
-router.get("/school-hub", validateJwt, validateManager, getAllSchoolHubs);
 
 //material for library
 router.post(
@@ -159,4 +144,5 @@ router.delete(
   validateTeacher,
   deleteMaterialForLibrary
 );
+router.get("/school-hub", validateJwt, validateTeacher, getAllSchoolHubs);
 module.exports = router;

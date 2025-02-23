@@ -17,6 +17,8 @@ import ManagerVRTable from "./Features/Manager/components/VR/MangerVRTable";
 import ManagerVRForm from "./Features/Manager/components/VR/ManagerVRForm";
 import DashboardTeacher from "./Features/Teacher/pages/DashboardTeacher";
 import TitleUpdater from "./ui/TitleUpdater";
+import AllMaterialPage from "./Features/Teacher/components/courses/AllYearsMaterual/AllMaterialPage";
+import SeeAllVR from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllVR";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -301,7 +303,7 @@ const AddMaterial = lazy(
   () => import("./Features/Teacher/components/courses/AddMaterial"),
 );
 const AllCourses = lazy(
-  () => import("./Features/Teacher/components/courses/AllCourses"),
+  () => import("./Features/Teacher/components/courses/AllYearsMaterual/AllCourses"),
 );
 const CurrentCourse = lazy(
   () => import("./Features/Teacher/components/courses/CurrentCourses"),
@@ -329,6 +331,9 @@ const ManagerSchoolHubsDetailes = lazy(
 );
 const ManagerSchoolHubsPrizes = lazy(
   () => import("./Features/Manager/components/Activites/SchoolHubsPrizes"),
+);
+const ManagerSchoolHubsParticipants = lazy(
+  () => import("./Features/Manager/components/Activites/SchoolHubsParticipants"),
 );
 const ManagerSchoolHubsAdd = lazy(
   () => import("./Features/Manager/components/Activites/AddSchoolHubs"),
@@ -451,8 +456,8 @@ function App() {
               path="edit-student-profile"
               element={<EditStudentProfile />}
             />
-            <Route path="activities/detailes" element={<DetailesActivity />} />
-            <Route path="activities/prizes" element={<PrizesActivity />} />
+            <Route path="activities/detailes/:id" element={<DetailesActivity />} />
+            <Route path="activities/prizes/:id" element={<PrizesActivity />} />
             <Route path="activities/contests" element={<Contests />} />
             <Route path="activities/contests/createteam/:contestId" element={<CreateTeam />} />
             <Route path="activities/contests/teamdetails/:teamId" element={<TeamDetails />} />
@@ -512,10 +517,10 @@ function App() {
             />
             <Route path="school-hubs" element={<SchoolHubs />} />
             <Route
-              path="school-hubs/detailes"
+              path="school-hubs/detailes/:id"
               element={<SchoolHubsDetailes />}
             />
-            <Route path="school-hubs/prizes" element={<SchoolHubsPrizes />} />
+            <Route path="school-hubs/prizes/:id" element={<SchoolHubsPrizes />} />
             <Route path="contests" element={<ActivityContests />} />
             <Route path="contests/participants/:contestId" element={<ParticipantsContests />} />
             <Route path="contests/activity-form" element={<ActivityForm />} />
@@ -545,11 +550,19 @@ function App() {
               element={<AddMaterial />}
             />
             <Route
+              path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
+              element={<AllMaterialPage />}
+            />
+            <Route
               path="/teacher/materialform/:classId/:gradeSubjectSemesterId"
               element={<MaterialForm />}
             />
             <Route
               path="/teacher/see-material/:grade_subject_semester_id"
+              element={<SeeMaterial />}
+            />
+            <Route
+              path="/teacher/see-all-material/:grade_subject_semester_id"
               element={<SeeMaterial />}
             />
             <Route
@@ -561,6 +574,10 @@ function App() {
             <Route
               path="/teacher/virtual-room/:grade_subject_semester_id"
               element={<SeeVR />}
+            />
+            <Route
+              path="/teacher/all-virtual-room/:grade_subject_semester_id"
+              element={<SeeAllVR />}
             />
             <Route
               path="/teacher/VR-form/:classId/:gradeSubjectSemesterId"
@@ -592,12 +609,16 @@ function App() {
             />
             <Route path="school-hubs" element={<ManagerSchoolHubs />} />
             <Route
-              path="school-hubs/detailes"
+              path="school-hubs/detailes/:id"
               element={<ManagerSchoolHubsDetailes />}
             />
             <Route
-              path="school-hubs/prizes"
+              path="school-hubs/prizes/:id"
               element={<ManagerSchoolHubsPrizes />}
+            />
+            <Route
+              path="school-hubs/participants/:schoolHubId"
+              element={<ManagerSchoolHubsParticipants />}
             />
             <Route path="add-school-hubs" element={<ManagerSchoolHubsAdd />} />
             <Route
