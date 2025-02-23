@@ -118,7 +118,8 @@ const LibraryBooksPage = () => {
   const [allMaterials, setAllMaterials] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const handleItemClick = (itemId, type) => {
-    dispatch(viewLibraryItem(itemId)); 
+    if(type === "general") {
+    dispatch(viewLibraryItem(itemId)); }
     navigate(`/student/library/${type}/${itemId}`);
   };
   // const handleItemClick = (itemId, type) => {
@@ -156,18 +157,20 @@ const LibraryBooksPage = () => {
 
   useEffect(() => {
     if (selectedSubject === "all") {
-      Promise.all(subjects.map((subject) => dispatch(fetchMaterialsForSubject(subject.id))))
+      Promise.all(subjects.map((subject) => dispatch(fetchMaterialsForSubject({ subjectId: subject.id, type: "PDF" }))))
         .then((responses) => {
           const combinedMaterials = responses.map((res) => res.payload).flat();
           setAllMaterials(combinedMaterials);
         })
         .catch((err) => console.error("Error fetching all materials:", err));
     } else if (selectedSubject !== "public" && selectedSubject.id) {
-      dispatch(fetchMaterialsForSubject(selectedSubject.id));
+      dispatch(fetchMaterialsForSubject({ subjectId: selectedSubject.id, type: "PDF" }));
     }
   }, [selectedSubject, subjects, dispatch]);
 
-  const displayedMaterials = selectedSubject === "all" ? allMaterials : materials;
+  const displayedMaterials = selectedSubject === "all" 
+  ? allMaterials.filter(material => material.type === "PDF") 
+  : materials.filter(material => material.type === "PDF");
 
   const filteredMaterials = displayedMaterials.filter((book) => {
     return (
@@ -327,7 +330,7 @@ const LibraryBooksPage = () => {
             {globalIndex} {/* Use globalIndex instead of index + 1 */}
           </p>
           <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-            {item.author || item.type}
+            {item.author || item.uploaded_by?.fullName}
           </h3>
         </div>
       </div>
@@ -482,7 +485,7 @@ const LibraryBooksPage = () => {
             {globalIndex} {/* Use globalIndex instead of index + 1 */}
           </p>
           <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-            {item.type}
+            {item.uploaded_by?.fullName}
           </h3>
         </div>
       </div>

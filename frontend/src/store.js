@@ -36,6 +36,7 @@ import schoolhubReducer from "./Features/Manager/components/ManagerRedux/schoolh
 import participantReducer from "./Features/Manager/components/ManagerRedux/participantSlice";
 import teacherSchoolHubReducer from "./Features/Teacher/components/TeacherRedux/schoolhubSlice";
 import studentSchoolHubReducer from "./Features/Student/components/StudentRedux/schoolhubSlice";
+import LibraryTeacherReducer from "./Features/Teacher/components/TeacherRedux/LibraryTeacherSlice";
 
 
 const store = configureStore({
@@ -70,6 +71,7 @@ const store = configureStore({
     classTeachers: classTeachersReducer,
     teacherSchedule: teacherScheduleReducer,
     teacherLibrary: teacherLibraryReducer,
+    libraryTeacher: LibraryTeacherReducer,
     libraryStudent: libraryStudentReducer,
     StudentvirtualRooms: StudentVirtualRooms,
     participants: participantsReducer,

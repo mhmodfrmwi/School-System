@@ -314,6 +314,9 @@ const MaterialForm = lazy(
 const SeeMaterial = lazy(
   () => import("./Features/Teacher/components/courses/SeeMaterial"),
 );
+const LibraryTeacherPage = lazy(
+  () => import("./Features/Teacher/components/Library/LibraryTeacherPage"),
+)
 const MaterialDetails = lazy(
   () => import("./Features/Student/components/courses/MaterialDetails"),
 );
@@ -360,7 +363,7 @@ function App() {
         draggable
         pauseOnHover
       />
-      <Suspense fallback>
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route index element={<Navigate replace to="onboarding" />} />
           <Route path="onboarding" element={<OnBoarding />} />
@@ -593,7 +596,12 @@ function App() {
               path="all-materials-library/:id"
               element={<MaterialsInLibrary />}
             />
+            <Route path="teacher-library" element={<LibraryTeacherPage />} />
+            
+            <Route path="library/:type/:itemId" element={<LibraryItemDetailsPage />} />
           </Route>
+          
+
           {/* ///////////////manager pages//////////////////// */}
           <Route
             path="manager"
@@ -632,6 +640,7 @@ function App() {
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
+          
         </Routes>
       </Suspense>
     </BrowserRouter>
