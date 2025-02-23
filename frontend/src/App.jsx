@@ -157,8 +157,8 @@ const LibraryVideosPage = lazy(
 const LibraryBooksPage = lazy(
   () => import("./Features/Student/components/Library/LibraryBooksPage"),
 );
-const LibraryBooksEnglish = lazy(
-  () => import("./Features/Student/components/Library/LibraryBooks"),
+const LibraryItemDetailsPage = lazy(
+  () => import("./Features/Student/components/Library/LibraryItemDetailsPage"),
 );
 const Parents = lazy(() => import("./Features/Parent/pages/Parents"));
 const DashboardParent = lazy(
@@ -442,13 +442,10 @@ function App() {
             <Route path="schedule" element={<Schedule />} />
             <Route path="schedule/exam" element={<ScheduleExam />} />
             <Route path="library" element={<LibraryPage />} />
-            <Route
-              path="librarybooksenglish"
-              element={<LibraryBooksEnglish />}
-            />
             
             <Route path="librarybooks" element={<LibraryBooksPage />} />
             <Route path="libraryvideos" element={<LibraryVideosPage />} />
+            <Route path="library/:type/:itemId" element={<LibraryItemDetailsPage />} />
             <Route path="motivation" element={<MotivationPage />} />
             <Route
               path="edit-student-profile"

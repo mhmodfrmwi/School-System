@@ -31,7 +31,7 @@ const LibraryPage = () => {
         {/* Books Section */}
         <div
           className="border p-8 w-full sm:w-[80%] md:w-[48%] h-[250px] flex items-center justify-center text-center cursor-pointer rounded-2xl border-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] transition-all transform hover:scale-105 hover:translate-y-2 mx-auto mt-4"
-          onClick={() => handleNavigate("/student/librarybooksenglish")}
+          onClick={() => handleNavigate("/student/librarybooks")}
         >
           <span className="text-[3rem] font-bold text-white gradient-stroke">
             Books
@@ -41,7 +41,7 @@ const LibraryPage = () => {
         {/* Videos Section */}
         <div
           className="border p-8 w-full sm:w-[80%] md:w-[48%] h-[250px] flex items-center justify-center text-center cursor-pointer rounded-2xl border-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] transition-all transform hover:scale-105 hover:translate-y-2 mx-auto mt-4"
-          onClick={() => handleNavigate("/videos")}
+          onClick={() => handleNavigate("/student/libraryvideos")}
         >
           <span className="text-[3rem] font-bold text-white gradient-stroke">
             Videos

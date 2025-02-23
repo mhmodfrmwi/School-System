@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLibraryItems, fetchLibrarySubjects, fetchMaterialsForSubject } from "../StudentRedux/libraryStudentSlice";
+import { fetchLibraryItems, fetchLibrarySubjects, fetchMaterialsForSubject,viewLibraryItem } from "../StudentRedux/libraryStudentSlice";
 import img1 from "../../../../assets/cover22 1.png";
 import img2 from "../../../../assets/Rectangle 314.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { FaSpinner } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 // Helper function to extract file ID
 const extractFileId = (url) => {
@@ -108,6 +109,7 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
 };
 
 const LibraryBooksPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { generalItems, subjects, materials, loading, error } = useSelector((state) => state.libraryStudent);
   const [selectedSubject, setSelectedSubject] = useState("all");
@@ -115,6 +117,25 @@ const LibraryBooksPage = () => {
   const [selectedSemester, setSelectedSemester] = useState("");
   const [allMaterials, setAllMaterials] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const handleItemClick = (itemId, type) => {
+    dispatch(viewLibraryItem(itemId)); 
+    navigate(`/student/library/${type}/${itemId}`);
+  };
+  // const handleItemClick = (itemId, type) => {
+  //   // Log the item before updating
+  //   console.log("Before update:", viewedItems[itemId]);
+  
+  //   // Dispatch the action and wait for the result
+  //   dispatch(viewLibraryItem(itemId)).then((result) => {
+  //     if (result.payload) {
+  //       console.log("After update:", result.payload);
+  //     }
+  //     // Navigate to the item's page
+  //     navigate(`/student/library/${type}/${itemId}`);
+  //   });
+  // };
+  
+  
 
   // Pagination states
   const [currentPageAll, setCurrentPageAll] = useState(1);
@@ -285,7 +306,8 @@ const LibraryBooksPage = () => {
   const globalIndex = (currentPageAll - 1) * itemsPerPage + index + 1;
   return (
     <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px]">
+      <div className="relative w-60 h-[350px] cursor-pointer" 
+      onClick={() => handleItemClick(item._id, item.author ? "general" : "material")}>
         <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
         <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
         <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
@@ -348,7 +370,7 @@ const LibraryBooksPage = () => {
   const globalIndex = (currentPagePublic - 1) * itemsPerPage + index + 1;
   return (
     <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px]">
+      <div className="relative w-60 h-[350px] cursor-pointer" onClick={() => handleItemClick(item._id, "general")}>
         <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
         <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
           <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
@@ -440,7 +462,7 @@ const LibraryBooksPage = () => {
   const globalIndex = (currentPageSubject - 1) * itemsPerPage + index + 1;
   return (
     <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px]">
+      <div className="relative w-60 h-[350px] cursor-pointer" onClick={() => handleItemClick(item._id, "material")}>
         <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
         <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
           <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
