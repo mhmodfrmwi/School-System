@@ -17,12 +17,21 @@ const AllCourses = ({ onSearchChange }) => {
     onSearchChange(e.target.value);
   };
 
-  const { classTeachers = [], message, loading } = useSelector((state) => state.classTeachers || {});
-  const filteredTeachers = classTeachers.filter((classteacher) =>
-    classteacher.subjectName.toLowerCase().includes(searchText.toLowerCase()) ||
-    classteacher.gradeName.toLowerCase().includes(searchText.toLowerCase()) ||
-    classteacher.className.toLowerCase().includes(searchText.toLowerCase()) ||
-    classteacher.semesterName.toLowerCase().includes(searchText.toLowerCase())
+  const {
+    classTeachers = [],
+    message,
+    loading,
+  } = useSelector((state) => state.classTeachers || {});
+  const filteredTeachers = classTeachers.filter(
+    (classteacher) =>
+      classteacher.subjectName
+        .toLowerCase()
+        .includes(searchText.toLowerCase()) ||
+      classteacher.gradeName.toLowerCase().includes(searchText.toLowerCase()) ||
+      classteacher.className.toLowerCase().includes(searchText.toLowerCase()) ||
+      classteacher.semesterName
+        .toLowerCase()
+        .includes(searchText.toLowerCase()),
   );
 
   useEffect(() => {
@@ -35,15 +44,15 @@ const AllCourses = ({ onSearchChange }) => {
     return (
       <>
         <CourseToggle />
-        <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
+        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
           <FontAwesomeIcon
             icon={faCalendar}
-            className="text-6xl text-gray-400 mb-4"
+            className="mb-4 text-6xl text-gray-400"
           />
-          <p className="text-xl font-semibold font-poppins text-gray-600 mb-2">
+          <p className="mb-2 font-poppins text-xl font-semibold text-gray-600">
             No Teacher Classes Found
           </p>
-          <p className="text-gray-500 mb-4 font-poppins text-center max-w-xl">
+          <p className="mb-4 max-w-xl text-center font-poppins text-gray-500">
             It seems like there are no teacher classes available at the moment.
           </p>
         </div>
@@ -52,11 +61,11 @@ const AllCourses = ({ onSearchChange }) => {
   }
   return (
     <>
-      <div className="mx-auto px-4 w-[90%] md:px-6 lg:px-0">
+      <div className="mx-auto w-[90%] px-4 md:px-6 lg:px-0">
         <CourseToggle />
         <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
           <div className="flex flex-col">
-            <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+            <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
               All Courses
             </h1>
             <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[140px]"></div>
@@ -69,7 +78,7 @@ const AllCourses = ({ onSearchChange }) => {
                 <input
                   type="text"
                   placeholder="Search ..."
-                  className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins border-2 border-gray-300 text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
+                  className="w-full rounded-md border-2 border-gray-300 bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
                   value={searchText}
                   onChange={handleSearchChange}
                 />
@@ -80,36 +89,39 @@ const AllCourses = ({ onSearchChange }) => {
       </div>
 
       {/* Grid of Courses */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center p-6">
+      <div className="grid grid-cols-1 justify-items-center gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredTeachers.map((classteacher, index) => (
           <div
-            key={classteacher.classId || index}
+            key={classteacher.gradeSubjectSemesterId || index}
             onClick={() => {
               const classId = classteacher.classId; // Use classId directly
-              const gradeSubjectSemesterId = classteacher.gradeSubjectSemesterId; // Use semesterId
+              const gradeSubjectSemesterId =
+                classteacher.gradeSubjectSemesterId; // Use semesterId
               if (classId && gradeSubjectSemesterId) {
-                navigate(`/teacher/allmaterial/${classId}/${gradeSubjectSemesterId}`);
+                navigate(
+                  `/teacher/allmaterial/${classId}/${gradeSubjectSemesterId}`,
+                );
               } else {
                 console.error("classId or gradeSubjectSemesterId is undefined");
               }
             }}
-            className="relative bg-slate-100 rounded-xl shadow-lg p-5 w-64 text-center border border-gray-300 flex flex-col items-center cursor-pointer hover:bg-slate-200 transition-colors"
+            className="relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
           >
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-3">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
               <img src={bag} alt="bag" className="h-7 w-7" />
             </div>
-            <p className="text-lg font-poppins font-semibold">
+            <p className="font-poppins text-lg font-semibold">
               {classteacher.subjectName || "N/A"}
             </p>
             <div className="flex justify-start gap-4">
-              <p className="text-[#197080] font-poppins font-semibold">
+              <p className="font-poppins font-semibold text-[#197080]">
                 {classteacher.gradeName || "N/A"}
               </p>
-              <p className="text-[#197080] font-poppins font-semibold">
+              <p className="font-poppins font-semibold text-[#197080]">
                 Class: {classteacher.className || "N/A"}
               </p>
             </div>
-            <p className="text-[#197080] font-poppins">
+            <p className="font-poppins text-[#197080]">
               {classteacher.semesterName || "N/A"}
             </p>
             <p className="font-poppins">
@@ -117,7 +129,6 @@ const AllCourses = ({ onSearchChange }) => {
                 ? `${classteacher.academicYearStart} - ${classteacher.academicYearEnd}`
                 : "N/A"}
             </p>
-
           </div>
         ))}
       </div>
