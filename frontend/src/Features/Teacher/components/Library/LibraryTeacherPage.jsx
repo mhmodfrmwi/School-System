@@ -127,7 +127,6 @@ const LibraryTeacherPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleItemClick = (itemId, type) => {
-    dispatch(viewLibraryItem(itemId));
     navigate(`/teacher/library/${type}/${itemId}`);
   };
 
