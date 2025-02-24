@@ -1,30 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLibraryItems, fetchLibrarySubjects, fetchMaterialsForSubject,viewLibraryItem } from "../StudentRedux/libraryStudentSlice";
+import {
+  fetchLibraryItems,
+  fetchAllGeneralAndMaterialPDFs,
+  fetchMaterialOfSubjectTypePDF,
+  viewLibraryItem,
+  fetchSubjectsWithPDFMaterial,
+  viewMaterial
+} from "../StudentRedux/libraryStudentSlice";
 import img1 from "../../../../assets/cover22 1.png";
 import img2 from "../../../../assets/Rectangle 314.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-// Helper function to extract file ID
-const extractFileId = (url) => {
-  const match = url.match(/\/file\/d\/([^/]+)/);
-  return match ? match[1] : null;
-};
-
-const extractFileIdForGoogleSlides = (url) => {
-  const match = url.match(/presentation\/d\/([^/]+)/);
-  return match ? match[1] : null;
-};
-
-// Helper function to get the first page as an image
+// Helper function to extract file ID and get the first page as an image
 const getFirstPageAsImage = (url) => {
   if (!url) return img2;
 
   // Handle Google Drive Files
   if (url.includes("drive.google.com/file/d/")) {
-    const fileId = extractFileId(url);
+    const fileId = url.match(/\/file\/d\/([^/]+)/)?.[1];
     if (fileId) {
       return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400-h350`;
     }
@@ -32,7 +28,7 @@ const getFirstPageAsImage = (url) => {
 
   // Handle Google Slides
   if (url.includes("docs.google.com/presentation/d/")) {
-    const fileId = extractFileIdForGoogleSlides(url);
+    const fileId = url.match(/presentation\/d\/([^/]+)/)?.[1];
     if (fileId) {
       return `https://docs.google.com/presentation/d/${fileId}/export/png?id=${fileId}&pageid=p1`;
     }
@@ -50,27 +46,6 @@ const getFirstPageAsImage = (url) => {
 
   return img2; // Fallback image
 };
-
-// Helper function to get filtered grades and semesters
-const getFilteredGradesAndSemesters = (materials) => {
-  const grades = new Set();
-  const semesters = new Set();
-
-  materials.forEach((item) => {
-    if (item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName) {
-      grades.add(item.grade_subject_semester_id.grade_subject_id.gradeId.gradeName.replace("Grade ", ""));
-    }
-    if (item.grade_subject_semester_id?.semester_id?.semesterName) {
-      semesters.add(item.grade_subject_semester_id.semester_id.semesterName.replace("Semester ", ""));
-    }
-  });
-
-  return {
-    grades: Array.from(grades).sort(),
-    semesters: Array.from(semesters).sort(),
-  };
-};
-
 // Pagination Controls Component
 const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
   return (
@@ -107,90 +82,124 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
     </div>
   );
 };
-
 const LibraryBooksPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { generalItems, subjects, materials, loading, error } = useSelector((state) => state.libraryStudent);
-  const [selectedSubject, setSelectedSubject] = useState("all");
-  const [selectedGrade, setSelectedGrade] = useState("");
-  const [selectedSemester, setSelectedSemester] = useState("");
-  const [allMaterials, setAllMaterials] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const handleItemClick = (itemId, type) => {
-    if(type === "general") {
-    dispatch(viewLibraryItem(itemId)); }
-    navigate(`/student/library/${type}/${itemId}`);
-  };
-  // const handleItemClick = (itemId, type) => {
-  //   // Log the item before updating
-  //   console.log("Before update:", viewedItems[itemId]);
-  
-  //   // Dispatch the action and wait for the result
-  //   dispatch(viewLibraryItem(itemId)).then((result) => {
-  //     if (result.payload) {
-  //       console.log("After update:", result.payload);
-  //     }
-  //     // Navigate to the item's page
-  //     navigate(`/student/library/${type}/${itemId}`);
-  //   });
-  // };
-  
-  
+  const {
+    generalItems,
+    generalPDFs,
+    pdfMaterials,
+    pdfSubjects,
+    loading,
+    error,
+  } = useSelector((state) => state.libraryStudent);
 
-  // Pagination states
-  const [currentPageAll, setCurrentPageAll] = useState(1);
-  const [currentPagePublic, setCurrentPagePublic] = useState(1);
-  const [currentPageSubject, setCurrentPageSubject] = useState(1);
+  const [selectedSubject, setSelectedSubject] = useState("all");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // State for each tab
+  const [tabStates, setTabStates] = useState({
+    all: {
+      currentPage: 1,
+      selectedGrade: "",
+      selectedSemester: "",
+    },
+    public: {
+      currentPage: 1,
+      selectedGrade: "",
+      selectedSemester: "",
+    },
+    subject: {
+      currentPage: 1,
+      selectedGrade: "",
+      selectedSemester: "",
+    },
+  });
 
   const itemsPerPage = 8; // Number of items per page
 
+  // Get the current tab's state
+  const currentTabState = tabStates[selectedSubject === "all" ? "all" : selectedSubject === "public" ? "public" : "subject"];
+  const { currentPage, selectedGrade, selectedSemester } = currentTabState;
+
   useEffect(() => {
     dispatch(fetchLibraryItems());
-    dispatch(fetchLibrarySubjects());
+    dispatch(fetchSubjectsWithPDFMaterial());
   }, [dispatch]);
 
   useEffect(() => {
-    setSelectedGrade("");
-    setSelectedSemester("");
-  }, [selectedSubject]);
-
-  useEffect(() => {
     if (selectedSubject === "all") {
-      Promise.all(subjects.map((subject) => dispatch(fetchMaterialsForSubject({ subjectId: subject.id, type: "PDF" }))))
-        .then((responses) => {
-          const combinedMaterials = responses.map((res) => res.payload).flat();
-          setAllMaterials(combinedMaterials);
-        })
-        .catch((err) => console.error("Error fetching all materials:", err));
+      dispatch(fetchAllGeneralAndMaterialPDFs());
     } else if (selectedSubject !== "public" && selectedSubject.id) {
-      dispatch(fetchMaterialsForSubject({ subjectId: selectedSubject.id, type: "PDF" }));
+      dispatch(fetchMaterialOfSubjectTypePDF(selectedSubject.id));
     }
-  }, [selectedSubject, subjects, dispatch]);
+  }, [selectedSubject, dispatch]);
 
-  const displayedMaterials = selectedSubject === "all" 
-  ? allMaterials.filter(material => material.type === "PDF") 
-  : materials.filter(material => material.type === "PDF");
+  const handleItemClick = (itemId, type) => {
+    if (type === "general") dispatch(viewLibraryItem(itemId));
+    if (type === "material") dispatch(viewMaterial(itemId));
+    navigate(`/student/library/${type}/${itemId}`);
+  };
 
-  const filteredMaterials = displayedMaterials.filter((book) => {
+  const displayedMaterials =
+    selectedSubject === "all" ? generalPDFs : pdfMaterials;
+
+  const filteredMaterials = displayedMaterials.filter((material) => {
     return (
-      (!selectedGrade || book.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName === `Grade ${selectedGrade}`) &&
-      (!selectedSemester || book.grade_subject_semester_id?.semester_id?.semesterName === `Semester ${selectedSemester}`)
+      (!selectedGrade ||
+        material.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName ===
+          `Grade ${selectedGrade}`) &&
+      (!selectedSemester ||
+        material.grade_subject_semester_id?.semester_id?.semesterName ===
+          `Semester ${selectedSemester}`)
     );
   });
 
-  const { grades, semesters } = getFilteredGradesAndSemesters(filteredMaterials);
+  const { grades, semesters } = (() => {
+    const grades = new Set();
+    const semesters = new Set();
 
-  // Combine generalItems and filteredMaterials for "All" section
-  const combinedItemsForAll = selectedSubject === "all" ? [...generalItems, ...filteredMaterials] : [];
+    filteredMaterials.forEach((material) => {
+      if (material.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName) {
+        grades.add(
+          material.grade_subject_semester_id.grade_subject_id.gradeId.gradeName.replace(
+            "Grade ",
+            ""
+          )
+        );
+      }
+      if (material.grade_subject_semester_id?.semester_id?.semesterName) {
+        semesters.add(
+          material.grade_subject_semester_id.semester_id.semesterName.replace(
+            "Semester ",
+            ""
+          )
+        );
+      }
+    });
+
+    return {
+      grades: Array.from(grades).sort(),
+      semesters: Array.from(semesters).sort(),
+    };
+  })();
 
   // Paginated data
-  const paginatedGeneralItems = generalItems.slice((currentPagePublic - 1) * itemsPerPage, currentPagePublic * itemsPerPage);
-  const paginatedAllMaterials = combinedItemsForAll.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage);
-  const paginatedSubjectMaterials = filteredMaterials.slice((currentPageSubject - 1) * itemsPerPage, currentPageSubject * itemsPerPage);
+  const paginatedGeneralItems = generalItems.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const paginatedAllMaterials = generalPDFs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const paginatedSubjectMaterials = filteredMaterials.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   // Total pages
-  const totalPagesAll = Math.ceil(combinedItemsForAll.length / itemsPerPage);
+  const totalPagesAll = Math.ceil(generalPDFs.length / itemsPerPage);
   const totalPagesPublic = Math.ceil(generalItems.length / itemsPerPage);
   const totalPagesSubject = Math.ceil(filteredMaterials.length / itemsPerPage);
 
@@ -219,6 +228,14 @@ const LibraryBooksPage = () => {
             onClick={() => {
               setSelectedSubject("all");
               setIsSidebarOpen(!isSidebarOpen);
+              setTabStates((prev) => ({
+                ...prev,
+                all: {
+                  currentPage: 1,
+                  selectedGrade: "",
+                  selectedSemester: "",
+                },
+              }));
             }}
           >
             <input
@@ -237,6 +254,14 @@ const LibraryBooksPage = () => {
             onClick={() => {
               setSelectedSubject("public");
               setIsSidebarOpen(!isSidebarOpen);
+              setTabStates((prev) => ({
+                ...prev,
+                public: {
+                  currentPage: 1,
+                  selectedGrade: "",
+                  selectedSemester: "",
+                },
+              }));
             }}
           >
             <input
@@ -250,13 +275,21 @@ const LibraryBooksPage = () => {
               Public
             </span>
           </li>
-          {subjects.map((subject, index) => (
+          {pdfSubjects.map((subject, index) => (
             <li
               key={subject.id || index}
               className="flex items-center cursor-pointer p-2 hover:bg-gray-200 rounded"
               onClick={() => {
                 setSelectedSubject(subject);
                 setIsSidebarOpen(!isSidebarOpen);
+                setTabStates((prev) => ({
+                  ...prev,
+                  subject: {
+                    currentPage: 1,
+                    selectedGrade: "",
+                    selectedSemester: "",
+                  },
+                }));
               }}
             >
               <input
@@ -296,7 +329,7 @@ const LibraryBooksPage = () => {
                     <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                   </h2>
                 </div>
-                {combinedItemsForAll.length === 0 ? (
+                {!loading && generalPDFs.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
                       No books available at the moment.
@@ -305,46 +338,58 @@ const LibraryBooksPage = () => {
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                    {paginatedAllMaterials.map((item, index) => {
-  const globalIndex = (currentPageAll - 1) * itemsPerPage + index + 1;
-  return (
-    <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px] cursor-pointer" 
-      onClick={() => handleItemClick(item._id, item.author ? "general" : "material")}>
-        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-        <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
-        <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-            {item.title}
-          </h2>
-          {item.item_url ? (
-            <img
-              src={getFirstPageAsImage(item.item_url)}
-              alt="First page preview"
-              className="w-60 h-[250px] object-cover"
-              onError={(e) => (e.target.src = img2)} // Fallback to default image
-            />
-          ) : (
-            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-          )}
-          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-            {globalIndex} {/* Use globalIndex instead of index + 1 */}
-          </p>
-          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-            {item.author || item.uploaded_by?.fullName}
-          </h3>
-        </div>
-      </div>
-      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-        {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
-      </h2>
-    </div>
-  );
-})}
+                      {paginatedAllMaterials.map((item, index) => {
+                        const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                        return (
+                          <div key={item._id} className="mx-auto w-60">
+                            <div
+                              className="relative w-60 h-[350px] cursor-pointer"
+                              onClick={() =>
+                                handleItemClick(item._id, item.author ? "general" : "material")
+                              }
+                            >
+                              <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+                              <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
+                                <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+                                  {item.title}
+                                </h2>
+                                {item.item_url ? (
+                                  <img
+                                    src={getFirstPageAsImage(item.item_url)}
+                                    alt="First page preview"
+                                    className="w-60 h-[250px] object-cover"
+                                    onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                  />
+                                ) : (
+                                  <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                )}
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                  {globalIndex}
+                                </p>
+                                <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+                                  {item.author || item.uploaded_by?.fullName}
+                                </h3>
+                              </div>
+                            </div>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
+                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
+                            </h2>
+                          </div>
+                        );
+                      })}
                     </div>
                     <PaginationControls
-                      currentPage={currentPageAll}
+                      currentPage={currentPage}
                       totalPages={totalPagesAll}
-                      onPageChange={setCurrentPageAll}
+                      onPageChange={(page) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          all: {
+                            ...prev.all,
+                            currentPage: page,
+                          },
+                        }));
+                      }}
                     />
                   </div>
                 )}
@@ -369,43 +414,54 @@ const LibraryBooksPage = () => {
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                    {paginatedGeneralItems.map((item, index) => {
-  const globalIndex = (currentPagePublic - 1) * itemsPerPage + index + 1;
-  return (
-    <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px] cursor-pointer" onClick={() => handleItemClick(item._id, "general")}>
-        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-        <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
-          <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-            {item.title}
-          </h2>
-          {item.item_url ? (
-            <img
-              src={getFirstPageAsImage(item.item_url)}
-              alt="First page preview"
-              className="w-60 h-[250px] object-cover"
-              onError={(e) => (e.target.src = img2)} // Fallback to default image
-            />
-          ) : (
-            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-          )}
-          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-            {globalIndex} {/* Use globalIndex instead of index + 1 */}
-          </p>
-          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-            {item.author}
-          </h3>
-        </div>
-      </div>
-      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
-    </div>
-  );
-})}
+                      {paginatedGeneralItems.map((item, index) => {
+                        const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                        return (
+                          <div key={item._id} className="mx-auto w-60">
+                            <div
+                              className="relative w-60 h-[350px] cursor-pointer"
+                              onClick={() => handleItemClick(item._id, "general")}
+                            >
+                              <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+                              <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
+                                <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+                                  {item.title}
+                                </h2>
+                                {item.item_url ? (
+                                  <img
+                                    src={getFirstPageAsImage(item.item_url)}
+                                    alt="First page preview"
+                                    className="w-60 h-[250px] object-cover"
+                                    onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                  />
+                                ) : (
+                                  <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                )}
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                  {globalIndex}
+                                </p>
+                                <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+                                  {item.author}
+                                </h3>
+                              </div>
+                            </div>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
+                          </div>
+                        );
+                      })}
                     </div>
                     <PaginationControls
-                      currentPage={currentPagePublic}
+                      currentPage={currentPage}
                       totalPages={totalPagesPublic}
-                      onPageChange={setCurrentPagePublic}
+                      onPageChange={(page) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          public: {
+                            ...prev.public,
+                            currentPage: page,
+                          },
+                        }));
+                      }}
                     />
                   </div>
                 )}
@@ -427,7 +483,15 @@ const LibraryBooksPage = () => {
                     <select
                       className="p-2 border rounded"
                       value={selectedGrade}
-                      onChange={(e) => setSelectedGrade(e.target.value)}
+                      onChange={(e) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          subject: {
+                            ...prev.subject,
+                            selectedGrade: e.target.value,
+                          },
+                        }));
+                      }}
                     >
                       <option value="">All Grades</option>
                       {grades.map((grade) => (
@@ -441,7 +505,15 @@ const LibraryBooksPage = () => {
                     <select
                       className="p-2 border rounded"
                       value={selectedSemester}
-                      onChange={(e) => setSelectedSemester(e.target.value)}
+                      onChange={(e) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          subject: {
+                            ...prev.subject,
+                            selectedSemester: e.target.value,
+                          },
+                        }));
+                      }}
                     >
                       <option value="">All Semesters</option>
                       {semesters.map((semester) => (
@@ -461,46 +533,57 @@ const LibraryBooksPage = () => {
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                    {paginatedSubjectMaterials.map((item, index) => {
-  const globalIndex = (currentPageSubject - 1) * itemsPerPage + index + 1;
-  return (
-    <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px] cursor-pointer" onClick={() => handleItemClick(item._id, "material")}>
-        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-        <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
-          <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-            {item.title}
-          </h2>
-          {item.item_url ? (
-            <img
-              src={getFirstPageAsImage(item.item_url)}
-              alt="First page preview"
-              className="w-60 h-[250px] object-cover"
-              onError={(e) => (e.target.src = img2)} // Fallback to default image
-            />
-          ) : (
-            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-          )}
-          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-            {globalIndex} {/* Use globalIndex instead of index + 1 */}
-          </p>
-          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-            {item.uploaded_by?.fullName}
-          </h3>
-        </div>
-      </div>
-      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-        {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName} -{" "}
-        {item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName}
-      </h2>
-    </div>
-  );
- })}
+                      {paginatedSubjectMaterials.map((item, index) => {
+                        const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                        return (
+                          <div key={item._id} className="mx-auto w-60">
+                            <div
+                              className="relative w-60 h-[350px] cursor-pointer"
+                              onClick={() => handleItemClick(item._id, "material")}
+                            >
+                              <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+                              <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
+                                <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+                                  {item.title}
+                                </h2>
+                                {item.item_url ? (
+                                  <img
+                                    src={getFirstPageAsImage(item.item_url)}
+                                    alt="First page preview"
+                                    className="w-60 h-[250px] object-cover"
+                                    onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                  />
+                                ) : (
+                                  <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                )}
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                  {globalIndex}
+                                </p>
+                                <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+                                  {item.uploaded_by?.fullName}
+                                </h3>
+                              </div>
+                            </div>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
+                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName} -{" "}
+                              {item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName}
+                            </h2>
+                          </div>
+                        );
+                      })}
                     </div>
                     <PaginationControls
-                      currentPage={currentPageSubject}
+                      currentPage={currentPage}
                       totalPages={totalPagesSubject}
-                      onPageChange={setCurrentPageSubject}
+                      onPageChange={(page) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          subject: {
+                            ...prev.subject,
+                            currentPage: page,
+                          },
+                        }));
+                      }}
                     />
                   </div>
                 )}
