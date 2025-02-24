@@ -38,7 +38,37 @@ const SubjectsInLibrary = ({ onSearchChange }) => {
 
   return (
     <>
-      <div className="mx-auto w-[90%] px-4 md:px-6 lg:px-0">
+      <div className="mx-auto mb-10 w-[90%] px-4 md:px-6 lg:px-0">
+        <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-2 rounded-3xl bg-gray-100 md:grid-cols-3">
+          <button
+            className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
+            onClick={() => navigate("/teacher/teacher-library")}
+          >
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+              1
+            </span>
+            Library
+          </button>
+
+          <button
+            className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
+            onClick={() => navigate("/teacher/all-subjects-library")}
+          >
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
+              2
+            </span>
+            Teacher Library
+          </button>
+          <button
+            className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
+            onClick={() => navigate("/teacher/items-in-library")}
+          >
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+              3
+            </span>
+            General Library
+          </button>
+        </div>
         <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
           <div className="flex flex-col">
             <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">

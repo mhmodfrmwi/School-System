@@ -37,7 +37,7 @@ import participantReducer from "./Features/Manager/components/ManagerRedux/parti
 import teacherSchoolHubReducer from "./Features/Teacher/components/TeacherRedux/schoolhubSlice";
 import studentSchoolHubReducer from "./Features/Student/components/StudentRedux/schoolhubSlice";
 import LibraryTeacherReducer from "./Features/Teacher/components/TeacherRedux/LibraryTeacherSlice";
-
+import generalLibraryReducer from "./Features/Teacher/components/TeacherRedux/generalLibrarySlice";
 
 const store = configureStore({
   reducer: {
@@ -79,6 +79,7 @@ const store = configureStore({
     participant: participantReducer,
     teacherSchoolHub: teacherSchoolHubReducer,
     studentSchoolHub: studentSchoolHubReducer,
+    generalLibrary: generalLibraryReducer,
   },
 });
 

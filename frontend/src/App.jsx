@@ -20,6 +20,11 @@ import TitleUpdater from "./ui/TitleUpdater";
 import AllMaterialPage from "./Features/Teacher/components/courses/AllYearsMaterual/AllMaterialPage";
 import SeeAllVR from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllVR";
 
+import ItemsInLIbrary from "./Features/Teacher/components/Library/itemsInLIbrary";
+import ItemInLibrary from "./Features/Teacher/components/Library/itemInLibrary";
+import LibraryItemForm from "./Features/Teacher/components/Library/libraryItemForm";
+import UpdateItemLIbrary from "./Features/Teacher/components/Library/updateItemLIbrary";
+
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
 );
@@ -303,7 +308,8 @@ const AddMaterial = lazy(
   () => import("./Features/Teacher/components/courses/AddMaterial"),
 );
 const AllCourses = lazy(
-  () => import("./Features/Teacher/components/courses/AllYearsMaterual/AllCourses"),
+  () =>
+    import("./Features/Teacher/components/courses/AllYearsMaterual/AllCourses"),
 );
 const CurrentCourse = lazy(
   () => import("./Features/Teacher/components/courses/CurrentCourses"),
@@ -316,7 +322,7 @@ const SeeMaterial = lazy(
 );
 const LibraryTeacherPage = lazy(
   () => import("./Features/Teacher/components/Library/LibraryTeacherPage"),
-)
+);
 const MaterialDetails = lazy(
   () => import("./Features/Student/components/courses/MaterialDetails"),
 );
@@ -336,7 +342,8 @@ const ManagerSchoolHubsPrizes = lazy(
   () => import("./Features/Manager/components/Activites/SchoolHubsPrizes"),
 );
 const ManagerSchoolHubsParticipants = lazy(
-  () => import("./Features/Manager/components/Activites/SchoolHubsParticipants"),
+  () =>
+    import("./Features/Manager/components/Activites/SchoolHubsParticipants"),
 );
 const ManagerSchoolHubsAdd = lazy(
   () => import("./Features/Manager/components/Activites/AddSchoolHubs"),
@@ -450,21 +457,36 @@ function App() {
             <Route path="schedule" element={<Schedule />} />
             <Route path="schedule/exam" element={<ScheduleExam />} />
             <Route path="library" element={<LibraryPage />} />
-            
+
             <Route path="librarybooks" element={<LibraryBooksPage />} />
             <Route path="libraryvideos" element={<LibraryVideosPage />} />
-            <Route path="library/:type/:itemId" element={<LibraryItemDetailsPage />} />
+            <Route
+              path="library/:type/:itemId"
+              element={<LibraryItemDetailsPage />}
+            />
             <Route path="motivation" element={<MotivationPage />} />
             <Route
               path="edit-student-profile"
               element={<EditStudentProfile />}
             />
-            <Route path="activities/detailes/:id" element={<DetailesActivity />} />
+            <Route
+              path="activities/detailes/:id"
+              element={<DetailesActivity />}
+            />
             <Route path="activities/prizes/:id" element={<PrizesActivity />} />
             <Route path="activities/contests" element={<Contests />} />
-            <Route path="activities/contests/createteam/:contestId" element={<CreateTeam />} />
-            <Route path="activities/contests/teamdetails/:teamId" element={<TeamDetails />} />
-            <Route path="activities/contests/edit-team/:teamId" element={<EditTeam />} />
+            <Route
+              path="activities/contests/createteam/:contestId"
+              element={<CreateTeam />}
+            />
+            <Route
+              path="activities/contests/teamdetails/:teamId"
+              element={<TeamDetails />}
+            />
+            <Route
+              path="activities/contests/edit-team/:teamId"
+              element={<EditTeam />}
+            />
             <Route path="activities" element={<Activities />} />
             <Route path="virtualrooms" element={<VirtualRooms />} />
             <Route path="allcourses" element={<AllCouses />} />
@@ -523,9 +545,15 @@ function App() {
               path="school-hubs/detailes/:id"
               element={<SchoolHubsDetailes />}
             />
-            <Route path="school-hubs/prizes/:id" element={<SchoolHubsPrizes />} />
+            <Route
+              path="school-hubs/prizes/:id"
+              element={<SchoolHubsPrizes />}
+            />
             <Route path="contests" element={<ActivityContests />} />
-            <Route path="contests/participants/:contestId" element={<ParticipantsContests />} />
+            <Route
+              path="contests/participants/:contestId"
+              element={<ParticipantsContests />}
+            />
             <Route path="contests/activity-form" element={<ActivityForm />} />
             <Route
               path="contests/edit-activity-form/:id"
@@ -536,7 +564,7 @@ function App() {
             <Route path="currentCourse" element={<CurrentCourse />} />
             <Route path="allcourses" element={<AllCourses />} />
             <Route
-              path="currentCourseforattendance"
+              path="currentcourseforattendance"
               element={<CurrentCourseForAttendance />}
             />
             <Route
@@ -596,11 +624,23 @@ function App() {
               path="all-materials-library/:id"
               element={<MaterialsInLibrary />}
             />
+
+            <Route path="library-item-form" element={<LibraryItemForm />} />
+
+            <Route path="items-in-library" element={<ItemsInLIbrary />} />
+
+            <Route path="item-in-library/:id" element={<ItemInLibrary />} />
+            <Route
+              path="update-item-library/:id"
+              element={<UpdateItemLIbrary />}
+            />
+
             <Route path="teacher-library" element={<LibraryTeacherPage />} />
-            
-            <Route path="library/:type/:itemId" element={<LibraryItemDetailsPage />} />
+            <Route
+              path="library/:type/:itemId"
+              element={<LibraryItemDetailsPage />}
+            />
           </Route>
-          
 
           {/* ///////////////manager pages//////////////////// */}
           <Route
@@ -640,7 +680,6 @@ function App() {
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
-          
         </Routes>
       </Suspense>
     </BrowserRouter>
