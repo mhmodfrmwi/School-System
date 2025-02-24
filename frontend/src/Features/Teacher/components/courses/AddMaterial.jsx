@@ -34,7 +34,6 @@ const AddMaterial = () => {
     }
 
     if (targetUrl) {
-      console.log("Navigating to:", targetUrl);
       navigate(targetUrl);
     }
   };
@@ -43,9 +42,11 @@ const AddMaterial = () => {
   const pdfMaterials = useSelector((state) => state.pdfMaterials.pdfMaterials || []);
   const teacherVirtualRooms = useSelector((state) => state.teacherVirtualRooms.teacherVirtualRooms || []);
   useEffect(() => {
-    dispatch(fetchClassTeacher());
-  }, [dispatch]);
-
+    if (classId) {
+      dispatch(fetchClassTeacher(classId));
+    }
+  }, [dispatch, classId]);
+  
   useEffect(() => {
     if (gradeSubjectSemesterId) {
       dispatch(fetchMaterials(gradeSubjectSemesterId));
@@ -56,13 +57,10 @@ const AddMaterial = () => {
   if (loading) return <div>Loading...</div>;
   if (message) return <div>{message}</div>;
 
-  const classteacher = classTeachers.length > 0 ? classTeachers[0] : null;
+  const classteacher = classTeachers.find(teacher => teacher.classId?._id === classId) || null;
   const videoCount = pdfMaterials.filter((material) => material.type === "Video").length;
   const pdfCount = pdfMaterials.filter((material) => material.type === "PDF").length;
   const vrCount = teacherVirtualRooms.length;
-
-  console.log("Teacher Virtual Rooms:", teacherVirtualRooms); // Log virtual rooms
-  console.log("VR Count:", vrCount); // Log VR count
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [

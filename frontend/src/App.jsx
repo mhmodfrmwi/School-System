@@ -24,6 +24,7 @@ import ItemsInLIbrary from "./Features/Teacher/components/Library/itemsInLIbrary
 import ItemInLibrary from "./Features/Teacher/components/Library/itemInLibrary";
 import LibraryItemForm from "./Features/Teacher/components/Library/libraryItemForm";
 import UpdateItemLIbrary from "./Features/Teacher/components/Library/updateItemLIbrary";
+import SeeAllMaterial from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllMaterial";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -594,7 +595,7 @@ function App() {
             />
             <Route
               path="/teacher/see-all-material/:grade_subject_semester_id"
-              element={<SeeMaterial />}
+              element={<SeeAllMaterial />}
             />
             <Route
               path="update-material/:materialId"
