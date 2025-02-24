@@ -46,9 +46,6 @@ const SeeAllMaterial = () => {
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                         FileUrl
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Actions
-                      </th>
                     </tr>
                   </thead>
                   <tbody>

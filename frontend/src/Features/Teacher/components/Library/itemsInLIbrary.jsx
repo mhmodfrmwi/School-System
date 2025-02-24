@@ -131,6 +131,14 @@ const ItemsInLibrary = () => {
                         <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                           <button
                             onClick={() =>
+                              navigate(`/teacher/item-in-library/${item._id}`)
+                            } // navigate to item details page
+                            className="text-[#117C90] transition duration-300 hover:text-[#244856]"
+                          >
+                            <FontAwesomeIcon icon={faEye} className="text-lg" />
+                          </button>
+                          <button
+                            onClick={() =>
                               navigate(
                                 `/teacher/update-item-library/${item._id}`,
                               )
@@ -150,14 +158,6 @@ const ItemsInLibrary = () => {
                               icon={faTrashAlt}
                               className="text-lg"
                             />
-                          </button>
-                          <button
-                            onClick={() =>
-                              navigate(`/teacher/item-in-library/${item._id}`)
-                            } // navigate to item details page
-                            className="text-[#117C90] transition duration-300 hover:text-[#244856]"
-                          >
-                            <FontAwesomeIcon icon={faEye} className="text-lg" />
                           </button>
                         </td>
                       </tr>

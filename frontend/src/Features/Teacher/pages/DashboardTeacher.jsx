@@ -103,7 +103,7 @@ const DashboardTeacher = () => {
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[125px]"></div>
             </div>
-            <div className="grid grid-cols-1  justify-items-center  gap-10 pt-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 ml-0 justify-items-center  gap-10 pt-6 sm:grid-cols-2 xl:grid-cols-3">
               {classTeachers.map((classteacher, index) => (
                 <div
                   key={classteacher?.classId || index}
