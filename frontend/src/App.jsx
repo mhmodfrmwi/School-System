@@ -25,6 +25,9 @@ import ItemInLibrary from "./Features/Teacher/components/Library/itemInLibrary";
 import LibraryItemForm from "./Features/Teacher/components/Library/libraryItemForm";
 import UpdateItemLIbrary from "./Features/Teacher/components/Library/updateItemLIbrary";
 import SeeAllMaterial from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllMaterial";
+import QuestionForm from "./Features/Teacher/components/courses/QuestionBank/FormQuestionBank";
+import SeeMyQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeMyQuestions";
+import SeeAllQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeAllQuestions";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -581,6 +584,9 @@ function App() {
               path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId"
               element={<AddMaterial />}
             />
+            <Route path="question-bank-form/:gradeSubjectSemesterId"element={<QuestionForm />}/>
+            <Route path="my-question-bank/:gradeSubjectSemesterId/my-questions"element={<SeeMyQuestion />}/>
+            <Route path="all-question-bank/:gradeSubjectSemesterId/all-questions"element={<SeeAllQuestion />}/>
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}
