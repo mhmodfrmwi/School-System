@@ -31,7 +31,20 @@ const getQuestionsBySubjectForStudent = expressAsyncHandler(
 
       const gradeSubjectSemester = await GradeSubjectSemester.findById(
         gradeSubjectSemesterId
-      );
+      )
+      .populate({
+        path: "grade_subject_id",
+        populate: [
+          { path: "subjectId"  },
+          { path: "academicYear_id" },
+          { path: "gradeId" },
+        ],
+      })
+      .populate({
+        path: "semester_id",
+        populate: { path: "academicYear_id" },
+      });
+      
       if (!gradeSubjectSemester) {
         return res.status(404).json({
           status: 404,
@@ -48,7 +61,6 @@ const getQuestionsBySubjectForStudent = expressAsyncHandler(
           message: "GradeSubject not found.",
         });
       }
-
       const questions = await Question.find({
         subjectId: gradeSubject.subjectId,
         gradeId: student.gradeId,
