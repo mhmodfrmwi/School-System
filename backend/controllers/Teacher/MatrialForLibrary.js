@@ -6,6 +6,9 @@ const libraryItemForGradeValidationSchema = require("../../validations/libraryIt
 const ClassTeacher = require("../../DB/classTeacherModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const LibraryItemsForGrade = require("../../DB/LibraryItemsForGrades");
+const LibraryItem = require("../../DB/LibraryItem");
+const StudentLibraryItem = require("../../DB/Student-LibraryItem");
+const LibraryMaterialView = require("../../DB/libraryMaterialView");
 
 const defaultFieldsToExclude = "-__v -createdAt -updatedAt";
 
@@ -281,6 +284,273 @@ const getMaterialFromLibraryById = expressAsyncHandler(async (req, res) => {
   });
 });
 
+const getSubjectsThatHasMaterialTypePdf = expressAsyncHandler(
+  async (req, res) => {
+    const query = LibraryItemsForGrade.find({ type: "PDF" }).select(
+      defaultFieldsToExclude
+    );
+    const materials = await populateLibraryItem(query).lean();
+
+    const subjectsMap = new Map();
+    materials.forEach((material) => {
+      const subject =
+        material.grade_subject_semester_id.grade_subject_id.subjectId;
+      const subjectId = subject._id.toString();
+      if (!subjectsMap.has(subjectId)) {
+        subjectsMap.set(subjectId, {
+          id: subjectId,
+          subject: subject.subjectName,
+        });
+      }
+    });
+
+    const subjects = Array.from(subjectsMap.values());
+    if (!subjects.length) {
+      return res.status(404).json({
+        status: 404,
+        message: "No subjects found with PDF materials",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Subjects with PDF materials",
+      subjects,
+    });
+  }
+);
+const getSubjectsThatHaveMaterialTypeVideo = expressAsyncHandler(
+  async (req, res) => {
+    const query = LibraryItemsForGrade.find({ type: "Video" }).select(
+      defaultFieldsToExclude
+    );
+    const materials = await populateLibraryItem(query).lean();
+
+    const subjectsMap = new Map();
+    materials.forEach((material) => {
+      const subject =
+        material.grade_subject_semester_id.grade_subject_id.subjectId;
+      const subjectId = subject._id.toString();
+      if (!subjectsMap.has(subjectId)) {
+        subjectsMap.set(subjectId, {
+          id: subjectId,
+          subject: subject.subjectName,
+        });
+      }
+    });
+
+    const subjects = Array.from(subjectsMap.values());
+    if (!subjects.length) {
+      return res.status(404).json({
+        status: 404,
+        message: "No subjects found with Video materials",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Subjects with Video materials",
+      subjects,
+    });
+  }
+);
+const getMaterialOfSubjectThatOfTypePdf = expressAsyncHandler(
+  async (req, res) => {
+    const { id: subjectId } = req.params;
+
+    if (!validateObjectId(subjectId)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Subject ID",
+      });
+    }
+
+    const query = LibraryItemsForGrade.find({
+      type: "PDF",
+    }).select(defaultFieldsToExclude);
+
+    const subjectsInTheLibrary = await populateLibraryItem(query).lean();
+
+    const materials = subjectsInTheLibrary.filter(
+      (subject) =>
+        subject.grade_subject_semester_id.grade_subject_id.subjectId._id.toString() ===
+        subjectId
+    );
+
+    if (!materials.length) {
+      return res.status(404).json({
+        status: 404,
+        message: "No materials found for this subject",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "PDF materials for the subject",
+      materials,
+    });
+  }
+);
+const getMaterialOfSubjectThatOfTypeVideo = expressAsyncHandler(
+  async (req, res) => {
+    const { id: subjectId } = req.params;
+
+    if (!validateObjectId(subjectId)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Subject ID",
+      });
+    }
+
+    const query = LibraryItemsForGrade.find({
+      type: "Video",
+    }).select(defaultFieldsToExclude);
+
+    const subjectsInTheLibrary = await populateLibraryItem(query).lean();
+
+    const materials = subjectsInTheLibrary.filter(
+      (subject) =>
+        subject.grade_subject_semester_id.grade_subject_id.subjectId._id.toString() ===
+        subjectId
+    );
+
+    if (!materials.length) {
+      return res.status(404).json({
+        status: 404,
+        message: "No Video materials found for this subject",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Video materials for the subject",
+      materials,
+    });
+  }
+);
+const fetchAllGeneralAndMaterialVideos = expressAsyncHandler(
+  async (req, res) => {
+    const validSortFields = ["createdAt", "-createdAt", "title", "-title"];
+    const sort = validSortFields.includes(req.query.sort)
+      ? req.query.sort
+      : "-createdAt";
+    const materialsQuery = LibraryItemsForGrade.find({ type: "Video" })
+      .select(defaultFieldsToExclude)
+      .sort(sort);
+
+    const materialsFromLibrary = await populateLibraryItem(
+      materialsQuery
+    ).lean();
+
+    const studentId = req.user.id;
+
+    const materialIds = materialsFromLibrary.map((material) => material._id);
+
+    const viewedMaterials = await LibraryMaterialView.find({
+      student_id: studentId,
+      library_material_id: { $in: materialIds },
+      is_viewed: true,
+    });
+
+    const viewedMaterialMap = new Map(
+      viewedMaterials.map((viewed) => [
+        viewed.library_material_id.toString(),
+        true,
+      ])
+    );
+
+    const enhancedMaterials = materialsFromLibrary.map((material) => ({
+      ...material,
+      isViewed: viewedMaterialMap.has(material._id.toString()),
+    }));
+
+    const libraryItems = await LibraryItem.find({ type: "Video" })
+      .select(defaultFieldsToExclude)
+      .sort(sort)
+      .populate("uploaded_by", "fullName");
+
+    const studentLibraryItems = await StudentLibraryItem.find({
+      student_id: req.user.id,
+      library_item_id: { $in: libraryItems.map((item) => item._id) },
+    });
+
+    const libraryItemsWithIsViewedAttributes = libraryItems.map((item) => {
+      const isViewed = studentLibraryItems.some(
+        (studentItem) =>
+          studentItem.library_item_id.toString() === item._id.toString()
+      );
+      return {
+        ...item.toObject(),
+        isViewed,
+      };
+    });
+
+    res.status(200).json({
+      status: 200,
+      message: "All general and material videos",
+      LibraryItems: libraryItemsWithIsViewedAttributes,
+      materialsFromLibrary: enhancedMaterials,
+    });
+  }
+);
+const fetchAllGeneralAndMaterialPdf = expressAsyncHandler(async (req, res) => {
+  const validSortFields = ["createdAt", "-createdAt", "title", "-title"];
+  const sort = validSortFields.includes(req.query.sort)
+    ? req.query.sort
+    : "-createdAt";
+  const materialsQuery = LibraryItemsForGrade.find({ type: "PDF" })
+    .select(defaultFieldsToExclude)
+    .sort(sort);
+
+  const materialsFromLibrary = await populateLibraryItem(materialsQuery).lean();
+
+  const studentId = req.user.id;
+
+  const materialIds = materialsFromLibrary.map((material) => material._id);
+
+  const viewedMaterials = await LibraryMaterialView.find({
+    student_id: studentId,
+    library_material_id: { $in: materialIds },
+    is_viewed: true,
+  });
+
+  const viewedMaterialMap = new Map(
+    viewedMaterials.map((viewed) => [
+      viewed.library_material_id.toString(),
+      true,
+    ])
+  );
+
+  const enhancedMaterials = materialsFromLibrary.map((material) => ({
+    ...material,
+    isViewed: viewedMaterialMap.has(material._id.toString()),
+  }));
+
+  const libraryItems = await LibraryItem.find({ type: "PDF" })
+    .select(defaultFieldsToExclude)
+    .sort(sort)
+    .populate("uploaded_by", "fullName");
+  const studentLibraryItems = await StudentLibraryItem.find({
+    student_id: req.user.id,
+    library_item_id: { $in: libraryItems.map((item) => item._id) },
+  });
+  const libraryItemsWithIsViewedAttributes = libraryItems.map((item) => {
+    const isViewed = studentLibraryItems.some(
+      (studentItem) =>
+        studentItem.library_item_id.toString() === item._id.toString()
+    );
+    return {
+      ...item.toObject(),
+      isViewed,
+    };
+  });
+  res.status(200).json({
+    status: 200,
+    message: "All general and material videos",
+    LibraryItems: libraryItemsWithIsViewedAttributes,
+    materialsFromLibrary: enhancedMaterials,
+  });
+});
 module.exports = {
   createMaterialForLibrary,
   deleteMaterialForLibrary,
@@ -289,4 +559,10 @@ module.exports = {
   getGeneralSubjectsThatHaveMaterialsInLibrary,
   getMaterialUsingTheIdOfTheGeneralSubjects,
   getMaterialFromLibraryById,
+  getSubjectsThatHasMaterialTypePdf,
+  getSubjectsThatHaveMaterialTypeVideo,
+  getMaterialOfSubjectThatOfTypePdf,
+  getMaterialOfSubjectThatOfTypeVideo,
+  fetchAllGeneralAndMaterialVideos,
+  fetchAllGeneralAndMaterialPdf,
 };

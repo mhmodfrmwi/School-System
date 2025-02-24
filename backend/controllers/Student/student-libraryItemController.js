@@ -79,6 +79,7 @@ const getLibraryItemsViewsForStudent = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ status: 500, message: "Internal Server Error" });
   }
 });
+
 module.exports = {
   updateLastUserViewForLibraryItem,
   getLibraryItemsViewsForStudent,
