@@ -24,6 +24,8 @@ const CurrentCourse = ({ onSearchChange }) => {
     loading,
   } = useSelector((state) => state.classTeachers || {});
 
+  console.log(classTeachers);
+
   useEffect(() => {
     dispatch(fetchClassTeacher());
   }, [dispatch]);
@@ -84,7 +86,7 @@ const CurrentCourse = ({ onSearchChange }) => {
       <div className="grid grid-cols-1 justify-items-center gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
         {classTeachers.map((classteacher, index) => (
           <div
-            key={classteacher?.classId || index}
+            key={classteacher?.id || index}
             onClick={() =>
               navigate(`/teacher/takeattendance/${classteacher.id}`, {
                 state: { classId: classteacher.classId._id },

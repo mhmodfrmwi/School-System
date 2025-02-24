@@ -40,3 +40,13 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);
 });
+
+/*
+[x] Fetch subjects that has material type pdf 
+[x] Fetch subjects that have material type video 
+[x] Fetch material of subject that of type pdf ,
+[x] Fetch material of subject that of type video 
+[x] fetch all general+ material books 
+[x] fetch all general+ material videos 
+[x] Mark as view for material
+*/

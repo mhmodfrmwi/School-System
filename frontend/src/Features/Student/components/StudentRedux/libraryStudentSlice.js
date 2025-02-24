@@ -52,121 +52,106 @@ export const fetchLibraryVideoItems = createAsyncThunk(
   }
 );
 
-// Fetch subjects in the library (filtered to include only subjects with PDF materials)
-export const fetchLibrarySubjects = createAsyncThunk(
-  "libraryStudent/fetchLibrarySubjects",
+// Fetch all general + material PDFs
+export const fetchAllGeneralAndMaterialPDFs = createAsyncThunk(
+  "libraryStudent/fetchAllGeneralAndMaterialPDFs",
   async (_, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch("http://localhost:4000/api/v1/general/get-general-subjects-in-library", {
+      const response = await fetch("http://localhost:4000/api/v1/general/fetch-all-general-and-material-pdf", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch subjects");
+        throw new Error(data.message || "Failed to fetch PDFs");
       }
-
-      // Fetch materials for each subject and filter subjects with at least one PDF material
-      const subjectsWithPDF = await Promise.all(
-        data.subjects.map(async (subject) => {
-          const materialsResponse = await fetch(
-            `http://localhost:4000/api/v1/general/get-material-for-general-subject-in-library/${subject.id}`,
-            {
-              method: "GET",
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          const materialsData = await materialsResponse.json();
-          if (!materialsResponse.ok) {
-            throw new Error(materialsData.message || "Failed to fetch materials");
-          }
-
-          // Check if the subject has at least one PDF material
-          const hasPDF = materialsData.materials.some(material => material.type === "PDF");
-          return hasPDF ? subject : null;
-        })
-      );
-
-      // Filter out null values (subjects without PDF materials)
-      return subjectsWithPDF.filter(subject => subject !== null);
+      return {
+        allItems: [
+          ...(data.LibraryItems || []),
+          ...(data.materialsFromLibrary || [])
+        ],
+      };
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Fetch subjects in the library (filtered to include only subjects with video materials)
-export const fetchLibraryVideoSubjects = createAsyncThunk(
-  "libraryStudent/fetchLibraryVideoSubjects",
+// Fetch all general + material videos
+export const fetchAllGeneralAndMaterialVideos = createAsyncThunk(
+  "libraryStudent/fetchAllGeneralAndMaterialVideos",
   async (_, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch("http://localhost:4000/api/v1/general/get-general-subjects-in-library", {
+      const response = await fetch("http://localhost:4000/api/v1/general/fetch-all-general-and-material-videos", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch subjects");
+        throw new Error(data.message || "Failed to fetch videos");
       }
-
-      // Fetch materials for each subject and filter subjects with at least one video material
-      const subjectsWithVideo = await Promise.all(
-        data.subjects.map(async (subject) => {
-          const materialsResponse = await fetch(
-            `http://localhost:4000/api/v1/general/get-material-for-general-subject-in-library/${subject.id}`,
-            {
-              method: "GET",
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          const materialsData = await materialsResponse.json();
-          if (!materialsResponse.ok) {
-            throw new Error(materialsData.message || "Failed to fetch materials");
-          }
-
-          // Check if the subject has at least one video material
-          const hasVideo = materialsData.materials.some(material => material.type === "Video");
-          return hasVideo ? subject : null;
-        })
-      );
-
-      // Filter out null values (subjects without video materials)
-      return subjectsWithVideo.filter(subject => subject !== null);
+      return {
+        allItems: [
+          ...(data.LibraryItems || []),
+          ...(data.materialsFromLibrary || [])
+        ],
+      };
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Fetch materials for a subject with type filter
-export const fetchMaterialsForSubject = createAsyncThunk(
-  "libraryStudent/fetchMaterialsForSubject",
-  async ({ subjectId, type }, { rejectWithValue }) => {
+// Fetch material of subject that is of type video
+export const fetchMaterialOfSubjectTypeVideo = createAsyncThunk(
+  "libraryStudent/fetchMaterialOfSubjectTypeVideo",
+  async (subjectId, { rejectWithValue }) => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch(`http://localhost:4000/api/v1/general/get-material-for-general-subject-in-library/${subjectId}`, {
+      const response = await fetch(`http://localhost:4000/api/v1/general/fetch-material-of-subject-that-of-type-video/${subjectId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch materials");
+        throw new Error(data.message || "Failed to fetch video materials");
       }
+      return data.materials;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
-      // Filter materials by type if type is provided
-      const filteredMaterials = type ? data.materials.filter(material => material.type === type) : data.materials;
-      return filteredMaterials;
+// Fetch material of subject that is of type PDF
+export const fetchMaterialOfSubjectTypePDF = createAsyncThunk(
+  "libraryStudent/fetchMaterialOfSubjectTypePDF",
+  async (subjectId, { rejectWithValue }) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch(`http://localhost:4000/api/v1/general/fetch-material-of-subject-that-of-type-pdf/${subjectId}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch PDF materials");
+      }
+      return data.materials;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -245,19 +230,97 @@ export const viewLibraryItem = createAsyncThunk(
   }
 );
 
+// View Material (Mark as Viewed)
+export const viewMaterial = createAsyncThunk(
+  "libraryStudent/viewMaterial",
+  async (materialId, { rejectWithValue }) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch(`http://localhost:4000/api/v1/student/library-material/${materialId}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to mark material as viewed");
+      }
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
+
+// Fetch subjects that have material type video
+export const fetchSubjectsWithVideoMaterial = createAsyncThunk(
+  "libraryStudent/fetchSubjectsWithVideoMaterial",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch("http://localhost:4000/api/v1/general/fetch-subjects-that-have-material-type-video", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch subjects with video materials");
+      }
+      return data.subjects;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Fetch subjects that have material type PDF
+export const fetchSubjectsWithPDFMaterial = createAsyncThunk(
+  "libraryStudent/fetchSubjectsWithPDFMaterial",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch("http://localhost:4000/api/v1/general/fetch-subjects-that-has-material-type-pdf", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch subjects with PDF materials");
+      }
+      return data.subjects;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const libraryStudentSlice = createSlice({
   name: "libraryStudent",
   initialState: {
     generalItems: [], // For PDFs
     videoItems: [], // For Videos
-    subjects: [], // For PDF subjects
-    videoSubjects: [], // For Video subjects
-    materials: [], // For PDF, Video materials
     itemDetails: null,
     materialDetails: null,
+    videoSubjects: [], // For video subjects
+    pdfSubjects: [], // For PDF subjects
+    generalPDFs: [], // For all general + material PDFs
+    generalVideos: [], // For all general + material videos
+    videoMaterials: [], // For video materials of a subject
+    pdfMaterials: [], // For PDF materials of a subject
     loading: false,
     error: null,
     viewedItems: {},
+    viewedMaterials: {},
   },
   reducers: {
     clearLibraryError: (state) => {
@@ -292,45 +355,6 @@ const libraryStudentSlice = createSlice({
         state.videoItems = action.payload;
       })
       .addCase(fetchLibraryVideoItems.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Fetch PDF Subjects
-      .addCase(fetchLibrarySubjects.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchLibrarySubjects.fulfilled, (state, action) => {
-        state.loading = false;
-        state.subjects = action.payload;
-      })
-      .addCase(fetchLibrarySubjects.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Fetch Video Subjects
-      .addCase(fetchLibraryVideoSubjects.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchLibraryVideoSubjects.fulfilled, (state, action) => {
-        state.loading = false;
-        state.videoSubjects = action.payload;
-      })
-      .addCase(fetchLibraryVideoSubjects.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Fetch Materials for Subject
-      .addCase(fetchMaterialsForSubject.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchMaterialsForSubject.fulfilled, (state, action) => {
-        state.loading = false;
-        state.materials = action.payload;
-      })
-      .addCase(fetchMaterialsForSubject.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -371,6 +395,98 @@ const libraryStudentSlice = createSlice({
         state.viewedItems[library_item_id] = last_view_date;
       })
       .addCase(viewLibraryItem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Fetch all general + material PDFs
+      .addCase(fetchAllGeneralAndMaterialPDFs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllGeneralAndMaterialPDFs.fulfilled, (state, action) => {
+        state.generalPDFs = Array.isArray(action.payload.allItems)
+        ? action.payload.allItems
+        : [];
+      state.loading = false;
+      })
+      .addCase(fetchAllGeneralAndMaterialPDFs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Fetch all general + material videos
+      .addCase(fetchAllGeneralAndMaterialVideos.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllGeneralAndMaterialVideos.fulfilled, (state, action) => {
+        state.generalVideos = Array.isArray(action.payload.allItems)
+        ? action.payload.allItems
+        : [];
+        state.loading = false;
+      })
+      .addCase(fetchAllGeneralAndMaterialVideos.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Fetch material of subject that is of type video
+      .addCase(fetchMaterialOfSubjectTypeVideo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchMaterialOfSubjectTypeVideo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.videoMaterials = action.payload;
+      })
+      .addCase(fetchMaterialOfSubjectTypeVideo.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+      })
+      // Fetch material of subject that is of type PDF
+      .addCase(fetchMaterialOfSubjectTypePDF.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchMaterialOfSubjectTypePDF.fulfilled, (state, action) => {
+        state.pdfMaterials = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchMaterialOfSubjectTypePDF.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Fetch subjects that have material type video
+      .addCase(fetchSubjectsWithVideoMaterial.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchSubjectsWithVideoMaterial.fulfilled, (state, action) => {
+        state.loading = false;
+        state.videoSubjects = action.payload;
+      })
+      .addCase(fetchSubjectsWithVideoMaterial.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Fetch subjects that have material type PDF
+      .addCase(fetchSubjectsWithPDFMaterial.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchSubjectsWithPDFMaterial.fulfilled, (state, action) => {
+        state.loading = false;
+        state.pdfSubjects = action.payload;
+      })
+      .addCase(fetchSubjectsWithPDFMaterial.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      //  mark material as viewed
+      .addCase(viewMaterial.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(viewMaterial.fulfilled, (state, action) => {
+        state.loading = false;
+        state.viewedMaterials = action.payload;
+      })
+      .addCase(viewMaterial.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

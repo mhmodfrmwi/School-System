@@ -13,6 +13,12 @@ const {
   getGeneralSubjectsThatHaveMaterialsInLibrary,
   getMaterialUsingTheIdOfTheGeneralSubjects,
   getMaterialFromLibraryById,
+  getSubjectsThatHasMaterialTypePdf,
+  getSubjectsThatHaveMaterialTypeVideo,
+  getMaterialOfSubjectThatOfTypePdf,
+  getMaterialOfSubjectThatOfTypeVideo,
+  fetchAllGeneralAndMaterialVideos,
+  fetchAllGeneralAndMaterialPdf,
 } = require("../controllers/Teacher/MatrialForLibrary");
 const router = express.Router();
 
@@ -51,5 +57,36 @@ router.get(
   "/get-material-from-library/:id",
   validateJwt,
   getMaterialFromLibraryById
+);
+
+router.get(
+  "/fetch-subjects-that-has-material-type-pdf",
+  validateJwt,
+  getSubjectsThatHasMaterialTypePdf
+);
+router.get(
+  "/fetch-subjects-that-have-material-type-video",
+  validateJwt,
+  getSubjectsThatHaveMaterialTypeVideo
+);
+router.get(
+  "/fetch-material-of-subject-that-of-type-pdf/:id",
+  validateJwt,
+  getMaterialOfSubjectThatOfTypePdf
+);
+router.get(
+  "/fetch-material-of-subject-that-of-type-video/:id",
+  validateJwt,
+  getMaterialOfSubjectThatOfTypeVideo
+);
+router.get(
+  "/fetch-all-general-and-material-videos",
+  validateJwt,
+  fetchAllGeneralAndMaterialVideos
+);
+router.get(
+  "/fetch-all-general-and-material-pdf",
+  validateJwt,
+  fetchAllGeneralAndMaterialPdf
 );
 module.exports = router;

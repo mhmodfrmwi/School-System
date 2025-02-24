@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchALLClassTeacher } from "../TeacherRedux/TeacherClassSlice";
-import { useNavigate } from "react-router-dom";
+
 import bag from "../../../../assets/bag.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,7 @@ import CourseToggle from "./SelectCoursePageForAttendance";
 
 const AllCoursesForAttendance = ({ onSearchChange }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (e) => {
@@ -22,6 +22,8 @@ const AllCoursesForAttendance = ({ onSearchChange }) => {
     message,
     loading,
   } = useSelector((state) => state.classTeachers || {});
+
+  console.log(classTeachers);
 
   const filteredTeachers = classTeachers.filter(
     (classteacher) =>
@@ -97,12 +99,7 @@ const AllCoursesForAttendance = ({ onSearchChange }) => {
       <div className="grid grid-cols-1 justify-items-center gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredTeachers.map((classteacher, index) => (
           <div
-            key={classteacher?.classId || index}
-            // onClick={() =>
-            //   navigate(`/teacher/takeattendance/${classteacher.subjectId}`, {
-            //     state: { classId: classteacher.classId },
-            //   })
-            // }
+            key={classteacher?.gradeSubjectSemesterId || index}
             className="relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
           >
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">

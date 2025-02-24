@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLibraryVideoItems, fetchLibraryVideoSubjects, fetchMaterialsForSubject, viewLibraryItem } from "../StudentRedux/libraryStudentSlice";
+import {
+  fetchLibraryVideoItems,
+  fetchAllGeneralAndMaterialVideos,
+  fetchSubjectsWithVideoMaterial,
+  fetchMaterialOfSubjectTypeVideo,
+  viewLibraryItem,
+  viewMaterial,
+} from "../StudentRedux/libraryStudentSlice";
 import img1 from "../../../../assets/cover22 1.png";
 import img2 from "../../../../assets/Rectangle 314.png";
 import { Card, CardContent } from "@/components/ui/card";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { FaPlay } from "react-icons/fa";
 
 // Helper function to extract YouTube Video ID
 const extractYouTubeVideoId = (url) => {
@@ -16,30 +22,9 @@ const extractYouTubeVideoId = (url) => {
 
 // Helper function to get YouTube thumbnail
 const getYouTubeThumbnail = (url) => {
-  const VideoId = extractYouTubeVideoId(url);
-  return VideoId ? `https://img.youtube.com/vi/${VideoId}/0.jpg` : img2;
+  const videoId = extractYouTubeVideoId(url);
+  return videoId ? `https://img.youtube.com/vi/${videoId}/0.jpg` : img2;
 };
-
-// Helper function to get filtered grades and semesters
-const getFilteredGradesAndSemesters = (materials) => {
-  const grades = new Set();
-  const semesters = new Set();
-  materials.forEach((item) => {
-    if (item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName) {
-      grades.add(item.grade_subject_semester_id.grade_subject_id.gradeId.gradeName.replace("Grade ", ""));
-    }
-    if (item.grade_subject_semester_id?.semester_id?.semesterName) {
-      semesters.add(item.grade_subject_semester_id.semester_id.semesterName.replace("Semester ", ""));
-    }
-  });
-
-  return {
-    grades: Array.from(grades).sort(),
-    semesters: Array.from(semesters).sort(),
-  };
-  
-};
-
 
 // Pagination Controls Component
 const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
@@ -81,71 +66,127 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
 const LibraryVideosPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { videoItems, videoSubjects, materials, loading, error } = useSelector((state) => state.libraryStudent);
-  const [selectedSubject, setSelectedSubject] = useState("all");
-  const [selectedGrade, setSelectedGrade] = useState("");
-  const [selectedSemester, setSelectedSemester] = useState("");
-  const [allmaterials, setAllmaterials] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const handleItemClick = (itemId, type) => {
-    if(type === "general"){
-    dispatch(viewLibraryItem(itemId)); }
-    navigate(`/student/library/${type}/${itemId}`);
-  };
+  const {
+    videoItems,
+    videoSubjects,
+    videoMaterials,
+    generalVideos,
+    loading,
+    error,
+  } = useSelector((state) => state.libraryStudent);
 
-  // Pagination states
-  const [currentPageAll, setCurrentPageAll] = useState(1);
-  const [currentPagePublic, setCurrentPagePublic] = useState(1);
-  const [currentPageSubject, setCurrentPageSubject] = useState(1);
+  const [selectedSubject, setSelectedSubject] = useState("all");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // State for each tab
+  const [tabStates, setTabStates] = useState({
+    all: {
+      currentPage: 1,
+      selectedGrade: "",
+      selectedSemester: "",
+    },
+    public: {
+      currentPage: 1,
+      selectedGrade: "",
+      selectedSemester: "",
+    },
+    subject: {
+      currentPage: 1,
+      selectedGrade: "",
+      selectedSemester: "",
+    },
+  });
 
   const itemsPerPage = 8; // Number of items per page
 
+  // Get the current tab's state
+  const currentTabState = tabStates[selectedSubject === "all" ? "all" : selectedSubject === "public" ? "public" : "subject"];
+  const { currentPage, selectedGrade, selectedSemester } = currentTabState;
+
   useEffect(() => {
     dispatch(fetchLibraryVideoItems());
-    dispatch(fetchLibraryVideoSubjects());
+    dispatch(fetchSubjectsWithVideoMaterial());
   }, [dispatch]);
 
   useEffect(() => {
-    setSelectedGrade("");
-    setSelectedSemester("");
-  }, [selectedSubject]);
-
-  useEffect(() => {
     if (selectedSubject === "all") {
-      Promise.all(videoSubjects.map((subject) => dispatch(fetchMaterialsForSubject({ subjectId: subject.id, type: "Video" }))))
-        .then((responses) => {
-          const combinedmaterials = responses.map((res) => res.payload).flat();
-          setAllmaterials(combinedmaterials);
-        })
-        .catch((err) => console.error("Error fetching all materials:", err));
+      dispatch(fetchAllGeneralAndMaterialVideos());
     } else if (selectedSubject !== "public" && selectedSubject.id) {
-      dispatch(fetchMaterialsForSubject({ subjectId: selectedSubject.id, type: "Video" }));
+      dispatch(fetchMaterialOfSubjectTypeVideo(selectedSubject.id));
     }
-  }, [selectedSubject, videoSubjects, dispatch]);
+  }, [selectedSubject, dispatch]);
 
-  const displayedmaterials = selectedSubject === "all" 
-  ? allmaterials.filter(material => material.type === "Video") 
-  : materials.filter(material => material.type === "Video");
+  const handleItemClick = (itemId, type) => {
+    if (type === "general") dispatch(viewLibraryItem(itemId));
+    if (type === "material") dispatch(viewMaterial(itemId));
+    navigate(`/student/library/${type}/${itemId}`);
+  };
 
-  const filteredmaterials = displayedmaterials.filter((video) => {
+  const displayedMaterials =
+  selectedSubject === "all"
+    ? generalVideos // Use generalVideos for the "All" tab
+    : selectedSubject === "public"
+    ? videoItems // Use videoItems for the "Public" tab
+    : videoMaterials; // Use videoMaterials for subject-specific videos
+
+  const filteredMaterials = displayedMaterials.filter((material) => {
     return (
-      (!selectedGrade || video.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName === `Grade ${selectedGrade}`) &&
-      (!selectedSemester || video.grade_subject_semester_id?.semester_id?.semesterName === `Semester ${selectedSemester}`)
+      (!selectedGrade ||
+        material.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName ===
+          `Grade ${selectedGrade}`) &&
+      (!selectedSemester ||
+        material.grade_subject_semester_id?.semester_id?.semesterName ===
+          `Semester ${selectedSemester}`)
     );
   });
-  const { grades, semesters } = getFilteredGradesAndSemesters(filteredmaterials);
 
-  // Combine videoItems and filteredmaterials for "All" section
-  const combinedItemsForAll = selectedSubject === "all" ? [...videoItems, ...filteredmaterials] : [];
+  const { grades, semesters } = (() => {
+    const grades = new Set();
+    const semesters = new Set();
+
+    filteredMaterials.forEach((material) => {
+      if (material.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName) {
+        grades.add(
+          material.grade_subject_semester_id.grade_subject_id.gradeId.gradeName.replace(
+            "Grade ",
+            ""
+          )
+        );
+      }
+      if (material.grade_subject_semester_id?.semester_id?.semesterName) {
+        semesters.add(
+          material.grade_subject_semester_id.semester_id.semesterName.replace(
+            "Semester ",
+            ""
+          )
+        );
+      }
+    });
+
+    return {
+      grades: Array.from(grades).sort(),
+      semesters: Array.from(semesters).sort(),
+    };
+  })();
+
   // Paginated data
-  const paginatedvideoItems = videoItems.slice((currentPagePublic - 1) * itemsPerPage, currentPagePublic * itemsPerPage);
-  const paginatedAllmaterials = combinedItemsForAll.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage);
-  const paginatedSubjectmaterials = filteredmaterials.slice((currentPageSubject - 1) * itemsPerPage, currentPageSubject * itemsPerPage);
+  const paginatedGeneralItems = videoItems.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const paginatedAllMaterials = generalVideos.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const paginatedSubjectMaterials = filteredMaterials.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   // Total pages
-  const totalPagesAll = Math.ceil(combinedItemsForAll.length / itemsPerPage);
+  const totalPagesAll = Math.ceil(generalVideos.length / itemsPerPage);
   const totalPagesPublic = Math.ceil(videoItems.length / itemsPerPage);
-  const totalPagesSubject = Math.ceil(filteredmaterials.length / itemsPerPage);
+  const totalPagesSubject = Math.ceil(filteredMaterials.length / itemsPerPage);
 
   return (
     <div className="flex min-h-screen w-[95%] mx-auto mt-20 mb-20 font-poppins">
@@ -172,6 +213,14 @@ const LibraryVideosPage = () => {
             onClick={() => {
               setSelectedSubject("all");
               setIsSidebarOpen(!isSidebarOpen);
+              setTabStates((prev) => ({
+                ...prev,
+                all: {
+                  currentPage: 1,
+                  selectedGrade: "",
+                  selectedSemester: "",
+                },
+              }));
             }}
           >
             <input
@@ -190,6 +239,14 @@ const LibraryVideosPage = () => {
             onClick={() => {
               setSelectedSubject("public");
               setIsSidebarOpen(!isSidebarOpen);
+              setTabStates((prev) => ({
+                ...prev,
+                public: {
+                  currentPage: 1,
+                  selectedGrade: "",
+                  selectedSemester: "",
+                },
+              }));
             }}
           >
             <input
@@ -210,6 +267,14 @@ const LibraryVideosPage = () => {
               onClick={() => {
                 setSelectedSubject(subject);
                 setIsSidebarOpen(!isSidebarOpen);
+                setTabStates((prev) => ({
+                  ...prev,
+                  subject: {
+                    currentPage: 1,
+                    selectedGrade: "",
+                    selectedSemester: "",
+                  },
+                }));
               }}
             >
               <input
@@ -249,67 +314,72 @@ const LibraryVideosPage = () => {
                     <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                   </h2>
                 </div>
-                {combinedItemsForAll.length === 0 ? (
+                {!loading && generalVideos.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
-                      No Videos available at the moment.
+                      No videos available at the moment.
                     </CardContent>
                   </Card>
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                    {paginatedAllmaterials.map((item, index) => {
-  const globalIndex = (currentPageAll - 1) * itemsPerPage + index + 1;
-  return (
-    <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px] cursor-pointer" 
-      onClick={() => handleItemClick(item._id, item.author ? "general" : "material")}>
-        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-        <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
-        <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-            {item.title}
-          </h2>
-          {item.item_url ? (
-            // <img
-            //   src={getYouTubeThumbnail(item.item_url)}
-            //   alt="Video thumbnail"
-            //   className="w-60 h-[250px] object-cover"
-            //   onError={(e) => (e.target.src = img2)} // Fallback to default image
-            // />
-            <div className="relative">
-        <img
-          src={getYouTubeThumbnail(item.item_url)}
-          alt="Video thumbnail"
-          className="w-60 h-[250px] object-cover"
-          onError={(e) => (e.target.src = img2)} // Fallback to default image
-        />
-        {/* Play Icon */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <FaPlay className="text-white text-5xl bg-black bg-opacity-50  p-2" />
-        </div>
-      </div>
-          ) : (
-            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-          )}
-          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-            {globalIndex} {/* Use globalIndex instead of index + 1 */}
-          </p>
-          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-            {item.author || item.type}
-          </h3>
-        </div>
-      </div>
-      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-        {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
-      </h2>
-    </div>
-  );
-})}
+                      {paginatedAllMaterials.map((item, index) => {
+                        const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                        return (
+                          <div key={item._id} className="mx-auto w-60">
+                            <div
+                              className="relative w-60 h-[350px] cursor-pointer"
+                              onClick={() =>
+                                handleItemClick(item._id, item.author ? "general" : "material")
+                              }
+                            >
+                              <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+                              <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
+                                <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+                                  {item.title}
+                                </h2>
+                                {item.item_url ? (
+                                  <div className="relative">
+                                    <img
+                                      src={getYouTubeThumbnail(item.item_url)}
+                                      alt="Video thumbnail"
+                                      className="w-60 h-[250px] object-cover"
+                                      onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                )}
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                  {globalIndex}
+                                </p>
+                                <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+                                  {item.author || item.uploaded_by?.fullName}
+                                </h3>
+                              </div>
+                            </div>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
+                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
+                            </h2>
+                          </div>
+                        );
+                      })}
                     </div>
                     <PaginationControls
-                      currentPage={currentPageAll}
+                      currentPage={currentPage}
                       totalPages={totalPagesAll}
-                      onPageChange={setCurrentPageAll}
+                      onPageChange={(page) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          all: {
+                            ...prev.all,
+                            currentPage: page,
+                          },
+                        }));
+                      }}
                     />
                   </div>
                 )}
@@ -328,68 +398,78 @@ const LibraryVideosPage = () => {
                 {videoItems.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
-                      No Videos available in the public library at the moment.
+                      No videos available in the public library at the moment.
                     </CardContent>
                   </Card>
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                    {paginatedvideoItems.map((item, index) => {
-  const globalIndex = (currentPagePublic - 1) * itemsPerPage + index + 1;
-  return (
-    <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px] cursor-pointer" onClick={() => handleItemClick(item._id, "general")}>
-        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-        <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
-          <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-            {item.title}
-          </h2>
-          {item.item_url ? (
-            <div className="relative">
-            <img
-              src={getYouTubeThumbnail(item.item_url)}
-              alt="Video thumbnail"
-              className="w-60 h-[250px] object-cover"
-              onError={(e) => (e.target.src = img2)} // Fallback to default image
-            />
-            {/* Play Icon */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <FaPlay className="text-white text-5xl bg-black bg-opacity-50  p-2" />
-            </div>
-          </div>
-          ) : (
-            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-          )}
-          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-            {globalIndex} {/* Use globalIndex instead of index + 1 */}
-          </p>
-          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-            {item.author}
-          </h3>
-        </div>
-      </div>
-      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
-    </div>
-  );
-})}
+                      {paginatedGeneralItems.map((item, index) => {
+                        const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                        return (
+                          <div key={item._id} className="mx-auto w-60">
+                            <div
+                              className="relative w-60 h-[350px] cursor-pointer"
+                              onClick={() => handleItemClick(item._id, "general")}
+                            >
+                              <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+                              <div className="absolute inset-0 z-10 flex flex-col justify-between px-4 pb-4 pt-2">
+                                <h2 className="flex items-center justify-center text-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+                                  {item.title}
+                                </h2>
+                                {item.item_url ? (
+                                  <div className="relative">
+                                    <img
+                                      src={getYouTubeThumbnail(item.item_url)}
+                                      alt="Video thumbnail"
+                                      className="w-60 h-[250px] object-cover"
+                                      onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                )}
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                  {globalIndex}
+                                </p>
+                                <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+                                  {item.author}
+                                </h3>
+                              </div>
+                            </div>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
+                          </div>
+                        );
+                      })}
                     </div>
                     <PaginationControls
-                      currentPage={currentPagePublic}
+                      currentPage={currentPage}
                       totalPages={totalPagesPublic}
-                      onPageChange={setCurrentPagePublic}
+                      onPageChange={(page) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          public: {
+                            ...prev.public,
+                            currentPage: page,
+                          },
+                        }));
+                      }}
                     />
                   </div>
                 )}
               </div>
             )}
 
-            {/* Subject materials Section */}
+            {/* Subject Materials Section */}
             {selectedSubject !== "public" && selectedSubject !== "all" && (
               <div>
                 <div className="flex flex-row justify-between items-center mb-8">
                   <div className="flex justify-center items-center md:items-start md:justify-start">
                     <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-                      {selectedSubject.subject} materials
+                      {selectedSubject.subject} Materials
                       <span className="absolute left-0 bottom-[-9px] w-[85px] md:w-[155px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                     </h2>
                   </div>
@@ -398,7 +478,15 @@ const LibraryVideosPage = () => {
                     <select
                       className="p-2 border rounded"
                       value={selectedGrade}
-                      onChange={(e) => setSelectedGrade(e.target.value)}
+                      onChange={(e) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          subject: {
+                            ...prev.subject,
+                            selectedGrade: e.target.value,
+                          },
+                        }));
+                      }}
                     >
                       <option value="">All Grades</option>
                       {grades.map((grade) => (
@@ -412,7 +500,15 @@ const LibraryVideosPage = () => {
                     <select
                       className="p-2 border rounded"
                       value={selectedSemester}
-                      onChange={(e) => setSelectedSemester(e.target.value)}
+                      onChange={(e) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          subject: {
+                            ...prev.subject,
+                            selectedSemester: e.target.value,
+                          },
+                        }));
+                      }}
                     >
                       <option value="">All Semesters</option>
                       {semesters.map((semester) => (
@@ -423,7 +519,7 @@ const LibraryVideosPage = () => {
                     </select>
                   </div>
                 </div>
-                {filteredmaterials.length === 0 ? (
+                {filteredMaterials.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
                       No materials available for {selectedSubject.subject} at the moment.
@@ -432,52 +528,62 @@ const LibraryVideosPage = () => {
                 ) : (
                   <div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                    {paginatedSubjectmaterials.map((item, index) => {
-  const globalIndex = (currentPageSubject - 1) * itemsPerPage + index + 1;
-  return (
-    <div key={item._id} className="mx-auto w-60">
-      <div className="relative w-60 h-[350px] cursor-pointer" onClick={() => handleItemClick(item._id, "material")}>
-        <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
-        <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
-          <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
-            {item.title}
-          </h2>
-          {item.item_url ? (
-            <div className="relative">
-            <img
-              src={getYouTubeThumbnail(item.item_url)}
-              alt="Video thumbnail"
-              className="w-60 h-[250px] object-cover"
-              onError={(e) => (e.target.src = img2)} // Fallback to default image
-            />
-            {/* Play Icon */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <FaPlay className="text-white text-5xl bg-black bg-opacity-50  p-2" />
-            </div>
-          </div>
-          ) : (
-            <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
-          )}
-          <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
-            {globalIndex} {/* Use globalIndex instead of index + 1 */}
-          </p>
-          <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
-            {item.type}
-          </h3>
-        </div>
-      </div>
-      <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-        {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName} -{" "}
-        {item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName}
-      </h2>
-    </div>
-  );
- })}
+                      {paginatedSubjectMaterials.map((item, index) => {
+                        const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
+                        return (
+                          <div key={item._id} className="mx-auto w-60">
+                            <div
+                              className="relative w-60 h-[350px] cursor-pointer"
+                              onClick={() => handleItemClick(item._id, "material")}
+                            >
+                              <img src={img1} alt="imagenotfound" className="w-60 h-[350px] object-cover" />
+                              <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 pt-2">
+                                <h2 className="flex items-center justify-center font-semibold text-[15px] text-white line-clamp-2 pb-2 h-[50px]">
+                                  {item.title}
+                                </h2>
+                                {item.item_url ? (
+                                  <div className="relative">
+                                    <img
+                                      src={getYouTubeThumbnail(item.item_url)}
+                                      alt="Video thumbnail"
+                                      className="w-60 h-[250px] object-cover"
+                                      onError={(e) => (e.target.src = img2)} // Fallback to default image
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <FaPlay className="text-white text-5xl bg-black bg-opacity-50 p-2" />
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
+                                )}
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                  {globalIndex}
+                                </p>
+                                <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
+                                  {item.uploaded_by?.fullName}
+                                </h3>
+                              </div>
+                            </div>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
+                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName} -{" "}
+                              {item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName}
+                            </h2>
+                          </div>
+                        );
+                      })}
                     </div>
                     <PaginationControls
-                      currentPage={currentPageSubject}
+                      currentPage={currentPage}
                       totalPages={totalPagesSubject}
-                      onPageChange={setCurrentPageSubject}
+                      onPageChange={(page) => {
+                        setTabStates((prev) => ({
+                          ...prev,
+                          subject: {
+                            ...prev.subject,
+                            currentPage: page,
+                          },
+                        }));
+                      }}
                     />
                   </div>
                 )}

@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { postTeacherLibrary } from "../TeacherRedux/teacherLibrarySlice";
-import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 
-function LibraryForm() {
+import { createLibraryItem } from "../TeacherRedux/generalLibrarySlice";
+
+function LibraryItemForm() {
   const dispatch = useDispatch();
-
-  const { classTeachers = [] } = useSelector(
-    (state) => state.classTeachers || {},
-  );
 
   const [formData, setFormData] = useState({
     title: "",
-    itemUrl: "",
-    description: "",
+    author: "",
+    libraryUrl: "",
     type: "",
-    gradeSubjectSemesterId: "",
   });
 
   const handleChange = (e) => {
@@ -24,33 +19,17 @@ function LibraryForm() {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  useEffect(() => {
-    dispatch(fetchClassTeacher());
-  }, [dispatch]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.title ||
-      !formData.itemUrl ||
-      !formData.description ||
-      !formData.gradeSubjectSemesterId
-    ) {
-      alert("Please fill in all the fields.");
-      return;
-    }
-
     try {
-      await dispatch(postTeacherLibrary(formData));
+      await dispatch(createLibraryItem(formData));
       setFormData({
         title: "",
-        itemUrl: "",
-        description: "",
+        author: "",
+        libraryUrl: "",
         type: "",
-        gradeSubjectSemesterId: "",
       });
-      toast.success("Library item added successfully!");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
@@ -80,38 +59,36 @@ function LibraryForm() {
               value={formData.title}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter title"
               required
             />
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Item URL
+              Author
             </label>
             <input
-              type="url"
-              name="itemUrl"
-              value={formData.itemUrl}
+              type="text"
+              name="author"
+              value={formData.author}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter item URL"
               required
             />
           </div>
 
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Description
+              Library URL
             </label>
-            <textarea
-              name="description"
-              value={formData.description}
+            <input
+              type="url"
+              name="libraryUrl"
+              value={formData.libraryUrl}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              placeholder="Enter description"
               required
-            ></textarea>
+            />
           </div>
 
           <div className="mb-4">
@@ -124,30 +101,9 @@ function LibraryForm() {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
             >
-              <option value="">Select Type</option>
+              <option value="">Select type</option>
               <option value="PDF">PDF</option>
               <option value="Video">Video</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
-              Grade Subject Semester ID
-            </label>
-
-            <select
-              name="gradeSubjectSemesterId"
-              value={formData.gradeSubjectSemesterId}
-              onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-              required
-            >
-              <option value="">Select ID</option>
-              {classTeachers.map((teacher) => (
-                <option key={teacher.id} value={teacher.id}>
-                  {`${teacher.gradeName} - ${teacher.subjectName} - ${teacher.semesterName}`}
-                </option>
-              ))}
             </select>
           </div>
 
@@ -165,4 +121,4 @@ function LibraryForm() {
   );
 }
 
-export default LibraryForm;
+export default LibraryItemForm;

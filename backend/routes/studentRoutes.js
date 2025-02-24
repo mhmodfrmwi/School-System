@@ -17,8 +17,8 @@ const {
 const {
   getAllSchoolHubs,
   registerInContest,
-  checkParticipation,//get my status
-  deleteRegistration
+  checkParticipation, //get my status
+  deleteRegistration,
 } = require("../controllers/Student/schoolHubController");
 const {
   getVirtualRoomsForStudent,
@@ -55,6 +55,11 @@ const {
   editTeam,
   deleteTeam,
 } = require("../controllers/Student/contestTeamMembersController");
+const {
+  updateLibraryMaterialView,
+  getLibraryMaterialViewByMaterialId,
+  getLibraryMaterialViewsForStudent,
+} = require("../controllers/Student/libraryMaterialViewController");
 const router = express.Router();
 
 //login route
@@ -101,10 +106,12 @@ router.get(
   validateStudent,
   getMissedVirtualRooms
 );
-router.post("/virtual-rooms/:virtualRoomId/click",
+router.post(
+  "/virtual-rooms/:virtualRoomId/click",
   validateJwt,
-  validateStudent, 
-  handleVrLinkClick);
+  validateStudent,
+  handleVrLinkClick
+);
 
 router.get(
   "/get-subject-contest",
@@ -177,32 +184,35 @@ router.get(
 );
 router
   .route("/get-contests/:contestId/team")
-  .post(
-    validateJwt,
-    validateStudent,
-    createTeam
-  )
-  .get(
-    validateJwt,
-    validateStudent,
-    getTeamsForStudentInContest
-  )
-  router
+  .post(validateJwt, validateStudent, createTeam)
+  .get(validateJwt, validateStudent, getTeamsForStudentInContest);
+router
   .route("/get-contests/:teamId/team")
-  .patch(
-    validateJwt,
-    validateStudent,
-    editTeam
-  )
-  .delete(
-    validateJwt,
-    validateStudent,
-    deleteTeam
-  );
+  .patch(validateJwt, validateStudent, editTeam)
+  .delete(validateJwt, validateStudent, deleteTeam);
 router.get(
   "/get-teammates",
   validateJwt,
   validateStudent,
   getStudentsInSameClassAndGrade
+);
+
+router.patch(
+  "/library-material/:id",
+  validateJwt,
+  validateStudent,
+  updateLibraryMaterialView
+);
+router.get(
+  "/library-material/:id",
+  validateJwt,
+  validateStudent,
+  getLibraryMaterialViewByMaterialId
+);
+router.get(
+  "/library-material-views",
+  validateJwt,
+  validateStudent,
+  getLibraryMaterialViewsForStudent
 );
 module.exports = router;

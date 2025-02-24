@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "@/ui/Loader";
 import {
   fetchMaterialsInLibrary,
@@ -13,6 +13,7 @@ import { faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 const MaterialsInLibrary = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     teacherLibrary = [],
@@ -38,15 +39,23 @@ const MaterialsInLibrary = () => {
 
   return (
     <div className="flex flex-col p-4">
-      <div className="mx-auto w-[400px] p-6 sm:w-[550px] md:w-full xl:w-full">
-        <div className="ml-8 flex flex-col">
-          <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-            All Materials in Library
-          </h1>
-          <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></div>
-        </div>
+      <div className=" ">
+        <div className="mx-auto w-[400px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
+          <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
+            <div className="">
+              <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+                All Materials in Library
+              </h1>
+              <p className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></p>
+            </div>
 
-        <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
+            <div
+              className="flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none sm:ml-auto"
+              onClick={() => navigate("/teacher/library-form")}
+            >
+              Add Materials
+            </div>
+          </div>
           <div className="mt-7">
             <div className="overflow-x-auto">
               <table className="min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] shadow-md shadow-[#117C90]">

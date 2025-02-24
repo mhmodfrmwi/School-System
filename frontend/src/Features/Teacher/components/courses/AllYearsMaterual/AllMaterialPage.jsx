@@ -20,7 +20,7 @@ const AllMaterialPage = () => {
   
     let targetUrl = "";
     if (courseName === "Video Lectures" || courseName === "Course Material") {
-      targetUrl = `/teacher/see-material/${gradeSubjectSemesterId}` ;
+      targetUrl = `/teacher/see-all-material/${gradeSubjectSemesterId}` ;
     } else if (courseName === "Virtual Room") {
       targetUrl = `/teacher/all-virtual-room/${gradeSubjectSemesterId}`;
     } else if (courseName === "Assignments") {
@@ -30,7 +30,6 @@ const AllMaterialPage = () => {
     }
   
     if (targetUrl) {
-      console.log("Navigating to:", targetUrl);
       navigate(targetUrl);
     }
   };
@@ -54,13 +53,14 @@ const AllMaterialPage = () => {
   if (loading) return <div>Loading...</div>;
   if (message) return <div>{message}</div>;
 
-  const classteacher = classTeachers.length > 0 ? classTeachers[0] : null;
+  const classteacher = classTeachers.find(teacher => teacher.gradeSubjectSemesterId === gradeSubjectSemesterId);
   const videoCount = pdfMaterials.filter((material) => material.type === "Video").length;
   const pdfCount = pdfMaterials.filter((material) => material.type === "PDF").length;
   const vrCount = teacherVirtualRooms.length;
 
-  console.log("Teacher Virtual Rooms:", teacherVirtualRooms); // Log virtual rooms
-  console.log("VR Count:", vrCount); // Log VR count
+  console.log("Selected Class Teacher:", classteacher);
+  console.log("Grade Subject Semester ID:", gradeSubjectSemesterId);
+  console.log("All Class Teachers Data:", classTeachers);
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
