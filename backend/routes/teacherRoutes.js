@@ -12,7 +12,8 @@ const {
   updateQuestion,
   deleteQuestion,
   getQuestion,
-  getAllQuestions,
+  getTeacherQuestions,
+  getSubjestSemesterQuestions
 } = require("../controllers/Teacher/questionBankController");
 const {
   createVirtualRoom,
@@ -62,13 +63,14 @@ router
   .delete(validateJwt, validateTeacher, deleteMateriel)
   .get(validateJwt, validateTeacher, getAllMateriels);
 
-router.post("/questionBank", validateJwt, validateTeacher, createQuestion);
+router.post("/questionBank/:gradeSubjectSemesterId", validateJwt, validateTeacher, createQuestion);
 router
-  .route("/questionBank/:id")
+  .route("/questionBank/:questionId")
   .get(validateJwt, validateTeacher, getQuestion)
   .patch(validateJwt, validateTeacher, updateQuestion)
-  .delete(validateJwt, validateTeacher, deleteQuestion);
-router.get("/questionBank", validateJwt, validateTeacher, getAllQuestions);
+  .delete(validateJwt, validateTeacher, deleteQuestion);;
+router.get("/questionBank/:gradeSubjectSemesterId/my-questions", validateJwt, validateTeacher, getTeacherQuestions);
+router.get("/questionBank/:gradeSubjectSemesterId/all-questions", validateJwt, validateTeacher, getSubjestSemesterQuestions);
 
 router.post(
   "/virtualRoom/:gradeSubjectSemesterId/:classId",

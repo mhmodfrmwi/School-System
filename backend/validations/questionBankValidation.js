@@ -6,16 +6,15 @@ const questionValidationSchema = Joi.object({
     .required(),
   questionText: Joi.string()
     .required(),
-  subjectName: Joi.string()
-    .required(),
-  gradeName: Joi.string()
-    .required(),
-  semesterName: Joi.string()
-    .required(),
-  teacherName: Joi.string()
-    .required(),
   answer: Joi.string()
     .required(),
+  choices: Joi.array()
+    .items(Joi.string())
+    .when('questionType', {
+      is: 'MCQ',
+      then: Joi.array().required(),
+      otherwise: Joi.array().optional()
+    })
 });
 
 module.exports = questionValidationSchema;

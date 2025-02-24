@@ -6,8 +6,18 @@ const Subject = require("../../DB/subjectModel");
 const Grade = require("../../DB/gradeModel");
 const Semester = require("../../DB/semesterModel");
 const Teacher = require("../../DB/teacher");
+const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 
 const createQuestion = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+    status: 400,
+    message: "Invalid teacher ID.",
+    });
+  }
+
   const { error } = questionValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
@@ -16,46 +26,36 @@ const createQuestion = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { questionType, questionText, subjectName, gradeName, semesterName, teacherName, answer } = req.body;
+  const { questionType, questionText, answer, choices } = req.body;
 
-  const subject = await Subject.findOne({ subjectName });
-  if (!subject) {
-    return res.status(404).json({
-      status: 404,
-      message: "Subject not found",
+  const { gradeSubjectSemesterId } = req.params;
+
+  if (!validateObjectId(gradeSubjectSemesterId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid gradeSubjectSemesterId",
     });
   }
 
-  const grade = await Grade.findOne({ gradeName });
-  if (!grade) {
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
+    .populate("grade_subject_id");
+
+  if (!gradeSubjectSemester) {
     return res.status(404).json({
       status: 404,
-      message: "Grade not found",
+      message: "GradeSubjectSemester not found",
     });
   }
 
-  const semester = await Semester.findOne({ semesterName });
-  if (!semester) {
-    return res.status(404).json({
-      status: 404,
-      message: "Semester not found",
-    });
-  }
-
-  const teacher = await Teacher.findOne({ fullName: teacherName });
-  if (!teacher) {
-    return res.status(404).json({
-      status: 404,
-      message: "Teacher not found",
-    });
-  }
+  const subjectId = gradeSubjectSemester.grade_subject_id.subjectId;
+  const gradeId = gradeSubjectSemester.grade_subject_id.gradeId;
+  const semesterId = gradeSubjectSemester.semester_id;
 
   const existingQuestion = await Question.findOne({
     questionText,
-    subjectId: subject._id,
-    gradeId: grade._id,
-    semesterId: semester._id,
-    teacherId: teacher._id,
+    subjectId,
+    gradeId,
+    semesterId,
   });
 
   if (existingQuestion) {
@@ -68,11 +68,12 @@ const createQuestion = expressAsyncHandler(async (req, res) => {
   const newQuestion = new Question({
     questionType,
     questionText,
-    subjectId: subject._id,
-    gradeId: grade._id,
-    semesterId: semester._id,
-    teacherId: teacher._id,
+    subjectId,
+    gradeId,
+    semesterId,
+    teacherId,
     answer,
+    choices: questionType === "MCQ" ? choices : undefined,
   });
 
   await newQuestion.save();
@@ -85,12 +86,19 @@ const createQuestion = expressAsyncHandler(async (req, res) => {
 });
 
 const updateQuestion = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { questionId } = req.params;
+  const teacherId = req.user.id;
 
-  if (!validateObjectId(id)) {
+  if (!validateObjectId(questionId)) {
     return res.status(400).json({
       status: 400,
-      message: "Invalid Question ID",
+      message: "Invalid question ID",
+    });
+  }
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+    status: 400,
+    message: "Invalid teacher ID.",
     });
   }
 
@@ -102,9 +110,10 @@ const updateQuestion = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const { questionType, questionText, subjectName, gradeName, semesterName, teacherName, answer } = req.body;
+  const { questionType, questionText, answer, choices } = req.body;
 
-  const existingQuestion = await Question.findById(id);
+  const existingQuestion = await Question.findById(questionId);
+
   if (!existingQuestion) {
     return res.status(404).json({
       status: 404,
@@ -112,45 +121,19 @@ const updateQuestion = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const subject = await Subject.findOne({ subjectName });
-  if (!subject) {
-    return res.status(404).json({
-      status: 404,
-      message: "Subject not found",
-    });
-  }
-
-  const grade = await Grade.findOne({ gradeName });
-  if (!grade) {
-    return res.status(404).json({
-      status: 404,
-      message: "Grade not found",
-    });
-  }
-
-  const semester = await Semester.findOne({ semesterName });
-  if (!semester) {
-    return res.status(404).json({
-      status: 404,
-      message: "Semester not found",
-    });
-  }
-
-  const teacher = await Teacher.findOne({ fullName: teacherName  });
-  if (!teacher) {
-    return res.status(404).json({
-      status: 404,
-      message: "Teacher not found",
+  if (existingQuestion.teacherId.toString() !== teacherId.toString()) {
+    return res.status(403).json({
+      status: 403,
+      message: "You are not authorized to update this question",
     });
   }
 
   const duplicateQuestion = await Question.findOne({
-    _id: { $ne: id },
     questionText,
-    subjectId: subject._id,
-    gradeId: grade._id,
-    semesterId: semester._id,
-    teacherId: teacher._id,
+    subjectId: existingQuestion.subjectId,
+    gradeId: existingQuestion.gradeId,
+    semesterId: existingQuestion.semesterId,
+    _id: { $ne: questionId },
   });
 
   if (duplicateQuestion) {
@@ -160,38 +143,44 @@ const updateQuestion = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const updatedQuestion = await Question.findByIdAndUpdate(
-    id,
-    {
-      questionType,
-      questionText,
-      subjectId: subject._id,
-      gradeId: grade._id,
-      semesterId: semester._id,
-      teacherId: teacher._id,
-      answer,
-    },
-    { new: true }
-  );
+  existingQuestion.questionType = questionType;
+  existingQuestion.questionText = questionText;
+  existingQuestion.answer = answer;
+
+  if (questionType === "MCQ") {
+    existingQuestion.choices = choices;
+  } else {
+    existingQuestion.choices = undefined;
+  }
+
+  await existingQuestion.save();
 
   res.status(200).json({
     status: 200,
     message: "Question updated successfully",
-    updatedQuestion,
+    updatedQuestion: existingQuestion,
   });
 });
 
 const deleteQuestion = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { questionId } = req.params;
+  const teacherId = req.user.id;
 
-  if (!validateObjectId(id)) {
+  if (!validateObjectId(questionId)) {
     return res.status(400).json({
       status: 400,
-      message: "Invalid Question ID",
+      message: "Invalid question ID",
+    });
+  }
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+    status: 400,
+    message: "Invalid teacher ID.",
     });
   }
 
-  const existingQuestion = await Question.findById(id);
+  const existingQuestion = await Question.findById(questionId);
+
   if (!existingQuestion) {
     return res.status(404).json({
       status: 404,
@@ -199,7 +188,14 @@ const deleteQuestion = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  await Question.findByIdAndDelete(id);
+  if (existingQuestion.teacherId.toString() !== teacherId.toString()) {
+    return res.status(403).json({
+      status: 403,
+      message: "You are not authorized to delete this question",
+    });
+  }
+
+  await Question.deleteOne({ _id: questionId });
 
   res.status(200).json({
     status: 200,
@@ -237,16 +233,94 @@ const getQuestion = expressAsyncHandler(async (req, res) => {
   });
 });
 
-const getAllQuestions = expressAsyncHandler(async (req, res) => {
-  const questions = await Question.find()
-    .populate("subjectId", "subjectName")
-    .populate("gradeId", "gradeName")
-    .populate("semesterId", "semesterName")
-    .populate("teacherId", "fullName");
+const getTeacherQuestions = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+    status: 400,
+    message: "Invalid teacher ID.",
+    });
+  }
+
+  const { gradeSubjectSemesterId } = req.params;
+
+  if (!validateObjectId(gradeSubjectSemesterId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid gradeSubjectSemesterId",
+    });
+  }
+
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
+    .populate("grade_subject_id");
+
+  if (!gradeSubjectSemester) {
+    return res.status(404).json({
+      status: 404,
+      message: "GradeSubjectSemester not found",
+    });
+  }
+
+  const subjectId = gradeSubjectSemester.grade_subject_id.subjectId;
+  const gradeId = gradeSubjectSemester.grade_subject_id.gradeId;
+  const semesterId = gradeSubjectSemester.semester_id;
+
+  const questions = await Question.find({
+    teacherId,
+    subjectId,
+    gradeId,
+    semesterId,
+  })
+  .populate("subjectId", "subjectName")
+  .populate("gradeId", "gradeName")
+  .populate("semesterId", "semesterName")
+  .populate("teacherId", "fullName");;
 
   res.status(200).json({
     status: 200,
-    message: "Questions retrieved successfully",
+    message: "Questions fetched successfully",
+    questions,
+  });
+});
+
+const getSubjestSemesterQuestions = expressAsyncHandler(async (req, res) => {
+  const { gradeSubjectSemesterId } = req.params;
+
+  if (!validateObjectId(gradeSubjectSemesterId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid gradeSubjectSemesterId",
+    });
+  }
+
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
+    .populate("grade_subject_id");
+
+  if (!gradeSubjectSemester) {
+    return res.status(404).json({
+      status: 404,
+      message: "GradeSubjectSemester not found",
+    });
+  }
+
+  const subjectId = gradeSubjectSemester.grade_subject_id.subjectId;
+  const gradeId = gradeSubjectSemester.grade_subject_id.gradeId;
+  const semesterId = gradeSubjectSemester.semester_id;
+
+  const questions = await Question.find({
+    subjectId,
+    gradeId,
+    semesterId,
+  })
+  .populate("subjectId", "subjectName")
+  .populate("gradeId", "gradeName")
+  .populate("semesterId", "semesterName")
+  .populate("teacherId", "fullName");;
+
+  res.status(200).json({
+    status: 200,
+    message: "Questions fetched successfully",
     questions,
   });
 });
@@ -256,5 +330,6 @@ module.exports = {
   updateQuestion,
   deleteQuestion,
   getQuestion,
-  getAllQuestions,
+  getTeacherQuestions,
+  getSubjestSemesterQuestions
 };
