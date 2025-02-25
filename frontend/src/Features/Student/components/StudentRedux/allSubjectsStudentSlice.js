@@ -55,7 +55,6 @@ export const fetchMaterials = createAsyncThunk(
 export const addToBookmark = createAsyncThunk(
   "allSubjectsStudent/addToBookmark",
   async (materialId, { rejectWithValue, getState }) => {
-    console.log(materialId);
     try {
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
