@@ -11,6 +11,15 @@ const {
   getQuestionsBySubjectForStudent,
 } = require("../controllers/Student/questionBankController");
 const {
+  addQuestionToBookmarks,
+  getAllBookmarkedQuestions,
+  deleteQuestionFromBookmarks,
+} = require("../controllers/Student/questionankBookMarksController");
+const {
+  updateQuestionView,
+  getQuestionViewByQuestionId,
+} = require("../controllers/Student/questionBankViewController");
+const {
   getContestForStudent,
   getAllContestsForStudent,
 } = require("../controllers/Student/contestController");
@@ -87,7 +96,29 @@ router.get(
   validateStudent,
   getQuestionsBySubjectForStudent
 );
+router.post(
+  "/add-question-to-bookmark/:questionId",
+  validateJwt,
+  validateStudent,
+  addQuestionToBookmarks
+);
+router.delete(
+  "/remove-question-from-bookmark/:questionId",
+  validateJwt,
+  validateStudent,
+  deleteQuestionFromBookmarks
+);
+router.get(
+  "/get-question-bookmarks",
+  validateJwt,
+  validateStudent,
+  getAllBookmarkedQuestions
+);
 
+router
+  .route("/question/:questionId")
+  .patch(validateJwt, validateStudent, updateQuestionView)
+  .get(validateJwt, validateStudent, getQuestionViewByQuestionId);
 router.get(
   "/virtual-rooms/:gradeSubjectSemesterId",
   validateJwt,
