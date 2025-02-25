@@ -4,7 +4,6 @@ import {
   fetchLibraryItems,
   fetchLibrarySubjects,
   fetchMaterialsForSubject,
-  viewLibraryItem,
 } from "../TeacherRedux/LibraryTeacherSlice";
 import img1 from "../../../../assets/cover22 1.png";
 import img2 from "../../../../assets/Rectangle 314.png";

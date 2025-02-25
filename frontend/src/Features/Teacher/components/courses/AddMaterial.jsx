@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import { fetchMaterials } from "../TeacherRedux/PdfMaterialSlice";
+import { fetchAllQuestions } from "../TeacherRedux/QuestionBankSlice"; 
 import { fetchVR } from "../TeacherRedux/VRSlice";
 
 const AddMaterial = () => {
@@ -27,6 +28,10 @@ const AddMaterial = () => {
       targetUrl = actionType === "see"
         ? `/teacher/virtual-room/${gradeSubjectSemesterId}`
         : `/teacher/VR-form/${classId}/${gradeSubjectSemesterId}`;
+      } else if (courseName === "Question Bank") {
+        targetUrl = actionType === "see"
+          ? `/teacher/my-question-bank/${gradeSubjectSemesterId}/my-questions`
+          : `/teacher/question-bank-form/${gradeSubjectSemesterId}`;
     } else if (courseName === "Assignments") {
       targetUrl = `/teacher/assignments/${gradeSubjectSemesterId}`;
     } else if (courseName === "Exams") {
@@ -41,6 +46,9 @@ const AddMaterial = () => {
   const { classTeachers = [], message, loading } = useSelector((state) => state.classTeachers || {});
   const pdfMaterials = useSelector((state) => state.pdfMaterials.pdfMaterials || []);
   const teacherVirtualRooms = useSelector((state) => state.teacherVirtualRooms.teacherVirtualRooms || []);
+  const myQuestions = useSelector((state) => {
+      return state.questionbank.questionbank; 
+    });
   useEffect(() => {
     if (classId) {
       dispatch(fetchClassTeacher(classId));
@@ -51,6 +59,7 @@ const AddMaterial = () => {
     if (gradeSubjectSemesterId) {
       dispatch(fetchMaterials(gradeSubjectSemesterId));
       dispatch(fetchVR(gradeSubjectSemesterId));
+      dispatch(fetchAllQuestions(gradeSubjectSemesterId)); 
     }
   }, [dispatch, gradeSubjectSemesterId]);
 
@@ -61,14 +70,16 @@ const AddMaterial = () => {
   const videoCount = pdfMaterials.filter((material) => material.type === "Video").length;
   const pdfCount = pdfMaterials.filter((material) => material.type === "PDF").length;
   const vrCount = teacherVirtualRooms.length;
+  const questionBankCount = myQuestions.length;
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
     { id: 1, name: "Video Lectures", total: videoCount, icon: faVideo },
     { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
     { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
-    { id: 4, name: "Assignments", total: 100, icon: faTasks },
-    { id: 5, name: "Exams", total: 19, icon: faFileAlt },
+    { id: 4, name: "Question Bank", total: questionBankCount, icon: faVideo },
+    { id: 5, name: "Assignments", total: 100, icon: faTasks },
+    { id: 6, name: "Exams", total: 19, icon: faFileAlt },
   ];
 
   const getColor = (index) => colors[index % colors.length];

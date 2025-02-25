@@ -6,8 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 
-import SeeVR from "./Features/Teacher/components/courses/SeeVR";
-import EditVR from "./Features/Teacher/components/courses/UpdateVR";
+import SeeVR from "./Features/Teacher/components/courses/VR/SeeVR";
+import EditVR from "./Features/Teacher/components/courses/VR/UpdateVR";
 import LibraryForm from "./Features/Teacher/components/Library/libraryForm";
 import SubjectsInLibrary from "./Features/Teacher/components/Library/subjectsInLibrary";
 import MaterialsInLibrary from "./Features/Teacher/components/Library/materialsInLibrary";
@@ -25,6 +25,10 @@ import ItemInLibrary from "./Features/Teacher/components/Library/itemInLibrary";
 import LibraryItemForm from "./Features/Teacher/components/Library/libraryItemForm";
 import UpdateItemLIbrary from "./Features/Teacher/components/Library/updateItemLIbrary";
 import SeeAllMaterial from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllMaterial";
+import QuestionForm from "./Features/Teacher/components/courses/QuestionBank/FormQuestionBank";
+import SeeMyQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeMyQuestions";
+import SeeAllQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeAllQuestions";
+import EditQuestion from "./Features/Teacher/components/courses/QuestionBank/EditQuestions";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -238,9 +242,7 @@ const TeamDetails = lazy(
 const EditTeam = lazy(
   () => import("./Features/Student/components/Activites/EditTeam"),
 );
-const VirtualRooms = lazy(
-  () => import("./Features/Student/components/Virtual Rooms/VirtualRooms"),
-);
+
 const AllCouses = lazy(
   () => import("./Features/Student/components/courses/allcourses"),
 );
@@ -252,6 +254,12 @@ const StudentMaterialDetails = lazy(
 );
 const StudentVirtualRooms = lazy(
   () => import("./Features/Student/components/courses/CoursesVirtualRooms"),
+);
+const StudentQuestionBank = lazy(
+  () => import("./Features/Student/components/courses/CoursesQuestionBank"),
+);
+const StudentQuestionDetailes = lazy(
+  () => import("./Features/Student/components/courses/QuestionsDetailes"),
 );
 const AttendancePage = lazy(
   () => import("./Features/Student/components/Attendance/AttendancePage"),
@@ -328,7 +336,7 @@ const MaterialDetails = lazy(
   () => import("./Features/Student/components/courses/MaterialDetails"),
 );
 const VRForm = lazy(
-  () => import("./Features/Teacher/components/courses/FormVR"),
+  () => import("./Features/Teacher/components/courses/VR/FormVR"),
 );
 const EditManagerProfile = lazy(
   () => import("./Features/Manager/pages/EditProfilePage"),
@@ -489,7 +497,6 @@ function App() {
               element={<EditTeam />}
             />
             <Route path="activities" element={<Activities />} />
-            <Route path="virtualrooms" element={<VirtualRooms />} />
             <Route path="allcourses" element={<AllCouses />} />
             <Route
               path="allcourses/videos/:subjectId"
@@ -506,6 +513,14 @@ function App() {
             <Route
               path="allcourses/virtualrooms/:subjectId"
               element={<StudentVirtualRooms />}
+            />
+              <Route
+              path="allcourses/questionbank/:subjectId"
+              element={<StudentQuestionBank />}
+            />
+               <Route
+              path="/student/question-details/:subjectId/:questionId"
+              element={<StudentQuestionDetailes />}
             />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
@@ -581,6 +596,10 @@ function App() {
               path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId"
               element={<AddMaterial />}
             />
+            <Route path="question-bank-form/:gradeSubjectSemesterId"element={<QuestionForm />}/>
+            <Route path="my-question-bank/:gradeSubjectSemesterId/my-questions"element={<SeeMyQuestion />}/>
+            <Route path="all-question-bank/:gradeSubjectSemesterId/all-questions"element={<SeeAllQuestion />}/>
+            <Route path="/teacher/edit-question/:questionId" element={<EditQuestion />} />
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}

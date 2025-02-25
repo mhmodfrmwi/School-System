@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchVR, deleteVR } from "../TeacherRedux/VRSlice";
+import { fetchVR, deleteVR } from "../../TeacherRedux/VRSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams } from "react-router-dom";
@@ -41,6 +41,8 @@ const SeeVR = () => {
                 const resultAction = await dispatch(deleteVR(id));
 
                 if (deleteVR.fulfilled.match(resultAction)) {
+                dispatch(fetchVR(grade_subject_semester_id)); 
+                    
                 } else {
                     toast.error(resultAction.payload || "Failed to delete material");
                 }

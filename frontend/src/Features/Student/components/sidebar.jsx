@@ -12,8 +12,8 @@ import Icon5 from "../../../assets/StudentIcon/Icon5.png";
 import Icon6 from "../../../assets/StudentIcon/Icon6.png";
 import Icon7 from "../../../assets/StudentIcon/Icon7.png";
 import Icon8 from "../../../assets/StudentIcon/Icon8.png";
-import Icon9 from "../../../assets/StudentIcon/Icon9.png";
-import Icon10 from "../../../assets/StudentIcon/Icon10.png";
+// import Icon9 from "../../../assets/StudentIcon/Icon9.png";
+// import Icon10 from "../../../assets/StudentIcon/Icon10.png";
 import Icon11 from "../../../assets/StudentIcon/Icon11.png";
 import Icon12 from "../../../assets/StudentIcon/Icon12.png";
 
@@ -29,8 +29,8 @@ const Sidebar = ({ closeSidebar }) => {
         { label: "Grade Managements", icon: Icon6, path: "/student/grades" },
         { label: "Activities", icon: Icon7, path: "/student/activities" },
         { label: "Library", icon: Icon8, path: "/student/library" },
-        { label: "Question Bank", icon: Icon9, path: "/student/question-bank" },
-        { label: "Virtual Rooms", icon: Icon10, path: "/student/virtualrooms" },
+        // { label: "Question Bank", icon: Icon9, path: "/student/question-bank" },
+        // { label: "Virtual Rooms", icon: Icon10, path: "/student/virtualrooms" },
         { label: "Chats", icon: Icon11, path: "/student/chats" },
         { label: "Logout", icon: Icon12, path: "/login" },
     ];

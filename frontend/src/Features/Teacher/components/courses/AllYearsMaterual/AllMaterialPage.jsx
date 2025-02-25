@@ -67,6 +67,7 @@ const AllMaterialPage = () => {
     { id: 1, name: "Video Lectures", total: videoCount, icon: faVideo },
     { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
     { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
+    { id: 3, name: "Question bank", total: 20, icon: faVideo },
     { id: 4, name: "Assignments", total: 100, icon: faTasks },
     { id: 5, name: "Exams", total: 19, icon: faFileAlt },
   ];

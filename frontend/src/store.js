@@ -38,6 +38,9 @@ import teacherSchoolHubReducer from "./Features/Teacher/components/TeacherRedux/
 import studentSchoolHubReducer from "./Features/Student/components/StudentRedux/schoolhubSlice";
 import LibraryTeacherReducer from "./Features/Teacher/components/TeacherRedux/LibraryTeacherSlice";
 import generalLibraryReducer from "./Features/Teacher/components/TeacherRedux/generalLibrarySlice";
+import questionbankReducer from "./Features/Teacher/components/TeacherRedux/QuestionBankSlice";
+import studentQuestionBankReducer from "./Features/Student/components/StudentRedux/questionBankSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -80,6 +83,8 @@ const store = configureStore({
     teacherSchoolHub: teacherSchoolHubReducer,
     studentSchoolHub: studentSchoolHubReducer,
     generalLibrary: generalLibraryReducer,
+    questionbank:questionbankReducer,
+    studentQuestionBank: studentQuestionBankReducer,
   },
 });
 
