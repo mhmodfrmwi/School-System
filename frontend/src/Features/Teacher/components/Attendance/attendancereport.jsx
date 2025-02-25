@@ -179,7 +179,7 @@ function Attendancereport() {
           <option value="">Select Class</option>
           {classTeachers.map((teacher) => (
             <option key={teacher.classId?._id} value={teacher.classId?._id}>
-              {teacher.classId?.className || "Unnamed Class"}
+              {` ${teacher.gradeName} - ${teacher.classId?.className}   `}
             </option>
           ))}
         </select>
