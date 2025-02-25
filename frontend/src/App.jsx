@@ -242,9 +242,7 @@ const TeamDetails = lazy(
 const EditTeam = lazy(
   () => import("./Features/Student/components/Activites/EditTeam"),
 );
-const VirtualRooms = lazy(
-  () => import("./Features/Student/components/Virtual Rooms/VirtualRooms"),
-);
+
 const AllCouses = lazy(
   () => import("./Features/Student/components/courses/allcourses"),
 );
@@ -256,6 +254,12 @@ const StudentMaterialDetails = lazy(
 );
 const StudentVirtualRooms = lazy(
   () => import("./Features/Student/components/courses/CoursesVirtualRooms"),
+);
+const StudentQuestionBank = lazy(
+  () => import("./Features/Student/components/courses/CoursesQuestionBank"),
+);
+const StudentQuestionDetailes = lazy(
+  () => import("./Features/Student/components/courses/QuestionsDetailes"),
 );
 const AttendancePage = lazy(
   () => import("./Features/Student/components/Attendance/AttendancePage"),
@@ -493,7 +497,6 @@ function App() {
               element={<EditTeam />}
             />
             <Route path="activities" element={<Activities />} />
-            <Route path="virtualrooms" element={<VirtualRooms />} />
             <Route path="allcourses" element={<AllCouses />} />
             <Route
               path="allcourses/videos/:subjectId"
@@ -510,6 +513,14 @@ function App() {
             <Route
               path="allcourses/virtualrooms/:subjectId"
               element={<StudentVirtualRooms />}
+            />
+              <Route
+              path="allcourses/questionbank/:subjectId"
+              element={<StudentQuestionBank />}
+            />
+               <Route
+              path="/student/question-details/:subjectId/:questionId"
+              element={<StudentQuestionDetailes />}
             />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>

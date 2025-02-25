@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMaterials, addToBookmark
+import {
+  fetchMaterials, addToBookmark
   , fetchBookmarks, fetchSubjects, clearError
-, markMaterialAsViewed } from "../../components/StudentRedux/allSubjectsStudentSlice";
+  , markMaterialAsViewed
+} from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaBookmark, FaEye, FaDownload, FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -10,11 +12,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const MaterialSection = () => {
-    
-    const [currentPageAll, setCurrentPageAll] = useState(1);
-  
-    const [currentPageBookmarks, setCurrentPageBookmarks] = useState(1);
-    const itemsPerPage = 3;
+
+  const [currentPageAll, setCurrentPageAll] = useState(1);
+
+  const [currentPageBookmarks, setCurrentPageBookmarks] = useState(1);
+  const itemsPerPage = 3;
   const dispatch = useDispatch();
   const { subjectId } = useParams();
   const { materials, bookmarks, loading, error, subjects } = useSelector((state) => state.allSubjectsStudent);
@@ -25,6 +27,7 @@ const MaterialSection = () => {
   useEffect(() => {
     dispatch(fetchSubjects());
   }, [dispatch]);
+  
 
   useEffect(() => {
     if (subjects.length > 0 && subjectId) {
@@ -47,7 +50,7 @@ const MaterialSection = () => {
     dispatch(addToBookmark(materialId));
   };
 
- const handleViewMaterial = (materialId) => {
+  const handleViewMaterial = (materialId) => {
     if (!materials.find((material) => material._id === materialId)?.isViewed) {
       dispatch(markMaterialAsViewed(materialId));
     }
@@ -60,7 +63,7 @@ const MaterialSection = () => {
 
   const pdfMaterials = materials?.filter((material) => material.type === "PDF") || [];
   const bookmarkedMaterials = pdfMaterials.filter((material) =>
-    bookmarks.some((bookmark) => bookmark.material_id._id === material._id)
+    bookmarks?.some((bookmark) => bookmark?.material_id?._id === material._id) 
   );
 
   const displayedMaterials = activeTab === "bookmarks" ? bookmarkedMaterials : pdfMaterials;
@@ -83,7 +86,7 @@ const MaterialSection = () => {
   const totalPagesAll = Math.ceil(pdfMaterials.length / itemsPerPage);
   const totalPagesBookmarks = Math.ceil(bookmarkedMaterials.length / itemsPerPage);
   const totalPages = activeTab === "all" ? totalPagesAll : totalPagesBookmarks;
-  
+
   const paginatedMaterials = activeTab === "all"
     ? pdfMaterials.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage)
     : bookmarkedMaterials.slice((currentPageBookmarks - 1) * itemsPerPage, currentPageBookmarks * itemsPerPage);
@@ -124,26 +127,33 @@ const MaterialSection = () => {
             </Button>
           </li>
           <li>
-                      <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-                       onClick={() => navigate(`/student/allcourses/virtualrooms/${subjectId}`)} >
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Virtual Rooms
-                      </Button>
-                    </li>
-           <li>
-                      <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Discussion Rooms
-                      </Button>
-                    </li>
-                    <li>
-                      <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
-                      </Button>
-                    </li>
-                    <li>
-                      <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
-                      </Button>
-                    </li>
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+              onClick={() => navigate(`/student/allcourses/virtualrooms/${subjectId}`)} >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Virtual Rooms
+            </Button>
+          </li>
+          <li>
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Discussion Rooms
+            </Button>
+          </li>
+          <li>
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
+            </Button>
+          </li>
+          <li>
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
+            </Button>
+          </li>
+          <li>
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+              onClick={() => navigate(`/student/allcourses/questionbank/${subjectId}`)}
+              >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
+            </Button>
+          </li>
         </ul>
       </div>
 
@@ -155,18 +165,16 @@ const MaterialSection = () => {
         <div className="flex flex-wrap gap-3 mb-6">
           <Button
             variant={activeTab === "all" ? "outline" : "solid"}
-            className={`${
-              activeTab === "all" ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white" : "border border-gray-500 text-gray-800"
-            } px-4 md:px-6 py-2 rounded-full`}
+            className={`${activeTab === "all" ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white" : "border border-gray-500 text-gray-800"
+              } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("all")}
           >
             All ({pdfMaterials.length})
           </Button>
           <Button
             variant={activeTab === "bookmarks" ? "outline" : "solid"}
-            className={`${
-              activeTab === "bookmarks" ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white" : "border border-gray-500 text-gray-800"
-            } px-4 md:px-6 py-2 rounded-full`}
+            className={`${activeTab === "bookmarks" ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white" : "border border-gray-500 text-gray-800"
+              } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("bookmarks")}
           >
             Bookmarks ({bookmarkedMaterials.length})
@@ -183,19 +191,19 @@ const MaterialSection = () => {
 
         {/* No Materials Message */}
         {activeTab === "all" && pdfMaterials.length === 0 && !loading && !error && (
-                 <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-                   <CardContent className="text-center p-4 text-gray-600">
-                     No pdf materials available for this subject.
-                   </CardContent>
-                 </Card>
-               )}
-                {activeTab === "bookmarks" && bookmarkedMaterials.length === 0 && !loading && !error && (
-                         <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-                           <CardContent className="text-center p-4 text-gray-600">
-                             You haven't bookmarked any material yet.
-                           </CardContent>
-                         </Card>
-                       )}
+          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+            <CardContent className="text-center p-4 text-gray-600">
+              No pdf materials available for this subject.
+            </CardContent>
+          </Card>
+        )}
+        {activeTab === "bookmarks" && bookmarkedMaterials.length === 0 && !loading && !error && (
+          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+            <CardContent className="text-center p-4 text-gray-600">
+              You haven't bookmarked any material yet.
+            </CardContent>
+          </Card>
+        )}
 
         {/* Material Cards */}
         <div className="space-y-4">
@@ -204,7 +212,7 @@ const MaterialSection = () => {
               <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
-                  {index + 1 + (currentPage - 1) * itemsPerPage}
+                    {index + 1 + (currentPage - 1) * itemsPerPage}
                   </div>
                   <div>
                     <h2 className="text-base md:text-lg font-semibold text-gray-800">{material.title}</h2>
@@ -217,19 +225,18 @@ const MaterialSection = () => {
                     <FaBookmark className={`text-gray-800 ${material.isBookmarked ? "text-yellow-500" : ""}`} />
                   </div>
                   <div
-                                 className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer"
-                                 onClick={() => handleViewMaterial(material._id)}
-                               >
-                                 <FaEye
-                   className={`cursor-pointer text-xl ${
-                     material.isViewed
-                       ? "text-blue-500"
-                       : "text-gray-500"
-                   }`}
-                   onClick={() => handleViewMaterial(material._id)}
-                 />
-                 
-                               </div>
+                    className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer"
+                    onClick={() => handleViewMaterial(material._id)}
+                  >
+                    <FaEye
+                      className={`cursor-pointer text-xl ${material.isViewed
+                        ? "text-blue-500"
+                        : "text-gray-500"
+                        }`}
+                      onClick={() => handleViewMaterial(material._id)}
+                    />
+
+                  </div>
                   <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer" onClick={() => handleDownload(material.file_url)}>
                     <FaDownload className="text-green-600" />
                   </div>
@@ -238,29 +245,29 @@ const MaterialSection = () => {
             </Card>
           ))}
         </div>
-        
-                {/* Pagination Controls */}
-                {displayedMaterials.length > itemsPerPage && (
-                  <div className="flex justify-center items-center gap-4 mb-4 mt-10">
-                    <button
-                      onClick={prevPage}
-                      disabled={currentPage === 1}
-                      className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-                    >
-                      <FaChevronLeft />
-                    </button>
-                    <span className="text-gray-800 font-medium">
-                      Page {currentPage} of {totalPages}
-                    </span>
-                    <button
-                      onClick={nextPage}
-                      disabled={currentPage === totalPages}
-                      className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-                    >
-                      <FaChevronRight />
-                    </button>
-                  </div>
-                )}
+
+        {/* Pagination Controls */}
+        {displayedMaterials.length > itemsPerPage && (
+          <div className="flex justify-center items-center gap-4 mb-4 mt-10">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+            >
+              <FaChevronLeft />
+            </button>
+            <span className="text-gray-800 font-medium">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+              className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
