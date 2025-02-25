@@ -247,6 +247,7 @@ const VirtualRoomsSection = () => {
                   </div>
                   <div>
                     <h2 className="text-base md:text-lg font-semibold text-gray-800">{room.title}</h2>
+                    <p className="text-md text-gray-700">Teacher : {room.teacherId.fullName} </p>
                     <p className="text-sm text-gray-600">Duration : {room.duration} </p>
                     <p className="text-sm text-gray-400">{new Date(room.createdAt).toLocaleString()}</p>
                   </div>

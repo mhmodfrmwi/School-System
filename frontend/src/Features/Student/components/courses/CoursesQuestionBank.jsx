@@ -14,13 +14,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const CoursesQuestionBank = () => {
-  const [currentPageAll, setCurrentPageAll] = useState(1);
-  const [currentPageBookmarks, setCurrentPageBookmarks] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("all");
   const itemsPerPage = 3;
   const dispatch = useDispatch();
   const { subjectId } = useParams();
-  const { questions, bookmarks, viewedQuestions, loading, error } = useSelector(
+  const { questions, bookmarks, loading, error } = useSelector(
     (state) => state.studentQuestionBank
   );
   const navigate = useNavigate();
@@ -50,7 +49,8 @@ const CoursesQuestionBank = () => {
   };
 
   const handleViewQuestion = (questionId) => {
-    if (!viewedQuestions[questionId]?.isViewed) {
+    const question = questions.find((q) => q._id === questionId);
+    if (question && !question.isViewed) {
       dispatch(markQuestionAsViewed(questionId));
     }
     navigate(`/student/question-details/${subjectId}/${questionId}`);
@@ -60,27 +60,23 @@ const CoursesQuestionBank = () => {
     bookmarks?.some((bookmark) => bookmark?.question_id?._id === question._id)
   );
 
-  const totalPagesAll = Math.ceil(questions.length / itemsPerPage);
-  const totalPagesBookmarks = Math.ceil(bookmarkedQuestions.length / itemsPerPage);
-  const totalPages = activeTab === "all" ? totalPagesAll : totalPagesBookmarks;
+  const displayedQuestions = activeTab === "all" ? questions : bookmarkedQuestions;
+  const totalPages = Math.ceil(displayedQuestions.length / itemsPerPage);
 
-  const paginatedQuestions = activeTab === "all"
-    ? questions.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage)
-    : bookmarkedQuestions.slice((currentPageBookmarks - 1) * itemsPerPage, currentPageBookmarks * itemsPerPage);
+  const paginatedQuestions = displayedQuestions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const nextPage = () => {
-    if (activeTab === "all" && currentPageAll < totalPagesAll) {
-      setCurrentPageAll(currentPageAll + 1);
-    } else if (activeTab === "bookmarks" && currentPageBookmarks < totalPagesBookmarks) {
-      setCurrentPageBookmarks(currentPageBookmarks + 1);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
     }
   };
 
   const prevPage = () => {
-    if (activeTab === "all" && currentPageAll > 1) {
-      setCurrentPageAll(currentPageAll - 1);
-    } else if (activeTab === "bookmarks" && currentPageBookmarks > 1) {
-      setCurrentPageBookmarks(currentPageBookmarks - 1);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
@@ -187,7 +183,7 @@ const CoursesQuestionBank = () => {
               <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
-                    {index + 1 + (currentPageAll - 1) * itemsPerPage}
+                    {index + 1 + (currentPage - 1) * itemsPerPage}
                   </div>
                   <div>
                     <h2 className="text-base md:text-lg font-semibold text-gray-800">{question.questionText}</h2>
@@ -206,7 +202,7 @@ const CoursesQuestionBank = () => {
                     className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer"
                     onClick={() => handleViewQuestion(question._id)}
                   >
-                    <FaEye className={`${viewedQuestions[question._id]?.isViewed ? "text-blue-500" : "text-gray-800 "}`} />
+                    <FaEye className={`${question.isViewed ? "text-blue-500" : "text-gray-800 "}`} />
                   </div>
                 </div>
               </CardContent>
@@ -215,21 +211,21 @@ const CoursesQuestionBank = () => {
         </div>
 
         {/* Pagination Controls */}
-        {questions.length > itemsPerPage && (
+        {displayedQuestions.length > itemsPerPage && (
           <div className="flex justify-center items-center gap-4 mb-4 mt-10">
             <button
               onClick={prevPage}
-              disabled={currentPageAll === 1}
+              disabled={currentPage === 1}
               className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
             >
               <FaChevronLeft />
             </button>
             <span className="text-gray-800 font-medium">
-              Page {activeTab === "all" ? currentPageAll : currentPageBookmarks} of {totalPages}
+              Page {currentPage} of {totalPages}
             </span>
             <button
               onClick={nextPage}
-              disabled={activeTab === "all" ? currentPageAll === totalPagesAll : currentPageBookmarks === totalPagesBookmarks}
+              disabled={currentPage === totalPages}
               className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
             >
               <FaChevronRight />
