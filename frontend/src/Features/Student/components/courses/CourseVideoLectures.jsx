@@ -232,13 +232,14 @@ const VideoSection = () => {
                   <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
                     {index + 1 + (currentPage - 1) * itemsPerPage}
                   </div>
-                  <div>
+                  <div> 
                     <h2 className="text-base md:text-lg font-semibold text-gray-800">{material.title}</h2>
                     <p className="text-sm text-gray-600">{material.type}</p>
                     <p className="text-sm text-gray-400">{new Date(material.createdAt).toLocaleString()}</p>
                   </div>
                 </div>
                 <div className="flex gap-3 text-gray-500">
+               
                   <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full" onClick={() => handleBookmark(material._id)}>
                     <FaBookmark className={`text-gray-800 ${material.isBookmarked ? 'text-yellow-500' : ''}`} />
                   </div>

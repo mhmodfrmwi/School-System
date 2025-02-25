@@ -55,15 +55,16 @@ export const fetchMaterials = createAsyncThunk(
 export const addToBookmark = createAsyncThunk(
   "allSubjectsStudent/addToBookmark",
   async (materialId, { rejectWithValue, getState }) => {
+    console.log(materialId);
     try {
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
       const state = getState();
+      
       const isBookmarked = state.allSubjectsStudent.bookmarks.some(
-        (bookmark) => bookmark.material_id._id === materialId
+        (bookmark) => bookmark?.material_id?._id === materialId
       );
-
       const url = isBookmarked
         ? `http://localhost:4000/api/v1/student/remove-from-bookmark/${materialId}`
         : `http://localhost:4000/api/v1/student/add-to-bookmark/${materialId}`;
@@ -223,7 +224,7 @@ const allSubjectsStudentSlice = createSlice({
       if (isBookmarked) {
         // Remove from bookmarks
         state.bookmarks = state.bookmarks.filter(
-          (bookmark) => bookmark.material_id._id !== materialId
+          (bookmark) => bookmark.material_id?._id !== materialId
         );
         // Update materials to reflect the removal
         state.materials = state.materials.map((material) =>
