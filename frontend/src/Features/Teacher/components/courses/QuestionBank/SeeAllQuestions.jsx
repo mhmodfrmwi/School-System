@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllQuestions } from "../../TeacherRedux/QuestionBankSlice"; // استدعاء الـ slice
+import { fetchAllQuestions ,deleteQuestion} from "../../TeacherRedux/QuestionBankSlice"; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useParams, useNavigate } from "react-router-dom";
@@ -18,10 +18,8 @@ if (!gradeSubjectSemesterId) {
 }
 
 const myQuestions = useSelector((state) => {
-    console.log("Redux Full State:", state); // Debug the full state
-    return state.questionbank.questionbank; // Access the nested questions array
+    return state.questionbank.questionbank; 
   });
-      console.log("Redux myQuestions:", myQuestions);
       
     useEffect(() => {
         if (gradeSubjectSemesterId) {
@@ -29,18 +27,31 @@ const myQuestions = useSelector((state) => {
         }
     }, [dispatch, gradeSubjectSemesterId]);
     
-    console.log("Redux State (myQuestions):", myQuestions);
+ const handleDeleteQuestion = async (questionId) => {
+        if (window.confirm("Are you sure you want to delete this question?")) {
+            try {
+                await dispatch(deleteQuestion(questionId)).unwrap(); 
+                toast.success("Question deleted successfully!");
+                dispatch(fetchAllQuestions(gradeSubjectSemesterId)); 
+            } catch (error) {
+                toast.error(error.message || "Failed to delete question");
+            }
+        }
+    };    
     
+    const handleEditQuestion = (questionId) => {
+        navigate(`/teacher/edit-question/${questionId}`); 
+    };
     return (
-        <div className="flex flex-col p-4">
-            <div className="flex-1">
-                <div className="mx-auto w-[400px] p-6 sm:w-[550px] md:w-full xl:w-full">
-                    <div className="flex ml-8 flex-col">
-                    <QuestionsToggle/>
+        <div className="flex flex-col p-0">
+        <div className="flex-1">
+            <QuestionsToggle />
+            <div className="mx-auto w-[400px] p-0 sm:w-[550px] md:w-full xl:w-full">
+                <div className="flex ml-8 flex-col">
                         <h1 className="text-lg  font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                            My questions
+                            All Questions For This Subject
                         </h1>
-                        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
+                        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[350px]"></div>
                     </div>
                     <div className="relative w-full px-4 sm:px-6 lg:px-8 font-poppins">
                         <div className="mt-7">
@@ -64,27 +75,20 @@ const myQuestions = useSelector((state) => {
                                                     key={question._id}
                                                     className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
                                                 >
-                                                    {/* رقم السؤال */}
                                                     <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{index + 1}</td>
-
-                                                    {/* نص السؤال */}
                                                     <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{question.questionText}</td>
-
-                                                    {/* نوع السؤال */}
                                                     <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{question.questionType}</td>
-
-                                                    {/* الإجابة */}
                                                     <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{question.answer}</td>
-
-                                                    {/* زر التعديل والحذف */}
                                                     <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                                                         <button
+                                                        onClick={() => handleEditQuestion(question._id)} 
                                                             className="text-[#117C90] transition duration-300 hover:text-[#244856]"
                                                         >
                                                             <FontAwesomeIcon icon={faEdit} className="text-lg" />
                                                         </button>
 
                                                         <button
+                                                        onClick={() => handleDeleteQuestion(question._id)} 
                                                             className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                                                         >
                                                             <FontAwesomeIcon icon={faTrashAlt} className="text-lg" />

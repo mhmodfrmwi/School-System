@@ -27,8 +27,9 @@ const SeeMaterial = () => {
         if (window.confirm("Are you sure you want to delete this material?")) {
             try {
                 const resultAction = await dispatch(deleteMaterial(id));
-
                 if (deleteMaterial.fulfilled.match(resultAction)) {
+                dispatch(fetchMaterials(grade_subject_semester_id)); 
+                    
                 } else {
                     toast.error(resultAction.payload || "Failed to delete material");
                 }

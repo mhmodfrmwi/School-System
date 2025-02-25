@@ -13,8 +13,8 @@ const QuestionForm = () => {
     grade_subject_semester_id: gradeSubjectSemesterId,
     questionType: "MCQ",
     questionText: "",
-    answer: "", // الإجابة الصحيحة
-    choices: ["", "", "", ""], // اختيارات MCQ الافتراضية
+    answer: "", 
+    choices: ["", "", "", ""], 
   });
 
   const handleChange = (e) => {
@@ -25,11 +25,10 @@ const QuestionForm = () => {
       [name]: value,
     }));
 
-    // عند اختيار MCQ، تأكد أن الإجابة الصحيحة هي واحدة من الاختيارات
     if (name === "questionType") {
       setFormData((prevState) => ({
         ...prevState,
-        answer: value === "MCQ" ? prevState.choices[0] : "", // أول اختيار كإجابة افتراضية
+        answer: value === "MCQ" ? prevState.choices[0] : "", 
       }));
     }
   };
@@ -42,16 +41,13 @@ const QuestionForm = () => {
       ...prevState,
       choices: updatedChoices,
       answer: prevState.questionType === "MCQ" && prevState.answer === prevState.choices[index]
-        ? value // إذا تم تغيير الاختيار الصحيح، يتم تحديث الإجابة الصحيحة أيضًا
+        ? value 
         : prevState.answer,
     }));
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-  
-    console.log("Form Data before validation:", formData); // Debugging Step
-  
+    e.preventDefault();  
     if (!formData.questionText.trim()) {
       toast.error("Question text is required!");
       return;
@@ -67,17 +63,14 @@ const QuestionForm = () => {
       return;
     }
   
-    // إنشاء نسخة جديدة من البيانات مع حذف choices لو لم يكن السؤال MCQ
     const dataToSend = {
       grade_subject_semester_id: formData.grade_subject_semester_id,
       questionType: formData.questionType,
       questionText: formData.questionText,
       answer: formData.answer,
-      ...(formData.questionType === "MCQ" && { choices: formData.choices }) // إضافة choices فقط عند الحاجة
+      ...(formData.questionType === "MCQ" && { choices: formData.choices }) 
     };
-  
-    console.log("Data sent to backend:", dataToSend);
-  
+    
     dispatch(postQuestionBank(dataToSend))
       .unwrap()
       .then(() => {

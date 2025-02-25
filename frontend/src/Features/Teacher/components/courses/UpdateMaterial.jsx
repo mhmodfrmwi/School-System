@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { toast } from "react-toastify";
 import { updateMaterial ,fetchMaterials} from "../TeacherRedux/PdfMaterialSlice";  
@@ -7,6 +7,7 @@ import { updateMaterial ,fetchMaterials} from "../TeacherRedux/PdfMaterialSlice"
 
 const EditMaterial = () => {    
     const { materialId } = useParams(); 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedMaterial = useSelector((state) =>
       state.pdfMaterials.pdfMaterials.find((mat) => mat._id === materialId)
@@ -57,6 +58,7 @@ const EditMaterial = () => {
         }
   
         toast.success("Material updated successfully");
+        navigate(-1); 
       } catch (error) {
         console.error("Update failed:", error);
         toast.error("Failed to update material");

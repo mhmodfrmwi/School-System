@@ -6,8 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 
-import SeeVR from "./Features/Teacher/components/courses/SeeVR";
-import EditVR from "./Features/Teacher/components/courses/UpdateVR";
+import SeeVR from "./Features/Teacher/components/courses/VR/SeeVR";
+import EditVR from "./Features/Teacher/components/courses/VR/UpdateVR";
 import LibraryForm from "./Features/Teacher/components/Library/libraryForm";
 import SubjectsInLibrary from "./Features/Teacher/components/Library/subjectsInLibrary";
 import MaterialsInLibrary from "./Features/Teacher/components/Library/materialsInLibrary";
@@ -28,6 +28,7 @@ import SeeAllMaterial from "./Features/Teacher/components/courses/AllYearsMateru
 import QuestionForm from "./Features/Teacher/components/courses/QuestionBank/FormQuestionBank";
 import SeeMyQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeMyQuestions";
 import SeeAllQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeAllQuestions";
+import EditQuestion from "./Features/Teacher/components/courses/QuestionBank/EditQuestions";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -331,7 +332,7 @@ const MaterialDetails = lazy(
   () => import("./Features/Student/components/courses/MaterialDetails"),
 );
 const VRForm = lazy(
-  () => import("./Features/Teacher/components/courses/FormVR"),
+  () => import("./Features/Teacher/components/courses/VR/FormVR"),
 );
 const EditManagerProfile = lazy(
   () => import("./Features/Manager/pages/EditProfilePage"),
@@ -587,6 +588,7 @@ function App() {
             <Route path="question-bank-form/:gradeSubjectSemesterId"element={<QuestionForm />}/>
             <Route path="my-question-bank/:gradeSubjectSemesterId/my-questions"element={<SeeMyQuestion />}/>
             <Route path="all-question-bank/:gradeSubjectSemesterId/all-questions"element={<SeeAllQuestion />}/>
+            <Route path="/teacher/edit-question/:questionId" element={<EditQuestion />} />
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}
