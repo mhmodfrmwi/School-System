@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const academicYearSchema = new mongoose.Schema(
   {
-    startYear: { type: Number, required: true },
-    endYear: { type: Number, required: true },
+    startYear: { type: Number },
+    endYear: { type: Number },
   },
   { timestamps: true }
 );
