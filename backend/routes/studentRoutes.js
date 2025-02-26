@@ -69,6 +69,10 @@ const {
   getLibraryMaterialViewByMaterialId,
   getLibraryMaterialViewsForStudent,
 } = require("../controllers/Student/libraryMaterialViewController");
+const {
+  getPublicLibraryTypePdf,
+  getPublicLibraryTypeVideo,
+} = require("../controllers/General/libraryItemController");
 const router = express.Router();
 
 //login route
@@ -246,4 +250,5 @@ router.get(
   validateStudent,
   getLibraryMaterialViewsForStudent
 );
+
 module.exports = router;

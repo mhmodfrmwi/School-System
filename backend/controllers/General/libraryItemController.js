@@ -185,6 +185,7 @@ const deleteLibraryItem = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ status: 500, message: "Internal Server Error" });
   }
 });
+
 const getLibraryItems = expressAsyncHandler(async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
@@ -217,26 +218,48 @@ const getLibraryItems = expressAsyncHandler(async (req, res) => {
       });
     }
 
-    const studentLibraryItems = await StudentLibraryItem.find({
-      student_id: req.user.id,
-      library_item_id: { $in: libraryItems.map((item) => item._id) },
-    });
+    let enhancedLibraryItems;
 
-    const libraryItemsWithIsViewedAttributes = libraryItems.map((item) => {
-      const isViewed = studentLibraryItems.some(
-        (studentItem) =>
-          studentItem.library_item_id.toString() === item._id.toString()
+    if (req.user.role === "student") {
+      // For students: Add isViewed attribute
+      const studentLibraryItems = await StudentLibraryItem.find({
+        student_id: req.user.id,
+        library_item_id: { $in: libraryItems.map((item) => item._id) },
+      });
+
+      enhancedLibraryItems = libraryItems.map((item) => {
+        const isViewed = studentLibraryItems.some(
+          (studentItem) =>
+            studentItem.library_item_id.toString() === item._id.toString()
+        );
+        return {
+          ...item.toObject(),
+          isViewed,
+        };
+      });
+    } else {
+      // For non-students: Add views count attribute
+      const libraryItemIds = libraryItems.map((item) => item._id);
+
+      const viewCounts = await StudentLibraryItem.aggregate([
+        { $match: { library_item_id: { $in: libraryItemIds } } },
+        { $group: { _id: "$library_item_id", views: { $sum: 1 } } },
+      ]);
+
+      const viewCountMap = new Map(
+        viewCounts.map((item) => [item._id.toString(), item.views])
       );
-      return {
+
+      enhancedLibraryItems = libraryItems.map((item) => ({
         ...item.toObject(),
-        isViewed,
-      };
-    });
+        views: viewCountMap.get(item._id.toString()) || 0,
+      }));
+    }
 
     res.status(200).json({
       status: 200,
       message: "Library items retrieved successfully",
-      libraryItems: libraryItemsWithIsViewedAttributes,
+      libraryItems: enhancedLibraryItems,
       totalItems,
     });
   } catch (error) {
@@ -244,6 +267,7 @@ const getLibraryItems = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ status: 500, message: "Internal Server Error" });
   }
 });
+
 const getLibraryItemById = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -270,23 +294,287 @@ const getLibraryItemById = expressAsyncHandler(async (req, res) => {
       });
     }
 
-    const isViewed = await StudentLibraryItem.findOne({
-      student_id: req.user.id,
-      library_item_id: id,
-    });
+    let enhancedLibraryItem;
 
-    const libraryItemWithIsViewed = {
-      ...libraryItem.toObject(),
-      isViewed: !!isViewed,
-    };
+    if (req.user.role === "student") {
+      // For students: Add isViewed attribute
+      const isViewed = await StudentLibraryItem.findOne({
+        student_id: req.user.id,
+        library_item_id: id,
+      });
+
+      enhancedLibraryItem = {
+        ...libraryItem.toObject(),
+        isViewed: !!isViewed,
+      };
+    } else {
+      // For non-students: Add views count attribute
+      const viewCount = await StudentLibraryItem.countDocuments({
+        library_item_id: id,
+      });
+
+      enhancedLibraryItem = {
+        ...libraryItem.toObject(),
+        views: viewCount,
+      };
+    }
 
     res.status(200).json({
       status: 200,
       message: "Library item retrieved successfully",
-      libraryItem: libraryItemWithIsViewed,
+      libraryItem: enhancedLibraryItem,
     });
   } catch (error) {
     console.error("Error fetching library item by ID:", error);
+    res.status(500).json({ status: 500, message: "Internal Server Error" });
+  }
+});
+
+const getPublicLibraryTypePdf = expressAsyncHandler(async (req, res) => {
+  try {
+    const filter = { type: "PDF" };
+
+    if (req.query.author) filter.author = req.query.author;
+    if (req.query.title) {
+      filter.title = { $regex: req.query.title, $options: "i" };
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const validSortFields = ["createdAt", "-createdAt", "title", "-title"];
+    const sort = validSortFields.includes(req.query.sort)
+      ? req.query.sort
+      : "-createdAt";
+
+    const pdfItems = await LibraryItem.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .populate("uploaded_by", "fullName");
+
+    const totalItems = await LibraryItem.countDocuments(filter);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    if (pdfItems.length === 0) {
+      return res.status(200).json({
+        status: 200,
+        message: "No PDF library items found",
+        libraryItems: [],
+        pagination: {
+          totalItems,
+          totalPages,
+          currentPage: page,
+          itemsPerPage: limit,
+        },
+      });
+    }
+
+    // Record views for logged-in users
+    if (req.user && req.user.id) {
+      const viewPromises = pdfItems.map(async (item) => {
+        const existingView = await StudentLibraryItem.findOne({
+          student_id: req.user.id,
+          library_item_id: item._id,
+        });
+
+        if (!existingView) {
+          await StudentLibraryItem.create({
+            student_id: req.user.id,
+            library_item_id: item._id,
+          });
+
+          await MaterialView.findOneAndUpdate(
+            { material_id: item._id },
+            { $inc: { view_count: 1 } },
+            { upsert: true, new: true }
+          );
+        }
+      });
+
+      await Promise.all(viewPromises);
+    }
+
+    let enhancedPdfItems;
+
+    if (req.user && req.user.role === "student") {
+      // For students: Add isViewed attribute
+      const studentLibraryItems = await StudentLibraryItem.find({
+        student_id: req.user.id,
+        library_item_id: { $in: pdfItems.map((item) => item._id) },
+      });
+
+      const viewedItemMap = new Map(
+        studentLibraryItems.map((item) => [
+          item.library_item_id.toString(),
+          true,
+        ])
+      );
+
+      enhancedPdfItems = pdfItems.map((item) => ({
+        ...item.toObject(),
+        isViewed: viewedItemMap.has(item._id.toString()),
+      }));
+    } else if (req.user && req.user.role !== "student") {
+      // For non-students: Add views count attribute
+      const pdfItemIds = pdfItems.map((item) => item._id);
+
+      const viewCounts = await StudentLibraryItem.aggregate([
+        { $match: { library_item_id: { $in: pdfItemIds } } },
+        { $group: { _id: "$library_item_id", views: { $sum: 1 } } },
+      ]);
+
+      const viewCountMap = new Map(
+        viewCounts.map((item) => [item._id.toString(), item.views])
+      );
+
+      enhancedPdfItems = pdfItems.map((item) => ({
+        ...item.toObject(),
+        views: viewCountMap.get(item._id.toString()) || 0,
+      }));
+    } else {
+      // For non-logged in users, just return the items as is
+      enhancedPdfItems = pdfItems;
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "PDF library items retrieved successfully",
+      libraryItems: enhancedPdfItems,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: page,
+        itemsPerPage: limit,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching PDF library items:", error);
+    res.status(500).json({ status: 500, message: "Internal Server Error" });
+  }
+});
+
+const getPublicLibraryTypeVideo = expressAsyncHandler(async (req, res) => {
+  try {
+    const filter = { type: "Video" };
+
+    if (req.query.author) filter.author = req.query.author;
+    if (req.query.title) {
+      filter.title = { $regex: req.query.title, $options: "i" };
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const validSortFields = ["createdAt", "-createdAt", "title", "-title"];
+    const sort = validSortFields.includes(req.query.sort)
+      ? req.query.sort
+      : "-createdAt";
+
+    const videoItems = await LibraryItem.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .populate("uploaded_by", "fullName");
+
+    const totalItems = await LibraryItem.countDocuments(filter);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    if (videoItems.length === 0) {
+      return res.status(200).json({
+        status: 200,
+        message: "No Video library items found",
+        libraryItems: [],
+        pagination: {
+          totalItems,
+          totalPages,
+          currentPage: page,
+          itemsPerPage: limit,
+        },
+      });
+    }
+
+    // Record views for logged-in users
+    if (req.user && req.user.id) {
+      const viewPromises = videoItems.map(async (item) => {
+        const existingView = await StudentLibraryItem.findOne({
+          student_id: req.user.id,
+          library_item_id: item._id,
+        });
+
+        if (!existingView) {
+          await StudentLibraryItem.create({
+            student_id: req.user.id,
+            library_item_id: item._id,
+          });
+
+          await MaterialView.findOneAndUpdate(
+            { material_id: item._id },
+            { $inc: { view_count: 1 } },
+            { upsert: true, new: true }
+          );
+        }
+      });
+
+      await Promise.all(viewPromises);
+    }
+
+    let enhancedVideoItems;
+
+    if (req.user && req.user.role === "student") {
+      // For students: Add isViewed attribute
+      const studentLibraryItems = await StudentLibraryItem.find({
+        student_id: req.user.id,
+        library_item_id: { $in: videoItems.map((item) => item._id) },
+      });
+
+      const viewedItemMap = new Map(
+        studentLibraryItems.map((item) => [
+          item.library_item_id.toString(),
+          true,
+        ])
+      );
+
+      enhancedVideoItems = videoItems.map((item) => ({
+        ...item.toObject(),
+        isViewed: viewedItemMap.has(item._id.toString()),
+      }));
+    } else if (req.user && req.user.role !== "student") {
+      // For non-students: Add views count attribute
+      const videoItemIds = videoItems.map((item) => item._id);
+
+      const viewCounts = await StudentLibraryItem.aggregate([
+        { $match: { library_item_id: { $in: videoItemIds } } },
+        { $group: { _id: "$library_item_id", views: { $sum: 1 } } },
+      ]);
+
+      const viewCountMap = new Map(
+        viewCounts.map((item) => [item._id.toString(), item.views])
+      );
+
+      enhancedVideoItems = videoItems.map((item) => ({
+        ...item.toObject(),
+        views: viewCountMap.get(item._id.toString()) || 0,
+      }));
+    } else {
+      enhancedVideoItems = videoItems;
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Video library items retrieved successfully",
+      libraryItems: enhancedVideoItems,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: page,
+        itemsPerPage: limit,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching Video library items:", error);
     res.status(500).json({ status: 500, message: "Internal Server Error" });
   }
 });
@@ -297,4 +585,6 @@ module.exports = {
   deleteLibraryItem,
   getLibraryItems,
   getLibraryItemById,
+  getPublicLibraryTypePdf,
+  getPublicLibraryTypeVideo,
 };

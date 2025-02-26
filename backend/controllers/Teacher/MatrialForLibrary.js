@@ -384,13 +384,55 @@ const getMaterialOfSubjectThatOfTypePdf = expressAsyncHandler(
       });
     }
 
+    let enhancedMaterials;
+
+    if (req.user.role === "student") {
+      const studentId = req.user.id;
+      const materialIds = materials.map((material) => material._id);
+
+      const viewedMaterials = await LibraryMaterialView.find({
+        student_id: studentId,
+        library_material_id: { $in: materialIds },
+        is_viewed: true,
+      });
+
+      const viewedMaterialMap = new Map(
+        viewedMaterials.map((viewed) => [
+          viewed.library_material_id.toString(),
+          true,
+        ])
+      );
+
+      enhancedMaterials = materials.map((material) => ({
+        ...material,
+        isViewed: viewedMaterialMap.has(material._id.toString()),
+      }));
+    } else {
+      const materialIds = materials.map((material) => material._id);
+
+      const materialViewCounts = await LibraryMaterialView.aggregate([
+        { $match: { library_material_id: { $in: materialIds } } },
+        { $group: { _id: "$library_material_id", views: { $sum: 1 } } },
+      ]);
+
+      const viewCountMap = new Map(
+        materialViewCounts.map((item) => [item._id.toString(), item.views])
+      );
+
+      enhancedMaterials = materials.map((material) => ({
+        ...material,
+        views: viewCountMap.get(material._id.toString()) || 0,
+      }));
+    }
+
     res.status(200).json({
       status: 200,
       message: "PDF materials for the subject",
-      materials,
+      materials: enhancedMaterials,
     });
   }
 );
+
 const getMaterialOfSubjectThatOfTypeVideo = expressAsyncHandler(
   async (req, res) => {
     const { id: subjectId } = req.params;
@@ -421,10 +463,52 @@ const getMaterialOfSubjectThatOfTypeVideo = expressAsyncHandler(
       });
     }
 
+    let enhancedMaterials;
+
+    if (req.user.role === "student") {
+      // For students: Add isViewed attribute
+      const studentId = req.user.id;
+      const materialIds = materials.map((material) => material._id);
+
+      const viewedMaterials = await LibraryMaterialView.find({
+        student_id: studentId,
+        library_material_id: { $in: materialIds },
+        is_viewed: true,
+      });
+
+      const viewedMaterialMap = new Map(
+        viewedMaterials.map((viewed) => [
+          viewed.library_material_id.toString(),
+          true,
+        ])
+      );
+
+      enhancedMaterials = materials.map((material) => ({
+        ...material,
+        isViewed: viewedMaterialMap.has(material._id.toString()),
+      }));
+    } else {
+      const materialIds = materials.map((material) => material._id);
+
+      const materialViewCounts = await LibraryMaterialView.aggregate([
+        { $match: { library_material_id: { $in: materialIds } } },
+        { $group: { _id: "$library_material_id", views: { $sum: 1 } } },
+      ]);
+
+      const viewCountMap = new Map(
+        materialViewCounts.map((item) => [item._id.toString(), item.views])
+      );
+
+      enhancedMaterials = materials.map((material) => ({
+        ...material,
+        views: viewCountMap.get(material._id.toString()) || 0,
+      }));
+    }
+
     res.status(200).json({
       status: 200,
       message: "Video materials for the subject",
-      materials,
+      materials: enhancedMaterials,
     });
   }
 );
@@ -434,47 +518,140 @@ const fetchAllGeneralAndMaterialVideos = expressAsyncHandler(
     const sort = validSortFields.includes(req.query.sort)
       ? req.query.sort
       : "-createdAt";
+
     const materialsQuery = LibraryItemsForGrade.find({ type: "Video" })
       .select(defaultFieldsToExclude)
       .sort(sort);
-
     const materialsFromLibrary = await populateLibraryItem(
       materialsQuery
     ).lean();
-
-    const studentId = req.user.id;
-
-    const materialIds = materialsFromLibrary.map((material) => material._id);
-
-    const viewedMaterials = await LibraryMaterialView.find({
-      student_id: studentId,
-      library_material_id: { $in: materialIds },
-      is_viewed: true,
-    });
-
-    const viewedMaterialMap = new Map(
-      viewedMaterials.map((viewed) => [
-        viewed.library_material_id.toString(),
-        true,
-      ])
-    );
-
-    const enhancedMaterials = materialsFromLibrary.map((material) => ({
-      ...material,
-      isViewed: viewedMaterialMap.has(material._id.toString()),
-    }));
 
     const libraryItems = await LibraryItem.find({ type: "Video" })
       .select(defaultFieldsToExclude)
       .sort(sort)
       .populate("uploaded_by", "fullName");
 
+    let enhancedMaterials, libraryItemsWithAttributes;
+
+    if (req.user.role === "student") {
+      const studentId = req.user.id;
+
+      const materialIds = materialsFromLibrary.map((material) => material._id);
+      const viewedMaterials = await LibraryMaterialView.find({
+        student_id: studentId,
+        library_material_id: { $in: materialIds },
+        is_viewed: true,
+      });
+      const viewedMaterialMap = new Map(
+        viewedMaterials.map((viewed) => [
+          viewed.library_material_id.toString(),
+          true,
+        ])
+      );
+      enhancedMaterials = materialsFromLibrary.map((material) => ({
+        ...material,
+        isViewed: viewedMaterialMap.has(material._id.toString()),
+      }));
+
+      // Process library items
+      const studentLibraryItems = await StudentLibraryItem.find({
+        student_id: req.user.id,
+        library_item_id: { $in: libraryItems.map((item) => item._id) },
+      });
+      libraryItemsWithAttributes = libraryItems.map((item) => {
+        const isViewed = studentLibraryItems.some(
+          (studentItem) =>
+            studentItem.library_item_id.toString() === item._id.toString()
+        );
+        return {
+          ...item.toObject(),
+          isViewed,
+        };
+      });
+    } else {
+      const materialIds = materialsFromLibrary.map((material) => material._id);
+      const materialViewCounts = await LibraryMaterialView.aggregate([
+        { $match: { library_material_id: { $in: materialIds } } },
+        { $group: { _id: "$library_material_id", views: { $sum: 1 } } },
+      ]);
+
+      const viewCountMap = new Map(
+        materialViewCounts.map((item) => [item._id.toString(), item.views])
+      );
+
+      enhancedMaterials = materialsFromLibrary.map((material) => ({
+        ...material,
+        views: viewCountMap.get(material._id.toString()) || 0,
+      }));
+
+      const libraryItemIds = libraryItems.map((item) => item._id);
+      const libraryViewCounts = await StudentLibraryItem.aggregate([
+        { $match: { library_item_id: { $in: libraryItemIds } } },
+        { $group: { _id: "$library_item_id", views: { $sum: 1 } } },
+      ]);
+
+      const libraryViewCountMap = new Map(
+        libraryViewCounts.map((item) => [item._id.toString(), item.views])
+      );
+
+      libraryItemsWithAttributes = libraryItems.map((item) => ({
+        ...item.toObject(),
+        views: libraryViewCountMap.get(item._id.toString()) || 0,
+      }));
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "All general and material videos",
+      LibraryItems: libraryItemsWithAttributes,
+      materialsFromLibrary: enhancedMaterials,
+    });
+  }
+);
+
+const fetchAllGeneralAndMaterialPdf = expressAsyncHandler(async (req, res) => {
+  const validSortFields = ["createdAt", "-createdAt", "title", "-title"];
+  const sort = validSortFields.includes(req.query.sort)
+    ? req.query.sort
+    : "-createdAt";
+
+  const materialsQuery = LibraryItemsForGrade.find({ type: "PDF" })
+    .select(defaultFieldsToExclude)
+    .sort(sort);
+  const materialsFromLibrary = await populateLibraryItem(materialsQuery).lean();
+
+  const libraryItems = await LibraryItem.find({ type: "PDF" })
+    .select(defaultFieldsToExclude)
+    .sort(sort)
+    .populate("uploaded_by", "fullName");
+
+  let enhancedMaterials, libraryItemsWithAttributes;
+
+  if (req.user.role === "student") {
+    const studentId = req.user.id;
+
+    const materialIds = materialsFromLibrary.map((material) => material._id);
+    const viewedMaterials = await LibraryMaterialView.find({
+      student_id: studentId,
+      library_material_id: { $in: materialIds },
+      is_viewed: true,
+    });
+    const viewedMaterialMap = new Map(
+      viewedMaterials.map((viewed) => [
+        viewed.library_material_id.toString(),
+        true,
+      ])
+    );
+    enhancedMaterials = materialsFromLibrary.map((material) => ({
+      ...material,
+      isViewed: viewedMaterialMap.has(material._id.toString()),
+    }));
+
     const studentLibraryItems = await StudentLibraryItem.find({
       student_id: req.user.id,
       library_item_id: { $in: libraryItems.map((item) => item._id) },
     });
-
-    const libraryItemsWithIsViewedAttributes = libraryItems.map((item) => {
+    libraryItemsWithAttributes = libraryItems.map((item) => {
       const isViewed = studentLibraryItems.some(
         (studentItem) =>
           studentItem.library_item_id.toString() === item._id.toString()
@@ -484,73 +661,141 @@ const fetchAllGeneralAndMaterialVideos = expressAsyncHandler(
         isViewed,
       };
     });
+  } else {
+    const materialIds = materialsFromLibrary.map((material) => material._id);
+    const materialViewCounts = await LibraryMaterialView.aggregate([
+      { $match: { library_material_id: { $in: materialIds } } },
+      { $group: { _id: "$library_material_id", views: { $sum: 1 } } },
+    ]);
+
+    const viewCountMap = new Map(
+      materialViewCounts.map((item) => [item._id.toString(), item.views])
+    );
+
+    enhancedMaterials = materialsFromLibrary.map((material) => ({
+      ...material,
+      views: viewCountMap.get(material._id.toString()) || 0,
+    }));
+
+    const libraryItemIds = libraryItems.map((item) => item._id);
+    const libraryViewCounts = await StudentLibraryItem.aggregate([
+      { $match: { library_item_id: { $in: libraryItemIds } } },
+      { $group: { _id: "$library_item_id", views: { $sum: 1 } } },
+    ]);
+
+    const libraryViewCountMap = new Map(
+      libraryViewCounts.map((item) => [item._id.toString(), item.views])
+    );
+
+    libraryItemsWithAttributes = libraryItems.map((item) => ({
+      ...item.toObject(),
+      views: libraryViewCountMap.get(item._id.toString()) || 0,
+    }));
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: "All general and material PDFs",
+    LibraryItems: libraryItemsWithAttributes,
+    materialsFromLibrary: enhancedMaterials,
+  });
+});
+
+const getAllGeneralAndMaterialTypeVideoAndPdf = expressAsyncHandler(
+  async (req, res) => {
+    const validSortFields = ["createdAt", "-createdAt", "title", "-title"];
+    const sort = validSortFields.includes(req.query.sort)
+      ? req.query.sort
+      : "-createdAt";
+
+    const materialsQuery = LibraryItemsForGrade.find()
+      .select(defaultFieldsToExclude)
+      .sort(sort);
+    const materialsFromLibrary = await populateLibraryItem(
+      materialsQuery
+    ).lean();
+
+    const libraryItems = await LibraryItem.find()
+      .select(defaultFieldsToExclude)
+      .sort(sort)
+      .populate("uploaded_by", "fullName");
+
+    let enhancedMaterials, libraryItemsWithAttributes;
+
+    if (req.user.role === "student") {
+      const studentId = req.user.id;
+
+      const materialIds = materialsFromLibrary.map((material) => material._id);
+      const viewedMaterials = await LibraryMaterialView.find({
+        student_id: studentId,
+        library_material_id: { $in: materialIds },
+        is_viewed: true,
+      });
+      const viewedMaterialMap = new Map(
+        viewedMaterials.map((viewed) => [
+          viewed.library_material_id.toString(),
+          true,
+        ])
+      );
+      enhancedMaterials = materialsFromLibrary.map((material) => ({
+        ...material,
+        isViewed: viewedMaterialMap.has(material._id.toString()),
+      }));
+
+      const studentLibraryItems = await StudentLibraryItem.find({
+        student_id: req.user.id,
+        library_item_id: { $in: libraryItems.map((item) => item._id) },
+      });
+      libraryItemsWithAttributes = libraryItems.map((item) => {
+        const isViewed = studentLibraryItems.some(
+          (studentItem) =>
+            studentItem.library_item_id.toString() === item._id.toString()
+        );
+        return {
+          ...item.toObject(),
+          isViewed,
+        };
+      });
+    } else {
+      const materialIds = materialsFromLibrary.map((material) => material._id);
+      const materialViewCounts = await LibraryMaterialView.aggregate([
+        { $match: { library_material_id: { $in: materialIds } } },
+        { $group: { _id: "$library_material_id", views: { $sum: 1 } } },
+      ]);
+
+      const viewCountMap = new Map(
+        materialViewCounts.map((item) => [item._id.toString(), item.views])
+      );
+
+      enhancedMaterials = materialsFromLibrary.map((material) => ({
+        ...material,
+        views: viewCountMap.get(material._id.toString()) || 0,
+      }));
+
+      const libraryItemIds = libraryItems.map((item) => item._id);
+      const libraryViewCounts = await StudentLibraryItem.aggregate([
+        { $match: { library_item_id: { $in: libraryItemIds } } },
+        { $group: { _id: "$library_item_id", views: { $sum: 1 } } },
+      ]);
+
+      const libraryViewCountMap = new Map(
+        libraryViewCounts.map((item) => [item._id.toString(), item.views])
+      );
+
+      libraryItemsWithAttributes = libraryItems.map((item) => ({
+        ...item.toObject(),
+        views: libraryViewCountMap.get(item._id.toString()) || 0,
+      }));
+    }
 
     res.status(200).json({
       status: 200,
-      message: "All general and material videos",
-      LibraryItems: libraryItemsWithIsViewedAttributes,
+      message: "All general and material PDFs and Videos",
+      LibraryItems: libraryItemsWithAttributes,
       materialsFromLibrary: enhancedMaterials,
     });
   }
 );
-const fetchAllGeneralAndMaterialPdf = expressAsyncHandler(async (req, res) => {
-  const validSortFields = ["createdAt", "-createdAt", "title", "-title"];
-  const sort = validSortFields.includes(req.query.sort)
-    ? req.query.sort
-    : "-createdAt";
-  const materialsQuery = LibraryItemsForGrade.find({ type: "PDF" })
-    .select(defaultFieldsToExclude)
-    .sort(sort);
-
-  const materialsFromLibrary = await populateLibraryItem(materialsQuery).lean();
-
-  const studentId = req.user.id;
-
-  const materialIds = materialsFromLibrary.map((material) => material._id);
-
-  const viewedMaterials = await LibraryMaterialView.find({
-    student_id: studentId,
-    library_material_id: { $in: materialIds },
-    is_viewed: true,
-  });
-
-  const viewedMaterialMap = new Map(
-    viewedMaterials.map((viewed) => [
-      viewed.library_material_id.toString(),
-      true,
-    ])
-  );
-
-  const enhancedMaterials = materialsFromLibrary.map((material) => ({
-    ...material,
-    isViewed: viewedMaterialMap.has(material._id.toString()),
-  }));
-
-  const libraryItems = await LibraryItem.find({ type: "PDF" })
-    .select(defaultFieldsToExclude)
-    .sort(sort)
-    .populate("uploaded_by", "fullName");
-  const studentLibraryItems = await StudentLibraryItem.find({
-    student_id: req.user.id,
-    library_item_id: { $in: libraryItems.map((item) => item._id) },
-  });
-  const libraryItemsWithIsViewedAttributes = libraryItems.map((item) => {
-    const isViewed = studentLibraryItems.some(
-      (studentItem) =>
-        studentItem.library_item_id.toString() === item._id.toString()
-    );
-    return {
-      ...item.toObject(),
-      isViewed,
-    };
-  });
-  res.status(200).json({
-    status: 200,
-    message: "All general and material videos",
-    LibraryItems: libraryItemsWithIsViewedAttributes,
-    materialsFromLibrary: enhancedMaterials,
-  });
-});
 module.exports = {
   createMaterialForLibrary,
   deleteMaterialForLibrary,
@@ -565,4 +810,5 @@ module.exports = {
   getMaterialOfSubjectThatOfTypeVideo,
   fetchAllGeneralAndMaterialVideos,
   fetchAllGeneralAndMaterialPdf,
+  getAllGeneralAndMaterialTypeVideoAndPdf,
 };

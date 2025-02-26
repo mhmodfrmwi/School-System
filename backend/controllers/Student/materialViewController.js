@@ -18,7 +18,6 @@ const updateMaterialView = expressAsyncHandler(async (req, res) => {
       { is_viewed: true, last_view_at: moment().format("YYYY-MM-DD HH:mm:ss") },
       { upsert: true, new: true }
     );
-
     res
       .status(200)
       .json({ status: 200, message: "Material viewed successfully" });
