@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 const virtualRoomStatusSchema = mongoose.Schema({
   studentId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: "ObjectId",
     ref: "Student",
     required: true,
   },
   virtualRoomId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: "ObjectId",
     ref: "VirtualRoom",
     required: true,
   },
@@ -16,13 +16,19 @@ const virtualRoomStatusSchema = mongoose.Schema({
     default: false,
   },
   openedAt: {
-    type: Date,
+    type: "Date",
     default: null,
   },
 });
 
-virtualRoomStatusSchema.index({ studentId: 1, virtualRoomId: 1 }, { unique: true });
+virtualRoomStatusSchema.index(
+  { studentId: 1, virtualRoomId: 1 },
+  { unique: true }
+);
 
-const VirtualRoomStatus = mongoose.model("VirtualRoomStatus", virtualRoomStatusSchema);
+const VirtualRoomStatus = mongoose.model(
+  "VirtualRoomStatus",
+  virtualRoomStatusSchema
+);
 
 module.exports = VirtualRoomStatus;

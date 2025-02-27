@@ -3,22 +3,22 @@ const mongoose = require("mongoose");
 const rewardClaimSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "User",
       required: true,
     },
     rewardId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "RewardCatalog",
       required: true,
     },
     userType: {
-      type: String,
+      type: "String",
       required: true,
       enum: ["student", "teacher", "admin"],
     },
     claimDate: {
-      type: Date,
+      type: "Date",
       default: Date.now,
     },
   },

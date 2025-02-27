@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const userPointSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "User",
       required: true,
     },
@@ -12,12 +12,12 @@ const userPointSchema = new mongoose.Schema(
       required: true,
     },
     userType: {
-      type: String,
+      type: "String",
       required: true,
       enum: ["student", "teacher", "admin"],
     },
     badges: {
-      type: String,
+      type: "String",
       required: true,
       enum: ["starter", "Bronze", "Silver", "Gold"],
     },

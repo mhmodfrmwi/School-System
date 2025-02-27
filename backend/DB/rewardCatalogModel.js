@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const rewardCatalogSchema = new mongoose.Schema(
   {
     rewardName: {
-      type: String,
+      type: "String",
       required: true,
     },
     points: {
@@ -11,7 +11,7 @@ const rewardCatalogSchema = new mongoose.Schema(
       required: true,
     },
     userType: {
-      type: String,
+      type: "String",
       required: true,
       enum: ["student", "teacher", "admin"],
     },

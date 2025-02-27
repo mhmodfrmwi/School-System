@@ -4,12 +4,12 @@ const Schema = mongoose.Schema;
 const participationSchema = new Schema(
   {
     studentId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Student",
       required: true,
     },
     schoolHubId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "SchoolHub",
       required: true,
     },

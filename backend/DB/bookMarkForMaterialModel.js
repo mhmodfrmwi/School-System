@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const bookMarkForMaterialSchema = mongoose.Schema(
   {
     material_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Material",
       required: true,
     },
     student_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Student",
       required: true,
     },

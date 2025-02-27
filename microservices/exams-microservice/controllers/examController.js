@@ -1,5 +1,8 @@
-const Exam = require("../models/Exam");
-const { addExam, fetchExams } = require("../services/examService");
+const {
+  addExam,
+  fetchExams,
+  fetchExamById,
+} = require("../services/examService");
 
 const createExam = async (req, res) => {
   try {
@@ -24,4 +27,17 @@ const getExams = async (req, res) => {
   }
 };
 
-module.exports = { createExam, getExams };
+const getExam = async (req, res) => {
+  try {
+    const exam = await fetchExamById(req.params.id);
+    if (!exam) {
+      return res.status(404).json({ message: "Exam not found" });
+    }
+    res.status(200).json(exam);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ message: "Failed to fetch exam", err: err.message });
+  }
+};
+
+module.exports = { createExam, getExams, getExam };

@@ -8,16 +8,16 @@ const contestSchema = new Schema(
       required: true,
     },
     teacherId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Teacher",
       required: true,
     },
     startDate: {
-      type: Date,
+      type: "Date",
       required: true,
     },
     endDate: {
-      type: Date,
+      type: "Date",
       required: true,
     },
     numberOfTeamMembers: {
@@ -28,27 +28,27 @@ const contestSchema = new Schema(
       type: "String",
     },
     subjectId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Subject",
       required: true,
     },
     academicYearId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "AcademicYear",
       required: true,
     },
     gradeId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Grade",
       required: true,
     },
     semesterId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Semester",
       required: true,
     },
     classId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Class",
       required: true,
     },

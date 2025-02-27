@@ -3,13 +3,13 @@ const { Schema, model } = require("mongoose");
 const materialSchema = new Schema(
   {
     title: {
-      type: String,
+      type: "String",
       required: [true, "Title is required"],
       minlength: 5,
       maxlength: 100,
     },
     description: {
-      type: String,
+      type: "String",
       required: true,
       minlength: 10,
       maxlength: 200,
@@ -20,12 +20,12 @@ const materialSchema = new Schema(
       required: true,
     },
     type: {
-      type: String,
+      type: "String",
       required: true,
       enum: ["PDF", "Video", "Assignment", "Link"],
     },
     file_url: {
-      type: String,
+      type: "String",
       required: function () {
         return this.type !== "Link";
       },

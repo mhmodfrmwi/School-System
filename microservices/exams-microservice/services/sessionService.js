@@ -1,10 +1,9 @@
-const Exam = require("../models/Exam");
 const Session = require("../models/Session");
 
 const addSession = async (student_id, exam_id, start_time, end_time) => {
   try {
     const existingSession = await Session.findOne({ student_id, exam_id });
-    if (existingSession) {
+    if (existingSession && existingSession.status === "In Progress") {
       throw new Error("Session already exists");
     }
     const session = new Session({
@@ -20,6 +19,7 @@ const addSession = async (student_id, exam_id, start_time, end_time) => {
     throw new Error(error.message);
   }
 };
+
 const getSessionsForStudent = async (student_id) => {
   try {
     const sessions = await Session.find({ student_id })
@@ -32,4 +32,32 @@ const getSessionsForStudent = async (student_id) => {
     throw new Error(error.message);
   }
 };
-module.exports = { addSession, getSessionsForStudent };
+
+const endSession = async (session_id) => {
+  try {
+    const session = await Session.findByIdAndUpdate(
+      session_id,
+      { status: "Submitted" },
+      { new: true }
+    );
+    if (!session) {
+      throw new Error("Session not found");
+    }
+    return session;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
+const fetchSession = async (exam_id, student_id) => {
+  const existingSession = await Session.findOne({ student_id, exam_id });
+  return existingSession;
+};
+
+module.exports = {
+  addSession,
+  getSessionsForStudent,
+  endSession,
+  fetchSession,
+};

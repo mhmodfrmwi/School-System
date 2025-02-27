@@ -4,24 +4,24 @@ const Schema = mongoose.Schema;
 const contestTeamSchema = new Schema(
   {
     teamName: {
-      type: String,
+      type: "String",
       required: true,
       unique: true,
     },
     contestId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Contest",
       required: true,
     },
     teamMembers: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: "ObjectId",
         ref: "Student",
         required: true,
       },
     ],
     leaderId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Student",
       required: true,
     },

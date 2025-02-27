@@ -1,29 +1,29 @@
 const mongoose = require("mongoose");
 const libraryItemsForGrades = mongoose.Schema({
   title: {
-    type: String,
+    type: "String",
     required: true,
   },
   item_url: {
-    type: String,
+    type: "String",
     required: true,
   },
   description: {
-    type: String,
+    type: "String",
     required: true,
   },
   uploaded_by: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: "ObjectId",
     ref: "Teacher",
     required: true,
   },
   type: {
-    type: String,
+    type: "String",
     enum: ["Video", "PDF"],
     required: true,
   },
   grade_subject_semester_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: "ObjectId",
     ref: "GradeSubjectSemester",
     required: true,
   },

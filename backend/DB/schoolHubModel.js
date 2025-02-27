@@ -4,27 +4,27 @@ const Schema = mongoose.Schema;
 const schoolHubSchema = new Schema(
   {
     title: {
-      type: String,
+      type: "String",
       required: true,
     },
     registrationStart: {
-      type: Date,
+      type: "Date",
       required: true,
     },
     registrationEnd: {
-      type: Date,
+      type: "Date",
       required: true,
     },
     contestDate: {
-      type: Date,
+      type: "Date",
       required: true,
     },
     location: {
-      type: String,
+      type: "String",
       required: true,
     },
     details: {
-      type: String,
+      type: "String",
       required: true,
     },
     prizes: {

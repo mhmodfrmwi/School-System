@@ -2,19 +2,19 @@ const mongoose = require("mongoose");
 
 const sessionSchema = new mongoose.Schema({
   student_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: "ObjectId",
     ref: "Student",
     required: true,
   },
   exam_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: "ObjectId",
     ref: "Exam",
     required: true,
   },
-  start_time: { type: Date, required: true },
-  end_time: { type: Date },
+  start_time: { type: "Date", required: true },
+  end_time: { type: "Date" },
   status: {
-    type: String,
+    type: "String",
     enum: ["In Progress", "Submitted"],
     default: "In Progress",
   },

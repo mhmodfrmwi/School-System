@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const parentStudentSchema = new mongoose.Schema(
   {
     parent_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Parent",
       required: true,
     },
     student_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Student",
       required: true,
     },
