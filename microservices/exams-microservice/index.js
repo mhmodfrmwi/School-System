@@ -9,18 +9,24 @@ const fetchAndRegisterModel = require("./utils/fetchAndRegisterModel");
 
 connectDB();
 
-let Subject, Grade, Class, AcademicYear, Semester, Teacher, Student;
+let Subject,
+  Grade,
+  Class,
+  AcademicYear,
+  Semester,
+  Teacher,
+  Student,
+  GradeSubject;
 (async () => {
   try {
     Grade = await fetchAndRegisterModel("Grade");
     AcademicYear = await fetchAndRegisterModel("AcademicYear");
-
     Class = await fetchAndRegisterModel("Class");
-
     Subject = await fetchAndRegisterModel("Subject");
     Semester = await fetchAndRegisterModel("Semester");
     Teacher = await fetchAndRegisterModel("Teacher");
     Student = await fetchAndRegisterModel("Student");
+    GradeSubject = await fetchAndRegisterModel("GradeSubject");
     console.log("All models registered successfully");
   } catch (err) {
     console.error("Failed to register models:", err);

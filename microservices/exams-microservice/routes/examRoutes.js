@@ -7,7 +7,7 @@ const {
 } = require("../controllers/examController");
 const validateJwt = require("../../../backend/middlewares/validateJWT");
 
-router.post("/create-exam", validateJwt, createExam);
+router.post("/create-exam/:id", validateJwt, createExam);
 router.get("/", validateJwt, getExams);
 router.get("/:id", validateJwt, getExam);
 
