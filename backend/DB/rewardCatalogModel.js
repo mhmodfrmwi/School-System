@@ -9,11 +9,12 @@ const rewardCatalogSchema = new mongoose.Schema(
     points: {
       type: Number,
       required: true,
+      default: 0,
     },
     userType: {
       type: "String",
       required: true,
-      enum: ["student", "teacher", "admin"],
+      enum: ["Student", "Teacher"],
     },
   },
   { timestamps: true }

@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const QuestionView = require("../../DB/QuestionViewModel");
 const moment = require("moment");
 const Question = require("../../DB/questionBankModel");
@@ -21,8 +22,15 @@ const updateQuestionView = expressAsyncHandler(async (req, res) => {
         .status(404)
         .json({ status: 404, message: "Question not found" });
     }
+    let questionView = await QuestionView.findOne({
+      question_id: questionId,
+      student_id,
+    });
 
-    const questionView = await QuestionView.findOneAndUpdate(
+    if (!questionView || !questionView.is_viewed) {
+      await addRewardClaimAndUpdatePoints(student_id, "Student", "View Question");
+    }
+    questionView = await QuestionView.findOneAndUpdate(
       { question_id: questionId, student_id },
       {
         is_viewed: true,

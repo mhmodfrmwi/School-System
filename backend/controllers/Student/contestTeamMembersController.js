@@ -1,6 +1,7 @@
 const contestValidationSchema = require("../../validations/contestValidation");
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const moment = require("moment");
 const teamValidationSchema = require("../../validations/contestTeamValidationSchema");
 const Contest = require("../../DB/contestModel");
@@ -96,7 +97,6 @@ const createTeam = expressAsyncHandler(async (req, res) => {
           message: `Teammate ${fullName} (${academic_number}) is already part of another team for this contest.`,
         });
       }
-
       teamMembers.push(teammateStudent._id);
     }
 
@@ -116,7 +116,10 @@ const createTeam = expressAsyncHandler(async (req, res) => {
     });
   
     await team.save();
-  
+    for(const teammate of teamMembers){
+      await addRewardClaimAndUpdatePoints(teammate, "Student", "Contest");
+    }
+
     res.status(201).json({
       status: 201,
       message: "Team created successfully.",
@@ -270,7 +273,10 @@ const deleteTeam = expressAsyncHandler(async (req, res) => {
   }
 
   await ContestTeam.findByIdAndDelete(teamId);
-
+  for(const teammate of team.teamMembers){
+    console.log("teammmmmmmmmmmtes " + teammate.toString());
+    await addRewardClaimAndUpdatePoints(teammate, "Student", "Contest","subtract");
+  }
   res.status(200).json({
     status: 200,
     message: "Team deleted successfully.",

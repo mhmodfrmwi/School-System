@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const MaterialView = require("../../DB/MaterialView");
 const moment = require("moment");
 const updateMaterialView = expressAsyncHandler(async (req, res) => {
@@ -13,7 +14,12 @@ const updateMaterialView = expressAsyncHandler(async (req, res) => {
   const student_id = req.user.id;
 
   try {
-    const materialView = await MaterialView.findOneAndUpdate(
+    let materialView = await MaterialView.findOne({ material_id: id, student_id });
+
+    if (!materialView || !materialView.is_viewed) {
+      await addRewardClaimAndUpdatePoints(student_id, "Student", "View Material");
+    }
+    materialView = await MaterialView.findOneAndUpdate(
       { material_id: id, student_id },
       { is_viewed: true, last_view_at: moment().format("YYYY-MM-DD HH:mm:ss") },
       { upsert: true, new: true }

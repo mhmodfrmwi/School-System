@@ -1,5 +1,6 @@
 const Contest = require("../../DB/contestModel");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const ClassTeacher = require("../../DB/classTeacherModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const Semester = require("../../DB/semesterModel");
@@ -85,6 +86,7 @@ const createContest = expressAsyncHandler(async (req, res) => {
   });
 
   await contest.save();
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Contest");
 
   res.status(201).json({ status: 201, message: "Contest created successfully", contest });
 });
@@ -225,7 +227,7 @@ const getContest = expressAsyncHandler(async (req, res) => {
 
 const deleteContest = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
-
+  const teacherId = req.user.id;
   if (!validateObjectId(id)) {
     return res.status(400).json({
       status: 400,
@@ -245,6 +247,7 @@ const deleteContest = expressAsyncHandler(async (req, res) => {
   }
 
   await contest.deleteOne();
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Contest","subtract");
   res
     .status(200)
     .json({ status: 200, message: "Contest deleted successfully" });

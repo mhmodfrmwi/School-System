@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const virtualRoomValidationSchema = require("../../validations/virtualRoomValidation");
 const VirtualRoom = require("../../DB/virtualRoomModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
@@ -76,6 +77,7 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
 
   await newVirtualRoom.save();
   
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding VR");
   res.status(201).json({
     status: 201,
     message: "Virtual room created successfully",
@@ -138,6 +140,7 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
 });
 
 const deleteVirtualRoom = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
   const { id } = req.params;
 
   if (!validateObjectId(id)) {
@@ -154,7 +157,7 @@ const deleteVirtualRoom = expressAsyncHandler(async (req, res) => {
       message: "Virtual room not found",
     });
   }
-
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding VR","subtract");
   res.status(200).json({
     status: 200,
     message: "Virtual room deleted successfully",
