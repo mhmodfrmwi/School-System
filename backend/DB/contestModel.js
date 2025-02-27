@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const contestSchema = new Schema(
   {
     title: {
-      type: String,
+      type: "String",
       required: true,
     },
     teacherId: {
@@ -21,35 +21,35 @@ const contestSchema = new Schema(
       required: true,
     },
     numberOfTeamMembers: {
-      type: Number,
+      type: "Number",
       required: true,
     },
     requirements: {
-      type: String,
+      type: "String",
     },
     subjectId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Subject',
+      ref: "Subject",
       required: true,
     },
     academicYearId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'AcademicYear',
+      ref: "AcademicYear",
       required: true,
     },
     gradeId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Grade',
+      ref: "Grade",
       required: true,
     },
     semesterId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Semester',
+      ref: "Semester",
       required: true,
     },
-    classId:{
+    classId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Class',
+      ref: "Class",
       required: true,
     },
   },

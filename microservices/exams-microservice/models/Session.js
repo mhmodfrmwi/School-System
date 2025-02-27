@@ -19,5 +19,5 @@ const sessionSchema = new mongoose.Schema({
     default: "In Progress",
   },
 });
-
-module.exports = mongoose.model("Session", sessionSchema);
+const Session = mongoose.model("Session", sessionSchema);
+module.exports = Session;

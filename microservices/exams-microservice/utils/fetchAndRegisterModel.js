@@ -10,14 +10,6 @@ const fetchAndRegisterModel = async (modelName) => {
       `${SCHOOL_SYSTEM_URL}/api/v1/expose-models/${modelName}`
     );
     const schemaDefinition = response.data;
-    console.log(schemaDefinition);
-    console.log(
-      "Fetched schema definition for",
-      modelName,
-      ":",
-      schemaDefinition
-    );
-
     const schema = new mongoose.Schema(schemaDefinition);
 
     return mongoose.model(modelName, schema);

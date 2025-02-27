@@ -5,7 +5,7 @@ const Class = require("../../DB/classModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const Semester = require("../../DB/semesterModel");
 const Teacher = require("../../DB/teacher");
-
+const Student = require("../../DB/student");
 const exposeModels = expressAsyncHandler(async (req, res) => {
   const { modelName } = req.params;
   const models = {
@@ -15,10 +15,10 @@ const exposeModels = expressAsyncHandler(async (req, res) => {
     AcademicYear: AcademicYear.schema.obj,
     Semester: Semester.schema.obj,
     Teacher: Teacher.schema.obj,
+    Student: Student.schema.obj,
   };
 
   if (models[modelName]) {
-    console.log(models[modelName]);
     res.json(models[modelName]);
   } else {
     res.status(404).json({ message: "Model not found" });

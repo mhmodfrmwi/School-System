@@ -53,6 +53,11 @@ const examSchema = new mongoose.Schema(
       type: Date,
       required: [true, "End time is required"],
     },
+    duration: {
+      type: "Number",
+      required: [true, "Duration is required"],
+      min: 0,
+    },
     total_marks: {
       type: Number,
       required: [true, "Total marks is required"],
