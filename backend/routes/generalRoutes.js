@@ -6,6 +6,8 @@ const {
   getLibraryItemById,
   updateLibraryItem,
   deleteLibraryItem,
+  getPublicLibraryTypePdf,
+  getPublicLibraryTypeVideo,
 } = require("../controllers/General/libraryItemController");
 const {
   displaySubjectsInTheMaterialOfTheLibrary,
@@ -19,6 +21,7 @@ const {
   getMaterialOfSubjectThatOfTypeVideo,
   fetchAllGeneralAndMaterialVideos,
   fetchAllGeneralAndMaterialPdf,
+  getAllGeneralAndMaterialTypeVideoAndPdf,
 } = require("../controllers/Teacher/MatrialForLibrary");
 const router = express.Router();
 
@@ -88,5 +91,22 @@ router.get(
   "/fetch-all-general-and-material-pdf",
   validateJwt,
   fetchAllGeneralAndMaterialPdf
+);
+
+router.get(
+  "/fetch-public-Library-type-pdf",
+  validateJwt,
+  getPublicLibraryTypePdf
+);
+
+router.get(
+  "/fetch-public-Library-type-video",
+  validateJwt,
+  getPublicLibraryTypeVideo
+);
+router.get(
+  "/fetch-all-general-material-type-video-pdf",
+  validateJwt,
+  getAllGeneralAndMaterialTypeVideoAndPdf
 );
 module.exports = router;

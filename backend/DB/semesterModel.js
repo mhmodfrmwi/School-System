@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const semesterSchema = new mongoose.Schema(
   {
-    semesterName: { type: String, required: true },
+    semesterName: { type: "String", required: true },
     academicYear_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "AcademicYear",
       required: true,
     },

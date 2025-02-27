@@ -1,18 +1,18 @@
 const mongoose = require("mongoose");
 const classSchema = new mongoose.Schema(
   {
-    className: { type: String, required: true },
+    className: { type: "String", required: true },
     gradeId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Grade",
       required: true,
     },
     academicYear_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "AcademicYear",
       required: true,
     },
-    student_count: { type: Number, default: 0 },
+    student_count: { type: "Number", default: 0 },
   },
   { timestamps: true }
 );

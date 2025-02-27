@@ -4,20 +4,20 @@ const Schema = mongoose.Schema;
 const tripSchema = new Schema(
   {
     title: {
-      type: String,
+      type: "String",
       required: true,
     },
     teacherId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: "ObjectId",
       ref: "Teacher",
       required: true,
     },
     startDate: {
-      type: Date,
+      type: "Date",
       required: true,
     },
     endDate: {
-      type: Date,
+      type: "Date",
       required: true,
     },
     numberOfSeats: {
@@ -30,7 +30,7 @@ const tripSchema = new Schema(
       required: true,
     },
     requirements: {
-      type: String,
+      type: "String",
     },
   },
   { timestamps: true }

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userPointSchema = new mongoose.Schema({
   userId: {
@@ -27,4 +27,4 @@ const userPointSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('UserPoint', userPointSchema);
+module.exports = mongoose.model("UserPoint", userPointSchema);

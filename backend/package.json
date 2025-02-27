@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "concurrently \"nodemon index.js\" \"wait-port -t 6000 localhost:4000 && cd ../microservices/exams-microservice && npm run dev\""
   },
   "keywords": [],
   "author": "",
@@ -35,6 +35,10 @@
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.4",
     "uuid": "^11.0.2",
+    "wait-port": "^1.1.0",
     "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }

@@ -1,34 +1,34 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const moment = require("moment");
 
 const virtualRoomSchema = new mongoose.Schema(
   {
     title: {
-      type: String,
+      type: "String",
       required: true,
     },
     subjectId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Subject',
+      type: "ObjectId",
+      ref: "Subject",
       required: true,
     },
     academicYearId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'AcademicYear',
+      type: "ObjectId",
+      ref: "AcademicYear",
       required: true,
     },
     gradeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Grade',
+      type: "ObjectId",
+      ref: "Grade",
       required: true,
     },
     semesterId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Semester',
+      type: "ObjectId",
+      ref: "Semester",
       required: true,
     },
     startTime: {
-      type: Date,
+      type: "Date",
       required: true,
       set: (val) => moment.utc(val).toDate(),
     },
@@ -36,22 +36,22 @@ const virtualRoomSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    classId:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Class',
+    classId: {
+      type: "ObjectId",
+      ref: "Class",
       required: true,
     },
     link: {
-      type: String,
+      type: "String",
       required: true,
     },
     teacherId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Teacher",
-          required: true,
+      type: "ObjectId",
+      ref: "Teacher",
+      required: true,
     },
     status: {
-      type: String,
+      type: "String",
       enum: ["upcoming", "ongoing", "completed"],
       default: "upcoming",
     },
@@ -72,6 +72,6 @@ virtualRoomSchema.methods.updateStatus = async function () {
 
   await this.save();
 };
-const VirtualRoom = mongoose.model('VirtualRoom', virtualRoomSchema);
+const VirtualRoom = mongoose.model("VirtualRoom", virtualRoomSchema);
 
 module.exports = VirtualRoom;

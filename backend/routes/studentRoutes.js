@@ -70,6 +70,10 @@ const {
   getLibraryMaterialViewsForStudent,
 } = require("../controllers/Student/libraryMaterialViewController");
 const {
+  getPublicLibraryTypePdf,
+  getPublicLibraryTypeVideo,
+} = require("../controllers/General/libraryItemController");
+const {
   getDailyPoints,
   getAllPoints,
 } = require("../controllers/Student/studentRewardsController");
@@ -250,6 +254,7 @@ router.get(
   validateStudent,
   getLibraryMaterialViewsForStudent
 );
+
 router.get(
   "/daily-reward",
   validateJwt,
