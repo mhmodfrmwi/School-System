@@ -1,11 +1,13 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const Material = require("../../DB/materielModel");
 
 const materialValidationSchema = require("../../validations/materialValidation");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const BookMarkForMaterial = require("../../DB/bookMarkForMaterialModel");
 const createMateriel = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
   const { error } = materialValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
@@ -46,6 +48,7 @@ const createMateriel = expressAsyncHandler(async (req, res) => {
     class_id,
   });
   await materiel.save();
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Material Item");
   res.status(201).json(materiel);
 });
 const getMaterielById = expressAsyncHandler(async (req, res) => {
@@ -111,6 +114,7 @@ const updateMateriel = expressAsyncHandler(async (req, res) => {
     .json({ status: 200, message: "Materiel updated successfully", materiel });
 });
 const deleteMateriel = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
   const materielId = req.params.id;
   if (validateObjectId(materielId) === false) {
     return res.status(400).json({ status: 400, message: "Invalid ID" });
@@ -119,6 +123,7 @@ const deleteMateriel = expressAsyncHandler(async (req, res) => {
   if (!materiel) {
     return res.status(404).json({ status: 404, message: "Materiel not found" });
   }
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Material Item","subtract");
   res
     .status(200)
     .json({ status: 200, message: "Materiel deleted successfully" });

@@ -53,6 +53,10 @@ const {
 const {
   getAllSchoolHubs
 } = require("../controllers/Teacher/schoolHubController");
+const{
+  getDailyPoints,
+  getAllPoints,
+}= require("../controllers/Teacher/teacherRewardsController");
 
 const router = express.Router();
 router.post("/login", login);
@@ -147,4 +151,16 @@ router.delete(
   deleteMaterialForLibrary
 );
 router.get("/school-hub", validateJwt, validateTeacher, getAllSchoolHubs);
+router.get(
+  "/daily-reward",
+  validateJwt,
+  validateTeacher,
+  getDailyPoints
+);
+router.get(
+  "/reward",
+  validateJwt,
+  validateTeacher,
+  getAllPoints
+);
 module.exports = router;

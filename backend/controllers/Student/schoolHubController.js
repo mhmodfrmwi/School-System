@@ -1,6 +1,7 @@
 const SchoolHub = require("../../DB/schoolHubModel");
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const Participation = require("../../DB/schoolHubParticipationModel");
 
 const getAllSchoolHubs = expressAsyncHandler(async (req, res) => {
@@ -73,7 +74,14 @@ const registerInContest = expressAsyncHandler(async (req, res) => {
   
       participation.participated = true;
       await participation.save();
-  
+////////////////////////////
+      /*try {
+      await addRewardClaimAndUpdatePoints(studentId, "Student", "School Hub");
+      } catch (error) {
+      console.error("Error in addRewardClaimAndUpdatePoints:", error);
+      }*/
+      //await addRewardClaimAndUpdatePoints(studentId, "Student", "School Hub");
+////////////////////////////////
       res.status(200).json({
         status: 200,
         message: "Participation marked successfully!",
@@ -143,7 +151,7 @@ const deleteRegistration = expressAsyncHandler(async (req, res) => {
       }
   
       await Participation.deleteOne({ _id: participation._id });
-  
+      //await addRewardClaimAndUpdatePoints(studentId, "Student", "School Hub","subtract");
       res.status(200).json({
         status: 200,
         message: "Registration deleted successfully.",

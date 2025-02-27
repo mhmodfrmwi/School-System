@@ -69,6 +69,10 @@ const {
   getLibraryMaterialViewByMaterialId,
   getLibraryMaterialViewsForStudent,
 } = require("../controllers/Student/libraryMaterialViewController");
+const {
+  getDailyPoints,
+  getAllPoints,
+} = require("../controllers/Student/studentRewardsController");
 const router = express.Router();
 
 //login route
@@ -245,5 +249,17 @@ router.get(
   validateJwt,
   validateStudent,
   getLibraryMaterialViewsForStudent
+);
+router.get(
+  "/daily-reward",
+  validateJwt,
+  validateStudent,
+  getDailyPoints
+);
+router.get(
+  "/reward",
+  validateJwt,
+  validateStudent,
+  getAllPoints
 );
 module.exports = router;

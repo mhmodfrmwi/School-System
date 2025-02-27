@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const moment = require("moment");
 const VirtualRoom = require("../../DB/virtualRoomModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
@@ -43,6 +44,8 @@ const handleVrLinkClick = expressAsyncHandler(async (req, res) => {
       attendanceStatus = "pending";
     } else if (now.isBetween(startTime, endTime)) {
       attendanceStatus = "attended";
+      ///adding reward 
+      addRewardClaimAndUpdatePoints(studentId,"Student","Attend VR");
     } else{
       if (attendance && attendance.status === "attended") {
         attendanceStatus = "attended";
@@ -449,3 +452,4 @@ module.exports = {
   getCompletedVirtualRooms,
   getMissedVirtualRooms,
 };
+//VirtualRoomAttendance

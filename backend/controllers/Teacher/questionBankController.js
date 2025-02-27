@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const questionValidationSchema = require("../../validations/questionBankValidation");
 const Question = require("../../DB/questionBankModel");
 const Subject = require("../../DB/subjectModel");
@@ -77,7 +78,8 @@ const createQuestion = expressAsyncHandler(async (req, res) => {
   });
 
   await newQuestion.save();
-
+  
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Question");
   res.status(201).json({
     status: 201,
     message: "Question created successfully",
@@ -196,7 +198,8 @@ const deleteQuestion = expressAsyncHandler(async (req, res) => {
   }
 
   await Question.deleteOne({ _id: questionId });
-
+  
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Question","subtract");
   res.status(200).json({
     status: 200,
     message: "Question deleted successfully",

@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const moment = require("moment");
 const AcademicYear = require("../../DB/academicYearModel");
 const libraryItemForGradeValidationSchema = require("../../validations/libraryItemForGradeValidation");
@@ -52,6 +53,7 @@ const validateRequest = (schema) =>
 const createMaterialForLibrary = [
   validateRequest(libraryItemForGradeValidationSchema),
   expressAsyncHandler(async (req, res) => {
+    const teacherId = req.user.id;
     const { title, itemUrl, description, type, gradeSubjectSemesterId } =
       req.body;
 
@@ -76,7 +78,8 @@ const createMaterialForLibrary = [
     });
 
     await libraryItemsForGrade.save();
-
+    
+    addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Material Item");
     res.status(201).json({
       status: 201,
       message: "Material added successfully.",
@@ -86,6 +89,7 @@ const createMaterialForLibrary = [
 ];
 
 const deleteMaterialForLibrary = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
   const { id } = req.params;
 
   if (!validateObjectId(id)) {
@@ -104,7 +108,8 @@ const deleteMaterialForLibrary = expressAsyncHandler(async (req, res) => {
   }
 
   await LibraryItemsForGrade.findByIdAndDelete(id);
-
+  
+  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Material Item","subtract");
   res.status(200).json({
     status: 200,
     message: "Material deleted successfully",

@@ -110,6 +110,7 @@ const {
   updateParentStudent,
   getAllParentsStudent,
 } = require("../controllers/Admin/parentStudentController");
+const{seedRewards} = require("../controllers/General/rewardCatalogDataController")
 const { login } = require("../controllers/auth/authAdminController");
 
 const router = express.Router();
@@ -343,5 +344,10 @@ router
   .patch(validateJwt, validateAdmin, updateSchedule)
   .delete(validateJwt, validateAdmin, deleteSchedule);
 router.get("/schedule", validateJwt, validateAdmin, getAllSchedule);
-
+router.post(
+  "/reward",
+  validateJwt,
+  validateAdmin,
+  seedRewards
+);
 module.exports = router;
