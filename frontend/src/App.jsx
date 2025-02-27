@@ -332,6 +332,12 @@ const SeeMaterial = lazy(
 const LibraryTeacherPage = lazy(
   () => import("./Features/Teacher/components/Library/LibraryTeacherPage"),
 );
+const LibraryItemDetailsPageForTeacher = lazy(
+  () =>
+    import(
+      "./Features/Teacher/components/Library/LibraryItemDetailsPageForTeacher"
+    ),
+);
 const MaterialDetails = lazy(
   () => import("./Features/Student/components/courses/MaterialDetails"),
 );
@@ -658,7 +664,7 @@ function App() {
             <Route path="teacher-library" element={<LibraryTeacherPage />} />
             <Route
               path="library/:type/:itemId"
-              element={<LibraryItemDetailsPage />}
+              element={<LibraryItemDetailsPageForTeacher />}
             />
           </Route>
 

@@ -1,5 +1,29 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+// Fetch all general and material PDFs and Videos
+export const fetchAllGeneralMaterialVideoPdf = createAsyncThunk(
+  "libraryTeacher/fetchAllGeneralMaterialVideoPdf",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch("http://localhost:4000/api/v1/general/fetch-all-general-material-type-video-pdf", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch all general and material PDFs and Videos");
+      }
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // Fetch general library items
 export const fetchLibraryItems = createAsyncThunk(
   "libraryTeacher/fetchLibraryItems",
@@ -155,6 +179,7 @@ const libraryTeacherSlice = createSlice({
     loading: false,
     error: null,
     teacherViewedItems: {},
+    allGeneralMaterialVideoPdf: [],
   },
   reducers: {
     clearLibraryError: (state) => {
@@ -231,6 +256,18 @@ const libraryTeacherSlice = createSlice({
         state.teacherViewedItems[library_item_id] = last_view_date;
       })
       .addCase(viewLibraryItem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Fetch All General Material Video Pdf
+      .addCase(fetchAllGeneralMaterialVideoPdf.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllGeneralMaterialVideoPdf.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allGeneralMaterialVideoPdf = action.payload.LibraryItems.concat(action.payload.materialsFromLibrary);
+      })
+      .addCase(fetchAllGeneralMaterialVideoPdf.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
