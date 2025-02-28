@@ -1,8 +1,95 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
+const moment = require("moment");
 const RewardClaim = require("../../DB/rewardClaimModel");
 const UserPoint = require("../../DB/userPointModel");
 const RewardCatalog = require("../../DB/rewardCatalogModel");
+const Teacher = require("../../DB/teacher");
+
+const getSemesterDates = () => {
+  const currentYear = moment().year();
+  const currentMonth = moment().month() + 1;
+  let semesterStart, semesterEnd;
+
+  if (currentMonth >= 9 && currentMonth <= 12) {
+    semesterStart = moment(`${currentYear}-09-01`).startOf("day");
+    semesterEnd = moment(`${currentYear}-12-31`).endOf("day");
+  } else {
+    semesterStart = moment(`${currentYear}-01-01`).startOf("day");
+    semesterEnd = moment(`${currentYear}-06-30`).endOf("day");
+  }
+  return { semesterStart, semesterEnd };
+};
+
+const getTeachersWithPointsAndBadges = expressAsyncHandler(async (req, res) => {
+
+  const { semesterStart, semesterEnd } = getSemesterDates();
+
+  try {
+    const teachers = await Teacher.find({})
+    .populate("subjectId");
+
+    const teachersWithPointsAndBadges = await Promise.all(
+      teachers.map(async (teacher) => {
+        const rewards = await RewardClaim.find({
+          userId: teacher._id,
+          userType: "Teacher",
+          claimDate: { $gte: semesterStart.toDate(), $lte: semesterEnd.toDate() },
+        }).populate("rewardId");
+
+        let totalPoints = 0;
+        rewards.forEach((rewardClaim) => {
+          if (rewardClaim.rewardId && rewardClaim.value) {
+            if (rewardClaim.rewardType === "add") {
+              totalPoints += rewardClaim.value;
+            } else if (rewardClaim.rewardType === "subtract") {
+              totalPoints -= rewardClaim.value;
+            }
+          }
+        });
+
+        const userPoint = await UserPoint.findOne({
+          userId: teacher._id,
+          userType: "Teacher",
+        });
+
+        const badge = userPoint ? userPoint.badges : "Green";
+        const subject = teacher.subjectId
+          ? {
+              _id: teacher.subjectId._id,
+              subjectName: teacher.subjectId.subjectName,
+              subjectCode: teacher.subjectId.subjectCode,
+            }
+          : null;
+
+        return {
+          _id: teacher._id,
+          academicNumber: teacher.academicNumber,
+          fullName: teacher.fullName,
+          totalPoints,
+          badge,
+          subject,
+        };
+      })
+    );
+
+    teachersWithPointsAndBadges.sort((a, b) => b.totalPoints - a.totalPoints);
+    res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Teachers' points and badges fetched successfully.",
+      data: teachersWithPointsAndBadges,
+    });
+  } catch (error) {
+    console.error("Error fetching teachers' points and badges:", error);
+    res.status(500).json({
+      success: false,
+      status: 400,
+      message: "Failed to fetch teachers' points and badges.",
+      error: error.message,
+    });
+  }
+});
 
 const getDailyPoints = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
@@ -35,7 +122,7 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
         if (rewardClaim.rewardType === "add") {
           totalDailyPoints += rewardClaim.value;
         } else if (rewardClaim.rewardType === "subtract") {
-          totalDailyPoints -= rewardClaim.rewardId.points;
+          totalDailyPoints -= rewardClaim.value;
         }
         validRewards.push(rewardClaim);
       } else {
@@ -47,6 +134,7 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
 
     res.status(200).json({
       success: true,
+      status: 200,
       message: "Daily points fetched successfully",
       data: {
         totalDailyPoints,
@@ -57,47 +145,11 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
     console.error("Error fetching daily points:", error);
     res.status(500).json({
       success: false,
+      status: 400,
       message: "Failed to fetch daily points",
       error: error.message,
     });
   }
-});
-
-const getDailyPoints1 = expressAsyncHandler(async (req, res) => {
-  const studentId = req.user.id;
-
-  if (!validateObjectId(studentId)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid student ID.",
-    });
-  }
-
-  const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
-
-  const endOfDay = new Date();
-  endOfDay.setHours(23, 59, 59, 999);
-
-  const dailyRewards = await RewardClaim.find({
-    userId: studentId,
-    userType: "Student",
-    claimDate: { $gte: startOfDay, $lte: endOfDay },
-  }).populate("rewardId");
-
-  let totalDailyPoints = 0;
-  dailyRewards.forEach((rewardClaim) => {
-    totalDailyPoints += rewardClaim.rewardId.points;
-  });
-
-  res.status(200).json({
-    success: true,
-    message: "Daily points fetched successfully",
-    data: {
-      totalDailyPoints,
-      dailyRewards,
-    },
-  });
 });
 
 const getAllPoints = expressAsyncHandler(async (req, res) => {
@@ -124,6 +176,7 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
+    status: 200,
     message: "Teacher points fetched successfully",
     data: {
       totalPoints: userPoint.totalPoints,
@@ -135,83 +188,5 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
 module.exports = {
   getDailyPoints,
   getAllPoints,
+  getTeachersWithPointsAndBadges,
 };
-/*const expressAsyncHandler = require("express-async-handler");
-const validateObjectId = require("../../utils/validateObjectId");
-const RewardClaim = require("../../DB/rewardClaimModel");
-const UserPoint = require("../../DB/userPointModel");
-const RewardCatalog = require("../../DB/rewardCatalogModel");
-
-const getDailyPoints = expressAsyncHandler(async (req, res) => {
-  const teacherId = req.user.id;
-
-  if (!validateObjectId(teacherId)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid teacher ID.",
-    });
-  }
-
-  const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
-
-  const endOfDay = new Date();
-  endOfDay.setHours(23, 59, 59, 999);
-
-  const dailyRewards = await RewardClaim.find({
-    userId: teacherId,
-    userType: "Teacher",
-    claimDate: { $gte: startOfDay, $lte: endOfDay },
-  }).populate("rewardId");
-
-  let totalDailyPoints = 0;
-  dailyRewards.forEach((rewardClaim) => {
-    totalDailyPoints += rewardClaim.rewardId.points;
-  });
-
-  res.status(200).json({
-    success: true,
-    message: "Daily points fetched successfully",
-    data: {
-      totalDailyPoints,
-      dailyRewards,
-    },
-  });
-});
-
-const getAllPoints = expressAsyncHandler(async (req, res) => {
-  const teacherId = req.user.id;
-
-  if (!validateObjectId(teacherId)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid teacher ID.",
-    });
-  }
-
-  const userPoint = await UserPoint.findOne({
-    userId: teacherId,
-    userType: "Teacher",
-  });
-
-  if (!userPoint) {
-    return res.status(404).json({
-      success: false,
-      message: "No points found for this teacher",
-    });
-  }
-
-  res.status(200).json({
-    success: true,
-    message: "teacher points fetched successfully",
-    data: {
-      totalPoints: userPoint.totalPoints,
-      badges: userPoint.badges,
-    },
-  });
-});
-
-module.exports = {
-  getDailyPoints,
-  getAllPoints,
-};*/

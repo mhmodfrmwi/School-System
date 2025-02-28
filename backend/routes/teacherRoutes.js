@@ -56,6 +56,7 @@ const {
 const{
   getDailyPoints,
   getAllPoints,
+  getTeachersWithPointsAndBadges
 }= require("../controllers/Teacher/teacherRewardsController");
 
 const router = express.Router();
@@ -162,5 +163,11 @@ router.get(
   validateJwt,
   validateTeacher,
   getAllPoints
+);
+router.get(
+  "/all-teacher-reward",
+  validateJwt,
+  validateTeacher,
+  getTeachersWithPointsAndBadges
 );
 module.exports = router;

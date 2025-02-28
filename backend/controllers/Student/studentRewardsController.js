@@ -48,7 +48,7 @@ const getSemesterPoints = expressAsyncHandler(async (req, res) => {
         if (rewardClaim.rewardType === "add") {
           totalSemesterPoints += rewardClaim.value;
         } else if (rewardClaim.rewardType === "subtract") {
-          totalSemesterPoints -= rewardClaim.rewardId.points;
+          totalSemesterPoints -= rewardClaim.value;
         }
         validRewards.push(rewardClaim);
       } else {
@@ -69,6 +69,7 @@ const getSemesterPoints = expressAsyncHandler(async (req, res) => {
     }
 
     res.status(200).json({
+      status: 200,
       success: true,
       message: "Semester points fetched successfully",
       data: {
@@ -80,7 +81,7 @@ const getSemesterPoints = expressAsyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Error fetching semester points:", error);
     res.status(500).json({
-      success: false,
+      status: 500,
       message: "Failed to fetch semester points",
       error: error.message,
     });
@@ -91,7 +92,7 @@ const getStudentWithFriendsPoints = expressAsyncHandler(async (req, res) => {
 
   if (!validateObjectId(studentId)) {
     return res.status(400).json({
-      success: false,
+      status: 400,
       message: "Invalid student ID.",
     });
   }
@@ -99,7 +100,7 @@ const getStudentWithFriendsPoints = expressAsyncHandler(async (req, res) => {
   const student = await Student.findById(studentId);
   if (!student) {
     return res.status(404).json({
-      success: false,
+      status: 404,
       message: "Student not found.",
     });
   }
@@ -110,7 +111,7 @@ const getStudentWithFriendsPoints = expressAsyncHandler(async (req, res) => {
     gradeId: student.gradeId,
     classId: student.classId,
     academicYear_id: student.academicYear_id,
-    _id: { $ne: student._id },
+    //_id: { $ne: student._id },
   });
 
   const friendsWithPoints = await Promise.all(
@@ -127,7 +128,7 @@ const getStudentWithFriendsPoints = expressAsyncHandler(async (req, res) => {
           if (rewardClaim.rewardType === "add") {
             totalPoints += rewardClaim.value;
           } else if (rewardClaim.rewardType === "subtract") {
-            totalPoints -= rewardClaim.rewardId.points;
+            totalPoints -= rewardClaim.value;
           }
         }
       });
@@ -148,7 +149,7 @@ const getStudentWithFriendsPoints = expressAsyncHandler(async (req, res) => {
     })
   );
   friendsWithPoints.sort((a, b) => b.totalPoints - a.totalPoints);
-  
+
   const loggedInStudentRewards = await RewardClaim.find({
     userId: student._id,
     userType: "Student",
@@ -172,7 +173,7 @@ const getStudentWithFriendsPoints = expressAsyncHandler(async (req, res) => {
   
     const loggedInStudentBadge = loggedInUserPoint ? loggedInUserPoint.badges : "Green";
   res.status(200).json({
-    success: true,
+    status: 200,
     message: "Student data and friends' points fetched successfully.",
     data: {
       student: {
@@ -218,7 +219,8 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
         if (rewardClaim.rewardType === "add") {
           totalDailyPoints += rewardClaim.value;
         } else if (rewardClaim.rewardType === "subtract") {
-          totalDailyPoints -= rewardClaim.rewardId.points;
+          ///////////////////
+          totalDailyPoints -= rewardClaim.value;
         }
         validRewards.push(rewardClaim);
       } else {
@@ -239,6 +241,7 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
     }
     res.status(200).json({
       success: true,
+      status: 200,
       message: "Daily points fetched successfully",
       data: {
         totalDailyPoints,
@@ -273,13 +276,14 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
 
   if (!userPoint) {
     return res.status(404).json({
-      success: false,
+      status: 404,
       message: "No points found for this student",
     });
   }
 
   res.status(200).json({
     success: true,
+    status: 200,
     message: "Student points fetched successfully",
     data: {
       totalPoints: userPoint.totalPoints,
