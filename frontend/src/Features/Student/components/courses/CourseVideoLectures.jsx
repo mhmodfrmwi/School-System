@@ -74,7 +74,7 @@ const VideoSection = () => {
 
   const videoMaterials = materials ? materials.filter((material) => material.type === "Video") : [];
   const bookmarkedMaterials = videoMaterials.filter((material) =>
-    bookmarks?.some((bookmark) => bookmark?.material_id?._id === material._id) 
+    bookmarks?.some((bookmark) => bookmark?.material_id?._id === material._id)
   );
   const displayedMaterials = activeTab === "bookmarks" ? bookmarkedMaterials : videoMaterials;
 
@@ -157,14 +157,15 @@ const VideoSection = () => {
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+              onClick={() => navigate(`/student/allcourses/exams/${subjectId}`)}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/questionbank/${subjectId}`)}
-              >
+            >
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
             </Button>
           </li>
@@ -232,14 +233,14 @@ const VideoSection = () => {
                   <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
                     {index + 1 + (currentPage - 1) * itemsPerPage}
                   </div>
-                  <div> 
+                  <div>
                     <h2 className="text-base md:text-lg font-semibold text-gray-800">{material.title}</h2>
                     <p className="text-sm text-gray-600">{material.type}</p>
                     <p className="text-sm text-gray-400">{new Date(material.createdAt).toLocaleString()}</p>
                   </div>
                 </div>
                 <div className="flex gap-3 text-gray-500">
-               
+
                   <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full" onClick={() => handleBookmark(material._id)}>
                     <FaBookmark className={`text-gray-800 ${material.isBookmarked ? 'text-yellow-500' : ''}`} />
                   </div>

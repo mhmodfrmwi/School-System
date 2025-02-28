@@ -40,9 +40,8 @@ import LibraryTeacherReducer from "./Features/Teacher/components/TeacherRedux/Li
 import generalLibraryReducer from "./Features/Teacher/components/TeacherRedux/generalLibrarySlice";
 import questionbankReducer from "./Features/Teacher/components/TeacherRedux/QuestionBankSlice";
 import studentQuestionBankReducer from "./Features/Student/components/StudentRedux/questionBankSlice";
+import examsReducer from "./Features/Student/components/StudentRedux/examsSlice";
 import examReducer from "./Features/Teacher/components/TeacherRedux/ExamSlice";
-
-
 const store = configureStore({
   reducer: {
     role: roleReducer,
@@ -86,8 +85,8 @@ const store = configureStore({
     generalLibrary: generalLibraryReducer,
     questionbank:questionbankReducer,
     studentQuestionBank: studentQuestionBankReducer,
+    exams: examsReducer,
     exam: examReducer,
-
   },
 });
 

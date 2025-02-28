@@ -262,6 +262,12 @@ const StudentQuestionBank = lazy(
 const StudentQuestionDetailes = lazy(
   () => import("./Features/Student/components/courses/QuestionsDetailes"),
 );
+const StudentExams = lazy(
+  () => import("./Features/Student/components/courses/CourseExam"),
+);
+const StudentExamPage = lazy(
+  () => import("./Features/Student/components/courses/ExamPage"),
+);
 const AttendancePage = lazy(
   () => import("./Features/Student/components/Attendance/AttendancePage"),
 );
@@ -521,13 +527,21 @@ function App() {
               path="allcourses/virtualrooms/:subjectId"
               element={<StudentVirtualRooms />}
             />
-              <Route
+            <Route
               path="allcourses/questionbank/:subjectId"
               element={<StudentQuestionBank />}
             />
-               <Route
+            <Route
               path="/student/question-details/:subjectId/:questionId"
               element={<StudentQuestionDetailes />}
+            />
+            <Route
+              path="allcourses/exams/:subjectId"
+              element={<StudentExams />}
+            />
+            <Route
+              path="allcourses/exams/:subjectId/:examId"
+              element={<StudentExamPage />}
             />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
@@ -603,12 +617,11 @@ function App() {
               path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId"
               element={<AddMaterial />}
             />
-            <Route path="question-bank-form/:gradeSubjectSemesterId"element={<QuestionForm />}/>
-            <Route path="my-question-bank/:gradeSubjectSemesterId/my-questions"element={<SeeMyQuestion />}/>
-            <Route path="all-question-bank/:gradeSubjectSemesterId/all-questions"element={<SeeAllQuestion />}/>
+            <Route path="question-bank-form/:gradeSubjectSemesterId" element={<QuestionForm />} />
+            <Route path="my-question-bank/:gradeSubjectSemesterId/my-questions" element={<SeeMyQuestion />} />
+            <Route path="all-question-bank/:gradeSubjectSemesterId/all-questions" element={<SeeAllQuestion />} />
             <Route path="/teacher/edit-question/:questionId" element={<EditQuestion />} />
             <Route path="/teacher/exam-form/:classId/:gradeSubjectSemesterId" element={<ExamForm />} />
-
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}
