@@ -29,6 +29,7 @@ import QuestionForm from "./Features/Teacher/components/courses/QuestionBank/For
 import SeeMyQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeMyQuestions";
 import SeeAllQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeAllQuestions";
 import EditQuestion from "./Features/Teacher/components/courses/QuestionBank/EditQuestions";
+import ExamForm from "./Features/Teacher/components/courses/Exams/ExamForm";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -606,6 +607,8 @@ function App() {
             <Route path="my-question-bank/:gradeSubjectSemesterId/my-questions"element={<SeeMyQuestion />}/>
             <Route path="all-question-bank/:gradeSubjectSemesterId/all-questions"element={<SeeAllQuestion />}/>
             <Route path="/teacher/edit-question/:questionId" element={<EditQuestion />} />
+            <Route path="/teacher/exam-form/:classId/:gradeSubjectSemesterId" element={<ExamForm />} />
+
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}

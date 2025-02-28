@@ -40,6 +40,7 @@ import LibraryTeacherReducer from "./Features/Teacher/components/TeacherRedux/Li
 import generalLibraryReducer from "./Features/Teacher/components/TeacherRedux/generalLibrarySlice";
 import questionbankReducer from "./Features/Teacher/components/TeacherRedux/QuestionBankSlice";
 import studentQuestionBankReducer from "./Features/Student/components/StudentRedux/questionBankSlice";
+import examReducer from "./Features/Teacher/components/TeacherRedux/ExamSlice";
 
 
 const store = configureStore({
@@ -85,6 +86,8 @@ const store = configureStore({
     generalLibrary: generalLibraryReducer,
     questionbank:questionbankReducer,
     studentQuestionBank: studentQuestionBankReducer,
+    exam: examReducer,
+
   },
 });
 
