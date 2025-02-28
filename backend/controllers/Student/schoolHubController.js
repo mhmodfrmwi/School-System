@@ -31,13 +31,14 @@ const registerInContest = expressAsyncHandler(async (req, res) => {
         message: "Invalid student ID.",
       });
     }
+    
     if ( !validateObjectId(schoolHubId)) {
         return res.status(400).json({
           status: 400,
           message: "Invalid SchoolHub ID.",
         });
     }
-    
+
     try {
       const schoolHub = await SchoolHub.findById(schoolHubId);
       if (!schoolHub) {

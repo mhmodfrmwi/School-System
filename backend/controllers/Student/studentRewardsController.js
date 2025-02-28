@@ -147,7 +147,8 @@ const getStudentWithFriendsPoints = expressAsyncHandler(async (req, res) => {
       };
     })
   );
-
+  friendsWithPoints.sort((a, b) => b.totalPoints - a.totalPoints);
+  
   const loggedInStudentRewards = await RewardClaim.find({
     userId: student._id,
     userType: "Student",
