@@ -76,6 +76,8 @@ const {
 const {
   getDailyPoints,
   getAllPoints,
+  getSemesterPoints,
+  getStudentWithFriendsPoints,
 } = require("../controllers/Student/studentRewardsController");
 const router = express.Router();
 
@@ -266,5 +268,17 @@ router.get(
   validateJwt,
   validateStudent,
   getAllPoints
+);
+router.get(
+  "/semester-reward",
+  validateJwt,
+  validateStudent,
+  getSemesterPoints
+);
+router.get(
+  "/student-with-friends-reward",
+  validateJwt,
+  validateStudent,
+  getStudentWithFriendsPoints
 );
 module.exports = router;
