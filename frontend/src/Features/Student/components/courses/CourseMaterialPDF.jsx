@@ -27,7 +27,7 @@ const MaterialSection = () => {
   useEffect(() => {
     dispatch(fetchSubjects());
   }, [dispatch]);
-  
+
 
   useEffect(() => {
     if (subjects.length > 0 && subjectId) {
@@ -63,7 +63,7 @@ const MaterialSection = () => {
 
   const pdfMaterials = materials?.filter((material) => material.type === "PDF") || [];
   const bookmarkedMaterials = pdfMaterials.filter((material) =>
-    bookmarks?.some((bookmark) => bookmark?.material_id?._id === material._id) 
+    bookmarks?.some((bookmark) => bookmark?.material_id?._id === material._id)
   );
 
   const displayedMaterials = activeTab === "bookmarks" ? bookmarkedMaterials : pdfMaterials;
@@ -143,14 +143,15 @@ const MaterialSection = () => {
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+              onClick={() => navigate(`/student/allcourses/exams/${subjectId}`)}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/questionbank/${subjectId}`)}
-              >
+            >
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
             </Button>
           </li>

@@ -1,3 +1,4 @@
+const GradeSubjectSemester = require("../models/GradeSubjectSemester");
 const {
   addExam,
   fetchExams,
@@ -6,6 +7,37 @@ const {
 
 const createExam = async (req, res) => {
   try {
+    const class_id = req.query.classId;
+
+    const grade_subject_semester_id = req.params.id;
+    const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+      _id: grade_subject_semester_id,
+    }).populate([
+      {
+        path: "grade_subject_id",
+        populate: { path: "subjectId", path: "gradeId" },
+      },
+      { path: "semester_id", populate: { path: "academicYear_id" } },
+    ]);
+
+    if (!gradeSubjectSemester) {
+      return res
+        .status(404)
+        .json({ message: "GradeSubjectSemester not found" });
+    }
+
+    const subject_id = gradeSubjectSemester.grade_subject_id.subjectId;
+    const grade_id = gradeSubjectSemester.grade_subject_id.gradeId._id;
+    const academic_year_id =
+      gradeSubjectSemester.grade_subject_id.gradeId.academicYear_id;
+    const semester_id = gradeSubjectSemester.semester_id._id;
+
+    req.body.subject_id = subject_id;
+    req.body.grade_id = grade_id;
+    req.body.academic_year_id = academic_year_id;
+    req.body.semester_id = semester_id;
+    req.body.class_id = class_id;
+
     const exam = await addExam(req.body);
     res.status(201).json(exam);
   } catch (err) {

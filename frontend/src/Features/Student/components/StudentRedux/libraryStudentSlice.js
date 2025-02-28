@@ -8,7 +8,7 @@ export const fetchLibraryItems = createAsyncThunk(
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch("http://localhost:4000/api/v1/general/get-library-items", {
+      const response = await fetch("http://localhost:4000/api/v1/general/fetch-public-Library-type-pdf", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -17,9 +17,7 @@ export const fetchLibraryItems = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch library items");
       }
-      // Filter general items to include only PDFs
-      const pdfItems = data.libraryItems.filter(item => item.type === "PDF");
-      return pdfItems;
+      return data.libraryItems;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -34,7 +32,7 @@ export const fetchLibraryVideoItems = createAsyncThunk(
       const token = sessionStorage.getItem("token");
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch("http://localhost:4000/api/v1/general/get-library-items", {
+      const response = await fetch("http://localhost:4000/api/v1/general/fetch-public-Library-type-video", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -43,9 +41,7 @@ export const fetchLibraryVideoItems = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch library items");
       }
-      // Filter general items to include only videos
-      const videoItems = data.libraryItems.filter(item => item.type === "Video");
-      return videoItems;
+      return data.libraryItems;
     } catch (error) {
       return rejectWithValue(error.message);
     }

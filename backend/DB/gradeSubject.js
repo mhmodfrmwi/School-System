@@ -19,6 +19,5 @@ const gradeSubjectSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-gradeSubjectSchema.index({ gradeId: 1, academicYear_id: 1 });
 const GradeSubject = mongoose.model("GradeSubject", gradeSubjectSchema);
 module.exports = GradeSubject;

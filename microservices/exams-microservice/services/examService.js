@@ -2,7 +2,7 @@ const Exam = require("../models/Exam");
 
 const addExam = async (examData) => {
   const exam = new Exam(examData);
-  await exam.save();
+  // await exam.save();
   return exam;
 };
 const fetchExams = async () => {

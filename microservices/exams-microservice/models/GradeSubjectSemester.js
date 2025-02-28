@@ -1,0 +1,25 @@
+const mongoose = require("mongoose");
+const gradeSubjectSemesterSchema = mongoose.Schema(
+  {
+    grade_subject_id: {
+      type: "ObjectId",
+      ref: "GradeSubject",
+      required: true,
+    },
+    semester_id: {
+      type: "ObjectId",
+      ref: "Semester",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+gradeSubjectSemesterSchema.index({
+  grade_subject_id: 1,
+  semester_id: 1,
+});
+const GradeSubjectSemester = mongoose.model(
+  "GradeSubjectSemester",
+  gradeSubjectSemesterSchema
+);
+module.exports = GradeSubjectSemester;
