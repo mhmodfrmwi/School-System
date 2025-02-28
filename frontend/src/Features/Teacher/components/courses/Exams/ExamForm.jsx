@@ -29,7 +29,47 @@ const ExamForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createExam({ formData: examData, classId, gradeSubjectSemesterId }));
+
+    const updatedQuestions = [...examData.questions];
+    if (
+      question.question_text.trim() !== '' &&
+      (question.question_type === 'Essay' ||
+        (question.options.length > 0 && question.correct_answer.trim() !== ''))
+    ) {
+      updatedQuestions.push(question);
+    }
+
+    const payload = {
+      ...examData,
+      questions: updatedQuestions,
+    };
+
+    dispatch(createExam({ formData: payload, classId, gradeSubjectSemesterId }))
+      .unwrap()
+      .then(() => {
+
+        setExamData({
+          title: '',
+          description: '',
+          type: 'Online',
+          start_time: '',
+          end_time: '',
+          duration: 0,
+          total_marks: 0,
+          questions: [],
+        });
+
+        setQuestion({
+          question_text: '',
+          question_type: 'MCQ',
+          options: [],
+          correct_answer: '',
+          marks: 0,
+        });
+      })
+      .catch((error) => {
+        alert(`Failed to create exam: ${error.message}`);
+      });
   };
 
   const handleInputChange = (e) => {
@@ -186,7 +226,7 @@ const ExamForm = () => {
                 required
               />
             </div>
-            <div>
+            <div className="mb-4">
               <label className="block font-medium">Question Type:</label>
               <select
                 name="question_type"
