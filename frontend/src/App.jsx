@@ -30,6 +30,8 @@ import SeeMyQuestion from "./Features/Teacher/components/courses/QuestionBank/Se
 import SeeAllQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeAllQuestions";
 import EditQuestion from "./Features/Teacher/components/courses/QuestionBank/EditQuestions";
 import ExamForm from "./Features/Teacher/components/courses/Exams/ExamForm";
+import Motivation from "./Features/Teacher/components/Motivation/Motivation";
+import Loader from "./ui/Loader";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -382,7 +384,7 @@ function App() {
     <BrowserRouter>
       <TitleUpdater />
       <ToastContainer
-        position="top-right"
+        position="top-center"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -392,7 +394,8 @@ function App() {
         draggable
         pauseOnHover
       />
-      <Suspense fallback={<div>Loading...</div>}>
+
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route index element={<Navigate replace to="onboarding" />} />
           <Route path="onboarding" element={<OnBoarding />} />
@@ -617,11 +620,26 @@ function App() {
               path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId"
               element={<AddMaterial />}
             />
-            <Route path="question-bank-form/:gradeSubjectSemesterId" element={<QuestionForm />} />
-            <Route path="my-question-bank/:gradeSubjectSemesterId/my-questions" element={<SeeMyQuestion />} />
-            <Route path="all-question-bank/:gradeSubjectSemesterId/all-questions" element={<SeeAllQuestion />} />
-            <Route path="/teacher/edit-question/:questionId" element={<EditQuestion />} />
-            <Route path="/teacher/exam-form/:classId/:gradeSubjectSemesterId" element={<ExamForm />} />
+            <Route
+              path="question-bank-form/:gradeSubjectSemesterId"
+              element={<QuestionForm />}
+            />
+            <Route
+              path="my-question-bank/:gradeSubjectSemesterId/my-questions"
+              element={<SeeMyQuestion />}
+            />
+            <Route
+              path="all-question-bank/:gradeSubjectSemesterId/all-questions"
+              element={<SeeAllQuestion />}
+            />
+            <Route
+              path="/teacher/edit-question/:questionId"
+              element={<EditQuestion />}
+            />
+            <Route
+              path="/teacher/exam-form/:classId/:gradeSubjectSemesterId"
+              element={<ExamForm />}
+            />
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}
@@ -682,6 +700,7 @@ function App() {
               path="library/:type/:itemId"
               element={<LibraryItemDetailsPageForTeacher />}
             />
+            <Route path="motivation" element={<Motivation />} />
           </Route>
 
           {/* ///////////////manager pages//////////////////// */}
