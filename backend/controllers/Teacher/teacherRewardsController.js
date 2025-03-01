@@ -185,7 +185,6 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
 
   const endOfDay = new Date();
   endOfDay.setHours(23, 59, 59, 999);
-
   try {
     const dailyRewards = await RewardClaim.find({
       userId: teacherId,
@@ -210,6 +209,15 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
         );
       }
     });
+    const userPoint = await UserPoint.findOne({
+      userId: teacherId,
+      userType: "Teacher",
+    });
+    
+    let badge = "Green";
+    if (userPoint) {
+      badge = userPoint.badges;
+    }
 
     res.status(200).json({
       success: true,
@@ -218,6 +226,7 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
       data: {
         totalDailyPoints,
         dailyRewards: validRewards,
+        badge,
       },
     });
   } catch (error) {
@@ -263,7 +272,6 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
     },
   });
 });
-
 module.exports = {
   getDailyPoints,
   getAllPoints,
