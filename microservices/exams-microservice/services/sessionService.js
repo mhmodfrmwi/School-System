@@ -33,31 +33,18 @@ const getSessionsForStudent = async (student_id) => {
   }
 };
 
-const endSession = async (session_id) => {
+const fetchSession = async (exam_id, student_id) => {
   try {
-    const session = await Session.findByIdAndUpdate(
-      session_id,
-      { status: "Submitted" },
-      { new: true }
-    );
-    if (!session) {
-      throw new Error("Session not found");
-    }
-    return session;
+    const existingSession = await Session.findOne({ student_id, exam_id });
+    return existingSession;
   } catch (error) {
     console.error(error);
     throw new Error(error.message);
   }
 };
 
-const fetchSession = async (exam_id, student_id) => {
-  const existingSession = await Session.findOne({ student_id, exam_id });
-  return existingSession;
-};
-
 module.exports = {
   addSession,
   getSessionsForStudent,
-  endSession,
   fetchSession,
 };

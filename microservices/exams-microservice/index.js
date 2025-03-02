@@ -16,7 +16,8 @@ let Subject,
   Semester,
   Teacher,
   Student,
-  GradeSubject;
+  GradeSubject,
+  Question;
 (async () => {
   try {
     Grade = await fetchAndRegisterModel("Grade");
@@ -27,6 +28,7 @@ let Subject,
     Teacher = await fetchAndRegisterModel("Teacher");
     Student = await fetchAndRegisterModel("Student");
     GradeSubject = await fetchAndRegisterModel("GradeSubject");
+    Question = await fetchAndRegisterModel("Question");
     console.log("All models registered successfully");
   } catch (err) {
     console.error("Failed to register models:", err);

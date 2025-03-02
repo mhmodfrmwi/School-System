@@ -68,35 +68,10 @@ const examSchema = new mongoose.Schema(
       ref: "Teacher",
       required: [true, "Created by (Teacher ID) is required"],
     },
-    questions: [
+    exam_questions: [
       {
-        question_text: {
-          type: "String",
-          required: [true, "Question text is required"],
-          trim: true,
-        },
-        question_type: {
-          type: "String",
-          required: [true, "Question type is required"],
-          enum: ["MCQ", "True/False", "Essay"],
-        },
-        options: {
-          type: ["String"],
-          required: function () {
-            return this.question_type === "MCQ";
-          },
-        },
-        correct_answer: {
-          type: "String",
-          required: function () {
-            return this.question_type !== "Essay";
-          },
-        },
-        marks: {
-          type: "Number",
-          required: [true, "Marks are required"],
-          min: 0,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ExamQuestion",
       },
     ],
   },
@@ -104,6 +79,18 @@ const examSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+examSchema.virtual("exam_status").get(function () {
+  const now = new Date();
+  if (now >= this.start_time && now <= this.end_time) {
+    return "Active";
+  } else if (now < this.start_time) {
+    return "Upcoming";
+  } else {
+    return "Expired";
+  }
+});
+
+examSchema.set("toJSON", { virtuals: true });
 
 const Exam = mongoose.model("Exam", examSchema);
 module.exports = Exam;
