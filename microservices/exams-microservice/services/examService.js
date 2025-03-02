@@ -123,6 +123,19 @@ const deleteExam = async (id) => {
   }
 };
 
+const getExamsByTeacherId = async (teacher_id) => {
+  try {
+    const exams = await Exam.find({ created_by: teacher_id })
+      .populate(
+        "subject_id grade_id class_id academic_year_id semester_id exam_questions"
+      )
+      .select("-__v -createdAt -updatedAt");
+    return exams;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   addExam,
   fetchExams,
@@ -131,4 +144,5 @@ module.exports = {
   checkExamStatus,
   updateExam,
   deleteExam,
+  getExamsByTeacherId,
 };

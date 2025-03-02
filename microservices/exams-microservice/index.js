@@ -9,15 +9,7 @@ const fetchAndRegisterModel = require("./utils/fetchAndRegisterModel");
 
 connectDB();
 
-let Subject,
-  Grade,
-  Class,
-  AcademicYear,
-  Semester,
-  Teacher,
-  Student,
-  GradeSubject,
-  Question;
+let Subject, Grade, Class, AcademicYear, Semester, Teacher, Student, Question;
 (async () => {
   try {
     Grade = await fetchAndRegisterModel("Grade");
@@ -27,7 +19,6 @@ let Subject,
     Semester = await fetchAndRegisterModel("Semester");
     Teacher = await fetchAndRegisterModel("Teacher");
     Student = await fetchAndRegisterModel("Student");
-    GradeSubject = await fetchAndRegisterModel("GradeSubject");
     Question = await fetchAndRegisterModel("Question");
     console.log("All models registered successfully");
   } catch (err) {
@@ -52,6 +43,6 @@ app.listen(PORT, () => {
 });
 
 /*
-  [ ] get students' grades after they finish.
+  [x] get students' grades after they finish.
   [x] teacher get, update , delete  
 */

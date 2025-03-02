@@ -1,3 +1,4 @@
+const GradeSubject = require("../models/GradeSubject");
 const GradeSubjectSemester = require("../models/GradeSubjectSemester");
 const {
   addExam,
@@ -6,6 +7,7 @@ const {
   fetchExamsByAttributes,
   updateExam,
   deleteExam,
+  getExamsByTeacherId,
 } = require("../services/examService");
 const { getExamResultsByExamId } = require("../services/resultsService");
 
@@ -165,6 +167,43 @@ const getExamResultsForTeacher = async (req, res) => {
     });
   }
 };
+
+const getExamsForTeacher = async (req, res) => {
+  try {
+    const teacher_id = req.user.id;
+    const exams = await getExamsByTeacherId(teacher_id);
+
+    const examsWithGSS = await Promise.all(
+      exams.map(async (exam) => {
+        const gradeSubject = await GradeSubject.findOne({
+          subjectId: exam.subject_id._id,
+          gradeId: exam.grade_id._id,
+          academicYear_id: exam.academic_year_id._id,
+        });
+
+        if (!gradeSubject) return exam;
+
+        const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+          grade_subject_id: gradeSubject._id,
+          semester_id: exam.semester_id._id,
+        });
+
+        return {
+          ...exam.toObject(),
+          gradeSubjectSemesterId: gradeSubjectSemester?._id || null,
+        };
+      })
+    );
+
+    res.status(200).json(examsWithGSS);
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to get exams for teacher",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createExam,
   getExams,
@@ -172,4 +211,5 @@ module.exports = {
   updateExamById,
   deleteExamById,
   getExamResultsForTeacher,
+  getExamsForTeacher,
 };
