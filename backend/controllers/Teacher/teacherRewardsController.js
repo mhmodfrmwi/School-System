@@ -91,6 +91,85 @@ const getTeachersWithPointsAndBadges = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const getTeacherWithPointsAndBadges = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+
+  if (!validateObjectId(teacherId)) {
+    return res.status(400).json({
+      success: false,
+      status: 400,
+      message: "Invalid teacher ID.",
+    });
+  }
+
+  const { semesterStart, semesterEnd } = getSemesterDates();
+
+  try {
+    const teacher = await Teacher.findById(teacherId).populate("subjectId");
+    if (!teacher) {
+      return res.status(404).json({
+        success: false,
+        status: 404,
+        message: "Teacher not found.",
+      });
+    }
+
+    const rewards = await RewardClaim.find({
+      userId: teacher._id,
+      userType: "Teacher",
+      claimDate: { $gte: semesterStart.toDate(), $lte: semesterEnd.toDate() },
+    }).populate("rewardId");
+
+    let totalPoints = 0;
+    rewards.forEach((rewardClaim) => {
+      if (rewardClaim.rewardId && rewardClaim.value) {
+        if (rewardClaim.rewardType === "add") {
+          totalPoints += rewardClaim.value;
+        } else if (rewardClaim.rewardType === "subtract") {
+          totalPoints -= rewardClaim.value;
+        }
+      }
+    });
+
+    const userPoint = await UserPoint.findOne({
+      userId: teacher._id,
+      userType: "Teacher",
+    });
+
+    const badge = userPoint ? userPoint.badges : "Green";
+
+    const subject = teacher.subjectId
+      ? {
+          _id: teacher.subjectId._id,
+          subjectName: teacher.subjectId.subjectName,
+          subjectCode: teacher.subjectId.subjectCode,
+        }
+      : null;
+
+    res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Teacher's points and badges fetched successfully.",
+      data: {
+        _id: teacher._id,
+        academicNumber: teacher.academicNumber,
+        fullName: teacher.fullName,
+        totalPoints,
+        badge,
+        subject,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching teacher's points and badges:", error);
+    res.status(500).json({
+      success: false,
+      status: 500,
+      message: "Failed to fetch teacher's points and badges.",
+      error: error.message,
+    });
+  }
+});
+
 const getDailyPoints = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
 
@@ -106,7 +185,6 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
 
   const endOfDay = new Date();
   endOfDay.setHours(23, 59, 59, 999);
-
   try {
     const dailyRewards = await RewardClaim.find({
       userId: teacherId,
@@ -131,6 +209,15 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
         );
       }
     });
+    const userPoint = await UserPoint.findOne({
+      userId: teacherId,
+      userType: "Teacher",
+    });
+    
+    let badge = "Green";
+    if (userPoint) {
+      badge = userPoint.badges;
+    }
 
     res.status(200).json({
       success: true,
@@ -139,6 +226,7 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
       data: {
         totalDailyPoints,
         dailyRewards: validRewards,
+        badge,
       },
     });
   } catch (error) {
@@ -184,9 +272,9 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
     },
   });
 });
-
 module.exports = {
   getDailyPoints,
   getAllPoints,
   getTeachersWithPointsAndBadges,
+  getTeacherWithPointsAndBadges
 };

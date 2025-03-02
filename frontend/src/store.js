@@ -41,7 +41,9 @@ import generalLibraryReducer from "./Features/Teacher/components/TeacherRedux/ge
 import questionbankReducer from "./Features/Teacher/components/TeacherRedux/QuestionBankSlice";
 import studentQuestionBankReducer from "./Features/Student/components/StudentRedux/questionBankSlice";
 import examsReducer from "./Features/Student/components/StudentRedux/examsSlice";
+import motivationReducer from "./Features/Student/components/StudentRedux/motivationSlice";
 import examReducer from "./Features/Teacher/components/TeacherRedux/ExamSlice";
+import motivationTeacherReducer from "./Features/Teacher/components/TeacherRedux/motivationTeacherSlice";
 const store = configureStore({
   reducer: {
     role: roleReducer,
@@ -83,10 +85,12 @@ const store = configureStore({
     teacherSchoolHub: teacherSchoolHubReducer,
     studentSchoolHub: studentSchoolHubReducer,
     generalLibrary: generalLibraryReducer,
-    questionbank:questionbankReducer,
+    questionbank: questionbankReducer,
     studentQuestionBank: studentQuestionBankReducer,
     exams: examsReducer,
     exam: examReducer,
+    motivation: motivationReducer,
+    motivationTeacher: motivationTeacherReducer,
   },
 });
 

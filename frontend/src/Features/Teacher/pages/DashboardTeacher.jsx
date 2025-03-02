@@ -6,6 +6,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassTeacher } from "../components/TeacherRedux/TeacherClassSlice";
 import bag from "../../../assets/bag.png";
+import { getTeacherPointsForTerm } from "../components/TeacherRedux/motivationTeacherSlice";
 
 const DashboardTeacher = () => {
   const dispatch = useDispatch();
@@ -13,11 +14,14 @@ const DashboardTeacher = () => {
     (state) => state.classTeachers || {},
   );
 
+  const { teacherPointsForTerm } = useSelector(
+    (state) => state.motivationTeacher,
+  );
   useEffect(() => {
     dispatch(fetchClassTeacher());
+    dispatch(getTeacherPointsForTerm());
   }, [dispatch]);
 
-  const [score, setScore] = useState(246);
   const [notifications, setNotifications] = useState({
     mail: 0,
     messages: 0,
@@ -47,24 +51,38 @@ const DashboardTeacher = () => {
       {/* Top Section */}
       <div className="mb-10 grid grid-cols-1 gap-10 font-poppins sm:grid-cols-2">
         <div className="grid h-48 grid-cols-2 rounded-md bg-[#117C90] p-4">
-          <div className="grid grid-cols-1 gap-2 ml-2 text-left">
+          <div className="ml-2 grid grid-cols-1 gap-2 text-left">
             <div className="flex items-center gap-2">
-              <FaCalendarAlt className="text-gray-200 text-lg" />
+              <FaCalendarAlt className="text-lg text-gray-200" />
               <span className="text-sm text-gray-200">{currentTime}</span>
             </div>
             <div className="flex flex-col items-start">
-              <div className="grid grid-cols-1 ml-2 gap-1 text-center">
-                <span className="text-xs font-medium text-white md:text-sm">Welcome</span>
-                <span className="md:text-4xl text-2xl font-bold text-white">zien</span>
+              <div className="ml-2 grid grid-cols-1 gap-1 text-center">
+                <span className="text-xs font-medium text-white md:text-sm">
+                  Welcome
+                </span>
+                <span className="text-2xl font-bold text-white md:text-4xl">
+                  zien
+                </span>
               </div>
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
             <span className="text-sm text-white md:text-lg">Your score</span>
             <div className="relative flex items-center justify-center">
-              <div className="h-12 w-12 rounded-full p-7 border-4 border-green-500 flex items-center justify-center md:h-14 md:w-14">
+              <div
+                className={`flex h-12 w-12 items-center justify-center rounded-full border-4 ${
+                  teacherPointsForTerm.badge === "Green"
+                    ? "border-green-500 bg-green-500"
+                    : teacherPointsForTerm.badge === "Diamond"
+                      ? "border-[#6a6969] bg-[#6a6969]"
+                      : teacherPointsForTerm.badge === "Gold"
+                        ? "border-yellow-500 bg-yellow-500"
+                        : "border-gray-300 bg-gray-300"
+                } p-7 md:h-14 md:w-14`}
+              >
                 <span className="text-lg font-bold text-white md:text-2xl">
-                  {score}
+                  {teacherPointsForTerm.totalPoints}
                 </span>
               </div>
             </div>
@@ -72,21 +90,24 @@ const DashboardTeacher = () => {
         </div>
 
         <div className="grid h-48 rounded-md bg-[#117C90] p-4">
-          <span className="text-sm ml-4 font-semibold text-white md:text-lg text-start block">
+          <span className="ml-4 block text-start text-sm font-semibold text-white md:text-lg">
             NOTIFICATIONS CENTER
           </span>
           <div className="flex h-14 w-full justify-center gap-4">
-            <div className="flex items-center bg-gray-100 px-3 py-1 rounded-md">
-              <FaBullhorn className="text-[#c9cc29] text-2xl" />
-              <span className="text-[#117C90] text-2xl font-bold ml-2">0</span>
+            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1">
+              <FaBullhorn className="text-2xl text-[#c9cc29]" />
+              <span className="ml-2 text-2xl font-bold text-[#117C90]">0</span>
             </div>
-            <div className="flex items-center bg-gray-100 px-3 py-1 rounded-md">
-              <FontAwesomeIcon icon={faEnvelope} className="text-[#cf502a] text-2xl" />
-              <span className="text-[#117C90] text-2xl font-bold ml-2">0</span>
+            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1">
+              <FontAwesomeIcon
+                icon={faEnvelope}
+                className="text-2xl text-[#cf502a]"
+              />
+              <span className="ml-2 text-2xl font-bold text-[#117C90]">0</span>
             </div>
-            <div className="flex items-center bg-gray-100 px-3 py-1 rounded-md">
-              <FaBell className="text-[#31961d] text-2xl" />
-              <span className="text-[#117C90] text-2xl font-bold ml-2">2</span>
+            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1">
+              <FaBell className="text-2xl text-[#31961d]" />
+              <span className="ml-2 text-2xl font-bold text-[#117C90]">2</span>
             </div>
           </div>
         </div>
@@ -98,12 +119,12 @@ const DashboardTeacher = () => {
         <section className="mb-4 rounded-lg p-4 md:mb-6 md:p-6">
           <div className="ml-0">
             <div className="flex flex-col">
-              <h1 className="text-lg font-poppins font-bold text-[#244856] sm:text-xl lg:text-3xl">
+              <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-3xl">
                 Courses
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[125px]"></div>
             </div>
-            <div className="grid grid-cols-1 ml-0 justify-items-center  gap-10 pt-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="ml-0 grid grid-cols-1 justify-items-center gap-10 pt-6 sm:grid-cols-2 xl:grid-cols-3">
               {classTeachers.map((classteacher, index) => (
                 <div
                   key={classteacher?.classId || index}
@@ -133,10 +154,10 @@ const DashboardTeacher = () => {
         </section>
 
         {/* Main Categories Section */}
-        <section className="mb-4 rounded-lg font-poppins p-4 md:mb-6 md:p-6">
+        <section className="mb-4 rounded-lg p-4 font-poppins md:mb-6 md:p-6">
           <div className="ml-0">
-            <div className="flex flex-col mb-7">
-              <h1 className="text-lg font-poppins font-bold text-[#244856] sm:text-xl lg:text-2xl">
+            <div className="mb-7 flex flex-col">
+              <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-2xl">
                 Main Categories
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[205px]"></div>
@@ -160,10 +181,10 @@ const DashboardTeacher = () => {
         </section>
 
         {/* Virtual Classrooms Section */}
-        <section className="rounded-lg font-poppins p-4 md:p-6">
+        <section className="rounded-lg p-4 font-poppins md:p-6">
           <div className="ml-0">
-            <div className="flex flex-col mb-6">
-              <h1 className="text-lg font-poppins font-bold text-[#244856] sm:text-xl lg:text-2xl">
+            <div className="mb-6 flex flex-col">
+              <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-2xl">
                 Virtual Classrooms
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[235px]"></div>
@@ -171,7 +192,7 @@ const DashboardTeacher = () => {
             {virtualClassrooms.length > 0 ? (
               <div>{/* Render virtual classrooms here */}</div>
             ) : (
-              <p className="w-[70%] bg-slate-100 p-10 font-medium text-lg text-gray-600 md:text-2xl">
+              <p className="w-[70%] bg-slate-100 p-10 text-lg font-medium text-gray-600 md:text-2xl">
                 You don’t have any new virtual classrooms today.
               </p>
             )}

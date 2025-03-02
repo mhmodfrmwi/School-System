@@ -1,9 +1,29 @@
-function Loader() {
+const Loader = () => {
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-200/20 backdrop-blur-sm">
-      <div className="loader"></div>
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(255, 255, 255, 0.8)",
+        zIndex: 1000,
+      }}
+    >
+      <div
+        className="h-16 w-16 animate-spin rounded-full"
+        style={{
+          background: `radial-gradient(farthest-side, #0284c7 94%, transparent) top/10px 10px no-repeat,
+                       conic-gradient(transparent 30%, #0284c7)`,
+          WebkitMask: `radial-gradient(farthest-side, transparent calc(100% - 10px), #000 0)`,
+        }}
+      ></div>
     </div>
   );
-}
+};
 
 export default Loader;
