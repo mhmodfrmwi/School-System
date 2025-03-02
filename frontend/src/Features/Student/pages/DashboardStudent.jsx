@@ -36,6 +36,7 @@ import { getSemesterReward } from "../components/StudentRedux/motivationSlice";
 function DashboardStudent() {
   const dispatch = useDispatch();
   const { semesterReward } = useSelector((state) => state.motivation);
+  const { fullName } = useSelector((state) => state.login);
 
   useEffect(() => {
     dispatch(getSemesterReward());
@@ -92,7 +93,7 @@ function DashboardStudent() {
           />
           <div className="space-y-2">
             <h2 className="font-poppins text-2xl font-bold text-[#62413A]">
-              Zaina Shaheen
+              {fullName}
             </h2>
             <div className="flex items-center space-x-2">
               <img src={trueIcon} alt="True Icon" className="h-6 w-6" />

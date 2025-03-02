@@ -6,36 +6,46 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async ({ email, password }, { rejectWithValue, getState }) => {
     try {
-      const role = getState().role.role; 
-      if (!role) throw new Error("No role selected! Please choose a role first.");
+      const role = getState().role.role;
+      if (!role)
+        throw new Error("No role selected! Please choose a role first.");
 
-      const response = await fetch(`http://localhost:4000/api/v1/${role}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/v1/${role}/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
         },
-        body: JSON.stringify({ email, password }),
-      });
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
         return rejectWithValue(data.message);
-
       }
 
       sessionStorage.setItem("token", data.token);
-      return { email, token: data.token };
+      sessionStorage.setItem("fullName", data[role]?.fullName || "Unknown");
+
+      return {
+        email,
+        token: data.token,
+        fullName: data[role]?.fullName || "Unknown",
+      };
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const loginSlice = createSlice({
   name: "user",
   initialState: {
     email: "",
+    fullName: sessionStorage.getItem("fullName") || "Unknown",
     token: sessionStorage.getItem("token") || null,
     loading: false,
     error: null,
@@ -43,8 +53,10 @@ const loginSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.email = "";
+      state.fullName = "Unknown";
       state.token = null;
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem("fullName");
       toast.info("Logged out successfully!");
     },
   },
@@ -58,7 +70,9 @@ const loginSlice = createSlice({
         state.loading = false;
         state.email = action.payload.email;
         state.token = action.payload.token;
-      //  toast.success("Login successful!");
+        state.fullName = action.payload.fullName;
+
+        toast.success(`Welcome, ${action.payload.fullName}`);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

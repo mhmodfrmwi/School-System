@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Mail, BookOpen, Calendar, MessageCircle } from "lucide-react";
 import { FaBullhorn, FaBell, FaCalendarAlt } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassTeacher } from "../components/TeacherRedux/TeacherClassSlice";
 import bag from "../../../assets/bag.png";
@@ -17,6 +17,9 @@ const DashboardTeacher = () => {
   const { teacherPointsForTerm } = useSelector(
     (state) => state.motivationTeacher,
   );
+
+  const { fullName } = useSelector((state) => state.login);
+
   useEffect(() => {
     dispatch(fetchClassTeacher());
     dispatch(getTeacherPointsForTerm());
@@ -61,8 +64,8 @@ const DashboardTeacher = () => {
                 <span className="text-xs font-medium text-white md:text-sm">
                   Welcome
                 </span>
-                <span className="text-2xl font-bold text-white md:text-4xl">
-                  zien
+                <span className="mt-4 text-2xl font-bold text-white md:text-xl xl:text-3xl">
+                  {fullName}
                 </span>
               </div>
             </div>
@@ -125,30 +128,48 @@ const DashboardTeacher = () => {
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[125px]"></div>
             </div>
             <div className="ml-0 grid grid-cols-1 justify-items-center gap-10 pt-6 sm:grid-cols-2 xl:grid-cols-3">
-              {classTeachers.map((classteacher, index) => (
-                <div
-                  key={classteacher?.classId || index}
-                  className="relative flex w-56 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
-                >
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
-                    <img src={bag} alt="bag" className="h-7 w-7" />
-                  </div>
-                  <p className="font-poppins text-lg font-semibold">
-                    {classteacher?.subjectName || "N/A"}
-                  </p>
-                  <div className="flex justify-start gap-4">
-                    <p className="font-poppins font-semibold text-[#197080]">
-                      {classteacher.gradeName || "N/A"}
+              {classTeachers.length > 0 ? (
+                classTeachers.map((classteacher, index) => (
+                  <div
+                    key={classteacher?.classId || index}
+                    className="relative flex w-56 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
+                  >
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
+                      <img src={bag} alt="bag" className="h-7 w-7" />
+                    </div>
+                    <p className="font-poppins text-lg font-semibold">
+                      {classteacher?.subjectName || "N/A"}
                     </p>
-                    <p className="font-poppins font-semibold text-[#197080]">
-                      {classteacher.className || "N/A"}
+                    <div className="flex justify-start gap-4">
+                      <p className="font-poppins font-semibold text-[#197080]">
+                        {classteacher.gradeName || "N/A"}
+                      </p>
+                      <p className="font-poppins font-semibold text-[#197080]">
+                        {classteacher.className || "N/A"}
+                      </p>
+                    </div>
+                    <p className="font-poppins text-[#197080]">
+                      {classteacher.semesterName || "N/A"}
                     </p>
                   </div>
-                  <p className="font-poppins text-[#197080]">
-                    {classteacher.semesterName || "N/A"}
-                  </p>
-                </div>
-              ))}
+                ))
+              ) : (
+                <>
+                  <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
+                    <FontAwesomeIcon
+                      icon={faCalendar}
+                      className="mb-4 text-6xl text-gray-400"
+                    />
+                    <p className="mb-2 font-poppins text-xl font-semibold text-gray-600">
+                      No Teacher Classes Found
+                    </p>
+                    <p className="mb-4 max-w-xl text-center font-poppins text-gray-500">
+                      It seems like there are no teacher classes available at
+                      the moment.
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </section>

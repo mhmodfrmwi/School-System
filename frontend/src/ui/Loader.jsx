@@ -17,8 +17,8 @@ const Loader = () => {
       <div
         className="h-16 w-16 animate-spin rounded-full"
         style={{
-          background: `radial-gradient(farthest-side, #0284c7 94%, transparent) top/10px 10px no-repeat,
-                       conic-gradient(transparent 30%, #0284c7)`,
+          background: `radial-gradient(farthest-side, #117c90  94%, transparent) top/10px 10px no-repeat,
+                       conic-gradient(transparent 30%, #117c90 )`,
           WebkitMask: `radial-gradient(farthest-side, transparent calc(100% - 10px), #000 0)`,
         }}
       ></div>
