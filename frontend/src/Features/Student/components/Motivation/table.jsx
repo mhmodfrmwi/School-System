@@ -107,7 +107,7 @@ function Table() {
           <div className="overflow-x-auto">
             {" "}
             {/* Horizontal scrolling for the table */}
-            <div className="h-[400px] overflow-y-auto">
+            <div className="max-h-[400px] overflow-y-auto">
               {" "}
               {/* Fixed height with vertical scrolling */}
               <table className="min-w-full border-collapse rounded-2xl border-2 border-pink-300 shadow-lg">
