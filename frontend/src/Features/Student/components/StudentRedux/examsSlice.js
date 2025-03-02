@@ -4,13 +4,13 @@ const getToken = () => sessionStorage.getItem("token");
 
 export const fetchExams = createAsyncThunk(
   "exams/fetchExams",
-  async ({ gradeSubjectSemesterId, classId }, { rejectWithValue }) => {
+  async ({ gradeSubjectSemesterId}, { rejectWithValue }) => {
     try {
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
       const response = await fetch(
-        `http://localhost:3000/exams?gradeSubjectSemesterId=${gradeSubjectSemesterId}&classId=${classId}`,
+        `http://localhost:3000/exams?gradeSubjectSemesterId=${gradeSubjectSemesterId}`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
@@ -22,7 +22,7 @@ export const fetchExams = createAsyncThunk(
         throw new Error(data.message || "Failed to fetch exams");
       }
 
-      return data;
+      return data.exams;
     } catch (error) {
       return rejectWithValue(error.message);
     }
