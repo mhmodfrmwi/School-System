@@ -44,7 +44,9 @@ const fetchExamsByAttributes = async (
       subject_id,
       academic_year_id,
     })
-      .populate("subject_id grade_id class_id academic_year_id semester_id")
+      .populate(
+        "subject_id grade_id class_id academic_year_id semester_id exam_questions"
+      )
       .populate("created_by", "_id fullName")
       .select("-__v -createdAt -updatedAt");
     return exams;
@@ -78,10 +80,32 @@ const checkExamStatus = async (id) => {
   }
 };
 
+const updateExam = async (id, updateData) => {
+  try {
+    const exam = await Exam.findByIdAndUpdate(id, updateData, { new: true });
+    return exam;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
+const deleteExam = async (id) => {
+  try {
+    const exam = await Exam.findByIdAndDelete(id);
+    return exam;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   addExam,
   fetchExams,
   fetchExamById,
   fetchExamsByAttributes,
   checkExamStatus,
+  updateExam,
+  deleteExam,
 };

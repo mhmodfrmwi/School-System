@@ -52,6 +52,6 @@ app.listen(PORT, () => {
 });
 
 /*
-  [ ] fetch exams with gradeSubjectSemester
+  [ ] get students' grades after they finish.
   [ ] teacher get, update , delete  
 */

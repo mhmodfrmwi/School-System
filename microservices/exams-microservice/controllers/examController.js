@@ -4,6 +4,8 @@ const {
   fetchExams,
   fetchExamById,
   fetchExamsByAttributes,
+  updateExam,
+  deleteExam,
 } = require("../services/examService");
 
 const createExam = async (req, res) => {
@@ -113,4 +115,47 @@ const getExam = async (req, res) => {
   }
 };
 
-module.exports = { createExam, getExams, getExam };
+const updateExamById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const updatedExam = await updateExam(id, updateData);
+    if (!updatedExam) {
+      return res.status(404).json({ message: "Exam not found" });
+    }
+
+    res.status(200).json({ exam: updatedExam });
+  } catch (err) {
+    console.log(err.message);
+    res
+      .status(500)
+      .json({ message: "Failed to update exam", err: err.message });
+  }
+};
+
+const deleteExamById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedExam = await deleteExam(id);
+    if (!deletedExam) {
+      return res.status(404).json({ message: "Exam not found" });
+    }
+
+    res.status(200).json({ message: "Exam deleted successfully" });
+  } catch (err) {
+    console.log(err.message);
+    res
+      .status(500)
+      .json({ message: "Failed to delete exam", err: err.message });
+  }
+};
+
+module.exports = {
+  createExam,
+  getExams,
+  getExam,
+  updateExamById,
+  deleteExamById,
+};
