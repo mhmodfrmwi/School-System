@@ -18,7 +18,15 @@ const ExamForm = () => {
     end_time: '',
     duration: 0,
     total_marks: 0,
-    exam_questions: [], // الأسئلة ستُدار هنا مباشرة
+    exam_questions: [
+      {
+        question_text: '',
+        question_type: 'MCQ',
+        options: [],
+        correct_answer: '',
+        marks: 0,
+      },
+    ], // سؤال واحد فارغ يظهر تلقائيًا
   });
 
   const handleSubmit = async (e) => {
@@ -65,8 +73,6 @@ const ExamForm = () => {
       created_by,
     };
 
-    console.log('Payload being sent:', payload);
-
     try {
       await dispatch(
         createExam({ formData: payload, classId, gradeSubjectSemesterId })
@@ -82,11 +88,18 @@ const ExamForm = () => {
         end_time: '',
         duration: 0,
         total_marks: 0,
-        exam_questions: [],
+        exam_questions: [
+          {
+            question_text: '',
+            question_type: 'MCQ',
+            options: [],
+            correct_answer: '',
+            marks: 0,
+          },
+        ], // إعادة تعيين سؤال فارغ بعد الإرسال
       });
     } catch (error) {
       toast.error(`Failed to create exam: ${error.message}`);
-      console.error('Error creating exam:', error);
     }
   };
 

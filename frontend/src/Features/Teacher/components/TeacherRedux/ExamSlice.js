@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 
 const getToken = () => sessionStorage.getItem('token');
 
@@ -18,9 +17,9 @@ export const createExam = createAsyncThunk(
         Authorization: `Bearer ${token}`,
       };
 
-      console.log('Payload being sent:', JSON.stringify(formData, null, 2));
-      console.log('Request URL:', url);
-      console.log('Request headers:', headers);
+      // console.log('Payload being sent:', JSON.stringify(formData, null, 2));
+      // console.log('Request URL:', url);
+      // console.log('Request headers:', headers);
 
       const response = await fetch(url, {
         method: 'POST',
@@ -30,15 +29,12 @@ export const createExam = createAsyncThunk(
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        console.error('Backend error response:', errorResponse);
         throw new Error(errorResponse.message || 'Failed to create exam');
       }
 
       const data = await response.json();
-      console.log('Exam created successfully:', data);
       return data;
     } catch (error) {
-      console.error('Error in createExam:', error);
       return rejectWithValue(error.message || 'Server Error');
     }
   }
@@ -62,14 +58,12 @@ const examSlice = createSlice({
       .addCase(createExam.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.exams.push(action.payload);
-        toast.success('Exam Added Successfully');
         state.loading = false;
       })
       .addCase(createExam.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload || 'Failed to add exam';
         state.loading = false;
-        toast.error(state.error);
       });
   },
 });
