@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
-const getToken = () => sessionStorage.getItem("token");
+const getToken = () => sessionStorage.getItem('token');
 
 export const createExam = createAsyncThunk(
   'exam/create',
@@ -48,7 +48,7 @@ const examSlice = createSlice({
   name: 'exam',
   initialState: {
     exams: [],
-    status: "idle",
+    status: 'idle',
     error: null,
     loading: false,
   },
@@ -56,18 +56,18 @@ const examSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createExam.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
         state.loading = true;
       })
       .addCase(createExam.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.exams.push(action.payload);
-        toast("Exam Added Successfully");
+        toast.success('Exam Added Successfully');
         state.loading = false;
       })
       .addCase(createExam.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload || "Failed to add exam";
+        state.status = 'failed';
+        state.error = action.payload || 'Failed to add exam';
         state.loading = false;
         toast.error(state.error);
       });
