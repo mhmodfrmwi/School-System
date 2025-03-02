@@ -7,6 +7,7 @@ const {
   updateExam,
   deleteExam,
 } = require("../services/examService");
+const { getExamResultsByExamId } = require("../services/resultsService");
 
 const createExam = async (req, res) => {
   try {
@@ -152,10 +153,23 @@ const deleteExamById = async (req, res) => {
   }
 };
 
+const getExamResultsForTeacher = async (req, res) => {
+  try {
+    const results = await getExamResultsByExamId(req.params.id);
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to get exam results for teacher",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createExam,
   getExams,
   getExam,
   updateExamById,
   deleteExamById,
+  getExamResultsForTeacher,
 };

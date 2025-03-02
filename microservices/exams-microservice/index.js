@@ -53,5 +53,5 @@ app.listen(PORT, () => {
 
 /*
   [ ] get students' grades after they finish.
-  [ ] teacher get, update , delete  
+  [x] teacher get, update , delete  
 */

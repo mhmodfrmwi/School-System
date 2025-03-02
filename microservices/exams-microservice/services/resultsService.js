@@ -30,6 +30,19 @@ const calculateResults = async (session_id) => {
   }
 };
 
+const getExamResultsByExamId = async (id) => {
+  try {
+    const results = await ExamResult.find({ exam_id: id })
+      .populate("student_id", "fullName")
+      .populate("exam_id", "title")
+      .select("-__v");
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   calculateResults,
+  getExamResultsByExamId,
 };

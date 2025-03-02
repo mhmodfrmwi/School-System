@@ -6,6 +6,7 @@ const {
   getExam,
   updateExamById,
   deleteExamById,
+  getExamResultsForTeacher,
 } = require("../controllers/examController");
 const validateJwt = require("../../../backend/middlewares/validateJWT");
 
@@ -16,5 +17,6 @@ router
   .get(validateJwt, getExam)
   .patch(validateJwt, updateExamById)
   .delete(validateJwt, deleteExamById);
+router.get("/:id/results", validateJwt, getExamResultsForTeacher);
 
 module.exports = router;
