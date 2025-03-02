@@ -4,13 +4,13 @@ const getToken = () => sessionStorage.getItem("token");
 
 export const fetchExams = createAsyncThunk(
   "exams/fetchExams",
-  async (subjectId, { rejectWithValue }) => {
+  async ({ gradeSubjectSemesterId, classId }, { rejectWithValue }) => {
     try {
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
       const response = await fetch(
-        `http://localhost:3000/exams`,
+        `http://localhost:3000/exams?gradeSubjectSemesterId=${gradeSubjectSemesterId}&classId=${classId}`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
@@ -28,7 +28,6 @@ export const fetchExams = createAsyncThunk(
     }
   }
 );
-
 export const startExamSession = createAsyncThunk(
   "exams/startExamSession",
   async (examId, { rejectWithValue }) => {
@@ -80,7 +79,7 @@ export const endExamSession = createAsyncThunk(
         throw new Error(data.message || "Failed to end exam session");
       }
 
-      // حساب النتيجة
+      // Calculate the score
       const exam = data.exam;
       let score = 0;
       exam.questions.forEach((question) => {
@@ -122,11 +121,14 @@ export const fetchSessions = createAsyncThunk(
     }
   }
 );
+
 const examsSlice = createSlice({
   name: "exams",
   initialState: {
     exams: [],
     sessions: [],
+    currentSession: null,
+    score: null,
     loadingExams: false,
     loadingSessions: false,
     loading: false,
@@ -134,6 +136,16 @@ const examsSlice = createSlice({
   },
   reducers: {
     clearError: (state) => {
+      state.error = null;
+    },
+    resetState: (state) => {
+      state.exams = [];
+      state.sessions = [];
+      state.currentSession = null;
+      state.score = null;
+      state.loadingExams = false;
+      state.loadingSessions = false;
+      state.loading = false;
       state.error = null;
     },
   },
@@ -145,7 +157,7 @@ const examsSlice = createSlice({
       })
       .addCase(fetchExams.fulfilled, (state, action) => {
         state.loadingExams = false;
-        state.exams = action.payload;
+        state.exams = Array.isArray(action.payload) ? action.payload : []; // Ensure exams is always an array
       })
       .addCase(fetchExams.rejected, (state, action) => {
         state.loadingExams = false;
@@ -157,7 +169,7 @@ const examsSlice = createSlice({
       })
       .addCase(fetchSessions.fulfilled, (state, action) => {
         state.loadingSessions = false;
-        state.sessions = action.payload;
+        state.sessions = Array.isArray(action.payload) ? action.payload : []; // Ensure sessions is always an array
       })
       .addCase(fetchSessions.rejected, (state, action) => {
         state.loadingSessions = false;
@@ -169,7 +181,7 @@ const examsSlice = createSlice({
       })
       .addCase(startExamSession.fulfilled, (state, action) => {
         state.loading = false;
-        // Handle the started session if needed
+        state.currentSession = action.payload; // Store the started session
       })
       .addCase(startExamSession.rejected, (state, action) => {
         state.loading = false;
@@ -181,7 +193,8 @@ const examsSlice = createSlice({
       })
       .addCase(endExamSession.fulfilled, (state, action) => {
         state.loading = false;
-        // Handle the ended session if needed
+        state.currentSession = null; // Clear the current session
+        state.score = action.payload.score; // Store the score
       })
       .addCase(endExamSession.rejected, (state, action) => {
         state.loading = false;
@@ -191,4 +204,4 @@ const examsSlice = createSlice({
 });
 
 export default examsSlice.reducer;
-export const { clearError } = examsSlice.actions;
+export const { clearError, resetState } = examsSlice.actions;

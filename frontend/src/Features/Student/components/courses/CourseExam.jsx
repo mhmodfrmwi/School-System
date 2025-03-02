@@ -10,33 +10,31 @@ import Swal from 'sweetalert2';
 
 const ExamsSection = () => {
     const dispatch = useDispatch();
-    const { subjectId } = useParams();
+    const { gradeSubjectSemesterId, classId } = useParams();
     const navigate = useNavigate();
-    const { exams, loading, error } = useSelector((state) => state.exams);
+    const { exams = [], loading, error } = useSelector((state) => state.exams);
     const { subjects } = useSelector((state) => state.allSubjectsStudent);
-
 
     const [activeTab, setActiveTab] = useState("all");
     const [filteredExams, setFilteredExams] = useState([]);
     const [subjectName, setSubjectName] = useState("");
 
-
     useEffect(() => {
-        dispatch(fetchExams(subjectId));
-    }, [dispatch, subjectId]);
+        dispatch(fetchExams({ gradeSubjectSemesterId, classId }));
+    }, [dispatch, gradeSubjectSemesterId, classId]);
 
     useEffect(() => {
         dispatch(fetchSubjects());
     }, [dispatch]);
 
     useEffect(() => {
-        if (subjects.length > 0 && subjectId) {
-            const subject = subjects.find((subject) => subject.id === subjectId);
+        if (subjects.length > 0 && gradeSubjectSemesterId) {
+            const subject = subjects.find((subject) => subject.id === gradeSubjectSemesterId);
             if (subject) {
                 setSubjectName(subject.subjectName);
             }
         }
-    }, [subjectId, subjects]);
+    }, [gradeSubjectSemesterId, subjects]);
 
     useEffect(() => {
         if (error) {
@@ -52,23 +50,33 @@ const ExamsSection = () => {
     }, [error, dispatch]);
 
     useEffect(() => {
-        if (activeTab === "completed") {
-            setFilteredExams(exams.filter(exam => exam.status === "completed"));
-        } else if (activeTab === "missed") {
-            setFilteredExams(exams.filter(exam => exam.status === "missed"));
-        } else {
-            setFilteredExams(exams);
+        if (Array.isArray(exams)) {
+            if (activeTab === "completed") {
+                setFilteredExams(exams.filter(exam => exam.status === "completed"));
+            } else if (activeTab === "missed") {
+                setFilteredExams(exams.filter(exam => exam.status === "missed"));
+            } else {
+                setFilteredExams(exams);
+            }
         }
     }, [activeTab, exams]);
 
     const handleStartExam = (examId) => {
         dispatch(startExamSession(examId));
-        navigate(`/student/allcourses/exams/${subjectId}/${examId}`);
+        navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${examId}`);
     };
 
     const handleEndExam = (sessionId) => {
         dispatch(endExamSession(sessionId));
     };
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!Array.isArray(exams)) {
+        return <div>No exams available.</div>;
+    }
 
     return (
         <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
@@ -82,7 +90,7 @@ const ExamsSection = () => {
                     <li>
                         <Button variant="solid" className="md:w-11/12  bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
 
-                            onClick={() => navigate(`/student/allcourses/videos/${subjectId}`)}>
+                            onClick={() => navigate(`/student/allcourses/videos/${gradeSubjectSemesterId}`)}>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> Video Lectures
                         </Button>
                     </li>
@@ -90,14 +98,14 @@ const ExamsSection = () => {
                         <Button
                             variant="solid"
                             className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-                            onClick={() => navigate(`/student/allcourses/materials/${subjectId}`)}
+                            onClick={() => navigate(`/student/allcourses/materials/${gradeSubjectSemesterId}`)}
                         >
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">02</span> Course Material
                         </Button>
                     </li>
                     <li>
                         <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700  font-medium py-4 rounded-lg"
-                            onClick={() => navigate(`/student/allcourses/virtualrooms/${subjectId}`)} >
+                            onClick={() => navigate(`/student/allcourses/virtualrooms/${gradeSubjectSemesterId}`)} >
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Virtual Rooms
                         </Button>
                     </li>
@@ -118,7 +126,7 @@ const ExamsSection = () => {
                     </li>
                     <li>
                         <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-                            onClick={() => navigate(`/student/allcourses/questionbank/${subjectId}`)}
+                            onClick={() => navigate(`/student/allcourses/questionbank/${gradeSubjectSemesterId}`)}
                         >
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
                         </Button>
@@ -129,7 +137,6 @@ const ExamsSection = () => {
             {/* Main Content */}
             <div className="flex-1 w-full md:w-3/4 p-4 mt-6">
                 <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">Exams</h1>
-
 
                 {/* Filter Buttons */}
                 <div className="flex flex-wrap gap-3 mb-6">
@@ -186,7 +193,7 @@ const ExamsSection = () => {
 
                 {/* Exam Cards */}
                 <div className="space-y-4">
-                    {exams.map((exam, index) => (
+                    {filteredExams.map((exam, index) => (
                         <Card key={exam._id} className="border border-gray-200 rounded-xl shadow-sm">
                             <CardContent className="flex items-center justify-center p-4 bg-gray-100">
 

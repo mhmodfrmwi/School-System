@@ -539,7 +539,7 @@ function App() {
               element={<StudentQuestionDetailes />}
             />
             <Route
-              path="allcourses/exams/:subjectId"
+              path="allcourses/exams/:gradeSubjectSemesterId/:classId"
               element={<StudentExams />}
             />
             <Route
