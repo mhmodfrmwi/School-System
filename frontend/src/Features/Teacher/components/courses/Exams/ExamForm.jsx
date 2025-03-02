@@ -18,15 +18,7 @@ const ExamForm = () => {
     end_time: '',
     duration: 0,
     total_marks: 0,
-    exam_questions: [],
-  });
-
-  const [question, setQuestion] = useState({
-    question_text: '',
-    question_type: 'MCQ', // نوع السؤال دائمًا MCQ
-    options: [],
-    correct_answer: '',
-    marks: 0,
+    exam_questions: [], // الأسئلة ستُدار هنا مباشرة
   });
 
   const handleSubmit = async (e) => {
@@ -48,8 +40,8 @@ const ExamForm = () => {
         throw new Error('Invalid question data');
       }
 
-      if (!q.options || q.options.length !== 4 || !q.correct_answer) {
-        toast.error('MCQ questions require 4 options and a correct answer');
+      if (q.question_type === 'MCQ' && (!q.options || q.options.length < 2)) {
+        toast.error('MCQ questions require at least 2 options');
         throw new Error('Invalid question data');
       }
 
@@ -92,14 +84,6 @@ const ExamForm = () => {
         total_marks: 0,
         exam_questions: [],
       });
-
-      setQuestion({
-        question_text: '',
-        question_type: 'MCQ',
-        options: [],
-        correct_answer: '',
-        marks: 0,
-      });
     } catch (error) {
       toast.error(`Failed to create exam: ${error.message}`);
       console.error('Error creating exam:', error);
@@ -114,44 +98,38 @@ const ExamForm = () => {
     });
   };
 
-  const handleQuestionChange = (e) => {
+  const handleQuestionChange = (e, index) => {
     const { name, value } = e.target;
+    const updatedQuestions = [...examData.exam_questions];
+
     if (name === 'options') {
-      setQuestion({ ...question, options: value.split(',') });
+      updatedQuestions[index] = {
+        ...updatedQuestions[index],
+        [name]: value.split(','),
+      };
     } else {
-      setQuestion({ ...question, [name]: value });
+      updatedQuestions[index] = {
+        ...updatedQuestions[index],
+        [name]: value,
+      };
     }
+
+    setExamData({ ...examData, exam_questions: updatedQuestions });
   };
 
-  const handleAddQuestion = () => {
-    if (!question.question_text || !question.marks) {
-      toast.error('Please fill in all required fields for the question');
-      return;
-    }
-
-    if (question.options.length !== 4) {
-      toast.error('MCQ questions must have exactly 4 options.');
-      return;
-    }
-
-    if (!question.correct_answer) {
-      toast.error('Please select a correct answer.');
-      return;
-    }
-
-    setExamData((prevData) => ({
-      ...prevData,
-      exam_questions: [...prevData.exam_questions, question],
-    }));
-
-    // إعادة تعيين الحقول بعد إضافة السؤال
-    setQuestion({
+  const addNewQuestion = () => {
+    const newQuestion = {
       question_text: '',
       question_type: 'MCQ',
       options: [],
       correct_answer: '',
       marks: 0,
-    });
+    };
+
+    setExamData((prevData) => ({
+      ...prevData,
+      exam_questions: [...prevData.exam_questions, newQuestion],
+    }));
   };
 
   return (
@@ -248,83 +226,72 @@ const ExamForm = () => {
             </div>
           </div>
 
-          {/* Question fields */}
-          <div>
-            <h3>Add Questions</h3>
-            <div>
-              <label className="block font-medium">Question Text:</label>
-              <input
-                type="text"
-                name="question_text"
-                value={question.question_text}
-                onChange={handleQuestionChange}
-                className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                required
-              />
-            </div>
-            <div>
-              <label className="block font-medium">Options (comma-separated):</label>
-              <input
-                type="text"
-                name="options"
-                value={question.options.join(',')}
-                onChange={(e) =>
-                  setQuestion({ ...question, options: e.target.value.split(',') })
-                }
-                className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                placeholder="Option 1, Option 2, Option 3, Option 4"
-                required
-              />
-            </div>
-            <div>
-              <label className="block font-medium">Correct Answer:</label>
-              <select
-                name="correct_answer"
-                value={question.correct_answer}
-                onChange={handleQuestionChange}
-                className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                required
-              >
-                <option value="">Select correct answer</option>
-                {question.options.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block font-medium">Marks:</label>
-              <input
-                type="number"
-                name="marks"
-                value={question.marks}
-                onChange={handleQuestionChange}
-                className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                required
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handleAddQuestion}
-              className="mt-2 px-4 py-2 bg-[#117C90] text-white rounded-2xl"
-            >
-              Add Question
-            </button>
-          </div>
-
-          {/* عرض الأسئلة المضافة */}
-          <div>
-            <h3>Added Questions</h3>
-            {examData.exam_questions.map((q, index) => (
-              <div key={index} className="mb-4 p-4 border border-gray-300 rounded-lg">
-                <p><strong>Question {index + 1}:</strong> {q.question_text}</p>
-                <p><strong>Options:</strong> {q.options.join(', ')}</p>
-                <p><strong>Correct Answer:</strong> {q.correct_answer}</p>
-                <p><strong>Marks:</strong> {q.marks}</p>
+          {/* Added Questions */}
+          {examData.exam_questions.map((q, index) => (
+            <div key={index} className="p-4 border border-gray-300 rounded-lg mb-4">
+              <h3 className="font-medium mb-2">Question {index + 1}</h3>
+              <div>
+                <label className="block font-medium">Question Text:</label>
+                <input
+                  type="text"
+                  name="question_text"
+                  value={q.question_text}
+                  onChange={(e) => handleQuestionChange(e, index)}
+                  className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                  required
+                />
               </div>
-            ))}
-          </div>
+              <div>
+                <label className="block font-medium">Options (comma-separated):</label>
+                <input
+                  type="text"
+                  name="options"
+                  value={q.options.join(',')}
+                  onChange={(e) => handleQuestionChange(e, index)}
+                  className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                  placeholder="Option 1, Option 2, Option 3, Option 4"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block font-medium">Correct Answer:</label>
+                <select
+                  name="correct_answer"
+                  value={q.correct_answer}
+                  onChange={(e) => handleQuestionChange(e, index)}
+                  className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                  required
+                >
+                  <option value="">Select correct answer</option>
+                  {q.options.map((option, i) => (
+                    <option key={i} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block font-medium">Marks:</label>
+                <input
+                  type="number"
+                  name="marks"
+                  value={q.marks}
+                  onChange={(e) => handleQuestionChange(e, index)}
+                  className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                  required
+                />
+              </div>
+            </div>
+          ))}
+
+          {/* Add New Question Button */}
+          <button
+            type="button"
+            onClick={addNewQuestion}
+            className="mt-2 px-4 py-2 bg-[#117C90] text-white rounded-2xl"
+          >
+            Add Question
+          </button>
 
           {/* Submit button */}
           <button
