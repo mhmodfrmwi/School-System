@@ -1,4 +1,8 @@
 const Exam = require("../models/Exam");
+const ExamQuestion = require("../models/ExamQuestion");
+const Session = require("../models/Session");
+const StudentAnswer = require("../models/StudentAnswer");
+const ExamResult = require("../models/ExamResult");
 const { createExamQuestions } = require("./questionService");
 
 const addExam = async (examData) => {
@@ -92,7 +96,26 @@ const updateExam = async (id, updateData) => {
 
 const deleteExam = async (id) => {
   try {
-    const exam = await Exam.findByIdAndDelete(id);
+    const exam = await Exam.findById(id);
+    if (!exam) {
+      throw new Error("Exam not found");
+    }
+
+    await ExamQuestion.deleteMany({ _id: { $in: exam.exam_questions } });
+
+    const sessions = await Session.find({ exam_id: id });
+
+    for (const session of sessions) {
+      await StudentAnswer.deleteMany({ session_id: session._id });
+      await ExamResult.deleteMany({
+        exam_id: id,
+        student_id: session.student_id,
+      });
+    }
+
+    await Session.deleteMany({ exam_id: id });
+
+    await Exam.findByIdAndDelete(id);
     return exam;
   } catch (error) {
     console.error(error);
