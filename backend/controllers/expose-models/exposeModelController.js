@@ -7,6 +7,7 @@ const Semester = require("../../DB/semesterModel");
 const Teacher = require("../../DB/teacher");
 const Student = require("../../DB/student");
 const GradeSubject = require("../../DB/gradeSubject");
+const Question = require("../../DB/questionBankModel");
 const exposeModels = expressAsyncHandler(async (req, res) => {
   const { modelName } = req.params;
   const models = {
@@ -18,6 +19,7 @@ const exposeModels = expressAsyncHandler(async (req, res) => {
     Teacher: Teacher.schema.obj,
     Student: Student.schema.obj,
     GradeSubject: GradeSubject.schema.obj,
+    Question: Question.schema.obj,
   };
 
   if (models[modelName]) {

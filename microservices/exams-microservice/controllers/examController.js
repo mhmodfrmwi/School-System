@@ -26,20 +26,19 @@ const createExam = async (req, res) => {
         .status(404)
         .json({ message: "GradeSubjectSemester not found" });
     }
-    console.log(gradeSubjectSemester);
 
     const subject_id = gradeSubjectSemester.grade_subject_id.subjectId;
     const grade_id = gradeSubjectSemester.grade_subject_id.gradeId._id;
     const academic_year_id =
       gradeSubjectSemester.grade_subject_id.academicYear_id;
     const semester_id = gradeSubjectSemester.semester_id._id;
-    console.log(academic_year_id);
 
     req.body.subject_id = subject_id;
     req.body.grade_id = grade_id;
     req.body.academic_year_id = academic_year_id;
     req.body.semester_id = semester_id;
     req.body.class_id = class_id;
+    console.log(req.body);
 
     const exam = await addExam(req.body);
     res.status(201).json(exam);
@@ -87,7 +86,11 @@ const getExams = async (req, res) => {
     } else {
       exams = await fetchExams();
     }
-    res.status(200).json({ exams, count: exams.length });
+    const formattedExams = exams.map((exam) => ({
+      ...exam.toObject(),
+      status: exam.exam_status,
+    }));
+    res.status(200).json({ exams: formattedExams, count: exams.length });
   } catch (err) {
     console.log(err.message);
     res
@@ -102,7 +105,8 @@ const getExam = async (req, res) => {
     if (!exam) {
       return res.status(404).json({ message: "Exam not found" });
     }
-    res.status(200).json(exam);
+    const formattedExam = { ...exam.toObject(), status: exam.exam_status };
+    res.status(200).json({ exam: formattedExam });
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ message: "Failed to fetch exam", err: err.message });

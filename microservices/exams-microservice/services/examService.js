@@ -1,9 +1,13 @@
 const Exam = require("../models/Exam");
+const { createExamQuestions } = require("./questionService");
 
 const addExam = async (examData) => {
   try {
-    console.log(examData);
-    const exam = new Exam(examData);
+    const questionIds = await createExamQuestions(examData.exam_questions);
+    const exam = new Exam({
+      ...examData,
+      exam_questions: questionIds,
+    });
     await exam.save();
     return exam;
   } catch (error) {
@@ -11,6 +15,7 @@ const addExam = async (examData) => {
     throw new Error(error.message);
   }
 };
+
 const fetchExams = async () => {
   try {
     const exams = await Exam.find()
@@ -23,6 +28,7 @@ const fetchExams = async () => {
     throw new Error(error.message);
   }
 };
+
 const fetchExamsByAttributes = async (
   class_id,
   semester_id,
@@ -47,11 +53,12 @@ const fetchExamsByAttributes = async (
     throw new Error(error.message);
   }
 };
+
 const fetchExamById = async (id) => {
   try {
     const exam = await Exam.findById(id)
       .populate(
-        "subject_id grade_id class_id academic_year_id semester_id created_by"
+        "subject_id grade_id class_id academic_year_id semester_id created_by exam_questions"
       )
       .select("-__v -createdAt -updatedAt");
     return exam;
@@ -60,4 +67,21 @@ const fetchExamById = async (id) => {
     throw new Error(error.message);
   }
 };
-module.exports = { addExam, fetchExams, fetchExamById, fetchExamsByAttributes };
+
+const checkExamStatus = async (id) => {
+  try {
+    const exam = await Exam.findById(id);
+    return exam.exam_status;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
+module.exports = {
+  addExam,
+  fetchExams,
+  fetchExamById,
+  fetchExamsByAttributes,
+  checkExamStatus,
+};

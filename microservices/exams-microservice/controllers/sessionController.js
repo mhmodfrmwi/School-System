@@ -4,7 +4,6 @@ const moment = require("moment");
 const {
   addSession,
   getSessionsForStudent,
-  endSession,
 } = require("../services/sessionService");
 
 const startSession = async (req, res) => {
@@ -59,6 +58,7 @@ const getAllSessions = async (req, res) => {
       ...session.toObject(),
       start_time: moment(session.start_time).format("YYYY-MM-DD HH:mm:ss"),
       end_time: moment(session.end_time).format("YYYY-MM-DD HH:mm:ss"),
+      status: session.session_status,
     }));
     res.json(formattedSessions);
   } catch (err) {
@@ -68,19 +68,5 @@ const getAllSessions = async (req, res) => {
   }
 };
 
-const endSessionById = async (req, res) => {
-  try {
-    const session_id = req.params.session_id;
-    if (!session_id) {
-      return res.status(400).json({ message: "Session ID is required" });
-    }
-    await endSession(session_id);
-    res.status(204).json({});
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Failed to end session", err: err.message });
-  }
-};
-
-module.exports = { startSession, getAllSessions, endSessionById };
+const submitSessionResults = (req, res) => {};
+module.exports = { startSession, getAllSessions };
