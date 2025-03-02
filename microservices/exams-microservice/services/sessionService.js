@@ -3,8 +3,8 @@ const Session = require("../models/Session");
 const addSession = async (student_id, exam_id, start_time, end_time) => {
   try {
     const existingSession = await Session.findOne({ student_id, exam_id });
-    if (existingSession && existingSession.status === "In Progress") {
-      throw new Error("Session already exists");
+    if (existingSession) {
+      return existingSession;
     }
     const session = new Session({
       exam_id,
