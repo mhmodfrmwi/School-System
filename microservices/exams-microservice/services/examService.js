@@ -136,6 +136,18 @@ const getExamsByTeacherId = async (teacher_id) => {
     throw new Error(error.message);
   }
 };
+
+const getStudentResults = async (student_id) => {
+  try {
+    const results = await ExamResult.find({ student_id })
+      .populate("exam_id", "title")
+      .select("-__v");
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   addExam,
   fetchExams,
@@ -145,4 +157,5 @@ module.exports = {
   updateExam,
   deleteExam,
   getExamsByTeacherId,
+  getStudentResults,
 };
