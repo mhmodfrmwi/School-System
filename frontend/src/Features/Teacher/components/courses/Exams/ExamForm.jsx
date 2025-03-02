@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createExam } from '../../TeacherRedux/ExamSlice';
 import { useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ExamForm = () => {
   const dispatch = useDispatch();
@@ -26,67 +28,102 @@ const ExamForm = () => {
     correct_answer: '',
     marks: 0,
   });
-
-  const handleSubmit = (e) => {
+ 
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const updatedQuestions = [...examData.questions];
-    if (
-      question.question_text.trim() !== '' &&
-      (question.question_type === 'Essay' ||
-        (question.options.length > 0 && question.correct_answer.trim() !== ''))
-    ) {
-      updatedQuestions.push(question);
+  
+    if (!examData.title || !examData.start_time || !examData.end_time || examData.questions.length === 0) {
+      toast.error("Please fill in all required fields");
+      return;
     }
-
+  
+    const updatedQuestions = examData.questions.map((q) => {
+      if (!q.question_text || !q.question_type || !q.marks) {
+        toast.error("Please fill in all required fields for each question");
+        throw new Error("Invalid question data");
+      }
+  
+      if (q.question_type === "MCQ" && (!q.options || q.options.length !== 4 || !q.correct_answer)) {
+        toast.error("MCQ questions require 4 options and a correct answer");
+        throw new Error("Invalid question data");
+      }
+  
+      if (q.question_type === "True/False" && (!q.options || q.options.length !== 2 || !q.correct_answer)) {
+        toast.error("True/False questions require two options (True/False) and a correct answer");
+        throw new Error("Invalid question data");
+      }
+  
+      return {
+        ...q,
+        marks: Number(q.marks), 
+      };
+    });
+  
+    
+    const formattedStartTime = new Date(examData.start_time).toISOString();
+    const formattedEndTime = new Date(examData.end_time).toISOString();  
+    const token = sessionStorage.getItem("token");
+    const decodedToken = JSON.parse(atob(token.split(".")[1])); 
+    const created_by = decodedToken.id; 
+  
+    // Prepare the payload
     const payload = {
       ...examData,
+      start_time: formattedStartTime,
+      end_time: formattedEndTime,
       questions: updatedQuestions,
+      created_by, 
     };
-
-    dispatch(createExam({ formData: payload, classId, gradeSubjectSemesterId }))
-      .unwrap()
-      .then(() => {
-
-        setExamData({
-          title: '',
-          description: '',
-          type: 'Online',
-          start_time: '',
-          end_time: '',
-          duration: 0,
-          total_marks: 0,
-          questions: [],
-        });
-
-        setQuestion({
-          question_text: '',
-          question_type: 'MCQ',
-          options: [],
-          correct_answer: '',
-          marks: 0,
-        });
-      })
-      .catch((error) => {
-        alert(`Failed to create exam: ${error.message}`);
+  
+    console.log("Payload being sent:", payload);
+  
+    try {
+      await dispatch(
+        createExam({ formData: payload, classId, gradeSubjectSemesterId })
+      ).unwrap();
+  
+      toast.success("Exam created successfully!");
+  
+      // Reset the form
+      setExamData({
+        title: "",
+        description: "",
+        type: "Online",
+        start_time: "",
+        end_time: "",
+        duration: 0,
+        total_marks: 0,
+        questions: [],
       });
+  
+      setQuestion({
+        question_text: "",
+        question_type: "MCQ",
+        options: [],
+        correct_answer: "",
+        marks: 0,
+      });
+    } catch (error) {
+      toast.error(`Failed to create exam: ${error.message}`);
+      console.error("Error creating exam:", error);
+    }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setExamData({
       ...examData,
-      [name]: name === "duration" || name === "total_marks" ? parseInt(value, 10) : value,
+      [name]: name === 'duration' || name === 'total_marks' ? parseInt(value, 10) : value,
     });
   };
 
   const handleQuestionChange = (e) => {
     const { name, value } = e.target;
-    if (name === "question_type") {
+    if (name === 'question_type') {
       setQuestion({
         ...question,
         question_type: value,
-        options: value === "True/False" ? ["True", "False"] : [],
+        options: value === 'True/False' ? ['True', 'False'] : [],
         correct_answer: '',
       });
     } else {
@@ -95,13 +132,19 @@ const ExamForm = () => {
   };
 
   const handleAddQuestion = () => {
-    if (question.question_type === "MCQ" && question.options.length !== 4) {
-      alert("MCQ questions must have exactly 4 options.");
+    // Validate question data
+    if (!question.question_text || !question.question_type || !question.marks) {
+      toast.error('Please fill in all required fields for the question');
       return;
     }
 
-    if (question.question_type !== "Essay" && !question.options.includes(question.correct_answer)) {
-      alert("Correct answer must be one of the provided options.");
+    if (question.question_type === 'MCQ' && question.options.length !== 4) {
+      toast.error('MCQ questions must have exactly 4 options.');
+      return;
+    }
+
+    if (question.question_type === 'True/False' && !question.options.includes(question.correct_answer)) {
+      toast.error('Correct answer must be "True" or "False".');
       return;
     }
 
@@ -121,6 +164,7 @@ const ExamForm = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
         <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
           Upload Exam
@@ -261,8 +305,8 @@ const ExamForm = () => {
                 <input
                   type="text"
                   name="options"
-                  value={question.options.join(', ')} // Join options with a comma
-                  readOnly // Make the input read-only
+                  value={question.options.join(', ')}
+                  readOnly
                   className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl bg-gray-100"
                 />
               </div>

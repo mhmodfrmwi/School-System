@@ -4,41 +4,42 @@ import { toast } from "react-toastify";
 const getToken = () => sessionStorage.getItem("token");
 
 export const createExam = createAsyncThunk(
-  "exam/create",
+  'exam/create',
   async ({ formData, classId, gradeSubjectSemesterId }, { rejectWithValue }) => {
     try {
       const token = getToken();
       if (!token) {
-        return rejectWithValue("Authentication required. Please log in.");
+        return rejectWithValue('Authentication required. Please log in.');
       }
 
       const url = `http://localhost:3000/exams/create-exam/${gradeSubjectSemesterId}?classId=${classId}`;
       const headers = {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       };
 
-      console.log("Payload being sent:", JSON.stringify(formData, null, 2));
-      console.log("Request URL:", url);
-      console.log("Request headers:", headers);
+      console.log('Payload being sent:', JSON.stringify(formData, null, 2));
+      console.log('Request URL:', url);
+      console.log('Request headers:', headers);
 
       const response = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers,
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        throw new Error(errorResponse.message || "Failed to create exam");
+        console.error('Backend error response:', errorResponse);
+        throw new Error(errorResponse.message || 'Failed to create exam');
       }
 
       const data = await response.json();
-      console.log("Exam created successfully:", data);
+      console.log('Exam created successfully:', data);
       return data;
-      
     } catch (error) {
-      return rejectWithValue(error.message || "Server Error");
+      console.error('Error in createExam:', error);
+      return rejectWithValue(error.message || 'Server Error');
     }
   }
 );
