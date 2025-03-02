@@ -4,6 +4,7 @@ import {
   fetchLibraryItems,
   fetchLibrarySubjects,
   fetchMaterialsForSubject,
+  fetchAllGeneralMaterialVideoPdf,
 } from "../TeacherRedux/LibraryTeacherSlice";
 import img1 from "../../../../assets/cover22 1.png";
 import img2 from "../../../../assets/Rectangle 314.png";
@@ -113,6 +114,7 @@ const LibraryTeacherPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
+    allGeneralMaterialVideoPdf,
     teacherGeneralItems,
     teacherSubjects,
     teacherMaterials,
@@ -122,7 +124,6 @@ const LibraryTeacherPage = () => {
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [selectedGrade, setSelectedGrade] = useState("");
   const [selectedSemester, setSelectedSemester] = useState("");
-  const [allMaterials, setAllMaterials] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleItemClick = (itemId, type) => {
@@ -139,27 +140,19 @@ const LibraryTeacherPage = () => {
   useEffect(() => {
     dispatch(fetchLibraryItems());
     dispatch(fetchLibrarySubjects());
+    dispatch(fetchAllGeneralMaterialVideoPdf());
   }, [dispatch]);
 
   useEffect(() => {
     if (selectedSubject === "all") {
-      Promise.all(
-        teacherSubjects.map((subject) =>
-          dispatch(fetchMaterialsForSubject(subject.id)),
-        ),
-      )
-        .then((responses) => {
-          const combinedMaterials = responses.map((res) => res.payload).flat();
-          setAllMaterials(combinedMaterials);
-        })
-        .catch((err) => console.error("Error fetching all materials:", err));
+    dispatch(fetchAllGeneralMaterialVideoPdf());
     } else if (selectedSubject !== "public" && selectedSubject.id) {
       dispatch(fetchMaterialsForSubject(selectedSubject.id));
     }
   }, [selectedSubject, teacherSubjects, dispatch]);
 
   const displayedMaterials =
-    selectedSubject === "all" ? allMaterials : teacherMaterials;
+    selectedSubject === "all" ? allGeneralMaterialVideoPdf : teacherMaterials;
 
   const filteredMaterials = displayedMaterials.filter((book) => {
     return (
@@ -193,18 +186,14 @@ const LibraryTeacherPage = () => {
     ),
   ].sort();
 
-  // Combine generalItems and filteredMaterials for "All" section
-  const combinedItemsForAll =
-    selectedSubject === "all"
-      ? [...teacherGeneralItems, ...filteredMaterials]
-      : [];
+  
 
   // Paginated data for each tab
   const paginatedGeneralItems = teacherGeneralItems.slice(
     (currentPagePublic - 1) * itemsPerPage,
     currentPagePublic * itemsPerPage,
   );
-  const paginatedAllMaterials = combinedItemsForAll.slice(
+  const paginatedAllMaterials = allGeneralMaterialVideoPdf.slice(
     (currentPageAll - 1) * itemsPerPage,
     currentPageAll * itemsPerPage,
   );
@@ -214,7 +203,7 @@ const LibraryTeacherPage = () => {
   );
 
   // Total pages for each tab
-  const totalPagesAll = Math.ceil(combinedItemsForAll.length / itemsPerPage);
+  const totalPagesAll = Math.ceil(allGeneralMaterialVideoPdf.length / itemsPerPage);
   const totalPagesPublic = Math.ceil(teacherGeneralItems.length / itemsPerPage);
   const totalPagesSubject = Math.ceil(filteredMaterials.length / itemsPerPage);
 
@@ -351,7 +340,7 @@ const LibraryTeacherPage = () => {
                       <span className="absolute bottom-[-9px] left-0 h-[4px] w-[85px] rounded-t-full bg-[#117C90]"></span>
                     </h2>
                   </div>
-                  {combinedItemsForAll.length === 0 ? (
+                  {allGeneralMaterialVideoPdf.length === 0 ? (
                     <Card className="mb-6 flex h-[450px] items-center justify-center rounded-xl border border-gray-200 shadow-sm">
                       <CardContent className="p-4 text-center text-gray-600">
                         No books available at the moment.
@@ -428,11 +417,18 @@ const LibraryTeacherPage = () => {
                                   </h3>
                                 </div>
                               </div>
-                              <h2 className="mx-auto mt-3 w-40 text-center font-semibold">
-                                {item.grade_subject_semester_id
-                                  ?.grade_subject_id?.subjectId?.subjectName ||
-                                  "General"}
-                              </h2>
+                              <div className="mt-3 flex items-center justify-center gap-4">
+                                <h2 className="text-sm font-semibold">
+                                {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
+                                </h2>
+
+  <span className="inline-flex items-center rounded-full bg-[#117C90] px-2.5 py-0.5 text-xs font-medium text-white">
+    👁️ {item.views} Views
+  </span>
+</div>
+
+
+
                             </div>
                           );
                         })}

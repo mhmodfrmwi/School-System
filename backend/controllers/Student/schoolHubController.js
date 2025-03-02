@@ -31,13 +31,14 @@ const registerInContest = expressAsyncHandler(async (req, res) => {
         message: "Invalid student ID.",
       });
     }
+    
     if ( !validateObjectId(schoolHubId)) {
         return res.status(400).json({
           status: 400,
           message: "Invalid SchoolHub ID.",
         });
     }
-  
+
     try {
       const schoolHub = await SchoolHub.findById(schoolHubId);
       if (!schoolHub) {
@@ -55,9 +56,16 @@ const registerInContest = expressAsyncHandler(async (req, res) => {
           schoolHubId,
           participated: true,
         });
-  
+        
         await participation.save();
-  
+
+        try {
+          await addRewardClaimAndUpdatePoints(studentId, "Student", "School Hub");
+          } catch (error) {
+          console.error("Error in addRewardClaimAndUpdatePoints:", error);
+          }
+          console.log("hello world")
+
         return res.status(201).json({
           status: 201,
           message: "Student successfully registered and marked as participated!",
@@ -74,14 +82,12 @@ const registerInContest = expressAsyncHandler(async (req, res) => {
   
       participation.participated = true;
       await participation.save();
-////////////////////////////
-      /*try {
+
+      try {
       await addRewardClaimAndUpdatePoints(studentId, "Student", "School Hub");
       } catch (error) {
       console.error("Error in addRewardClaimAndUpdatePoints:", error);
-      }*/
-      //await addRewardClaimAndUpdatePoints(studentId, "Student", "School Hub");
-////////////////////////////////
+      }
       res.status(200).json({
         status: 200,
         message: "Participation marked successfully!",
@@ -151,7 +157,7 @@ const deleteRegistration = expressAsyncHandler(async (req, res) => {
       }
   
       await Participation.deleteOne({ _id: participation._id });
-      //await addRewardClaimAndUpdatePoints(studentId, "Student", "School Hub","subtract");
+      await addRewardClaimAndUpdatePoints(studentId, "Student", "School Hub","subtract");
       res.status(200).json({
         status: 200,
         message: "Registration deleted successfully.",

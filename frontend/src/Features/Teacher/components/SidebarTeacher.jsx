@@ -33,7 +33,12 @@ const SidebarTeacher = () => {
 
   const menuItems = [
     { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/teacher" },
-    { label: "Motivation", icon: AwardIcon, hoverIcon: AwardIconH, href: "#" },
+    {
+      label: "Motivation",
+      icon: AwardIcon,
+      hoverIcon: AwardIconH,
+      href: "/teacher/motivation",
+    },
     {
       label: "Courses",
       icon: CourseIcon,

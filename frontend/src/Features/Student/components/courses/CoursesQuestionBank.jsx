@@ -7,6 +7,7 @@ import {
   markQuestionAsViewed,
   clearError,
 } from "../../components/StudentRedux/questionBankSlice";
+import { fetchSubjects } from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaBookmark, FaEye, FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -18,11 +19,13 @@ const CoursesQuestionBank = () => {
   const [activeTab, setActiveTab] = useState("all");
   const itemsPerPage = 3;
   const dispatch = useDispatch();
-  const { subjectId } = useParams();
+  const { subjectId ,classId} = useParams();
   const { questions, bookmarks, loading, error } = useSelector(
     (state) => state.studentQuestionBank
   );
+  const { subjects } = useSelector((state) => state.allSubjectsStudent);
   const navigate = useNavigate();
+  const [subjectName, setSubjectName] = useState("");
 
   useEffect(() => {
     if (subjectId) {
@@ -30,6 +33,19 @@ const CoursesQuestionBank = () => {
       dispatch(fetchBookmarks());
     }
   }, [dispatch, subjectId]);
+
+  useEffect(() => {
+    dispatch(fetchSubjects());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (subjects.length > 0 && subjectId) {
+      const subject = subjects.find((subject) => subject.id === subjectId);
+      if (subject) {
+        setSubjectName(subject.subjectName);
+      }
+    }
+  }, [subjectId, subjects]);
 
   useEffect(() => {
     if (error) {
@@ -85,7 +101,7 @@ const CoursesQuestionBank = () => {
       {/* Sidebar */}
       <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-6 md:h-[530px]">
         <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-          {questions.length > 0 ? questions[0].subjectId.subjectName : "Loading..."}
+          {subjectName}
           <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
         </h2>
         <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
@@ -121,7 +137,8 @@ const CoursesQuestionBank = () => {
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+              onClick={() => navigate(`/student/allcourses/exams/${subjectId}/${classId}`)}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
             </Button>
           </li>

@@ -15,7 +15,7 @@ const VirtualRoomsSection = () => {
 
   const itemsPerPage = 3;
   const dispatch = useDispatch();
-  const { subjectId } = useParams();
+  const { subjectId ,classId} = useParams();
   const navigate = useNavigate();
   const { virtualRooms, completedRooms, missedRooms, loading, error } = useSelector(
     (state) => state.StudentvirtualRooms
@@ -144,14 +144,15 @@ const VirtualRoomsSection = () => {
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+              onClick={() => navigate(`/student/allcourses/exams/${subjectId}/${classId}`)}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/questionbank/${subjectId}`)}
-              >
+            >
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
             </Button>
           </li>
