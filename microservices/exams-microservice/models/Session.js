@@ -13,6 +13,10 @@ const sessionSchema = new mongoose.Schema({
   },
   start_time: { type: "Date", required: true },
   end_time: { type: "Date" },
+  status: {
+    type: String,
+    enum: ["Not Submitted", "Submitted"],
+  },
 });
 
 sessionSchema.virtual("available_time").get(function () {

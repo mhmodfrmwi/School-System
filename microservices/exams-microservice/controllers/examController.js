@@ -14,6 +14,30 @@ const { getExamResultsByExamId } = require("../services/resultsService");
 
 const createExam = async (req, res) => {
   try {
+    const { start_time, end_time, duration } = req.body;
+
+    const startTime = new Date(start_time);
+    const endTime = new Date(end_time);
+
+    const timeDifferenceInMinutes = (endTime - startTime) / (1000 * 60);
+
+    console.log("Start Time:", startTime);
+    console.log("End Time:", endTime);
+    console.log("Duration (minutes):", duration);
+    console.log("Time Difference (minutes):", timeDifferenceInMinutes);
+
+    if (startTime >= endTime || duration > timeDifferenceInMinutes) {
+      return res.status(400).json({
+        message: "Invalid start and end time or duration",
+        details: {
+          start_time: startTime,
+          end_time: endTime,
+          duration,
+          timeDifferenceInMinutes,
+        },
+      });
+    }
+
     const class_id = req.query.classId;
 
     const grade_subject_semester_id = req.params.id;
@@ -44,7 +68,6 @@ const createExam = async (req, res) => {
     req.body.academic_year_id = academic_year_id;
     req.body.semester_id = semester_id;
     req.body.class_id = class_id;
-    console.log(req.body);
 
     const exam = await addExam(req.body);
     res.status(201).json(exam);

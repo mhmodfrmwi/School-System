@@ -5,6 +5,7 @@ const {
   addSession,
   getSessionsForStudent,
 } = require("../services/sessionService");
+const Session = require("../models/Session");
 
 const startSession = async (req, res) => {
   try {
@@ -14,32 +15,59 @@ const startSession = async (req, res) => {
     }
 
     const student_id = req.user.id;
-    const exam = await Exam.findOne({ _id: exam_id });
 
+    // Fetch the exam
+    const exam = await Exam.findOne({ _id: exam_id });
     if (!exam) {
       return res.status(404).json({ message: "Exam not found" });
     }
 
+    // Get current time and calculate session end time
     const start_time = moment().utc().toDate();
-    const end_time = moment().utc().add(exam.duration, "minutes").toDate();
+    const end_time = moment(start_time).add(exam.duration, "minutes").toDate();
 
+    // Check if the exam is closed
+    const exam_end_time = moment(exam.end_time).utc();
+    if (exam_end_time.isBefore(moment().utc())) {
+      return res.status(403).json({ message: "Exam is closed" });
+    }
+
+    // Check if the session end time exceeds the exam end time
+    if (moment(end_time).isAfter(exam_end_time)) {
+      return res.status(403).json({
+        message:
+          "Session cannot be started because it exceeds the exam end time",
+      });
+    }
+
+    // Check if the student already has an active session for this exam
+    const existingSession = await Session.findOne({
+      exam_id,
+      student_id,
+      end_time: { $gt: moment().utc().toDate() }, // Active session
+    });
+
+    if (existingSession) {
+      return res.status(403).json({
+        message: "You already have an active session for this exam",
+      });
+    }
+
+    // Create a new session
     const session = await addSession(student_id, exam_id, start_time, end_time);
 
-    const formattedStartTime = moment(session.start_time).format(
-      "YYYY-MM-DD HH:mm:ss"
-    );
-    const formattedEndTime = moment(session.end_time).format(
-      "YYYY-MM-DD HH:mm:ss"
-    );
-
-    const availableTimeDuration = moment.duration(session.available_time);
-    const formattedAvailableTime = `${availableTimeDuration.hours()} hours, ${availableTimeDuration.minutes()} minutes, ${availableTimeDuration.seconds()} seconds`;
+    // Format response
+    const formattedStartTime = moment(session.start_time)
+      .utc()
+      .format("YYYY-MM-DD HH:mm:ss");
+    const formattedEndTime = moment(session.end_time)
+      .utc()
+      .format("YYYY-MM-DD HH:mm:ss");
 
     const response = {
       ...session.toObject(),
       start_time: formattedStartTime,
       end_time: formattedEndTime,
-      available_time: formattedAvailableTime,
       status: session.session_status,
     };
 
@@ -68,5 +96,4 @@ const getAllSessions = async (req, res) => {
   }
 };
 
-const submitSessionResults = (req, res) => {};
 module.exports = { startSession, getAllSessions };

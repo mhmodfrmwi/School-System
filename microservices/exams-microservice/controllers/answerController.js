@@ -9,19 +9,34 @@ const submitAnswers = async (req, res) => {
     const { answers } = req.body;
 
     const session = await Session.findById(session_id);
-    if (!session || session.status === "Submitted") {
+
+    if (!session) {
       return res.status(400).json({ message: "Invalid session" });
     }
-
-    const savedAnswers = await StudentAnswer.insertMany(
+    if (session.status === "Submitted") {
+      return res.status(403).json({ message: "Session already submitted" });
+    }
+    if (session.session_status === "Expired") {
+      return res.status(403).json({ message: "Session Expired" });
+    }
+    await StudentAnswer.insertMany(
       answers.map((answer) => ({
         ...answer,
         session_id,
         student_id: req.user.id,
       }))
     );
+    const savedAnswers = await StudentAnswer.find({
+      session_id,
+      student_id: req.user.id,
+    })
+      .populate("question_id")
+      .populate("student_id", "fullName")
+      .select("-__v -updatedAt -createdAt");
     await autoGradeMCQ(session_id);
     const result = await calculateResults(session_id);
+    session.status = "Submitted";
+    await session.save();
     res.status(201).json({ savedAnswers, result });
   } catch (err) {
     console.error(err.message);

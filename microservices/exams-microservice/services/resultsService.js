@@ -12,6 +12,7 @@ const calculateResults = async (session_id) => {
 
     const session = await Session.findById(session_id);
     const exam = await Exam.findById(session.exam_id);
+
     const percentage = (totalMarks / exam.total_marks) * 100;
 
     const result = new ExamResult({
