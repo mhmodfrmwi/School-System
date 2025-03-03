@@ -87,6 +87,7 @@ const getAllSessions = async (req, res) => {
       start_time: moment(session.start_time).format("YYYY-MM-DD HH:mm:ss"),
       end_time: moment(session.end_time).format("YYYY-MM-DD HH:mm:ss"),
       status: session.status,
+      isExpired: session.session_status === "Expired" ? true : false,
     }));
     res.json(formattedSessions);
   } catch (err) {
