@@ -89,13 +89,13 @@ export const startExamSession = createAsyncThunk(
 );
 export const submitExam = createAsyncThunk(
   "exams/submitExam",
-  async ({ sessionId, answers }, { rejectWithValue }) => {
+  async ({ sessionId, answers }, { rejectWithValue, getState }) => {
     try {
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
-      console.log("Submitting answers for session:", sessionId); 
-      console.log("Answers:", answers); 
+      console.log("Submitting answers for session:", sessionId);
+      console.log("Answers:", answers);
 
       const response = await fetch(
         `http://localhost:3000/sessions/${sessionId}/answers`,
@@ -105,20 +105,31 @@ export const submitExam = createAsyncThunk(
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ answers }),
+          body: JSON.stringify({ answers }), // Ensure the payload matches server expectations
         }
       );
 
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
         throw new Error(data.message || "Failed to submit exam");
       }
 
-      // Calculate the score
-      const exam = data.exam;
+      // Calculate score on the client side if the server does not provide it
+      const state = getState();
+      const currentExam = state.exams.currentExam;
+
+      if (!currentExam || !currentExam.exam || !currentExam.exam.exam_questions) {
+        throw new Error("Exam data is missing or invalid");
+      }
+
       let score = 0;
-      exam.questions.forEach((question) => {
-        if (answers[question._id] === question.correct_answer) {
+      currentExam.exam.exam_questions.forEach((question) => {
+        const userAnswer = answers.find(
+          (answer) => answer.question_id === question._id
+        );
+
+        if (userAnswer && userAnswer.selected_answer.trim() === question.correct_answer.trim()) {
           score += question.marks;
         }
       });

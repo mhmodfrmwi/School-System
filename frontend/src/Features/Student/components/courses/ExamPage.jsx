@@ -54,43 +54,53 @@ const StudentExamPage = () => {
   };
 
   const handleSubmitExam = useCallback(() => {
-    const activeSession = sessions.find(session => 
-      session.exam_id._id === examId && session.status === "In Progress"
+    const activeSession = sessions.find(
+      (session) => session.exam_id._id === examId && session.status === "In Progress"
     );
-
+  
     if (!activeSession) {
       console.error("No active session found!");
       Swal.fire({
-        title: 'Error!',
-        text: 'No active session found. Please start the exam first.',
-        icon: 'error',
-        confirmButtonText: 'OK'
+        title: "Error!",
+        text: "No active session found. Please start the exam first.",
+        icon: "error",
+        confirmButtonText: "OK",
       });
       return;
     }
-
-    const sessionId = activeSession._id; 
-
-    const formattedAnswers = {
-      answers: answers.map(answer => ({
-        question_id: answer.question_id,
-        selected_answer: answer.selected_answer
-      }))
-    };
-
-    dispatch(submitExam({ sessionId, answers: formattedAnswers })).then((action) => {
-      if (action.payload) {
+  
+    const sessionId = activeSession._id;
+  
+    // Format the answers array correctly
+    const formattedAnswers = answers.map((answer) => ({
+      question_id: answer.question_id,
+      selected_answer: answer.selected_answer,
+    }));
+  
+    dispatch(submitExam({ sessionId, answers: formattedAnswers }))
+      .then((action) => {
+        if (action.payload) {
+          Swal.fire({
+            title: "Exam Submitted!",
+            text: `Your score is ${action.payload.score}`,
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then(() => {
+            navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`);
+          });
+        }
+      })
+      .catch((error) => {
         Swal.fire({
-          title: 'Exam Submitted!',
-          text: `Your score is ${action.payload.score}`,
-          icon: 'success',
-          confirmButtonText: 'OK'
-        }).then(() => {
-          navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`);
+          title: "Error!",
+          text: error.message || "Failed to submit exam",
+          icon: "error",
+          confirmButtonText: "OK",
         });
-      }
-    });
+      });
   }, [dispatch, sessions, examId, answers, gradeSubjectSemesterId, navigate]);
+
+
 
   useEffect(() => {
     const timer = setInterval(() => {
