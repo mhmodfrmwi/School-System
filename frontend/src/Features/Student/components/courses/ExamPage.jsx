@@ -1,191 +1,199 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { startExamSession, endExamSession, fetchSessions, fetchExams } from "../../components/StudentRedux/examsSlice";
-import Swal from "sweetalert2";
+import { useParams, useNavigate } from "react-router-dom";
+import { submitExam, fetchExamById, fetchSessions } from "../../components/StudentRedux/examsSlice";
+import Swal from 'sweetalert2';
+import { FaSpinner } from "react-icons/fa";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import moment from 'moment'; 
 
-const ExamPage = () => {
-    const { examId, subjectId } = useParams();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { exams, sessions, loadingExams, loadingSessions, error } = useSelector((state) => state.exams);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState({});
-    const [timeLeft, setTimeLeft] = useState(null);
-    const [examStarted, setExamStarted] = useState(false);
+const StudentExamPage = () => {
+  const dispatch = useDispatch();
+  const { examId, gradeSubjectSemesterId } = useParams();
+  const navigate = useNavigate();
+  const { currentExam, sessions, loading, error } = useSelector((state) => state.exams);
+  const [answers, setAnswers] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [formattedAvailableTime, setFormattedAvailableTime] = useState("Calculating...");
 
-    const exam = exams.find((exam) => exam._id === examId);
+  useEffect(() => {
+    dispatch(fetchExamById(examId)).then((action) => {
+      if (action.payload) {
+        console.log("Current Exam:", action.payload); 
+      }
+    });
+    dispatch(fetchSessions()); 
+  }, [dispatch, examId]);
 
-    const calculateTotalMarks = (questions) => {
-        return questions.reduce((total, question) => total + question.marks, 0);
-    };
-
-    const totalMarks = exam ? calculateTotalMarks(exam.questions) : 0;
-
-    const handleSubmit = useCallback(async () => {
-        if (!examStarted) return;
-
-        const result = await dispatch(endExamSession({ examId, answers }));
-        if (result.payload) {
-            Swal.fire({
-                title: "Exam Submitted",
-                text: `Your score is ${result.payload.score}/${totalMarks}`,
-                icon: "success",
-            });
-            navigate("/student/allcourses/exams");
-        }
-    }, [examStarted, answers, dispatch, examId, navigate, totalMarks]);
-
-    useEffect(() => {
-        dispatch(fetchExams(subjectId));
-    }, [dispatch, subjectId]);
-
-    useEffect(() => {
-        if (!exam) {
-            navigate(`/student/allcourses/exams/${subjectId}`);
-            return;
-        }
-
-        dispatch(fetchSessions());
-
-        const now = new Date();
-        const startTime = new Date(exam.start_time);
-        const endTime = new Date(exam.end_time);
-
-        if (now < startTime) {
-            Swal.fire({
-                title: "Exam Not Started",
-                text: "The exam has not started yet.",
-                icon: "warning",
-            });
-            navigate(`/student/allcourses/exams/${subjectId}`);
-            return;
-        }
-
-        if (now > endTime) {
-            Swal.fire({
-                title: "Exam Ended",
-                text: "The exam has already ended.",
-                icon: "error",
-            });
-            navigate(`/student/allcourses/exams/${subjectId}`);
-            return;
-        }
-
-        const session = sessions.find((session) => session.exam_id === examId);
-        if (session && session.status === "completed") {
-            Swal.fire({
-                title: "Exam Already Taken",
-                text: "You have already taken this exam.",
-                icon: "info",
-            });
-            navigate("/student/allcourses/exams/");
-            return;
-        }
-
-        dispatch(startExamSession(examId)).then(() => {
-            setExamStarted(true);
-            setTimeLeft(exam.duration * 60);
-        });
-
-        const timer = setInterval(() => {
-            setTimeLeft((prev) => {
-                if (prev <= 0) {
-                    clearInterval(timer);
-                    handleSubmit();
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [examId, exam, dispatch, navigate, sessions, subjectId, handleSubmit]);
-
-    const handleAnswerChange = (questionId, answer) => {
-        setAnswers((prev) => ({
-            ...prev,
-            [questionId]: answer,
-        }));
-    };
-
-    if (loadingExams || loadingSessions) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
-    if (!exam || !examStarted) {
-        return <div>No exam data found.</div>;
-    }
-
-    const currentQuestion = exam.questions[currentQuestionIndex];
-
-    return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <h1 className="text-2xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-                {exam.title}
-            </h1>
-            <div className="mb-4">
-                <p className="text-gray-700">Time Left: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60}</p>
-            </div>
-            <div className="mb-4 bg-white p-6 rounded-lg shadow-sm">
-                <h2 className="text-xl font-semibold text-gray-800">Question {currentQuestionIndex + 1}</h2>
-                <p className="text-gray-700">{currentQuestion.question_text}</p>
-                {currentQuestion.question_type === "MCQ" ? (
-                    currentQuestion.options.map((option, index) => (
-                        <div key={index} className="mt-2">
-                            <label className="flex items-center text-gray-700">
-                                <input
-                                    type="radio"
-                                    name={`question-${currentQuestion._id}`}
-                                    value={option}
-                                    onChange={() => handleAnswerChange(currentQuestion._id, option)}
-                                    checked={answers[currentQuestion._id] === option}
-                                    className="mr-2"
-                                />
-                                {option}
-                            </label>
-                        </div>
-                    ))
-                ) : (
-                    <textarea
-                        className="w-full p-2 border rounded text-gray-700"
-                        value={answers[currentQuestion._id] || ""}
-                        onChange={(e) => handleAnswerChange(currentQuestion._id, e.target.value)}
-                    />
-                )}
-            </div>
-            <div className="flex justify-between">
-                <button
-                    className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white px-4 py-2 rounded"
-                    onClick={() => setCurrentQuestionIndex((prev) => Math.max(prev - 1, 0))}
-                    disabled={currentQuestionIndex === 0}
-                >
-                    Previous
-                </button>
-                <button
-                    className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white px-4 py-2 rounded"
-                    onClick={() =>
-                        setCurrentQuestionIndex((prev) => Math.min(prev + 1, exam.questions.length - 1))
-                    }
-                    disabled={currentQuestionIndex === exam.questions.length - 1}
-                >
-                    Next
-                </button>
-            </div>
-            <div className="mt-6">
-                <button
-                    className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white px-4 py-2 rounded"
-                    onClick={handleSubmit}
-                >
-                    Submit Exam
-                </button>
-            </div>
-        </div>
+  useEffect(() => {
+    const activeSession = sessions.find(session => 
+      session.exam_id._id === examId && session.status === "In Progress"
     );
+
+    if (activeSession) {
+      const now = moment(); 
+      const endTime = moment(activeSession.end_time); 
+      const durationInSeconds = endTime.diff(now, 'seconds');
+
+      if (durationInSeconds >= 0) {
+        setTimeLeft(durationInSeconds);
+        setFormattedAvailableTime(`${Math.floor(durationInSeconds / 60)}:${durationInSeconds % 60 < 10 ? `0${durationInSeconds % 60}` : durationInSeconds % 60}`);
+      } else {
+        setTimeLeft(0);
+        setFormattedAvailableTime("00:00");
+      }
+    }
+  }, [sessions, examId]);
+
+  const handleAnswerChange = (questionId, selectedAnswer) => {
+    setAnswers((prevAnswers) => {
+      const updatedAnswers = prevAnswers.filter(answer => answer.question_id !== questionId); 
+      return [...updatedAnswers, { question_id: questionId, selected_answer: selectedAnswer }]; 
+    });
+  };
+
+  const handleSubmitExam = useCallback(() => {
+    const activeSession = sessions.find(session => 
+      session.exam_id._id === examId && session.status === "In Progress"
+    );
+
+    if (!activeSession) {
+      console.error("No active session found!");
+      Swal.fire({
+        title: 'Error!',
+        text: 'No active session found. Please start the exam first.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    const sessionId = activeSession._id; 
+
+    const formattedAnswers = {
+      answers: answers.map(answer => ({
+        question_id: answer.question_id,
+        selected_answer: answer.selected_answer
+      }))
+    };
+
+    dispatch(submitExam({ sessionId, answers: formattedAnswers })).then((action) => {
+      if (action.payload) {
+        Swal.fire({
+          title: 'Exam Submitted!',
+          text: `Your score is ${action.payload.score}`,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`);
+        });
+      }
+    });
+  }, [dispatch, sessions, examId, answers, gradeSubjectSemesterId, navigate]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timer);
+          handleSubmitExam();
+          return 0;
+        }
+        const newTime = prevTime - 1;
+        setFormattedAvailableTime(`${Math.floor(newTime / 60)}:${newTime % 60 < 10 ? `0${newTime % 60}` : newTime % 60}`);
+        return newTime;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [handleSubmitExam]);
+
+  
+  const timeColor = timeLeft <= 60 ? 'text-red-500' : 'text-gray-800';
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center text-gray-500 mt-10">
+        <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4" />
+        <p className="text-gray-700 text-lg font-semibold">Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">Error: {error}</div>;
+  }
+
+  if (!currentExam || !currentExam.exam || !currentExam.exam.exam_questions) {
+    return <div className="text-center text-gray-500">No exam questions found.</div>;
+  }
+
+  return (
+    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
+     
+      <div className="w-full flex justify-between items-center mb-6">
+        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
+          {currentExam.exam.title}
+        </h1>
+        <Button
+          variant="solid"
+          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </Button>
+      </div>
+
+    
+      <div className="w-full mb-6">
+        <Card className="border border-gray-200 rounded-xl shadow-sm">
+          <CardContent className="p-4">
+            <p className={`text-lg font-semibold ${timeColor}`}>
+              Time Left: {formattedAvailableTime}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+     
+      <div className="w-full space-y-4">
+        {currentExam.exam.exam_questions.map((question, index) => (
+          <Card key={question._id} className="border border-gray-200 rounded-xl shadow-sm">
+            <CardContent className="p-4">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Question {index + 1}: {question.question_text}
+              </h3>
+              <div className="mt-2">
+                {question.options.map((option, i) => (
+                  <label key={i} className="block">
+                    <input
+                      type="radio"
+                      name={`question-${question._id}`}
+                      value={option}
+                      onChange={() => handleAnswerChange(question._id, option)}
+                      className="mr-2"
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+     
+      <div className="w-full mt-6">
+        <Button
+          onClick={handleSubmitExam}
+          className="w-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white py-2 rounded-lg"
+        >
+          Submit Exam
+        </Button>
+      </div>
+    </div>
+  );
 };
 
-export default ExamPage;
+export default StudentExamPage;
