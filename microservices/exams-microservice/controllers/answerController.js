@@ -37,6 +37,8 @@ const submitAnswers = async (req, res) => {
     const result = await calculateResults(session_id);
     session.status = "Submitted";
     await session.save();
+    console.log(session);
+
     res.status(201).json({ savedAnswers, result });
   } catch (err) {
     console.error(err.message);

@@ -1,3 +1,4 @@
+const { request } = require("express");
 const GradeSubject = require("../models/GradeSubject");
 const GradeSubjectSemester = require("../models/GradeSubjectSemester");
 const {
@@ -114,6 +115,9 @@ const getExams = async (req, res) => {
       );
     } else {
       exams = await fetchExams();
+    }
+    if (req.query.upcoming === "true") {
+      exams = exams.filter((exam) => exam.exam_status === "Upcoming");
     }
     const formattedExams = exams.map((exam) => ({
       ...exam.toObject(),

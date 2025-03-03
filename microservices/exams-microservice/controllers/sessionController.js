@@ -86,7 +86,7 @@ const getAllSessions = async (req, res) => {
       ...session.toObject(),
       start_time: moment(session.start_time).format("YYYY-MM-DD HH:mm:ss"),
       end_time: moment(session.end_time).format("YYYY-MM-DD HH:mm:ss"),
-      status: session.session_status,
+      status: session.status,
     }));
     res.json(formattedSessions);
   } catch (err) {
