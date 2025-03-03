@@ -543,7 +543,7 @@ function App() {
               element={<StudentExams />}
             />
             <Route
-              path="allcourses/exams/:subjectId/:examId"
+              path="allcourses/exams/:gradeSubjectSemesterId/:examId"
               element={<StudentExamPage />}
             />
             <Route path="attendance" element={<AttendancePage />} />

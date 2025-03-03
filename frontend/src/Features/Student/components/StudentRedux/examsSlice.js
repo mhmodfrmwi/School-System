@@ -4,7 +4,7 @@ const getToken = () => sessionStorage.getItem("token");
 
 export const fetchExams = createAsyncThunk(
   "exams/fetchExams",
-  async ({ gradeSubjectSemesterId}, { rejectWithValue }) => {
+  async ({ gradeSubjectSemesterId }, { rejectWithValue }) => {
     try {
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
@@ -28,6 +28,34 @@ export const fetchExams = createAsyncThunk(
     }
   }
 );
+
+export const fetchExamById = createAsyncThunk(
+  "exams/fetchExamById",
+  async (examId, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch(
+        `http://localhost:3000/exams/${examId}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch exam by ID");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const startExamSession = createAsyncThunk(
   "exams/startExamSession",
   async (examId, { rejectWithValue }) => {
@@ -48,42 +76,60 @@ export const startExamSession = createAsyncThunk(
         throw new Error(data.message || "Failed to start exam session");
       }
 
-      return data;
+      console.log("API Response:", data); 
+      return { 
+        ...data, 
+        sessionId: data.session._id,
+        formattedAvailableTime: data.session.available_time 
+      }; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
-
-export const endExamSession = createAsyncThunk(
-  "exams/endExamSession",
-  async ({ examId, answers }, { rejectWithValue }) => {
+export const submitExam = createAsyncThunk(
+  "exams/submitExam",
+  async ({ sessionId, answers }, { rejectWithValue, getState }) => {
     try {
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
+      console.log("Submitting answers for session:", sessionId);
+      console.log("Answers:", answers);
+
       const response = await fetch(
-        `http://localhost:3000/sessions/${examId}/end`,
+        `http://localhost:3000/sessions/${sessionId}/answers`,
         {
-          method: "PATCH",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ answers }),
+          body: JSON.stringify({ answers }), // Ensure the payload matches server expectations
         }
       );
 
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
-        throw new Error(data.message || "Failed to end exam session");
+        throw new Error(data.message || "Failed to submit exam");
       }
 
-      // Calculate the score
-      const exam = data.exam;
+      // Calculate score on the client side if the server does not provide it
+      const state = getState();
+      const currentExam = state.exams.currentExam;
+
+      if (!currentExam || !currentExam.exam || !currentExam.exam.exam_questions) {
+        throw new Error("Exam data is missing or invalid");
+      }
+
       let score = 0;
-      exam.questions.forEach((question) => {
-        if (answers[question._id] === question.correct_answer) {
+      currentExam.exam.exam_questions.forEach((question) => {
+        const userAnswer = answers.find(
+          (answer) => answer.question_id === question._id
+        );
+
+        if (userAnswer && userAnswer.selected_answer.trim() === question.correct_answer.trim()) {
           score += question.marks;
         }
       });
@@ -102,13 +148,10 @@ export const fetchSessions = createAsyncThunk(
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
-      const response = await fetch(
-        `http://localhost:3000/sessions`,
-        {
-          method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await fetch(`http://localhost:3000/sessions`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       const data = await response.json();
       if (!response.ok) {
@@ -128,9 +171,12 @@ const examsSlice = createSlice({
     exams: [],
     sessions: [],
     currentSession: null,
+    currentExam: null, 
     score: null,
+    formattedAvailableTime: null, 
     loadingExams: false,
     loadingSessions: false,
+    loadingExamById: false, 
     loading: false,
     error: null,
   },
@@ -142,9 +188,12 @@ const examsSlice = createSlice({
       state.exams = [];
       state.sessions = [];
       state.currentSession = null;
+      state.currentExam = null; 
       state.score = null;
+      state.formattedAvailableTime = null; 
       state.loadingExams = false;
       state.loadingSessions = false;
+      state.loadingExamById = false; 
       state.loading = false;
       state.error = null;
     },
@@ -157,10 +206,22 @@ const examsSlice = createSlice({
       })
       .addCase(fetchExams.fulfilled, (state, action) => {
         state.loadingExams = false;
-        state.exams = Array.isArray(action.payload) ? action.payload : []; // Ensure exams is always an array
+        state.exams = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchExams.rejected, (state, action) => {
         state.loadingExams = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchExamById.pending, (state) => {
+        state.loadingExamById = true;
+        state.error = null;
+      })
+      .addCase(fetchExamById.fulfilled, (state, action) => {
+        state.loadingExamById = false;
+        state.currentExam = action.payload; 
+      })
+      .addCase(fetchExamById.rejected, (state, action) => {
+        state.loadingExamById = false;
         state.error = action.payload;
       })
       .addCase(fetchSessions.pending, (state) => {
@@ -169,7 +230,7 @@ const examsSlice = createSlice({
       })
       .addCase(fetchSessions.fulfilled, (state, action) => {
         state.loadingSessions = false;
-        state.sessions = Array.isArray(action.payload) ? action.payload : []; // Ensure sessions is always an array
+        state.sessions = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchSessions.rejected, (state, action) => {
         state.loadingSessions = false;
@@ -181,22 +242,23 @@ const examsSlice = createSlice({
       })
       .addCase(startExamSession.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentSession = action.payload; // Store the started session
+        state.currentSession = action.payload;
+        state.formattedAvailableTime = action.payload.formattedAvailableTime;
       })
       .addCase(startExamSession.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(endExamSession.pending, (state) => {
+      .addCase(submitExam.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(endExamSession.fulfilled, (state, action) => {
+      .addCase(submitExam.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentSession = null; // Clear the current session
-        state.score = action.payload.score; // Store the score
+        state.currentSession = null;
+        state.score = action.payload.score;
       })
-      .addCase(endExamSession.rejected, (state, action) => {
+      .addCase(submitExam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

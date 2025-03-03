@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchExams, startExamSession, endExamSession, clearError } from "../../components/StudentRedux/examsSlice";
+import { fetchExams, startExamSession, fetchSessions, clearError } from "../../components/StudentRedux/examsSlice";
 import { fetchSubjects } from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,9 @@ const ExamsSection = () => {
     const dispatch = useDispatch();
     const { gradeSubjectSemesterId, classId } = useParams();
     const navigate = useNavigate();
-    const { exams = [], loading, error } = useSelector((state) => state.exams);
+    const { exams = [], sessions, loading, error } = useSelector((state) => state.exams);
     const { subjects } = useSelector((state) => state.allSubjectsStudent);
+
 
     const [activeTab, setActiveTab] = useState("all");
     const [filteredExams, setFilteredExams] = useState([]);
@@ -25,6 +26,7 @@ const ExamsSection = () => {
 
     useEffect(() => {
         dispatch(fetchSubjects());
+        dispatch(fetchSessions());
     }, [dispatch]);
 
     useEffect(() => {
@@ -51,25 +53,63 @@ const ExamsSection = () => {
 
     useEffect(() => {
         if (Array.isArray(exams)) {
+            let sortedExams = [...exams].sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
+
             if (activeTab === "completed") {
-                setFilteredExams(exams.filter(exam => exam.status === "completed"));
+                setFilteredExams(sortedExams.filter(exam => exam.status === "completed"));
             } else if (activeTab === "missed") {
-                setFilteredExams(exams.filter(exam => exam.status === "missed"));
+                setFilteredExams(sortedExams.filter(exam => exam.status === "missed"));
             } else {
-                setFilteredExams(exams);
+                setFilteredExams(sortedExams);
             }
         }
     }, [activeTab, exams]);
 
-    const handleStartExam = (examId) => {
-        dispatch(startExamSession(examId));
-        navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${examId}`);
+    const handleStartExam = (exam) => {
+        const now = new Date();
+        const startTime = new Date(exam.start_time);
+        const endTime = new Date(exam.end_time);
+    
+        if (now < startTime) {
+            Swal.fire({
+                title: 'Not Started!',
+                text: 'The exam has not started yet.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+    
+        if (now > endTime) {
+            Swal.fire({
+                title: 'Exam Ended!',
+                text: 'The exam has already ended.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+    
+        const session = sessions.find(session => session.exam_id._id === exam._id);
+    
+        // Check if session exists before accessing its status
+        if (session && session.status === "Expired") {
+            Swal.fire({
+                title: 'Session Expired!',
+                text: 'You cannot enter this exam as the session has expired.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+    
+        // Start the exam session and navigate to the exam page
+        dispatch(startExamSession(exam._id)).then((action) => {
+            if (action.payload) {
+                navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
+            }
+        });
     };
-
-    const handleEndExam = (sessionId) => {
-        dispatch(endExamSession(sessionId));
-    };
-
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -89,7 +129,6 @@ const ExamsSection = () => {
                 <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
                     <li>
                         <Button variant="solid" className="md:w-11/12  bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-
                             onClick={() => navigate(`/student/allcourses/videos/${gradeSubjectSemesterId}`)}>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> Video Lectures
                         </Button>
@@ -196,7 +235,6 @@ const ExamsSection = () => {
                     {filteredExams.map((exam, index) => (
                         <Card key={exam._id} className="border border-gray-200 rounded-xl shadow-sm">
                             <CardContent className="flex items-center justify-center p-4 bg-gray-100">
-
                                 <div className="flex items-center gap-3 flex-1">
                                     <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
                                         {index + 1}
@@ -214,14 +252,22 @@ const ExamsSection = () => {
                                     </div>
                                 </div>
 
-                                {/* زر Start Exam */}
-                                <div className="ml-4">
+                                {/*  Start Exam */}
+                                <div className="ml-4" title={new Date() < new Date(exam.start_time) ? "The exam has not started yet." : new Date() > new Date(exam.end_time) ? "The exam has already ended." : ""}>
                                     <Button
                                         variant="solid"
                                         className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
-                                        onClick={() => handleStartExam(exam._id)}
+                                        onClick={() => handleStartExam(exam)}
+                                        disabled={
+                                            new Date() < new Date(exam.start_time) ||
+                                            new Date() > new Date(exam.end_time) ||
+                                            (sessions.find(session => session.exam_id._id === exam._id)?.status === "Expired")
+                                        }
                                     >
-                                        Start Exam
+                                        {sessions.find(session => session.exam_id._id === exam._id)?.status === "Expired" ? "Expired" :
+                                            new Date() < new Date(exam.start_time) ? "Not Started" :
+                                                new Date() > new Date(exam.end_time) ? "Exam Ended" :
+                                                    "Start Exam"}
                                     </Button>
                                 </div>
                             </CardContent>

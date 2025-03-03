@@ -18,7 +18,7 @@ const MaterialSection = () => {
   const [currentPageBookmarks, setCurrentPageBookmarks] = useState(1);
   const itemsPerPage = 3;
   const dispatch = useDispatch();
-  const { subjectId,classId } = useParams();
+  const { subjectId } = useParams();
   const { materials, bookmarks, loading, error, subjects } = useSelector((state) => state.allSubjectsStudent);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
@@ -144,7 +144,7 @@ const MaterialSection = () => {
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-              onClick={() => navigate(`/student/allcourses/exams/${subjectId}/${classId}`)}>
+              onClick={() => navigate(`/student/allcourses/exams/${subjectId}`)}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
             </Button>
           </li>
