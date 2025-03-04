@@ -37,9 +37,6 @@ export const createExam = createAsyncThunk(
   }
 );
 
-
-
-// Async Thunk to fetch exams for a teacher
 export const fetchExamsForTeacher = createAsyncThunk(
   'exam/fetchExamsForTeacher',
   async (_, { rejectWithValue }) => {
@@ -99,7 +96,6 @@ export const deleteExam = createAsyncThunk(
     }
   }
 );
-
 
 const examSlice = createSlice({
   name: 'exam',
