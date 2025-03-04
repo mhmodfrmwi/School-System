@@ -38,8 +38,8 @@ const ExamDetails = () => {
                                     <div className="mt-1 h-[3px] w-[160px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[200px]"></div>
                                 </div>
 
-                                <div className="mt-7 p-4 bg-[#F5FAFF] rounded-lg shadow-md">
-                                    <h2 className="text-xl font-poppins font-semibold text-[#244856] mb-4">
+                                <div className="p-6 bg-slate-50 mt-9 rounded-xl shadow-md border border-[#117C90] hover:shadow-lg transition-shadow duration-300">
+                                <h2 className="text-xl font-poppins font-semibold text-[#47bfee] mb-4">
                                         General Information
                                     </h2>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -76,10 +76,11 @@ const ExamDetails = () => {
                                     </div>
                                 </div>
 
-                                <div className="mt-7 p-4 bg-[#F5FAFF] rounded-lg shadow-md">
-                                    <h2 className="text-xl font-poppins font-semibold text-[#244856] mb-4">
+                                <div className="p-6 mt-8 bg-slate-50 rounded-xl shadow-md border border-[#117C90] hover:shadow-lg transition-shadow duration-300">
+                                <h2 className="text-xl font-poppins font-semibold text-[#244856] mb-4">
                                         Exam Questions
                                     </h2>
+                                    <hr className="mb-7"></hr>
                                     {exam.exam_questions.map((question, index) => (
                                         <div key={question._id} className="mb-6">
                                             <p className="text-sm font-poppins text-[#244856]">
@@ -99,11 +100,13 @@ const ExamDetails = () => {
                                                 ))}
                                             </ul>
                                             <p className="text-sm font-poppins text-[#244856]">
-                                                <strong>Correct Answer:</strong> {question.correct_answer}
+                                                <strong>Correct Answer:</strong><span className="font-bold text-[#44b323]"> {question.correct_answer}</span> 
                                             </p>
                                             <p className="text-sm font-poppins text-[#244856]">
                                                 <strong>Marks:</strong> {question.marks}
                                             </p>
+                                            <hr className="m-7"></hr>
+
                                         </div>
                                     ))}
                                 </div>
