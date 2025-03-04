@@ -13,7 +13,7 @@ const ExamForm = () => {
   const [examData, setExamData] = useState({
     title: '',
     description: '',
-    type: 'Online',
+    type: 'Online', // القيمة الافتراضية
     start_time: '',
     end_time: '',
     duration: 0,
@@ -26,60 +26,99 @@ const ExamForm = () => {
         correct_answer: '',
         marks: 0,
       },
-    ], // سؤال واحد فارغ يظهر تلقائيًا
+    ],
   });
+
+  // دالة لحساب مجموع درجات الأسئلة
+  const calculateTotalQuestionMarks = (questions) => {
+    return questions.reduce((sum, question) => sum + (Number(question.marks) || 0), 0);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // التحقق من أن الوقت المحدد لم يمر بعد
+    const currentTime = new Date();
+    const startTime = new Date(examData.start_time);
+    const endTime = new Date(examData.end_time);
+  
+    if (startTime <= currentTime) {
+      toast.error('Start time must be in the future');
+      return;
+    }
+  
+    if (endTime <= currentTime) {
+      toast.error('End time must be in the future');
+      return;
+    }
+  
+    if (endTime <= startTime) {
+      toast.error('End time must be after start time');
+      return;
+    }
+  
+    // التحقق من الحقول المطلوبة
     if (
       !examData.title ||
       !examData.start_time ||
       !examData.end_time ||
-      examData.exam_questions.length === 0
+      (examData.type === 'Online' && examData.exam_questions.length === 0) // التحقق من الأسئلة فقط إذا كان النوع Online
     ) {
       toast.error('Please fill in all required fields');
       return;
     }
-
+  
+    // التحقق من أن مجموع درجات الأسئلة يساوي total_marks (فقط إذا كان النوع Online)
+    if (examData.type === 'Online') {
+      const totalQuestionMarks = calculateTotalQuestionMarks(examData.exam_questions);
+      if (totalQuestionMarks !== examData.total_marks) {
+        toast.error('Total marks of questions must equal the exam\'s total marks');
+        return;
+      }
+    }
+  
+    // التحقق من صحة كل سؤال (فقط إذا كان النوع Online)
     const updatedQuestions = examData.exam_questions.map((q) => {
       if (!q.question_text || !q.marks) {
         toast.error('Please fill in all required fields for each question');
         throw new Error('Invalid question data');
       }
-
+  
       if (q.question_type === 'MCQ' && (!q.options || q.options.length < 2)) {
         toast.error('MCQ questions require at least 2 options');
         throw new Error('Invalid question data');
       }
-
+  
       return {
         ...q,
         marks: Number(q.marks),
       };
     });
-
+  
+    // إعداد البيانات للإرسال
     const formattedStartTime = new Date(examData.start_time).toISOString();
     const formattedEndTime = new Date(examData.end_time).toISOString();
     const token = sessionStorage.getItem('token');
     const decodedToken = JSON.parse(atob(token.split('.')[1]));
     const created_by = decodedToken.id;
-
+  
     const payload = {
       ...examData,
       start_time: formattedStartTime,
       end_time: formattedEndTime,
-      exam_questions: updatedQuestions,
+      exam_questions: examData.type === 'Online' ? updatedQuestions : [], // إرسال الأسئلة فقط إذا كان النوع Online
       created_by,
     };
-
+  
     try {
+      // إرسال البيانات
       await dispatch(
         createExam({ formData: payload, classId, gradeSubjectSemesterId })
       ).unwrap();
-
+  
       toast.success('Exam created successfully!');
-
+  
+      // إعادة تعيين الحقول
       setExamData({
         title: '',
         description: '',
@@ -96,7 +135,7 @@ const ExamForm = () => {
             correct_answer: '',
             marks: 0,
           },
-        ], // إعادة تعيين سؤال فارغ بعد الإرسال
+        ],
       });
     } catch (error) {
       toast.error(`Failed to create exam: ${error.message}`);
@@ -114,7 +153,7 @@ const ExamForm = () => {
   const handleQuestionChange = (e, index) => {
     const { name, value } = e.target;
     const updatedQuestions = [...examData.exam_questions];
-
+  
     if (name === 'options') {
       updatedQuestions[index] = {
         ...updatedQuestions[index],
@@ -126,7 +165,7 @@ const ExamForm = () => {
         [name]: value,
       };
     }
-
+  
     setExamData({ ...examData, exam_questions: updatedQuestions });
   };
 
@@ -157,7 +196,7 @@ const ExamForm = () => {
 
       <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
         <form onSubmit={handleSubmit} className="space-y-4 font-poppins">
-          {/* Exam details fields */}
+          {/* حقول تفاصيل الامتحان */}
           <div>
             <label className="block font-medium">Title:</label>
             <input
@@ -239,74 +278,78 @@ const ExamForm = () => {
             </div>
           </div>
 
-          {/* Added Questions */}
-          {examData.exam_questions.map((q, index) => (
-            <div key={index} className="p-4 border border-gray-300 rounded-lg mb-4">
-              <h3 className="font-medium mb-2">Question {index + 1}</h3>
-              <div>
-                <label className="block font-medium">Question Text:</label>
-                <input
-                  type="text"
-                  name="question_text"
-                  value={q.question_text}
-                  onChange={(e) => handleQuestionChange(e, index)}
-                  className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block font-medium">Options (comma-separated):</label>
-                <input
-                  type="text"
-                  name="options"
-                  value={q.options.join(',')}
-                  onChange={(e) => handleQuestionChange(e, index)}
-                  className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                  placeholder="Option 1, Option 2, Option 3, Option 4"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block font-medium">Correct Answer:</label>
-                <select
-                  name="correct_answer"
-                  value={q.correct_answer}
-                  onChange={(e) => handleQuestionChange(e, index)}
-                  className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                  required
-                >
-                  <option value="">Select correct answer</option>
-                  {q.options.map((option, i) => (
-                    <option key={i} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block font-medium">Marks:</label>
-                <input
-                  type="number"
-                  name="marks"
-                  value={q.marks}
-                  onChange={(e) => handleQuestionChange(e, index)}
-                  className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                  required
-                />
-              </div>
-            </div>
-          ))}
+          {/* عرض الأسئلة فقط إذا كان النوع Online */}
+          {examData.type === 'Online' && (
+            <>
+              {examData.exam_questions.map((q, index) => (
+                <div key={index} className="p-4 border border-gray-300 rounded-lg mb-4">
+                  <h3 className="font-medium mb-2">Question {index + 1}</h3>
+                  <div>
+                    <label className="block font-medium">Question Text:</label>
+                    <input
+                      type="text"
+                      name="question_text"
+                      value={q.question_text}
+                      onChange={(e) => handleQuestionChange(e, index)}
+                      className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium">Options (comma-separated):</label>
+                    <input
+                      type="text"
+                      name="options"
+                      value={q.options.join(',')}
+                      onChange={(e) => handleQuestionChange(e, index)}
+                      className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                      placeholder="Option 1, Option 2, Option 3, Option 4"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium">Correct Answer:</label>
+                    <select
+                      name="correct_answer"
+                      value={q.correct_answer}
+                      onChange={(e) => handleQuestionChange(e, index)}
+                      className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                      required
+                    >
+                      <option value="">Select correct answer</option>
+                      {q.options.map((option, i) => (
+                        <option key={i} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block font-medium">Marks:</label>
+                    <input
+                      type="number"
+                      name="marks"
+                      value={q.marks}
+                      onChange={(e) => handleQuestionChange(e, index)}
+                      className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                      required
+                    />
+                  </div>
+                </div>
+              ))}
 
-          {/* Add New Question Button */}
-          <button
-            type="button"
-            onClick={addNewQuestion}
-            className="mt-2 px-4 py-2 bg-[#117C90] text-white rounded-2xl"
-          >
-            Add Question
-          </button>
+              {/* زر إضافة سؤال جديد (فقط إذا كان النوع Online) */}
+              <button
+                type="button"
+                onClick={addNewQuestion}
+                className="mt-2 px-4 py-2 bg-[#117C90] text-white rounded-2xl"
+              >
+                Add Question
+              </button>
+            </>
+          )}
 
-          {/* Submit button */}
+          {/* زر الإرسال */}
           <button
             type="submit"
             disabled={status === 'loading'}
