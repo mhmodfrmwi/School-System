@@ -53,7 +53,10 @@ const EditExam = () => {
     const updatedQuestions = [...formData.exam_questions];
     updatedQuestions[index] = { ...updatedQuestions[index], [name]: value };
     setFormData({ ...formData, exam_questions: updatedQuestions });
+  
+    console.log("Updated Questions:", updatedQuestions); // للتحقق من البيانات
   };
+  
 
   const addNewQuestion = () => {
     setFormData({
@@ -67,15 +70,16 @@ const EditExam = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Submitting exam data:', formData); // Log formData
     dispatch(updateExam({ examId, examData: formData }))
-      .unwrap()
-      .then(() => {
-        navigate(-1); 
-      })
-      .catch((error) => {
-        console.error('Failed to update exam:', error);
-      });
-  };
+        .unwrap()
+        .then(() => {
+            navigate(-1);
+        })
+        .catch((error) => {
+            console.error('Failed to update exam:', error);
+        });
+};
 
   if (status === 'loading') {
     return <div>Loading...</div>;
