@@ -7,6 +7,11 @@ const { createExamQuestions } = require("./questionService");
 
 const addExam = async (examData) => {
   try {
+    if (!examData.exam_questions && examData.type === "Offline") {
+      const exam = new Exam(examData);
+      await exam.save();
+      return exam;
+    }
     const questionIds = await createExamQuestions(examData.exam_questions);
     const exam = new Exam({
       ...examData,
@@ -147,9 +152,7 @@ const updateExam = async (id, updateData) => {
 const deleteExam = async (id) => {
   try {
     const exam = await Exam.findById(id);
-    if (!exam) {
-      throw new Error("Exam not found");
-    }
+    if (!exam) throw new Error("Exam not found");
 
     await ExamQuestion.deleteMany({ _id: { $in: exam.exam_questions } });
 
