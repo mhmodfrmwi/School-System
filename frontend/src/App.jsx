@@ -5,380 +5,183 @@ import { lazy, Suspense } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
-
-import SeeVR from "./Features/Teacher/components/courses/VR/SeeVR";
-import EditVR from "./Features/Teacher/components/courses/VR/UpdateVR";
-import LibraryForm from "./Features/Teacher/components/Library/libraryForm";
-import SubjectsInLibrary from "./Features/Teacher/components/Library/subjectsInLibrary";
-import MaterialsInLibrary from "./Features/Teacher/components/Library/materialsInLibrary";
-import SchedualTable from "./Features/Manager/components/Schedule/ScheduleTable";
-import FormShedule from "./Features/Manager/components/Schedule/ScheduleForm";
-import ManagerVRTable from "./Features/Manager/components/VR/MangerVRTable";
-import ManagerVRForm from "./Features/Manager/components/VR/ManagerVRForm";
-import DashboardTeacher from "./Features/Teacher/pages/DashboardTeacher";
-import TitleUpdater from "./ui/TitleUpdater";
-import AllMaterialPage from "./Features/Teacher/components/courses/AllYearsMaterual/AllMaterialPage";
-import SeeAllVR from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllVR";
-
-import ItemsInLIbrary from "./Features/Teacher/components/Library/itemsInLIbrary";
-import ItemInLibrary from "./Features/Teacher/components/Library/itemInLibrary";
-import LibraryItemForm from "./Features/Teacher/components/Library/libraryItemForm";
-import UpdateItemLIbrary from "./Features/Teacher/components/Library/updateItemLIbrary";
-import SeeAllMaterial from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllMaterial";
-import QuestionForm from "./Features/Teacher/components/courses/QuestionBank/FormQuestionBank";
-import SeeMyQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeMyQuestions";
-import SeeAllQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeAllQuestions";
-import EditQuestion from "./Features/Teacher/components/courses/QuestionBank/EditQuestions";
-import ExamForm from "./Features/Teacher/components/courses/Exams/ExamForm";
-import SeeMyExams from "./Features/Teacher/components/courses/Exams/seeAllExams";
-import ExamDetailes from "./Features/Teacher/components/courses/Exams/myExamDetailes";
-import Motivation from "./Features/Teacher/components/Motivation/Motivation";
 import Loader from "./ui/Loader";
-import EditExam from "./Features/Teacher/components/courses/Exams/EditExam";
+import TitleUpdater from "./ui/TitleUpdater";
 
-const TakeAttendance = lazy(
-  () => import("./Features/Teacher/components/Attendance/takeAttendance"),
-);
-const Attendancereport = lazy(
-  () => import("./Features/Teacher/components/Attendance/attendancereport"),
-);
-const CurrentCourseForAttendance = lazy(
-  () =>
-    import(
-      "./Features/Teacher/components/Attendance/CurrentCourseForAttendance"
-    ),
-);
-const AllCoursesForAttendance = lazy(
-  () =>
-    import("./Features/Teacher/components/Attendance/AllCoursesForAttendance"),
-);
-const StudentAttendanceDetails = lazy(
-  () =>
-    import("./Features/Teacher/components/Attendance/StudentAttendanceDetails"),
-);
-const EditMaterial = lazy(
-  () => import("./Features/Teacher/components/courses/UpdateMaterial"),
-);
+/* /////////////////auth imports//////////////////// */
 
-const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
 const Login = lazy(() => import("./Features/Auth/Login"));
 const OnBoarding = lazy(() => import("./Features/Auth/OnBoarding"));
 const ChooseRole = lazy(() => import("./Features/Auth/ChooseRole"));
-const StudentForm = lazy(
-  () => import("./Features/Admin/components/Students/studentForm"),
-);
+
+
+
+/* /////////////////admin imports//////////////////// */
+
+const StudentForm = lazy(() => import("./Features/Admin/components/Students/studentForm"),);
 const BasicForm = lazy(() => import("./Features/Admin/components/basicForm"));
-const DashboardAdmin = lazy(
-  () => import("./Features/Admin/Pages/DashboardAdmin"),
-);
-const Manager = lazy(() => import("./Features/Manager/pages/Manager"));
-const DashboardManager = lazy(
-  () => import("./Features/Manager/pages/DashboardManager"),
-);
-const AllStudent = lazy(
-  () => import("./Features/Admin/Pages/StudentTablePage"),
-);
-const ParentForm = lazy(
-  () => import("./Features/Admin/components/Parents/parentForm"),
-);
-const ScheduleForm = lazy(
-  () => import("./Features/Admin/components/Schedule/scheduleForm"),
-);
-const TeacherForm = lazy(
-  () => import("./Features/Admin/components/Teachers/teacherForm"),
-);
-const TeacherInfo = lazy(
-  () => import("./Features/Admin/components/Teachers/teacherInfo"),
-);
-const AdminForm = lazy(
-  () => import("./Features/Admin/components/Admins/adminForm"),
-);
-const ManagerForm = lazy(
-  () => import("./Features/Admin/components/Managers/managerForm"),
-);
+const DashboardAdmin = lazy(() => import("./Features/Admin/Pages/DashboardAdmin"),);
+const AllStudent = lazy(() => import("./Features/Admin/Pages/StudentTablePage"),);
+const ParentForm = lazy(() => import("./Features/Admin/components/Parents/parentForm"),);
+const ScheduleForm = lazy(() => import("./Features/Admin/components/Schedule/scheduleForm"),);
+const TeacherForm = lazy(() => import("./Features/Admin/components/Teachers/teacherForm"),);
+const TeacherInfo = lazy(() => import("./Features/Admin/components/Teachers/teacherInfo"),);
+const AdminForm = lazy(() => import("./Features/Admin/components/Admins/adminForm"),);
+const ManagerForm = lazy(() => import("./Features/Admin/components/Managers/managerForm"),);
 const AllParents = lazy(() => import("./Features/Admin/Pages/ParentTablePage"));
-const AllTeachers = lazy(
-  () => import("./Features/Admin/pages/TeacherTablePage"),
-);
-const AllManagers = lazy(
-  () => import("./Features/Admin/pages/ManagerTablePage"),
-);
-const EditManagerForm = lazy(
-  () => import("./Features/Admin/components/Managers/editManager"),
-);
+const AllTeachers = lazy(() => import("./Features/Admin/pages/TeacherTablePage"),);
+const AllManagers = lazy(() => import("./Features/Admin/pages/ManagerTablePage"),);
+const EditManagerForm = lazy(() => import("./Features/Admin/components/Managers/editManager"),);
 const AllAdmins = lazy(() => import("./Features/Admin/Pages/AdminTablePage"));
-const AllSchedules = lazy(
-  () => import("./Features/Admin/Pages/ScheduleTablePage"),
-);
+const AllSchedules = lazy(() => import("./Features/Admin/Pages/ScheduleTablePage"),);
 const AllTerms = lazy(() => import("./Features/Admin/Pages/TermPage"));
-const TermForm = lazy(
-  () => import("./Features/Admin/components/Terms/termForm"),
-);
+const TermForm = lazy(() => import("./Features/Admin/components/Terms/termForm"),);
 const Admins = lazy(() => import("./Features/Admin/Pages/Admins"));
-const EditTeacher = lazy(
-  () => import("./Features/Admin/components/Teachers/editTeacher"),
-);
-const AcademicYearForm = lazy(
-  () => import("./Features/Admin/components/AcademicYears/academicYearForm"),
-);
-const EditAcademicYearForm = lazy(
-  () =>
-    import("./Features/Admin/components/AcademicYears/editAcademicYearForm"),
-);
-const AllAcademicYears = lazy(
-  () => import("./Features/Admin/Pages/AcademicYearPage"),
-);
-const SubjectDetails = lazy(
-  () => import("./Features/Admin/components/Subjects/AllAssignedSubjects"),
-);
-const SubjectsList = lazy(
-  () => import("./Features/Admin/Pages/SubjectTablePage"),
-);
-const AddSubject = lazy(
-  () => import("./Features/Admin/components/Subjects/AddSubjectManagement"),
-);
+const EditTeacher = lazy(() => import("./Features/Admin/components/Teachers/editTeacher"),);
+const AcademicYearForm = lazy(() => import("./Features/Admin/components/AcademicYears/academicYearForm"),);
+const EditAcademicYearForm = lazy(() => import("./Features/Admin/components/AcademicYears/editAcademicYearForm"),);
+const AllAcademicYears = lazy(() => import("./Features/Admin/Pages/AcademicYearPage"),);
+const SubjectDetails = lazy(() => import("./Features/Admin/components/Subjects/AllAssignedSubjects"),);
+const SubjectsList = lazy(() => import("./Features/Admin/Pages/SubjectTablePage"),);
+const AddSubject = lazy(() => import("./Features/Admin/components/Subjects/AddSubjectManagement"),);
 const AllGrades = lazy(() => import("./Features/Admin/Pages/GradePage"));
-const GradeForm = lazy(
-  () => import("./Features/Admin/components/Grades/GradeForm"),
-);
-const EditGradeForm = lazy(
-  () => import("./Features/Admin/components/Grades/EditGradeForm"),
-);
-const AssignGrade = lazy(
-  () => import("./Features/Admin/components/Grades/AssignGrade"),
-);
+const GradeForm = lazy(() => import("./Features/Admin/components/Grades/GradeForm"),);
+const EditGradeForm = lazy(() => import("./Features/Admin/components/Grades/EditGradeForm"),);
+const AssignGrade = lazy(() => import("./Features/Admin/components/Grades/AssignGrade"),);
+const EditAdminForm = lazy(() => import("./Features/Admin/components/Admins/editAdmin"),);
+const GradesDetails = lazy(() => import("./Features/Admin/components/Grades/AllAssignedGrades"),);
+const EditAssignedGrade = lazy(() => import("./Features/Admin/components/Grades/EditAssignedGrade"),);
+const AssignSubject = lazy(() => import("./Features/Admin/components/Subjects/AssignSubject"),);
+const EditSubject = lazy(() => import("./Features/Admin/components/Subjects/EditSubject"),);
+const EditAssignedSubject = lazy(() => import("./Features/Admin/components/Subjects/EditAssignedSubject"),);
+const AllClassTeacher = lazy(() => import("./Features/Admin/Pages/classTeacherTablePage"),);
+const EditClassTeacher = lazy(() => import("./Features/Admin/components/classTeacher/editClassTeacher"),);
+const EditProfilePage = lazy(() => import("./Features/Admin/Pages/EditProfilePage"),);
+const EditSchedule = lazy(() => import("./Features/Admin/components/Schedule/editScheduleForm"),);
+const EditTermForm = lazy(() => import("./Features/Admin/components/Terms/editTermForm"),);
+const EditParentForm = lazy(() => import("./Features/Admin/components/Parents/editParent"),);
+const EditStudent = lazy(() => import("./Features/Admin/components/Students/editStudentForm"),);
+
+
+
+/* /////////////////student imports//////////////////// */
+
 const Students = lazy(() => import("./Features/Student/pages/Students"));
-const DashboardStudent = lazy(
-  () => import("./Features/Student/pages/DashboardStudent"),
-);
-const Grades = lazy(
-  () => import("./Features/Student/components/Grades/Grades"),
-);
-const GradesAssignment = lazy(
-  () => import("./Features/Student/components/Grades/GradesAssignment"),
-);
-const GradesExam = lazy(
-  () => import("./Features/Student/components/Grades/GradesExam"),
-);
-const Schedule = lazy(
-  () => import("./Features/Student/components/Schedule/schedule"),
-);
-const ScheduleExam = lazy(
-  () => import("./Features/Student/components/Schedule/scheduleExam"),
-);
-const LibraryPage = lazy(
-  () => import("./Features/Student/components/Library/LibraryPage"),
-);
-const LibraryVideosPage = lazy(
-  () => import("./Features/Student/components/Library/LibraryVideosPage"),
-);
-const LibraryBooksPage = lazy(
-  () => import("./Features/Student/components/Library/LibraryBooksPage"),
-);
-const LibraryItemDetailsPage = lazy(
-  () => import("./Features/Student/components/Library/LibraryItemDetailsPage"),
-);
+const DashboardStudent = lazy(() => import("./Features/Student/pages/DashboardStudent"),);
+const Grades = lazy(() => import("./Features/Student/components/Grades/Grades"),);
+const GradesAssignment = lazy(() => import("./Features/Student/components/Grades/GradesAssignment"),);
+const GradesExam = lazy(() => import("./Features/Student/components/Grades/GradesExam"),);
+const Schedule = lazy(() => import("./Features/Student/components/Schedule/schedule"),);
+const ScheduleExam = lazy(() => import("./Features/Student/components/Schedule/scheduleExam"),);
+const LibraryPage = lazy(() => import("./Features/Student/components/Library/LibraryPage"),);
+const LibraryVideosPage = lazy(() => import("./Features/Student/components/Library/LibraryVideosPage"),);
+const LibraryBooksPage = lazy(() => import("./Features/Student/components/Library/LibraryBooksPage"),);
+const LibraryItemDetailsPage = lazy(() => import("./Features/Student/components/Library/LibraryItemDetailsPage"),);
+const MotivationPage = lazy(() => import("./Features/Student/pages/MotivationPage"),);
+const EditStudentProfile = lazy(() => import("./Features/Student/pages/EditProfilePage"),);
+const DetailesActivity = lazy(() => import("./Features/Student/components/Activites/detailesActivity"),);
+const PrizesActivity = lazy(() => import("./Features/Student/components/Activites/PrizesActivity"),);
+const Activities = lazy(() => import("./Features/Student/components/Activites/Activites"),);
+const Contests = lazy(() => import("./Features/Student/components/Activites/Contests"),);
+const CreateTeam = lazy(() => import("./Features/Student/components/Activites/CreateTeam"),);
+const TeamDetails = lazy(() => import("./Features/Student/components/Activites/TeamDetails"),);
+const EditTeam = lazy(() => import("./Features/Student/components/Activites/EditTeam"),);
+const AllCouses = lazy(() => import("./Features/Student/components/courses/allcourses"),);
+const StudentCourseDetails = lazy(() => import("./Features/Student/components/courses/CourseVideoLectures"),);
+const StudentMaterialDetails = lazy(() => import("./Features/Student/components/courses/CourseMaterialPDF"),);
+const StudentVirtualRooms = lazy(() => import("./Features/Student/components/courses/CoursesVirtualRooms"),);
+const StudentQuestionBank = lazy(() => import("./Features/Student/components/courses/CoursesQuestionBank"),);
+const StudentQuestionDetailes = lazy(() => import("./Features/Student/components/courses/QuestionsDetailes"),);
+const StudentExams = lazy(() => import("./Features/Student/components/courses/CourseExam"),);
+const StudentExamPage = lazy(() => import("./Features/Student/components/courses/ExamPage"),);
+const AttendancePage = lazy(() => import("./Features/Student/components/Attendance/AttendancePage"),);
+const MaterialDetails = lazy(() => import("./Features/Student/components/courses/MaterialDetails"),);
+
+
+
+/* /////////////////parent imports//////////////////// */
+
 const Parents = lazy(() => import("./Features/Parent/pages/Parents"));
-const DashboardParent = lazy(
-  () => import("./Features/Parent/pages/DashboardParent"),
-);
-const EditAdminForm = lazy(
-  () => import("./Features/Admin/components/Admins/editAdmin"),
-);
-const GradesDetails = lazy(
-  () => import("./Features/Admin/components/Grades/AllAssignedGrades"),
-);
-const EditAssignedGrade = lazy(
-  () => import("./Features/Admin/components/Grades/EditAssignedGrade"),
-);
-const AssignSubject = lazy(
-  () => import("./Features/Admin/components/Subjects/AssignSubject"),
-);
-const EditSubject = lazy(
-  () => import("./Features/Admin/components/Subjects/EditSubject"),
-);
-const EditAssignedSubject = lazy(
-  () => import("./Features/Admin/components/Subjects/EditAssignedSubject"),
-);
-const AllClassTeacher = lazy(
-  () => import("./Features/Admin/Pages/classTeacherTablePage"),
-);
-const EditClassTeacher = lazy(
-  () => import("./Features/Admin/components/classTeacher/editClassTeacher"),
-);
-const EditProfilePage = lazy(
-  () => import("./Features/Admin/Pages/EditProfilePage"),
-);
-const EditSchedule = lazy(
-  () => import("./Features/Admin/components/Schedule/editScheduleForm"),
-);
-const EditTermForm = lazy(
-  () => import("./Features/Admin/components/Terms/editTermForm"),
-);
-const EditParentForm = lazy(
-  () => import("./Features/Admin/components/Parents/editParent"),
-);
-const EditStudent = lazy(
-  () => import("./Features/Admin/components/Students/editStudentForm"),
-);
-const MotivationPage = lazy(
-  () => import("./Features/Student/pages/MotivationPage"),
-);
-const EditStudentProfile = lazy(
-  () => import("./Features/Student/pages/EditProfilePage"),
-);
-const DetailesActivity = lazy(
-  () => import("./Features/Student/components/Activites/detailesActivity"),
-);
-const PrizesActivity = lazy(
-  () => import("./Features/Student/components/Activites/PrizesActivity"),
-);
-const Activities = lazy(
-  () => import("./Features/Student/components/Activites/Activites"),
-);
-const Contests = lazy(
-  () => import("./Features/Student/components/Activites/Contests"),
-);
-const CreateTeam = lazy(
-  () => import("./Features/Student/components/Activites/CreateTeam"),
-);
-const TeamDetails = lazy(
-  () => import("./Features/Student/components/Activites/TeamDetails"),
-);
-const EditTeam = lazy(
-  () => import("./Features/Student/components/Activites/EditTeam"),
-);
+const DashboardParent = lazy(() => import("./Features/Parent/pages/DashboardParent"),);
+const GradesParent = lazy(() => import("./Features/Parent/components/Grades/Grades"),);
+const EditParentProfile = lazy(() => import("./Features/Parent/pages/EditProfilePage"),);
+const GradesAssignmentParent = lazy(() => import("./Features/Parent/components/Grades/GradesAssignment"),);
+const GradesExamParent = lazy(() => import("./Features/Parent/components/Grades/GradesExam"),);
+const ScheduleParent = lazy(() => import("./Features/Parent/components/Schedule/schedule"),);
+const ScheduleExamParent = lazy(() => import("./Features/Parent/components/Schedule/scheduleExam"),);
 
-const AllCouses = lazy(
-  () => import("./Features/Student/components/courses/allcourses"),
-);
-const StudentCourseDetails = lazy(
-  () => import("./Features/Student/components/courses/CourseVideoLectures"),
-);
-const StudentMaterialDetails = lazy(
-  () => import("./Features/Student/components/courses/CourseMaterialPDF"),
-);
-const StudentVirtualRooms = lazy(
-  () => import("./Features/Student/components/courses/CoursesVirtualRooms"),
-);
-const StudentQuestionBank = lazy(
-  () => import("./Features/Student/components/courses/CoursesQuestionBank"),
-);
-const StudentQuestionDetailes = lazy(
-  () => import("./Features/Student/components/courses/QuestionsDetailes"),
-);
-const StudentExams = lazy(
-  () => import("./Features/Student/components/courses/CourseExam"),
-);
-const StudentExamPage = lazy(
-  () => import("./Features/Student/components/courses/ExamPage"),
-);
-const AttendancePage = lazy(
-  () => import("./Features/Student/components/Attendance/AttendancePage"),
-);
-const GradesParent = lazy(
-  () => import("./Features/Parent/components/Grades/Grades"),
-);
-const EditParentProfile = lazy(
-  () => import("./Features/Parent/pages/EditProfilePage"),
-);
-const GradesAssignmentParent = lazy(
-  () => import("./Features/Parent/components/Grades/GradesAssignment"),
-);
-const GradesExamParent = lazy(
-  () => import("./Features/Parent/components/Grades/GradesExam"),
-);
-const ScheduleParent = lazy(
-  () => import("./Features/Parent/components/Schedule/schedule"),
-);
-const ScheduleExamParent = lazy(
-  () => import("./Features/Parent/components/Schedule/scheduleExam"),
-);
-const EditTeacherProfile = lazy(
-  () => import("./Features/Teacher/pages/EditProfilePage"),
-);
-const SchoolHubs = lazy(
-  () => import("./Features/Teacher/components/Activities/SchoolHubs"),
-);
-const SchoolHubsDetailes = lazy(
-  () => import("./Features/Teacher/components/Activities/SchoolHubsDetailes"),
-);
-const SchoolHubsPrizes = lazy(
-  () => import("./Features/Teacher/components/Activities/SchoolHubsPrizes"),
-);
-const ActivityContests = lazy(
-  () => import("./Features/Teacher/components/Activities/Contests"),
-);
-const ParticipantsContests = lazy(
-  () => import("./Features/Teacher/components/Activities/Participants"),
-);
-const ActivityForm = lazy(
-  () => import("./Features/Teacher/components/Activities/AddContestForm"),
-);
-const EditActivityForm = lazy(
-  () => import("./Features/Teacher/components/Activities/EditContestForm"),
-);
-const WeeklySchedule = lazy(
-  () => import("./Features/Teacher/components/Schedule/WeekSchedule"),
-);
 
-const ExamSchedule = lazy(
-  () => import("./Features/Teacher/components/Schedule/ExamSchedule"),
-);
-const AddMaterial = lazy(
-  () => import("./Features/Teacher/components/courses/AddMaterial"),
-);
-const AllCourses = lazy(
-  () =>
-    import("./Features/Teacher/components/courses/AllYearsMaterual/AllCourses"),
-);
-const CurrentCourse = lazy(
-  () => import("./Features/Teacher/components/courses/CurrentCourses"),
-);
-const MaterialForm = lazy(
-  () => import("./Features/Teacher/components/courses/FormCourse"),
-);
-const SeeMaterial = lazy(
-  () => import("./Features/Teacher/components/courses/SeeMaterial"),
-);
-const LibraryTeacherPage = lazy(
-  () => import("./Features/Teacher/components/Library/LibraryTeacherPage"),
-);
-const LibraryItemDetailsPageForTeacher = lazy(
-  () =>
-    import(
-      "./Features/Teacher/components/Library/LibraryItemDetailsPageForTeacher"
-    ),
-);
-const MaterialDetails = lazy(
-  () => import("./Features/Student/components/courses/MaterialDetails"),
-);
-const VRForm = lazy(
-  () => import("./Features/Teacher/components/courses/VR/FormVR"),
-);
-const EditManagerProfile = lazy(
-  () => import("./Features/Manager/pages/EditProfilePage"),
-);
-const ManagerSchoolHubs = lazy(
-  () => import("./Features/Manager/components/Activites/SchoolHubs"),
-);
-const ManagerSchoolHubsDetailes = lazy(
-  () => import("./Features/Manager/components/Activites/SchoolHubsDetailes"),
-);
-const ManagerSchoolHubsPrizes = lazy(
-  () => import("./Features/Manager/components/Activites/SchoolHubsPrizes"),
-);
-const ManagerSchoolHubsParticipants = lazy(
-  () =>
-    import("./Features/Manager/components/Activites/SchoolHubsParticipants"),
-);
-const ManagerSchoolHubsAdd = lazy(
-  () => import("./Features/Manager/components/Activites/AddSchoolHubs"),
-);
-const ManagerSchoolHubsEdit = lazy(
-  () => import("./Features/Manager/components/Activites/EditSchoolHubs"),
-);
+/* /////////////////teacher imports//////////////////// */
 
+const SeeVR = lazy(() => import("./Features/Teacher/components/courses/VR/SeeVR"));
+const EditVR = lazy(() => import("./Features/Teacher/components/courses/VR/UpdateVR"));
+const LibraryForm = lazy(() => import("./Features/Teacher/components/Library/libraryForm"));
+const SubjectsInLibrary = lazy(() => import("./Features/Teacher/components/Library/subjectsInLibrary"));
+const MaterialsInLibrary = lazy(() => import("./Features/Teacher/components/Library/materialsInLibrary"));
+const DashboardTeacher = lazy(() => import("./Features/Teacher/pages/DashboardTeacher"));
+const AllMaterialPage = lazy(() => import("./Features/Teacher/components/courses/AllYearsMaterual/AllMaterialPage"));
+const SeeAllVR = lazy(() => import("./Features/Teacher/components/courses/AllYearsMaterual/SeeAllVR"));
+const ItemsInLIbrary = lazy(() => import("./Features/Teacher/components/Library/itemsInLIbrary"));
+const ItemInLibrary = lazy(() => import("./Features/Teacher/components/Library/itemInLibrary"));
+const LibraryItemForm = lazy(() => import("./Features/Teacher/components/Library/libraryItemForm"));
+const UpdateItemLIbrary = lazy(() => import("./Features/Teacher/components/Library/updateItemLIbrary"));
+const SeeAllMaterial = lazy(() => import("./Features/Teacher/components/courses/AllYearsMaterual/SeeAllMaterial"));
+const QuestionForm = lazy(() => import("./Features/Teacher/components/courses/QuestionBank/FormQuestionBank"));
+const SeeMyQuestion = lazy(() => import("./Features/Teacher/components/courses/QuestionBank/SeeMyQuestions"));
+const SeeAllQuestion = lazy(() => import("./Features/Teacher/components/courses/QuestionBank/SeeAllQuestions"));
+const EditQuestion = lazy(() => import("./Features/Teacher/components/courses/QuestionBank/EditQuestions"));
+const ExamForm = lazy(() => import("./Features/Teacher/components/courses/Exams/ExamForm"));
+const SeeMyExams = lazy(() => import("./Features/Teacher/components/courses/Exams/seeAllExams"));
+const ExamDetailes = lazy(() => import("./Features/Teacher/components/courses/Exams/myExamDetailes"));
+const Motivation = lazy(() => import("./Features/Teacher/components/Motivation/Motivation"));
+const EditExam = lazy(() => import("./Features/Teacher/components/courses/Exams/EditExam"));
+const TakeAttendance = lazy(() => import("./Features/Teacher/components/Attendance/takeAttendance"),);
+const Attendancereport = lazy(() => import("./Features/Teacher/components/Attendance/attendancereport"),);
+const CurrentCourseForAttendance = lazy(() => import("./Features/Teacher/components/Attendance/CurrentCourseForAttendance"),);
+const AllCoursesForAttendance = lazy(() => import("./Features/Teacher/components/Attendance/AllCoursesForAttendance"),);
+const StudentAttendanceDetails = lazy(() => import("./Features/Teacher/components/Attendance/StudentAttendanceDetails"),);
+const EditMaterial = lazy(() => import("./Features/Teacher/components/courses/UpdateMaterial"));
+const Teachers = lazy(() => import("./Features/Teacher/pages/Teacher"));
+const EditTeacherProfile = lazy(() => import("./Features/Teacher/pages/EditProfilePage"),);
+const SchoolHubs = lazy(() => import("./Features/Teacher/components/Activities/SchoolHubs"),);
+const SchoolHubsDetailes = lazy(() => import("./Features/Teacher/components/Activities/SchoolHubsDetailes"),);
+const SchoolHubsPrizes = lazy(() => import("./Features/Teacher/components/Activities/SchoolHubsPrizes"),);
+const ActivityContests = lazy(() => import("./Features/Teacher/components/Activities/Contests"),);
+const ParticipantsContests = lazy(() => import("./Features/Teacher/components/Activities/Participants"),);
+const ActivityForm = lazy(() => import("./Features/Teacher/components/Activities/AddContestForm"),);
+const EditActivityForm = lazy(() => import("./Features/Teacher/components/Activities/EditContestForm"),);
+const WeeklySchedule = lazy(() => import("./Features/Teacher/components/Schedule/WeekSchedule"),);
+const ExamSchedule = lazy(() => import("./Features/Teacher/components/Schedule/ExamSchedule"),);
+const AddMaterial = lazy(() => import("./Features/Teacher/components/courses/AddMaterial"),);
+const AllCourses = lazy(() => import("./Features/Teacher/components/courses/AllYearsMaterual/AllCourses"),);
+const CurrentCourse = lazy(() => import("./Features/Teacher/components/courses/CurrentCourses"),);
+const MaterialForm = lazy(() => import("./Features/Teacher/components/courses/FormCourse"),);
+const SeeMaterial = lazy(() => import("./Features/Teacher/components/courses/SeeMaterial"),);
+const LibraryTeacherPage = lazy(() => import("./Features/Teacher/components/Library/LibraryTeacherPage"),);
+const LibraryItemDetailsPageForTeacher = lazy(() => import("./Features/Teacher/components/Library/LibraryItemDetailsPageForTeacher"),);
+const VRForm = lazy(() => import("./Features/Teacher/components/courses/VR/FormVR"),);
+
+
+
+/* /////////////////manager imports//////////////////// */
+
+const SchedualTable = lazy(() => import("./Features/Manager/components/Schedule/ScheduleTable"));
+const FormShedule = lazy(() => import("./Features/Manager/components/Schedule/ScheduleForm"));
+const ManagerVRTable = lazy(() => import("./Features/Manager/components/VR/MangerVRTable"));
+const ManagerVRForm = lazy(() => import("./Features/Manager/components/VR/ManagerVRForm"));
+const Manager = lazy(() => import("./Features/Manager/pages/Manager"));
+const DashboardManager = lazy(() => import("./Features/Manager/pages/DashboardManager"),);
+const EditManagerProfile = lazy(() => import("./Features/Manager/pages/EditProfilePage"),);
+const ManagerSchoolHubs = lazy(() => import("./Features/Manager/components/Activites/SchoolHubs"),);
+const ManagerSchoolHubsDetailes = lazy(() => import("./Features/Manager/components/Activites/SchoolHubsDetailes"),);
+const ManagerSchoolHubsPrizes = lazy(() => import("./Features/Manager/components/Activites/SchoolHubsPrizes"),);
+const ManagerSchoolHubsParticipants = lazy(() => import("./Features/Manager/components/Activites/SchoolHubsParticipants"),);
+const ManagerSchoolHubsAdd = lazy(() => import("./Features/Manager/components/Activites/AddSchoolHubs"),);
+const ManagerSchoolHubsEdit = lazy(() => import("./Features/Manager/components/Activites/EditSchoolHubs"),);
+
+
+
+/* //////////////////////////////////////////////// */
 function App() {
   const role =
     useSelector((state) => state.role.role) || localStorage.getItem("role");
@@ -643,16 +446,16 @@ function App() {
               path="/teacher/exam-form/:classId/:gradeSubjectSemesterId"
               element={<ExamForm />}
             />
-              <Route
+            <Route
               path="/teacher/my-exams/:gradeSubjectSemesterId"
               element={<SeeMyExams />}
             />
-            
+
             <Route
               path="/teacher/exams/:examId"
               element={<EditExam />}
             />
-                <Route
+            <Route
               path="/teacher/exam-details/:examId"
               element={<ExamDetailes />}
             />
