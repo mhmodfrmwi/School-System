@@ -86,8 +86,58 @@ const checkExamStatus = async (id) => {
 
 const updateExam = async (id, updateData) => {
   try {
-    const exam = await Exam.findByIdAndUpdate(id, updateData, { new: true });
-    return exam;
+    const existingSessionsForTheExam = await Session.find({
+      exam_id: id,
+      status: "Submitted",
+    });
+    if (existingSessionsForTheExam.length > 0) {
+      throw new Error(
+        "Cannot update exam status while there are ongoing sessions"
+      );
+    }
+    const { exam_questions, ...examUpdateData } = updateData;
+
+    if (exam_questions && exam_questions.length > 0) {
+      await Promise.all(
+        exam_questions.map(async (question) => {
+          if (question._id) {
+            await ExamQuestion.findByIdAndUpdate(
+              question._id,
+              { $set: question },
+              { new: true }
+            );
+          } else {
+            const newQuestion = await ExamQuestion.create(question);
+            await Exam.findByIdAndUpdate(id, {
+              $push: { exam_questions: newQuestion._id },
+            });
+          }
+        })
+      );
+    }
+
+    const examWithQuestions = await Exam.findById(id).populate(
+      "exam_questions"
+    );
+    const newTotalMarks = examWithQuestions.exam_questions.reduce(
+      (sum, question) => sum + question.marks,
+      0
+    );
+
+    const updatedExam = await Exam.findByIdAndUpdate(
+      id,
+      {
+        ...examUpdateData,
+        total_marks: newTotalMarks,
+      },
+      { new: true }
+    )
+      .populate("subject_id grade_id class_id academic_year_id semester_id")
+      .populate("created_by", "_id fullName")
+      .populate("exam_questions")
+      .select("-__v -createdAt -updatedAt");
+
+    return updatedExam;
   } catch (error) {
     console.error(error);
     throw new Error(error.message);
