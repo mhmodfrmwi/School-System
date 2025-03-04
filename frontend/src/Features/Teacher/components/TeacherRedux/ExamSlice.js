@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from "react-toastify";
 
 const getToken = () => sessionStorage.getItem('token');
 
@@ -56,6 +57,41 @@ export const fetchExamsForTeacher = createAsyncThunk(
       if (!response.ok) {
         const errorResponse = await response.json();
         throw new Error(errorResponse.message || 'Failed to fetch exams');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Server Error');
+    }
+  }
+);
+
+// Async Thunk to update an exam
+export const updateExam = createAsyncThunk(
+  'exam/updateExam',
+  async ({ examId, examData }, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) {
+        return rejectWithValue('Authentication required. Please log in.');
+      }
+
+      const url = `http://localhost:3000/exams/${examId}`;
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify(examData),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to update exam');
       }
 
       const data = await response.json();
@@ -148,6 +184,24 @@ const examSlice = createSlice({
       .addCase(deleteExam.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload || 'Failed to delete exam';
+        state.loading = false;
+      })
+      .addCase(updateExam.pending, (state) => {
+        state.status = 'loading';
+        state.loading = true;
+      })
+      .addCase(updateExam.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        toast.success("Exam updated successfully");
+        const updatedExams = state.exams.map(exam =>
+          exam._id === action.payload._id ? action.payload : exam
+        );
+        state.exams = updatedExams;
+        state.loading = false;
+      })
+      .addCase(updateExam.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || 'Failed to update exam';
         state.loading = false;
       });
   },

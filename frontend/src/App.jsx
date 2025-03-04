@@ -34,6 +34,7 @@ import SeeMyExams from "./Features/Teacher/components/courses/Exams/seeAllExams"
 import ExamDetailes from "./Features/Teacher/components/courses/Exams/myExamDetailes";
 import Motivation from "./Features/Teacher/components/Motivation/Motivation";
 import Loader from "./ui/Loader";
+import EditExam from "./Features/Teacher/components/courses/Exams/EditExam";
 
 const TakeAttendance = lazy(
   () => import("./Features/Teacher/components/Attendance/takeAttendance"),
@@ -645,6 +646,11 @@ function App() {
               <Route
               path="/teacher/my-exams/:gradeSubjectSemesterId"
               element={<SeeMyExams />}
+            />
+            
+            <Route
+              path="/teacher/exams/:examId"
+              element={<EditExam />}
             />
                 <Route
               path="/teacher/exam-details/:examId"

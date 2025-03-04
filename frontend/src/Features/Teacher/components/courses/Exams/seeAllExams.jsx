@@ -29,7 +29,7 @@ const SeeMyExams = () => {
     };
 
     const handleEditExam = (examId) => {
-        navigate(`/teacher/edit-exam/${examId}`);
+        navigate(`/teacher/exams/${examId}`);
     };
 
     const handleViewExam = (examId) => {
