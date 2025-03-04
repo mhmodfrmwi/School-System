@@ -16,7 +16,7 @@ const EditExam = () => {
     end_time: '',
     duration: 0,
     total_marks: 0,
-    exam_questions: [], 
+    exam_questions: [],
   });
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const EditExam = () => {
       if (examToEdit) {
         const formattedExam = {
           ...examToEdit,
-          exam_questions: examToEdit.exam_questions || [], 
+          exam_questions: examToEdit.exam_questions || [],
           start_time: examToEdit.start_time
             ? new Date(examToEdit.start_time).toISOString().slice(0, 16)
             : '',
@@ -38,7 +38,7 @@ const EditExam = () => {
             : '',
         };
 
-        setFormData(formattedExam); 
+        setFormData(formattedExam);
       }
     }
   }, [exams, examId]);
@@ -52,11 +52,14 @@ const EditExam = () => {
     const { name, value } = e.target;
     const updatedQuestions = [...formData.exam_questions];
     updatedQuestions[index] = { ...updatedQuestions[index], [name]: value };
+
+    // Convert options to array if it's a string
+    if (name === 'options') {
+      updatedQuestions[index].options = value.split(',').map((option) => option.trim());
+    }
+
     setFormData({ ...formData, exam_questions: updatedQuestions });
-  
-    console.log("Updated Questions:", updatedQuestions); // للتحقق من البيانات
   };
-  
 
   const addNewQuestion = () => {
     setFormData({
@@ -70,16 +73,27 @@ const EditExam = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitting exam data:', formData); // Log formData
-    dispatch(updateExam({ examId, examData: formData }))
-        .unwrap()
-        .then(() => {
-            navigate(-1);
-        })
-        .catch((error) => {
-            console.error('Failed to update exam:', error);
-        });
-};
+
+    // Ensure options are arrays before submitting
+    const formattedExamData = {
+      ...formData,
+      exam_questions: formData.exam_questions.map((question) => ({
+        ...question,
+        options: Array.isArray(question.options) ? question.options : question.options.split(',').map((option) => option.trim()),
+      })),
+    };
+
+    console.log('Submitting exam data:', formattedExamData); // Log formatted data
+
+    dispatch(updateExam({ examId, examData: formattedExamData }))
+      .unwrap()
+      .then(() => {
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error('Failed to update exam:', error);
+      });
+  };
 
   if (status === 'loading') {
     return <div>Loading...</div>;
@@ -195,7 +209,7 @@ const EditExam = () => {
               <input
                 type="text"
                 name="options"
-                value={q.options?.join(',') || ''} // Ensure options is an array
+                value={q.options?.join(',') || ''}
                 onChange={(e) => handleQuestionChange(e, index)}
                 className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 placeholder="Option 1, Option 2, Option 3, Option 4"
@@ -212,7 +226,7 @@ const EditExam = () => {
                 required
               >
                 <option value="">Select correct answer</option>
-                {q.options?.map((option, i) => ( // Ensure options is an array
+                {q.options?.map((option, i) => (
                   <option key={i} value={option}>
                     {option}
                   </option>

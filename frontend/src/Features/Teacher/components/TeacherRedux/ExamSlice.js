@@ -67,7 +67,6 @@ export const fetchExamsForTeacher = createAsyncThunk(
   }
 );
 
-// Async Thunk to update an exam
 export const updateExam = createAsyncThunk(
   'exam/updateExam',
   async ({ examId, examData }, { rejectWithValue }) => {
@@ -164,7 +163,7 @@ const examSlice = createSlice({
       })
       .addCase(fetchExamsForTeacher.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.exams = action.payload; // Update exams array with fetched data
+        state.exams = action.payload;
         state.loading = false;
       })
       .addCase(fetchExamsForTeacher.rejected, (state, action) => {
@@ -178,7 +177,8 @@ const examSlice = createSlice({
       })
       .addCase(deleteExam.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.exams = state.exams.filter(exam => exam._id !== action.payload); // Remove the deleted exam
+        state.exams = state.exams.filter(exam => exam._id !== action.payload); 
+       
         state.loading = false;
       })
       .addCase(deleteExam.rejected, (state, action) => {
