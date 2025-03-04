@@ -36,7 +36,7 @@ const AddMaterial = () => {
       targetUrl = `/teacher/assignments/${gradeSubjectSemesterId}`;
     } else if (courseName === "Exams") {
       targetUrl = actionType === "see"
-      ? `/teacher/exams/${gradeSubjectSemesterId}`
+      ? `/teacher/my-exams/${gradeSubjectSemesterId}`
       : `/teacher/exam-form/${classId}/${gradeSubjectSemesterId}`;
     }
 

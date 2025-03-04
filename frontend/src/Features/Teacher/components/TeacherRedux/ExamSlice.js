@@ -17,10 +17,7 @@ export const createExam = createAsyncThunk(
         Authorization: `Bearer ${token}`,
       };
 
-      // console.log('Payload being sent:', JSON.stringify(formData, null, 2));
-      // console.log('Request URL:', url);
-      // console.log('Request headers:', headers);
-
+      
       const response = await fetch(url, {
         method: 'POST',
         headers,
@@ -39,6 +36,70 @@ export const createExam = createAsyncThunk(
     }
   }
 );
+
+
+
+// Async Thunk to fetch exams for a teacher
+export const fetchExamsForTeacher = createAsyncThunk(
+  'exam/fetchExamsForTeacher',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) {
+        return rejectWithValue('Authentication required. Please log in.');
+      }
+
+      const url = 'http://localhost:3000/exams/teacher-exams';
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(url, { headers });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to fetch exams');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Server Error');
+    }
+  }
+);
+
+export const deleteExam = createAsyncThunk(
+  'exam/deleteExam',
+  async (examId, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) {
+        return rejectWithValue('Authentication required. Please log in.');
+      }
+
+      const url = `http://localhost:3000/exams/${examId}`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers,
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to delete exam');
+      }
+
+      return examId; // Return the exam ID to remove it from the state
+    } catch (error) {
+      return rejectWithValue(error.message || 'Server Error');
+    }
+  }
+);
+
 
 const examSlice = createSlice({
   name: 'exam',
@@ -63,6 +124,34 @@ const examSlice = createSlice({
       .addCase(createExam.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload || 'Failed to add exam';
+        state.loading = false;
+      })
+      .addCase(fetchExamsForTeacher.pending, (state) => {
+        state.status = 'loading';
+        state.loading = true;
+      })
+      .addCase(fetchExamsForTeacher.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.exams = action.payload; // Update exams array with fetched data
+        state.loading = false;
+      })
+      .addCase(fetchExamsForTeacher.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || 'Failed to fetch exams';
+        state.loading = false;
+      })
+      .addCase(deleteExam.pending, (state) => {
+        state.status = 'loading';
+        state.loading = true;
+      })
+      .addCase(deleteExam.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.exams = state.exams.filter(exam => exam._id !== action.payload); // Remove the deleted exam
+        state.loading = false;
+      })
+      .addCase(deleteExam.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || 'Failed to delete exam';
         state.loading = false;
       });
   },

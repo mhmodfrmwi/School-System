@@ -30,6 +30,7 @@ import SeeMyQuestion from "./Features/Teacher/components/courses/QuestionBank/Se
 import SeeAllQuestion from "./Features/Teacher/components/courses/QuestionBank/SeeAllQuestions";
 import EditQuestion from "./Features/Teacher/components/courses/QuestionBank/EditQuestions";
 import ExamForm from "./Features/Teacher/components/courses/Exams/ExamForm";
+import SeeMyExams from "./Features/Teacher/components/courses/Exams/seeAllExams";
 import Motivation from "./Features/Teacher/components/Motivation/Motivation";
 import Loader from "./ui/Loader";
 
@@ -639,6 +640,10 @@ function App() {
             <Route
               path="/teacher/exam-form/:classId/:gradeSubjectSemesterId"
               element={<ExamForm />}
+            />
+              <Route
+              path="/teacher/my-exams/:gradeSubjectSemesterId"
+              element={<SeeMyExams />}
             />
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
