@@ -148,10 +148,34 @@ const ExamsSection = () => {
     }
 
     dispatch(startExamSession(exam._id)).then((action) => {
-      if (action.payload) {
-        navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
-      }
-    });
+        if (startExamSession.fulfilled.match(action)) {
+          // If the session starts successfully, navigate to the exam page
+          navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
+        } else {
+          // Check if the error message indicates an active session
+          if (action.payload === "You already have an active session for this exam") {
+            Swal.fire({
+              title: "Warning!",
+              text: "You already have an active session. Resuming your previous exam.",
+              icon: "warning",
+              confirmButtonText: "Proceed",
+            });
+            // Navigate to the exam page even if this error occurs
+            navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
+          } else {
+            // Handle other errors normally
+            Swal.fire({
+              title: "Error!",
+              text: action.payload || "Failed to start the exam.",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          }
+        }
+      });
+      
+      
+
   };
 
   // Pagination logic
