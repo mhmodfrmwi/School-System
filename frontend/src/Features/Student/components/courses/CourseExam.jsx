@@ -261,13 +261,18 @@ const ExamsSection = () => {
                                         disabled={
                                             new Date() < new Date(exam.start_time) ||
                                             new Date() > new Date(exam.end_time) ||
-                                            (sessions.find(session => session.exam_id._id === exam._id)?.status === "Expired")
+                                            (sessions.find(session => session.exam_id._id === exam._id)?.isExpired === true) ||
+                                            (sessions.find(session => session.exam_id._id === exam._id)?.status === "Submitted")
                                         }
                                     >
-                                        {sessions.find(session => session.exam_id._id === exam._id)?.status === "Expired" ? "Expired" :
-                                            new Date() < new Date(exam.start_time) ? "Not Started" :
-                                                new Date() > new Date(exam.end_time) ? "Exam Ended" :
-                                                    "Start Exam"}
+                                    {(() => {
+                                    const session = sessions.find(session => session.exam_id._id === exam._id);
+                                    if (session?.isExpired === true) return "Expired";
+                                    if (session?.status === "Submitted") return "Submitted";
+                                    if (new Date() < new Date(exam.start_time)) return "Not Started";
+                                    if (new Date() > new Date(exam.end_time)) return "Exam Ended";
+                                    return "Start Exam";
+                                    })()}
                                     </Button>
                                 </div>
                             </CardContent>

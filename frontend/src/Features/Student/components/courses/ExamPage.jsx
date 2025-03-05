@@ -25,10 +25,9 @@ const StudentExamPage = () => {
     });
     dispatch(fetchSessions()); 
   }, [dispatch, examId]);
-
   useEffect(() => {
     const activeSession = sessions.find(session => 
-      session.exam_id._id === examId && session.status === "In Progress"
+      session.exam_id._id === examId && session.isExpired === false
     );
 
     if (activeSession) {
@@ -54,16 +53,17 @@ const StudentExamPage = () => {
   };
 
   const handleSubmitExam = useCallback(() => {
-    const activeSession = sessions.find(
-      (session) => session.exam_id._id === examId && session.status === "In Progress"
+    const activeSession = sessions.find((session) =>
+      session.exam_id._id === examId &&
+      session.isExpired === false &&
+      (session?.status ? session.status !== "Submitted" : true) // Check status only if it exists
     );
   
     if (!activeSession) {
-      console.error("No active session found!");
       Swal.fire({
-        title: "Error!",
-        text: "No active session found. Please start the exam first.",
-        icon: "error",
+        title: "No Active Session",
+        text: "Either the exam is already submitted or the session has expired.",
+        icon: "warning",
         confirmButtonText: "OK",
       });
       return;
@@ -99,7 +99,7 @@ const StudentExamPage = () => {
         });
       });
   }, [dispatch, sessions, examId, answers, gradeSubjectSemesterId, navigate]);
-
+  
 
 
   useEffect(() => {
