@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchExams,
@@ -71,31 +71,47 @@ const ExamsSection = () => {
     }
   }, [error, dispatch]);
 
-  // Categorize and sort exams for the "All" tab
-  const categorizeAndSortExams = (exams) => {
-    const now = new Date();
-    // Create a copy of the exams array to avoid mutating the original
-    const sortedExams = [...exams].sort((a, b) => {
-      const aStart = new Date(a.start_time);
-      const aEnd = new Date(a.end_time);
-      const bStart = new Date(b.start_time);
-      const bEnd = new Date(b.end_time);
+ // Categorize and sort exams for the "All" tab
+const categorizeAndSortExams = useCallback(
+    (exams) => {
+      const now = new Date();
 
-      // Upcoming exams (start time is in the future)
-      if (aStart > now && bStart <= now) return -1;
-      if (bStart > now && aStart <= now) return 1;
+      return [...exams].sort((a, b) => {
+        const aStart = new Date(a.start_time);
+        const aEnd = new Date(a.end_time);
+        const bStart = new Date(b.start_time);
+        const bEnd = new Date(b.end_time);
 
-      // Active exams (start time is in the past, end time is in the future)
-      if (aStart <= now && aEnd > now && (bStart > now || bEnd <= now)) return -1;
-      if (bStart <= now && bEnd > now && (aStart > now || aEnd <= now)) return 1;
+        // Check if the exam is active (started but not ended)
+        const isAActive = aStart <= now && aEnd > now;
+        const isBActive = bStart <= now && bEnd > now;
 
-      // Completed/missed exams (end time is in the past)
-      return bEnd - aEnd; // Sort by end time (most recent first)
-    });
+        // Check if the exam is submitted or expired
+        const aSession = sessions.find((session) => session.exam_id._id === a._id);
+        const bSession = sessions.find((session) => session.exam_id._id === b._id);
+        const isASubmittedOrExpired = aSession?.status === "Submitted" || aSession?.isExpired === true;
+        const isBSubmittedOrExpired = bSession?.status === "Submitted" || bSession?.isExpired === true;
 
-    return sortedExams;
-  };
+        // Priority 1: Active exams that are not submitted or expired
+        if (isAActive && !isASubmittedOrExpired && !(isBActive && !isBSubmittedOrExpired)) return -1;
+        if (isBActive && !isBSubmittedOrExpired && !(isAActive && !isASubmittedOrExpired)) return 1;
 
+        // Priority 2: Not started exams
+        if (aStart > now && bStart <= now) return -1;
+        if (bStart > now && aStart <= now) return 1;
+
+        // Priority 3: Active exams that are submitted or expired
+        if (isAActive && isASubmittedOrExpired && !(isBActive && isBSubmittedOrExpired)) return -1;
+        if (isBActive && isBSubmittedOrExpired && !(isAActive && isASubmittedOrExpired)) return 1;
+
+        // Priority 4: Completed or missed exams
+        return bEnd - aEnd; // Sort by end time (most recent first)
+      });
+    },
+    [sessions] // sessions is a dependency because it's used inside the function
+  );
+
+  // Update filteredExams when activeTab, exams, or sessions change
   useEffect(() => {
     let examsToDisplay = [];
     if (activeTab === "all") {
@@ -108,7 +124,8 @@ const ExamsSection = () => {
       examsToDisplay = missedExams;
     }
     setFilteredExams(examsToDisplay);
-  }, [activeTab, exams, upcomingExams, completedExams, missedExams]);
+  }, [activeTab, exams, upcomingExams, completedExams, missedExams, categorizeAndSortExams]);
+
 
   const handleStartExam = (exam) => {
     const now = new Date();
@@ -384,25 +401,37 @@ const ExamsSection = () => {
                   }
                 >
                   <Button
-                    variant="solid"
-                    className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
-                    onClick={() => handleStartExam(exam)}
-                    disabled={
-                      new Date() < new Date(exam.start_time) ||
-                      new Date() > new Date(exam.end_time) ||
-                      (sessions.find((session) => session.exam_id._id === exam._id)?.isExpired === true) ||
-                      (sessions.find((session) => session.exam_id._id === exam._id)?.status === "Submitted")
-                    }
-                  >
-                    {(() => {
-                      const session = sessions.find((session) => session.exam_id._id === exam._id);
-                      if (session?.status === "Submitted") return "Submitted";
-                      if (session?.isExpired === true) return "Expired";
-                      if (new Date() < new Date(exam.start_time)) return "Not Started";
-                      if (new Date() > new Date(exam.end_time)) return "Exam Ended";
-                      return "Start Exam";
-                    })()}
-                  </Button>
+  variant="solid"
+  className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
+  onClick={() => {
+    const session = sessions.find((session) => session.exam_id._id === exam._id);
+    if (
+      session?.status === "Submitted" ||
+      session?.isExpired === true 
+    ) {
+      // Navigate to the results page
+      navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/result/${exam._id}`);
+    } else {
+      // Handle starting the exam
+      handleStartExam(exam);
+    }
+  }}
+  disabled={
+    (new Date() > new Date(exam.end_time) && !sessions.find((session) => session.exam_id._id === exam._id)) ||
+    new Date() < new Date(exam.start_time) ||
+    exam.type === "Offline"
+  }
+>
+  {(() => {
+    if (exam.type === "Offline") return "Offline";
+    const session = sessions.find((session) => session.exam_id._id === exam._id);
+    if (session?.status === "Submitted") return "View";
+    if (session?.isExpired === true) return "View";
+    if (new Date() < new Date(exam.start_time)) return "Not Started";
+    if (new Date() > new Date(exam.end_time)) return "Exam Ended";
+    return "Start Exam";
+  })()}
+</Button>
                 </div>
               </CardContent>
             </Card>

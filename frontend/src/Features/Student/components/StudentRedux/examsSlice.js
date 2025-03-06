@@ -134,7 +134,7 @@ export const submitExam = createAsyncThunk(
         }
       });
 
-      return { ...data, score };
+      return { ...data, score: score || 0 };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -245,6 +245,33 @@ export const fetchCompletedExams = createAsyncThunk(
     }
   }
 );
+export const fetchExamResult = createAsyncThunk(
+  "exams/fetchExamResult",
+  async (examId, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch(
+        `http://localhost:3000/exams/student/exam/${examId}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch exam result");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 const examsSlice = createSlice({
   name: "exams",
@@ -263,6 +290,7 @@ const examsSlice = createSlice({
     loadingExamById: false,
     loading: false,
     error: null,
+    examResult: null,
   },
   reducers: {
     clearError: (state) => {
@@ -283,6 +311,7 @@ const examsSlice = createSlice({
       state.loadingExamById = false;
       state.loading = false;
       state.error = null;
+      state.examResult = null;
     },
   },
   extraReducers: (builder) => {
@@ -383,6 +412,17 @@ const examsSlice = createSlice({
       })
       .addCase(fetchCompletedExams.rejected, (state, action) => {
         state.loadingExams = false;
+        state.error = action.payload;
+      }).addCase(fetchExamResult.pending, (state) => {
+        state.loadingResult = true;
+        state.error = null;
+      })
+      .addCase(fetchExamResult.fulfilled, (state, action) => {
+        state.loadingResult = false;
+        state.examResult = action.payload;
+      })
+      .addCase(fetchExamResult.rejected, (state, action) => {
+        state.loadingResult = false;
         state.error = action.payload;
       });
   },

@@ -94,6 +94,7 @@ const StudentQuestionBank = lazy(() => import("./Features/Student/components/cou
 const StudentQuestionDetailes = lazy(() => import("./Features/Student/components/courses/QuestionsDetailes"),);
 const StudentExams = lazy(() => import("./Features/Student/components/courses/CourseExam"),);
 const StudentExamPage = lazy(() => import("./Features/Student/components/courses/ExamPage"),);
+const StudentExamResultPage = lazy(() => import("./Features/Student/components/courses/StudentExamResultPage"),);
 const AttendancePage = lazy(() => import("./Features/Student/components/Attendance/AttendancePage"),);
 const MaterialDetails = lazy(() => import("./Features/Student/components/courses/MaterialDetails"),);
 
@@ -352,6 +353,10 @@ function App() {
               path="allcourses/exams/:gradeSubjectSemesterId/:examId"
               element={<StudentExamPage />}
             />
+            <Route
+          path="allcourses/exams/:gradeSubjectSemesterId/result/:examId"
+          element={<StudentExamResultPage />}
+        />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
