@@ -1,21 +1,94 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchExamsForTeacher, deleteExam } from "../../TeacherRedux/ExamSlice"; // Import the appropriate slice
+import { fetchExamsForTeacher, deleteExam } from "../../TeacherRedux/ExamSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrashAlt, faEye, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+// Helper function to format the start and end time
+const formatStartTime = (startTime) => {
+    const date = new Date(startTime);
+    const formattedDate = date.toISOString().split('T')[0];
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `${formattedDate} (${formattedTime})`;
+};
+
+// Reusable ExamCard component
+const ExamCard = ({ exam, onView, onEdit, onDelete }) => {
+    // Determine the color based on the exam type
+    const typeColor = exam.type === "Online" ? "text-green-600" : "text-red-600";
+
+    return (
+        <div className="p-6 bg-slate-50 rounded-xl shadow-md border border-[#117C90] hover:shadow-lg transition-shadow duration-300">
+            <h2 className="text-2xl font-bold text-[#244856] mb-2">{exam.title}</h2>
+            <p className="text-sm text-gray-600 mb-4">{exam.description}</p>
+            <hr className="mb-7"></hr>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+                <div className="flex items-center space-x-1">
+                    <span className="text-sm font-semibold text-gray-700">Duration:</span>
+                    <span className="text-sm text-gray-600">{exam.duration} mins</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <span className="text-sm font-semibold text-gray-700">Total Marks:</span>
+                    <span className="text-sm text-gray-600">{exam.total_marks}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <span className="text-sm font-semibold text-gray-700">Start:</span>
+                    <span className="text-sm text-gray-600">{formatStartTime(exam.start_time)}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <span className="text-sm font-semibold text-gray-700">End:</span>
+                    <span className="text-sm text-gray-600">{formatStartTime(exam.end_time)}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <span className="text-lg font-semibold text-gray-700">Type:</span>
+                    <span className={`text-sm font-semibold ${typeColor}`}>{exam.type}</span>
+                </div>
+            </div>
+            <div className="flex justify-end space-x-4">
+                <button
+                    aria-label="View Exam"
+                    className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
+                    onClick={onView}
+                >
+                    <FontAwesomeIcon icon={faEye} className="text-xl" />
+                </button>
+                <button
+                    aria-label="Edit Exam"
+                    className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
+                    onClick={onEdit}
+                >
+                    <FontAwesomeIcon icon={faEdit} className="text-xl" />
+                </button>
+                <button
+                    aria-label="Delete Exam"
+                    className="text-[#E74833] hover:text-[#244856] transition-colors duration-300"
+                    onClick={onDelete}
+                >
+                    <FontAwesomeIcon icon={faTrashAlt} className="text-xl" />
+                </button>
+            </div>
+        </div>
+    );
+};
 
 const SeeMyExams = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { exams, loading, error } = useSelector((state) => state.exam);
 
-    const { exams } = useSelector((state) => state.exam);
-
+    // Fetch exams on component mount
     useEffect(() => {
-        dispatch(fetchExamsForTeacher());
+        dispatch(fetchExamsForTeacher())
+            .unwrap()
+            .catch((error) => {
+                toast.error(error.message || "Failed to fetch exams");
+            });
     }, [dispatch]);
 
+    // Handle exam deletion
     const handleDeleteExam = async (examId) => {
         if (window.confirm("Are you sure you want to delete this exam?")) {
             try {
@@ -28,93 +101,55 @@ const SeeMyExams = () => {
         }
     };
 
+    // Handle exam editing
     const handleEditExam = (examId) => {
         navigate(`/teacher/exams/${examId}`);
     };
 
+    // Handle viewing exam details
     const handleViewExam = (examId) => {
         navigate(`/teacher/exam-details/${examId}`);
     };
 
-    
-    return (
-        <div className="flex flex-col p-4">
-            <div className="flex-1">
-                <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-full">
-                    <div className="flex flex-col p-0">
-                        <div className="flex-1">
-                            <div className="mx-auto w-full p-0">
-                                <div className="flex ml-8 flex-col">
-                                    <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                                        My Exams
-                                    </h1>
-                                    <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
-                                </div>
+    // Display loading state
+    if (loading) {
+        return <p className="text-center text-lg font-semibold">Loading...</p>;
+    }
 
-                                <div className="relative w-full px-4 sm:px-6 lg:px-8 font-poppins">
-                                    <div className="mt-7">
-                                        <div className="overflow-x-auto">
-                                            <table className="min-w-full table-auto border-collapse border-2 border-[#117C90] border-re rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
-                                                <thead className="bg-[#117C90] text-white">
-                                                    <tr>
-                                                        <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">#</th>
-                                                        <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Title</th>
-                                                        <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Description</th>
-                                                        <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Duration</th>
-                                                        <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Total Marks</th>
-                                                        <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {exams && exams.length > 0 ? (
-                                                        exams.map((exam, index) => (
-                                                            <tr
-                                                                key={exam._id}
-                                                                className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
-                                                            >
-                                                                <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{index + 1}</td>
-                                                                <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{exam.title}</td>
-                                                                <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{exam.description}</td>
-                                                                <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{exam.duration}</td>
-                                                                <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{exam.total_marks}</td>
-                                                                <td className="flex space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
-                                                                    <button
-                                                                        className="text-[#117C90] transition duration-300 hover:text-[#244856]"
-                                                                        onClick={() => handleViewExam(exam._id)}
-                                                                    >
-                                                                        <FontAwesomeIcon icon={faEye} className="text-md" />
-                                                                    </button>
-                                                                    <button
-                                                                        className="text-[#117C90] transition duration-300 hover:text-[#244856]"
-                                                                        onClick={() => handleEditExam(exam._id)}
-                                                                    >
-                                                                        <FontAwesomeIcon icon={faEdit} className="text-md" />
-                                                                    </button>
-                                                                    <button
-                                                                        className="text-[#E74833] transition duration-300 hover:text-[#244856]"
-                                                                        onClick={() => handleDeleteExam(exam._id)}
-                                                                    >
-                                                                        <FontAwesomeIcon icon={faTrashAlt} className="text-md" />
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        ))
-                                                    ) : (
-                                                        <tr>
-                                                            <td colSpan="5" className="text-center font-poppins py-9">
-                                                                No Exams Found
-                                                            </td>
-                                                        </tr>
-                                                    )}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    // Display error state
+    if (error) {
+        return <p className="text-center text-lg font-semibold text-red-500">{error}</p>;
+    }
+
+    return (
+        <div className="p-6 space-y-6">
+            <h1 className="text-3xl font-bold font-poppins text-[#244856]">My Exams</h1>
+            <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
+            <div className="grid font-poppins gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
+                {exams && exams.length > 0 ? (
+                    exams.map((exam) => (
+                        <ExamCard
+                            key={exam._id}
+                            exam={exam}
+                            onView={() => handleViewExam(exam._id)}
+                            onEdit={() => handleEditExam(exam._id)}
+                            onDelete={() => handleDeleteExam(exam._id)}
+                        />
+                    ))
+                ) : (
+                    <div className="col-span-full flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg">
+                        <FontAwesomeIcon
+                            icon={faCalendar}
+                            className="text-6xl text-gray-400 mb-4"
+                        />
+                        <p className="text-xl font-semibold text-gray-600 mb-2">
+                            No Exams Found
+                        </p>
+                        <p className="text-gray-500 text-center max-w-xl">
+                            It seems like there are no exams available at the moment.
+                        </p>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

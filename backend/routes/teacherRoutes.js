@@ -59,6 +59,10 @@ const{
   getTeachersWithPointsAndBadges,
   getTeacherWithPointsAndBadges
 }= require("../controllers/Teacher/teacherRewardsController");
+const{
+  getGradeData,
+  uploadGrades,
+}= require("../controllers/Teacher/subjectScore");
 
 const router = express.Router();
 router.post("/login", login);
@@ -176,4 +180,16 @@ router.get("/teacher-points",
   validateTeacher,
   getTeacherWithPointsAndBadges
 );
+router.get("/exam-score/:classId/:gradeSubjectSemesterId/students",
+  validateJwt,
+  validateTeacher,
+  getGradeData
+);
+
+router.post("/exam-score/:classId/:gradeSubjectSemesterId",
+  validateJwt,
+  validateTeacher,
+  uploadGrades
+);
+
 module.exports = router;

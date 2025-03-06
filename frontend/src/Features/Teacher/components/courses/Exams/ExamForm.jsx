@@ -8,12 +8,12 @@ import 'react-toastify/dist/ReactToastify.css';
 const ExamForm = () => {
   const dispatch = useDispatch();
   const { classId, gradeSubjectSemesterId } = useParams();
-  const { status, error } = useSelector((state) => state.exam);
+  const { status} = useSelector((state) => state.exam);
 
   const [examData, setExamData] = useState({
     title: '',
     description: '',
-    type: 'Online', // القيمة الافتراضية
+    type: 'Online', // Default value
     start_time: '',
     end_time: '',
     duration: 0,
@@ -29,46 +29,46 @@ const ExamForm = () => {
     ],
   });
 
-  // دالة لحساب مجموع درجات الأسئلة
+  // Function to calculate total marks of questions
   const calculateTotalQuestionMarks = (questions) => {
     return questions.reduce((sum, question) => sum + (Number(question.marks) || 0), 0);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // التحقق من أن الوقت المحدد لم يمر بعد
+
+    // Validate time
     const currentTime = new Date();
     const startTime = new Date(examData.start_time);
     const endTime = new Date(examData.end_time);
-  
+
     if (startTime <= currentTime) {
       toast.error('Start time must be in the future');
       return;
     }
-  
+
     if (endTime <= currentTime) {
       toast.error('End time must be in the future');
       return;
     }
-  
+
     if (endTime <= startTime) {
       toast.error('End time must be after start time');
       return;
     }
-  
-    // التحقق من الحقول المطلوبة
+
+    // Validate required fields
     if (
       !examData.title ||
       !examData.start_time ||
       !examData.end_time ||
-      (examData.type === 'Online' && examData.exam_questions.length === 0) // التحقق من الأسئلة فقط إذا كان النوع Online
+      (examData.type === 'Online' && examData.exam_questions.length === 0) // Validate questions only for Online exams
     ) {
       toast.error('Please fill in all required fields');
       return;
     }
-  
-    // التحقق من أن مجموع درجات الأسئلة يساوي total_marks (فقط إذا كان النوع Online)
+
+    // Validate total marks for Online exams
     if (examData.type === 'Online') {
       const totalQuestionMarks = calculateTotalQuestionMarks(examData.exam_questions);
       if (totalQuestionMarks !== examData.total_marks) {
@@ -76,49 +76,49 @@ const ExamForm = () => {
         return;
       }
     }
-  
-    // التحقق من صحة كل سؤال (فقط إذا كان النوع Online)
+
+    // Validate each question for Online exams
     const updatedQuestions = examData.exam_questions.map((q) => {
       if (!q.question_text || !q.marks) {
         toast.error('Please fill in all required fields for each question');
         throw new Error('Invalid question data');
       }
-  
+
       if (q.question_type === 'MCQ' && (!q.options || q.options.length < 2)) {
         toast.error('MCQ questions require at least 2 options');
         throw new Error('Invalid question data');
       }
-  
+
       return {
         ...q,
         marks: Number(q.marks),
       };
     });
-  
-    // إعداد البيانات للإرسال
+
+    // Prepare payload
     const formattedStartTime = new Date(examData.start_time).toISOString();
     const formattedEndTime = new Date(examData.end_time).toISOString();
     const token = sessionStorage.getItem('token');
     const decodedToken = JSON.parse(atob(token.split('.')[1]));
     const created_by = decodedToken.id;
-  
+
     const payload = {
       ...examData,
       start_time: formattedStartTime,
       end_time: formattedEndTime,
-      exam_questions: examData.type === 'Online' ? updatedQuestions : [], // إرسال الأسئلة فقط إذا كان النوع Online
+      exam_questions: examData.type === 'Online' ? updatedQuestions : [], // Include questions only for Online exams
       created_by,
     };
-  
+
     try {
-      // إرسال البيانات
+      // Submit data
       await dispatch(
         createExam({ formData: payload, classId, gradeSubjectSemesterId })
       ).unwrap();
-  
+
       toast.success('Exam created successfully!');
-  
-      // إعادة تعيين الحقول
+
+      // Reset form
       setExamData({
         title: '',
         description: '',
@@ -138,22 +138,32 @@ const ExamForm = () => {
         ],
       });
     } catch (error) {
-      toast.error(`Failed to create exam: ${error.message}`);
+      toast.error(`Failed to create exam: ${error.message || error.err || error}`);
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setExamData({
-      ...examData,
-      [name]: name === 'duration' || name === 'total_marks' ? parseInt(value, 10) : value,
-    });
+
+    // If type is changed to "Offline", reset exam_questions
+    if (name === 'type' && value === 'Offline') {
+      setExamData({
+        ...examData,
+        [name]: value,
+        exam_questions: [], // Clear exam_questions
+      });
+    } else {
+      setExamData({
+        ...examData,
+        [name]: name === 'duration' || name === 'total_marks' ? parseInt(value, 10) : value,
+      });
+    }
   };
 
   const handleQuestionChange = (e, index) => {
     const { name, value } = e.target;
     const updatedQuestions = [...examData.exam_questions];
-  
+
     if (name === 'options') {
       updatedQuestions[index] = {
         ...updatedQuestions[index],
@@ -165,7 +175,7 @@ const ExamForm = () => {
         [name]: value,
       };
     }
-  
+
     setExamData({ ...examData, exam_questions: updatedQuestions });
   };
 
@@ -196,7 +206,7 @@ const ExamForm = () => {
 
       <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
         <form onSubmit={handleSubmit} className="space-y-4 font-poppins">
-          {/* حقول تفاصيل الامتحان */}
+          {/* Exam details fields */}
           <div>
             <label className="block font-medium">Title:</label>
             <input
@@ -278,12 +288,12 @@ const ExamForm = () => {
             </div>
           </div>
 
-          {/* عرض الأسئلة فقط إذا كان النوع Online */}
+          {/* Show questions only for Online exams */}
           {examData.type === 'Online' && (
             <>
               {examData.exam_questions.map((q, index) => (
                 <div key={index} className="p-4 border border-gray-300 rounded-lg mb-4">
-                  <h3 className="font-medium mb-2">Question {index + 1}</h3>
+                  <h3 className="font-bold text-[#244856] mb-2">Question {index + 1}</h3>
                   <div>
                     <label className="block font-medium">Question Text:</label>
                     <input
@@ -338,7 +348,7 @@ const ExamForm = () => {
                 </div>
               ))}
 
-              {/* زر إضافة سؤال جديد (فقط إذا كان النوع Online) */}
+              {/* Add new question button (only for Online exams) */}
               <button
                 type="button"
                 onClick={addNewQuestion}
@@ -349,7 +359,7 @@ const ExamForm = () => {
             </>
           )}
 
-          {/* زر الإرسال */}
+          {/* Submit button */}
           <button
             type="submit"
             disabled={status === 'loading'}
@@ -357,7 +367,6 @@ const ExamForm = () => {
           >
             {status === 'loading' ? 'Creating Exam...' : 'Create Exam'}
           </button>
-          {error && <p className="text-red-500">{error}</p>}
         </form>
       </div>
     </>

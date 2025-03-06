@@ -134,7 +134,7 @@ export const submitExam = createAsyncThunk(
         }
       });
 
-      return { ...data, score };
+      return { ...data, score: score || 0 };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -165,20 +165,132 @@ export const fetchSessions = createAsyncThunk(
   }
 );
 
+export const fetchUpcomingExams = createAsyncThunk(
+  "exams/fetchUpcomingExams",
+  async ({ gradeSubjectSemesterId, classId }, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch(
+        `http://localhost:3000/exams?gradeSubjectSemesterId=${gradeSubjectSemesterId}&upcoming=true`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch upcoming exams");
+      }
+
+      return data.exams;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchMissedExams = createAsyncThunk(
+  "exams/fetchMissedExams",
+  async ({ gradeSubjectSemesterId, classId }, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch(
+        `http://localhost:3000/exams/student/missed?gradeSubjectSemesterId=${gradeSubjectSemesterId}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch missed exams");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchCompletedExams = createAsyncThunk(
+  "exams/fetchCompletedExams",
+  async ({ gradeSubjectSemesterId, classId }, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch(
+        `http://localhost:3000/exams/student/completed?gradeSubjectSemesterId=${gradeSubjectSemesterId}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch completed exams");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const fetchExamResult = createAsyncThunk(
+  "exams/fetchExamResult",
+  async (examId, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) return rejectWithValue("No token found");
+
+      const response = await fetch(
+        `http://localhost:3000/exams/student/exam/${examId}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch exam result");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 const examsSlice = createSlice({
   name: "exams",
   initialState: {
     exams: [],
+    completedExams: [], 
+    missedExams: [],
+    upcomingExams: [],
     sessions: [],
     currentSession: null,
-    currentExam: null, 
+    currentExam: null,
     score: null,
-    formattedAvailableTime: null, 
+    formattedAvailableTime: null,
     loadingExams: false,
     loadingSessions: false,
-    loadingExamById: false, 
+    loadingExamById: false,
     loading: false,
     error: null,
+    examResult: null,
   },
   reducers: {
     clearError: (state) => {
@@ -186,16 +298,20 @@ const examsSlice = createSlice({
     },
     resetState: (state) => {
       state.exams = [];
+      state.completedExams = [];
+      state.missedExams = [];
+      state.upcomingExams = [];
       state.sessions = [];
       state.currentSession = null;
-      state.currentExam = null; 
+      state.currentExam = null;
       state.score = null;
-      state.formattedAvailableTime = null; 
+      state.formattedAvailableTime = null;
       state.loadingExams = false;
       state.loadingSessions = false;
-      state.loadingExamById = false; 
+      state.loadingExamById = false;
       state.loading = false;
       state.error = null;
+      state.examResult = null;
     },
   },
   extraReducers: (builder) => {
@@ -260,6 +376,53 @@ const examsSlice = createSlice({
       })
       .addCase(submitExam.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchUpcomingExams.pending, (state) => {
+        state.loadingExams = true;
+        state.error = null;
+      })
+      .addCase(fetchUpcomingExams.fulfilled, (state, action) => {
+        state.loadingExams = false;
+        state.upcomingExams = Array.isArray(action.payload) ? action.payload : [];
+      })
+      .addCase(fetchUpcomingExams.rejected, (state, action) => {
+        state.loadingExams = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchMissedExams.pending, (state) => {
+        state.loadingExams = true;
+        state.error = null;
+      })
+      .addCase(fetchMissedExams.fulfilled, (state, action) => {
+        state.loadingExams = false;
+        state.missedExams = Array.isArray(action.payload) ? action.payload : [];
+      })
+      .addCase(fetchMissedExams.rejected, (state, action) => {
+        state.loadingExams = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchCompletedExams.pending, (state) => {
+        state.loadingExams = true;
+        state.error = null;
+      })
+      .addCase(fetchCompletedExams.fulfilled, (state, action) => {
+        state.loadingExams = false;
+        state.completedExams = Array.isArray(action.payload) ? action.payload : [];
+      })
+      .addCase(fetchCompletedExams.rejected, (state, action) => {
+        state.loadingExams = false;
+        state.error = action.payload;
+      }).addCase(fetchExamResult.pending, (state) => {
+        state.loadingResult = true;
+        state.error = null;
+      })
+      .addCase(fetchExamResult.fulfilled, (state, action) => {
+        state.loadingResult = false;
+        state.examResult = action.payload;
+      })
+      .addCase(fetchExamResult.rejected, (state, action) => {
+        state.loadingResult = false;
         state.error = action.payload;
       });
   },

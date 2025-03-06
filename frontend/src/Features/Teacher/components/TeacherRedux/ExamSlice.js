@@ -178,7 +178,7 @@ const examSlice = createSlice({
       .addCase(deleteExam.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.exams = state.exams.filter(exam => exam._id !== action.payload); 
-       
+        toast.success("Exam deleted successfully");
         state.loading = false;
       })
       .addCase(deleteExam.rejected, (state, action) => {
@@ -192,11 +192,11 @@ const examSlice = createSlice({
       })
       .addCase(updateExam.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        toast.success("Exam updated successfully");
         const updatedExams = state.exams.map(exam =>
           exam._id === action.payload._id ? action.payload : exam
         );
         state.exams = updatedExams;
+        toast.success("Exam updated successfully");
         state.loading = false;
       })
       .addCase(updateExam.rejected, (state, action) => {
