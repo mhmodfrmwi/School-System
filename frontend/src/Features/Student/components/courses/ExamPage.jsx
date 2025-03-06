@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { submitExam, fetchExamById, fetchSessions } from "../../components/StudentRedux/examsSlice";
@@ -17,6 +17,7 @@ const StudentExamPage = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [formattedAvailableTime, setFormattedAvailableTime] = useState("Calculating...");
   const [isSubmitted, setIsSubmitted] = useState(false); // Track submission status
+  const isSubmittedRef = useRef(false); // Ref to track submission status
 
   // Fetch exam and sessions
   useEffect(() => {
@@ -62,15 +63,40 @@ const StudentExamPage = () => {
   // Handle exam submission (with automatic flag)
   const handleSubmitExam = useCallback(
     (isAutomatic = false) => {
-      if (isSubmitted) return; // Prevent multiple submissions
-
+      if (isSubmittedRef.current) {
+        console.log("Exam already submitted. Aborting.");
+        return;
+      }
+  
+      // Check if all questions are answered (only for manual submission)
+      if (!isAutomatic) {
+        const allQuestions = currentExam.exam.exam_questions;
+        const unansweredQuestions = allQuestions.filter((question) => {
+          const existingAnswer = answers.find((answer) => answer.question_id === question._id);
+          return !existingAnswer || existingAnswer.selected_answer === "";
+        });
+  
+        if (unansweredQuestions.length > 0) {
+          Swal.fire({
+            title: "Incomplete Exam",
+            text: "Please answer all questions before submitting.",
+            icon: "warning",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+      }
+  
+      isSubmittedRef.current = true; // Mark as submitted using ref
+      setIsSubmitted(true); // Update state for UI
+  
       const activeSession = sessions.find(
         (session) =>
           session.exam_id._id === examId &&
           (isAutomatic || session.isExpired === false) &&
           session?.status !== "Submitted"
       );
-
+  
       if (!activeSession) {
         Swal.fire({
           title: "No Active Session",
@@ -80,11 +106,9 @@ const StudentExamPage = () => {
         });
         return;
       }
-
-      setIsSubmitted(true); // Mark as submitted
-
+  
       const sessionId = activeSession._id;
-
+  
       // Ensure all questions are included (even unanswered ones)
       const allAnswers = currentExam.exam.exam_questions.map((question) => {
         const existingAnswer = answers.find((answer) => answer.question_id === question._id);
@@ -93,7 +117,10 @@ const StudentExamPage = () => {
           selected_answer: existingAnswer ? existingAnswer.selected_answer : "",
         };
       });
-
+  
+      console.log("Submitting answers for session:", sessionId);
+      console.log("Answers:", allAnswers);
+  
       // Submit the exam
       dispatch(submitExam({ sessionId, answers: allAnswers }))
         .then((action) => {
@@ -117,13 +144,13 @@ const StudentExamPage = () => {
           });
         });
     },
-    [dispatch, sessions, examId, answers, gradeSubjectSemesterId, navigate, currentExam, isSubmitted]
+    [dispatch, sessions, examId, answers, gradeSubjectSemesterId, navigate, currentExam]
   );
 
   // Timer countdown (Auto-submit when time is up)
   useEffect(() => {
     let timer;
-    if (timeLeft > 0) {
+    if (timeLeft > 0 && !isSubmittedRef.current) {
       timer = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 10) {
