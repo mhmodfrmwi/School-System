@@ -32,14 +32,6 @@ const startSession = async (req, res) => {
       return res.status(403).json({ message: "Exam is closed" });
     }
 
-    // Check if the session end time exceeds the exam end time
-    if (moment(end_time).isAfter(exam_end_time)) {
-      return res.status(403).json({
-        message:
-          "Session cannot be started because it exceeds the exam end time",
-      });
-    }
-
     // Check if the student already has an active session for this exam
     const existingSession = await Session.findOne({
       exam_id,
