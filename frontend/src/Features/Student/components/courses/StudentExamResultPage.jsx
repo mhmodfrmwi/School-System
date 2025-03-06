@@ -1,19 +1,20 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { fetchExamResult } from "../../components/StudentRedux/examsSlice"; // Adjust the import path as needed
-import { FaSpinner } from "react-icons/fa";
-import { Card, CardContent } from "@/components/ui/card"; // Assuming you're using a UI library like Shadcn
-import { Button } from "@/components/ui/button"; // Adjust imports based on your UI library
+import { useParams, useNavigate } from "react-router-dom";
+import { fetchExamResult } from "../../components/StudentRedux/examsSlice";
+import { FaSpinner, FaCheck, FaTimes } from "react-icons/fa";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const ExamResultPage = () => {
   const dispatch = useDispatch();
-  const { examId } = useParams(); // Get the examId from the URL
+  const { examId } = useParams();
+  const navigate = useNavigate();
   const { examResult, loadingResult, error } = useSelector((state) => state.exams);
 
   // Fetch the exam result when the component mounts
   useEffect(() => {
-    dispatch(fetchExamResult(examId)); // Use examId to fetch the result
+    dispatch(fetchExamResult(examId));
   }, [dispatch, examId]);
 
   // Loading state
@@ -29,88 +30,154 @@ const ExamResultPage = () => {
   // Error state
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-red-500">
-        <p className="text-lg font-semibold">Error: {error}</p>
+      <div className="flex flex-col items-center justify-center min-h-screen text-red-500">
+        <h2 className="text-2xl font-semibold mb-4">Error!</h2>
+        <p className="text-lg">{error.message || "An error occurred while loading the exam result."}</p>
+        <Button
+          className="mt-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:from-[#CF72C0] hover:to-[#FD813D] transition-all duration-300"
+          onClick={() => navigate(-1)}
+        >
+          Go Back
+        </Button>
       </div>
     );
   }
-
-  // If no exam result is found
+  
   if (!examResult) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-gray-500">
-        <p className="text-lg font-semibold">No exam result found.</p>
+      <div className="flex flex-col items-center justify-center min-h-screen text-gray-500">
+        <h2 className="text-2xl font-semibold mb-4">No Exam Result</h2>
+        <p className="text-lg">No exam result was found.</p>
+        <Button
+          className="mt-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:from-[#CF72C0] hover:to-[#FD813D] transition-all duration-300"
+          onClick={() => navigate(-1)}
+        >
+          Go Back
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col font-poppins gap-6 w-[95%] mx-auto mt-10 mb-20">
-      {/* Page Header */}
-      <div className="w-full flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
+    <div className="font-poppins mt-20 mb-20 min-h-[75vh] w-[75%] mx-auto">
+      {/* Header */}
+      <div className="w-full flex justify-between items-center mb-8">
+        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
           Exam Result
+          <span className="absolute left-0 bottom-[-9px] w-[50%] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
         </h1>
         <Button
           variant="solid"
-          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
-          onClick={() => window.history.back()} // Navigate back to the previous page
+          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:from-[#CF72C0] hover:to-[#FD813D] transition-all duration-300"
+          onClick={() => navigate(-1)}
         >
           Back
         </Button>
       </div>
 
-      {/* Exam Summary Card */}
-      <Card className="border border-gray-200 rounded-xl shadow-sm">
-        <CardContent className="p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Exam Summary</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-gray-600">Total Marks</p>
-              <p className="text-lg font-semibold text-gray-800">{examResult.result.total_marks}</p>
-            </div>
-            <div>
-              <p className="text-gray-600">Percentage</p>
-              <p className="text-lg font-semibold text-gray-800">{examResult.result.percentage}%</p>
-            </div>
-            <div>
-              <p className="text-gray-600">Status</p>
-              <p
-                className={`text-lg font-semibold ${
-                  examResult.result.status === "Pass" ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {examResult.result.status}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Saved Answers Section */}
-      <div className="w-full space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">Your Answers</h2>
-        {examResult.savedAnswers.length > 0 ? (
-          examResult.savedAnswers.map((answer, index) => (
-            <Card key={answer._id} className="border border-gray-200 rounded-xl shadow-sm">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Question {index + 1}: {answer.question_id.question_text}
-                </h3>
-                <div className="mt-4 space-y-2">
-                  <p className="text-gray-600">Selected Answer</p>
-                  <p className="text-gray-800 font-medium">{answer.selected_answer}</p>
-                  <p className="text-gray-600">Correct Answer</p>
-                  <p className="text-gray-800 font-medium">{answer.question_id.correct_answer}</p>
-                  <p className="text-gray-600">Marks Awarded</p>
-                  <p className="text-gray-800 font-medium">{answer.marks_awarded}</p>
+      <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md mt-8">
+        <table className="min-w-full table-auto bg-white p-6 shadow-md">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th colSpan="10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-3">
+                  <div>
+                    <span className="text-gray-600 text-lg">Total Marks : </span>
+                    <span className="text-lg font-semibold text-gray-800">{examResult.result.total_marks}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-600 text-lg">Percentage : </span>
+                    <span className="text-lg font-semibold text-gray-800">{examResult.result.percentage}%</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-600 text-lg">Status : </span>
+                    <span
+                      className={`text-lg font-semibold ${
+                        examResult.result.status === "Pass" ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {examResult.result.status}
+                    </span>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <p className="text-gray-600">No answers were submitted.</p>
-        )}
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-[#F9F9F9]">
+            <div className="w-[90%] mx-auto space-y-6 my-5">
+              {examResult.savedAnswers.length > 0 ? (
+                examResult.savedAnswers.map((answer, index) => (
+                  <Card
+                    key={answer._id}
+                    className="border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-xl font-semibold text-gray-800">
+                          Question {index + 1}: {answer.question_id.question_text}
+                        </h3>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-gray-600 text-lg">Points : </span>
+                          <span className="text-lg font-semibold text-gray-800">{answer.marks_awarded}</span>
+                          {answer.selected_answer === answer.question_id.correct_answer ? (
+                            <FaCheck className="text-green-500 text-2xl" />
+                          ) : answer.selected_answer === "" ? (
+                            <FaTimes className="text-gray-500 text-2xl" />
+                          ) : (
+                            <FaTimes className="text-red-500 text-2xl" />
+                          )}
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        {answer.question_id.options.map((option, i) => {
+                          const isSelected = answer.selected_answer === option;
+                          const isCorrect = option === answer.question_id.correct_answer;
+                          const isUnanswered = answer.selected_answer === "";
+
+                          return (
+                            <label
+                              key={i}
+                              className={`block p-4 rounded-lg cursor-pointer transition-all duration-200 ${
+                                isSelected
+                                  ? isCorrect
+                                    ? "border-2 border-green-500 bg-green-50"
+                                    : "border-2 border-red-500 bg-red-50"
+                                  : isCorrect && (isUnanswered || !isSelected)
+                                  ? "border-2 border-green-500 bg-green-50"
+                                  : "border border-gray-200 hover:border-blue-300"
+                              }`}
+                            >
+                              <div className="flex items-center">
+                                <input
+                                  type="radio"
+                                  name={`question-${answer.question_id._id}`}
+                                  value={option}
+                                  checked={isSelected}
+                                  readOnly
+                                  className="mr-3"
+                                />
+                                {option}
+                                {isCorrect && (isUnanswered || !isSelected) && (
+                                  <FaCheck className="text-green-500 ml-4" />
+                                )}
+                                {isSelected && !isCorrect && (
+                                  <p className="text-red-600 ml-4">Correct Answer: {answer.question_id.correct_answer}</p>
+                                )}
+                              </div>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-gray-600 h-[50vh] text-center flex items-center justify-center">No answers were submitted.</p>
+              )}
+            </div>
+          </tbody>
+        </table>
       </div>
     </div>
   );
