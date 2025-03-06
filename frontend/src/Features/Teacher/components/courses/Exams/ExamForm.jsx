@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const ExamForm = () => {
   const dispatch = useDispatch();
   const { classId, gradeSubjectSemesterId } = useParams();
-  const { status, error } = useSelector((state) => state.exam);
+  const { status} = useSelector((state) => state.exam);
 
   const [examData, setExamData] = useState({
     title: '',
@@ -138,7 +138,7 @@ const ExamForm = () => {
         ],
       });
     } catch (error) {
-      toast.error(`Failed to create exam: ${error.message}`);
+      toast.error(`Failed to create exam: ${error.message || error.err || error}`);
     }
   };
 
@@ -367,7 +367,6 @@ const ExamForm = () => {
           >
             {status === 'loading' ? 'Creating Exam...' : 'Create Exam'}
           </button>
-          {error && <p className="text-red-500">{error}</p>}
         </form>
       </div>
     </>
