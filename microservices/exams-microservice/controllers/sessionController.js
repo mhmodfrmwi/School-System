@@ -16,27 +16,23 @@ const startSession = async (req, res) => {
 
     const student_id = req.user.id;
 
-    // Fetch the exam
     const exam = await Exam.findOne({ _id: exam_id });
     if (!exam) {
       return res.status(404).json({ message: "Exam not found" });
     }
 
-    // Get current time and calculate session end time
     const start_time = moment().utc().toDate();
     const end_time = moment(start_time).add(exam.duration, "minutes").toDate();
 
-    // Check if the exam is closed
     const exam_end_time = moment(exam.end_time).utc();
     if (exam_end_time.isBefore(moment().utc())) {
       return res.status(403).json({ message: "Exam is closed" });
     }
 
-    // Check if the student already has an active session for this exam
     const existingSession = await Session.findOne({
       exam_id,
       student_id,
-      end_time: { $gt: moment().utc().toDate() }, // Active session
+      end_time: { $gt: moment().utc().toDate() },
     });
 
     if (existingSession) {
@@ -45,10 +41,8 @@ const startSession = async (req, res) => {
       });
     }
 
-    // Create a new session
     const session = await addSession(student_id, exam_id, start_time, end_time);
 
-    // Format response
     const formattedStartTime = moment(session.start_time)
       .utc()
       .format("YYYY-MM-DD HH:mm:ss");
