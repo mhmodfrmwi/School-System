@@ -75,8 +75,6 @@ export const startExamSession = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || "Failed to start exam session");
       }
-
-      console.log("API Response:", data); 
       return { 
         ...data, 
         sessionId: data.session._id,
@@ -94,9 +92,6 @@ export const submitExam = createAsyncThunk(
       const token = getToken();
       if (!token) return rejectWithValue("No token found");
 
-      console.log("Submitting answers for session:", sessionId);
-      console.log("Answers:", answers);
-
       const response = await fetch(
         `http://localhost:3000/sessions/${sessionId}/answers`,
         {
@@ -110,7 +105,6 @@ export const submitExam = createAsyncThunk(
       );
 
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         throw new Error(data.message || "Failed to submit exam");
       }
