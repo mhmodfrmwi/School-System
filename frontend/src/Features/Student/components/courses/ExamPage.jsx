@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { submitExam, fetchExamById, fetchSessions } from "../../components/StudentRedux/examsSlice";
 import Swal from "sweetalert2";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaClock } from "react-icons/fa";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
@@ -16,19 +16,14 @@ const StudentExamPage = () => {
   const [answers, setAnswers] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [formattedAvailableTime, setFormattedAvailableTime] = useState("Calculating...");
-  const [isSubmitted, setIsSubmitted] = useState(false); // Track submission status
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const isSubmittedRef = useRef(false);
 
-  // Fetch exam and sessions
   useEffect(() => {
-    dispatch(fetchExamById(examId)).then((action) => {
-      if (action.payload) {
-        console.log("Current Exam:", action.payload);
-      }
-    });
+    dispatch(fetchExamById(examId));
     dispatch(fetchSessions());
   }, [dispatch, examId]);
 
-  // Timer logic
   useEffect(() => {
     const activeSession = sessions.find(
       (session) => session.exam_id._id === examId && session.isExpired === false
@@ -51,7 +46,6 @@ const StudentExamPage = () => {
     }
   }, [sessions, examId]);
 
-  // Handle answer selection
   const handleAnswerChange = (questionId, selectedAnswer) => {
     setAnswers((prevAnswers) => {
       const updatedAnswers = prevAnswers.filter((answer) => answer.question_id !== questionId);
@@ -59,10 +53,32 @@ const StudentExamPage = () => {
     });
   };
 
-  // Handle exam submission (with automatic flag)
   const handleSubmitExam = useCallback(
     (isAutomatic = false) => {
-      if (isSubmitted) return; // Prevent multiple submissions
+      if (isSubmittedRef.current) {
+        return;
+      }
+
+      if (!isAutomatic) {
+        const allQuestions = currentExam.exam.exam_questions;
+        const unansweredQuestions = allQuestions.filter((question) => {
+          const existingAnswer = answers.find((answer) => answer.question_id === question._id);
+          return !existingAnswer || existingAnswer.selected_answer === "";
+        });
+
+        if (unansweredQuestions.length > 0) {
+          Swal.fire({
+            title: "Incomplete Exam",
+            text: "Please answer all questions before submitting.",
+            icon: "warning",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+      }
+
+      isSubmittedRef.current = true;
+      setIsSubmitted(true);
 
       const activeSession = sessions.find(
         (session) =>
@@ -81,11 +97,8 @@ const StudentExamPage = () => {
         return;
       }
 
-      setIsSubmitted(true); // Mark as submitted
-
       const sessionId = activeSession._id;
 
-      // Ensure all questions are included (even unanswered ones)
       const allAnswers = currentExam.exam.exam_questions.map((question) => {
         const existingAnswer = answers.find((answer) => answer.question_id === question._id);
         return {
@@ -94,7 +107,6 @@ const StudentExamPage = () => {
         };
       });
 
-      // Submit the exam
       dispatch(submitExam({ sessionId, answers: allAnswers }))
         .then((action) => {
           if (action.payload) {
@@ -117,18 +129,17 @@ const StudentExamPage = () => {
           });
         });
     },
-    [dispatch, sessions, examId, answers, gradeSubjectSemesterId, navigate, currentExam, isSubmitted]
+    [dispatch, sessions, examId, answers, gradeSubjectSemesterId, navigate, currentExam]
   );
 
-  // Timer countdown (Auto-submit when time is up)
   useEffect(() => {
     let timer;
-    if (timeLeft > 0) {
+    if (timeLeft > 0 && !isSubmittedRef.current) {
       timer = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 10) {
             clearInterval(timer);
-            handleSubmitExam(true); // Auto-submit when time ends
+            handleSubmitExam(true);
             return 0;
           }
           const newTime = prevTime - 1;
@@ -140,13 +151,11 @@ const StudentExamPage = () => {
       }, 1000);
     }
 
-    return () => clearInterval(timer); // Cleanup on unmount
+    return () => clearInterval(timer);
   }, [timeLeft, handleSubmitExam]);
 
-  // Styling for time left
   const timeColor = timeLeft <= 60 ? "text-red-500" : "text-gray-800";
 
-  // Loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center text-gray-500 mt-10">
@@ -156,89 +165,130 @@ const StudentExamPage = () => {
     );
   }
 
-  // Error state
   if (error) {
     return <div className="text-center text-red-500">Error: {error}</div>;
   }
 
-  // No exam questions found
   if (!currentExam || !currentExam.exam || !currentExam.exam.exam_questions) {
     return <div className="text-center text-gray-500">No exam questions found.</div>;
   }
 
   return (
-    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
+    <div className="font-poppins mt-20 mb-20 min-h-[75vh] w-[75%] mx-auto">
       {/* Header */}
-      <div className="w-full flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
+      <div className="w-full flex justify-between items-center mb-8">
+        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
           {currentExam.exam.title}
+          <span className="absolute left-0 bottom-[-9px] w-[50%] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
         </h1>
         <Button
           variant="solid"
-          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
+          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:from-[#CF72C0] hover:to-[#FD813D] transition-all duration-300"
           onClick={() => navigate(-1)}
         >
           Back
         </Button>
       </div>
 
-      {/* Timer */}
-      <div className="w-full mb-6">
-        <Card className="border border-gray-200 rounded-xl shadow-sm">
-          <CardContent className="p-4">
-            <p className={`text-lg font-semibold ${timeColor}`}>
-              Time Left: {formattedAvailableTime}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Timer and Questions */}
+      <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md">
+        <table className="min-w-full table-auto bg-white p-6 shadow-md">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th colSpan="10">
+                {/* Timer with Clock Icon and Progress Bar */}
+                <div className="my-5 mr-5 ml-5 flex justify-between items-center">
+                  <div className="flex items-center w-full">
+                    {/* Time Left */}
+                    <p className={`text-xl font-bold ${timeColor}`}>
+                      Time Left: {formattedAvailableTime}
+                    </p>
 
-      {/* Questions */}
-      <div className="w-full space-y-4">
-        {currentExam.exam.exam_questions.map((question, index) => (
-          <Card key={question._id} className="border border-gray-200 rounded-xl shadow-sm">
-            <CardContent className="p-4">
-              <h3 className="text-lg font-semibold text-gray-800">
-                Question {index + 1}: {question.question_text}
-              </h3>
-              <div className="mt-2">
-                {question.options.map((option, i) => {
-                  const isSelected = answers.some(
-                    (answer) => answer.question_id === question._id && answer.selected_answer === option
-                  );
-                  return (
-                    <label
-                      key={i}
-                      className={`block p-3 rounded-lg cursor-pointer ${
-                        isSelected ? "border-2 border-blue-500 bg-blue-50" : "border border-gray-200"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name={`question-${question._id}`}
-                        value={option}
-                        onChange={() => handleAnswerChange(question._id, option)}
-                        className="mr-2"
-                      />
-                      {option}
-                    </label>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                    {/* Progress Bar */}
+                    <div className="hidden md:block w-[50%] h-3 bg-gray-200 rounded-lg overflow-hidden mx-4 ml-10">
+                      <div
+                        className="h-full transition-all duration-300 ease-in-out rounded-lg"
+                        style={{
+                          width: `${(timeLeft / (currentExam.exam.duration * 60)) * 100}%`,
+                          background: `linear-gradient(90deg, ${
+                            timeLeft <= 60
+                              ? "#EF4444" // Red
+                              : timeLeft <= 120
+                              ? "#F97316" // Orange
+                              : "#10B981" // Green
+                          }, ${
+                            timeLeft <= 60
+                              ? "#DC2626" // Darker Red
+                              : timeLeft <= 120
+                              ? "#EA580C" // Darker Orange
+                              : "#059669" // Darker Green
+                          })`,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
 
-      {/* Submit Button */}
-      <div className="w-full mt-6">
-        <Button
-          onClick={() => handleSubmitExam(false)} // Manual submission
-          className="w-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white py-2 rounded-lg"
-          disabled={isSubmitted} // Disable button after submission
-        >
-          Submit Exam
-        </Button>
+                  {/* Clock Icon */}
+                  <FaClock className={`text-xl ${timeColor}`} />
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-[#F9F9F9]">
+            {/* Questions */}
+            <div className="w-[90%] mx-auto space-y-6 my-5">
+              {currentExam.exam.exam_questions.map((question, index) => (
+                <Card key={question._id} className="border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-xl font-semibold text-gray-800">
+                        Question {index + 1}: {question.question_text}
+                      </h3>
+                      <span className="text-lg font-semibold text-gray-600">
+                        Marks: {question.marks}
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {question.options.map((option, i) => {
+                        const isSelected = answers.some(
+                          (answer) => answer.question_id === question._id && answer.selected_answer === option
+                        );
+                        return (
+                          <label
+                            key={i}
+                            className={`block p-4 rounded-lg cursor-pointer transition-all duration-200 ${
+                              isSelected ? "border-2 border-blue-500 bg-blue-50" : "border border-gray-200 hover:border-blue-300"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name={`question-${question._id}`}
+                              value={option}
+                              onChange={() => handleAnswerChange(question._id, option)}
+                              className="mr-3"
+                            />
+                            {option}
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Submit Button */}
+            <div className="w-[90%] mx-auto space-y-6 my-5">
+              <Button
+                onClick={() => handleSubmitExam(false)}
+                className="w-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white py-3 rounded-lg hover:from-[#CF72C0] hover:to-[#FD813D] transition-all duration-300"
+                disabled={isSubmitted}
+              >
+                Submit Exam
+              </Button>
+            </div>
+          </tbody>
+        </table>
       </div>
     </div>
   );

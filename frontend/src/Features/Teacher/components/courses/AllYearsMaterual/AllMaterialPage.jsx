@@ -6,9 +6,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchALLClassTeacher } from "../../TeacherRedux/TeacherClassSlice";
 import { fetchMaterials } from "../../TeacherRedux/PdfMaterialSlice";
 import { fetchVR } from "../../TeacherRedux/VRSlice";
+import { fetchAllQuestions } from "../../TeacherRedux/QuestionBankSlice"; 
+import { fetchExamsForTeacher } from "../../TeacherRedux/ExamSlice"; 
 
 const AllMaterialPage = () => {
-  const { classId, gradeSubjectSemesterId } = useParams();
+  const {  gradeSubjectSemesterId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -23,10 +25,12 @@ const AllMaterialPage = () => {
       targetUrl = `/teacher/see-all-material/${gradeSubjectSemesterId}` ;
     } else if (courseName === "Virtual Room") {
       targetUrl = `/teacher/all-virtual-room/${gradeSubjectSemesterId}`;
+      } else if (courseName === "Question Bank") {
+        targetUrl = `/teacher/my-all-question-bank/${gradeSubjectSemesterId}/my-questions`
     } else if (courseName === "Assignments") {
       targetUrl = `/teacher/assignments/${gradeSubjectSemesterId}`;
     } else if (courseName === "Exams") {
-      targetUrl = `/teacher/exams/${gradeSubjectSemesterId}`;
+      targetUrl = `/teacher/see-all-exams/${gradeSubjectSemesterId}`;
     }
   
     if (targetUrl) {
@@ -37,6 +41,12 @@ const AllMaterialPage = () => {
   const { classTeachers = [], message, loading } = useSelector((state) => state.classTeachers || {});
   const pdfMaterials = useSelector((state) => state.pdfMaterials.pdfMaterials || []);
   const teacherVirtualRooms = useSelector((state) => state.teacherVirtualRooms.teacherVirtualRooms || []);
+  const myQuestions = useSelector((state) => {
+    return state.questionbank.questionbank; 
+  });
+  const exams = useSelector((state) => {
+    return state.exam.exams; 
+  });
   useEffect(() => {
     dispatch(fetchALLClassTeacher());
   }, [dispatch]);
@@ -45,6 +55,8 @@ const AllMaterialPage = () => {
     if (gradeSubjectSemesterId) {
       dispatch(fetchMaterials(gradeSubjectSemesterId));
       dispatch(fetchVR(gradeSubjectSemesterId));
+      dispatch(fetchAllQuestions(gradeSubjectSemesterId)); 
+      dispatch(fetchExamsForTeacher(gradeSubjectSemesterId));  
     } else {
       console.error("gradeSubjectSemesterId is undefined");
     }
@@ -57,19 +69,22 @@ const AllMaterialPage = () => {
   const videoCount = pdfMaterials.filter((material) => material.type === "Video").length;
   const pdfCount = pdfMaterials.filter((material) => material.type === "PDF").length;
   const vrCount = teacherVirtualRooms.length;
+  const questionBankCount = myQuestions.length;
+  const examCount = exams.filter((exam) => exam.teacherId === classteacher?._id).length;
 
-  console.log("Selected Class Teacher:", classteacher);
-  console.log("Grade Subject Semester ID:", gradeSubjectSemesterId);
-  console.log("All Class Teachers Data:", classTeachers);
+
+  // console.log("Selected Class Teacher:", classteacher);
+  // console.log("Grade Subject Semester ID:", gradeSubjectSemesterId);
+  // console.log("All Class Teachers Data:", classTeachers);
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
     { id: 1, name: "Video Lectures", total: videoCount, icon: faVideo },
     { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
     { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
-    { id: 3, name: "Question bank", total: 20, icon: faVideo },
+    { id: 4, name: "Question Bank", total: questionBankCount, icon: faVideo },
     { id: 4, name: "Assignments", total: 100, icon: faTasks },
-    { id: 5, name: "Exams", total: 19, icon: faFileAlt },
+    { id: 6, name: "Exams", total: examCount, icon: faFileAlt },
   ];
 
   const getColor = (index) => colors[index % colors.length];

@@ -161,6 +161,10 @@ const SeeMaterial = lazy(() => import("./Features/Teacher/components/courses/See
 const LibraryTeacherPage = lazy(() => import("./Features/Teacher/components/Library/LibraryTeacherPage"),);
 const LibraryItemDetailsPageForTeacher = lazy(() => import("./Features/Teacher/components/Library/LibraryItemDetailsPageForTeacher"),);
 const VRForm = lazy(() => import("./Features/Teacher/components/courses/VR/FormVR"),);
+const StudentResults = lazy(() => import ( "./Features/Teacher/components/courses/Exams/ExamResults"),);
+const SeeAllExams = lazy(() => import ("./Features/Teacher/components/courses/AllYearsMaterual/SeeAllExams"),);
+const SeeMyAllQuestionAllYears = lazy(() => import ("./Features/Teacher/components/courses/AllYearsMaterual/qBank/SeeMyAllQuestionAllYears"),);
+const SeeAllQuestionAllYears = lazy(() => import ("./Features/Teacher/components/courses/AllYearsMaterual/qBank/SeeAllQuestionsAllYears"),);
 
 
 
@@ -354,9 +358,9 @@ function App() {
               element={<StudentExamPage />}
             />
             <Route
-          path="allcourses/exams/:gradeSubjectSemesterId/result/:examId"
-          element={<StudentExamResultPage />}
-        />
+              path="allcourses/exams/:gradeSubjectSemesterId/result/:examId"
+              element={<StudentExamResultPage />}
+            />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
@@ -444,6 +448,14 @@ function App() {
               element={<SeeAllQuestion />}
             />
             <Route
+              path="/teacher/my-all-question-bank/:gradeSubjectSemesterId/my-questions"
+              element={<SeeMyAllQuestionAllYears />}
+            />
+            <Route
+              path="/teacher/all-question-bank-allyears/:gradeSubjectSemesterId/all-questions"
+              element={<SeeAllQuestionAllYears />}
+            />
+            <Route
               path="/teacher/edit-question/:questionId"
               element={<EditQuestion />}
             />
@@ -464,6 +476,15 @@ function App() {
               path="/teacher/exam-details/:examId"
               element={<ExamDetailes />}
             />
+            <Route
+              path="/teacher/exam-results/:examId"
+              element={<StudentResults />}
+            />
+            <Route
+              path="/teacher/see-all-exams/:gradeSubjectSemesterId"
+              element={<SeeAllExams />}
+            />
+
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}
