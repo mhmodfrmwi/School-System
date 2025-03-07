@@ -2,6 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
 const xlsx = require("xlsx");
+const fs = require('fs');
 const Grade = require("../../DB/gradeModel");
 const Student = require("../../DB/student");
 const AcademicYear = require("../../DB/academicYearModel");
@@ -133,132 +134,80 @@ const getGradeData = expressAsyncHandler(async (req, res) => {
   });
 });
 
-const uploadGrades = expressAsyncHandler(async (req, res) => {
+const uploadScoresFromExcel = expressAsyncHandler(async (req, res) => {
     const { classId, gradeSubjectSemesterId } = req.params;
-  
-    if (!validateObjectId(classId) || !validateObjectId(gradeSubjectSemesterId)) {
-      return res.status(400).json({
-        status: 400,
-        message: "Invalid classId or gradeSubjectSemesterId",
-      });
-    }
-  
-    if (!req.file) {
-      return res.status(400).json({
-        status: 400,
-        message: "No file uploaded",
-      });
+    const file = req.file;
+
+    if (!file) {
+        return res.status(400).json({ message: 'No file uploaded.' });
     }
 
-    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const data = xlsx.utils.sheet_to_json(sheet);
-  
-    const finalDegreeRow = data[data.length - 1];
-    const finalDegree = finalDegreeRow.finalDegree;
-  
-    if (isNaN(finalDegree)) {
-      return res.status(400).json({
-        status: 400,
-        message: "Invalid finalDegree value in the Excel sheet",
-      });
+    try {
+        const workbook = xlsx.readFile(file.path);
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        const type = sheet['B1']?.v;
+        const finalDegree = sheet['B2']?.v;
+
+        if (!type || !finalDegree) {
+            return res.status(400).json({ message: 'File is missing type or finalDegree.' });
+        }
+
+        const data = xlsx.utils.sheet_to_json(sheet, { range: 2 });
+
+        if (!data.length) {
+            return res.status(400).json({ message: 'File contains no student data.' });
+        }
+        
+        for (const row of data) {
+            const { academic_number, fullName, examGrade } = row;
+
+            if (!academic_number || !fullName || !examGrade) {
+                console.warn('Invalid file format or missing data.');
+                continue;
+            }
+
+            const student = await Student.findOne({ academic_number });
+            if (!student) {
+                console.warn(`Student ${fullName} (${academic_number}) not found.`);
+                continue;
+            }
+
+            let subjectScore = await SubjectScore.findOne({ gradeSubjectSemesterId });
+            if (!subjectScore) {
+
+                subjectScore = new SubjectScore({
+                    gradeSubjectSemesterId,
+                    finalDegree,
+                });
+                await subjectScore.save();
+            }
+
+            const score = new Score({
+                studentId: student._id,
+                academicYearId: student.academicYear_id,
+                classId,
+                type,
+                examGrade,
+                subjectScoreId: subjectScore._id,
+            });
+
+            await score.save();
+        }
+        fs.unlinkSync(file.path);
+        res.status(200).json({ message: 'Data uploaded successfully.' });
+    } catch (error) {
+        if (file) {
+            fs.unlinkSync(file.path);
+        }
+        console.error('Error uploading data:', error);
+        res.status(500).json({ message: 'Error uploading data.' });
     }
-  
-    // Remove the finalDegree row from the data
-    data.pop();
-
-    if (!data[0] || !data[0].academic_number || !data[0].fullName || !data[0].grade) {
-      return res.status(400).json({
-        status: 400,
-        message: "Excel file must contain 'academic_number', 'fullName', and 'grade' columns",
-      });
-    }
-
-    const currentYear = moment().year().toString().slice(-2);
-    const currentMonth = moment().month() + 1;
-    let startYear, endYear;
-    
-    if (currentMonth >= 9 && currentMonth <= 12) {
-      startYear = `20${currentYear}`;
-      endYear = `20${parseInt(currentYear) + 1}`;
-    } else {
-      startYear = `20${parseInt(currentYear) - 1}`;
-      endYear = `20${currentYear}`;
-    }
-
-    const academicYear = await AcademicYear.findOne({ startYear, endYear });
-    if (!academicYear) {
-      return res.status(404).json({
-        status: 404,
-        message: "Current academic year not found",
-      });
-    }
-
-    let subjectScore = await SubjectScore.findOne({ gradeSubjectSemesterId });
-
-    // If it doesn't exist, create a new one
-    if (!subjectScore) {
-        subjectScore = new SubjectScore({
-        gradeSubjectSemesterId,
-        finalDegree,
-        });
-        await subjectScore.save();
-    }
-
-    const results = [];
-    for (const row of data) {
-      const { academic_number, fullName, grade } = row;
-
-      if (isNaN(grade) || grade < 0 || grade > finalDegree) {
-        results.push({
-          academic_number,
-          fullName,
-          status: "Failed",
-          message: `Invalid grade (must be between 0 and ${finalDegree})`,
-        });
-        continue;
-      }
-
-      const student = await Student.findOne({ academic_number });
-      if (!student) {
-        results.push({
-          academic_number,
-          fullName,
-          status: "Failed",
-          message: "Student not found",
-        });
-        continue;
-      }
-
-      const score = new Score({
-        studentId: student._id,
-        academicYearId: academicYear._id,
-        classId,
-        type: "final",
-        examGrade: grade,
-        subjectScoreId: subjectScore._id,
-      });
-      await score.save();
-  
-      results.push({
-        academic_number,
-        fullName,
-        status: "Success",
-        message: "Grade uploaded successfully",
-        scoreId: score._id,
-        subjectScoreId: subjectScore._id,
-      });
-    }
-  
-    return res.status(200).json({
-      status: 200,
-      message: "Grades processed successfully",
-      results,
-    });
 });
+
 
 module.exports = { 
     getGradeData,
-    uploadGrades
+    uploadScoresFromExcel
  };
