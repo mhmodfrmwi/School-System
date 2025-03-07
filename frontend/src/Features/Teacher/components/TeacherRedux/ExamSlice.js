@@ -38,34 +38,81 @@ export const createExam = createAsyncThunk(
   }
 );
 
+// export const fetchExamsForTeacher = createAsyncThunk(
+//   'exam/fetchExamsForTeacher',
+//   async (gradeSubjectSemesterId, { rejectWithValue }) => {
+//     try {
+//       const token = getToken();
+//       if (!token) {
+//         return rejectWithValue("Authentication required. Please log in.");
+//       }
+
+//       if (!gradeSubjectSemesterId) {
+//         return rejectWithValue("Invalid ID: gradeSubjectSemesterId is missing.");
+//       }
+
+//       // Construct the URL with the query parameter
+//       const url = `http://localhost:3000/exams/teacher-exams?grade_subject_semester_id=${gradeSubjectSemesterId}`;
+
+//       const response = await fetch(url, {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       });
+
+//       if (!response.ok) {
+//         const error = await response.json();
+//         return rejectWithValue(error.message);
+//       }
+
+//       const data = await response.json();
+//       console.log("Fetched exams:", data);
+//       return data.exams; // Ensure the backend returns `exams` in the response
+//     } catch (error) {
+//       return rejectWithValue(error.message || "Failed to fetch exams");
+//     }
+//   }
+// );
 export const fetchExamsForTeacher = createAsyncThunk(
   'exam/fetchExamsForTeacher',
-  async (_, { rejectWithValue }) => {
+  async (gradeSubjectSemesterId, { rejectWithValue }) => {
     try {
       const token = getToken();
       if (!token) {
-        return rejectWithValue('Authentication required. Please log in.');
+        return rejectWithValue("Authentication required. Please log in.");
       }
 
-      const url = 'http://localhost:3000/exams/teacher-exams';
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
+      if (!gradeSubjectSemesterId) {
+        return rejectWithValue("Invalid ID: gradeSubjectSemesterId is missing.");
+      }
 
-      const response = await fetch(url, { headers });
+      const response = await fetch(
+        `http://localhost:3000/exams/teacher-exams?grade_subject_semester_id=${gradeSubjectSemesterId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(errorResponse.message || 'Failed to fetch exams');
+        const error = await response.json();
+        return rejectWithValue(error.message);
       }
 
       const data = await response.json();
+      console.log("Fetched exams:", data);
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Server Error');
+      return rejectWithValue(error.message || "Failed to fetch exams");
     }
   }
 );
+
 
 export const updateExam = createAsyncThunk(
   'exam/updateExam',
