@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import TitleUpdater from "./ui/TitleUpdater";
+import AssignmentForm from "./Features/Teacher/components/courses/Assignments/AssignmentsForm";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -95,6 +96,9 @@ const StudentQuestionDetailes = lazy(() => import("./Features/Student/components
 const StudentExams = lazy(() => import("./Features/Student/components/courses/CourseExam"),);
 const StudentExamPage = lazy(() => import("./Features/Student/components/courses/ExamPage"),);
 const StudentExamResultPage = lazy(() => import("./Features/Student/components/courses/StudentExamResultPage"),);
+const StudentAssignments = lazy(() => import("./Features/Student/components/courses/CourseAssignment"),);
+const StudentAssignmentPage = lazy(() => import("./Features/Student/components/courses/AssignmentView"),);
+const StudentAssignmentSubmittedpage = lazy(() => import("./Features/Student/components/courses/AssignmentSubmissionView"),);
 const AttendancePage = lazy(() => import("./Features/Student/components/Attendance/AttendancePage"),);
 const MaterialDetails = lazy(() => import("./Features/Student/components/courses/MaterialDetails"),);
 
@@ -361,6 +365,18 @@ function App() {
               path="allcourses/exams/:gradeSubjectSemesterId/result/:examId"
               element={<StudentExamResultPage />}
             />
+              <Route
+              path="allcourses/assignments/:gradeSubjectSemesterId"
+              element={<StudentAssignments />}
+            />
+             <Route
+              path="allcourses/assignments/:gradeSubjectSemesterId/:assignmentId"
+              element={<StudentAssignmentPage />}
+            />
+              <Route
+              path="allcourses/assignments/:gradeSubjectSemesterId/submission/:assignmentId"
+              element={<StudentAssignmentSubmittedpage />}
+            />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>
           {/* /////////////////parentpage//////////////////// */}
@@ -483,6 +499,10 @@ function App() {
             <Route
               path="/teacher/see-all-exams/:gradeSubjectSemesterId"
               element={<SeeAllExams />}
+            />
+            <Route
+              path="/teacher/assignment-form/:classId/:gradeSubjectSemesterId"
+              element={<AssignmentForm />}
             />
 
             <Route

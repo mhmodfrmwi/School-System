@@ -88,7 +88,7 @@ const ExamResultPage = () => {
                   </div>
                   <div>
                     <span className="text-gray-600 text-lg">Percentage : </span>
-                    <span className="text-lg font-semibold text-gray-800">{examResult.result.percentage}%</span>
+                    <span className="text-lg font-semibold text-gray-800">{parseFloat(examResult.result.percentage).toFixed(2)}%</span>
                   </div>
                   <div>
                     <span className="text-gray-600 text-lg">Status : </span>
@@ -110,7 +110,7 @@ const ExamResultPage = () => {
                 examResult.savedAnswers.map((answer, index) => (
                   <Card
                     key={answer._id}
-                    className="border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
+                    className="border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 mb-8"
                   >
                     <CardContent className="p-6">
                       <div className="flex justify-between items-center mb-4">

@@ -1,6 +1,8 @@
 const express = require("express");
+const multer = require('multer');
 const validateJwt = require("../middlewares/validateJWT");
 const validateTeacher = require("../middlewares/validateTeacher");
+
 const {
   createMateriel,
   updateMateriel,
@@ -62,10 +64,15 @@ const{
 const{
   getGradeData,
   uploadGrades,
+  uploadScoresFromExcel
 }= require("../controllers/Teacher/subjectScore");
 
 const router = express.Router();
+
+const upload = multer({ dest: 'uploads/' }); 
+
 router.post("/login", login);
+
 router
   .route("/material/:id")
   .post(validateJwt, validateTeacher, createMateriel)
@@ -189,7 +196,8 @@ router.get("/exam-score/:classId/:gradeSubjectSemesterId/students",
 router.post("/exam-score/:classId/:gradeSubjectSemesterId",
   validateJwt,
   validateTeacher,
-  uploadGrades
+  upload.single('file'),
+  uploadScoresFromExcel,
 );
 
 module.exports = router;

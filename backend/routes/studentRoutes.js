@@ -79,6 +79,9 @@ const {
   getSemesterPoints,
   getStudentWithFriendsPoints,
 } = require("../controllers/Student/studentRewardsController");
+const {
+  getStudentGrades
+} = require("../controllers/Student/getStudentGrade");
 const router = express.Router();
 
 //login route
@@ -280,5 +283,11 @@ router.get(
   validateJwt,
   validateStudent,
   getStudentWithFriendsPoints
+);
+router.get(
+  "/subject-degree/:subjectId",
+  validateJwt,
+  validateStudent,
+  getStudentGrades
 );
 module.exports = router;

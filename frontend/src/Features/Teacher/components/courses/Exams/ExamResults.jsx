@@ -58,7 +58,7 @@ const StudentResults = () => {
                                                 >
                                                     <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{result.student_id.fullName}</td>
                                                     <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{result.total_marks}</td>
-                                                    <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{result.percentage}%</td>
+                                                    <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{parseFloat(result.percentage).toFixed(2)}%</td>
                                                     <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{result.status}</td>
                                                 </tr>
                                             ))

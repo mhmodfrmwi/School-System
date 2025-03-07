@@ -96,7 +96,7 @@ const SeeMyExams = () => {
     if (window.confirm("Are you sure you want to delete this exam?")) {
       try {
         await dispatch(deleteExam(examId)).unwrap();
-        toast.success("Exam deleted successfully!");
+        // toast.success("Exam deleted successfully!");
         dispatch(fetchExamsForTeacher());
       } catch (error) {
         toast.error(error.message || "Failed to delete exam");
@@ -115,6 +115,9 @@ const SeeMyExams = () => {
   const handleViewResults = (examId) => {
     navigate(`/teacher/exam-results/${examId}`);
   };
+  const sortedExams = exams
+    ? [...exams].sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
+    : [];
 
   if (loading) {
     return <p className="text-center text-lg font-semibold">Loading...</p>;
@@ -129,8 +132,8 @@ const SeeMyExams = () => {
       <h1 className="text-3xl font-bold font-poppins text-[#244856]">My Exams</h1>
       <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
       <div className="grid font-poppins gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
-        {exams && exams.length > 0 ? (
-          exams.map((exam) => (
+        {sortedExams && exams.length > 0 ? (
+          sortedExams.map((exam) => (
             <ExamCard
               key={exam._id}
               exam={exam}
