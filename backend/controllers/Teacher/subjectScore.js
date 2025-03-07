@@ -9,6 +9,7 @@ const AcademicYear = require("../../DB/academicYearModel");
 const Class = require("../../DB/classModel");
 const Subject = require("../../DB/subjectModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const Semester = require("../../DB/semesterModel")
 const Score = require("../../DB/scoreModel");
 const SubjectScore = require("../../DB/subjectScoreModel");
 
@@ -136,7 +137,7 @@ const getGradeData = expressAsyncHandler(async (req, res) => {
   });
 });
 
-const uploadScoresFromExcel = expressAsyncHandler(async (req, res) => {
+const uploadScoresFromExcel1 = expressAsyncHandler(async (req, res) => {
   const { classId, gradeSubjectSemesterId } = req.params;
   const file = req.file;
 
@@ -210,7 +211,144 @@ const uploadScoresFromExcel = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ message: "Error uploading data." });
   }
 });
+const uploadScoresFromExcel = expressAsyncHandler(async (req, res) => {
+    const { classId, gradeSubjectSemesterId } = req.params;
+    const file = req.file;
+  
+    if (!file) {
+      return res.status(400).json({status:400, message: "No file uploaded." });
+    }
+  
+    try {
+      const currentYear = moment().year().toString().slice(-2);
+      const currentMonth = moment().month() + 1;
+      let startYear;
+      let endYear;
+  
+      if (currentMonth >= 9 && currentMonth <= 12) {
+        startYear = "20" + parseInt(currentYear);
+        endYear = "20" + (parseInt(currentYear) + 1);
+      } else {
+        startYear = "20" + (parseInt(currentYear) - 1);
+        endYear = "20" + parseInt(currentYear);
+      }
+  
+      let semester_name;
+      if (currentMonth >= 9 && currentMonth <= 12) {
+        semester_name = "Semester 1";
+      } else {
+        semester_name = "Semester 2";
+      }
 
+      const academic_year = await AcademicYear.findOne({ startYear, endYear });
+      if (!academic_year) {
+        return res.status(404).json({
+          status: 404,
+          message: "Academic year not found",
+        });
+      }
+      const academicYearId = academic_year._id;
+
+      const semester = await Semester.findOne({
+        semesterName: semester_name,
+        academicYear_id: academicYearId,
+      });
+      if (!semester) {
+        return res.status(404).json({
+          status: 404,
+          message: "Semester not found in the given academic year",
+        });
+      }
+      const semesterId = semester._id;
+
+      const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
+        .populate('grade_subject_id');
+  
+      if (!gradeSubjectSemester) {
+        return res.status(404).json({
+          status: 404,
+          message: "GradeSubjectSemester not found",
+        });
+      }
+
+      const gradeId = gradeSubjectSemester.grade_subject_id.gradeId;
+      const subjectId = gradeSubjectSemester.grade_subject_id.subjectId;
+
+      const workbook = xlsx.readFile(file.path);
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+  
+      const type = sheet["B1"]?.v;
+      const finalDegree = sheet["B2"]?.v;
+  
+      if (!type || !finalDegree) {
+        return res
+          .status(400)
+          .json({status:400, message: "File is missing type or finalDegree." });
+      }
+
+      const data = xlsx.utils.sheet_to_json(sheet, { range: 2 });
+  
+      if (!data.length) {
+        return res
+          .status(400)
+          .json({status:400, message: "File contains no student data." });
+      }
+  
+      for (const row of data) {
+        const { academic_number, fullName, examGrade } = row;
+  
+        if (!academic_number || !fullName || !examGrade) {
+          console.warn("Invalid file format or missing data.");
+          continue;
+        }
+
+        const student = await Student.findOne({ academic_number });
+        if (!student) {
+          console.warn(`Student ${fullName} (${academic_number}) not found.`);
+          continue;
+        }
+
+        let subjectScore = await SubjectScore.findOne({
+          gradeId,
+          subjectId,
+          semesterId,
+        });
+        if (!subjectScore) {
+          subjectScore = new SubjectScore({
+            gradeId,
+            subjectId,
+            semesterId,
+            finalDegree,
+          });
+          await subjectScore.save();
+        }
+
+        const score = new Score({
+          studentId: student._id,
+          academicYearId: student.academicYear_id,
+          classId,
+          type,
+          examGrade,
+          subjectScoreId: subjectScore._id,
+        });
+  
+        await score.save();
+      }
+
+      fs.unlinkSync(file.path);
+  
+      res.status(200).json({
+        status:200,
+        message: "Data uploaded successfully." });
+    } catch (error) {
+      if (file) {
+        fs.unlinkSync(file.path);
+      }
+      console.error("Error uploading data:", error);
+      res.status(500).json({ status:500, message: "Error uploading data.", error: error.message });
+    }
+});
 module.exports = {
   getGradeData,
   uploadScoresFromExcel,
