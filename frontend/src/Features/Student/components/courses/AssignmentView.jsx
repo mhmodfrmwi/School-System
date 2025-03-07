@@ -9,18 +9,18 @@ import Swal from "sweetalert2";
 
 const AssignmentView = () => {
   const dispatch = useDispatch();
-  const { assignmentId } = useParams(); 
+  const { assignmentId,gradeSubjectSemesterId } = useParams();
   const navigate = useNavigate();
   const { currentAssignment, loadingAssignmentById, error } = useSelector((state) => state.assignments);
   const [submissionText, setSubmissionText] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false); 
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
 
   useEffect(() => {
     dispatch(fetchAssignmentById(assignmentId));
   }, [dispatch, assignmentId]);
 
- 
+
   useEffect(() => {
     if (error) {
       Swal.fire({
@@ -45,11 +45,11 @@ const AssignmentView = () => {
       });
       return;
     }
-  
+
     const submissionData = {
-      submission_text: submissionText, 
+      submission_text: submissionText,
     };
-  
+
     const result = await dispatch(submitAssignment({ assignmentId, submissionData }));
     if (submitAssignment.fulfilled.match(result)) {
       Swal.fire({
@@ -57,8 +57,10 @@ const AssignmentView = () => {
         text: "Assignment submitted successfully.",
         icon: "success",
         confirmButtonText: "OK",
+      }).then(() => {
+        navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}`); 
       });
-      setIsSubmitted(true); 
+      setIsSubmitted(true);
     }
   };
 
@@ -87,7 +89,7 @@ const AssignmentView = () => {
           <p className="text-sm text-gray-600">
             Due Date: {new Date(currentAssignment.due_date).toLocaleString()}
           </p>
-   
+
           <div className="mt-6">
             <textarea
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -95,17 +97,17 @@ const AssignmentView = () => {
               placeholder="Enter your answer here..."
               value={submissionText}
               onChange={(e) => setSubmissionText(e.target.value)}
-              disabled={isSubmitted} 
+              disabled={isSubmitted}
             />
           </div>
 
-       
+
           <div className="mt-6">
             <Button
               variant="solid"
               className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-6 py-3 rounded-lg"
               onClick={handleSubmit}
-              disabled={isSubmitted} 
+              disabled={isSubmitted}
             >
               {isSubmitted ? "View Submission" : "Submit Assignment"}
             </Button>
