@@ -103,8 +103,10 @@ export const submitExam = createAsyncThunk(
           body: JSON.stringify({ answers }), // Ensure the payload matches server expectations
         }
       );
+      console.log("answers in slice : ",answers);
 
       const data = await response.json();
+      console.log("data in slice : ", data);
       if (!response.ok) {
         throw new Error(data.message || "Failed to submit exam");
       }

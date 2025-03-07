@@ -1,3 +1,4 @@
+const Assignment = require("../models/Assignment");
 const GradeSubjectSemester = require("../models/GradeSubjectSemester");
 const {
   addAssignment,
@@ -40,6 +41,10 @@ const createAssignment = async (req, res) => {
     const academic_year_id =
       gradeSubjectSemester.grade_subject_id.academicYear_id;
     const semester_id = gradeSubjectSemester.semester_id._id;
+    console.log(subject_id);
+    console.log(grade_id);
+    console.log(academic_year_id);
+    console.log(semester_id);
 
     req.body.subject_id = subject_id;
     req.body.grade_id = grade_id;
@@ -48,7 +53,14 @@ const createAssignment = async (req, res) => {
     req.body.class_id = class_id;
 
     const assignment = await addAssignment(req.body);
-    res.status(200).json({ assignment });
+    const newAssignment = await Assignment.findById(assignment._id)
+      .populate("created_by", "fullName")
+      .populate("subject_id", "subjectName")
+      .populate("class_id", "className")
+      .populate("grade_id", "gradeName")
+      .populate("academic_year_id", "startYear endYear")
+      .populate("semester_id", "semesterName");
+    res.status(200).json(newAssignment);
   } catch (error) {
     console.error(error);
     res

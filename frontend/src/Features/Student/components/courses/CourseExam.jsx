@@ -87,8 +87,8 @@ const ExamsSection = () => {
         const isBActive = bStart <= now && bEnd > now;
 
         // Check if the exam is submitted or expired
-        const aSession = sessions.find((session) => session.exam_id._id === a._id);
-        const bSession = sessions.find((session) => session.exam_id._id === b._id);
+        const aSession = sessions.find((session) => session.exam_id?._id === a._id);
+        const bSession = sessions.find((session) => session.exam_id?._id === b._id);
         const isASubmittedOrExpired = aSession?.status === "Submitted" || aSession?.isExpired === true;
         const isBSubmittedOrExpired = bSession?.status === "Submitted" || bSession?.isExpired === true;
 
@@ -152,7 +152,7 @@ const ExamsSection = () => {
       return;
     }
 
-    const session = sessions.find((session) => session.exam_id._id === exam._id);
+    const session = sessions.find((session) => session.exam_id?._id === exam._id);
 
     if (session && session.status === "Expired") {
       Swal.fire({
@@ -406,7 +406,7 @@ const ExamsSection = () => {
                     variant="solid"
                     className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
                     onClick={() => {
-                      const session = sessions.find((session) => session.exam_id._id === exam._id);
+                      const session = sessions.find((session) => session.exam_id?._id === exam._id);
                       if (
                         session?.status === "Submitted" ||
                         session?.isExpired === true
@@ -419,14 +419,14 @@ const ExamsSection = () => {
                       }
                     }}
                     disabled={
-                      (new Date() > new Date(exam.end_time) && !sessions.find((session) => session.exam_id._id === exam._id)) ||
+                      (new Date() > new Date(exam.end_time) && !sessions.find((session) => session.exam_id?._id === exam._id)) ||
                       new Date() < new Date(exam.start_time) ||
                       exam.type === "Offline"
                     }
                   >
                     {(() => {
                       if (exam.type === "Offline") return "Offline";
-                      const session = sessions.find((session) => session.exam_id._id === exam._id);
+                      const session = sessions.find((session) => session.exam_id?._id === exam._id);
                       if (session?.status === "Submitted") return "View";
                       if (session?.isExpired === true) return "View";
                       if (new Date() < new Date(exam.start_time)) return "Not Started";

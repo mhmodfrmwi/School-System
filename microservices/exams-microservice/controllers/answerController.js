@@ -1,4 +1,5 @@
 const Exam = require("../models/Exam");
+const ExamResult = require("../models/ExamResult");
 const Session = require("../models/Session");
 const StudentAnswer = require("../models/StudentAnswer");
 const autoGradeMCQ = require("../services/gradingService");
@@ -10,7 +11,12 @@ const submitAnswers = async (req, res) => {
     const { answers } = req.body;
 
     const session = await Session.findById(session_id);
-
+    const existingResult = await ExamResult.findOne({
+      exam_id: session.exam_id,
+    });
+    if (existingResult) {
+      throw new Error("this exam submitted before");
+    }
     if (!session) {
       return res.status(400).json({ message: "Invalid session" });
     }
@@ -36,6 +42,9 @@ const submitAnswers = async (req, res) => {
       .select("-__v -updatedAt -createdAt");
 
     await autoGradeMCQ(session_id);
+    if (session.status === "Submitted") {
+      return res.status(400).json("this exam submitted before");
+    }
     const result = await calculateResults(session_id);
     session.status = "Submitted";
     await session.save();
@@ -44,7 +53,7 @@ const submitAnswers = async (req, res) => {
     res.status(201).json({ savedAnswers, result });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Failed to submit answers" });
+    res.status(500).json({ message: err.message });
   }
 };
 

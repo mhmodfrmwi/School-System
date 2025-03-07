@@ -29,7 +29,7 @@ const SubmissionView = () => {
   }, [error, dispatch]);
 
   const submission = studentSubmissions.find(
-    (submission) => submission.assignment_id._id === assignmentId
+    (submission) => submission.assignment_id?._id === assignmentId
   );
 
   if (loadingSubmissions) {
