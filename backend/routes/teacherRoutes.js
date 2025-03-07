@@ -64,7 +64,7 @@ const{
 const{
   getGradeData,
   uploadGrades,
-  uploadScoresFromExcel
+  uploadScoresFromExcel,
 }= require("../controllers/Teacher/subjectScore");
 
 const router = express.Router();

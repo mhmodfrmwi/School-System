@@ -80,7 +80,9 @@ const {
   getStudentWithFriendsPoints,
 } = require("../controllers/Student/studentRewardsController");
 const {
-  getStudentGrades
+  getStudentGrades,
+  getStudentSemesterGrades,
+  getAllSemesterGrades
 } = require("../controllers/Student/getStudentGrade");
 const router = express.Router();
 
@@ -289,5 +291,17 @@ router.get(
   validateJwt,
   validateStudent,
   getStudentGrades
+);
+router.get(
+  "/semester-subject-degree",
+  validateJwt,
+  validateStudent,
+  getStudentSemesterGrades
+);
+router.get(
+  "/all-subjects-degrees",
+  validateJwt,
+  validateStudent,
+  getAllSemesterGrades
 );
 module.exports = router;

@@ -17,6 +17,11 @@ const subjectScoreSchema = new Schema({
     ref: "Grade",
     required: true,
   },
+  type: {
+    type: String,
+    enum: ['midterm', 'final'],
+    required: true
+  },
   /*
   gradeSubjectSemesterId: { 
     type: Schema.Types.ObjectId,

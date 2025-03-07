@@ -32,11 +32,11 @@ const scoreSchema = new Schema({
     ref: 'Subject',
     required: true
   },*/
-  type: {
+  /*type: {
     type: String,
     enum: ['midterm', 'final'],
     required: true
-  },
+  },*/
   examGrade: {
     type: Number,
     required: true,
