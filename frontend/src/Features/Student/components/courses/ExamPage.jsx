@@ -72,6 +72,39 @@ const StudentExamPage = () => {
     });
   };
 
+  // Start the timer
+  const startTimer = useCallback(() => {
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    // Only start timer if time is left
+    if (timeLeft <= 0) return;
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+
+          // Only auto-submit if no submission is in progress
+          if (!submissionInProgressRef.current) {
+            handleSubmitExam(true);
+          }
+          return 0;
+        }
+
+        const newTime = prevTime - 1;
+        setFormattedAvailableTime(
+          `${Math.floor(newTime / 60)}:${newTime % 60 < 10 ? `0${newTime % 60}` : newTime % 60}`,
+        );
+        return newTime;
+      });
+    }, 1000);
+  }, [timeLeft]);
+
   // Handle exam submission
   const handleSubmitExam = useCallback(
     async (isAutomatic = false) => {
@@ -105,14 +138,14 @@ const StudentExamPage = () => {
             text: "Please answer all questions before submitting.",
             icon: "warning",
             confirmButtonText: "OK",
-          });
-          submissionInProgressRef.current = false;
-          setIsSubmitting(false);
+          }).then(() => {
+            // Reset submission flags
+            submissionInProgressRef.current = false;
+            setIsSubmitting(false);
 
-          // Restart timer if it was an automatic submission attempt
-          if (isAutomatic && timeLeft > 0) {
+            // Restart the timer after user acknowledges the warning
             startTimer();
-          }
+          });
           return;
         }
       }
@@ -130,9 +163,14 @@ const StudentExamPage = () => {
           text: "Either the exam is already submitted or the session has expired.",
           icon: "warning",
           confirmButtonText: "OK",
+        }).then(() => {
+          // Reset submission flags
+          submissionInProgressRef.current = false;
+          setIsSubmitting(false);
+
+          // Restart the timer after user acknowledges the warning
+          startTimer();
         });
-        submissionInProgressRef.current = false;
-        setIsSubmitting(false);
         return;
       }
 
@@ -171,14 +209,14 @@ const StudentExamPage = () => {
           text: error.message || "Failed to submit exam",
           icon: "error",
           confirmButtonText: "OK",
-        });
-        submissionInProgressRef.current = false;
-        setIsSubmitting(false);
+        }).then(() => {
+          // Reset submission flags
+          submissionInProgressRef.current = false;
+          setIsSubmitting(false);
 
-        // Restart timer if there was an error during automatic submission
-        if (isAutomatic && timeLeft > 0) {
+          // Restart the timer after user acknowledges the error
           startTimer();
-        }
+        });
       }
     },
     [
@@ -189,45 +227,18 @@ const StudentExamPage = () => {
       gradeSubjectSemesterId,
       navigate,
       currentExam,
-      timeLeft,
+      startTimer,
     ],
   );
 
-  // Start the timer
-  const startTimer = useCallback(() => {
-    // Clear any existing timer
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-
-    timerRef.current = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime <= 1) {
-          clearInterval(timerRef.current);
-          timerRef.current = null;
-
-          // Only auto-submit if no submission is in progress
-          if (!submissionInProgressRef.current) {
-            handleSubmitExam(true);
-          }
-          return 0;
-        }
-
-        const newTime = prevTime - 1;
-        setFormattedAvailableTime(
-          `${Math.floor(newTime / 60)}:${newTime % 60 < 10 ? `0${newTime % 60}` : newTime % 60}`,
-        );
-        return newTime;
-      });
-    }, 1000);
-  }, [handleSubmitExam]);
-
-  // Timer logic
+  // Timer logic - start timer when component mounts or when timeLeft changes
   useEffect(() => {
+    // Only start timer if time is left and no submission is in progress
     if (timeLeft > 0 && !submissionInProgressRef.current) {
       startTimer();
     }
 
+    // Cleanup timer on component unmount
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
