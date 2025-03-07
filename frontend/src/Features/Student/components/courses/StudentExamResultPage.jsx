@@ -88,7 +88,7 @@ const ExamResultPage = () => {
                   </div>
                   <div>
                     <span className="text-gray-600 text-lg">Percentage : </span>
-                    <span className="text-lg font-semibold text-gray-800">{examResult.result.percentage}%</span>
+                    <span className="text-lg font-semibold text-gray-800">{parseFloat(examResult.result.percentage).toFixed(2)}%</span>
                   </div>
                   <div>
                     <span className="text-gray-600 text-lg">Status : </span>

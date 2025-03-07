@@ -95,6 +95,9 @@ const StudentQuestionDetailes = lazy(() => import("./Features/Student/components
 const StudentExams = lazy(() => import("./Features/Student/components/courses/CourseExam"),);
 const StudentExamPage = lazy(() => import("./Features/Student/components/courses/ExamPage"),);
 const StudentExamResultPage = lazy(() => import("./Features/Student/components/courses/StudentExamResultPage"),);
+const StudentAssignments = lazy(() => import("./Features/Student/components/courses/CourseAssignment"),);
+const StudentAssignmentPage = lazy(() => import("./Features/Student/components/courses/AssignmentView"),);
+const StudentAssignmentSubmittedpage = lazy(() => import("./Features/Student/components/courses/AssignmentSubmissionView"),);
 const AttendancePage = lazy(() => import("./Features/Student/components/Attendance/AttendancePage"),);
 const MaterialDetails = lazy(() => import("./Features/Student/components/courses/MaterialDetails"),);
 
@@ -360,6 +363,18 @@ function App() {
             <Route
               path="allcourses/exams/:gradeSubjectSemesterId/result/:examId"
               element={<StudentExamResultPage />}
+            />
+              <Route
+              path="allcourses/assignments/:gradeSubjectSemesterId"
+              element={<StudentAssignments />}
+            />
+             <Route
+              path="allcourses/assignments/:gradeSubjectSemesterId/:assignmentId"
+              element={<StudentAssignmentPage />}
+            />
+              <Route
+              path="allcourses/assignments/:gradeSubjectSemesterId/submission/:assignmentId"
+              element={<StudentAssignmentSubmittedpage />}
             />
             <Route path="attendance" element={<AttendancePage />} />
           </Route>

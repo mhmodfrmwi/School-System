@@ -41,6 +41,7 @@ import generalLibraryReducer from "./Features/Teacher/components/TeacherRedux/ge
 import questionbankReducer from "./Features/Teacher/components/TeacherRedux/QuestionBankSlice";
 import studentQuestionBankReducer from "./Features/Student/components/StudentRedux/questionBankSlice";
 import examsReducer from "./Features/Student/components/StudentRedux/examsSlice";
+import assignmentsReducer from "./Features/Student/components/StudentRedux/assignmentSlice";
 import motivationReducer from "./Features/Student/components/StudentRedux/motivationSlice";
 import examReducer from "./Features/Teacher/components/TeacherRedux/ExamSlice";
 import motivationTeacherReducer from "./Features/Teacher/components/TeacherRedux/motivationTeacherSlice";
@@ -91,6 +92,7 @@ const store = configureStore({
     exam: examReducer,
     motivation: motivationReducer,
     motivationTeacher: motivationTeacherReducer,
+    assignments: assignmentsReducer,
   },
 });
 

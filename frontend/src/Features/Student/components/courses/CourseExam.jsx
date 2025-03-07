@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchExams,
@@ -71,8 +71,8 @@ const ExamsSection = () => {
     }
   }, [error, dispatch]);
 
- // Categorize and sort exams for the "All" tab
-const categorizeAndSortExams = useCallback(
+  // Categorize and sort exams for the "All" tab
+  const categorizeAndSortExams = useCallback(
     (exams) => {
       const now = new Date();
 
@@ -165,33 +165,33 @@ const categorizeAndSortExams = useCallback(
     }
 
     dispatch(startExamSession(exam._id)).then((action) => {
-        if (startExamSession.fulfilled.match(action)) {
-          // If the session starts successfully, navigate to the exam page
+      if (startExamSession.fulfilled.match(action)) {
+        // If the session starts successfully, navigate to the exam page
+        navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
+      } else {
+        // Check if the error message indicates an active session
+        if (action.payload === "You already have an active session for this exam") {
+          Swal.fire({
+            title: "Warning!",
+            text: "You already have an active session. Resuming your previous exam.",
+            icon: "warning",
+            confirmButtonText: "Proceed",
+          });
+          // Navigate to the exam page even if this error occurs
           navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
         } else {
-          // Check if the error message indicates an active session
-          if (action.payload === "You already have an active session for this exam") {
-            Swal.fire({
-              title: "Warning!",
-              text: "You already have an active session. Resuming your previous exam.",
-              icon: "warning",
-              confirmButtonText: "Proceed",
-            });
-            // Navigate to the exam page even if this error occurs
-            navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
-          } else {
-            // Handle other errors normally
-            Swal.fire({
-              title: "Error!",
-              text: action.payload || "Failed to start the exam.",
-              icon: "error",
-              confirmButtonText: "OK",
-            });
-          }
+          // Handle other errors normally
+          Swal.fire({
+            title: "Error!",
+            text: action.payload || "Failed to start the exam.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
         }
-      });
-      
-      
+      }
+    });
+
+
 
   };
 
@@ -206,10 +206,10 @@ const categorizeAndSortExams = useCallback(
   const paginatedExams = activeTab === "all"
     ? filteredExams.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage)
     : activeTab === "upcoming"
-    ? upcomingExams.slice((currentPageUpcoming - 1) * itemsPerPage, currentPageUpcoming * itemsPerPage)
-    : activeTab === "completed"
-    ? completedExams.slice((currentPageCompleted - 1) * itemsPerPage, currentPageCompleted * itemsPerPage)
-    : missedExams.slice((currentPageMissed - 1) * itemsPerPage, currentPageMissed * itemsPerPage);
+      ? upcomingExams.slice((currentPageUpcoming - 1) * itemsPerPage, currentPageUpcoming * itemsPerPage)
+      : activeTab === "completed"
+        ? completedExams.slice((currentPageCompleted - 1) * itemsPerPage, currentPageCompleted * itemsPerPage)
+        : missedExams.slice((currentPageMissed - 1) * itemsPerPage, currentPageMissed * itemsPerPage);
 
   const nextPage = () => {
     if (activeTab === "all" && currentPageAll < totalPagesAll) {
@@ -281,7 +281,9 @@ const categorizeAndSortExams = useCallback(
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+              onClick={() => navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}`)}
+            >
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
             </Button>
           </li>
@@ -396,42 +398,42 @@ const categorizeAndSortExams = useCallback(
                     new Date() < new Date(exam.start_time)
                       ? "The exam has not started yet."
                       : new Date() > new Date(exam.end_time)
-                      ? "The exam has already ended."
-                      : ""
+                        ? "The exam has already ended."
+                        : ""
                   }
                 >
                   <Button
-  variant="solid"
-  className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
-  onClick={() => {
-    const session = sessions.find((session) => session.exam_id._id === exam._id);
-    if (
-      session?.status === "Submitted" ||
-      session?.isExpired === true 
-    ) {
-      // Navigate to the results page
-      navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/result/${exam._id}`);
-    } else {
-      // Handle starting the exam
-      handleStartExam(exam);
-    }
-  }}
-  disabled={
-    (new Date() > new Date(exam.end_time) && !sessions.find((session) => session.exam_id._id === exam._id)) ||
-    new Date() < new Date(exam.start_time) ||
-    exam.type === "Offline"
-  }
->
-  {(() => {
-    if (exam.type === "Offline") return "Offline";
-    const session = sessions.find((session) => session.exam_id._id === exam._id);
-    if (session?.status === "Submitted") return "View";
-    if (session?.isExpired === true) return "View";
-    if (new Date() < new Date(exam.start_time)) return "Not Started";
-    if (new Date() > new Date(exam.end_time)) return "Exam Ended";
-    return "Start Exam";
-  })()}
-</Button>
+                    variant="solid"
+                    className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
+                    onClick={() => {
+                      const session = sessions.find((session) => session.exam_id._id === exam._id);
+                      if (
+                        session?.status === "Submitted" ||
+                        session?.isExpired === true
+                      ) {
+                        // Navigate to the results page
+                        navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/result/${exam._id}`);
+                      } else {
+                        // Handle starting the exam
+                        handleStartExam(exam);
+                      }
+                    }}
+                    disabled={
+                      (new Date() > new Date(exam.end_time) && !sessions.find((session) => session.exam_id._id === exam._id)) ||
+                      new Date() < new Date(exam.start_time) ||
+                      exam.type === "Offline"
+                    }
+                  >
+                    {(() => {
+                      if (exam.type === "Offline") return "Offline";
+                      const session = sessions.find((session) => session.exam_id._id === exam._id);
+                      if (session?.status === "Submitted") return "View";
+                      if (session?.isExpired === true) return "View";
+                      if (new Date() < new Date(exam.start_time)) return "Not Started";
+                      if (new Date() > new Date(exam.end_time)) return "Exam Ended";
+                      return "Start Exam";
+                    })()}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
