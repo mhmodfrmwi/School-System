@@ -44,7 +44,7 @@ const AssignmentForm = () => {
                 <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
                     Upload Assignment
                 </h1>
-                <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[200px]"></div>
+                <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[240px]"></div>
             </div>
 
             <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">

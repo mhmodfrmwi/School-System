@@ -46,7 +46,7 @@ const assignmentSlice = createSlice({
             .addCase(createAssignment.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.assignment.push(action.payload.assignment); 
-                      toast.success('Exam created successfully!');
+                toast.success('Assignment created successfully!');
                 
             })
             .addCase(createAssignment.rejected, (state, action) => {
