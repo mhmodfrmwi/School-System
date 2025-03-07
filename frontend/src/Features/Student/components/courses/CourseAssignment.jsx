@@ -29,8 +29,8 @@ const AssignmentsSection = () => {
     const [currentPageAll, setCurrentPageAll] = useState(1);
     const [currentPageSubmitted, setCurrentPageSubmitted] = useState(1);
     const [currentPagePending, setCurrentPagePending] = useState(1);
+    const [currentPageMissed, setCurrentPageMissed] = useState(1);
     const itemsPerPage = 3;
-
 
     useEffect(() => {
         dispatch(fetchSubjects());
@@ -46,7 +46,6 @@ const AssignmentsSection = () => {
             }
         }
     }, [gradeSubjectSemesterId, subjects]);
-
 
     useEffect(() => {
         if (error) {
@@ -92,7 +91,6 @@ const AssignmentsSection = () => {
         },
         [studentSubmissions]
     );
-
     // Update filteredAssignments when activeTab, assignments, or studentSubmissions change
     useEffect(() => {
         let assignmentsToDisplay = [];
@@ -100,32 +98,44 @@ const AssignmentsSection = () => {
             assignmentsToDisplay = categorizeAndSortAssignments(assignments);
         } else if (activeTab === "submitted") {
             assignmentsToDisplay = assignments.filter((assignment) =>
-                studentSubmissions.some((submission) => submission.assignment_id._id === assignment._id)
+                studentSubmissions.some((submission) => submission.assignment_id?._id === assignment._id)
             );
         } else if (activeTab === "pending") {
-            assignmentsToDisplay = assignments.filter(
-                (assignment) =>
-                    !studentSubmissions.some((submission) => submission.assignment_id._id === assignment._id)
-            );
+            assignmentsToDisplay = assignments.filter((assignment) => {
+                const isSubmitted = studentSubmissions.some(
+                    (submission) => submission.assignment_id?._id === assignment._id
+                );
+                const dueDate = new Date(assignment.due_date);
+                const now = new Date();
+                return !isSubmitted && dueDate >= now;
+            });
+        } else if (activeTab === "missed") {
+            assignmentsToDisplay = assignments.filter((assignment) => {
+                const isSubmitted = studentSubmissions.some(
+                    (submission) => submission.assignment_id?._id === assignment._id
+                );
+                const dueDate = new Date(assignment.due_date);
+                const now = new Date();
+                return !isSubmitted && dueDate < now;
+            });
         }
         setFilteredAssignments(assignmentsToDisplay);
     }, [activeTab, assignments, studentSubmissions, categorizeAndSortAssignments]);
 
     const handleViewAssignment = (assignmentId) => {
         const isSubmitted = studentSubmissions.some(
-            (submission) => submission.assignment_id._id === assignmentId
+            (submission) => submission.assignment_id?._id === assignmentId
         );
-        
+
         if (isSubmitted) {
-            
             navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}/submission/${assignmentId}`);
         } else {
-           
             navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}/${assignmentId}`);
         }
     };
+
     // Pagination logic
-    const currentPage = activeTab === "all" ? currentPageAll : activeTab === "submitted" ? currentPageSubmitted : currentPagePending;
+    const currentPage = activeTab === "all" ? currentPageAll : activeTab === "submitted" ? currentPageSubmitted : activeTab === "pending" ? currentPagePending : currentPageMissed;
     const totalPagesAll = Math.ceil(filteredAssignments.length / itemsPerPage);
     const totalPagesSubmitted = Math.ceil(
         assignments.filter((assignment) =>
@@ -133,27 +143,56 @@ const AssignmentsSection = () => {
         ).length / itemsPerPage
     );
     const totalPagesPending = Math.ceil(
-        assignments.filter(
-            (assignment) =>
-                !studentSubmissions.some((submission) => submission.assignment_id?._id === assignment._id)
-        ).length / itemsPerPage
+        assignments.filter((assignment) => {
+            const isSubmitted = studentSubmissions.some(
+                (submission) => submission.assignment_id?._id === assignment._id
+            );
+            const dueDate = new Date(assignment.due_date);
+            const now = new Date();
+            return !isSubmitted && dueDate >= now;
+        }).length / itemsPerPage
     );
-    const totalPages = activeTab === "all" ? totalPagesAll : activeTab === "submitted" ? totalPagesSubmitted : totalPagesPending;
+    const totalPagesMissed = Math.ceil(
+        assignments.filter((assignment) => {
+            const isSubmitted = studentSubmissions.some(
+                (submission) => submission.assignment_id?._id === assignment._id
+            );
+            const dueDate = new Date(assignment.due_date);
+            const now = new Date();
+            return !isSubmitted && dueDate < now;
+        }).length / itemsPerPage
+    );
+    const totalPages = activeTab === "all" ? totalPagesAll : activeTab === "submitted" ? totalPagesSubmitted : activeTab === "pending" ? totalPagesPending : totalPagesMissed;
 
     const paginatedAssignments = activeTab === "all"
         ? filteredAssignments.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage)
         : activeTab === "submitted"
             ? assignments
                 .filter((assignment) =>
-                    studentSubmissions.some((submission) => submission.assignment_id._id === assignment._id)
+                    studentSubmissions.some((submission) => submission.assignment_id?._id === assignment._id)
                 )
                 .slice((currentPageSubmitted - 1) * itemsPerPage, currentPageSubmitted * itemsPerPage)
-            : assignments
-                .filter(
-                    (assignment) =>
-                        !studentSubmissions.some((submission) => submission.assignment_id._id === assignment._id)
-                )
-                .slice((currentPagePending - 1) * itemsPerPage, currentPagePending * itemsPerPage);
+            : activeTab === "pending"
+                ? assignments
+                    .filter((assignment) => {
+                        const isSubmitted = studentSubmissions.some(
+                            (submission) => submission.assignment_id?._id === assignment._id
+                        );
+                        const dueDate = new Date(assignment.due_date);
+                        const now = new Date();
+                        return !isSubmitted && dueDate >= now;
+                    })
+                    .slice((currentPagePending - 1) * itemsPerPage, currentPagePending * itemsPerPage)
+                : assignments
+                    .filter((assignment) => {
+                        const isSubmitted = studentSubmissions.some(
+                            (submission) => submission.assignment_id?._id === assignment._id
+                        );
+                        const dueDate = new Date(assignment.due_date);
+                        const now = new Date();
+                        return !isSubmitted && dueDate < now;
+                    })
+                    .slice((currentPageMissed - 1) * itemsPerPage, currentPageMissed * itemsPerPage);
 
     const nextPage = () => {
         if (activeTab === "all" && currentPageAll < totalPagesAll) {
@@ -162,6 +201,8 @@ const AssignmentsSection = () => {
             setCurrentPageSubmitted(currentPageSubmitted + 1);
         } else if (activeTab === "pending" && currentPagePending < totalPagesPending) {
             setCurrentPagePending(currentPagePending + 1);
+        } else if (activeTab === "missed" && currentPageMissed < totalPagesMissed) {
+            setCurrentPageMissed(currentPageMissed + 1);
         }
     };
 
@@ -172,6 +213,8 @@ const AssignmentsSection = () => {
             setCurrentPageSubmitted(currentPageSubmitted - 1);
         } else if (activeTab === "pending" && currentPagePending > 1) {
             setCurrentPagePending(currentPagePending - 1);
+        } else if (activeTab === "missed" && currentPageMissed > 1) {
+            setCurrentPageMissed(currentPageMissed - 1);
         }
     };
 
@@ -280,7 +323,31 @@ const AssignmentsSection = () => {
                             } px-4 md:px-6 py-2 rounded-full`}
                         onClick={() => setActiveTab("pending")}
                     >
-                        Pending ({assignments.length - studentSubmissions.length})
+                        Pending ({assignments.filter((assignment) => {
+                            const isSubmitted = studentSubmissions.some(
+                                (submission) => submission.assignment_id?._id === assignment._id
+                            );
+                            const dueDate = new Date(assignment.due_date);
+                            const now = new Date();
+                            return !isSubmitted && dueDate >= now;
+                        }).length})
+                    </Button>
+                    <Button
+                        variant={activeTab === "missed" ? "outline" : "solid"}
+                        className={`${activeTab === "missed"
+                            ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
+                            : "border border-gray-500 text-gray-800"
+                            } px-4 md:px-6 py-2 rounded-full`}
+                        onClick={() => setActiveTab("missed")}
+                    >
+                        Missed ({assignments.filter((assignment) => {
+                            const isSubmitted = studentSubmissions.some(
+                                (submission) => submission.assignment_id?._id === assignment._id
+                            );
+                            const dueDate = new Date(assignment.due_date);
+                            const now = new Date();
+                            return !isSubmitted && dueDate < now;
+                        }).length})
                     </Button>
                 </div>
 
@@ -322,15 +389,46 @@ const AssignmentsSection = () => {
 
                                 {/* View Assignment */}
                                 <div className="ml-4">
-                                    <Button
-                                        variant="solid"
-                                        className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
-                                        onClick={() => handleViewAssignment(assignment._id)}
-                                    >
-                                        {studentSubmissions.some((submission) => submission.assignment_id?._id === assignment._id)
-                                            ? "View Submission"
-                                            : "Submit Assignment"}
-                                    </Button>
+                                    {(() => {
+                                        const isSubmitted = studentSubmissions.some(
+                                            (submission) => submission.assignment_id?._id === assignment._id
+                                        );
+                                        const dueDate = new Date(assignment.due_date);
+                                        const now = new Date();
+                                        const isMissed = !isSubmitted && dueDate < now;
+
+                                        if (isMissed) {
+                                            return (
+                                                <Button
+                                                    variant="solid"
+                                                    className="text-white bg-gray-400 px-4 py-2 rounded-lg cursor-not-allowed"
+                                                    disabled
+                                                >
+                                                    Missed
+                                                </Button>
+                                            );
+                                        } else if (isSubmitted) {
+                                            return (
+                                                <Button
+                                                    variant="solid"
+                                                    className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
+                                                    onClick={() => handleViewAssignment(assignment._id)}
+                                                >
+                                                    View Submission
+                                                </Button>
+                                            );
+                                        } else {
+                                            return (
+                                                <Button
+                                                    variant="solid"
+                                                    className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
+                                                    onClick={() => handleViewAssignment(assignment._id)}
+                                                >
+                                                    Submit Assignment
+                                                </Button>
+                                            );
+                                        }
+                                    })()}
                                 </div>
                             </CardContent>
                         </Card>
