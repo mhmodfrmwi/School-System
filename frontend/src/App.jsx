@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import TitleUpdater from "./ui/TitleUpdater";
+import AssignmentForm from "./Features/Teacher/components/courses/Assignments/AssignmentsForm";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -498,6 +499,10 @@ function App() {
             <Route
               path="/teacher/see-all-exams/:gradeSubjectSemesterId"
               element={<SeeAllExams />}
+            />
+            <Route
+              path="/teacher/assignment-form/:classId/:gradeSubjectSemesterId"
+              element={<AssignmentForm />}
             />
 
             <Route
