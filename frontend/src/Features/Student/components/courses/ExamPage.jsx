@@ -18,48 +18,69 @@ const StudentExamPage = () => {
   const [formattedAvailableTime, setFormattedAvailableTime] = useState("Calculating...");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const isSubmittedRef = useRef(false);
+  const timerRef = useRef(null); // Ref to store the timer
 
+  // Fetch exam and sessions on mount
   useEffect(() => {
+    console.debug("Fetching exam and sessions...");
     dispatch(fetchExamById(examId));
     dispatch(fetchSessions());
   }, [dispatch, examId]);
 
+  // Calculate time left based on active session
   useEffect(() => {
+    console.debug("Checking for active session...");
     const activeSession = sessions.find(
       (session) => session.exam_id._id === examId && session.isExpired === false
     );
 
     if (activeSession) {
+      console.debug("Active session found:", activeSession);
       const now = moment();
       const endTime = moment(activeSession.end_time);
       const durationInSeconds = endTime.diff(now, "seconds");
 
       if (durationInSeconds >= 0) {
+        console.debug("Time left:", durationInSeconds, "seconds");
         setTimeLeft(durationInSeconds);
         setFormattedAvailableTime(
           `${Math.floor(durationInSeconds / 60)}:${durationInSeconds % 60 < 10 ? `0${durationInSeconds % 60}` : durationInSeconds % 60}`
         );
       } else {
+        console.debug("Session has expired.");
         setTimeLeft(0);
         setFormattedAvailableTime("00:00");
       }
+    } else {
+      console.debug("No active session found.");
     }
   }, [sessions, examId]);
 
+  // Handle answer changes
   const handleAnswerChange = (questionId, selectedAnswer) => {
+    console.debug("Answer changed for question:", questionId, "Selected answer:", selectedAnswer);
     setAnswers((prevAnswers) => {
       const updatedAnswers = prevAnswers.filter((answer) => answer.question_id !== questionId);
       return [...updatedAnswers, { question_id: questionId, selected_answer: selectedAnswer }];
     });
   };
 
+  // Handle exam submission
   const handleSubmitExam = useCallback(
     (isAutomatic = false) => {
+      console.debug("Submit exam triggered. isAutomatic:", isAutomatic);
+
       if (isSubmittedRef.current) {
+        console.debug("Exam already submitted. Aborting.");
         return;
       }
 
+      isSubmittedRef.current = true;
+      setIsSubmitted(true);
+      console.debug("isSubmittedRef set to true.");
+
       if (!isAutomatic) {
+        console.debug("Checking for unanswered questions...");
         const allQuestions = currentExam.exam.exam_questions;
         const unansweredQuestions = allQuestions.filter((question) => {
           const existingAnswer = answers.find((answer) => answer.question_id === question._id);
@@ -67,19 +88,21 @@ const StudentExamPage = () => {
         });
 
         if (unansweredQuestions.length > 0) {
+          console.debug("Unanswered questions found:", unansweredQuestions.length);
           Swal.fire({
             title: "Incomplete Exam",
             text: "Please answer all questions before submitting.",
             icon: "warning",
             confirmButtonText: "OK",
           });
+          isSubmittedRef.current = false;
+          setIsSubmitted(false);
+          console.debug("isSubmittedRef reset to false due to incomplete exam.");
           return;
         }
       }
 
-      isSubmittedRef.current = true;
-      setIsSubmitted(true);
-
+      console.debug("Looking for active session...");
       const activeSession = sessions.find(
         (session) =>
           session.exam_id._id === examId &&
@@ -88,16 +111,21 @@ const StudentExamPage = () => {
       );
 
       if (!activeSession) {
+        console.debug("No active session found or session already submitted.");
         Swal.fire({
           title: "No Active Session",
           text: "Either the exam is already submitted or the session has expired.",
           icon: "warning",
           confirmButtonText: "OK",
         });
+        isSubmittedRef.current = false;
+        setIsSubmitted(false);
+        console.debug("isSubmittedRef reset to false due to no active session.");
         return;
       }
 
       const sessionId = activeSession._id;
+      console.debug("Active session ID:", sessionId);
 
       const allAnswers = currentExam.exam.exam_questions.map((question) => {
         const existingAnswer = answers.find((answer) => answer.question_id === question._id);
@@ -107,42 +135,54 @@ const StudentExamPage = () => {
         };
       });
 
+      console.debug("Submitting exam with answers:", allAnswers);
       dispatch(submitExam({ sessionId, answers: allAnswers }))
         .then((action) => {
           if (action.payload) {
+            console.debug("Exam submitted successfully. Score:", action.payload.score);
             Swal.fire({
               title: isAutomatic ? "Time's Up! Exam Auto-Submitted" : "Exam Submitted!",
               text: `Your score is ${action.payload.score || 0}`,
               icon: "success",
               confirmButtonText: "OK",
             }).then(() => {
+              console.debug("Navigating to exam list page...");
               navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`);
             });
           }
         })
         .catch((error) => {
+          console.error("Error submitting exam:", error);
           Swal.fire({
             title: "Error!",
             text: error.message || "Failed to submit exam",
             icon: "error",
             confirmButtonText: "OK",
           });
+          isSubmittedRef.current = false;
+          setIsSubmitted(false);
+          console.debug("isSubmittedRef reset to false due to error.");
         });
     },
     [dispatch, sessions, examId, answers, gradeSubjectSemesterId, navigate, currentExam]
   );
 
+  // Timer logic
   useEffect(() => {
-    let timer;
+    console.debug("Timer useEffect triggered. Time left:", timeLeft);
+
     if (timeLeft > 0 && !isSubmittedRef.current) {
-      timer = setInterval(() => {
+      console.debug("Starting timer...");
+      timerRef.current = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 10) {
-            clearInterval(timer);
+            console.debug("Time's up! Auto-submitting exam...");
+            clearInterval(timerRef.current);
             handleSubmitExam(true);
             return 0;
           }
           const newTime = prevTime - 1;
+          console.debug("Time left:", newTime, "seconds");
           setFormattedAvailableTime(
             `${Math.floor(newTime / 60)}:${newTime % 60 < 10 ? `0${newTime % 60}` : newTime % 60}`
           );
@@ -151,12 +191,16 @@ const StudentExamPage = () => {
       }, 1000);
     }
 
-    return () => clearInterval(timer);
+    return () => {
+      console.debug("Clearing timer...");
+      clearInterval(timerRef.current);
+    };
   }, [timeLeft, handleSubmitExam]);
 
   const timeColor = timeLeft <= 60 ? "text-red-500" : "text-gray-800";
 
   if (loading) {
+    console.debug("Loading exam data...");
     return (
       <div className="flex items-center justify-center text-gray-500 mt-10">
         <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4" />
@@ -166,13 +210,16 @@ const StudentExamPage = () => {
   }
 
   if (error) {
+    console.error("Error loading exam:", error);
     return <div className="text-center text-red-500">Error: {error}</div>;
   }
 
   if (!currentExam || !currentExam.exam || !currentExam.exam.exam_questions) {
+    console.debug("No exam questions found.");
     return <div className="text-center text-gray-500">No exam questions found.</div>;
   }
 
+  console.debug("Rendering exam page...");
   return (
     <div className="font-poppins mt-20 mb-20 min-h-[75vh] w-[75%] mx-auto">
       {/* Header */}
