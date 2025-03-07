@@ -27,19 +27,21 @@ const StudentExamPage = () => {
     dispatch(fetchSessions());
   }, [dispatch, examId]);
 
-  // Calculate time left based on active session
   useEffect(() => {
     console.debug("Checking for active session...");
     const activeSession = sessions.find(
       (session) => session.exam_id._id === examId && session.isExpired === false
     );
-
+  
     if (activeSession) {
       console.debug("Active session found:", activeSession);
       const now = moment();
       const endTime = moment(activeSession.end_time);
-      const durationInSeconds = endTime.diff(now, "seconds");
-
+      let durationInSeconds = endTime.diff(now, "seconds");
+  
+      // Subtract 10 seconds from the total duration
+      durationInSeconds = Math.max(durationInSeconds - 10, 0); // Ensure it doesn't go below 0
+  
       if (durationInSeconds >= 0) {
         console.debug("Time left:", durationInSeconds, "seconds");
         setTimeLeft(durationInSeconds);
@@ -105,7 +107,7 @@ const StudentExamPage = () => {
       console.debug("Looking for active session...");
       const activeSession = sessions.find(
         (session) =>
-          session.exam_id._id === examId &&
+          session.exam_id?._id === examId &&
           (isAutomatic || session.isExpired === false) &&
           session?.status !== "Submitted"
       );
