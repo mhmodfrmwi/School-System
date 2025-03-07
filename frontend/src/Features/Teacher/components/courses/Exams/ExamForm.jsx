@@ -13,7 +13,7 @@ const ExamForm = () => {
   const [examData, setExamData] = useState({
     title: '',
     description: '',
-    type: 'Online', // Default value
+    type: 'Online', 
     start_time: '',
     end_time: '',
     duration: 0,
@@ -29,15 +29,12 @@ const ExamForm = () => {
     ],
   });
 
-  // Function to calculate total marks of questions
   const calculateTotalQuestionMarks = (questions) => {
     return questions.reduce((sum, question) => sum + (Number(question.marks) || 0), 0);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate time
     const currentTime = new Date();
     const startTime = new Date(examData.start_time);
     const endTime = new Date(examData.end_time);
@@ -57,18 +54,15 @@ const ExamForm = () => {
       return;
     }
 
-    // Validate required fields
     if (
       !examData.title ||
       !examData.start_time ||
       !examData.end_time ||
-      (examData.type === 'Online' && examData.exam_questions.length === 0) // Validate questions only for Online exams
+      (examData.type === 'Online' && examData.exam_questions.length === 0) 
     ) {
       toast.error('Please fill in all required fields');
       return;
     }
-
-    // Validate total marks for Online exams
     if (examData.type === 'Online') {
       const totalQuestionMarks = calculateTotalQuestionMarks(examData.exam_questions);
       if (totalQuestionMarks !== examData.total_marks) {
@@ -77,7 +71,6 @@ const ExamForm = () => {
       }
     }
 
-    // Validate each question for Online exams
     const updatedQuestions = examData.exam_questions.map((q) => {
       if (!q.question_text || !q.marks) {
         toast.error('Please fill in all required fields for each question');
@@ -95,7 +88,6 @@ const ExamForm = () => {
       };
     });
 
-    // Prepare payload
     const formattedStartTime = new Date(examData.start_time).toISOString();
     const formattedEndTime = new Date(examData.end_time).toISOString();
     const token = sessionStorage.getItem('token');
@@ -106,19 +98,17 @@ const ExamForm = () => {
       ...examData,
       start_time: formattedStartTime,
       end_time: formattedEndTime,
-      exam_questions: examData.type === 'Online' ? updatedQuestions : [], // Include questions only for Online exams
+      exam_questions: examData.type === 'Online' ? updatedQuestions : [], 
       created_by,
     };
 
     try {
-      // Submit data
       await dispatch(
         createExam({ formData: payload, classId, gradeSubjectSemesterId })
       ).unwrap();
 
       toast.success('Exam created successfully!');
 
-      // Reset form
       setExamData({
         title: '',
         description: '',
@@ -145,12 +135,11 @@ const ExamForm = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    // If type is changed to "Offline", reset exam_questions
     if (name === 'type' && value === 'Offline') {
       setExamData({
         ...examData,
         [name]: value,
-        exam_questions: [], // Clear exam_questions
+        exam_questions: [], 
       });
     } else {
       setExamData({
@@ -206,7 +195,6 @@ const ExamForm = () => {
 
       <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
         <form onSubmit={handleSubmit} className="space-y-4 font-poppins">
-          {/* Exam details fields */}
           <div>
             <label className="block font-medium">Title:</label>
             <input
@@ -288,7 +276,6 @@ const ExamForm = () => {
             </div>
           </div>
 
-          {/* Show questions only for Online exams */}
           {examData.type === 'Online' && (
             <>
               {examData.exam_questions.map((q, index) => (
@@ -348,7 +335,6 @@ const ExamForm = () => {
                 </div>
               ))}
 
-              {/* Add new question button (only for Online exams) */}
               <button
                 type="button"
                 onClick={addNewQuestion}

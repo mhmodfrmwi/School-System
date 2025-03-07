@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchExamsForTeacher, deleteExam } from "../../TeacherRedux/ExamSlice";
+import { fetchExamsForTeacher } from "../../TeacherRedux/ExamSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt, faEye, faCalendar, faChartBar } from "@fortawesome/free-solid-svg-icons";
+import {  faEye, faCalendar, faChartBar } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -54,20 +54,6 @@ const ExamCard = ({ exam, onView, onEdit, onDelete, onViewResults }) => {
           <FontAwesomeIcon icon={faEye} className="text-xl" />
         </button>
         <button
-          aria-label="Edit Exam"
-          className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
-          onClick={onEdit}
-        >
-          <FontAwesomeIcon icon={faEdit} className="text-xl" />
-        </button>
-        <button
-          aria-label="Delete Exam"
-          className="text-[#E74833] hover:text-[#244856] transition-colors duration-300"
-          onClick={onDelete}
-        >
-          <FontAwesomeIcon icon={faTrashAlt} className="text-xl" />
-        </button>
-        <button
           aria-label="View Results"
           className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
           onClick={onViewResults}
@@ -79,11 +65,12 @@ const ExamCard = ({ exam, onView, onEdit, onDelete, onViewResults }) => {
   );
 };
 
-const SeeMyExams = () => {
+const SeeAllExams = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { exams, loading, error } = useSelector((state) => state.exam);
 
+  // Fetch exams on component mount
   useEffect(() => {
     dispatch(fetchExamsForTeacher())
       .unwrap()
@@ -92,22 +79,6 @@ const SeeMyExams = () => {
       });
   }, [dispatch]);
 
-  const handleDeleteExam = async (examId) => {
-    if (window.confirm("Are you sure you want to delete this exam?")) {
-      try {
-        await dispatch(deleteExam(examId)).unwrap();
-        // toast.success("Exam deleted successfully!");
-        dispatch(fetchExamsForTeacher());
-      } catch (error) {
-        toast.error(error.message || "Failed to delete exam");
-      }
-    }
-  };
-
-  const handleEditExam = (examId) => {
-    navigate(`/teacher/exams/${examId}`);
-  };
-
   const handleViewExam = (examId) => {
     navigate(`/teacher/exam-details/${examId}`);
   };
@@ -115,10 +86,6 @@ const SeeMyExams = () => {
   const handleViewResults = (examId) => {
     navigate(`/teacher/exam-results/${examId}`);
   };
-  const sortedExams = exams
-    ? [...exams].sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
-    : [];
-
   if (loading) {
     return <p className="text-center text-lg font-semibold">Loading...</p>;
   }
@@ -132,14 +99,12 @@ const SeeMyExams = () => {
       <h1 className="text-3xl font-bold font-poppins text-[#244856]">My Exams</h1>
       <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
       <div className="grid font-poppins gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
-        {sortedExams && exams.length > 0 ? (
-          sortedExams.map((exam) => (
+        {exams && exams.length > 0 ? (
+          exams.map((exam) => (
             <ExamCard
               key={exam._id}
               exam={exam}
               onView={() => handleViewExam(exam._id)}
-              onEdit={() => handleEditExam(exam._id)}
-              onDelete={() => handleDeleteExam(exam._id)}
               onViewResults={() => handleViewResults(exam._id)} 
             />
           ))
@@ -162,4 +127,4 @@ const SeeMyExams = () => {
   );
 };
 
-export default SeeMyExams;
+export default SeeAllExams;

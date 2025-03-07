@@ -18,7 +18,7 @@ export const createExam = createAsyncThunk(
         Authorization: `Bearer ${token}`,
       };
 
-      
+
       const response = await fetch(url, {
         method: 'POST',
         headers,
@@ -125,7 +125,36 @@ export const deleteExam = createAsyncThunk(
         throw new Error(errorResponse.message || 'Failed to delete exam');
       }
 
-      return examId; // Return the exam ID to remove it from the state
+      return examId;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Server Error');
+    }
+  }
+);
+
+export const fetchExamResults = createAsyncThunk(
+  'exam/fetchExamResults',
+  async (examId, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) {
+        return rejectWithValue('Authentication required. Please log in.');
+      }
+
+      const url = `http://localhost:3000/exams/${examId}/results`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(url, { headers });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to fetch exam results');
+      }
+
+      const data = await response.json();
+      return { examId, results: data };
     } catch (error) {
       return rejectWithValue(error.message || 'Server Error');
     }
@@ -136,6 +165,7 @@ const examSlice = createSlice({
   name: 'exam',
   initialState: {
     exams: [],
+    examResults: {},
     status: 'idle',
     error: null,
     loading: false,
@@ -177,7 +207,7 @@ const examSlice = createSlice({
       })
       .addCase(deleteExam.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.exams = state.exams.filter(exam => exam._id !== action.payload); 
+        state.exams = state.exams.filter(exam => exam._id !== action.payload);
         toast.success("Exam deleted successfully");
         state.loading = false;
       })
@@ -202,6 +232,21 @@ const examSlice = createSlice({
       .addCase(updateExam.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload || 'Failed to update exam';
+        state.loading = false;
+      })
+      // Existing cases...
+      .addCase(fetchExamResults.pending, (state) => {
+        state.status = 'loading';
+        state.loading = true;
+      })
+      .addCase(fetchExamResults.fulfilled, (state, action) => {
+        console.log("Fetched Results:", action.payload); 
+        state.examResults[action.payload.examId] = action.payload.results;
+        state.loading = false;
+      })
+      .addCase(fetchExamResults.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || 'Failed to fetch exam results';
         state.loading = false;
       });
   },

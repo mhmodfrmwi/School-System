@@ -4,6 +4,7 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const examRoutes = require("./routes/examRoutes");
 const sessionRoutes = require("./routes/sessionRoutes");
+const assignmentRoutes = require("./routes/assignmentRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const fetchAndRegisterModel = require("./utils/fetchAndRegisterModel");
 
@@ -34,6 +35,7 @@ app.use(express.json());
 
 app.use("/exams", examRoutes);
 app.use("/sessions", sessionRoutes);
+app.use("/assignments", assignmentRoutes);
 
 app.use(errorHandler);
 

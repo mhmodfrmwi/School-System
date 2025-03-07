@@ -138,7 +138,9 @@ const MaterialSection = () => {
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
+            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+             onClick={() => navigate(`/student/allcourses/assignments/${subjectId}`)}
+             >
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
             </Button>
           </li>
