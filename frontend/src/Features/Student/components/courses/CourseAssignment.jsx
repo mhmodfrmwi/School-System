@@ -72,10 +72,10 @@ const AssignmentsSection = () => {
 
                 // Check if the assignment is submitted
                 const isASubmitted = studentSubmissions.some(
-                    (submission) => submission.assignment_id._id === a._id
+                    (submission) => submission.assignment_id?._id === a._id
                 );
                 const isBSubmitted = studentSubmissions.some(
-                    (submission) => submission.assignment_id._id === b._id
+                    (submission) => submission.assignment_id?._id === b._id
                 );
 
                 // Priority 1: Pending assignments (not submitted and not overdue)
@@ -129,13 +129,13 @@ const AssignmentsSection = () => {
     const totalPagesAll = Math.ceil(filteredAssignments.length / itemsPerPage);
     const totalPagesSubmitted = Math.ceil(
         assignments.filter((assignment) =>
-            studentSubmissions.some((submission) => submission.assignment_id._id === assignment._id)
+            studentSubmissions.some((submission) => submission.assignment_id?._id === assignment._id)
         ).length / itemsPerPage
     );
     const totalPagesPending = Math.ceil(
         assignments.filter(
             (assignment) =>
-                !studentSubmissions.some((submission) => submission.assignment_id._id === assignment._id)
+                !studentSubmissions.some((submission) => submission.assignment_id?._id === assignment._id)
         ).length / itemsPerPage
     );
     const totalPages = activeTab === "all" ? totalPagesAll : activeTab === "submitted" ? totalPagesSubmitted : totalPagesPending;
@@ -327,7 +327,7 @@ const AssignmentsSection = () => {
                                         className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
                                         onClick={() => handleViewAssignment(assignment._id)}
                                     >
-                                        {studentSubmissions.some((submission) => submission.assignment_id._id === assignment._id)
+                                        {studentSubmissions.some((submission) => submission.assignment_id?._id === assignment._id)
                                             ? "View Submission"
                                             : "Submit Assignment"}
                                     </Button>

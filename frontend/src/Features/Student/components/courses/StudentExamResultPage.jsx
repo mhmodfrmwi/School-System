@@ -110,7 +110,7 @@ const ExamResultPage = () => {
                 examResult.savedAnswers.map((answer, index) => (
                   <Card
                     key={answer._id}
-                    className="border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
+                    className="border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 mb-8"
                   >
                     <CardContent className="p-6">
                       <div className="flex justify-between items-center mb-4">
