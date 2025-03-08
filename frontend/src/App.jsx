@@ -13,6 +13,11 @@ import GetStudentsForGrades from "./Features/Teacher/components/Grades/GetStuden
 import UploadFileGrades from "./Features/Teacher/components/Grades/UploadFileGrades";
 import GradesForSemester from "./Features/Student/components/Grades/GradesForSemester";
 import GradesforAllYears from "./Features/Student/components/Grades/GradesforAllYears";
+import SeeAssignments from "./Features/Teacher/components/courses/Assignments/SeeAssignments";
+import EditAssignment from "./Features/Teacher/components/courses/Assignments/EditAssignments";
+import AssignmentSubmissions from "./Features/Teacher/components/courses/Assignments/SubmissionsForAssignment";
+import StudentSubmissions from "./Features/Teacher/components/courses/Assignments/StudentSubmission";
+import SubmissionDetails from "./Features/Teacher/components/courses/Assignments/StudentSubmission";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -805,6 +810,21 @@ function App() {
               path="/teacher/assignment-form/:classId/:gradeSubjectSemesterId"
               element={<AssignmentForm />}
             />
+            <Route
+              path="/teacher/all-assignment"
+              element={<SeeAssignments />}
+            />
+            <Route 
+            path="/teacher/assignment-submissions/:assignmentId" 
+            element={<AssignmentSubmissions />} />
+
+            <Route
+              path="/teacher/edit-assignment/:assignmentId"
+              element={<EditAssignment />}
+            />
+            <Route 
+            path="/teacher/submission-details/:submissionId" 
+            element={<SubmissionDetails />} />
 
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
