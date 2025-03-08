@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createAssignment } from '../../TeacherRedux/AssignmentSlice'; 
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { editAssignment, fetchAssignments } from '../../TeacherRedux/AssignmentSlice';
 
-const AssignmentForm = () => {
+const EditAssignment = () => {
+    const { assignmentId } = useParams();
     const dispatch = useDispatch();
-    const { classId, gradeSubjectSemesterId } = useParams();
+    const navigate = useNavigate();
+    const { assignment } = useSelector((state) => state.assignmentsTeacher);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -15,46 +17,40 @@ const AssignmentForm = () => {
         total_marks: '',
     });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    useEffect(() => {
+        dispatch(fetchAssignments());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (assignment.length > 0) {
+            const selectedAssignment = assignment.find((a) => a._id === assignmentId);
+            if (selectedAssignment) {
+                setFormData({
+                    title: selectedAssignment.title,
+                    description: selectedAssignment.description,
+                    due_date: new Date(selectedAssignment.due_date).toISOString().slice(0, 16),
+                    total_marks: selectedAssignment.total_marks,
+                });
+            }
+        }
+    }, [assignment, assignmentId]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const dueDate = new Date(formData.due_date);
-        const currentDate = new Date();
-
-        if (dueDate < currentDate) {
-            toast.error('Due date cannot be in the past.'); 
-            return;
-        }
-
-        const token = sessionStorage.getItem('token');
-        if (!token) {
-            toast.error('Authentication required. Please log in.'); 
-            return;
-        }
-
-        const decodedToken = JSON.parse(atob(token.split('.')[1]));
-        const created_by = decodedToken.id;
-        const payload = {
-            ...formData,
-            created_by,
-        };
-
-        dispatch(createAssignment({ gradeSubjectSemesterId, classId, ...payload }))
+        dispatch(editAssignment({ assignmentId, updatedData: formData }))
             .unwrap()
             .then(() => {
-                setFormData({ 
-                    title: '',
-                    description: '',
-                    due_date: '',
-                    total_marks: '',
-                });
+                toast.success("Assignment updated successfully!");
+                navigate(-1); 
             })
             .catch((error) => {
-                toast.error(error || 'Failed to create assignment.'); 
+                toast.error(error || 'Failed to update assignment');
             });
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     return (
@@ -62,7 +58,7 @@ const AssignmentForm = () => {
             <ToastContainer />
             <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
                 <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                    Upload Assignment
+                    Update Assignment
                 </h1>
                 <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[240px]"></div>
             </div>
@@ -116,7 +112,7 @@ const AssignmentForm = () => {
                         type="submit"
                         className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
                     >
-                        Create Assignment
+                        Edit Assignment
                     </button>
                 </form>
             </div>
@@ -124,4 +120,4 @@ const AssignmentForm = () => {
     );
 };
 
-export default AssignmentForm;
+export default EditAssignment;
