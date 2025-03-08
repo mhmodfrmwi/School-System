@@ -31,7 +31,9 @@ const getSubmissionsForAssignment = async (id) => {
   try {
     const assignmentSubmissions = await AssignmentSubmission.find({
       assignment_id: id,
-    }).select("-__v -createdAt -updatedAt");
+    })
+      .select("-__v -createdAt -updatedAt")
+      .populate("student_id", "fullName");
     const submissions = await Promise.all(
       assignmentSubmissions.map(async (submission) => {
         const status = await submission.getStatus();

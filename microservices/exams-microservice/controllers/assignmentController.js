@@ -110,9 +110,9 @@ const getAssignmentById = async (req, res) => {
 const getAssignments = async (req, res) => {
   let assignments;
   try {
-    if (req.query.gradeSubjectSemesterId && req.query.classId) {
+    if (req.query.gradeSubjectSemesterId) {
       const grade_subject_semester_id = req.query.gradeSubjectSemesterId;
-      const class_id = req.query.classId;
+      const class_id = req.user.classId;
       const gradeSubjectSemester = await GradeSubjectSemester.findOne({
         _id: grade_subject_semester_id,
       }).populate([
