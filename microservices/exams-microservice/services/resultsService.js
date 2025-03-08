@@ -2,7 +2,7 @@ const Exam = require("../models/Exam");
 const Session = require("../models/Session");
 const StudentAnswer = require("../models/StudentAnswer");
 const ExamResult = require("../models/ExamResult");
-const calculateResults = async (session_id) => {
+const calculateResults = async (session_id, dbSession = null) => {
   try {
     const session = await Session.findById(session_id);
     if (!session) {
@@ -18,7 +18,26 @@ const calculateResults = async (session_id) => {
       throw new Error("Exam has invalid total marks");
     }
 
-    const answers = await StudentAnswer.find({ session_id });
+    // Check for existing result first
+    const existingResult = await ExamResult.findOne(
+      {
+        student_id: session.student_id,
+        exam_id: session.exam_id,
+      },
+      null,
+      dbSession ? { session: dbSession } : undefined
+    );
+
+    if (existingResult) {
+      return existingResult;
+    }
+
+    const answers = await StudentAnswer.find(
+      { session_id },
+      null,
+      dbSession ? { session: dbSession } : undefined
+    );
+
     if (!answers || answers.length === 0) {
       throw new Error(`No answers found for session ${session_id}`);
     }
@@ -31,15 +50,6 @@ const calculateResults = async (session_id) => {
     const percentage =
       exam.total_marks > 0 ? (totalMarks / exam.total_marks) * 100 : 0;
 
-    const existingResult = await ExamResult.findOne({
-      student_id: session.student_id,
-      exam_id: session.exam_id,
-    });
-
-    if (existingResult) {
-      return existingResult;
-    }
-
     const result = new ExamResult({
       student_id: session.student_id,
       exam_id: session.exam_id,
@@ -48,7 +58,12 @@ const calculateResults = async (session_id) => {
       status: totalMarks >= exam.total_marks / 2 ? "Pass" : "Fail",
     });
 
-    await result.save();
+    if (dbSession) {
+      await result.save({ session: dbSession });
+    } else {
+      await result.save();
+    }
+
     return result;
   } catch (error) {
     console.error("Error calculating results:", error);

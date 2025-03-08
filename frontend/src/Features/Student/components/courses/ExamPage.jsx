@@ -24,8 +24,11 @@ const StudentExamPage = () => {
   const [formattedAvailableTime, setFormattedAvailableTime] =
     useState("Calculating...");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Use a ref to track submission status across async calls
   const submissionInProgressRef = useRef(false);
   const timerRef = useRef(null);
+  // Add a submission completed ref to track when a submission has been completed
+  const submissionCompletedRef = useRef(false);
 
   // Fetch exam and sessions on mount
   useEffect(() => {
@@ -80,8 +83,8 @@ const StudentExamPage = () => {
       timerRef.current = null;
     }
 
-    // Only start timer if time is left
-    if (timeLeft <= 0) return;
+    // Only start timer if time is left and submission is not completed
+    if (timeLeft <= 0 || submissionCompletedRef.current) return;
 
     timerRef.current = setInterval(() => {
       setTimeLeft((prevTime) => {
@@ -89,8 +92,11 @@ const StudentExamPage = () => {
           clearInterval(timerRef.current);
           timerRef.current = null;
 
-          // Only auto-submit if no submission is in progress
-          if (!submissionInProgressRef.current) {
+          // Only auto-submit if no submission is in progress or completed
+          if (
+            !submissionInProgressRef.current &&
+            !submissionCompletedRef.current
+          ) {
             handleSubmitExam(true);
           }
           return 0;
@@ -108,8 +114,15 @@ const StudentExamPage = () => {
   // Handle exam submission
   const handleSubmitExam = useCallback(
     async (isAutomatic = false) => {
+      // Check if submission is already completed or in progress
+      if (submissionCompletedRef.current) {
+        console.log("Exam already submitted successfully");
+        return;
+      }
+
       // Prevent multiple submissions
       if (submissionInProgressRef.current) {
+        console.log("Submission already in progress");
         return;
       }
 
@@ -144,7 +157,9 @@ const StudentExamPage = () => {
             setIsSubmitting(false);
 
             // Restart the timer after user acknowledges the warning
-            startTimer();
+            if (!submissionCompletedRef.current) {
+              startTimer();
+            }
           });
           return;
         }
@@ -164,12 +179,13 @@ const StudentExamPage = () => {
           icon: "warning",
           confirmButtonText: "OK",
         }).then(() => {
-          // Reset submission flags
+          // Mark as completed since there's no valid session
+          submissionCompletedRef.current = true;
           submissionInProgressRef.current = false;
           setIsSubmitting(false);
 
-          // Restart the timer after user acknowledges the warning
-          startTimer();
+          // Navigate back after acknowledgment
+          navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`);
         });
         return;
       }
@@ -191,6 +207,9 @@ const StudentExamPage = () => {
           submitExam({ sessionId, answers: allAnswers }),
         );
 
+        // Mark submission as completed before showing any alerts
+        submissionCompletedRef.current = true;
+
         if (action.payload) {
           Swal.fire({
             title: isAutomatic
@@ -204,19 +223,36 @@ const StudentExamPage = () => {
           });
         }
       } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: error.message || "Failed to submit exam",
-          icon: "error",
-          confirmButtonText: "OK",
-        }).then(() => {
-          // Reset submission flags
+        // Only reset flags if this is a real error, not just a "already submitted" message
+        if (error.message && !error.message.includes("submitted before")) {
           submissionInProgressRef.current = false;
-          setIsSubmitting(false);
+          // Don't reset the completed flag here, as the server might have processed it
 
-          // Restart the timer after user acknowledges the error
-          startTimer();
-        });
+          Swal.fire({
+            title: "Error!",
+            text: error.message || "Failed to submit exam",
+            icon: "error",
+            confirmButtonText: "OK",
+          }).then(() => {
+            setIsSubmitting(false);
+
+            // Only restart timer if we're sure submission failed and exam isn't completed
+            if (!submissionCompletedRef.current) {
+              startTimer();
+            }
+          });
+        } else {
+          // It was already submitted, so mark as completed
+          submissionCompletedRef.current = true;
+          Swal.fire({
+            title: "Already Submitted",
+            text: "Your exam was already submitted. Returning to exam list.",
+            icon: "info",
+            confirmButtonText: "OK",
+          }).then(() => {
+            navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`);
+          });
+        }
       }
     },
     [
@@ -233,8 +269,12 @@ const StudentExamPage = () => {
 
   // Timer logic - start timer when component mounts or when timeLeft changes
   useEffect(() => {
-    // Only start timer if time is left and no submission is in progress
-    if (timeLeft > 0 && !submissionInProgressRef.current) {
+    // Only start timer if time is left and no submission is in progress or completed
+    if (
+      timeLeft > 0 &&
+      !submissionInProgressRef.current &&
+      !submissionCompletedRef.current
+    ) {
       startTimer();
     }
 
@@ -370,7 +410,9 @@ const StudentExamPage = () => {
                                 handleAnswerChange(question._id, option)
                               }
                               className="mr-3"
-                              disabled={isSubmitting}
+                              disabled={
+                                isSubmitting || submissionCompletedRef.current
+                              }
                             />
                             {option}
                           </label>
@@ -387,7 +429,7 @@ const StudentExamPage = () => {
               <Button
                 onClick={() => handleSubmitExam(false)}
                 className="w-full rounded-lg bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-3 text-white transition-all duration-300 hover:from-[#CF72C0] hover:to-[#FD813D]"
-                disabled={isSubmitting}
+                disabled={isSubmitting || submissionCompletedRef.current}
               >
                 {isSubmitting ? "Submitting..." : "Submit Exam"}
               </Button>
