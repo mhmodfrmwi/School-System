@@ -61,7 +61,7 @@ const SidebarTeacher = () => {
       label: "Grade Management",
       icon: GradeIcon,
       hoverIcon: GradeIconH,
-      href: "#",
+      href: "/teacher/current-courses-for-grades",
     },
     {
       label: "Activities",

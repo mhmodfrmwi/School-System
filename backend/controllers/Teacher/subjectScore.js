@@ -137,84 +137,9 @@ const getGradeData = expressAsyncHandler(async (req, res) => {
   });
 });
 
-const uploadScoresFromExcel1 = expressAsyncHandler(async (req, res) => {
-  const { classId, gradeSubjectSemesterId } = req.params;
-  const file = req.file;
-
-  if (!file) {
-    return res.status(400).json({ message: "No file uploaded." });
-  }
-
-  try {
-    const workbook = xlsx.readFile(file.path);
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-
-    const type = sheet["B1"]?.v;
-    const finalDegree = sheet["B2"]?.v;
-
-    if (!type || !finalDegree) {
-      return res
-        .status(400)
-        .json({ message: "File is missing type or finalDegree." });
-    }
-
-    const data = xlsx.utils.sheet_to_json(sheet, { range: 2 });
-
-    if (!data.length) {
-      return res
-        .status(400)
-        .json({ message: "File contains no student data." });
-    }
-
-    for (const row of data) {
-      const { academic_number, fullName, examGrade } = row;
-
-      if (!academic_number || !fullName || !examGrade) {
-        console.warn("Invalid file format or missing data.");
-        continue;
-      }
-
-      const student = await Student.findOne({ academic_number });
-      if (!student) {
-        console.warn(`Student ${fullName} (${academic_number}) not found.`);
-        continue;
-      }
-
-      let subjectScore = await SubjectScore.findOne({ gradeSubjectSemesterId });
-      if (!subjectScore) {
-        subjectScore = new SubjectScore({
-          gradeSubjectSemesterId,
-          finalDegree,
-        });
-        await subjectScore.save();
-      }
-
-      const score = new Score({
-        studentId: student._id,
-        academicYearId: student.academicYear_id,
-        classId,
-        type,
-        examGrade,
-        subjectScoreId: subjectScore._id,
-      });
-
-      await score.save();
-    }
-    fs.unlinkSync(file.path);
-    res.status(200).json({ message: "Data uploaded successfully." });
-  } catch (error) {
-    if (file) {
-      fs.unlinkSync(file.path);
-    }
-    console.error("Error uploading data:", error);
-    res.status(500).json({ message: "Error uploading data." });
-  }
-});
 const uploadScoresFromExcel = expressAsyncHandler(async (req, res) => {
     const { classId, gradeSubjectSemesterId } = req.params;
     const file = req.file;
-  
     if (!file) {
       return res.status(400).json({status:400, message: "No file uploaded." });
     }
@@ -313,12 +238,14 @@ const uploadScoresFromExcel = expressAsyncHandler(async (req, res) => {
           gradeId,
           subjectId,
           semesterId,
+          type
         });
         if (!subjectScore) {
           subjectScore = new SubjectScore({
             gradeId,
             subjectId,
             semesterId,
+            type,
             finalDegree,
           });
           await subjectScore.save();
@@ -328,7 +255,7 @@ const uploadScoresFromExcel = expressAsyncHandler(async (req, res) => {
           studentId: student._id,
           academicYearId: student.academicYear_id,
           classId,
-          type,
+          //type,
           examGrade,
           subjectScoreId: subjectScore._id,
         });

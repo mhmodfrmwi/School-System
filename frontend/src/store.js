@@ -46,6 +46,8 @@ import motivationReducer from "./Features/Student/components/StudentRedux/motiva
 import examReducer from "./Features/Teacher/components/TeacherRedux/ExamSlice";
 import motivationTeacherReducer from "./Features/Teacher/components/TeacherRedux/motivationTeacherSlice";
 import assignmentsTeacherReducer from "./Features/Teacher/components/TeacherRedux/AssignmentSlice";
+import examScoresReducer from "./Features/Teacher/components/TeacherRedux/examScoreSlice";
+import gradesStudentReducer from "./Features/Student/components/StudentRedux/gradesStudentSlice";
 const store = configureStore({
   reducer: {
     role: roleReducer,
@@ -95,6 +97,8 @@ const store = configureStore({
     motivationTeacher: motivationTeacherReducer,
     assignments: assignmentsReducer,
     assignmentsTeacher: assignmentsTeacherReducer,
+    examScores: examScoresReducer,
+    studentGrades: gradesStudentReducer,
   },
 });
 
