@@ -51,6 +51,51 @@ const fetchAssignmentsByAttributes = async (
     throw new Error(`Failed to fetch assignments: ${error.message}`);
   }
 };
+
+const fetchAssignmentsByTeacherId = async (teacher_id) => {
+  try {
+    const assignments = await Assignment.find({ created_by: teacher_id })
+      .populate("created_by", "fullName")
+      .populate("subject_id", "subjectName")
+      .populate("class_id", "className")
+      .populate("grade_id", "gradeName")
+      .populate("academic_year_id", "startYear endYear")
+      .populate("semester_id", "semesterName")
+      .select("-__v -createdAt -updatedAt");
+    return assignments;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Failed to fetch assignments: ${error.message}`);
+  }
+};
+const fetchAssignmentsByTeacherIdAndSubjectAttributes = async (
+  teacher_id,
+  subject_id,
+  grade_id,
+  academic_year_id,
+  semester_id
+) => {
+  try {
+    const assignments = await Assignment.find({
+      created_by: teacher_id,
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+    })
+      .populate("created_by", "fullName")
+      .populate("subject_id", "subjectName")
+      .populate("class_id", "className")
+      .populate("grade_id", "gradeName")
+      .populate("academic_year_id", "startYear endYear")
+      .populate("semester_id", "semesterName")
+      .select("-__v -createdAt -updatedAt");
+    return assignments;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Failed to fetch assignments: ${error.message}`);
+  }
+};
 const fetchAssignmentById = async (id) => {
   try {
     const assignment = await Assignment.findById(id)
@@ -102,4 +147,6 @@ module.exports = {
   fetchAssignmentById,
   updateAssignment,
   deleteAssignment,
+  fetchAssignmentsByTeacherId,
+  fetchAssignmentsByTeacherIdAndSubjectAttributes,
 };
