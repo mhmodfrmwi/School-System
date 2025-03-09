@@ -226,9 +226,22 @@ const getStudentResults = async (student_id) => {
   }
 };
 
-const getMissedExams = async (student_id) => {
+const getMissedExams = async (
+  student_id,
+  subject_id,
+  grade_id,
+  academic_year_id,
+  semester_id,
+  class_id
+) => {
   try {
-    const exams = await Exam.find()
+    const exams = await Exam.find({
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+      class_id,
+    })
       .populate("subject_id grade_id class_id academic_year_id semester_id")
       .populate("created_by", "_id fullName")
       .select("-__v -createdAt -updatedAt");
@@ -253,9 +266,22 @@ const getMissedExams = async (student_id) => {
   }
 };
 
-const getCompletedExams = async (student_id) => {
+const getCompletedExams = async (
+  student_id,
+  subject_id,
+  grade_id,
+  academic_year_id,
+  semester_id,
+  class_id
+) => {
   try {
-    const exams = await Exam.find()
+    const exams = await Exam.find({
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+      class_id,
+    })
       .populate("subject_id grade_id class_id academic_year_id semester_id")
       .populate("created_by", "_id fullName")
       .select("-__v -createdAt -updatedAt");
