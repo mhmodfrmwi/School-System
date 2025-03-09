@@ -7,6 +7,8 @@ import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import TitleUpdater from "./ui/TitleUpdater";
+import SeeAllAssignments from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllAssignments";
+import AllSubmissionsForAssignment from "./Features/Teacher/components/courses/AllYearsMaterual/AllSubmissionsForAssignment";
 
 
 /* /////////////////auth imports//////////////////// */
@@ -846,7 +848,12 @@ function App() {
             <Route 
             path="/teacher/submission-details/:submissionId" 
             element={<SubmissionDetails />} />
-
+            <Route 
+            path="/teacher/see-all-assignments-allYears/:gradeSubjectSemesterId" 
+            element={<SeeAllAssignments />} />
+            <Route 
+            path="/teacher/all-assignment-submissions/:assignmentId" 
+            element={<AllSubmissionsForAssignment />} />
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}

@@ -34,26 +34,33 @@ export const fetchAssignments = createAsyncThunk(
     'assignments/fetchAssignments',
     async (gradeSubjectSemesterId, { rejectWithValue }) => {
         try {
-            const url = `http://localhost:3000/assignments?gradeSubjectSemesterId=${gradeSubjectSemesterId}`;
+            const url = `http://localhost:3000/assignments/teacher?gradeSubjectSemesterId=${gradeSubjectSemesterId}`;
             const headers = {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             };
+
+            console.log("Fetching assignments from:", url); // Debugging: Log the URL
+            console.log("Headers:", headers); // Debugging: Log the headers
 
             const response = await fetch(url, {
                 method: 'GET',
                 headers,
             });
 
+            console.log("Response Status:", response.status); // Debugging: Log the response status
+
             if (!response.ok) {
                 const errorResponse = await response.json();
+                console.error("Error Response:", errorResponse); // Debugging: Log the error response
                 throw new Error(errorResponse.message || 'Failed to fetch assignments');
             }
 
             const data = await response.json();
-            console.log("API Response Data:", data); 
+            console.log("API Response Data:", data); // Debugging: Log the response data
             return data;
         } catch (error) {
+            console.error("Error in fetchAssignments:", error); // Debugging: Log the error
             return rejectWithValue(error.message || 'Server Error');
         }
     }
@@ -233,7 +240,7 @@ const assignmentSlice = createSlice({
             })
             .addCase(fetchAssignments.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.assignment = action.payload; 
+                state.assignment = action.payload.assignments; // Store only the assignments array
             })
             .addCase(fetchAssignments.rejected, (state, action) => {
                 state.status = 'failed';
