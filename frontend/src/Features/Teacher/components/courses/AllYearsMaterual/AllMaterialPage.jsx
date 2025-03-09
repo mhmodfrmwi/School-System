@@ -8,6 +8,8 @@ import { fetchMaterials } from "../../TeacherRedux/PdfMaterialSlice";
 import { fetchVR } from "../../TeacherRedux/VRSlice";
 import { fetchAllQuestions } from "../../TeacherRedux/QuestionBankSlice"; 
 import { fetchExamsForTeacher } from "../../TeacherRedux/ExamSlice"; 
+import { fetchAssignments } from "../../TeacherRedux/AssignmentSlice"; 
+
 
 const AllMaterialPage = () => {
   const {  gradeSubjectSemesterId } = useParams();
@@ -28,7 +30,7 @@ const AllMaterialPage = () => {
       } else if (courseName === "Question Bank") {
         targetUrl = `/teacher/my-all-question-bank/${gradeSubjectSemesterId}/my-questions`
     } else if (courseName === "Assignments") {
-      targetUrl = `/teacher/assignments/${gradeSubjectSemesterId}`;
+      targetUrl = `/teacher/see-all-assignments-allYears/${gradeSubjectSemesterId}`;
     } else if (courseName === "Exams") {
       targetUrl = `/teacher/see-all-exams/${gradeSubjectSemesterId}`;
     }
@@ -47,6 +49,9 @@ const AllMaterialPage = () => {
   const exams = useSelector((state) => {
     return state.exam.exams; 
   });
+  const assignment = useSelector((state) => {
+    return state.assignmentsTeacher.assignment;
+});
   useEffect(() => {
     dispatch(fetchALLClassTeacher());
   }, [dispatch]);
@@ -56,7 +61,8 @@ const AllMaterialPage = () => {
       dispatch(fetchMaterials(gradeSubjectSemesterId));
       dispatch(fetchVR(gradeSubjectSemesterId));
       dispatch(fetchAllQuestions(gradeSubjectSemesterId)); 
-      dispatch(fetchExamsForTeacher(gradeSubjectSemesterId));  
+      dispatch(fetchExamsForTeacher(gradeSubjectSemesterId)); 
+      dispatch(fetchAssignments(gradeSubjectSemesterId));  
     } else {
       console.error("gradeSubjectSemesterId is undefined");
     }
@@ -71,6 +77,7 @@ const AllMaterialPage = () => {
   const vrCount = teacherVirtualRooms.length;
   const questionBankCount = myQuestions.length;
   const examCount = exams.filter((exam) => exam.teacherId === classteacher?._id).length;
+  const filteredAssignments = assignment.filter((assignment) => assignment.teacherId === classteacher?._id).length;
 
 
   // console.log("Selected Class Teacher:", classteacher);
@@ -83,7 +90,7 @@ const AllMaterialPage = () => {
     { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
     { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
     { id: 4, name: "Question Bank", total: questionBankCount, icon: faVideo },
-    { id: 4, name: "Assignments", total: 100, icon: faTasks },
+    { id: 5, name: "Assignments", total: filteredAssignments, icon: faTasks },
     { id: 6, name: "Exams", total: examCount, icon: faFileAlt },
   ];
 
