@@ -7,6 +7,7 @@ import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import { fetchMaterials } from "../TeacherRedux/PdfMaterialSlice";
 import { fetchAllQuestions } from "../TeacherRedux/QuestionBankSlice"; 
 import { fetchExamsForTeacher } from "../TeacherRedux/ExamSlice"; 
+import { fetchAssignments } from "../TeacherRedux/AssignmentSlice"; 
 import { fetchVR } from "../TeacherRedux/VRSlice";
 
 const AddMaterial = () => {
@@ -57,6 +58,10 @@ const AddMaterial = () => {
     const exams = useSelector((state) => {
       return state.exam.exams; 
     });
+    const assignment = useSelector((state) => {
+      return state.assignmentsTeacher.assignment;
+  });
+    
   useEffect(() => {
     if (classId) {
       dispatch(fetchClassTeacher(classId));
@@ -69,6 +74,7 @@ const AddMaterial = () => {
       dispatch(fetchVR(gradeSubjectSemesterId));
       dispatch(fetchAllQuestions(gradeSubjectSemesterId)); 
       dispatch(fetchExamsForTeacher(gradeSubjectSemesterId));  
+      dispatch(fetchAssignments(gradeSubjectSemesterId)); 
     }
   }, [dispatch, gradeSubjectSemesterId]);
 
@@ -81,6 +87,8 @@ const AddMaterial = () => {
   const vrCount = teacherVirtualRooms.length;
   const questionBankCount = myQuestions.length;
   const examCount = exams.filter((exam) => exam.teacherId === classteacher?._id).length;
+  // const filteredAssignments = assignment.filter((assignment) => assignment.created_by._id === classteacher?._id).length;
+  const assignments = assignment.length;
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
@@ -88,7 +96,7 @@ const AddMaterial = () => {
     { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
     { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
     { id: 4, name: "Question Bank", total: questionBankCount, icon: faVideo },
-    { id: 5, name: "Assignments", total: 100, icon: faTasks },
+    { id: 5, name: "Assignments", total: assignments, icon: faTasks },
     { id: 6, name: "Exams", total: examCount, icon: faFileAlt },
   ];
 
