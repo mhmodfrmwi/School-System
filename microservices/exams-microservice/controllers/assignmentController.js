@@ -1,4 +1,6 @@
 const Assignment = require("../models/Assignment");
+const AssignmentSubmission = require("../models/AssignmentSubmission");
+
 const GradeSubjectSemester = require("../models/GradeSubjectSemester");
 const {
   addAssignment,
@@ -84,8 +86,18 @@ const updateAssignmentById = async (req, res) => {
 
 const deleteAssignmentById = async (req, res) => {
   try {
+    const submissions = await AssignmentSubmission.find({
+      assignment_id: req.params.id,
+    });
+    if (submissions) {
+      return res
+        .status(400)
+        .json({
+          message:
+            "This assignment can not be deleted because it has submissions",
+        });
+    }
     const assignment = await deleteAssignment(req.params.id);
-
     res.status(200).json({ message: "Assignment deleted successfully" });
   } catch (error) {
     console.error(error);
