@@ -36,7 +36,7 @@ const AddMaterial = () => {
           : `/teacher/question-bank-form/${gradeSubjectSemesterId}`;
     } else if (courseName === "Assignments") {
       targetUrl = actionType === "see"
-          ? `/teacher/all-assignment`
+          ? `/teacher/all-assignment/${gradeSubjectSemesterId}`
           : `/teacher/assignment-form/${classId}/${gradeSubjectSemesterId}`;
     } else if (courseName === "Exams") {
       targetUrl = actionType === "see"

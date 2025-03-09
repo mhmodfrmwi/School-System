@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faCalendar, faChartBar } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 import { fetchAssignments, deleteAssignment } from "../../TeacherRedux/AssignmentSlice";
 
 const SeeAssignments = () => {
@@ -12,21 +12,31 @@ const SeeAssignments = () => {
         const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         return `${formattedDate} (${formattedTime})`;
     };
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { gradeSubjectSemesterId } = useParams();
     const { assignment, status, error } = useSelector((state) => state.assignmentsTeacher);
     const assignmentsArray = Array.isArray(assignment) ? assignment : [];
 
+    console.log("gradeSubjectSemesterId:", gradeSubjectSemesterId);
+    console.log("Assignment State:", assignment);
+    console.log("Status:", status);
+    console.log("Error:", error);
+
     useEffect(() => {
-        dispatch(fetchAssignments())
-            .unwrap()
-            .then((data) => {
-                console.log("Assignments Data:", data); 
-            })
-            .catch((error) => {
-                console.error("Error fetching assignments:", error);
-            });
-    }, [dispatch]);
+        if (gradeSubjectSemesterId) {
+            dispatch(fetchAssignments(gradeSubjectSemesterId))
+                .unwrap()
+                .then((data) => {
+                    console.log("Assignments Data:", data); 
+                })
+                .catch((error) => {
+                    console.error("Error fetching assignments:", error);
+                });
+        }
+    }, [dispatch, gradeSubjectSemesterId]);
+
     const handleEditAssignment = (assignmentId) => {
         navigate(`/teacher/edit-assignment/${assignmentId}`);
     };

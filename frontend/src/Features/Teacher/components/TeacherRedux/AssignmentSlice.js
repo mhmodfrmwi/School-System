@@ -32,9 +32,9 @@ export const createAssignment = createAsyncThunk(
 
 export const fetchAssignments = createAsyncThunk(
     'assignments/fetchAssignments',
-    async (_, { rejectWithValue }) => {
+    async (gradeSubjectSemesterId, { rejectWithValue }) => {
         try {
-            const url = 'http://localhost:3000/assignments/';
+            const url = `http://localhost:3000/assignments?gradeSubjectSemesterId=${gradeSubjectSemesterId}`;
             const headers = {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem('token')}`,
@@ -51,6 +51,7 @@ export const fetchAssignments = createAsyncThunk(
             }
 
             const data = await response.json();
+            console.log("API Response Data:", data); 
             return data;
         } catch (error) {
             return rejectWithValue(error.message || 'Server Error');
