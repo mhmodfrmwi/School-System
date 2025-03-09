@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchExamsForTeacher } from "../../TeacherRedux/ExamSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faEye, faCalendar, faChartBar } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useNavigate ,useParams} from "react-router-dom";
 
 const formatStartTime = (startTime) => {
   const date = new Date(startTime);
@@ -68,17 +67,16 @@ const ExamCard = ({ exam, onView, onEdit, onDelete, onViewResults }) => {
 const SeeAllExams = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { exams, loading, error } = useSelector((state) => state.exam);
 
   // Fetch exams on component mount
-  useEffect(() => {
-    dispatch(fetchExamsForTeacher())
-      .unwrap()
-      .catch((error) => {
-        toast.error(error.message || "Failed to fetch exams");
-      });
-  }, [dispatch]);
-
+   const { gradeSubjectSemesterId } = useParams();
+   const { exams, loading, error } = useSelector((state) => state.exam);
+ 
+   useEffect(() => {
+    if (gradeSubjectSemesterId) {
+                dispatch(fetchExamsForTeacher(gradeSubjectSemesterId));
+            }
+        }, [dispatch, gradeSubjectSemesterId]);
   const handleViewExam = (examId) => {
     navigate(`/teacher/exam-details/${examId}`);
   };

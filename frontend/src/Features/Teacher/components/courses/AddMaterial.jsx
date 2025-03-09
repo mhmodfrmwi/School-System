@@ -36,7 +36,7 @@ const AddMaterial = () => {
           : `/teacher/question-bank-form/${gradeSubjectSemesterId}`;
     } else if (courseName === "Assignments") {
       targetUrl = actionType === "see"
-          ? `/teacher/all-assignment`
+          ? `/teacher/all-assignment/${gradeSubjectSemesterId}`
           : `/teacher/assignment-form/${classId}/${gradeSubjectSemesterId}`;
     } else if (courseName === "Exams") {
       targetUrl = actionType === "see"
@@ -87,8 +87,8 @@ const AddMaterial = () => {
   const vrCount = teacherVirtualRooms.length;
   const questionBankCount = myQuestions.length;
   const examCount = exams.filter((exam) => exam.teacherId === classteacher?._id).length;
-  // const filteredAssignments = assignment.filter((assignment) => assignment.created_by._id === classteacher?._id).length;
-  const assignments = assignment.length;
+  const filteredAssignments = assignment.filter((assignment) => assignment.teacherId === classteacher?._id).length;
+
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
@@ -96,7 +96,7 @@ const AddMaterial = () => {
     { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
     { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
     { id: 4, name: "Question Bank", total: questionBankCount, icon: faVideo },
-    { id: 5, name: "Assignments", total: assignments, icon: faTasks },
+    { id: 5, name: "Assignments", total: filteredAssignments, icon: faTasks },
     { id: 6, name: "Exams", total: examCount, icon: faFileAlt },
   ];
 

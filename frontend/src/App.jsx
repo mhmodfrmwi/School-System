@@ -832,7 +832,7 @@ function App() {
               element={<AssignmentForm />}
             />
             <Route
-              path="/teacher/all-assignment"
+              path="/teacher/all-assignment/:gradeSubjectSemesterId"
               element={<SeeAssignments />}
             />
             <Route 
