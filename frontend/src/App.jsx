@@ -7,17 +7,7 @@ import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
 import Loader from "./ui/Loader";
 import TitleUpdater from "./ui/TitleUpdater";
-import AssignmentForm from "./Features/Teacher/components/courses/Assignments/AssignmentsForm";
-import CurrentCoursesForGrades from "./Features/Teacher/components/Grades/CurrentCoursesForGrades";
-import GetStudentsForGrades from "./Features/Teacher/components/Grades/GetStudentsForGrades";
-import UploadFileGrades from "./Features/Teacher/components/Grades/UploadFileGrades";
-import GradesForSemester from "./Features/Student/components/Grades/GradesForSemester";
-import GradesforAllYears from "./Features/Student/components/Grades/GradesforAllYears";
-import SeeAssignments from "./Features/Teacher/components/courses/Assignments/SeeAssignments";
-import EditAssignment from "./Features/Teacher/components/courses/Assignments/EditAssignments";
-import AssignmentSubmissions from "./Features/Teacher/components/courses/Assignments/SubmissionsForAssignment";
-import StudentSubmissions from "./Features/Teacher/components/courses/Assignments/StudentSubmission";
-import SubmissionDetails from "./Features/Teacher/components/courses/Assignments/StudentSubmission";
+
 
 /* /////////////////auth imports//////////////////// */
 
@@ -456,6 +446,37 @@ const SeeAllQuestionAllYears = lazy(
       "./Features/Teacher/components/courses/AllYearsMaterual/qBank/SeeAllQuestionsAllYears"
     ),
 );
+const AssignmentForm = lazy(
+  () => import("./Features/Teacher/components/courses/Assignments/AssignmentsForm")
+);
+const CurrentCoursesForGrades = lazy(
+  () => import("./Features/Teacher/components/Grades/CurrentCoursesForGrades")
+);
+const GetStudentsForGrades = lazy(
+  () => import("./Features/Teacher/components/Grades/GetStudentsForGrades")
+);
+const UploadFileGrades = lazy(
+  () => import("./Features/Teacher/components/Grades/UploadFileGrades")
+);
+const GradesForSemester = lazy(
+  () => import("./Features/Student/components/Grades/GradesForSemester")
+);
+const GradesforAllYears = lazy(
+  () => import("./Features/Student/components/Grades/GradesforAllYears")
+);
+const SeeAssignments = lazy(
+  () => import("./Features/Teacher/components/courses/Assignments/SeeAssignments")
+);
+const EditAssignment = lazy(
+  () => import("./Features/Teacher/components/courses/Assignments/EditAssignments")
+);
+const AssignmentSubmissions = lazy(
+  () => import("./Features/Teacher/components/courses/Assignments/SubmissionsForAssignment")
+);
+const SubmissionDetails = lazy(
+  () => import("./Features/Teacher/components/courses/Assignments/StudentSubmission")
+);
+
 
 /* /////////////////manager imports//////////////////// */
 
