@@ -6,6 +6,7 @@ const {
   updateAssignment,
   deleteAssignment,
   fetchAssignmentById,
+  fetchAssignmentsByAttributes,
 } = require("../services/assignmentService");
 const { fetchExamsByAttributes } = require("../services/examService");
 
@@ -84,6 +85,7 @@ const updateAssignmentById = async (req, res) => {
 const deleteAssignmentById = async (req, res) => {
   try {
     const assignment = await deleteAssignment(req.params.id);
+
     res.status(200).json({ message: "Assignment deleted successfully" });
   } catch (error) {
     console.error(error);
@@ -134,7 +136,7 @@ const getAssignments = async (req, res) => {
         gradeSubjectSemester.grade_subject_id.academicYear_id;
       const semester_id = gradeSubjectSemester.semester_id._id;
 
-      assignments = await fetchExamsByAttributes(
+      assignments = await fetchAssignmentsByAttributes(
         class_id,
         semester_id,
         grade_id,
