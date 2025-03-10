@@ -1,4 +1,5 @@
 const Assignment = require("../models/Assignment");
+const AssignmentSubmission = require("../models/AssignmentSubmission");
 
 const addAssignment = async (assignmentData) => {
   try {
@@ -129,13 +130,28 @@ const updateAssignment = async (id, assignmentData) => {
 };
 
 const deleteAssignment = async (id) => {
+  if (!id) {
+    throw new Error("Invalid assignment ID");
+  }
+
   try {
     const result = await Assignment.findByIdAndDelete(id);
     if (!result) {
       throw new Error("Assignment not found");
     }
-    return result;
+
+    const submissions = await AssignmentSubmission.deleteMany({
+      assignment_id: id,
+    });
+
+    console.log(`Deleted assignment with ID: ${id}`);
+    console.log(`Deleted ${submissions.deletedCount} submissions`);
+
+    return {
+      deletedAssignment: result,
+    };
   } catch (error) {
+    console.error(`Failed to delete assignment by ID ${id}: ${error.message}`);
     throw new Error(`Failed to delete assignment by ID: ${error.message}`);
   }
 };
