@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEdit, faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEdit, faCalendar, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getAssignmentSubmissions } from '../../TeacherRedux/AssignmentSlice';
+import { getAssignmentSubmissions, deleteSubmission } from '../../TeacherRedux/AssignmentSlice';
 import EditGradeModal from './EditGradeModal';
 
 const AssignmentSubmissions = () => {
@@ -37,6 +37,13 @@ const AssignmentSubmissions = () => {
     const handleCloseModal = () => {
         setIsEditModalOpen(false);
         setSelectedSubmission(null);
+    };
+    const handleDeleteSubmission = (submissionId) => {
+        if (window.confirm("Are you sure you want to delete this submission?")) {
+            dispatch(deleteSubmission(submissionId)).then(() => {
+                dispatch(getAssignmentSubmissions(assignmentId));
+            });
+        }
     };
 
     if (status === 'loading') {
@@ -78,13 +85,19 @@ const AssignmentSubmissions = () => {
                                             className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
                                             onClick={() => handleViewSubmissionDetails(submission._id)}
                                         >
-                                            <FontAwesomeIcon icon={faEye} className="text-xl" />
+                                            <FontAwesomeIcon icon={faEye} className="text-lg" />
                                         </button>
                                         <button
                                             className="text-[#117C90] hover:text-[#244856]"
                                             onClick={() => handleEditGrade(submission)}
                                         >
                                             <FontAwesomeIcon icon={faEdit} className="text-lg" />
+                                        </button>
+                                        <button
+                                            className="text-[#E74833] hover:text-[#244856]"
+                                            onClick={() => handleDeleteSubmission(submission._id)}
+                                        >
+                                            <FontAwesomeIcon icon={faTrashAlt} className="text-lg" />
                                         </button>
                                     </td>
                                 </tr>

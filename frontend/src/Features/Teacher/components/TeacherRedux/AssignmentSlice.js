@@ -207,6 +207,32 @@ export const updateSubmissionGrade = createAsyncThunk(
         }
     }
 );
+export const deleteSubmission = createAsyncThunk(
+    'assignments/deleteSubmission',
+    async (submissionId, { rejectWithValue }) => {
+        try {
+            const url = `http://localhost:3000/assignments/submission/${submissionId}`;
+            const headers = {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            };
+
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers,
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.message || 'Failed to delete submission');
+            }
+            toast.success('Submission deleted successfully!');
+            return submissionId;
+        } catch (error) {
+            return rejectWithValue(error.message || 'Server Error');
+        }
+    }
+);
 
 
 
@@ -315,6 +341,17 @@ const assignmentSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.payload;
                 toast.error(action.payload || 'Failed to update grade');
+            })
+            .addCase(deleteSubmission.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(deleteSubmission.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.submissions = state.submissions.filter((s) => s._id !== action.payload);
+            })
+            .addCase(deleteSubmission.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
             });
             
     },
