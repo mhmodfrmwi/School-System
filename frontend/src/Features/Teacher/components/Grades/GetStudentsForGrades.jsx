@@ -1,15 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom"; // Use useHistory for navigation
+import { useNavigate, useParams } from "react-router-dom";
 import Papa from "papaparse";
 import { fetchExamScores } from "../TeacherRedux/examScoreSlice";
 import Loader from "@/ui/Loader";
+import Pagination from "../Pagination";
 
 const GetStudentsForGrades = () => {
   const { classId, gradeSubjectSemesterId } = useParams();
   const dispatch = useDispatch();
   const { scores, loading, error } = useSelector((state) => state.examScores);
   const navigate = useNavigate();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 10;
 
   useEffect(() => {
     if (classId && gradeSubjectSemesterId) {
@@ -20,12 +24,32 @@ const GetStudentsForGrades = () => {
   const handleExportCSV = () => {
     if (!scores?.data?.students) return;
 
+    const typeRow = {
+      academic_number: "type",
+      fullName: "",
+      examGrade: "",
+    };
+    const finalDegreeRow = {
+      academic_number: "finalDegree",
+      fullName: "",
+      examGrade: "",
+    };
+
+    const headerRow = {
+      academic_number: "academic_number",
+      fullName: "fullName",
+      examGrade: "examGrade",
+    };
+
     const csvData = scores.data.students.map((student) => ({
-      "Academic Number": student.academic_number,
-      "Full Name": student.fullName,
+      academic_number: student.academic_number,
+      fullName: student.fullName,
+      examGrade: "",
     }));
 
-    const csv = Papa.unparse(csvData);
+    const finalCsvData = [typeRow, finalDegreeRow, headerRow, ...csvData];
+
+    const csv = Papa.unparse(finalCsvData, { header: false });
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -39,6 +63,15 @@ const GetStudentsForGrades = () => {
   const handleGoToUploadPage = () => {
     navigate(`/teacher/exam-score/upload/${classId}/${gradeSubjectSemesterId}`);
   };
+
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = scores?.data?.students.slice(
+    indexOfFirstStudent,
+    indexOfLastStudent,
+  );
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
@@ -61,21 +94,25 @@ const GetStudentsForGrades = () => {
           <div className="overflow-x-auto">
             <table className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
               <thead>
-                <tr className="bg-gray-200">
-                  <th colSpan="2" className="border p-2 text-center">
+                <tr className="bg-[#117C90]">
+                  <th colSpan="2" className="border p-2 text-center text-white">
                     {scores.data.grade.gradeName} -{" "}
                     {scores.data.subject.subjectName} (Academic Year:{" "}
                     {scores.data.grade.academicYear.startYear} -{" "}
                     {scores.data.grade.academicYear.endYear})
                   </th>
                 </tr>
-                <tr className="bg-gray-200">
-                  <th className="border p-2">Academic Number</th>
-                  <th className="border p-2">Full Name</th>
+                <tr>
+                  <th className="border bg-[#117C90] p-2 text-white">
+                    Academic Number
+                  </th>
+                  <th className="border bg-[#117C90] p-2 text-white">
+                    Full Name
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {scores.data.students.map((student) => (
+                {currentStudents.map((student) => (
                   <tr
                     key={student.academic_number}
                     className="hover:bg-gray-100"
@@ -87,18 +124,25 @@ const GetStudentsForGrades = () => {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-between">
+          <div className="mt-4 flex justify-end">
+            <Pagination
+              totalItems={scores?.data?.students.length || 0}
+              itemsPerPage={studentsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
+          <div className="mt-4 flex justify-between">
             <button
               onClick={handleExportCSV}
-              className="mt-4 rounded bg-[#117C90] p-2 text-white"
+              className="rounded bg-[#117C90] p-2 text-white"
             >
               Export to CSV
             </button>
 
-            {/* Add button to navigate to the upload page */}
             <button
               onClick={handleGoToUploadPage}
-              className="ml-4 mt-4 rounded bg-[#117C90] p-2 text-white"
+              className="ml-4 rounded bg-[#117C90] p-2 text-white"
             >
               Go to Upload File
             </button>

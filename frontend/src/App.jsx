@@ -9,7 +9,7 @@ import Loader from "./ui/Loader";
 import TitleUpdater from "./ui/TitleUpdater";
 import SeeAllAssignments from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllAssignments";
 import AllSubmissionsForAssignment from "./Features/Teacher/components/courses/AllYearsMaterual/AllSubmissionsForAssignment";
-
+import GetStudentsWithGrades from "./Features/Teacher/components/Grades/GetStudentsWithGrades";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -449,36 +449,44 @@ const SeeAllQuestionAllYears = lazy(
     ),
 );
 const AssignmentForm = lazy(
-  () => import("./Features/Teacher/components/courses/Assignments/AssignmentsForm")
+  () =>
+    import("./Features/Teacher/components/courses/Assignments/AssignmentsForm"),
 );
 const CurrentCoursesForGrades = lazy(
-  () => import("./Features/Teacher/components/Grades/CurrentCoursesForGrades")
+  () => import("./Features/Teacher/components/Grades/CurrentCoursesForGrades"),
 );
 const GetStudentsForGrades = lazy(
-  () => import("./Features/Teacher/components/Grades/GetStudentsForGrades")
+  () => import("./Features/Teacher/components/Grades/GetStudentsForGrades"),
 );
 const UploadFileGrades = lazy(
-  () => import("./Features/Teacher/components/Grades/UploadFileGrades")
+  () => import("./Features/Teacher/components/Grades/UploadFileGrades"),
 );
 const GradesForSemester = lazy(
-  () => import("./Features/Student/components/Grades/GradesForSemester")
+  () => import("./Features/Student/components/Grades/GradesForSemester"),
 );
 const GradesforAllYears = lazy(
-  () => import("./Features/Student/components/Grades/GradesforAllYears")
+  () => import("./Features/Student/components/Grades/GradesforAllYears"),
 );
 const SeeAssignments = lazy(
-  () => import("./Features/Teacher/components/courses/Assignments/SeeAssignments")
+  () =>
+    import("./Features/Teacher/components/courses/Assignments/SeeAssignments"),
 );
 const EditAssignment = lazy(
-  () => import("./Features/Teacher/components/courses/Assignments/EditAssignments")
+  () =>
+    import("./Features/Teacher/components/courses/Assignments/EditAssignments"),
 );
 const AssignmentSubmissions = lazy(
-  () => import("./Features/Teacher/components/courses/Assignments/SubmissionsForAssignment")
+  () =>
+    import(
+      "./Features/Teacher/components/courses/Assignments/SubmissionsForAssignment"
+    ),
 );
 const SubmissionDetails = lazy(
-  () => import("./Features/Teacher/components/courses/Assignments/StudentSubmission")
+  () =>
+    import(
+      "./Features/Teacher/components/courses/Assignments/StudentSubmission"
+    ),
 );
-
 
 /* /////////////////manager imports//////////////////// */
 
@@ -837,23 +845,27 @@ function App() {
               path="/teacher/all-assignment/:gradeSubjectSemesterId"
               element={<SeeAssignments />}
             />
-            <Route 
-            path="/teacher/assignment-submissions/:assignmentId" 
-            element={<AssignmentSubmissions />} />
+            <Route
+              path="/teacher/assignment-submissions/:assignmentId"
+              element={<AssignmentSubmissions />}
+            />
 
             <Route
               path="/teacher/edit-assignment/:assignmentId"
               element={<EditAssignment />}
             />
-            <Route 
-            path="/teacher/submission-details/:submissionId" 
-            element={<SubmissionDetails />} />
-            <Route 
-            path="/teacher/see-all-assignments-allYears/:gradeSubjectSemesterId" 
-            element={<SeeAllAssignments />} />
-            <Route 
-            path="/teacher/all-assignment-submissions/:assignmentId" 
-            element={<AllSubmissionsForAssignment />} />
+            <Route
+              path="/teacher/submission-details/:submissionId"
+              element={<SubmissionDetails />}
+            />
+            <Route
+              path="/teacher/see-all-assignments-allYears/:gradeSubjectSemesterId"
+              element={<SeeAllAssignments />}
+            />
+            <Route
+              path="/teacher/all-assignment-submissions/:assignmentId"
+              element={<AllSubmissionsForAssignment />}
+            />
             <Route
               path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
               element={<AllMaterialPage />}
@@ -928,6 +940,11 @@ function App() {
             <Route
               path="exam-score/upload/:classId/:gradeSubjectSemesterId"
               element={<UploadFileGrades />}
+            />
+
+            <Route
+              path="exam-results/:scoreId/:classId"
+              element={<GetStudentsWithGrades />}
             />
           </Route>
 
