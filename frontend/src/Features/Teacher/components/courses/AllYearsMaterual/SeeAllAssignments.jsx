@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt, faCalendar, faChartBar } from "@fortawesome/free-solid-svg-icons";
-import { fetchAssignments, deleteAssignment } from "../../TeacherRedux/AssignmentSlice";
+import {  faCalendar, faChartBar } from "@fortawesome/free-solid-svg-icons";
+import { fetchAssignments } from "../../TeacherRedux/AssignmentSlice";
 
-const SeeAssignments = () => {
+const SeeAllAssignments = () => {
     const formatStartTime = (due_date) => {
         const date = new Date(due_date);
         const formattedDate = date.toISOString().split('T')[0];
@@ -31,18 +31,8 @@ const SeeAssignments = () => {
         }
     }, [dispatch, gradeSubjectSemesterId]);
 
-    const handleEditAssignment = (assignmentId) => {
-        navigate(`/teacher/edit-assignment/${assignmentId}`);
-    };
-
-    const handleDeleteAssignment = (assignmentId) => {
-        if (window.confirm("Are you sure you want to delete this assignment?")) {
-            dispatch(deleteAssignment(assignmentId));
-        }
-    };
-
     const handleViewSubmissions = (assignmentId) => {
-        navigate(`/teacher/assignment-submissions/${assignmentId}`);
+        navigate(`/teacher/all-assignment-submissions/${assignmentId}`);
     };
 
     if (status === 'loading') {
@@ -73,12 +63,7 @@ const SeeAssignments = () => {
                                 >
                                     <FontAwesomeIcon icon={faChartBar} className="text-xl" />
                                 </button>
-                                <button className="text-[#117C90] hover:text-[#244856]" onClick={() => handleEditAssignment(item._id)}>
-                                    <FontAwesomeIcon icon={faEdit} className="text-lg" />
-                                </button>
-                                <button className="text-[#E74833] hover:text-[#244856]" onClick={() => handleDeleteAssignment(item._id)}>
-                                    <FontAwesomeIcon icon={faTrashAlt} className="text-lg" />
-                                </button>
+                                
                             </div>
                         </div>
                     ))
@@ -101,4 +86,4 @@ const SeeAssignments = () => {
     );
 };
 
-export default SeeAssignments;
+export default SeeAllAssignments;

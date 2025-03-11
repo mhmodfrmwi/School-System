@@ -25,7 +25,12 @@ const login = expressAsyncHandler(async (req, res) => {
   }
 
   // If everything ok, send token to client
-  const token = signToken(student._id, student.email, "student");
+  const token = signToken(
+    student._id,
+    student.email,
+    "student",
+    student.classId
+  );
 
   res.status(200).json({
     status: 200,

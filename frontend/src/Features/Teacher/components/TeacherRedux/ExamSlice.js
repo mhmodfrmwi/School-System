@@ -89,7 +89,7 @@ export const fetchExamsForTeacher = createAsyncThunk(
       }
 
       const response = await fetch(
-        `http://localhost:3000/exams/teacher-exams?grade_subject_semester_id=${gradeSubjectSemesterId}`,
+        `http://localhost:3000/exams/teacher-exams?gradeSubjectSemesterId=${gradeSubjectSemesterId}`,
         {
           method: "GET",
           headers: {

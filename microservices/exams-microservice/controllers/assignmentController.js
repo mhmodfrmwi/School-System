@@ -1,4 +1,6 @@
 const Assignment = require("../models/Assignment");
+const AssignmentSubmission = require("../models/AssignmentSubmission");
+
 const GradeSubjectSemester = require("../models/GradeSubjectSemester");
 const {
   addAssignment,
@@ -6,6 +8,9 @@ const {
   updateAssignment,
   deleteAssignment,
   fetchAssignmentById,
+  fetchAssignmentsByAttributes,
+  fetchAssignmentsByTeacherIdAndSubjectAttributes,
+  fetchAssignmentsByTeacherId,
 } = require("../services/assignmentService");
 const { fetchExamsByAttributes } = require("../services/examService");
 
@@ -110,9 +115,9 @@ const getAssignmentById = async (req, res) => {
 const getAssignments = async (req, res) => {
   let assignments;
   try {
-    if (req.query.gradeSubjectSemesterId && req.query.classId) {
+    if (req.query.gradeSubjectSemesterId) {
       const grade_subject_semester_id = req.query.gradeSubjectSemesterId;
-      const class_id = req.query.classId;
+      const class_id = req.user.classId;
       const gradeSubjectSemester = await GradeSubjectSemester.findOne({
         _id: grade_subject_semester_id,
       }).populate([
@@ -134,7 +139,7 @@ const getAssignments = async (req, res) => {
         gradeSubjectSemester.grade_subject_id.academicYear_id;
       const semester_id = gradeSubjectSemester.semester_id._id;
 
-      assignments = await fetchExamsByAttributes(
+      assignments = await fetchAssignmentsByAttributes(
         class_id,
         semester_id,
         grade_id,
@@ -152,10 +157,58 @@ const getAssignments = async (req, res) => {
     });
   }
 };
+
+const getAssignmentsForTeacher = async (req, res) => {
+  try {
+    const teacher_id = req.user.id;
+    let assignments;
+    if (req.query.gradeSubjectSemesterId) {
+      const grade_subject_semester_id = req.query.gradeSubjectSemesterId;
+      const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+        _id: grade_subject_semester_id,
+      }).populate([
+        {
+          path: "grade_subject_id",
+          populate: { path: "subjectId", path: "gradeId" },
+        },
+        { path: "semester_id", populate: { path: "academicYear_id" } },
+      ]);
+
+      if (!gradeSubjectSemester) {
+        return res
+          .status(404)
+          .json({ message: "GradeSubjectSemester not found" });
+      }
+      const subject_id = gradeSubjectSemester.grade_subject_id.subjectId;
+      const grade_id = gradeSubjectSemester.grade_subject_id.gradeId._id;
+      const academic_year_id =
+        gradeSubjectSemester.grade_subject_id.academicYear_id;
+      const semester_id = gradeSubjectSemester.semester_id._id;
+
+      assignments = await fetchAssignmentsByTeacherIdAndSubjectAttributes(
+        teacher_id,
+        subject_id,
+        grade_id,
+        academic_year_id,
+        semester_id
+      );
+    } else {
+      assignments = await fetchAssignmentsByTeacherId(teacher_id);
+    }
+    res.status(200).json({ assignments, count: assignments.length });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to get assignments for teacher",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createAssignment,
   updateAssignmentById,
   deleteAssignmentById,
   getAssignmentById,
   getAssignments,
+  getAssignmentsForTeacher,
 };

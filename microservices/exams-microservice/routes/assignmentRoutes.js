@@ -6,6 +6,7 @@ const {
   getAssignmentById,
   updateAssignmentById,
   deleteAssignmentById,
+  getAssignmentsForTeacher,
 } = require("../controllers/assignmentController");
 const {
   submitAssignment,
@@ -21,6 +22,7 @@ const router = express.Router();
 router.post("/create-assignment/:id", validateJwt, createAssignment);
 router.get("/", validateJwt, getAssignments);
 router.get("/submissions/student/", validateJwt, getStudentSubmissions);
+router.get("/teacher", validateJwt, getAssignmentsForTeacher);
 router.get("/:id", validateJwt, getAssignmentById);
 router.patch("/:id", validateJwt, updateAssignmentById);
 router.delete("/:id", validateJwt, deleteAssignmentById);

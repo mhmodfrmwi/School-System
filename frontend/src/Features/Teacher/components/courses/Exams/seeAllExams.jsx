@@ -96,7 +96,7 @@ const SeeMyExams = () => {
       try {
         await dispatch(deleteExam(examId)).unwrap();
         // toast.success("Exam deleted successfully!");
-        dispatch(fetchExamsForTeacher());
+        dispatch(fetchExamsForTeacher(gradeSubjectSemesterId));
       } catch (error) {
         toast.error(error.message || "Failed to delete exam");
       }

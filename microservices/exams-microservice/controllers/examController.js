@@ -12,6 +12,7 @@ const {
   getStudentResults,
   getMissedExams,
   getCompletedExams,
+  fetchExamsByTeacherIdAndSubjectAttributes,
 } = require("../services/examService");
 const { getExamResultsByExamId } = require("../services/resultsService");
 
@@ -84,9 +85,9 @@ const createExam = async (req, res) => {
 const getExams = async (req, res) => {
   let exams;
   try {
-    if (req.query.gradeSubjectSemesterId && req.query.classId) {
+    if (req.query.gradeSubjectSemesterId) {
       const grade_subject_semester_id = req.query.gradeSubjectSemesterId;
-      const class_id = req.query.classId;
+      const class_id = req.user.classId;
       const gradeSubjectSemester = await GradeSubjectSemester.findOne({
         _id: grade_subject_semester_id,
       }).populate([
@@ -214,7 +215,40 @@ const getAllStudentResults = async (req, res) => {
 const getExamsForTeacher = async (req, res) => {
   try {
     const teacher_id = req.user.id;
-    const exams = await getExamsByTeacherId(teacher_id);
+    let exams;
+    if (req.query.gradeSubjectSemesterId) {
+      const grade_subject_semester_id = req.query.gradeSubjectSemesterId;
+      const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+        _id: grade_subject_semester_id,
+      }).populate([
+        {
+          path: "grade_subject_id",
+          populate: { path: "subjectId", path: "gradeId" },
+        },
+        { path: "semester_id", populate: { path: "academicYear_id" } },
+      ]);
+
+      if (!gradeSubjectSemester) {
+        return res
+          .status(404)
+          .json({ message: "GradeSubjectSemester not found" });
+      }
+      const subject_id = gradeSubjectSemester.grade_subject_id.subjectId;
+      const grade_id = gradeSubjectSemester.grade_subject_id.gradeId._id;
+      const academic_year_id =
+        gradeSubjectSemester.grade_subject_id.academicYear_id;
+      const semester_id = gradeSubjectSemester.semester_id._id;
+
+      exams = await fetchExamsByTeacherIdAndSubjectAttributes(
+        teacher_id,
+        subject_id,
+        grade_id,
+        academic_year_id,
+        semester_id
+      );
+    } else {
+      exams = await getExamsByTeacherId(teacher_id);
+    }
 
     const examsWithGSS = await Promise.all(
       exams.map(async (exam) => {
@@ -251,7 +285,38 @@ const getExamsForTeacher = async (req, res) => {
 const getMissedExamsForStudent = async (req, res) => {
   try {
     const student_id = req.user.id;
-    const exams = await getMissedExams(student_id);
+
+    const grade_subject_semester_id = req.query.gradeSubjectSemesterId;
+    const class_id = req.user.classId;
+    const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+      _id: grade_subject_semester_id,
+    }).populate([
+      {
+        path: "grade_subject_id",
+        populate: { path: "subjectId", path: "gradeId" },
+      },
+      { path: "semester_id", populate: { path: "academicYear_id" } },
+    ]);
+
+    if (!gradeSubjectSemester) {
+      return res
+        .status(404)
+        .json({ message: "GradeSubjectSemester not found" });
+    }
+    const subject_id = gradeSubjectSemester.grade_subject_id.subjectId;
+    const grade_id = gradeSubjectSemester.grade_subject_id.gradeId._id;
+    const academic_year_id =
+      gradeSubjectSemester.grade_subject_id.academicYear_id;
+    const semester_id = gradeSubjectSemester.semester_id._id;
+
+    const exams = await getMissedExams(
+      student_id,
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+      class_id
+    );
     res.status(200).json(exams);
   } catch (error) {
     res.status(500).json({
@@ -265,7 +330,38 @@ const getMissedExamsForStudent = async (req, res) => {
 const getCompletedExamsForStudent = async (req, res) => {
   try {
     const student_id = req.user.id;
-    const exams = await getCompletedExams(student_id);
+
+    const grade_subject_semester_id = req.query.gradeSubjectSemesterId;
+    const class_id = req.user.classId;
+    const gradeSubjectSemester = await GradeSubjectSemester.findOne({
+      _id: grade_subject_semester_id,
+    }).populate([
+      {
+        path: "grade_subject_id",
+        populate: { path: "subjectId", path: "gradeId" },
+      },
+      { path: "semester_id", populate: { path: "academicYear_id" } },
+    ]);
+
+    if (!gradeSubjectSemester) {
+      return res
+        .status(404)
+        .json({ message: "GradeSubjectSemester not found" });
+    }
+    const subject_id = gradeSubjectSemester.grade_subject_id.subjectId;
+    const grade_id = gradeSubjectSemester.grade_subject_id.gradeId._id;
+    const academic_year_id =
+      gradeSubjectSemester.grade_subject_id.academicYear_id;
+    const semester_id = gradeSubjectSemester.semester_id._id;
+
+    const exams = await getCompletedExams(
+      student_id,
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+      class_id
+    );
     res.status(200).json(exams);
   } catch (error) {
     res.status(500).json({

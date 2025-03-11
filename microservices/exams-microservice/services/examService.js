@@ -189,7 +189,31 @@ const getExamsByTeacherId = async (teacher_id) => {
     throw new Error(error.message);
   }
 };
-
+const fetchExamsByTeacherIdAndSubjectAttributes = async (
+  teacher_id,
+  subject_id,
+  grade_id,
+  academic_year_id,
+  semester_id
+) => {
+  try {
+    const exams = await Exam.find({
+      created_by: teacher_id,
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+    })
+      .populate(
+        "subject_id grade_id class_id academic_year_id semester_id exam_questions"
+      )
+      .select("-__v -createdAt -updatedAt");
+    return exams;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
 const getStudentResults = async (student_id) => {
   try {
     const results = await ExamResult.find({ student_id })
@@ -202,9 +226,22 @@ const getStudentResults = async (student_id) => {
   }
 };
 
-const getMissedExams = async (student_id) => {
+const getMissedExams = async (
+  student_id,
+  subject_id,
+  grade_id,
+  academic_year_id,
+  semester_id,
+  class_id
+) => {
   try {
-    const exams = await Exam.find()
+    const exams = await Exam.find({
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+      class_id,
+    })
       .populate("subject_id grade_id class_id academic_year_id semester_id")
       .populate("created_by", "_id fullName")
       .select("-__v -createdAt -updatedAt");
@@ -229,9 +266,22 @@ const getMissedExams = async (student_id) => {
   }
 };
 
-const getCompletedExams = async (student_id) => {
+const getCompletedExams = async (
+  student_id,
+  subject_id,
+  grade_id,
+  academic_year_id,
+  semester_id,
+  class_id
+) => {
   try {
-    const exams = await Exam.find()
+    const exams = await Exam.find({
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+      class_id,
+    })
       .populate("subject_id grade_id class_id academic_year_id semester_id")
       .populate("created_by", "_id fullName")
       .select("-__v -createdAt -updatedAt");
@@ -261,6 +311,7 @@ module.exports = {
   updateExam,
   deleteExam,
   getExamsByTeacherId,
+  fetchExamsByTeacherIdAndSubjectAttributes,
   getStudentResults,
   getMissedExams,
   getCompletedExams,

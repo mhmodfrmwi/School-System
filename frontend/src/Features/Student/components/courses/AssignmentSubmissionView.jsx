@@ -56,6 +56,10 @@ const SubmissionView = () => {
           </h2>
 
         
+          <p className="text-lg font-semibold text-transparent bg-clip-text bg-[#fc9e6e] mb-4">
+           Your Grade : {submission.grade !== undefined ? submission.grade : "Not graded yet"}
+          </p>
+
           <p className="text-gray-700 mb-4">{submission.assignment_id.description}</p>
 
         
