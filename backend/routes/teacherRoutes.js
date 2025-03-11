@@ -63,8 +63,10 @@ const{
 }= require("../controllers/Teacher/teacherRewardsController");
 const{
   getGradeData,
-  uploadGrades,
   uploadScoresFromExcel,
+  getExamResults,
+  updateScoresFromExcel,
+  deleteExamResults,
 }= require("../controllers/Teacher/subjectScore");
 
 const router = express.Router();
@@ -192,12 +194,31 @@ router.get("/exam-score/:classId/:gradeSubjectSemesterId/students",
   validateTeacher,
   getGradeData
 );
-
-router.post("/exam-score/:classId/:gradeSubjectSemesterId",
-  validateJwt,
-  validateTeacher,
-  upload.single('file'),
-  uploadScoresFromExcel,
-);
-
+/////
+router
+  .route("/exam-score/:classId/:gradeSubjectSemesterId")
+  .post(
+    validateJwt,
+    validateTeacher,
+    upload.single('file'),
+    uploadScoresFromExcel,
+  )
+  .patch(
+    validateJwt,
+    validateTeacher,
+    upload.single('file'),
+    updateScoresFromExcel
+  )
+router
+  .route("/exam-results/:subjectScoreId/:classId")
+  .get(
+    validateJwt,
+    validateTeacher,
+    getExamResults
+  )
+  .delete(
+    validateJwt,
+    validateTeacher,
+    deleteExamResults
+  )
 module.exports = router;

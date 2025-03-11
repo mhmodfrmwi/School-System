@@ -22,6 +22,11 @@ const scoreSchema = new Schema({
     ref: 'Class',
     required: true
   },
+  teacherId: {
+    type: Schema.Types.ObjectId,
+    ref: "Teacher",
+    required: true,
+  },
   /*semesterId: {
     type: Schema.Types.ObjectId,
     ref: 'Semester',
