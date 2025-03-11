@@ -300,97 +300,6 @@ const uploadScoresFromExcel = expressAsyncHandler(async (req, res) => {
     });
   }
 });
-
-const getExamResults = expressAsyncHandler(async (req, res) => {
-  const teacherId = req.user.id;
-  const { subjectScoreId, classId } = req.params;
-
-  if (!validateObjectId(subjectScoreId) || !validateObjectId(classId)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid subjectScoreId or classId format",
-    });
-  }
-
-  try {
-    const subjectScore = await SubjectScore.findById(subjectScoreId)
-      .populate({
-        path: "gradeId",
-        select: "gradeName level",
-      })
-      .populate({
-        path: "subjectId",
-        select: "subjectName subjectCode",
-      })
-      .populate({
-        path: "semesterId",
-        select: "semesterName",
-      })
-      .lean();
-
-    if (!subjectScore) {
-      return res.status(404).json({
-        status: 404,
-        message: "SubjectScore not found",
-      });
-    }
-
-    const scores = await Score.find({ subjectScoreId, classId, teacherId })
-      .populate({
-        path: "studentId",
-        select: "academic_number fullName",
-      }).populate({
-        path: "teacherId",
-        select: "fullName",
-      })
-      .lean();
-
-    if (!scores.length) {
-      return res.status(404).json({
-        status: 404,
-        message: "No exam results found for this subjectScoreId and classId",
-      });
-    }
-
-    const response = {
-      type: subjectScore.type,
-      finalDegree: subjectScore.finalDegree,
-      grade: {
-        gradeName: subjectScore.gradeId.gradeName,
-        level: subjectScore.gradeId.level,
-      },
-      subject: {
-        subjectName: subjectScore.subjectId.subjectName,
-        subjectCode: subjectScore.subjectId.subjectCode,
-      },
-      semester: {
-        semesterName: subjectScore.semesterId.semesterName,
-      },
-      teacher: {
-        fullName: scores[0].teacherId.fullName,
-      },
-      students: scores.map((score) => ({
-        academic_number: score.studentId.academic_number,
-        fullName: score.studentId.fullName,
-        examGrade: score.examGrade,
-      })),
-    };
-
-    return res.status(200).json({
-      status: 200,
-      message: "Exam results retrieved successfully",
-      data: response,
-    });
-  } catch (error) {
-    console.error("Error retrieving exam results:", error);
-    return res.status(500).json({
-      status: 500,
-      message: "Error retrieving exam results",
-      error: error.message,
-    });
-  }
-});
-
 const updateScoresFromExcel = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
   const { classId, gradeSubjectSemesterId } = req.params;
@@ -551,17 +460,182 @@ const updateScoresFromExcel = expressAsyncHandler(async (req, res) => {
     });
   }
 });
-const deleteExamResults = expressAsyncHandler(async (req, res) => {
-  const { subjectScoreId, classId } = req.params;
+const getExamResults = expressAsyncHandler(async (req, res) => {
+  const teacherId = req.user.id;
+  const { classId, gradeSubjectSemesterId, type } = req.params;
 
-  if (!validateObjectId(subjectScoreId) || !validateObjectId(classId)) {
+  if (
+    !validateObjectId(classId) ||
+    !validateObjectId(gradeSubjectSemesterId)
+  ) {
     return res.status(400).json({
       status: 400,
-      message: "Invalid subjectScoreId or classId format",
+      message: "Invalid classId or gradeSubjectSemesterId format",
+    });
+  }
+
+  if (!["midterm", "final"].includes(type)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid type. Must be 'midterm' or 'final'.",
     });
   }
 
   try {
+    const gradeSubjectSemester = await GradeSubjectSemester.findById(
+      gradeSubjectSemesterId
+    ).populate("grade_subject_id");
+
+    if (!gradeSubjectSemester) {
+      return res.status(404).json({
+        status: 404,
+        message: "GradeSubjectSemester not found",
+      });
+    }
+
+    const gradeId = gradeSubjectSemester.grade_subject_id.gradeId;
+    const subjectId = gradeSubjectSemester.grade_subject_id.subjectId;
+    const semesterId = gradeSubjectSemester.semester_id;
+
+    const subjectScore = await SubjectScore.findOne({
+      gradeId,
+      subjectId,
+      semesterId,
+      type,
+    })
+      .populate({
+        path: "gradeId",
+        select: "gradeName level",
+      })
+      .populate({
+        path: "subjectId",
+        select: "subjectName subjectCode",
+      })
+      .populate({
+        path: "semesterId",
+        select: "semesterName",
+      })
+      .lean();
+
+    if (!subjectScore) {
+      return res.status(404).json({
+        status: 404,
+        message: "SubjectScore not found",
+      });
+    }
+
+    const scores = await Score.find({
+      subjectScoreId: subjectScore._id,
+      classId,
+      teacherId,
+    })
+      .populate({
+        path: "studentId",
+        select: "academic_number fullName",
+      })
+      .populate({
+        path: "teacherId",
+        select: "fullName",
+      })
+      .lean();
+
+    if (!scores.length) {
+      return res.status(404).json({
+        status: 404,
+        message: "No exam results found for this subjectScoreId and classId",
+      });
+    }
+
+    const response = {
+      type: subjectScore.type,
+      finalDegree: subjectScore.finalDegree,
+      grade: {
+        gradeName: subjectScore.gradeId.gradeName,
+        level: subjectScore.gradeId.level,
+      },
+      subject: {
+        subjectName: subjectScore.subjectId.subjectName,
+        subjectCode: subjectScore.subjectId.subjectCode,
+      },
+      semester: {
+        semesterName: subjectScore.semesterId.semesterName,
+      },
+      teacher: {
+        fullName: scores[0].teacherId.fullName,
+      },
+      students: scores.map((score) => ({
+        academic_number: score.studentId.academic_number,
+        fullName: score.studentId.fullName,
+        examGrade: score.examGrade,
+      })),
+    };
+
+    return res.status(200).json({
+      status: 200,
+      message: "Exam results retrieved successfully",
+      data: response,
+    });
+  } catch (error) {
+    console.error("Error retrieving exam results:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Error retrieving exam results",
+      error: error.message,
+    });
+  }
+});
+const deleteExamResults = expressAsyncHandler(async (req, res) => {
+  const { classId, gradeSubjectSemesterId, type } = req.params;
+
+  if (
+    !validateObjectId(classId) ||
+    !validateObjectId(gradeSubjectSemesterId)
+  ) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid classId or gradeSubjectSemesterId format",
+    });
+  }
+
+  if (!["midterm", "final"].includes(type)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid type. Must be 'midterm' or 'final'.",
+    });
+  }
+
+  try {
+    const gradeSubjectSemester = await GradeSubjectSemester.findById(
+      gradeSubjectSemesterId
+    ).populate("grade_subject_id");
+
+    if (!gradeSubjectSemester) {
+      return res.status(404).json({
+        status: 404,
+        message: "GradeSubjectSemester not found",
+      });
+    }
+
+    const gradeId = gradeSubjectSemester.grade_subject_id.gradeId;
+    const subjectId = gradeSubjectSemester.grade_subject_id.subjectId;
+    const semesterId = gradeSubjectSemester.semester_id;
+
+    const subjectScore = await SubjectScore.findOne({
+      gradeId,
+      subjectId,
+      semesterId,
+      type,
+    });
+
+    if (!subjectScore) {
+      return res.status(404).json({
+        status: 404,
+        message: "SubjectScore not found",
+      });
+    }
+
+    const subjectScoreId = subjectScore._id;
+
     const deleteResult = await Score.deleteMany({
       subjectScoreId,
       classId,

@@ -210,7 +210,7 @@ router
     updateScoresFromExcel
   )
 router
-  .route("/exam-results/:subjectScoreId/:classId")
+  .route("/exam-results/:classId/:gradeSubjectSemesterId/:type")
   .get(
     validateJwt,
     validateTeacher,
