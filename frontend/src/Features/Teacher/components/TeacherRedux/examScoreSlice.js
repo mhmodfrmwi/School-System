@@ -52,42 +52,80 @@ export const uploadFileGrades = createAsyncThunk(
 
       if (!response.ok) throw new Error("Failed to upload file");
 
-      return { success: true, message: "File uploaded successfully" };
+      const data = await response.json();
+      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
 );
 
-// export const removeFile = createAsyncThunk(
-//   "examScores/removeFile",
-//   async ({ classId, gradeSubjectSemesterId }, { rejectWithValue }) => {
-//     try {
-//       const token = getToken();
-//       if (!token) throw new Error("No token found, please login again.");
+export const fetchStudentExamResult = createAsyncThunk(
+  "examScores/fetchStudentExamResult",
+  async ({ scoreId, classId }, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) {
+        throw new Error("No token found, please login again.");
+      }
 
-//       const response = await fetch(
-//         `${API_BASE_URL}/teacher/exam-score/${classId}/${gradeSubjectSemesterId}`,
-//         {
-//           method: "DELETE",
-//           headers: { Authorization: `Bearer ${token}` },
-//         },
-//       );
+      const response = await fetch(
+        `${API_BASE_URL}/teacher/exam-results/${scoreId}/${classId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-//       if (!response.ok) throw new Error("Failed to remove file");
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch student exam result: ${response.statusText}`,
+        );
+      }
 
-//       return { success: true, message: "File removed successfully" }; // ✅ Only return success message
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   },
-// );
+      const data = await response.json();
+
+      console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+export const removeFile = createAsyncThunk(
+  "examScores/removeFile",
+  async ({ scoreId, classId }, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) throw new Error("No token found, please login again.");
+
+      const response = await fetch(
+        `${API_BASE_URL}/teacher/exam-results/${scoreId}/${classId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (!response.ok) throw new Error("Failed to remove file");
+
+      return { success: true, message: "File removed successfully" };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
 
 const examScoreSlice = createSlice({
   name: "examScores",
   initialState: {
     scores: [],
     uploadedFile: null,
+    studentResult: null,
     loading: false,
     error: null,
   },
@@ -98,7 +136,6 @@ const examScoreSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
       .addCase(fetchExamScores.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -119,28 +156,41 @@ const examScoreSlice = createSlice({
       .addCase(uploadFileGrades.fulfilled, (state, action) => {
         state.loading = false;
         state.uploadedFile = action.payload;
-        toast.success("File uploaded successfully!");
       })
       .addCase(uploadFileGrades.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         toast.error(state.error);
-      });
+      })
 
-    // .addCase(removeFile.pending, (state) => {
-    //   state.loading = true;
-    //   state.error = null;
-    // })
-    // .addCase(removeFile.fulfilled, (state) => {
-    //   state.loading = false;
-    //   state.uploadedFile = null;
-    //   toast.success("File removed successfully!");
-    // })
-    // .addCase(removeFile.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    //   toast.error(state.error);
-    // });
+      .addCase(fetchStudentExamResult.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchStudentExamResult.fulfilled, (state, action) => {
+        state.loading = false;
+        state.studentResult = action.payload;
+      })
+      .addCase(fetchStudentExamResult.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(removeFile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(removeFile.fulfilled, (state) => {
+        state.loading = false;
+        state.uploadedFile = null;
+        toast.success("File removed successfully!");
+      })
+      .addCase(removeFile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        toast.error(state.error);
+      });
   },
 });
 
