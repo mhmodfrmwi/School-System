@@ -26,11 +26,11 @@ const SidebarManager = () => {
   const currentPath = location.pathname;
 
   const menuItems = [
-    { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/manager" },
+    { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/manager/dashboard" },
     { label: "School Hubs", icon: ActivityIcon, hoverIcon: ActivityIconH, href: "/manager/school-hubs" },
     { label: "Absence", icon: AbsenceIcon, hoverIcon: AbsenceIconH, href: "#" },
     { label: "Schedule", icon: ScheduleIcon, hoverIcon: ScheduleIconH, href: "/manager/schedule-table" },
-    { label: "Grades", icon: GradeIcon, hoverIcon: GradeIconH, href: "#" },
+    { label: "Grades", icon: GradeIcon, hoverIcon: GradeIconH, href: "/manager/grade" },
     { label: "Virtual Rooms", icon: VirtualIcon, hoverIcon: VirtualIconH, href: "/manager/virtual-room" },
   ];
 

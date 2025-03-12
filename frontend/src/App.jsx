@@ -528,6 +528,9 @@ const ManagerSchoolHubsAdd = lazy(
 const ManagerSchoolHubsEdit = lazy(
   () => import("./Features/Manager/components/Activites/EditSchoolHubs"),
 );
+const ManagerGrade = lazy(
+  () => import("./Features/Manager/components/Grades/gradeSearch"),
+);
 
 /* //////////////////////////////////////////////// */
 function App() {
@@ -983,6 +986,7 @@ function App() {
             <Route path="schedule-form" element={<FormShedule />} />
             <Route path="virtual-room" element={<ManagerVRTable />} />
             <Route path="virtual-room-form" element={<ManagerVRForm />} />
+            <Route path="grade" element={<ManagerGrade />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
