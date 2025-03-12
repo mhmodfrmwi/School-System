@@ -12,6 +12,8 @@ import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
+import Loader from "../../../../ui/Loader";
+
 const AssignmentsSection = () => {
     const dispatch = useDispatch();
     const { gradeSubjectSemesterId, classId } = useParams();
@@ -30,12 +32,25 @@ const AssignmentsSection = () => {
     const [currentPageSubmitted, setCurrentPageSubmitted] = useState(1);
     const [currentPagePending, setCurrentPagePending] = useState(1);
     const [currentPageMissed, setCurrentPageMissed] = useState(1);
+    const [initialLoading, setInitialLoading] = useState(true);
     const itemsPerPage = 3;
 
     useEffect(() => {
-        dispatch(fetchSubjects());
-        dispatch(fetchAssignments({ gradeSubjectSemesterId, classId }));
-        dispatch(fetchAllStudentSubmissions());
+        const fetchData = async () => {
+            try {
+                await Promise.all([
+                    dispatch(fetchSubjects()),
+                    dispatch(fetchAssignments({ gradeSubjectSemesterId, classId })),
+                    dispatch(fetchAllStudentSubmissions()),
+                ]);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setInitialLoading(false);
+            }
+        };
+
+        fetchData();
     }, [dispatch, gradeSubjectSemesterId, classId]);
 
     useEffect(() => {
@@ -91,6 +106,7 @@ const AssignmentsSection = () => {
         },
         [studentSubmissions]
     );
+
     // Update filteredAssignments when activeTab, assignments, or studentSubmissions change
     useEffect(() => {
         let assignmentsToDisplay = [];
@@ -218,14 +234,18 @@ const AssignmentsSection = () => {
         }
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
+    if (initialLoading) {
+        return (
+            <div className=" mt-16 mb-20 min-h-[68vh] w-[95%] mx-auto">
+            <Loader/>
+            </div>
+        );
     }
 
     return (
-        <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
+        <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-12 mb-20">
             {/* Sidebar */}
-            <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-6 md:h-[530px]">
+            <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-2 md:h-[550px]">
                 <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
                     {subjectName}
                     <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
@@ -259,13 +279,8 @@ const AssignmentsSection = () => {
                         </Button>
                     </li>
                     <li>
-                        <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Discussion Rooms
-                        </Button>
-                    </li>
-                    <li>
                         <Button variant="solid" className="md:w-11/12 bg-[#BFBFBF] text-white font-medium py-4 rounded-lg">
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Assignments
                         </Button>
                     </li>
                     <li>
@@ -274,7 +289,7 @@ const AssignmentsSection = () => {
                             className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
                             onClick={() => navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`)}
                         >
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Exams
                         </Button>
                     </li>
                     <li>
@@ -283,7 +298,7 @@ const AssignmentsSection = () => {
                             className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
                             onClick={() => navigate(`/student/allcourses/questionbank/${gradeSubjectSemesterId}`)}
                         >
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Question Bank
                         </Button>
                     </li>
                 </ul>
@@ -352,7 +367,7 @@ const AssignmentsSection = () => {
                 </div>
 
                 {/* Loading Message */}
-                {loading && (
+                {loading && !initialLoading && (
                     <div className="flex items-center justify-center text-center text-gray-500 mt-10">
                         <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
                         <p className="text-gray-700 text-lg font-semibold">Loading...</p>
@@ -360,7 +375,7 @@ const AssignmentsSection = () => {
                 )}
 
                 {/* No Assignments Message */}
-                {filteredAssignments.length === 0 && !loading && !error && (
+                {!initialLoading && filteredAssignments.length === 0 && !loading && !error && (
                     <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
                         <CardContent className="text-center p-4 text-gray-600">
                             No assignments available.
