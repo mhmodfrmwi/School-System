@@ -1,36 +1,69 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMaterialDetails } from "../../components/StudentRedux/allSubjectsStudentSlice";
 import { useParams, useNavigate } from "react-router-dom";
-import { FaSpinner } from "react-icons/fa";
+import Swal from "sweetalert2";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Loader from "../../../../ui/Loader";
+import subject from "../../../../assets/child.jpg";
 
 const MaterialDetails = () => {
   const { subjectId, materialId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { materialDetails, loading, error } = useSelector((state) => state.allSubjectsStudent);
+  const [mediaLoading, setMediaLoading] = useState(true); // State for media loading
 
   useEffect(() => {
-    dispatch(fetchMaterialDetails({ subjectId, materialId }));
+    dispatch(fetchMaterialDetails({ subjectId, materialId })).then(() => {
+      setMediaLoading(false); // Set media loading to false once data is fetched
+    });
   }, [dispatch, subjectId, materialId]);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center text-gray-500 mt-10">
-        <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4" />
-        <p className="text-gray-700 text-lg font-semibold">Loading...</p>
+      <div className="mt-16 mb-20 min-h-[68vh] w-[95%] mx-auto">
+        <Loader />
       </div>
     );
   }
 
   if (error) {
-    return <p className="text-red-500 text-center">Error: {error}</p>;
+    Swal.fire({
+      title: 'Error!',
+      text: error,
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
   }
 
-  if (!materialDetails) {
-    return <p className="text-gray-500 text-center">No material details available.</p>;
+  if (!materialDetails || materialDetails.length === 0) {
+    return (
+      <div className="flex flex-col lg:flex-row items-center justify-center text-center mt-16 min-h-[60vh] w-[95%] mb-20 mx-auto font-poppins gap-8">
+        <img
+          src={subject}
+          alt="No Subjects"
+          className="w-full lg:w-1/2 mb-8 rounded-3xl h-[50vh] lg:h-[70vh] object-cover shadow-lg"
+        />
+        <div className="flex items-center justify-center w-1/2">
+          <Card className="border border-gray-200 rounded-xl shadow-sm w-full max-w-md bg-white/90 backdrop-blur-sm">
+            <CardContent className="text-center p-8">
+              <div className="text-4xl mb-4">📚</div>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">No Material Details Available</h2>
+              <p className="text-gray-600 mb-6">It looks like there are no details available for this material.</p>
+              <Button
+                variant="solid"
+                className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
+                onClick={() => navigate(-1)}
+              >
+                Go Back
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   // Get file URL
@@ -76,110 +109,130 @@ const MaterialDetails = () => {
   };
 
   return (
-    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
-      {/* Header */}
-      <div className="w-full flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-          {materialDetails.title}
-        </h1>
-        <Button
-          variant="solid"
-          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </Button>
-      </div>
+    <>
+      {materialDetails && (
+        <div className="flex flex-wrap font-poppins gap-6 w-[90%] mx-auto mt-16 mb-20">
+          {/* Header */}
+          <div className="w-full flex justify-between items-center mb-6">
+            <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
+              {materialDetails.title}
+              <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+            </h1>
+            <Button
+              variant="solid"
+              className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </Button>
+          </div>
 
-      <div className="w-full flex flex-col md:flex-row gap-6">
-        {/* Material Details */}
-        <div className="w-full md:w-1/3">
-          <Card className="border border-gray-200 rounded-xl shadow-sm">
-            <CardContent className="p-4">
-              <table className="w-full table-auto">
-                <tbody>
-                  <tr>
-                    <td className="py-2 font-semibold text-gray-700">Description</td>
-                    <td className="py-2 text-gray-600">{materialDetails.description}</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 font-semibold text-gray-700">Type</td>
-                    <td className="py-2 text-gray-600">{materialDetails.type}</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 font-semibold text-gray-700">Uploaded By</td>
-                    <td className="py-2 text-gray-600">{materialDetails.uploaded_by?.fullName || "Unknown"}</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 font-semibold text-gray-700">Upload Date</td>
-                    <td className="py-2 text-gray-600">{new Date(materialDetails.createdAt).toLocaleString()}</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 font-semibold text-gray-700">Size</td>
-                    <td className="py-2 text-gray-600">{materialDetails.size || "Unknown"}</td>
-                  </tr>
-                  {fileUrl && (
-                    <tr>
-                      <td className="py-2 font-semibold text-gray-700">Download</td>
-                      <td className="py-2">
-                        <a href={fileUrl} download className="btn btn-success">
-                          Download Material
-                        </a>
-                      </td>
-                    </tr>
+          <div className="w-full flex flex-col md:flex-row gap-6">
+            {/* Material Details */}
+            <div className="w-full md:w-1/3">
+              <Card className="border border-gray-200 rounded-xl shadow-sm">
+                <CardContent className="p-4">
+                  <table className="w-full table-auto">
+                    <tbody>
+                      <tr>
+                        <td className="py-2 font-semibold text-gray-700">Description</td>
+                        <td className="py-2 text-gray-600">{materialDetails.description}</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 font-semibold text-gray-700">Type</td>
+                        <td className="py-2 text-gray-600">{materialDetails.type}</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 font-semibold text-gray-700">Uploaded By</td>
+                        <td className="py-2 text-gray-600">{materialDetails.uploaded_by?.fullName || "Unknown"}</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 font-semibold text-gray-700">Upload Date</td>
+                        <td className="py-2 text-gray-600">{new Date(materialDetails.createdAt).toLocaleString()}</td>
+                      </tr>
+                      {fileUrl && (
+                        <tr>
+                          <td className="py-2 font-semibold text-gray-700">Download</td>
+                          <td className="py-2">
+                            <a href={fileUrl} download target="_blank" rel="noopener noreferrer">
+                              <Button
+                                variant="solid"
+                                className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] text-white flex items-center gap-2"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="2"
+                                  stroke="currentColor"
+                                  className="w-5 h-5"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 12l4-4m-4 4l-4-4M4 20h16" />
+                                </svg>
+                                Download Material
+                              </Button>
+                            </a>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Media Preview */}
+            <div className="w-full md:w-2/3">
+              <Card className="border border-gray-200 rounded-xl shadow-sm">
+                <CardContent className="p-4">
+                  {mediaLoading ? ( // Show loader while media is loading
+                    <div className="flex items-center justify-center h-40">
+                      <Loader />
+                    </div>
+                  ) : fileUrl ? (
+                    isYouTube ? (
+                      <iframe
+                        src={getYouTubeEmbedUrl(fileUrl)}
+                        width="100%"
+                        height="400px"
+                        title="YouTube Video"
+                        allowFullScreen
+                        className="border rounded"
+                      ></iframe>
+                    ) : isImage ? (
+                      <img src={fileUrl} alt={materialDetails.title} className="img-fluid rounded mb-3" />
+                    ) : isPdf ? (
+                      <iframe src={fileUrl} width="100%" height="400px" className="border rounded" title="PDF Document"></iframe>
+                    ) : isVideo ? (
+                      <video width="100%" controls>
+                        <source src={fileUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : isGoogleDocs ? (
+                      <iframe
+                        src={getGoogleEmbedUrl(fileUrl)}
+                        width="100%"
+                        height="500px"
+                        title="Google Document"
+                        className="border rounded"
+                      ></iframe>
+                    ) : isGoogleDrive ? (
+                      <iframe src={fileUrl.replace("/view", "/preview")} width="100%" height="400px" title="Google Drive File"></iframe>
+                    ) : (
+                      <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                        Download Material
+                      </a>
+                    )
+                  ) : (
+                    <p className="text-gray-500 text-center h-40 flex items-center justify-center">No file available for this material.</p>
                   )}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
-
-        {/* Media Preview */}
-        <div className="w-full md:w-2/3">
-          <Card className="border border-gray-200 rounded-xl shadow-sm">
-            <CardContent className="p-4">
-              {fileUrl ? (
-                isYouTube ? (
-                  <iframe
-                    src={getYouTubeEmbedUrl(fileUrl)}
-                    width="100%"
-                    height="400px"
-                    title="YouTube Video"
-                    allowFullScreen
-                    className="border rounded"
-                  ></iframe>
-                ) : isImage ? (
-                  <img src={fileUrl} alt={materialDetails.title} className="img-fluid rounded mb-3" />
-                ) : isPdf ? (
-                  <iframe src={fileUrl} width="100%" height="400px" className="border rounded" title="PDF Document"></iframe>
-                ) : isVideo ? (
-                  <video width="100%" controls>
-                    <source src={fileUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : isGoogleDocs ? (
-                  <iframe
-                    src={getGoogleEmbedUrl(fileUrl)}
-                    width="100%"
-                    height="500px"
-                    title="Google Document"
-                    className="border rounded"
-                  ></iframe>
-                ) : isGoogleDrive ? (
-                  <iframe src={fileUrl.replace("/view", "/preview")} width="100%" height="400px" title="Google Drive File"></iframe>
-                ) : (
-                  <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                    Download Material
-                  </a>
-                )
-              ) : (
-                <p className="text-gray-500">No file available for this material.</p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

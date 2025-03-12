@@ -13,7 +13,7 @@ const VirtualRoomsSection = () => {
   const [currentPageAll, setCurrentPageAll] = useState(1);
   const [currentPageCompleted, setCurrentPageCompleted] = useState(1);
   const [currentPageMissed, setCurrentPageMissed] = useState(1);
-  const [initialLoading, setInitialLoading] = useState(true); // Add initialLoading state
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const itemsPerPage = 3;
   const dispatch = useDispatch();
@@ -47,9 +47,9 @@ const VirtualRoomsSection = () => {
         dispatch(fetchCompletedRooms(subjectId)),
         dispatch(fetchMissedRooms(subjectId))
       ]).then(() => {
-        setInitialLoading(false); // Set initialLoading to false after data is fetched
+        setInitialLoading(false);
       }).catch(() => {
-        setInitialLoading(false); // Set initialLoading to false even if there's an error
+        setInitialLoading(false);
       });
     }
   }, [dispatch, subjectId]);
@@ -107,11 +107,10 @@ const VirtualRoomsSection = () => {
     }
   };
 
-  // Show full-page loading during initial data fetch
   if (initialLoading) {
     return (
-      <div className=" mt-16 mb-20 min-h-[68vh] w-[95%] mx-auto">
-      <Loader/>
+      <div className="mt-16 mb-20 min-h-[68vh] w-[95%] mx-auto">
+        <Loader />
       </div>
     );
   }
@@ -267,13 +266,26 @@ const VirtualRoomsSection = () => {
                   <div className="flex gap-3 text-gray-500">
                     <Button
                       variant="solid"
-                      className="text-white  bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py- rounded-lg"
+                      className={`text-white px-3 py-2 rounded-lg ${
+                        room.status === "completed" || room.studentAttendanceStatus === "attended" || room.studentAttendanceStatus === "missed"
+                          ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] cursor-not-allowed"
+                          : "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"
+                      }`}
+                      disabled={room.status === "completed" || room.studentAttendanceStatus === "attended" || room.studentAttendanceStatus === "missed"}
                       onClick={() => {
-                        window.open(room.link, "_blank"); // Open link in a new tab
-                        handleViewRoom(room._id); // Mark the room as viewed
+                        if (room.status !== "completed" && room.studentAttendanceStatus !== "attended" && room.studentAttendanceStatus !== "missed") {
+                          window.open(room.link, "_blank");
+                          handleViewRoom(room._id);
+                        }
                       }}
                     >
-                      Enter
+                      {room.studentAttendanceStatus === "attended"
+                        ? "Attended"
+                        : room.studentAttendanceStatus === "missed"
+                        ? "Missed"
+                        : room.status === "completed"
+                        ? "Completed"
+                        : "Enter"}
                     </Button>
                   </div>
                 </CardContent>
