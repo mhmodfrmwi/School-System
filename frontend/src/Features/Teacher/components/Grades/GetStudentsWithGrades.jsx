@@ -15,7 +15,7 @@ function GetStudentsWithGrades() {
   const { classId, gradeSubjectSemesterId, type } = useParams();
   const dispatch = useDispatch();
   const { studentResult, loading } = useSelector((state) => state.examScores);
-
+  console.log(studentResult);
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
   const [students, setStudents] = useState([]);
@@ -46,8 +46,6 @@ function GetStudentsWithGrades() {
       setStudents(uniqueStudents);
     }
   }, [studentResult]);
-
-  if (loading) return <Loader />;
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -130,6 +128,20 @@ function GetStudentsWithGrades() {
     indexOfLastStudent - studentsPerPage,
     indexOfLastStudent,
   );
+
+  if (loading) return <Loader />;
+
+  if (!studentResult?.data?.type) {
+    return (
+      <>
+        <h1 className="mb-4 text-2xl font-semibold text-[#117C90]">
+          Student Exam Results
+        </h1>
+
+        <div>No student results found.</div>
+      </>
+    );
+  }
 
   return (
     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-[90%]">

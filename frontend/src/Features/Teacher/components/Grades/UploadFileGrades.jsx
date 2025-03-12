@@ -84,13 +84,16 @@ const UploadFileGrades = () => {
         </button>
 
         <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2">
-          <input
-            type="text"
-            placeholder="Enter exam type"
+          <select
             value={examType}
             onChange={(e) => setExamType(e.target.value)}
             className="w-full rounded border p-2 text-center"
-          />
+          >
+            <option value="">Select exam type</option>
+            <option value="midterm">midterm</option>
+            <option value="final">final</option>
+          </select>
+
           <button
             onClick={handleGetStudentsGrades}
             className="rounded bg-[#117C90] p-2 text-lg text-white"
