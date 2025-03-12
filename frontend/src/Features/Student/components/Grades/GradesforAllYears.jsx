@@ -89,16 +89,16 @@ function GradesforAllYears() {
                                 {gradeData.subjectName}
                               </td>
                               <td className="px-4 py-3">
-                                {gradeData?.midterm?.examGrade ?? "N/A"}
+                                {gradeData?.midterm?.examGrade ?? "-"}
                               </td>
                               <td className="px-4 py-3">
-                                {gradeData?.midterm?.finalDegree ?? "N/A"}
+                                {gradeData?.midterm?.finalDegree ?? "-"}
                               </td>
                               <td className="px-4 py-3">
-                                {gradeData?.final?.examGrade ?? "N/A"}
+                                {gradeData?.final?.examGrade ?? "-"}
                               </td>
                               <td className="px-4 py-3">
-                                {gradeData?.final?.finalDegree ?? "N/A"}
+                                {gradeData?.final?.finalDegree ?? "-"}
                               </td>
                               <td className="px-4 py-3">{scoreSubject}</td>
                               <td className="px-4 py-3">{maxScoreSubject}</td>
