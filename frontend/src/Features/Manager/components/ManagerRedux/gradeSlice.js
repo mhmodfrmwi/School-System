@@ -8,10 +8,10 @@ const initialState = {
   classNames: [],
   gradeNames: [],
   subjectNames: [],
-  notFound: false, // حالة جديدة لتتبع إذا كانت النتيجة مش موجودة
+  notFound: false, 
 };
 
-// Async Thunk لـ Grade Results
+// Grade Results
 export const getGradeResults = createAsyncThunk(
   "gradeManager/getGradeResults",
   async (requestData, { rejectWithValue }) => {
@@ -46,7 +46,7 @@ export const getGradeResults = createAsyncThunk(
   }
 );
 
-// Async Thunk لـ Class, Grade, and Subject Names
+// Class, Grade, and Subject Names
 export const getClassGradeSubjectNames = createAsyncThunk(
   "gradeManager/getClassGradeSubjectNames",
   async (_, { rejectWithValue }) => {
@@ -85,19 +85,19 @@ const gradeManagerSlice = createSlice({
       .addCase(getGradeResults.pending, (state) => {
         state.status = "loading";
         state.loading = true;
-        state.notFound = false; // إعادة تعيين notFound عند بدء البحث
+        state.notFound = false; 
       })
       .addCase(getGradeResults.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.loading = false;
         state.gradeResults = action.payload;
-        state.notFound = false; // تأكيد أن البيانات موجودة
+        state.notFound = false;
       })
       .addCase(getGradeResults.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to fetch grade results";
         state.loading = false;
-        state.notFound = true; // تعيين notFound إلى true في حالة 404
+        state.notFound = true; 
       })
 
       // Class, Grade, and Subject Names Cases

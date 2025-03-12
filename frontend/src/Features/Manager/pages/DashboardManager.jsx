@@ -75,7 +75,7 @@ function DashboardManager() {
   const studentsRanksData = studentsRanks?.data || [];
   const teachersRanksData = teachersRanks?.data || [];
 
-  // دالة لإرجاع لون الـ Badge بناءً على القيمة
+
   const getBadgeColor = (badge) => {
     switch (badge) {
       case "Green":
