@@ -22,6 +22,7 @@ const{
 
 const{
   getExamResults,
+  getUniqueNames
 }= require("../controllers/manager/gradesController");
 
 const router = express.Router();
@@ -42,6 +43,6 @@ router.get("/grade-statistics", validateJwt, validateManager,getGradeStatistics)
 router.get("/absence-statistics", validateJwt, validateManager,getDailyAttendancePercentage);
 router.get("/teachers-ranks", validateJwt, validateManager,getTeachersWithPointsAndBadges);
 router.get("/students-ranks", validateJwt, validateManager,getTop10Students);
-router.get("/class-results", validateJwt, validateManager,getExamResults);
-
+router.get("/class-results/:gradeName/:className/:subjectName", validateJwt, validateManager,getExamResults);
+router.get("/class-grade-subject-names", validateJwt, validateManager,getUniqueNames);
 module.exports = router;

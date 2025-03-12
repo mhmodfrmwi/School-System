@@ -10,8 +10,37 @@ const Class = require("../../DB/classModel");
 const Subject = require("../../DB/subjectModel");
 const Semester = require("../../DB/semesterModel")
 
+const getUniqueNames = expressAsyncHandler(async (req, res) => {
+  try {
+    const classNames = await Class.distinct("className");
+
+    const gradeNames = await Grade.distinct("gradeName");
+
+    const subjectNames = await Subject.distinct("subjectName");
+
+    res.status(200).json({
+      status: 200,
+      success: true,
+      message: "Unique names retrieved successfully",
+      data: {
+        classNames,
+        gradeNames,
+        subjectNames,
+      },
+    });
+  } catch (error) {
+    console.error("Error retrieving unique names:", error);
+    res.status(500).json({
+      status: 500,
+      success: false,
+      message: "Failed to retrieve unique names",
+      error: error.message,
+    });
+  }
+});
+
 const getExamResults = expressAsyncHandler(async (req, res) => {
-    const { gradeName, className, subjectName } = req.body;
+    const { gradeName, className, subjectName } = req.params;
   
     try {
       const grade = await Grade.findOne({ gradeName });
@@ -207,5 +236,6 @@ const getExamResults = expressAsyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    getExamResults
+    getExamResults,
+    getUniqueNames
 };

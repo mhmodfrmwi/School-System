@@ -20,17 +20,13 @@ const getStatistics = expressAsyncHandler(async (req, res) => {
     const studentCount = await Student.countDocuments({});
     const teacherCount = await Teacher.countDocuments({});
     const parentCount = await Parent.countDocuments({});
-    const adminCount = await Admin.countDocuments({});
-    const managerCount = await Manager.countDocuments({});
     const seheduleCount = await Sehedule.countDocuments({});
 
-    const totalUsers = studentCount + teacherCount + parentCount + adminCount + managerCount;
+    const totalUsers = studentCount + teacherCount + parentCount ;
 
     const studentPercentage = ((studentCount / totalUsers) * 100).toFixed(2);
     const teacherPercentage = ((teacherCount / totalUsers) * 100).toFixed(2);
     const parentPercentage = ((parentCount / totalUsers) * 100).toFixed(2);
-    const adminPercentage = ((adminCount / totalUsers) * 100).toFixed(2);
-    const managerPercentage = ((managerCount / totalUsers) * 100).toFixed(2);
 
     const studentGenderCounts = await Student.aggregate([
       { $group: { _id: "$gender", count: { $sum: 1 } } },
@@ -76,8 +72,6 @@ const getStatistics = expressAsyncHandler(async (req, res) => {
           students: studentPercentage,
           teachers: teacherPercentage,
           parents: parentPercentage,
-          admins: adminPercentage,
-          managers: managerPercentage,
         },
       },
     });

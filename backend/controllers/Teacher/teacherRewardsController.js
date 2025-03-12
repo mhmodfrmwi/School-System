@@ -75,6 +75,8 @@ const getTeachersWithPointsAndBadges = expressAsyncHandler(async (req, res) => {
     );
 
     teachersWithPointsAndBadges.sort((a, b) => b.totalPoints - a.totalPoints);
+    const top10Teacher = teachersWithPointsAndBadges.slice(0, 10);
+
     res.status(200).json({
       success: true,
       status: 200,
