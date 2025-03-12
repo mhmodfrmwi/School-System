@@ -943,7 +943,7 @@ function App() {
             />
 
             <Route
-              path="exam-results/:scoreId/:classId"
+              path="exam-results/:classId/:gradeSubjectSemesterId/:type"
               element={<GetStudentsWithGrades />}
             />
           </Route>

@@ -68,22 +68,18 @@ function GradesForSemester() {
                     <tr key={item.subjectId} className="border-b">
                       <td className="px-4 py-3">{item.subjectName}</td>
                       <td className="px-4 py-3">
-                        {item.midterm?.examGrade
-                          ? item.midterm.examGrade
-                          : "N/A"}
+                        {item.midterm?.examGrade ? item.midterm.examGrade : "-"}
                       </td>
                       <td className="px-4 py-3">
                         {item.midterm?.finalDegree
                           ? item.midterm.finalDegree
-                          : "N/A"}
+                          : "-"}
                       </td>
                       <td className="px-4 py-3">
-                        {item.final?.examGrade ? item.final.examGrade : "N/A"}
+                        {item.final?.examGrade ? item.final.examGrade : "-"}
                       </td>
                       <td className="px-4 py-3">
-                        {item.final?.finalDegree
-                          ? item.final.finalDegree
-                          : "N/A"}
+                        {item.final?.finalDegree ? item.final.finalDegree : "-"}
                       </td>
                       <td className="px-4 py-3">{scoreSubject}</td>
                       <td className="px-4 py-3">{maxScoreSubject}</td>

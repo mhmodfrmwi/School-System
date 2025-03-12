@@ -60,9 +60,38 @@ export const uploadFileGrades = createAsyncThunk(
   },
 );
 
+export const updateFileGrades = createAsyncThunk(
+  "examScores/updateFileGrades",
+  async (
+    { classId, gradeSubjectSemesterId, formData },
+    { rejectWithValue },
+  ) => {
+    try {
+      const token = getToken();
+      if (!token) throw new Error("No token found, please login again.");
+
+      const response = await fetch(
+        `${API_BASE_URL}/teacher/exam-score/${classId}/${gradeSubjectSemesterId}`,
+        {
+          method: "PATCH",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        },
+      );
+
+      if (!response.ok) throw new Error("Failed to update file");
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
 export const fetchStudentExamResult = createAsyncThunk(
   "examScores/fetchStudentExamResult",
-  async ({ scoreId, classId }, { rejectWithValue }) => {
+  async ({ classId, gradeSubjectSemesterId, type }, { rejectWithValue }) => {
     try {
       const token = getToken();
       if (!token) {
@@ -70,7 +99,7 @@ export const fetchStudentExamResult = createAsyncThunk(
       }
 
       const response = await fetch(
-        `${API_BASE_URL}/teacher/exam-results/${scoreId}/${classId}`,
+        `${API_BASE_URL}/teacher/exam-results/${classId}/${gradeSubjectSemesterId}/${type}`,
         {
           method: "GET",
           headers: {
@@ -80,15 +109,7 @@ export const fetchStudentExamResult = createAsyncThunk(
         },
       );
 
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch student exam result: ${response.statusText}`,
-        );
-      }
-
       const data = await response.json();
-
-      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -98,13 +119,13 @@ export const fetchStudentExamResult = createAsyncThunk(
 
 export const removeFile = createAsyncThunk(
   "examScores/removeFile",
-  async ({ scoreId, classId }, { rejectWithValue }) => {
+  async ({ classId, gradeSubjectSemesterId, type }, { rejectWithValue }) => {
     try {
       const token = getToken();
       if (!token) throw new Error("No token found, please login again.");
 
       const response = await fetch(
-        `${API_BASE_URL}/teacher/exam-results/${scoreId}/${classId}`,
+        `${API_BASE_URL}/teacher/exam-results/${classId}/${gradeSubjectSemesterId}/${type}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -160,7 +181,19 @@ const examScoreSlice = createSlice({
       .addCase(uploadFileGrades.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        toast.error(state.error);
+      })
+
+      .addCase(updateFileGrades.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateFileGrades.fulfilled, (state, action) => {
+        state.loading = false;
+        state.uploadedFile = action.payload;
+      })
+      .addCase(updateFileGrades.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
 
       .addCase(fetchStudentExamResult.pending, (state) => {
@@ -184,7 +217,6 @@ const examScoreSlice = createSlice({
       .addCase(removeFile.fulfilled, (state) => {
         state.loading = false;
         state.uploadedFile = null;
-        toast.success("File removed successfully!");
       })
       .addCase(removeFile.rejected, (state, action) => {
         state.loading = false;
