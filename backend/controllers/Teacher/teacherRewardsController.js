@@ -66,6 +66,7 @@ const getTeachersWithPointsAndBadges = expressAsyncHandler(async (req, res) => {
           _id: teacher._id,
           academicNumber: teacher.academicNumber,
           fullName: teacher.fullName,
+          email: teacher.email,
           totalPoints,
           badge,
           subject,
