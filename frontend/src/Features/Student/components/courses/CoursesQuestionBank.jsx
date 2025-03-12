@@ -13,8 +13,10 @@ import { Button } from "@/components/ui/button";
 import { FaBookmark, FaEye, FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Loader from "../../../../ui/Loader";
 
 const CoursesQuestionBank = () => {
+  const [initialLoading, setInitialLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("all");
   const itemsPerPage = 3;
@@ -29,8 +31,14 @@ const CoursesQuestionBank = () => {
 
   useEffect(() => {
     if (subjectId) {
-      dispatch(fetchQuestions(subjectId));
-      dispatch(fetchBookmarks());
+      Promise.all([
+        dispatch(fetchQuestions(subjectId)),
+        dispatch(fetchBookmarks()),
+      ]).then(() => {
+        setInitialLoading(false);
+      }).catch(() => {
+        setInitialLoading(false);
+      });
     }
   }, [dispatch, subjectId]);
 
@@ -96,10 +104,19 @@ const CoursesQuestionBank = () => {
     }
   };
 
+  // Show full-page loading during initial data fetch
+  if (initialLoading) {
+    return (
+      <div className="mt-16 mb-20 min-h-[68vh] w-[95%] mx-auto">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
+    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-12 mb-20">
       {/* Sidebar */}
-      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-6 md:h-[530px]">
+      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-2 md:h-[550px]">
         <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
           {subjectName}
           <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
@@ -127,27 +144,22 @@ const CoursesQuestionBank = () => {
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Discussion Rooms
-            </Button>
-          </li>
-          <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
              onClick={() => navigate(`/student/allcourses/assignments/${subjectId}`)}>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Assignments
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/exams/${subjectId}`)}>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Exams
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-[#BFBFBF] text-white font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/questionbank/${subjectId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Question Bank
             </Button>
           </li>
         </ul>
@@ -177,78 +189,92 @@ const CoursesQuestionBank = () => {
           </Button>
         </div>
 
-        {/* Loading Message */}
-        {loading && (
+        {/* Secondary Loading State (for actions after initial load) */}
+        {loading && !initialLoading && (
           <div className="flex items-center justify-center text-center text-gray-500 mt-10">
             <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
             <p className="text-gray-700 text-lg font-semibold">Loading...</p>
           </div>
         )}
 
-        {/* No Questions Message */}
-        {!loading && questions.length === 0 && (
-          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-            <CardContent className="text-center p-4 text-gray-600">
-              No questions available for this subject.
-            </CardContent>
-          </Card>
-        )}
+        {/* Content Area - only show when not in loading state */}
+        {!loading && (
+          <>
+            {/* No Questions Message */}
+            {activeTab === "all" && questions.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  No questions available for this subject.
+                </CardContent>
+              </Card>
+            )}
+            {activeTab === "bookmarks" && bookmarkedQuestions.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  You haven't bookmarked any questions yet.
+                </CardContent>
+              </Card>
+            )}
 
-        {/* Question Cards */}
-        <div className="space-y-4">
-          {paginatedQuestions.map((question, index) => (
-            <Card key={question._id} className="border border-gray-200 rounded-xl shadow-sm">
-              <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
-                    {index + 1 + (currentPage - 1) * itemsPerPage}
-                  </div>
-                  <div>
-                    <h2 className="text-base md:text-lg font-semibold text-gray-800">{question.questionText}</h2>
-                    <p className="text-sm text-gray-600">{question.questionType}</p>
-                    <p className="text-sm text-gray-400">Teacher: {question.teacherId.fullName}</p>
-                  </div>
-                </div>
-                <div className="flex gap-3 text-gray-500">
-                  <div
-                    className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer"
-                    onClick={() => handleBookmark(question._id)}
-                  >
-                    <FaBookmark className={`text-gray-800 ${bookmarks.some((bookmark) => bookmark?.question_id?._id === question._id) ? "text-yellow-500" : ""}`} />
-                  </div>
-                  <div
-                    className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer"
-                    onClick={() => handleViewQuestion(question._id)}
-                  >
-                    <FaEye className={`${question.isViewed ? "text-blue-500" : "text-gray-800 "}`} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+            {/* Question Cards */}
+            {displayedQuestions.length > 0 && (
+              <div className="space-y-4">
+                {paginatedQuestions.map((question, index) => (
+                  <Card key={question._id} className="border border-gray-200 rounded-xl shadow-sm">
+                    <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
+                          {index + 1 + (currentPage - 1) * itemsPerPage}
+                        </div>
+                        <div>
+                          <h2 className="text-base md:text-lg font-semibold text-gray-800">{question.questionText}</h2>
+                          <p className="text-sm text-gray-600">{question.questionType}</p>
+                          <p className="text-sm text-gray-400">Teacher: {question.teacherId.fullName}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 text-gray-500">
+                        <div
+                          className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer"
+                          onClick={() => handleBookmark(question._id)}
+                        >
+                          <FaBookmark className={`text-gray-800 ${bookmarks.some((bookmark) => bookmark?.question_id?._id === question._id) ? "text-yellow-500" : ""}`} />
+                        </div>
+                        <div
+                          className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full cursor-pointer"
+                          onClick={() => handleViewQuestion(question._id)}
+                        >
+                          <FaEye className={`${question.isViewed ? "text-blue-500" : "text-gray-800 "}`} />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
 
-        {/* Pagination Controls */}
-        {displayedQuestions.length > itemsPerPage && (
-          <div className="flex justify-center items-center gap-4 mb-4 mt-10">
-            <button
-              onClick={prevPage}
-              disabled={currentPage === 1}
-              className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-            >
-              <FaChevronLeft />
-            </button>
-            <span className="text-gray-800 font-medium">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={nextPage}
-              disabled={currentPage === totalPages}
-              className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-            >
-              <FaChevronRight />
-            </button>
-          </div>
+            {/* Pagination Controls */}
+            {displayedQuestions.length > itemsPerPage && (
+              <div className="flex justify-center items-center gap-4 mb-4 mt-10">
+                <button
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                  className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+                >
+                  <FaChevronLeft />
+                </button>
+                <span className="text-gray-800 font-medium">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages}
+                  className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+                >
+                  <FaChevronRight />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

@@ -15,9 +15,11 @@ import { Button } from "@/components/ui/button";
 import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Loader from "../../../../ui/Loader";
 
 const ExamsSection = () => {
   const dispatch = useDispatch();
+  const [initialLoading, setInitialLoading] = useState(true);
   const { gradeSubjectSemesterId, classId } = useParams();
   const navigate = useNavigate();
   const {
@@ -41,12 +43,24 @@ const ExamsSection = () => {
 
   // Fetch all required data on component mount
   useEffect(() => {
-    dispatch(fetchSubjects());
-    dispatch(fetchSessions());
-    dispatch(fetchExams({ gradeSubjectSemesterId, classId }));
-    dispatch(fetchUpcomingExams({ gradeSubjectSemesterId, classId }));
-    dispatch(fetchCompletedExams({ gradeSubjectSemesterId, classId }));
-    dispatch(fetchMissedExams({ gradeSubjectSemesterId, classId }));
+    const fetchData = async () => {
+      try {
+        await Promise.all([
+          dispatch(fetchSubjects()),
+          dispatch(fetchSessions()),
+          dispatch(fetchExams({ gradeSubjectSemesterId, classId })),
+          dispatch(fetchUpcomingExams({ gradeSubjectSemesterId, classId })),
+          dispatch(fetchCompletedExams({ gradeSubjectSemesterId, classId })),
+          dispatch(fetchMissedExams({ gradeSubjectSemesterId, classId })),
+        ]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+
+    fetchData();
   }, [dispatch, gradeSubjectSemesterId, classId]);
 
   useEffect(() => {
@@ -126,7 +140,6 @@ const ExamsSection = () => {
     setFilteredExams(examsToDisplay);
   }, [activeTab, exams, upcomingExams, completedExams, missedExams, categorizeAndSortExams]);
 
-
   const handleStartExam = (exam) => {
     const now = new Date();
     const startTime = new Date(exam.start_time);
@@ -190,9 +203,6 @@ const ExamsSection = () => {
         }
       }
     });
-
-
-
   };
 
   // Pagination logic
@@ -235,14 +245,19 @@ const ExamsSection = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
+  // Show full-page loading during initial data fetch
+  if (initialLoading) {
+    return (
+      <div className="mt-16 mb-20 min-h-[68vh] w-[95%] mx-auto">
+        <Loader />
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
+    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-12 mb-20">
       {/* Sidebar */}
-      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-6 md:h-[530px]">
+      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-2 md:h-[550px]">
         <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
           {subjectName}
           <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
@@ -251,7 +266,7 @@ const ExamsSection = () => {
           <li>
             <Button
               variant="solid"
-              className="md:w-11/12  bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
+              className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/videos/${gradeSubjectSemesterId}`)}
             >
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> Video Lectures
@@ -269,27 +284,22 @@ const ExamsSection = () => {
           <li>
             <Button
               variant="solid"
-              className="md:w-11/12 bg-gray-100 text-gray-700  font-medium py-4 rounded-lg"
+              className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/virtualrooms/${gradeSubjectSemesterId}`)}
             >
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Virtual Rooms
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Discussion Rooms
-            </Button>
-          </li>
-          <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Assignments
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-[#BFBFBF] text-white font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Exams
             </Button>
           </li>
           <li>
@@ -298,7 +308,7 @@ const ExamsSection = () => {
               className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/questionbank/${gradeSubjectSemesterId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Question Bank
             </Button>
           </li>
         </ul>
@@ -352,115 +362,143 @@ const ExamsSection = () => {
           </Button>
         </div>
 
-        {/* Loading Message */}
-        {loading && (
+        {/* Secondary Loading State (for actions after initial load) */}
+        {loading && !initialLoading && (
           <div className="flex items-center justify-center text-center text-gray-500 mt-10">
             <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
             <p className="text-gray-700 text-lg font-semibold">Loading...</p>
           </div>
         )}
 
-        {/* No Exams Message */}
-        {filteredExams.length === 0 && !loading && !error && (
-          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-            <CardContent className="text-center p-4 text-gray-600">
-              No exams available.
-            </CardContent>
-          </Card>
-        )}
+        {/* Content Area - only show when not in loading state */}
+        {!loading && (
+          <>
+            {/* No Exams Message */}
+            {activeTab === "all" && filteredExams.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  No exams available.
+                </CardContent>
+              </Card>
+            )}
+            {activeTab === "upcoming" && upcomingExams.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  No upcoming exams available.
+                </CardContent>
+              </Card>
+            )}
+            {activeTab === "completed" && completedExams.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  No completed exams available.
+                </CardContent>
+              </Card>
+            )}
+            {activeTab === "missed" && missedExams.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  No missed exams available.
+                </CardContent>
+              </Card>
+            )}
 
-        {/* Exam Cards */}
-        <div className="space-y-4">
-          {paginatedExams.map((exam, index) => (
-            <Card key={exam._id} className="border border-gray-200 rounded-xl shadow-sm">
-              <CardContent className="flex items-center justify-center p-4 bg-gray-100">
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
-                    {index + 1 + (currentPage - 1) * itemsPerPage}
-                  </div>
-                  <div>
-                    <h2 className="text-base md:text-lg font-semibold text-gray-800">{exam.title}</h2>
-                    <p className="text-md text-gray-700">Description: {exam.description}</p>
-                    <p className="text-sm text-gray-700">Created By: {exam.created_by.fullName}</p>
-                    <p className="text-sm text-gray-700">Duration: {exam.duration} minutes</p>
-                    <p className="text-sm text-gray-700">
-                      Start Time: {new Date(exam.start_time).toLocaleString()}
-                      <span className="text-pink-600"> | </span>
-                      End Time: {new Date(exam.end_time).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
+            {/* Exam Cards */}
+            {filteredExams.length > 0 && (
+              <div className="space-y-4">
+                {paginatedExams.map((exam, index) => (
+                  <Card key={exam._id} className="border border-gray-200 rounded-xl shadow-sm">
+                    <CardContent className="flex items-center justify-center p-4 bg-gray-100">
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
+                          {index + 1 + (currentPage - 1) * itemsPerPage}
+                        </div>
+                        <div>
+                          <h2 className="text-base md:text-lg font-semibold text-gray-800">{exam.title}</h2>
+                          <p className="text-md text-gray-700">Description: {exam.description}</p>
+                          <p className="text-sm text-gray-700">Created By: {exam.created_by.fullName}</p>
+                          <p className="text-sm text-gray-700">Duration: {exam.duration} minutes</p>
+                          <p className="text-sm text-gray-700">
+                            Start Time: {new Date(exam.start_time).toLocaleString()}
+                            <span className="text-pink-600"> | </span>
+                            End Time: {new Date(exam.end_time).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
 
-                {/* Start Exam */}
-                <div
-                  className="ml-4"
-                  title={
-                    new Date() < new Date(exam.start_time)
-                      ? "The exam has not started yet."
-                      : new Date() > new Date(exam.end_time)
-                        ? "The exam has already ended."
-                        : ""
-                  }
+                      {/* Start Exam */}
+                      <div
+                        className="ml-4"
+                        title={
+                          new Date() < new Date(exam.start_time)
+                            ? "The exam has not started yet."
+                            : new Date() > new Date(exam.end_time)
+                              ? "The exam has already ended."
+                              : ""
+                        }
+                      >
+                        <Button
+                          variant="solid"
+                          className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
+                          onClick={() => {
+                            const session = sessions.find((session) => session.exam_id?._id === exam._id);
+                            if (
+                              session?.status === "Submitted" ||
+                              session?.isExpired === true
+                            ) {
+                              // Navigate to the results page
+                              navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/result/${exam._id}`);
+                            } else {
+                              // Handle starting the exam
+                              handleStartExam(exam);
+                            }
+                          }}
+                          disabled={
+                            (new Date() > new Date(exam.end_time) && !sessions.find((session) => session.exam_id?._id === exam._id)) ||
+                            new Date() < new Date(exam.start_time) ||
+                            exam.type === "Offline"
+                          }
+                        >
+                          {(() => {
+                            if (exam.type === "Offline") return "Offline";
+                            const session = sessions.find((session) => session.exam_id?._id === exam._id);
+                            if (session?.status === "Submitted") return "View";
+                            if (session?.isExpired === true) return "View";
+                            if (new Date() < new Date(exam.start_time)) return "Not Started";
+                            if (new Date() > new Date(exam.end_time)) return "Exam Ended";
+                            return "Start Exam";
+                          })()}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {/* Pagination Controls */}
+            {filteredExams.length > itemsPerPage && (
+              <div className="flex justify-center items-center gap-4 mb-4 mt-10">
+                <button
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                  className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
                 >
-                  <Button
-                    variant="solid"
-                    className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
-                    onClick={() => {
-                      const session = sessions.find((session) => session.exam_id?._id === exam._id);
-                      if (
-                        session?.status === "Submitted" ||
-                        session?.isExpired === true
-                      ) {
-                        // Navigate to the results page
-                        navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/result/${exam._id}`);
-                      } else {
-                        // Handle starting the exam
-                        handleStartExam(exam);
-                      }
-                    }}
-                    disabled={
-                      (new Date() > new Date(exam.end_time) && !sessions.find((session) => session.exam_id?._id === exam._id)) ||
-                      new Date() < new Date(exam.start_time) ||
-                      exam.type === "Offline"
-                    }
-                  >
-                    {(() => {
-                      if (exam.type === "Offline") return "Offline";
-                      const session = sessions.find((session) => session.exam_id?._id === exam._id);
-                      if (session?.status === "Submitted") return "View";
-                      if (session?.isExpired === true) return "View";
-                      if (new Date() < new Date(exam.start_time)) return "Not Started";
-                      if (new Date() > new Date(exam.end_time)) return "Exam Ended";
-                      return "Start Exam";
-                    })()}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Pagination Controls */}
-        {filteredExams.length > itemsPerPage && (
-          <div className="flex justify-center items-center gap-4 mb-4 mt-10">
-            <button
-              onClick={prevPage}
-              disabled={currentPage === 1}
-              className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-            >
-              <FaChevronLeft />
-            </button>
-            <span className="text-gray-800 font-medium">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={nextPage}
-              disabled={currentPage === totalPages}
-              className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-            >
-              <FaChevronRight />
-            </button>
-          </div>
+                  <FaChevronLeft />
+                </button>
+                <span className="text-gray-800 font-medium">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages}
+                  className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+                >
+                  <FaChevronRight />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

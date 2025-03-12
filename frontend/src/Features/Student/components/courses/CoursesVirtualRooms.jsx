@@ -7,11 +7,13 @@ import { Button } from "@/components/ui/button";
 import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import Loader from "../../../../ui/Loader";
 
 const VirtualRoomsSection = () => {
   const [currentPageAll, setCurrentPageAll] = useState(1);
   const [currentPageCompleted, setCurrentPageCompleted] = useState(1);
   const [currentPageMissed, setCurrentPageMissed] = useState(1);
+  const [initialLoading, setInitialLoading] = useState(true); // Add initialLoading state
 
   const itemsPerPage = 3;
   const dispatch = useDispatch();
@@ -23,7 +25,6 @@ const VirtualRoomsSection = () => {
   const { subjects } = useSelector((state) => state.allSubjectsStudent);
 
   const [activeTab, setActiveTab] = useState("all");
-
   const [subjectName, setSubjectName] = useState("");
 
   useEffect(() => {
@@ -41,9 +42,15 @@ const VirtualRoomsSection = () => {
 
   useEffect(() => {
     if (subjectId) {
-      dispatch(fetchVirtualRooms(subjectId));
-      dispatch(fetchCompletedRooms(subjectId));
-      dispatch(fetchMissedRooms(subjectId));
+      Promise.all([
+        dispatch(fetchVirtualRooms(subjectId)),
+        dispatch(fetchCompletedRooms(subjectId)),
+        dispatch(fetchMissedRooms(subjectId))
+      ]).then(() => {
+        setInitialLoading(false); // Set initialLoading to false after data is fetched
+      }).catch(() => {
+        setInitialLoading(false); // Set initialLoading to false even if there's an error
+      });
     }
   }, [dispatch, subjectId]);
 
@@ -63,7 +70,6 @@ const VirtualRoomsSection = () => {
   const handleViewRoom = (roomId) => {
     dispatch(markRoomAsViewed(roomId));
   };
-
 
   const currentPage = activeTab === "completed"
     ? currentPageCompleted
@@ -85,7 +91,6 @@ const VirtualRoomsSection = () => {
     currentPage * itemsPerPage
   );
 
-
   const nextPage = () => {
     if (currentPage < totalPages) {
       if (activeTab === "all") setCurrentPageAll(currentPageAll + 1);
@@ -102,11 +107,19 @@ const VirtualRoomsSection = () => {
     }
   };
 
+  // Show full-page loading during initial data fetch
+  if (initialLoading) {
+    return (
+      <div className=" mt-16 mb-20 min-h-[68vh] w-[95%] mx-auto">
+      <Loader/>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
+    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-12 mb-20">
       {/* Sidebar */}
-      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-6 md:h-[530px]">
+      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-2 md:h-[550px]">
         <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
           {subjectName}
           <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
@@ -114,7 +127,6 @@ const VirtualRoomsSection = () => {
         <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
           <li>
             <Button variant="solid" className="md:w-11/12  bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-
               onClick={() => navigate(`/student/allcourses/videos/${subjectId}`)}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> Video Lectures
             </Button>
@@ -134,27 +146,22 @@ const VirtualRoomsSection = () => {
             </Button>
           </li>
           <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Discussion Rooms
-            </Button>
-          </li>
-          <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
              onClick={() => navigate(`/student/allcourses/assignments/${subjectId}`)}>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Assignments
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Assignments
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/exams/${subjectId}`)}>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Exams
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Exams
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/questionbank/${subjectId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">07</span> Question Bank
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Question Bank
             </Button>
           </li>
         </ul>
@@ -205,9 +212,8 @@ const VirtualRoomsSection = () => {
 
         </div>
 
-
-        {/* Loading Message */}
-        {loading && (
+        {/* Secondary Loading State (for actions after initial load) */}
+        {loading && !initialLoading && (
           <div className="flex items-center justify-center text-center text-gray-500 mt-10">
             <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
             <p className="text-gray-700 text-lg font-semibold">Loading...</p>
@@ -215,46 +221,49 @@ const VirtualRoomsSection = () => {
         )}
 
         {/* No Virtual Rooms Message */}
-        {activeTab === "all" && virtualRooms.length === 0 && !loading && !error && (
-          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-            <CardContent className="text-center p-4 text-gray-600">
-              No virtual rooms available for this subject.
-            </CardContent>
-          </Card>
-        )}
-        {activeTab === "completed" && completedRooms.length === 0 && !loading && !error && (
-          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-            <CardContent className="text-center p-4 text-gray-600">
-              No completed virtual rooms available for this subject.
-            </CardContent>
-          </Card>
-        )}
-        {activeTab === "missed" && missedRooms.length === 0 && !loading && !error && (
-
-          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-            <CardContent className="text-center p-4 text-gray-600">
-              No missed virtual rooms available for this subject.
-            </CardContent>
-          </Card>
+        {!initialLoading && !loading && (
+          <>
+            {activeTab === "all" && virtualRooms.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  No virtual rooms available for this subject.
+                </CardContent>
+              </Card>
+            )}
+            {activeTab === "completed" && completedRooms.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  No completed virtual rooms available for this subject.
+                </CardContent>
+              </Card>
+            )}
+            {activeTab === "missed" && missedRooms.length === 0 && (
+              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
+                <CardContent className="text-center p-4 text-gray-600">
+                  No missed virtual rooms available for this subject.
+                </CardContent>
+              </Card>
+            )}
+          </>
         )}
 
         {/* Virtual Room Cards */}
-        <div className="space-y-4">
-          {paginatedRooms.map((room, index) => (
-            <Card key={room._id} className="border border-gray-200 rounded-xl shadow-sm">
-              <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
-                    {index + 1 + (currentPage - 1) * itemsPerPage}
+        {!initialLoading && !loading && displayedRooms.length > 0 && (
+          <div className="space-y-4">
+            {paginatedRooms.map((room, index) => (
+              <Card key={room._id} className="border border-gray-200 rounded-xl shadow-sm">
+                <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
+                      {index + 1 + (currentPage - 1) * itemsPerPage}
+                    </div>
+                    <div>
+                      <h2 className="text-base md:text-lg font-semibold text-gray-800">{room.title}</h2>
+                      <p className="text-md text-gray-700">Teacher : {room.teacherId.fullName} </p>
+                      <p className="text-sm text-gray-600">Duration : {room.duration} </p>
+                      <p className="text-sm text-gray-400">{new Date(room.createdAt).toLocaleString()}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-base md:text-lg font-semibold text-gray-800">{room.title}</h2>
-                    <p className="text-md text-gray-700">Teacher : {room.teacherId.fullName} </p>
-                    <p className="text-sm text-gray-600">Duration : {room.duration} </p>
-                    <p className="text-sm text-gray-400">{new Date(room.createdAt).toLocaleString()}</p>
-                  </div>
-                </div>
-                <div className="flex gap-3 text-gray-500">
                   <div className="flex gap-3 text-gray-500">
                     <Button
                       variant="solid"
@@ -267,14 +276,14 @@ const VirtualRoomsSection = () => {
                       Enter
                     </Button>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
         {/* Pagination Controls */}
-        {displayedRooms.length > itemsPerPage && (
+        {!initialLoading && !loading && displayedRooms.length > itemsPerPage && (
           <div className="flex justify-center items-center gap-4 mb-4 mt-10">
             <button
               onClick={prevPage}
