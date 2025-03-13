@@ -2,16 +2,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getDegreesAllYears } from "../StudentRedux/gradesStudentSlice";
 import { useEffect } from "react";
+import Loader from "@/ui/Loader";
 
 function GradesforAllYears() {
-  const { allDegrees } = useSelector((state) => state.studentGrades);
+  const { allDegrees, loading } = useSelector((state) => state.studentGrades);
   const dispatch = useDispatch();
+  const role = sessionStorage.getItem("role");
 
   useEffect(() => {
     dispatch(getDegreesAllYears());
   }, [dispatch]);
 
   const navigate = useNavigate();
+
+  if (loading) return <Loader role={role} />;
 
   return (
     <div className="mx-auto w-[90%]">
@@ -52,17 +56,13 @@ function GradesforAllYears() {
                     <thead>
                       <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white">
                         <th className="px-4 py-3 text-left">Subject Name</th>
+                        <th className="px-4 py-3 text-left">Midterm Degree</th>
                         <th className="px-4 py-3 text-left">
-                          Midterm Exam Grade
+                          Max Midterm Degree
                         </th>
+                        <th className="px-4 py-3 text-left">Final Degree</th>
                         <th className="px-4 py-3 text-left">
-                          Midterm Final Degree
-                        </th>
-                        <th className="px-4 py-3 text-left">
-                          Final Exam Grade
-                        </th>
-                        <th className="px-4 py-3 text-left">
-                          Final Final Degree
+                          Max Final Degree
                         </th>
                         <th className="px-4 py-3 text-left">Score Subject</th>
                         <th className="px-4 py-3 text-left">

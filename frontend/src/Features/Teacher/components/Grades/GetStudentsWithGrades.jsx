@@ -163,7 +163,6 @@ function GetStudentsWithGrades() {
             </div>
           </div>
 
-          {/* Table */}
           <table className="min-w-full border border-gray-300 bg-white">
             <thead className="bg-[#117C90] text-white">
               <tr>
@@ -211,48 +210,46 @@ function GetStudentsWithGrades() {
             />
           </div>
 
-          {/* File Upload Section */}
-          <div className="mb-4 mt-10 flex flex-col items-center gap-4">
-            <label
-              className={`w-64 cursor-pointer rounded-lg border-2 border-dashed p-3 text-center transition-all ${
-                file
-                  ? "border-green-500 bg-green-100 text-green-700"
-                  : "border-gray-400 bg-gray-100 text-gray-500"
-              }`}
-            >
-              {file ? file.name : "Choose a file"}
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </label>
-            <button
-              onClick={handleUpload}
-              className="rounded bg-[#117C90] p-2 text-white"
-            >
-              Upload & Update
-            </button>
-          </div>
+          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
+            <div className="flex flex-col items-center gap-4">
+              <label
+                className={`w-64 cursor-pointer rounded-lg border-2 border-dashed p-3 text-center transition-all ${
+                  file
+                    ? "border-green-500 bg-green-100 text-green-700"
+                    : "border-gray-400 bg-gray-100 text-gray-500"
+                }`}
+              >
+                {file ? file.name : "Choose a file"}
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </label>
+              <button
+                onClick={handleUpload}
+                className="w-full rounded bg-[#117C90] p-2 text-white transition-all hover:bg-[#0e6a7d] focus:outline-none focus:ring-2 focus:ring-[#117C90] focus:ring-offset-2"
+              >
+                Upload & Update
+              </button>
+            </div>
 
-          {/* Export and Delete Buttons */}
-          <div className="mb-4 flex justify-between">
-            <button
-              onClick={handleExport}
-              className="rounded bg-[#117C90] p-2 text-white"
-            >
-              Export Data
-            </button>
-            <button
-              onClick={handleDeleteAll}
-              className="rounded bg-[#117C90] p-2 text-white"
-            >
-              Delete All Data
-            </button>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <button
+                onClick={handleExport}
+                className="rounded bg-[#117C90] p-2 text-white transition-all hover:bg-[#0e6a7d] focus:outline-none focus:ring-2 focus:ring-[#117C90] focus:ring-offset-2"
+              >
+                Export Data
+              </button>
+              <button
+                onClick={handleDeleteAll}
+                className="rounded bg-[#117C90] p-2 text-white transition-all hover:bg-[#0e6a7d] focus:outline-none focus:ring-2 focus:ring-[#117C90] focus:ring-offset-2"
+              >
+                Delete All Data
+              </button>
+            </div>
           </div>
-
-          {/* Pagination */}
         </div>
       ) : (
         <div>No student results found.</div>

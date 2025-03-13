@@ -78,7 +78,7 @@ const UploadFileGrades = () => {
       <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <button
           onClick={handleUpload}
-          className="rounded bg-[#117C90] p-2 text-lg text-white"
+          className="rounded bg-[#117C90] p-1 text-lg text-white"
         >
           Upload File
         </button>
@@ -96,7 +96,7 @@ const UploadFileGrades = () => {
 
           <button
             onClick={handleGetStudentsGrades}
-            className="rounded bg-[#117C90] p-2 text-lg text-white"
+            className="rounded bg-[#117C90] p-1 text-lg text-white"
           >
             Get Students Grades
           </button>
