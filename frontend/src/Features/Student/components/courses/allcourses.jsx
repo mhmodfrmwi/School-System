@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 const images = [sub1, sub2];
 
 const AllCourses = () => {
+    const role = sessionStorage.getItem("role");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { subjects, loading, error } = useSelector((state) => state.allSubjectsStudent);
@@ -44,7 +45,7 @@ const AllCourses = () => {
         if (loading) {
             return (
                 <div className="flex items-center justify-center min-h-screen">
-                <Loader />
+                <Loader role={role}/>
                 </div>
             );
         }

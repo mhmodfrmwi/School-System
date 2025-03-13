@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
 
 const CoursesQuestionBank = () => {
+  const role = sessionStorage.getItem("role");
   const [initialLoading, setInitialLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("all");
@@ -108,7 +109,7 @@ const CoursesQuestionBank = () => {
   if (initialLoading) {
     return (
       <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
-        <Loader />
+        <Loader role={role}/>
       </div>
     );
   }
