@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Loader from "../../../../ui/Loader";
 
 const ExamResultPage = () => {
+  const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const { examId } = useParams();
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const ExamResultPage = () => {
   if (loadingResult) {
     return (
       <div className="flex items-center justify-center min-h-screen text-gray-500">
-       <Loader/>
+       <Loader role={role}/>
       </div>
     );
   }

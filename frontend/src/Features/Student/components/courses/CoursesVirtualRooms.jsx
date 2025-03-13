@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import Loader from "../../../../ui/Loader";
 
 const VirtualRoomsSection = () => {
+  const role = sessionStorage.getItem("role");
   const [currentPageAll, setCurrentPageAll] = useState(1);
   const [currentPageCompleted, setCurrentPageCompleted] = useState(1);
   const [currentPageMissed, setCurrentPageMissed] = useState(1);
@@ -110,7 +111,7 @@ const VirtualRoomsSection = () => {
   if (initialLoading) {
     return (
       <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
-        <Loader />
+        <Loader role={role}/>
       </div>
     );
   }

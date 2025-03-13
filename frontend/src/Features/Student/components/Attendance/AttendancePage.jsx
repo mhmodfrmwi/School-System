@@ -11,10 +11,11 @@ const AttendancePage = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const dispatch = useDispatch();
   const role = sessionStorage.getItem("role");
+
   useEffect(() => {
     dispatch(fetchStudentAttendance());
   }, [dispatch]);
-  console.log(studentAttendance);
+
   const uniqueAttendance = studentAttendance.reduce((acc, record) => {
     const key = `${record.date.split("T")[0]}-${record.studentId}`;
     acc.set(key, record);
@@ -54,7 +55,7 @@ const AttendancePage = () => {
   });
 
   const startOfWeek = currentDate.startOf("week");
-  const days = Array.from({ length: 7 }, (_, i) =>
+  const days = Array.from({ length: 21 }, (_, i) =>
     startOfWeek.add(i, "day").format("YYYY-MM-DD"),
   );
 
@@ -71,13 +72,14 @@ const AttendancePage = () => {
   }, {});
 
   if (loading) return <Loader role={role} />;
+
   return (
     <div className="mt-10 flex min-h-screen items-start justify-center p-8 font-poppins">
       <div className="w-[90%]">
         <div className="mb-8">
           <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-3xl font-semibold text-transparent">
             Attendance Level
-            <span className="absolute bottom-[-9px] left-0 h-[4px] w-[15%] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
+            <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
           </h1>
 
           <div className="flex flex-col space-y-4 sm:ml-8 sm:flex-row sm:items-center sm:space-x-8 sm:space-y-0">
@@ -119,11 +121,14 @@ const AttendancePage = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md mt-12 mb-12">
           <table className="min-w-full table-auto bg-white p-6 shadow-md">
             <thead>
               <tr className="border-b border-gray-200">
-                <th colSpan="10">
+                <th className="border-b border-gray-200 px-2 py-4 text-center text-gray-700">
+                  Academic Number: {Object.values(groupedAttendance)[0]?.academic_number || "N/A"}
+                </th>
+                <th colSpan="6">
                   <div className="mb-6 mr-6 mt-6 flex flex-nowrap items-center justify-end">
                     <button
                       onClick={handlePreviousWeek}
@@ -147,35 +152,26 @@ const AttendancePage = () => {
             </thead>
 
             <tbody>
-              <tr>
-                <th className="border-b border-gray-200 px-2 py-4 text-center text-gray-700">
-                  Academic Number
-                </th>
-                {days.map((day, index) => (
-                  <th
-                    key={index}
-                    className="border-b border-l border-gray-200 px-4 py-2 text-center text-gray-700"
-                  >
-                    {dayjs(day).format("dddd DD")}
-                  </th>
-                ))}
-              </tr>
-
-              {Object.values(groupedAttendance).map((student, index) => (
-                <tr key={index} className="border-b border-gray-200">
-                  <td className="px-4 py-4 font-medium text-gray-700">
-                    {student.academic_number}
-                  </td>
-
-                  {days.map((day, dayIndex) => {
-                    const status = student.attendance[day] || "";
+              {[...Array(7)].map((_, dayIndex) => (
+                <tr key={dayIndex} className="border-b border-gray-200">
+                  {[...Array(3)].map((_, colIndex) => {
+                    const day = days[colIndex * 7 + dayIndex];
+                    const status =
+                      Object.values(groupedAttendance)[0]?.attendance[day] || "";
+                    const isToday = dayjs(day).isSame(dayjs(), "day");
                     return (
-                      <td
-                        key={dayIndex}
-                        className={`border-l border-gray-200 px-4 py-4 text-center ${status === "P" ? "bg-green-600 text-white" : status === "A" ? "bg-red-600 text-white" : ""}`}
-                      >
-                        {status}
-                      </td>
+                      <React.Fragment key={colIndex}>
+                        <td  style={{ width: "70px" }}
+                          className={`border-l border-gray-200 px-2 py-5 text-center text-gray-800 ${isToday ? "bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10" : ""}`}
+                        >
+                          {dayjs(day).format("dddd DD")}
+                        </td>
+                        <td  style={{ width: "50px" }}
+                          className={`border-l border-gray-200 px-5 py-5 text-center ${status === "P" ? "bg-green-600 text-white" : status === "A" ? "bg-red-600 text-white" : ""}`}
+                        >
+                          {status}
+                        </td>
+                      </React.Fragment>
                     );
                   })}
                 </tr>

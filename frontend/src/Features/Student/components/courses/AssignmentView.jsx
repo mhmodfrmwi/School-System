@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
 
 const AssignmentView = () => {
+  const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const { assignmentId, gradeSubjectSemesterId } = useParams();
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ const AssignmentView = () => {
   if (loadingAssignmentById) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader />
+        <Loader role={role} />
       </div>
     );
   }
