@@ -122,7 +122,7 @@ function DashboardStudent() {
                         ? "text-gray-500"
                         : semesterReward.badge === "Gold"
                           ? "text-yellow-500"
-                          : "text-gray-300"
+                          : "text-green-700"
                   }`}
                 >
                   {semesterReward.badge === "Green"
@@ -131,7 +131,7 @@ function DashboardStudent() {
                       ? "Diamond Level"
                       : semesterReward.badge === "Gold"
                         ? "Gold Level"
-                        : "Default Level"}
+                        : "Green Level"}
                 </p>
                 <img src={awardIcon} alt="Award Icon" className="h-10 w-10" />
               </div>
@@ -192,7 +192,7 @@ function DashboardStudent() {
                           ? "url(#diamondGradient)"
                           : semesterReward.badge === "Gold"
                             ? "url(#goldGradient)"
-                            : "url(#defaultGradient)",
+                            : "url(#greenGradient)",
                   }}
                 />
                 <defs>
@@ -270,7 +270,7 @@ function DashboardStudent() {
                       ? "text-gray-500"
                       : semesterReward.badge === "Gold"
                         ? "text-yellow-500"
-                        : "text-gray-300"
+                        : "text-green-700"
                 }`}
               >
                 {semesterReward.totalSemesterPoints}
