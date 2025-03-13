@@ -236,7 +236,7 @@ const AssignmentsSection = () => {
 
     if (initialLoading) {
         return (
-            <div className=" mt-16 mb-20 min-h-[68vh] w-[95%] mx-auto">
+            <div className=" mt-16 mb-20 min-h-screen w-[95%] mx-auto">
             <Loader/>
             </div>
         );

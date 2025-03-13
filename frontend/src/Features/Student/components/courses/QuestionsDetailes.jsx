@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchQuestions, clearError } from "../../components/StudentRedux/questionBankSlice"; 
 import { useParams, useNavigate } from "react-router-dom";
-import { FaSpinner } from "react-icons/fa";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
+import Loader from "../../../../ui/Loader";
 
 const QuestionDetails = () => {
   const { subjectId, questionId } = useParams();
@@ -33,9 +33,8 @@ const QuestionDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center text-gray-500 mt-10">
-        <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4" />
-        <p className="text-gray-700 text-lg font-semibold">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader />
       </div>
     );
   }
@@ -43,33 +42,39 @@ const QuestionDetails = () => {
   const questionDetails = questions.find((question) => question._id === questionId);
 
   if (!questionDetails) {
-    return <p className="text-gray-500 text-center">No question details available.</p>;
+    return (
+      <div className="flex items-center justify-center min-h-[68vh]">
+        <p className="text-gray-500 text-center">No question details available.</p>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
-
+    <div className="flex flex-wrap font-poppins gap-6 w-[90%] mx-auto mt-16 mb-20 min-h-[68vh]">
+      {/* Header */}
       <div className="w-full flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
+        <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
           Question Details
+          <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
         </h1>
         <Button
           variant="solid"
-          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
+          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
           onClick={() => navigate(-1)}
         >
           Back
         </Button>
       </div>
 
-    
+      {/* Question Details */}
       <div className="w-full">
-        <Card className="border border-gray-200 rounded-xl shadow-sm mb-4">
-          <CardContent className="p-4">
-            <p className="text-sm md:text-base text-gray-600 mb-1">Type: {questionDetails.questionType}</p>
-            <h2 className="text-lg md:text-xl font-semibold text-gray-800">{questionDetails.questionText}</h2>
+        <Card className="border border-gray-200 rounded-xl shadow-sm p-6">
+          <CardContent className="p-6 border border-gray-200 rounded-lg">
+            <div className="mb-6">
+              <p className="text-sm md:text-base text-gray-600 mb-1">Type: {questionDetails.questionType}</p>
+              <h2 className="text-lg md:text-xl font-semibold text-gray-800">{questionDetails.questionText}</h2>
+            </div>
 
-     
             {questionDetails.choices && questionDetails.choices.length > 0 && (
               <div className="mt-3">
                 <h3 className="font-semibold text-gray-700">Choices:</h3>
@@ -81,18 +86,19 @@ const QuestionDetails = () => {
               </div>
             )}
 
-           
             <Button
               variant="outline"
-              className="mt-4 text-blue-600"
+              className="mt-4 text-blue-600 hover:shadow-lg transition-shadow duration-300"
               onClick={() => setShowAnswer((prev) => !prev)}
             >
               {showAnswer ? "Hide Answer" : "Show Answer"}
             </Button>
 
-          
             {showAnswer && (
-              <p className="mt-2 text-md md:text-lg font-semibold text-gray-500">Answer: {questionDetails.answer}</p>
+              <div className="mt-6 p-6 bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10 rounded-lg">
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Answer:</h3>
+                <p className="text-gray-700 whitespace-pre-wrap">{questionDetails.answer}</p>
+              </div>
             )}
           </CardContent>
         </Card>

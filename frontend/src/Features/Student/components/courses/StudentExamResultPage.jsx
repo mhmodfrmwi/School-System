@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchExamResult } from "../../components/StudentRedux/examsSlice";
-import { FaSpinner, FaCheck, FaTimes } from "react-icons/fa";
+import {  FaCheck, FaTimes } from "react-icons/fa";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Loader from "../../../../ui/Loader";
 
 const ExamResultPage = () => {
   const dispatch = useDispatch();
@@ -21,8 +22,7 @@ const ExamResultPage = () => {
   if (loadingResult) {
     return (
       <div className="flex items-center justify-center min-h-screen text-gray-500">
-        <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4" />
-        <p className="text-gray-700 text-lg font-semibold">Loading exam result...</p>
+       <Loader/>
       </div>
     );
   }
