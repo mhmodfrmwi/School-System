@@ -56,8 +56,8 @@ function GradesForSemester() {
                 <th className="px-4 py-3 text-left">Max Midterm Degree</th>
                 <th className="px-4 py-3 text-left">Final Degree</th>
                 <th className="px-4 py-3 text-left">Max Final Degree</th>
-                <th className="px-4 py-3 text-left">Score Subject</th>
-                <th className="px-4 py-3 text-left">Max Score Subject</th>
+                <th className="px-4 py-3 text-left">Subject Score</th>
+                <th className="px-4 py-3 text-left">Max Subject Score</th>
               </tr>
             </thead>
             <tbody>

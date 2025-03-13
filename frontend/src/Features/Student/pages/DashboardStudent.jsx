@@ -83,7 +83,7 @@ function DashboardStudent() {
     <>
       {/*Header */}
 
-      <div className="flex items-center justify-between bg-gradient-to-r from-[#FD813D] via-[#CF72C0] via-[#E47986] to-[#BC6FFB] p-6 shadow-md">
+      <div className="flex items-center justify-between bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-6 shadow-md">
         {/*User */}
         <div className="flex items-center space-x-6 pl-10">
           <img
