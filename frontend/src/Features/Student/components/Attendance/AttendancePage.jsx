@@ -161,12 +161,12 @@ const AttendancePage = () => {
                     const isToday = dayjs(day).isSame(dayjs(), "day");
                     return (
                       <React.Fragment key={colIndex}>
-                        <td  style={{ width: "70px" }}
+                        <td  style={{ minWidth: "70px", width: "70px" }}
                           className={`border-l border-gray-200 px-2 py-5 text-center text-gray-800 ${isToday ? "bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10" : ""}`}
                         >
                           {dayjs(day).format("dddd DD")}
                         </td>
-                        <td  style={{ width: "50px" }}
+                        <td  style={{minWidth: "70px" ,width: "70px" }}
                           className={`border-l border-gray-200 px-5 py-5 text-center ${status === "P" ? "bg-green-600 text-white" : status === "A" ? "bg-red-600 text-white" : ""}`}
                         >
                           {status}
