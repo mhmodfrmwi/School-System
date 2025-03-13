@@ -274,20 +274,13 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
     userType: "Student",
   });
 
-  if (!userPoint) {
-    return res.status(404).json({
-      status: 404,
-      message: "No points found for this student",
-    });
-  }
-
   res.status(200).json({
     success: true,
     status: 200,
-    message: "Student points fetched successfully",
+    message: userPoint ? "Student points fetched successfully" : "No points found for this Student yet",
     data: {
-      totalPoints: userPoint.totalPoints,
-      badges: userPoint.badges,
+      totalPoints: userPoint ? userPoint.totalPoints : 0,
+      badges: userPoint ? userPoint.badges : [],
     },
   });
 });
