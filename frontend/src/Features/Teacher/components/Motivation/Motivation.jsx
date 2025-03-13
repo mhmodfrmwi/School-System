@@ -39,7 +39,7 @@ const Motivation = () => {
                 ? "bg-[#6a6969]"
                 : teacherPointsForTerm.badge === "Gold"
                   ? "bg-yellow-500"
-                  : "bg-gray-300"
+                  : "bg-green-500"
           }`}
         >
           <div className="flex items-center space-x-4">
@@ -104,7 +104,7 @@ const Motivation = () => {
                           ? "text-[#6a6969]"
                           : teacherDailyReward.badge === "Gold"
                             ? "text-yellow-500"
-                            : "text-white"
+                            : "text-green-500"
                     }`}
                   >
                     Points Earned Today
@@ -119,7 +119,7 @@ const Motivation = () => {
                           ? "text-[#6a6969]"
                           : teacherDailyReward.badge === "Gold"
                             ? "text-yellow-500"
-                            : "text-white"
+                            : "text-green-500"
                     }`}
                   >
                     {teacherDailyReward.totalDailyPoints}
@@ -147,7 +147,7 @@ const Motivation = () => {
                           ? "text-[#6a6969]"
                           : teacherPointsForTerm.badge === "Gold"
                             ? "text-yellow-500"
-                            : "text-white"
+                            : "text-green-500"
                     }`}
                   >
                     Score for this Semester
@@ -162,7 +162,7 @@ const Motivation = () => {
                           ? "text-[#6a6969]"
                           : teacherPointsForTerm.badge === "Gold"
                             ? "text-yellow-500"
-                            : "text-white"
+                            : "text-green-500"
                     }`}
                   >
                     {teacherPointsForTerm.totalPoints}
@@ -191,7 +191,7 @@ const Motivation = () => {
                           ? "text-[#6a6969]"
                           : teacherReward.badges === "Gold"
                             ? "text-yellow-500"
-                            : "text-white"
+                            : "text-green-500"
                     }`}
                   >
                     Score for all semesters
@@ -206,7 +206,7 @@ const Motivation = () => {
                           ? "text-[#6a6969]"
                           : teacherReward.badges === "Gold"
                             ? "text-yellow-500"
-                            : "text-white"
+                            : "text-green-500"
                     }`}
                   >
                     {teacherReward.totalPoints}

@@ -51,7 +51,7 @@ const PointsSummary = () => {
                         ? "text-[#6a6969]"
                         : dailyReward.badge === "Gold"
                           ? "text-yellow-500"
-                          : "text-white"
+                          : "text-green-700"
                   }`}
                 >
                   Points Earned Today
@@ -66,7 +66,7 @@ const PointsSummary = () => {
                         ? "text-[#6a6969]"
                         : dailyReward.badge === "Gold"
                           ? "text-yellow-500"
-                          : "text-white"
+                          : "text-green-700"
                   }`}
                 >
                   {dailyReward.totalDailyPoints}
@@ -94,7 +94,7 @@ const PointsSummary = () => {
                         ? "text-[#6a6969]"
                         : semesterReward.badge === "Gold"
                           ? "text-yellow-500"
-                          : "text-white"
+                          : "text-green-700"
                   }`}
                 >
                   Your Score for this Semester
@@ -109,7 +109,7 @@ const PointsSummary = () => {
                         ? "text-[#6a6969]"
                         : semesterReward.badge === "Gold"
                           ? "text-yellow-500"
-                          : "text-white"
+                          : "text-green-700"
                   }`}
                 >
                   {semesterReward.totalSemesterPoints}
@@ -138,7 +138,7 @@ const PointsSummary = () => {
                         ? "text-[#6a6969]"
                         : reward.badges === "Gold"
                           ? "text-yellow-500"
-                          : "text-white"
+                          : "text-green-700"
                   }`}
                 >
                   Score for all semesters
@@ -153,7 +153,7 @@ const PointsSummary = () => {
                         ? "text-[#6a6969]"
                         : reward.badges === "Gold"
                           ? "text-yellow-500"
-                          : "text-white"
+                          : "text-green-700"
                   }`}
                 >
                   {reward.totalPoints}

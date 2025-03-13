@@ -14,49 +14,45 @@ function ScheduleExam() {
   ]);
 
   return (
-    <>
-      <section>
-        <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-3">
-          <div className="col-span-2 flex flex-col justify-between">
-            <div className="my-12 ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 md:mt-10 lg:ms-20">
-              <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
-              <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
-                Upcoming Smart Classes
-              </button>
-            </div>
-
-            <div className="mb-10 ms-8 mt-7 md:ms-14 lg:ms-20">
-              <button
-                className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-2 py-2 text-lg font-medium text-transparent"
-                onClick={() => navigate("/student/schedule")}
-              >
-                Weekly Schedule
-              </button>
-
-              <button
-                className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-2 py-2 text-lg font-medium text-white focus:outline-none"
-                onClick={() => navigate("/student/schedule/exam")}
-              >
-                Exams Schedule
-              </button>
-            </div>
+    <section className="font-poppins min-h-screen w-[95%] mx-auto mt-10">
+      <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-3">
+        <div className="col-span-2 flex flex-col justify-between">
+          <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
+            <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
+              Upcoming Smart Classes
+              <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
+            </button>
           </div>
-
-          <img
-            src={img1}
-            className="col-span-1 mx-auto mt-10 w-72"
-            alt="imgnotfound"
-          />
+          <div className="mb-10 ms-8 mt-7 md:ms-14 lg:ms-20 flex items-center gap-8">
+            <button
+              className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 text-lg font-medium text-transparent"
+              onClick={() => navigate("/student/schedule")}
+            >
+              Weekly Schedule
+            </button>
+            <button
+              className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-2 text-lg font-medium text-white focus:outline-none"
+              onClick={() => navigate("/student/schedule/exam")}
+            >
+              Exams Schedule
+            </button>
+          </div>
         </div>
-
-        <div className="mx-auto w-[88%] overflow-x-auto bg-[#F5F6F7] shadow-lg rounded-xl">
-          <table className="w-full table-auto">
+        <img
+          src={img1}
+          className="col-span-1 mx-auto mt-10 w-72"
+          alt="Schedule"
+        />
+      </div>
+      <div className="mx-auto w-[88%] rounded-xl border border-gray-200 shadow-md font-poppins mb-20">
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto bg-white p-6 shadow-md">
             <thead>
               <tr>
                 {schedule[0].map((header, index) => (
                   <th
                     key={index}
-                    className="border border-gray-300 px-6 py-4 text-center text-[#303030] text-lg font-semibold bg-[#D6A3E1] rounded-tl-xl rounded-tr-xl"
+                    className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]"
                   >
                     {header}
                   </th>
@@ -67,14 +63,14 @@ function ScheduleExam() {
               {schedule.slice(1).map((row, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className={`${
+                  className={`border-b border-gray-200 ${
                     rowIndex % 2 === 0 ? "bg-white" : "bg-[#F9F9F9]"
                   } hover:bg-[#F3E5F5] transition duration-200`}
                 >
                   {row.map((cell, cellIndex) => (
                     <td
                       key={cellIndex}
-                      className="border border-gray-300 px-6 py-4 text-center text-[#5e5b63] text-sm sm:text-base lg:text-lg"
+                      className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]"
                     >
                       {cell || "--"}
                     </td>
@@ -84,8 +80,8 @@ function ScheduleExam() {
             </tbody>
           </table>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 

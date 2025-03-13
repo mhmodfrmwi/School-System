@@ -35,10 +35,10 @@ function HeaderInfo() {
                     ? "text-[#6a6969]"
                     : semesterReward.badge === "Gold"
                       ? "text-yellow-500"
-                      : "text-gray-300"
+                      : "text-green-700"
               }`}
             >
-              {semesterReward.badge}
+              {semesterReward.badge ? semesterReward.badge : "Green"}
             </h1>
 
             <img src={ScheduleIcon} className="h-6 w-6" alt="Schedule Icon" />
@@ -57,7 +57,7 @@ function HeaderInfo() {
                 ? "border-[#6a6969]"
                 : reward.badges === "Gold"
                   ? "border-yellow-500"
-                  : "border-gray-300"
+                  : "border-green-500"
           }`}
         >
           <p
@@ -68,7 +68,7 @@ function HeaderInfo() {
                   ? "text-[#6a6969]"
                   : reward.badges === "Gold"
                     ? "text-yellow-500"
-                    : "text-gray-300"
+                    : "text-green-700"
             }`}
           >
             Score
@@ -82,7 +82,7 @@ function HeaderInfo() {
                   ? "text-[#6a6969]"
                   : reward.badges === "Gold"
                     ? "text-yellow-500"
-                    : "text-gray-300"
+                    : "text-green-700"
             }`}
           >
             for all semesters
