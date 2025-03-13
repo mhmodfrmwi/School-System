@@ -32,15 +32,14 @@ const Motivation = () => {
     <>
       <div className="flex justify-center">
         <div
-          className={`mt-4 flex w-[97%] items-center justify-between rounded-2xl p-6 shadow-lg ${
-            teacherPointsForTerm.badge === "Green"
+          className={`mt-4 flex w-[97%] items-center justify-between rounded-2xl p-6 shadow-lg ${teacherPointsForTerm.badge === "Green"
               ? "bg-green-500"
               : teacherPointsForTerm.badge === "Diamond"
                 ? "bg-[#6a6969]"
                 : teacherPointsForTerm.badge === "Gold"
                   ? "bg-yellow-500"
                   : "bg-green-500"
-          }`}
+            }`}
         >
           <div className="flex items-center space-x-4">
             <img
@@ -97,30 +96,28 @@ const Motivation = () => {
 
                 <div>
                   <p
-                    className={`font-poppins font-semibold ${
-                      teacherDailyReward.badge === "Green"
+                    className={`font-poppins font-semibold ${teacherDailyReward.badge === "Green"
                         ? "text-green-500"
                         : teacherDailyReward.badge === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherDailyReward.badge === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                    }`}
+                      }`}
                   >
                     Points Earned Today
                   </p>
                 </div>
                 <div>
                   <p
-                    className={`font-poppins text-2xl font-extrabold ${
-                      teacherDailyReward.badge === "Green"
+                    className={`font-poppins text-2xl font-extrabold ${teacherDailyReward.badge === "Green"
                         ? "text-green-500"
                         : teacherDailyReward.badge === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherDailyReward.badge === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                    }`}
+                      }`}
                   >
                     {teacherDailyReward.totalDailyPoints}
                   </p>
@@ -140,30 +137,28 @@ const Motivation = () => {
                 </div>
                 <div>
                   <p
-                    className={`font-poppins font-semibold ${
-                      teacherPointsForTerm.badge === "Green"
+                    className={`font-poppins font-semibold ${teacherPointsForTerm.badge === "Green"
                         ? "text-green-500"
                         : teacherPointsForTerm.badge === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherPointsForTerm.badge === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                    }`}
+                      }`}
                   >
                     Score for this Semester
                   </p>
                 </div>
                 <div>
                   <p
-                    className={`font-poppins text-2xl font-extrabold ${
-                      teacherPointsForTerm.badge === "Green"
+                    className={`font-poppins text-2xl font-extrabold ${teacherPointsForTerm.badge === "Green"
                         ? "text-green-500"
                         : teacherPointsForTerm.badge === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherPointsForTerm.badge === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                    }`}
+                      }`}
                   >
                     {teacherPointsForTerm.totalPoints}
                   </p>
@@ -184,30 +179,28 @@ const Motivation = () => {
                 </div>
                 <div>
                   <p
-                    className={`font-poppins font-semibold ${
-                      teacherReward.badges === "Green"
+                    className={`font-poppins font-semibold ${teacherReward.badges === "Green"
                         ? "text-green-500"
                         : teacherReward.badges === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherReward.badges === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                    }`}
+                      }`}
                   >
                     Score for all semesters
                   </p>
                 </div>
                 <div>
                   <p
-                    className={`font-poppins text-2xl font-extrabold ${
-                      teacherReward.badges === "Green"
+                    className={`font-poppins text-2xl font-extrabold ${teacherReward.badges === "Green"
                         ? "text-green-500"
                         : teacherReward.badges === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherReward.badges === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                    }`}
+                      }`}
                   >
                     {teacherReward.totalPoints}
                   </p>
@@ -218,7 +211,7 @@ const Motivation = () => {
         </div>
 
         <div>
-          <button className="cursor-text py-2 font-poppins text-2xl font-bold text-[#117C90]">
+          <button className="cursor-text mt-6 py-2 font-poppins text-2xl font-bold text-[#117C90]">
             Summary Of Your Score
           </button>
           <p className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
@@ -230,10 +223,10 @@ const Motivation = () => {
             semester as recognition for your efforts.
           </p>
           <section className="flex items-center space-x-4">
-            <div className="h-6 w-6 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
+            <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
 
             <p className="text-md font-poppins">
-               If you are among the top <strong>55%</strong> in your school, you
+              If you are among the top <strong>55%</strong> in your school, you
               will deserve Learnova{" "}
               <strong className="text-lg font-bold text-green-500">
                 {" "}
@@ -243,10 +236,10 @@ const Motivation = () => {
             </p>
           </section>
           <section className="flex items-center space-x-4">
-            <div className="h-6 w-6 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
+            <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
 
             <p className="text-md font-poppins">
-               If you are among the top <strong>40%</strong> in your school, you
+              If you are among the top <strong>40%</strong> in your school, you
               will deserve Learnova{" "}
               <strong className="text-lg font-bold text-orange-400">
                 {" "}
@@ -256,10 +249,10 @@ const Motivation = () => {
             </p>
           </section>
           <section className="flex items-center space-x-4">
-            <div className="h-6 w-6 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
+            <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
 
             <p className="text-md font-poppins">
-                If you are among the top <strong>5%</strong> in your school, you
+              If you are among the top <strong>5%</strong> in your school, you
               truly deserve the{" "}
               <strong className="text-lg font-bold text-gray-500">
                 {" "}
@@ -277,11 +270,11 @@ const Motivation = () => {
         <p className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
       </div>
 
-      <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-[900px]">
+      <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-[1200px]">
         <div className="overflow-x-auto">
           <div className="max-h-[400px] overflow-y-auto">
-            <table className="min-w-full border-collapse rounded-2xl border-2 border-[#117C90] shadow-lg">
-              <thead>
+            <table className="min-w-full table-auto border-collapse border-2 border-[#117C90] border-re rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+              <thead className="bg-[#117C90] text-white">
                 <tr className="bg-[#117C90] text-white">
                   {" "}
                   {/* Use #117C90 as the background color */}
@@ -303,8 +296,10 @@ const Motivation = () => {
                 </tr>
               </thead>
               <tbody>
-                {allTeachersReward.map((teacher) => (
-                  <tr key={teacher._id} className="hover:bg-gray-100">
+                {allTeachersReward.map((teacher, index) => (
+                  <tr key={teacher._id}
+                    className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                  >
                     <td className="border border-[#117C90] px-4 py-7 font-poppins text-xs sm:text-sm md:text-sm">
                       {teacher.fullName}
                     </td>

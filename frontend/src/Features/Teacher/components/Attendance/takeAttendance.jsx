@@ -13,6 +13,8 @@ function TakeAttendance() {
   const { studentsforsubject, loading } = useSelector(
     (state) => state.attendanceTeacher,
   );
+  const isActive = (path) => location.pathname === path;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -72,34 +74,41 @@ function TakeAttendance() {
     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
       {loading && <Loader />}
 
-      <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
-        <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
-          onClick={() => navigate(`/teacher/takeattendance/${id}`)}
-        >
-          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
-            1
-          </span>
-          Take Attendance
-        </button>
+      <div className="mx-auto mt-5 w-full px-4">
+        <div className="mx-auto mb-20 flex max-w-[90%] flex-wrap overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5] md:w-[60%] md:flex-nowrap">
+          <button
+            onClick={() => navigate(`/teacher/takeattendance/${id}`)}
 
-        <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
-          onClick={() =>
-            navigate(`/teacher/attendancereport/${id}`, {
-              state: { classId: classId },
-            })
-          }
-        >
-          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
-            2
-          </span>
-          Attendance Report
-        </button>
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm 
+              ${isActive(`/teacher/takeattendance/${id}`)
+                ? "bg-[#008394] font-bold text-white"
+                : "bg-[#f4f4f4] font-normal text-[#008394]"
+              }`}
+          >
+            <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90]">
+              1
+            </span>
+            Take Attendance
+          </button>
+
+          <button
+            onClick={() => navigate(`/teacher/attendancereport/${id}`)}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm 
+              ${isActive(`/teacher/attendancereport/${id}`)
+                ? "bg-[#008394] font-bold text-white"
+                : "bg-[#f4f4f4] font-normal text-[#008394]"
+              }`}
+          >
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+              2
+            </span>
+            Attendance Report
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="mx-auto w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
+        <table className="mx-auto w-full font-poppins table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
           <thead className="bg-[#117C90] text-left text-white">
             <tr>
               <th className="px-3 py-2">#</th>
@@ -155,7 +164,7 @@ function TakeAttendance() {
       <form onSubmit={handleSubmit} className="mt-4 flex justify-center">
         <button
           type="submit"
-          className="rounded-lg bg-[#117C90] px-6 py-3 text-lg font-semibold text-white hover:bg-[#0f6a7d]"
+          className="rounded-lg font-poppins bg-[#117C90] px-6 py-3 text-lg font-semibold text-white hover:bg-[#0f6a7d]"
         >
           Submit Attendance
         </button>

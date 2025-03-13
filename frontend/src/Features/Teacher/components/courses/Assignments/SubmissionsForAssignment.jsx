@@ -16,7 +16,7 @@ const AssignmentSubmissions = () => {
     const { assignmentId } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { submissions, status, error } = useSelector((state) => state.assignmentsTeacher);
+    const { submissions, status } = useSelector((state) => state.assignmentsTeacher);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedSubmission, setSelectedSubmission] = useState(null);
@@ -50,9 +50,7 @@ const AssignmentSubmissions = () => {
         return <div>Loading...</div>;
     }
 
-    if (status === 'failed') {
-        return <div>Error: {error}</div>;
-    }
+   
 
     return (
         <div className="p-6 space-y-6">

@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 function Attendancereport() {
   const dispatch = useDispatch();
+  const isActive = (path) => location.pathname === path;
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
@@ -134,41 +135,56 @@ function Attendancereport() {
 
   return (
     <div className="mx-auto w-[360px] p-4 sm:w-[550px] md:w-[700px] md:p-6 lg:px-0 xl:w-full">
-      <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
-        {/* {classTeachers.map((classteacher) => ( */}
-        <button
-          key={id}
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
-          onClick={() => {
-            navigate(`/teacher/takeattendance/${id}`, {
-              state: {
-                classId: classId,
-              },
-            });
-          }}
-        >
-          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
-            1
-          </span>
-          Take Attendance
-        </button>
-        {/* ))} */}
-        <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-[#117C90] py-2 font-medium text-white focus:outline-none"
-          onClick={() => navigate("/teacher/attendancereport")}
-        >
-          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
-            2
-          </span>
-          Attendance Report
-        </button>
+      <div className="mx-auto  mt-5 w-full px-4">
+        <div className="mx-auto mb-20 flex max-w-[90%] flex-wrap overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5] md:w-[60%] md:flex-nowrap">
+          {/* {classTeachers.map((classteacher) => ( */}
+          <button
+            key={id}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm 
+              ${isActive(`/teacher/takeattendance/${id}`)
+                ? "bg-[#008394] font-bold text-white"
+                : "bg-[#f4f4f4] font-normal text-[#008394]"
+              }`}
+            onClick={() => {
+              navigate(`/teacher/takeattendance/${id}`, {
+                state: {
+                  classId: classId,
+                },
+              });
+            }}
+          >
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+              1
+            </span>
+            Take Attendance
+          </button>
+          {/* ))} */}
+          <button
+            onClick={() => navigate("/teacher/attendancereport")}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm 
+            ${isActive(`/teacher/attendancereport/${id}`)
+                ? "bg-[#008394] font-bold text-white"
+                : "bg-[#f4f4f4] font-normal text-[#008394]"
+              }`}
+          >
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
+              2
+            </span>
+            Attendance Report
+          </button>
+        </div>
       </div>
-      <h2 className="mb-4 text-left text-2xl font-bold text-[#117C90]">
-        See Attendance Summary
-      </h2>
+
+      <div className="flex ml-8 mb-6 flex-col">
+        <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+          See Attendance Summary
+        </h1>
+        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[260px]"></div>
+      </div>
+      <div className="ml-6">
       <form
         onSubmit={handleSubmit}
-        className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-4"
+        className="mb-4 grid font-poppins grid-cols-1 gap-4 md:grid-cols-4"
       >
         <select
           name="classId"
@@ -206,24 +222,26 @@ function Attendancereport() {
           Generate Report
         </button>
       </form>
+      </div>
       {attendanceStatus === "loading" ? (
         <div>Loading attendance data...</div>
       ) : currentStudents.length > 0 ? (
         <>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
+        <table className="mx-auto w-full mt-7 font-poppins table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
+          <thead className="bg-[#117C90] text-left text-white">
               <tr className="bg-[#117C90] text-white">
-                <th className="border p-2">Academic Number</th>
-                <th className="border p-2">Name</th>
-                <th className="border p-2">Class</th>
-                <th className="border p-2">Absences</th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">#</th>
+                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Academic Number</th>
+                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Name</th>
+                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Class</th>
+                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Absences</th>
               </tr>
             </thead>
             <tbody>
-              {currentStudents.map((student) => (
+              {currentStudents.map((student,index) => (
                 <tr
                   key={student?.student_id?.id}
-                  className="cursor-pointer border text-center"
+                  className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
                   onClick={() =>
                     navigate(
                       `/teacher/student-attendance-details/${student.student_id}`,
@@ -233,10 +251,11 @@ function Attendancereport() {
                     )
                   }
                 >
-                  <td className="border p-2">{student.academicNumber}</td>
-                  <td className="border p-2">{student.fullName}</td>
-                  <td className="border p-2">{student.className}</td>
-                  <td className="border p-2">{student.absences}</td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{index + 1}</td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.academicNumber}</td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.fullName}</td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.className}</td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.absences}</td>
                 </tr>
               ))}
             </tbody>
