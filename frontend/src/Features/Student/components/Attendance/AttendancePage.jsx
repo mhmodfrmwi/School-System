@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentAttendance } from "../StudentRedux/studentAttendanceSlice";
+import Loader from "@/ui/Loader";
 
 const AttendancePage = () => {
-  const { studentAttendance } = useSelector((state) => state.studentAttendance);
+  const { studentAttendance, loading } = useSelector(
+    (state) => state.studentAttendance,
+  );
   const [currentDate, setCurrentDate] = useState(dayjs());
   const dispatch = useDispatch();
-
+  const role = sessionStorage.getItem("role");
   useEffect(() => {
     dispatch(fetchStudentAttendance());
   }, [dispatch]);
@@ -67,6 +70,7 @@ const AttendancePage = () => {
     return acc;
   }, {});
 
+  if (loading) return <Loader role={role} />;
   return (
     <div className="mt-10 flex min-h-screen items-start justify-center p-8 font-poppins">
       <div className="w-[90%]">

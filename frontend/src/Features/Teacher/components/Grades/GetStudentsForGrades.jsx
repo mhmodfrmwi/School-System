@@ -91,17 +91,25 @@ const GetStudentsForGrades = () => {
 
       {scores?.data?.students?.length > 0 ? (
         <>
+          <div className="my-2 text-lg text-black">
+            <span className="text-xl font-semibold">Academic Year:</span>{" "}
+            {scores.data.grade.academicYear.startYear} -{" "}
+            {scores.data.grade.academicYear.endYear}
+          </div>
+          <div className="my-2 text-lg text-black">
+            <div>
+              <span className="text-xl font-semibold">Grade:</span>{" "}
+              {scores.data.grade.gradeName}{" "}
+            </div>{" "}
+            <div className="my-2">
+              <span className="text-xl font-semibold">Subject:</span>{" "}
+              {scores.data.subject.subjectName}
+            </div>
+          </div>
+
           <div className="overflow-x-auto">
             <table className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
               <thead>
-                <tr className="bg-[#117C90]">
-                  <th colSpan="2" className="border p-2 text-center text-white">
-                    {scores.data.grade.gradeName} -{" "}
-                    {scores.data.subject.subjectName} (Academic Year:{" "}
-                    {scores.data.grade.academicYear.startYear} -{" "}
-                    {scores.data.grade.academicYear.endYear})
-                  </th>
-                </tr>
                 <tr>
                   <th className="border bg-[#117C90] p-2 text-white">
                     Academic Number

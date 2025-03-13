@@ -1,58 +1,93 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getGeneralStatistics, getAbsenceStatistics, getGradeStatistics, getStudentsRanks, getTeachersRanks } from "./ManagerSlices/dashboardSlice";
 
 function DashboardManager() {
-  // Static values for the data
-  const students = 100;
-  const teachers = 50;
-  const parents = 80;
-  const schedules = 12;
+  const dispatch = useDispatch();
+  const { statistics, absenceStatistics, gradeStatistics, studentsRanks, teachersRanks, loading, error } = useSelector(
+    (state) => state.managerdashboard
+  );
 
-  const maleTeachers = 30;
-  const femaleTeachers = 20;
-  const maleStudents = 60;
-  const femaleStudents = 40;
+  useEffect(() => {
+    dispatch(getGeneralStatistics());
+    dispatch(getAbsenceStatistics());
+    dispatch(getGradeStatistics());
+    dispatch(getStudentsRanks());
+    dispatch(getTeachersRanks());
+  }, [dispatch]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  const defaultData = {
+    counts: {
+      students: 0,
+      teachers: 0,
+      parents: 0,
+      sehedule: 0,
+    },
+    genderPercentages: {
+      students: { girls: "0.00", boys: "0.00" },
+      teachers: { girls: "0.00", boys: "0.00" },
+    },
+    categoryPercentages: {
+      students: "0.00",
+      teachers: "0.00",
+      parents: "0.00",
+    },
+  };
+
+  const {
+    counts: { students, teachers, parents, sehedule: schedules },
+    genderPercentages: {
+      students: { girls: femaleStudentsPercentage, boys: maleStudentsPercentage },
+      teachers: { girls: femaleTeachersPercentage, boys: maleTeachersPercentage },
+    },
+    categoryPercentages,
+  } = statistics?.data || defaultData;
+
+  const femaleStudents = parseFloat(femaleStudentsPercentage);
+  const maleStudents = parseFloat(maleStudentsPercentage);
+  const femaleTeachers = parseFloat(femaleTeachersPercentage);
+  const maleTeachers = parseFloat(maleTeachersPercentage);
 
   const pieData = [
-    { name: "Students", value: students, color: "#4CAF50" },
-    { name: "Parents", value: parents, color: "#FF9800" },
-    { name: "Teachers", value: teachers, color: "#2196F3" },
+    { name: "Students", value: parseFloat(categoryPercentages.students), color: "#4CAF50" },
+    { name: "Teachers", value: parseFloat(categoryPercentages.teachers), color: "#2196F3" },
+    { name: "Parents", value: parseFloat(categoryPercentages.parents), color: "#FF9800" },
   ];
 
-  // Grades data from Grade 1 to Grade 12
-  const gradesData = [
-    { grade: "Grade 1", percentage: 85 },
-    { grade: "Grade 2", percentage: 78 },
-    { grade: "Grade 3", percentage: 90 },
-    { grade: "Grade 4", percentage: 82 },
-    { grade: "Grade 5", percentage: 88 },
-    { grade: "Grade 6", percentage: 75 },
-    { grade: "Grade 7", percentage: 80 },
-    { grade: "Grade 8", percentage: 92 },
-    { grade: "Grade 9", percentage: 85 },
-    { grade: "Grade 10", percentage: 79 },
-    { grade: "Grade 11", percentage: 83 },
-    { grade: "Grade 12", percentage: 87 },
-  ];
+  const gradesData = gradeStatistics?.data?.map((grade) => ({
+    grade: grade.grade,
+    passedPercentage: parseFloat(grade.passedPercentage),
+    failedPercentage: parseFloat(grade.failedPercentage),
+  })) || [];
 
-  // Absence data from Grade 1 to Grade 12
-  const absenceData = [
-    { grade: "Grade 1", absences: 5 },
-    { grade: "Grade 2", absences: 8 },
-    { grade: "Grade 3", absences: 3 },
-    { grade: "Grade 4", absences: 6 },
-    { grade: "Grade 5", absences: 7 },
-    { grade: "Grade 6", absences: 4 },
-    { grade: "Grade 7", absences: 9 },
-    { grade: "Grade 8", absences: 2 },
-    { grade: "Grade 9", absences: 5 },
-    { grade: "Grade 10", absences: 6 },
-    { grade: "Grade 11", absences: 3 },
-    { grade: "Grade 12", absences: 4 },
-  ];
+  const absenceData = absenceStatistics?.data?.map((absence) => ({
+    grade: absence.grade,
+    presentPercentage: parseFloat(absence.presentPercentage),
+    absentPercentage: parseFloat(absence.absentPercentage),
+  })) || [];
 
+  const studentsRanksData = studentsRanks?.data || [];
+  const teachersRanksData = teachersRanks?.data || [];
+
+
+  const getBadgeColor = (badge) => {
+    switch (badge) {
+      case "Green":
+        return "bg-green-400";
+      case "Silver":
+        return "bg-gray-400";
+      case "Bronze":
+        return "bg-orange-600";
+      default:
+        return "bg-gray-200";
+    }
+  };
   const NoDataPieChart = () => (
     <ResponsiveContainer width="100%" height={200}>
       <PieChart>
@@ -70,16 +105,15 @@ function DashboardManager() {
       </PieChart>
     </ResponsiveContainer>
   );
-
   return (
     <div className="p-6 font-poppins">
-      {/* Overview Section */}
+      {/* Search Section */}
       <section>
         <h2 className="text-2xl font-semibold font-poppins text-gray-700 mb-2">Overview</h2>
         <div className="mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856] mb-4"></div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-12">
-          {[ 
+          {[
             { label: "Students", value: students, icon: "/src/assets/students 1.png", bgColor: "#D1F3E0" },
             { label: "Teachers", value: teachers, icon: "/src/assets/Group.png", bgColor: "#E1F1FF" },
             { label: "Parents", value: parents, icon: "/src/assets/vector.png", bgColor: "#FFF2D8" },
@@ -175,7 +209,7 @@ function DashboardManager() {
               Percentage Of Users By Type
             </h3>
             <ResponsiveContainer width="100%" height={250}>
-              {pieData[0].value > 0 || pieData[1].value > 0 || pieData[2].value > 0 || pieData[3].value > 0 ? (
+              {pieData[0].value > 0 || pieData[1].value > 0 || pieData[2].value > 0 ? (
                 <PieChart>
                   <Pie
                     data={pieData}
@@ -219,7 +253,8 @@ function DashboardManager() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="percentage" fill="#117C90" />
+                <Bar dataKey="passedPercentage" fill="#4CAF50" name="Passed" />
+                <Bar dataKey="failedPercentage" fill="#E74833" name="Failed" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -235,9 +270,94 @@ function DashboardManager() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="absences" fill="#E74833" />
+                <Bar dataKey="presentPercentage" fill="#4CAF50" name="Present" />
+                <Bar dataKey="absentPercentage" fill="#E74833" name="Absent" />
               </BarChart>
             </ResponsiveContainer>
+          </div>
+        </div>
+      </section>
+
+      {/* Ranks Section */}
+      <section className="mt-12">
+        <h2 className="text-2xl font-semibold font-poppins text-gray-700 mb-2">
+          Ranks
+        </h2>
+        <div className="mt-1 h-[4px] w-[200px] rounded-t-md bg-[#244856] mb-4"></div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12">
+          {/* Students Ranks Table */}
+          <div className="bg-white shadow-xl rounded-lg p-6">
+            <h3 className="text-center font-poppins text-lg font-medium text-gray-600 mb-4">
+              Top Students
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b">Rank</th>
+                    <th className="py-2 px-4 border-b">Name</th>
+                    <th className="py-2 px-4 border-b">Academic Number</th>
+                    <th className="py-2 px-4 border-b">Grade</th>
+                    <th className="py-2 px-4 border-b">Total Points</th>
+                    <th className="py-2 px-4 border-b">Badge</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {studentsRanksData.map((student, index) => (
+                    <tr key={index} className={`text-center ${index % 2 === 0 ? "bg-[#F5F5F5]" : "bg-white"} hover:bg-[#117C90]/10 transition-all`}>
+                      <td className="py-2 px-4 border-b">{index + 1}</td>
+                      <td className="py-2 px-4 border-b">{student.fullName}</td>
+                      <td className="py-2 px-4 border-b">{student.academic_number}</td>
+                      <td className="py-2 px-4 border-b">{student.grade}</td>
+                      <td className="py-2 px-4 border-b">{student.totalPoints}</td>
+                      <td className="py-2 px-4 border-b">
+                        <span className={`px-2 py-1 rounded-full text-white ${getBadgeColor(student.badge)}`}>
+                          {student.badge}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Teachers Ranks Table */}
+          <div className="bg-white shadow-xl rounded-lg p-6">
+            <h3 className="text-center font-poppins text-lg font-medium text-gray-600 mb-4">
+              Top Teachers
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b">Rank</th>
+                    <th className="py-2 px-4 border-b">Name</th>
+                    <th className="py-2 px-4 border-b">Academic Number</th>
+                    <th className="py-2 px-4 border-b">Subject</th>
+                    <th className="py-2 px-4 border-b">Total Points</th>
+                    <th className="py-2 px-4 border-b">Badge</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {teachersRanksData.map((teacher, index) => (
+                    <tr key={index} className={`text-center ${index % 2 === 0 ? "bg-[#F5F5F5]" : "bg-white"} hover:bg-[#117C90]/10 transition-all`}>
+                      <td className="py-2 px-4 border-b">{index + 1}</td>
+                      <td className="py-2 px-4 border-b">{teacher.fullName}</td>
+                      <td className="py-2 px-4 border-b">{teacher.academicNumber}</td>
+                      <td className="py-2 px-4 border-b">{teacher.subject.subjectName}</td>
+                      <td className="py-2 px-4 border-b">{teacher.totalPoints}</td>
+                      <td className="py-2 px-4 border-b">
+                        <span className={`px-2 py-1 rounded-full text-white ${getBadgeColor(teacher.badge)}`}>
+                          {teacher.badge}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
