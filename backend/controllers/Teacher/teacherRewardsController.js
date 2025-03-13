@@ -257,6 +257,7 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
     userId: teacherId,
     userType: "Teacher",
   });
+  const badges = userPoint?.badges? userPoint.badges : "green";
 
   res.status(200).json({
     success: true,
@@ -264,7 +265,7 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
     message: userPoint ? "Teacher points fetched successfully" : "No points found for this Teacher yet",
     data: {
       totalPoints: userPoint ? userPoint.totalPoints : 0,
-      badges: userPoint ? userPoint.badges : [],
+      badges: badges,
     },
   });
 });
