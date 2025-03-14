@@ -112,32 +112,42 @@ const deleteSubject = expressAsyncHandler(async (req, res) => {
 });
 
 const getSubject = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Error getting this page",
+  try {
+    const { id } = req.params;
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Error getting this page",
+      });
+    }
+    const subject = await Subject.findById(id);
+    if (!subject) {
+      return res.status(404).json({
+        status: 404,
+        message: "Subject not found",
+      });
+    }
+    res.status(200).json({
+      status: 200,
+      subject,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-  const subject = await Subject.findById(id);
-  if (!subject) {
-    return res.status(404).json({
-      status: 404,
-      message: "Subject not found",
-    });
-  }
-  res.status(200).json({
-    status: 200,
-    subject,
-  });
 });
 
 const getAllSubject = expressAsyncHandler(async (req, res) => {
-  const subjects = await Subject.find();
-  res.status(200).json({
-    status: 200,
-    subjects,
-  });
+  try {
+    const subjects = await Subject.find();
+    res.status(200).json({
+      status: 200,
+      subjects,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

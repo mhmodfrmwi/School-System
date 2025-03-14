@@ -327,45 +327,55 @@ const deleteStudent = expressAsyncHandler(async (req, res) => {
 });
 
 const getStudent = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid Student ID",
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Student ID",
+      });
+    }
+
+    const student = await Student.findById(id)
+      .populate("gradeId", "gradeName")
+      .populate("classId", "className")
+      .populate("academicYear_id", "startYear");
+
+    if (!student) {
+      return res.status(404).json({
+        status: 404,
+        message: "Student not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Student retrieved successfully",
+      student,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  const student = await Student.findById(id)
-    .populate("gradeId", "gradeName")
-    .populate("classId", "className")
-    .populate("academicYear_id", "startYear");
-
-  if (!student) {
-    return res.status(404).json({
-      status: 404,
-      message: "Student not found",
-    });
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: "Student retrieved successfully",
-    student,
-  });
 });
 
 const getAllStudents = expressAsyncHandler(async (req, res) => {
-  const students = await Student.find()
-    .populate("gradeId", "gradeName")
-    .populate("classId", "className")
-    .populate("academicYear_id", "startYear");
+  try {
+    const students = await Student.find()
+      .populate("gradeId", "gradeName")
+      .populate("classId", "className")
+      .populate("academicYear_id", "startYear");
 
-  res.status(200).json({
-    status: 200,
-    message: "Students retrieved successfully",
-    students,
-  });
+    res.status(200).json({
+      status: 200,
+      message: "Students retrieved successfully",
+      students,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

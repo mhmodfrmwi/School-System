@@ -281,31 +281,41 @@ const deleteClassTeacher = expressAsyncHandler(async (req, res) => {
 });
 
 const getClassTeacher = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id))
-    return res.status(400).json({ status: 400, message: "Invalid ID" });
+    if (!validateObjectId(id))
+      return res.status(400).json({ status: 400, message: "Invalid ID" });
 
-  const assignment = await populateClassTeacher(ClassTeacher.findById(id));
-  if (!assignment)
-    return res
-      .status(404)
-      .json({ status: 404, message: "Assignment not found" });
+    const assignment = await populateClassTeacher(ClassTeacher.findById(id));
+    if (!assignment)
+      return res
+        .status(404)
+        .json({ status: 404, message: "Assignment not found" });
 
-  res.status(200).json({
-    status: 200,
-    message: "Assignment retrieved successfully",
-    classTeacher: assignment,
-  });
+    res.status(200).json({
+      status: 200,
+      message: "Assignment retrieved successfully",
+      classTeacher: assignment,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 const getAllClassTeacher = expressAsyncHandler(async (req, res) => {
-  const assignments = await populateClassTeacher(ClassTeacher.find());
-  res.status(200).json({
-    status: 200,
-    message: "Assignments retrieved successfully",
-    classTeachers: assignments,
-  });
+  try {
+    const assignments = await populateClassTeacher(ClassTeacher.find());
+    res.status(200).json({
+      status: 200,
+      message: "Assignments retrieved successfully",
+      classTeachers: assignments,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

@@ -40,23 +40,32 @@ const addMaterialForBookMarks = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllBookmarksForStudent = expressAsyncHandler(async (req, res) => {
-  const studentId = req.user.id;
-  if (!validateObjectId(studentId)) {
-    return res.status(400).json({ status: 400, message: "Invalid Student ID" });
+  try {
+    const studentId = req.user.id;
+    if (!validateObjectId(studentId)) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Invalid Student ID" });
+    }
+    const existingStudent = await student.findById(studentId);
+    if (!existingStudent) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Student not found" });
+    }
+    const bookmarks = await BookMarkForMaterial.find(
+      {
+        student_id: existingStudent._id,
+      },
+      ["-__v", "-createdAt", "-updatedAt"]
+    )
+      .populate("material_id", ["-__v", "-createdAt", "-updatedAt"])
+      .populate("student_id", ["-__v", "-createdAt", "-updatedAt"]);
+    res.status(200).json({ status: 200, bookmarks });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-  const existingStudent = await student.findById(studentId);
-  if (!existingStudent) {
-    return res.status(404).json({ status: 404, message: "Student not found" });
-  }
-  const bookmarks = await BookMarkForMaterial.find(
-    {
-      student_id: existingStudent._id,
-    },
-    ["-__v", "-createdAt", "-updatedAt"]
-  )
-    .populate("material_id", ["-__v", "-createdAt", "-updatedAt"])
-    .populate("student_id", ["-__v", "-createdAt", "-updatedAt"]);
-  res.status(200).json({ status: 200, bookmarks });
 });
 const deleteMaterialFromBookMarks = expressAsyncHandler(async (req, res) => {
   const studentId = req.user.id;

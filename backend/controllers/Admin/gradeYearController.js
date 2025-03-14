@@ -128,37 +128,47 @@ const deleteGradeYear = expressAsyncHandler(async (req, res) => {
   });
 });
 const getAllGradeYear = expressAsyncHandler(async (req, res) => {
-  const gradeYears = await GradeYear.find()
-    .populate("gradeId", "gradeName")
-    .populate("academicYear_id", "startYear endYear");
-  res.status(200).json({
-    status: 200,
-    message: "Grade Years retrieved successfully",
-    gradeYears,
-  });
+  try {
+    const gradeYears = await GradeYear.find()
+      .populate("gradeId", "gradeName")
+      .populate("academicYear_id", "startYear endYear");
+    res.status(200).json({
+      status: 200,
+      message: "Grade Years retrieved successfully",
+      gradeYears,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 const getGradeYear = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid Grade Year ID",
+  try {
+    const { id } = req.params;
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Grade Year ID",
+      });
+    }
+    const gradeYear = await GradeYear.findById(id)
+      .populate("gradeId", "gradeName")
+      .populate("academicYear_id", "startYear endYear");
+    if (!gradeYear) {
+      return res.status(404).json({
+        status: 404,
+        message: "Grade Year not found",
+      });
+    }
+    res.status(200).json({
+      status: 200,
+      message: "Grade Year retrieved successfully",
+      gradeYear,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-  const gradeYear = await GradeYear.findById(id)
-    .populate("gradeId", "gradeName")
-    .populate("academicYear_id", "startYear endYear");
-  if (!gradeYear) {
-    return res.status(404).json({
-      status: 404,
-      message: "Grade Year not found",
-    });
-  }
-  res.status(200).json({
-    status: 200,
-    message: "Grade Year retrieved successfully",
-    gradeYear,
-  });
 });
 
 module.exports = {

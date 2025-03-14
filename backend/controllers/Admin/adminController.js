@@ -68,25 +68,35 @@ const deleteAdmin = expressAsyncHandler(async (req, res) => {
 });
 
 const getAdmin = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
-  if (!validateObjectId(id))
-    return res.status(400).json({ message: "Invalid ID" });
+  try {
+    const { id } = req.params;
+    if (!validateObjectId(id))
+      return res.status(400).json({ message: "Invalid ID" });
 
-  const admin = await Admin.findById(id);
-  if (!admin) return res.status(404).json({ message: "Admin not found" });
+    const admin = await Admin.findById(id);
+    if (!admin) return res.status(404).json({ message: "Admin not found" });
 
-  res.json(sanitizeAdmin(admin));
+    res.json(sanitizeAdmin(admin));
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 const getAllAdmin = expressAsyncHandler(async (req, res) => {
-  const [admins] = await Promise.all([
-    Admin.find().select("-password"),
-    Admin.countDocuments(),
-  ]);
+  try {
+    const [admins] = await Promise.all([
+      Admin.find().select("-password"),
+      Admin.countDocuments(),
+    ]);
 
-  res.json({
-    admins,
-  });
+    res.json({
+      admins,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

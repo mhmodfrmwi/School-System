@@ -201,39 +201,44 @@ const deleteParent = expressAsyncHandler(async (req, res) => {
 });
 
 const getParent = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid Parent ID",
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Parent ID",
+      });
+    }
+
+    const parent = await Parent.findById(id);
+
+    if (!parent) {
+      return res.status(404).json({
+        status: 404,
+        message: "Parent not found",
+      });
+    }
+    const parentStudents = await ParentStudent.find({ parent_id: id }, [
+      "-parent_id",
+    ]).populate({
+      path: "student_id",
+      populate: [
+        { path: "gradeId" },
+        { path: "classId" },
+        { path: "academicYear_id" },
+      ],
     });
-  }
-
-  const parent = await Parent.findById(id);
-
-  if (!parent) {
-    return res.status(404).json({
-      status: 404,
-      message: "Parent not found",
+    res.status(200).json({
+      status: 200,
+      message: "Parent retrieved successfully",
+      parent,
+      students: parentStudents,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-  const parentStudents = await ParentStudent.find({ parent_id: id }, [
-    "-parent_id",
-  ]).populate({
-    path: "student_id",
-    populate: [
-      { path: "gradeId" },
-      { path: "classId" },
-      { path: "academicYear_id" },
-    ],
-  });
-  res.status(200).json({
-    status: 200,
-    message: "Parent retrieved successfully",
-    parent,
-    students: parentStudents,
-  });
 });
 
 const getAllParent = expressAsyncHandler(async (req, res) => {
@@ -266,10 +271,8 @@ const getAllParent = expressAsyncHandler(async (req, res) => {
       parents: parentsWithStudents,
     });
   } catch (error) {
-    res.status(400).json({
-      status: 400,
-      message: error.message,
-    });
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
 });
 

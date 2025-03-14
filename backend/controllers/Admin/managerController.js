@@ -123,38 +123,48 @@ const deleteManager = expressAsyncHandler(async (req, res) => {
 });
 
 const getManager = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid Manager ID",
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Manager ID",
+      });
+    }
+
+    const manager = await Manager.findById(id);
+
+    if (!manager) {
+      return res.status(404).json({
+        status: 404,
+        message: "Manager not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Manager retrieved successfully",
+      manager,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  const manager = await Manager.findById(id);
-
-  if (!manager) {
-    return res.status(404).json({
-      status: 404,
-      message: "Manager not found",
-    });
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: "Manager retrieved successfully",
-    manager,
-  });
 });
 
 const getAllManager = expressAsyncHandler(async (req, res) => {
-  const managers = await Manager.find();
-  res.status(200).json({
-    status: 200,
-    message: "Managers retrieved successfully",
-    managers,
-  });
+  try {
+    const managers = await Manager.find();
+    res.status(200).json({
+      status: 200,
+      message: "Managers retrieved successfully",
+      managers,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

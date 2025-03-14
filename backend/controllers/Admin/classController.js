@@ -219,39 +219,49 @@ const deleteClass = expressAsyncHandler(async (req, res) => {
 });
 
 const getClass = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid Class ID",
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Class ID",
+      });
+    }
+
+    const foundClass = await populateClass(Class.findById(id));
+
+    if (!foundClass) {
+      return res.status(404).json({
+        status: 404,
+        message: "Class not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Class retrieved successfully",
+      foundClass,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  const foundClass = await populateClass(Class.findById(id));
-
-  if (!foundClass) {
-    return res.status(404).json({
-      status: 404,
-      message: "Class not found",
-    });
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: "Class retrieved successfully",
-    foundClass,
-  });
 });
 
 const getAllClasses = expressAsyncHandler(async (req, res) => {
-  const classes = await populateClass(Class.find());
+  try {
+    const classes = await populateClass(Class.find());
 
-  res.status(200).json({
-    status: 200,
-    message: "Classes retrieved successfully",
-    classes,
-  });
+    res.status(200).json({
+      status: 200,
+      message: "Classes retrieved successfully",
+      classes,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

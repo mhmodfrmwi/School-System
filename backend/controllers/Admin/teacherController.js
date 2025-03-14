@@ -162,41 +162,51 @@ const deleteTeacher = expressAsyncHandler(async (req, res) => {
 });
 
 const getTeacher = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid Teacher ID",
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Teacher ID",
+      });
+    }
+
+    const teacher = await Teacher.findById(id).populate(
+      "subjectId",
+      "subjectName"
+    );
+
+    if (!teacher) {
+      return res.status(404).json({
+        status: 404,
+        message: "Teacher not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Teacher retrieved successfully",
+      teacher,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  const teacher = await Teacher.findById(id).populate(
-    "subjectId",
-    "subjectName"
-  );
-
-  if (!teacher) {
-    return res.status(404).json({
-      status: 404,
-      message: "Teacher not found",
-    });
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: "Teacher retrieved successfully",
-    teacher,
-  });
 });
 
 const getAllTeacher = expressAsyncHandler(async (req, res) => {
-  const teachers = await Teacher.find().populate("subjectId", "subjectName");
-  res.status(200).json({
-    status: 200,
-    message: "Teachers retrieved successfully",
-    teachers,
-  });
+  try {
+    const teachers = await Teacher.find().populate("subjectId", "subjectName");
+    res.status(200).json({
+      status: 200,
+      message: "Teachers retrieved successfully",
+      teachers,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

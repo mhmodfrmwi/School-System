@@ -140,37 +140,47 @@ const deleteGrade = expressAsyncHandler(async (req, res) => {
 });
 
 const getGrade = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid grade ID",
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid grade ID",
+      });
+    }
+
+    const grade = await Grade.findById(id);
+    if (!grade) {
+      return res.status(404).json({
+        status: 404,
+        message: "Grade not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Grade retrieved successfully",
+      grade,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  const grade = await Grade.findById(id);
-  if (!grade) {
-    return res.status(404).json({
-      status: 404,
-      message: "Grade not found",
-    });
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: "Grade retrieved successfully",
-    grade,
-  });
 });
 
 const getAllGrade = expressAsyncHandler(async (req, res) => {
-  const grades = await Grade.find().sort({ gradeName: 1 });
-  res.status(200).json({
-    status: 200,
-    message: "Grades retrieved successfully",
-    grades,
-  });
+  try {
+    const grades = await Grade.find().sort({ gradeName: 1 });
+    res.status(200).json({
+      status: 200,
+      message: "Grades retrieved successfully",
+      grades,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

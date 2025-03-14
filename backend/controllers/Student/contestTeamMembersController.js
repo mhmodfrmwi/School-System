@@ -8,42 +8,51 @@ const Contest = require("../../DB/contestModel");
 const Student = require("../../DB/student");
 const Semester = require("../../DB/semesterModel");
 const ContestTeam = require("../../DB/contestTeamModel");
- 
+
 const getStudentsInSameClassAndGrade = expressAsyncHandler(async (req, res) => {
-  const studentId = req.user.id;
+  try {
+    const studentId = req.user.id;
 
-  const loggedInStudent = await Student.findById(studentId);
-  if (!loggedInStudent) {
-    return res.status(404).json({
-      status: 404,
-      message: "Logged-in student not found.",
+    const loggedInStudent = await Student.findById(studentId);
+    if (!loggedInStudent) {
+      return res.status(404).json({
+        status: 404,
+        message: "Logged-in student not found.",
+      });
+    }
+
+    const students = await Student.find({
+      classId: loggedInStudent.classId,
+      gradeId: loggedInStudent.gradeId,
+      academicYear_id: loggedInStudent.academicYear_id,
+      _id: { $ne: studentId },
+    })
+      .select("fullName academic_number")
+      .lean();
+
+    res.status(200).json({
+      status: 200,
+      message:
+        "Students in the same class, grade, academic year, and semester retrieved successfully.",
+      data: students,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  const students = await Student.find({
-    classId: loggedInStudent.classId,
-    gradeId: loggedInStudent.gradeId,
-    academicYear_id: loggedInStudent.academicYear_id,
-    _id: { $ne: studentId },
-  })
-    .select("fullName academic_number")
-    .lean();
-
-  res.status(200).json({
-    status: 200,
-    message: "Students in the same class, grade, academic year, and semester retrieved successfully.",
-    data: students,
-  });
 });
 
 const createTeam = expressAsyncHandler(async (req, res) => {
+  try {
     const { teamName, teammates } = req.body;
     const { contestId } = req.params;
     const studentId = req.user.id;
 
     const { error } = teamValidationSchema.validate(req.body);
     if (error) {
-        return res.status(400).json({ status: 400, message: error.details[0].message });
+      return res
+        .status(400)
+        .json({ status: 400, message: error.details[0].message });
     }
 
     const contest = await Contest.findById(contestId);
@@ -53,12 +62,12 @@ const createTeam = expressAsyncHandler(async (req, res) => {
         message: "Contest not found.",
       });
     }
-  
+
     const existingTeamWithLoggedInStudent = await ContestTeam.findOne({
       contestId,
       teamMembers: studentId,
     });
-  
+
     if (existingTeamWithLoggedInStudent) {
       return res.status(400).json({
         status: 400,
@@ -66,11 +75,15 @@ const createTeam = expressAsyncHandler(async (req, res) => {
       });
     }
 
-    const existingTeamWithName = await ContestTeam.findOne({ teamName, contestId });
+    const existingTeamWithName = await ContestTeam.findOne({
+      teamName,
+      contestId,
+    });
     if (existingTeamWithName) {
       return res.status(400).json({
         status: 400,
-        message: "Team name already exists for this contest. Please choose a different name.",
+        message:
+          "Team name already exists for this contest. Please choose a different name.",
       });
     }
 
@@ -78,19 +91,22 @@ const createTeam = expressAsyncHandler(async (req, res) => {
     for (const teammate of teammates) {
       const { fullName, academic_number } = teammate;
 
-      const teammateStudent = await Student.findOne({ fullName, academic_number });
+      const teammateStudent = await Student.findOne({
+        fullName,
+        academic_number,
+      });
       if (!teammateStudent) {
         return res.status(404).json({
           status: 404,
           message: `Teammate with name ${fullName} and academic number ${academic_number} not found.`,
         });
       }
-  
+
       const existingTeamWithTeammate = await ContestTeam.findOne({
         contestId,
         teamMembers: teammateStudent._id,
       });
-  
+
       if (existingTeamWithTeammate) {
         return res.status(400).json({
           status: 400,
@@ -114,9 +130,9 @@ const createTeam = expressAsyncHandler(async (req, res) => {
       teamMembers,
       leaderId: studentId,
     });
-  
+
     await team.save();
-    for(const teammate of teamMembers){
+    for (const teammate of teamMembers) {
       await addRewardClaimAndUpdatePoints(teammate, "Student", "Contest");
     }
 
@@ -125,40 +141,49 @@ const createTeam = expressAsyncHandler(async (req, res) => {
       message: "Team created successfully.",
       team,
     });
-  });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
+});
 
 const getTeamsForStudentInContest = expressAsyncHandler(async (req, res) => {
-  const { contestId } = req.params;
-  const studentId = req.user.id;
+  try {
+    const { contestId } = req.params;
+    const studentId = req.user.id;
 
-  if (!validateObjectId(contestId)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid contest ID.",
-    });
-  }
+    if (!validateObjectId(contestId)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid contest ID.",
+      });
+    }
 
-  const teams = await ContestTeam.find({
-    contestId,
-    teamMembers: studentId,
-  })
-    .populate("contestId", "title")
-    .populate("teamMembers", "fullName academic_number")
-    .populate("leaderId", "fullName academic_number")
-    .lean();
+    const teams = await ContestTeam.find({
+      contestId,
+      teamMembers: studentId,
+    })
+      .populate("contestId", "title")
+      .populate("teamMembers", "fullName academic_number")
+      .populate("leaderId", "fullName academic_number")
+      .lean();
 
-  if (teams.length === 0) {
-    return res.status(200).json({
+    if (teams.length === 0) {
+      return res.status(200).json({
+        status: 200,
+        message: "You haven't join a team yet.",
+      });
+    }
+
+    res.status(200).json({
       status: 200,
-      message: "You haven't join a team yet.",
+      message: "Teams retrieved successfully.",
+      data: teams,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  res.status(200).json({
-    status: 200,
-    message: "Teams retrieved successfully.",
-    data: teams,
-  });
 });
 const editTeam = expressAsyncHandler(async (req, res) => {
   const { teamId } = req.params;
@@ -167,7 +192,9 @@ const editTeam = expressAsyncHandler(async (req, res) => {
 
   const { error } = teamValidationSchema.validate(req.body);
   if (error) {
-    return res.status(400).json({ status: 400, message: error.details[0].message });
+    return res
+      .status(400)
+      .json({ status: 400, message: error.details[0].message });
   }
 
   const team = await ContestTeam.findById(teamId).populate("contestId");
@@ -186,11 +213,15 @@ const editTeam = expressAsyncHandler(async (req, res) => {
   }
 
   if (teamName && teamName !== team.teamName) {
-    const existingTeamWithName = await ContestTeam.findOne({ teamName, contestId: team.contestId._id });
+    const existingTeamWithName = await ContestTeam.findOne({
+      teamName,
+      contestId: team.contestId._id,
+    });
     if (existingTeamWithName) {
       return res.status(400).json({
         status: 400,
-        message: "Team name already exists for this contest. Please choose a different name.",
+        message:
+          "Team name already exists for this contest. Please choose a different name.",
       });
     }
   }
@@ -201,7 +232,10 @@ const editTeam = expressAsyncHandler(async (req, res) => {
     for (const teammate of teammates) {
       const { fullName, academic_number } = teammate;
 
-      const teammateStudent = await Student.findOne({ fullName, academic_number });
+      const teammateStudent = await Student.findOne({
+        fullName,
+        academic_number,
+      });
       if (!teammateStudent) {
         return res.status(404).json({
           status: 404,
@@ -214,7 +248,10 @@ const editTeam = expressAsyncHandler(async (req, res) => {
         teamMembers: teammateStudent._id,
       });
 
-      if (existingTeamWithTeammate && existingTeamWithTeammate._id.toString() !== teamId) {
+      if (
+        existingTeamWithTeammate &&
+        existingTeamWithTeammate._id.toString() !== teamId
+      ) {
         return res.status(400).json({
           status: 400,
           message: `Teammate ${fullName} (${academic_number}) is already part of another team for this contest.`,
@@ -273,16 +310,21 @@ const deleteTeam = expressAsyncHandler(async (req, res) => {
   }
 
   await ContestTeam.findByIdAndDelete(teamId);
-  for(const teammate of team.teamMembers){
+  for (const teammate of team.teamMembers) {
     console.log("teammmmmmmmmmmtes " + teammate.toString());
-    await addRewardClaimAndUpdatePoints(teammate, "Student", "Contest","subtract");
+    await addRewardClaimAndUpdatePoints(
+      teammate,
+      "Student",
+      "Contest",
+      "subtract"
+    );
   }
   res.status(200).json({
     status: 200,
     message: "Team deleted successfully.",
   });
 });
-  /*const addTeamMember = expressAsyncHandler(async (req, res) => {
+/*const addTeamMember = expressAsyncHandler(async (req, res) => {
     const { teamId } = req.params;
     const { fullName, academic_number } = req.body;
     const studentId = req.user.id;
@@ -353,10 +395,10 @@ const deleteTeam = expressAsyncHandler(async (req, res) => {
   });*/
 
 module.exports = {
-    getStudentsInSameClassAndGrade,
-    createTeam,
-    getTeamsForStudentInContest,
-    editTeam,
-    deleteTeam,
-   // addTeamMember,
+  getStudentsInSameClassAndGrade,
+  createTeam,
+  getTeamsForStudentInContest,
+  editTeam,
+  deleteTeam,
+  // addTeamMember,
 };

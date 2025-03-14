@@ -316,51 +316,61 @@ const deleteSchedule = expressAsyncHandler(async (req, res) => {
 });
 
 const getSchedule = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid Schedule ID",
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Schedule ID",
+      });
+    }
+
+    const schedule = await Schedule.findById(id)
+      .populate("class_id", "className")
+      .populate("subject_id", "subjectName")
+      .populate("teacher_id", "fullName")
+      .populate("grade_id", "gradeName")
+      .populate("academic_year_id", "startYear endYear")
+      .populate("semester_id");
+
+    if (!schedule) {
+      return res.status(404).json({
+        status: 404,
+        message: "Schedule not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Schedule retrieved successfully",
+      schedule,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  const schedule = await Schedule.findById(id)
-    .populate("class_id", "className")
-    .populate("subject_id", "subjectName")
-    .populate("teacher_id", "fullName")
-    .populate("grade_id", "gradeName")
-    .populate("academic_year_id", "startYear endYear")
-    .populate("semester_id");
-
-  if (!schedule) {
-    return res.status(404).json({
-      status: 404,
-      message: "Schedule not found",
-    });
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: "Schedule retrieved successfully",
-    schedule,
-  });
 });
 
 const getAllSchedule = expressAsyncHandler(async (req, res) => {
-  const schedules = await Schedule.find()
-    .populate("class_id", "className")
-    .populate("subject_id", "subjectName")
-    .populate("teacher_id", "fullName")
-    .populate("grade_id", "gradeName")
-    .populate("academic_year_id", "startYear endYear")
-    .populate("semester_id");
+  try {
+    const schedules = await Schedule.find()
+      .populate("class_id", "className")
+      .populate("subject_id", "subjectName")
+      .populate("teacher_id", "fullName")
+      .populate("grade_id", "gradeName")
+      .populate("academic_year_id", "startYear endYear")
+      .populate("semester_id");
 
-  res.status(200).json({
-    status: 200,
-    message: "Schedules retrieved successfully",
-    schedules,
-  });
+    res.status(200).json({
+      status: 200,
+      message: "Schedules retrieved successfully",
+      schedules,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

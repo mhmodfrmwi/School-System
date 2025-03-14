@@ -2,9 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const moment = require("moment");
-const AcademicYear = require("../../DB/academicYearModel");
 const libraryItemForGradeValidationSchema = require("../../validations/libraryItemForGradeValidation");
-const ClassTeacher = require("../../DB/classTeacherModel");
 const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const LibraryItemsForGrade = require("../../DB/LibraryItemsForGrades");
 const LibraryItem = require("../../DB/LibraryItem");
@@ -78,8 +76,8 @@ const createMaterialForLibrary = [
     });
 
     await libraryItemsForGrade.save();
-    
-    addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Material Item");
+
+    addRewardClaimAndUpdatePoints(teacherId, "Teacher", "Adding Material Item");
     res.status(201).json({
       status: 201,
       message: "Material added successfully.",
@@ -108,8 +106,13 @@ const deleteMaterialForLibrary = expressAsyncHandler(async (req, res) => {
   }
 
   await LibraryItemsForGrade.findByIdAndDelete(id);
-  
-  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Material Item","subtract");
+
+  addRewardClaimAndUpdatePoints(
+    teacherId,
+    "Teacher",
+    "Adding Material Item",
+    "subtract"
+  );
   res.status(200).json({
     status: 200,
     message: "Material deleted successfully",
@@ -122,45 +125,53 @@ const deleteMaterialForLibrary = expressAsyncHandler(async (req, res) => {
 
 const displaySubjectsInTheMaterialOfTheLibrary = expressAsyncHandler(
   async (req, res) => {
-    const libraryItemForGrades = await LibraryItemsForGrade.find({})
-      .select(defaultFieldsToExclude)
-      .populate({
-        path: "grade_subject_semester_id",
-        populate: [
-          {
-            path: "grade_subject_id",
-            populate: [
-              { path: "gradeId", select: "gradeName" },
-              { path: "subjectId", select: "subjectName" },
-              { path: "academicYear_id", select: "startYear endYear" },
-            ],
-          },
-          {
-            path: "semester_id",
-            select: "semesterName",
-          },
-        ],
-      })
-      .lean();
+    try {
+      const libraryItemForGrades = await LibraryItemsForGrade.find({})
+        .select(defaultFieldsToExclude)
+        .populate({
+          path: "grade_subject_semester_id",
+          populate: [
+            {
+              path: "grade_subject_id",
+              populate: [
+                { path: "gradeId", select: "gradeName" },
+                { path: "subjectId", select: "subjectName" },
+                { path: "academicYear_id", select: "startYear endYear" },
+              ],
+            },
+            {
+              path: "semester_id",
+              select: "semesterName",
+            },
+          ],
+        })
+        .lean();
+      console.log(libraryItemForGrades);
 
-    const transformedResponse = libraryItemForGrades.map((item) => ({
-      id: item.grade_subject_semester_id._id,
-      subject:
-        item.grade_subject_semester_id.grade_subject_id.subjectId.subjectName,
-      grade: item.grade_subject_semester_id.grade_subject_id.gradeId.gradeName,
-      startYear:
-        item.grade_subject_semester_id.grade_subject_id.academicYear_id
-          .startYear,
-      endYear:
-        item.grade_subject_semester_id.grade_subject_id.academicYear_id.endYear,
-      semester: item.grade_subject_semester_id.semester_id.semesterName,
-    }));
+      const transformedResponse = libraryItemForGrades.map((item) => ({
+        id: item.grade_subject_semester_id._id,
+        subject:
+          item.grade_subject_semester_id.grade_subject_id.subjectId.subjectName,
+        grade:
+          item.grade_subject_semester_id.grade_subject_id.gradeId.gradeName,
+        startYear:
+          item.grade_subject_semester_id.grade_subject_id.academicYear_id
+            .startYear,
+        endYear:
+          item.grade_subject_semester_id.grade_subject_id.academicYear_id
+            .endYear,
+        semester: item.grade_subject_semester_id.semester_id.semesterName,
+      }));
 
-    res.status(200).json({
-      status: 200,
-      message: "Subjects in the material of the library",
-      subjects: transformedResponse,
-    });
+      res.status(200).json({
+        status: 200,
+        message: "Subjects in the material of the library",
+        subjects: transformedResponse,
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.json({ message: `Failed to fetch : ${error.message}` });
+    }
   }
 );
 

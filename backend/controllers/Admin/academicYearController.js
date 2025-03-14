@@ -166,36 +166,46 @@ const deleteAcademicYear = expressAsyncHandler(async (req, res) => {
 });
 
 const getAcademicYear = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid academic year ID",
-    });
-  }
+  try {
+    const { id } = req.params;
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid academic year ID",
+      });
+    }
 
-  const academicYear = await AcademicYear.findById(id);
-  if (!academicYear) {
-    return res.status(404).json({
-      status: 404,
-      message: "Academic year not found",
-    });
-  }
+    const academicYear = await AcademicYear.findById(id);
+    if (!academicYear) {
+      return res.status(404).json({
+        status: 404,
+        message: "Academic year not found",
+      });
+    }
 
-  res.status(200).json({
-    status: 200,
-    message: "Academic year retrieved successfully",
-    academicYear,
-  });
+    res.status(200).json({
+      status: 200,
+      message: "Academic year retrieved successfully",
+      academicYear,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 const getAllAcademicYear = expressAsyncHandler(async (req, res) => {
-  const academicYears = await AcademicYear.find().sort({ startYear: -1 });
-  res.status(200).json({
-    status: 200,
-    message: "Academic years retrieved successfully",
-    academicYears,
-  });
+  try {
+    const academicYears = await AcademicYear.find().sort({ startYear: -1 });
+    res.status(200).json({
+      status: 200,
+      message: "Academic years retrieved successfully",
+      academicYears,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

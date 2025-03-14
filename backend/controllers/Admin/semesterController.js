@@ -155,38 +155,48 @@ const deleteSemester = expressAsyncHandler(async (req, res) => {
 });
 
 const getSemester = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid Semester ID",
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Semester ID",
+      });
+    }
+
+    const semester = await Semester.findById(id).populate("academicYear_id");
+
+    if (!semester) {
+      return res.status(404).json({
+        status: 404,
+        message: "Semester not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "Semester retrieved successfully",
+      semester,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  const semester = await Semester.findById(id).populate("academicYear_id");
-
-  if (!semester) {
-    return res.status(404).json({
-      status: 404,
-      message: "Semester not found",
-    });
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: "Semester retrieved successfully",
-    semester,
-  });
 });
 
 const getAllSemester = expressAsyncHandler(async (req, res) => {
-  const semesters = await Semester.find().populate("academicYear_id");
-  res.status(200).json({
-    status: 200,
-    message: "Semesters retrieved successfully",
-    semesters,
-  });
+  try {
+    const semesters = await Semester.find().populate("academicYear_id");
+    res.status(200).json({
+      status: 200,
+      message: "Semesters retrieved successfully",
+      semesters,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 
 module.exports = {

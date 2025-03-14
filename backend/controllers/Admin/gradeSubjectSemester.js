@@ -8,6 +8,7 @@ const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
 const Grade = require("../../DB/gradeModel");
 const Subject = require("../../DB/subjectModel");
 const AcademicYear = require("../../DB/academicYearModel");
+const LibraryItemsForGrade = require("../../DB/LibraryItemsForGrades");
 
 async function createGradeSubject(gradeId, subjectId, academicYearId) {
   const existingGradeSubject = await GradeSubject.findOne({
@@ -258,6 +259,7 @@ const deleteGradeSubjectSemester = expressAsyncHandler(async (req, res) => {
   const { grade_subject_id } = gradeSubjectSemester;
 
   try {
+    await LibraryItemsForGrade.deleteMany({ grade_subject_semester_id: id });
     await GradeSubjectSemester.findByIdAndDelete(id);
 
     if (validateObjectId(grade_subject_id)) {
@@ -281,51 +283,61 @@ const deleteGradeSubjectSemester = expressAsyncHandler(async (req, res) => {
 });
 
 const getGradeSubjectSemester = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!validateObjectId(id)) {
-    return res.status(400).json({
-      status: 400,
-      message: "Invalid GradeSubjectSemester ID",
-    });
-  }
+    if (!validateObjectId(id)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid GradeSubjectSemester ID",
+      });
+    }
 
-  const gradeSubjectSemester = await GradeSubjectSemester.findById(id).populate(
-    [
+    const gradeSubjectSemester = await GradeSubjectSemester.findById(
+      id
+    ).populate([
       {
         path: "grade_subject_id",
         populate: { path: "subjectId", path: "gradeId" },
       },
       { path: "semester_id", populate: { path: "academicYear_id" } },
-    ]
-  );
+    ]);
 
-  if (!gradeSubjectSemester) {
-    return res.status(404).json({
-      status: 404,
-      message: "GradeSubjectSemester not found",
+    if (!gradeSubjectSemester) {
+      return res.status(404).json({
+        status: 404,
+        message: "GradeSubjectSemester not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: "GradeSubject retrieved successfully",
+      gradeSubjectSemester,
     });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
   }
-
-  res.status(200).json({
-    status: 200,
-    message: "GradeSubject retrieved successfully",
-    gradeSubjectSemester,
-  });
 });
 
 // Get all GradeSubjects
 const getAllGradeSubjectSemesters = expressAsyncHandler(async (req, res) => {
-  const gradeSubjectSemesters = await GradeSubjectSemester.find().populate([
-    { path: "grade_subject_id", populate: { path: "subjectId" } },
-    { path: "semester_id", populate: { path: "academicYear_id" } },
-  ]);
+  try {
+    const gradeSubjectSemesters = await GradeSubjectSemester.find().populate([
+      { path: "grade_subject_id", populate: { path: "subjectId" } },
+      { path: "semester_id", populate: { path: "academicYear_id" } },
+    ]);
 
-  res.status(200).json({
-    status: 200,
-    message: "GradeSubjectSemesters retrieved successfully",
-    gradeSubjectSemesters,
-  });
+    res.status(200).json({
+      status: 200,
+      message: "GradeSubjectSemesters retrieved successfully",
+      gradeSubjectSemesters,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
 });
 module.exports = {
   createGradeSubjectSemester,
