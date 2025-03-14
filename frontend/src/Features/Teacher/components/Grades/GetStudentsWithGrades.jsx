@@ -151,12 +151,12 @@ function GetStudentsWithGrades() {
           {/* Display type and finalDegree above the table */}
           <div className="mb-4 flex flex-col gap-2 py-4">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-[#105E6A]">Type:</span>
-              <span className="text-[#117C90]">{studentResult?.data?.type}</span>
+              <span className="font-semibold text-black">Type:</span>
+              <span>{studentResult?.data?.type}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-[#105E6A]">Final Degree:</span>
-              <span className="text-[#117C90]">
+              <span className="font-semibold text-black">Final Degree:</span>
+              <span >
                 {studentResult?.data?.finalDegree}
               </span>
             </div>
@@ -166,6 +166,7 @@ function GetStudentsWithGrades() {
             <table className="min-w-full">
               <thead className="bg-[#117C90] text-white">
                 <tr>
+                <th className="px-4 py-3 text-left font-poppins font-semibold">#</th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
                     Academic Number
                   </th>
@@ -189,14 +190,15 @@ function GetStudentsWithGrades() {
                     },
                     index,
                   ) => (
-                    <tr key={index} className="hover:bg-gray-100">
-                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                    <tr key={index} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
+                        <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">{index + 1}</td>
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
                         {academic_number}
                       </td>
-                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
                         {fullName}
                       </td>
-                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
                         {examGrade}
                       </td>
                     </tr>

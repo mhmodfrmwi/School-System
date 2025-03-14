@@ -124,7 +124,9 @@ const GetStudentsForGrades = () => {
           <div className="overflow-x-auto rounded-lg border border-[#117C90] shadow-lg">
             <table className="min-w-full">
               <thead>
+                
                 <tr className="bg-[#117C90] text-white">
+                 <th className="px-4 py-3 text-left font-poppins font-semibold">#</th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
                     Academic Number
                   </th>
@@ -134,15 +136,16 @@ const GetStudentsForGrades = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentStudents.map((student) => (
+                {currentStudents.map((student,index) => (
                   <tr
                     key={student.academic_number}
-                    className="hover:bg-gray-100"
+                    className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
                   >
-                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">{index + 1}</td>
+                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
                       {student.academic_number}
                     </td>
-                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
                       {student.fullName}
                     </td>
                   </tr>

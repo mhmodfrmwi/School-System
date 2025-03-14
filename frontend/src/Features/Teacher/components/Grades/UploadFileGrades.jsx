@@ -55,49 +55,70 @@ const UploadFileGrades = () => {
   }
 
   return (
-    <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-[90%]">
-      <div className="mb-8 flex flex-col">
-        <h1 className="font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
+    <div className="mx-auto w-[90%] max-w-4xl font-poppins rounded-lg bg-white p-6 shadow-lg">
+      {/* Title Section */}
+      <div className="mb-8">
+        <h1 className="font-poppins text-2xl font-bold text-[#117C90]">
           Grades For Students
         </h1>
-        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#117C90] lg:h-[4px] lg:w-[140px]"></div>
+        <div className="mt-2 h-1 w-24 rounded-full bg-[#117C90]"></div>
       </div>
 
-      <div className="flex flex-col items-center gap-4">
+      {/* File Upload Section */}
+      <div className="mb-8 rounded-lg border border-gray-200 bg-gray-50 p-6 shadow-sm">
+        <h2 className="mb-4 text-xl font-semibold text-gray-600">
+          Upload Grades File
+        </h2>
         <label
-          className={`w-64 cursor-pointer rounded-lg border-2 border-dashed p-3 text-center transition-all ${
+          className={`flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all ${
             file
-              ? "border-green-500 bg-green-100 text-green-700"
-              : "border-gray-400 bg-gray-100 text-gray-500"
+              ? "border-green-500 bg-green-50 text-green-700"
+              : "border-gray-300 bg-gray-100 text-gray-500 hover:border-[#117C90] hover:bg-gray-200"
           }`}
         >
-          {file ? file.name : "Choose a file"}
-          <input type="file" onChange={handleFileChange} className="hidden" />
+          {file ? (
+            <span className="text-center font-medium">{file.name}</span>
+          ) : (
+            <>
+              <span className="text-center">Choose a file</span>
+              <span className="mt-2 text-sm text-gray-400">
+                (Excel, CSV, or PDF)
+              </span>
+            </>
+          )}
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="hidden"
+            accept=".xlsx, .xls, .csv, .pdf"
+          />
         </label>
-      </div>
-
-      <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <button
           onClick={handleUpload}
-          className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+          className="mt-4 w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins font-semibold text-white transition hover:opacity-90"
         >
           Upload File
         </button>
+      </div>
 
-        <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2">
+      {/* Get Students Grades Section */}
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 shadow-sm">
+        <h2 className="mb-4 text-xl font-semibold text-gray-600">
+          Get Students Grades
+        </h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <select
             value={examType}
             onChange={(e) => setExamType(e.target.value)}
-            className="w-full rounded-lg border border-[#117C90] p-2 text-center font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+            className="w-full rounded-lg border border-[#117C90] p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
           >
             <option value="">Select exam type</option>
             <option value="midterm">Midterm</option>
             <option value="final">Final</option>
           </select>
-
           <button
             onClick={handleGetStudentsGrades}
-            className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+            className="w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins font-semibold text-white transition hover:opacity-90"
           >
             Get Students Grades
           </button>
