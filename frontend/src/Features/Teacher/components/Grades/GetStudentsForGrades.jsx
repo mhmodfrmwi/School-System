@@ -74,7 +74,7 @@ const GetStudentsForGrades = () => {
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
+    <div className="mx-auto font-poppins w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
       <div className="flex flex-col">
         <h1 className="font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
           Exam Scores
@@ -91,30 +91,44 @@ const GetStudentsForGrades = () => {
 
       {scores?.data?.students?.length > 0 ? (
         <>
-          <div className="my-2 text-lg text-black">
+          <div className="my-4 text-lg text-black">
             <span className="text-xl font-semibold">Academic Year:</span>{" "}
             {scores.data.grade.academicYear.startYear} -{" "}
             {scores.data.grade.academicYear.endYear}
           </div>
-          <div className="my-2 text-lg text-black">
-            <div>
-              <span className="text-xl font-semibold">Grade:</span>{" "}
-              {scores.data.grade.gradeName}{" "}
-            </div>{" "}
-            <div className="my-2">
-              <span className="text-xl font-semibold">Subject:</span>{" "}
-              {scores.data.subject.subjectName}
-            </div>
+          <div className="my-4 text-lg text-black">
+            <span className="text-xl font-semibold">Grade:</span>{" "}
+            {scores.data.grade.gradeName}{" "}
+          </div>
+          <div className="my-4 text-lg text-black">
+            <span className="text-xl font-semibold">Subject:</span>{" "}
+            {scores.data.subject.subjectName}
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
+          <div className="mb-6 flex justify-between">
+            <button
+              onClick={handleExportCSV}
+              className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+            >
+              Export to CSV
+            </button>
+
+            <button
+              onClick={handleGoToUploadPage}
+              className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+            >
+              Go to Upload File
+            </button>
+          </div>
+
+          <div className="overflow-x-auto rounded-lg border border-[#117C90] shadow-lg">
+            <table className="min-w-full">
               <thead>
-                <tr>
-                  <th className="border bg-[#117C90] p-2 text-white">
+                <tr className="bg-[#117C90] text-white">
+                  <th className="px-4 py-3 text-left font-poppins font-semibold">
                     Academic Number
                   </th>
-                  <th className="border bg-[#117C90] p-2 text-white">
+                  <th className="px-4 py-3 text-left font-poppins font-semibold">
                     Full Name
                   </th>
                 </tr>
@@ -125,14 +139,18 @@ const GetStudentsForGrades = () => {
                     key={student.academic_number}
                     className="hover:bg-gray-100"
                   >
-                    <td className="border p-2">{student.academic_number}</td>
-                    <td className="border p-2">{student.fullName}</td>
+                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                      {student.academic_number}
+                    </td>
+                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                      {student.fullName}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="mt-4 flex justify-end">
+          <div className="mt-6 flex justify-end">
             <Pagination
               totalItems={scores?.data?.students.length || 0}
               itemsPerPage={studentsPerPage}
@@ -140,24 +158,10 @@ const GetStudentsForGrades = () => {
               onPageChange={handlePageChange}
             />
           </div>
-          <div className="mt-4 flex justify-between">
-            <button
-              onClick={handleExportCSV}
-              className="rounded bg-[#117C90] p-2 text-white"
-            >
-              Export to CSV
-            </button>
 
-            <button
-              onClick={handleGoToUploadPage}
-              className="ml-4 rounded bg-[#117C90] p-2 text-white"
-            >
-              Go to Upload File
-            </button>
-          </div>
         </>
       ) : (
-        <p>No students found.</p>
+        <p className="font-poppins text-lg text-gray-600">No students found.</p>
       )}
     </div>
   );

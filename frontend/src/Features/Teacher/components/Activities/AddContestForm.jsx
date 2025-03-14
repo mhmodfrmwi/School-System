@@ -19,7 +19,7 @@ function ActivityForm() {
 
   const { classTeachers = [], message, loading } = useSelector((state) => state.classTeachers || {});
 
-  // يجب أن يكون useEffect في الأعلى دائمًا
+
   useEffect(() => {
     dispatch(fetchClassTeacher());
   }, [dispatch]);

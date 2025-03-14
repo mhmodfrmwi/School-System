@@ -15,7 +15,6 @@ function GetStudentsWithGrades() {
   const { classId, gradeSubjectSemesterId, type } = useParams();
   const dispatch = useDispatch();
   const { studentResult, loading } = useSelector((state) => state.examScores);
-  console.log(studentResult);
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
   const [students, setStudents] = useState([]);
@@ -65,7 +64,6 @@ function GetStudentsWithGrades() {
     const csvData = students.map((student) => [
       student.academic_number,
       student.fullName,
-
       student.examGrade || "",
     ]);
 
@@ -133,75 +131,123 @@ function GetStudentsWithGrades() {
 
   if (!studentResult?.data?.type) {
     return (
-      <>
+      <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-[90%]">
         <h1 className="mb-4 text-2xl font-semibold text-[#117C90]">
           Student Exam Results
         </h1>
-
         <div>No student results found.</div>
-      </>
+      </div>
     );
   }
 
   return (
-    <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-[90%]">
-      <h1 className="mb-4 text-2xl font-semibold text-[#117C90]">
+    <div className="mx-auto font-poppins w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-[90%]">
+      <h1 className=" text-2xl font-semibold text-[#117C90]">
         Student Exam Results
       </h1>
 
       {students.length ? (
-        <div className="overflow-x-auto">
+        <div>
           {/* Display type and finalDegree above the table */}
-          <div className="mb-4 flex flex-col gap-2">
+          <div className="mb-4 flex flex-col gap-2 py-4">
             <div className="flex items-center gap-2">
-              <span className="font-semibold">Type:</span>
-              <span>{studentResult?.data?.type}</span>
+              <span className="font-semibold text-[#105E6A]">Type:</span>
+              <span className="text-[#117C90]">{studentResult?.data?.type}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-semibold">Final Degree:</span>
-              <span>{studentResult?.data?.finalDegree}</span>
+              <span className="font-semibold text-[#105E6A]">Final Degree:</span>
+              <span className="text-[#117C90]">
+                {studentResult?.data?.finalDegree}
+              </span>
             </div>
           </div>
 
-          <table className="min-w-full border border-gray-300 bg-white">
-            <thead className="bg-[#117C90] text-white">
-              <tr>
-                <th className="border-b px-4 py-2">Academic Number</th>
-                <th className="border-b px-4 py-2">Full Name</th>
+          <div className="overflow-x-auto rounded-lg border border-[#117C90] shadow-lg">
+            <table className="min-w-full">
+              <thead className="bg-[#117C90] text-white">
+                <tr>
+                  <th className="px-4 py-3 text-left font-poppins font-semibold">
+                    Academic Number
+                  </th>
+                  <th className="px-4 py-3 text-left font-poppins font-semibold">
+                    Full Name
+                  </th>
+                  <th className="px-4 py-3 text-left font-poppins font-semibold">
+                    Exam Grade
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentStudents.map(
+                  (
+                    {
+                      academic_number,
+                      fullName,
+                      academic_year,
+                      other_degree,
+                      examGrade,
+                    },
+                    index,
+                  ) => (
+                    <tr key={index} className="hover:bg-gray-100">
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                        {academic_number}
+                      </td>
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                        {fullName}
+                      </td>
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-[#105E6A]">
+                        {examGrade}
+                      </td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
 
-                <th className="border-b px-4 py-2">Exam Grade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentStudents.map(
-                (
-                  {
-                    academic_number,
-                    fullName,
-                    academic_year,
-                    other_degree,
-                    examGrade,
-                  },
-                  index,
-                ) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="border-b px-4 py-2 text-center">
-                      {academic_number}
-                    </td>
-                    <td className="border-b px-4 py-2 text-center">
-                      {fullName}
-                    </td>
 
-                    <td className="border-b px-4 py-2 text-center">
-                      {examGrade}
-                    </td>
-                  </tr>
-                ),
-              )}
-            </tbody>
-          </table>
+            <div className="flex flex-col justify-between gap-6 p-4 sm:flex-row sm:items-center">
+              <div className="flex flex-col items-center gap-4">
+                <label
+                  className={`w-64 cursor-pointer rounded-lg border-2 border-dashed p-3 text-center transition-all ${file
+                    ? "border-green-500 bg-green-100 text-green-700"
+                    : "border-gray-400 bg-gray-100 text-gray-500"
+                    }`}
+                >
+                  {file ? file.name : "Choose a file"}
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
+                <button
+                  onClick={handleUpload}
+                  className="w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+                >
+                  Upload & Update
+                </button>
+              </div>
 
-          <div className="mt-4 flex justify-end">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <button
+                  onClick={handleExport}
+                  className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+                >
+                  Export Data
+                </button>
+                <button
+                  onClick={handleDeleteAll}
+                  className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+                >
+                  Delete All Data
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 flex justify-end p-4">
             <Pagination
               totalItems={students.length}
               itemsPerPage={studentsPerPage}
@@ -209,50 +255,12 @@ function GetStudentsWithGrades() {
               onPageChange={handlePageChange}
             />
           </div>
-
-          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
-            <div className="flex flex-col items-center gap-4">
-              <label
-                className={`w-64 cursor-pointer rounded-lg border-2 border-dashed p-3 text-center transition-all ${
-                  file
-                    ? "border-green-500 bg-green-100 text-green-700"
-                    : "border-gray-400 bg-gray-100 text-gray-500"
-                }`}
-              >
-                {file ? file.name : "Choose a file"}
-                <input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
-              <button
-                onClick={handleUpload}
-                className="w-full rounded bg-[#117C90] p-2 text-white transition-all hover:bg-[#0e6a7d] focus:outline-none focus:ring-2 focus:ring-[#117C90] focus:ring-offset-2"
-              >
-                Upload & Update
-              </button>
-            </div>
-
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <button
-                onClick={handleExport}
-                className="rounded bg-[#117C90] p-2 text-white transition-all hover:bg-[#0e6a7d] focus:outline-none focus:ring-2 focus:ring-[#117C90] focus:ring-offset-2"
-              >
-                Export Data
-              </button>
-              <button
-                onClick={handleDeleteAll}
-                className="rounded bg-[#117C90] p-2 text-white transition-all hover:bg-[#0e6a7d] focus:outline-none focus:ring-2 focus:ring-[#117C90] focus:ring-offset-2"
-              >
-                Delete All Data
-              </button>
-            </div>
-          </div>
+          
         </div>
       ) : (
-        <div>No student results found.</div>
+        <div className="font-poppins text-lg text-gray-600">
+          No student results found.
+        </div>
       )}
     </div>
   );

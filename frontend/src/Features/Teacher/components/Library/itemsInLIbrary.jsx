@@ -31,7 +31,7 @@ const ItemsInLibrary = () => {
 
   return (
     <>
-      <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-2 rounded-3xl bg-gray-100 md:grid-cols-3">
+      <div className="m-auto font-poppins mb-6 grid w-[90%] grid-cols-1 gap-2 rounded-3xl bg-gray-100 md:grid-cols-3">
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
           onClick={() => navigate("/teacher/teacher-library")}
@@ -61,7 +61,7 @@ const ItemsInLibrary = () => {
           General Library
         </button>
       </div>
-      <div className="flex flex-col p-4">
+      <div className="flex flex-col p-4 font-poppins">
         <div className="mx-auto w-[400px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
           <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
             <div className="">

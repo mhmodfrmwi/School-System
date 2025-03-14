@@ -74,7 +74,7 @@ const getFirstPageAsImage = (url) => {
 // Pagination Controls Component
 const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
   return (
-    <div className="mt-6 flex items-center justify-center">
+    <div className="mt-6 flex items-center justify-center font-poppins">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -209,7 +209,7 @@ const LibraryTeacherPage = () => {
 
   return (
     <>
-      <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-2 rounded-3xl bg-gray-100 md:grid-cols-3">
+      <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-2 rounded-3xl font-poppins bg-gray-100 md:grid-cols-3">
         <button
           className="flex cursor-pointer items-center justify-center rounded-t-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none md:rounded-3xl"
           onClick={() => navigate("/teacher/teacher-library")}

@@ -273,7 +273,7 @@ const Motivation = () => {
       <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-[1200px]">
         <div className="overflow-x-auto">
           <div className="max-h-[400px] overflow-y-auto">
-            <table className="min-w-full table-auto border-collapse border-2 border-[#117C90] border-re rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+            <table className="min-w-full table-auto border-collapse border-2 border-[#117C90]  rounded-[1rem]  bg-[#FBE9D1] overflow-hidden">
               <thead className="bg-[#117C90] text-white">
                 <tr className="bg-[#117C90] text-white">
                   {" "}

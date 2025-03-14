@@ -74,15 +74,14 @@ const DashboardTeacher = () => {
             <span className="text-sm text-white md:text-lg">Your score</span>
             <div className="relative flex items-center justify-center">
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-full border-4 ${
-                  teacherPointsForTerm.badge === "Green"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border-4 ${teacherPointsForTerm.badge === "Green"
                     ? "border-green-500 bg-green-500"
                     : teacherPointsForTerm.badge === "Diamond"
                       ? "border-[#6a6969] bg-[#6a6969]"
                       : teacherPointsForTerm.badge === "Gold"
                         ? "border-yellow-500 bg-yellow-500"
                         : "border-gray-300 bg-gray-300"
-                } p-7 md:h-14 md:w-14`}
+                  } p-7 md:h-14 md:w-14`}
               >
                 <span className="text-lg font-bold text-white md:text-2xl">
                   {teacherPointsForTerm.totalPoints}
@@ -127,7 +126,8 @@ const DashboardTeacher = () => {
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[125px]"></div>
             </div>
-            <div className="ml-0 grid grid-cols-1 justify-items-center gap-10 pt-6 sm:grid-cols-2 xl:grid-cols-3">
+
+            <div className="ml-0 grid grid-cols-1 justify-items-start gap-10 pt-6 sm:grid-cols-2 xl:grid-cols-3">
               {classTeachers.length > 0 ? (
                 classTeachers.map((classteacher, index) => (
                   <div
@@ -173,7 +173,6 @@ const DashboardTeacher = () => {
             </div>
           </div>
         </section>
-
         {/* Main Categories Section */}
         <section className="mb-4 rounded-lg p-4 font-poppins md:mb-6 md:p-6">
           <div className="ml-0">
