@@ -13,6 +13,7 @@ import img2 from "../../../../assets/Rectangle 314.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { FaSpinner, FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../../ui/Loader"; // Import your Loader component
 
 // Helper function to extract YouTube Video ID
 const extractYouTubeVideoId = (url) => {
@@ -77,6 +78,7 @@ const LibraryVideosPage = () => {
 
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   // State for each tab
   const [tabStates, setTabStates] = useState({
@@ -104,8 +106,13 @@ const LibraryVideosPage = () => {
   const { currentPage, selectedGrade, selectedSemester } = currentTabState;
 
   useEffect(() => {
-    dispatch(fetchLibraryVideoItems());
-    dispatch(fetchSubjectsWithVideoMaterial());
+    const fetchData = async () => {
+      await dispatch(fetchLibraryVideoItems());
+      await dispatch(fetchSubjectsWithVideoMaterial());
+      setInitialLoading(false);
+    };
+
+    fetchData();
   }, [dispatch]);
 
   useEffect(() => {
@@ -123,11 +130,11 @@ const LibraryVideosPage = () => {
   };
 
   const displayedMaterials =
-  selectedSubject === "all"
-    ? generalVideos // Use generalVideos for the "All" tab
-    : selectedSubject === "public"
-    ? videoItems // Use videoItems for the "Public" tab
-    : videoMaterials; // Use videoMaterials for subject-specific videos
+    selectedSubject === "all"
+      ? generalVideos // Use generalVideos for the "All" tab
+      : selectedSubject === "public"
+      ? videoItems // Use videoItems for the "Public" tab
+      : videoMaterials; // Use videoMaterials for subject-specific videos
 
   const filteredMaterials = displayedMaterials.filter((material) => {
     return (
@@ -187,6 +194,15 @@ const LibraryVideosPage = () => {
   const totalPagesAll = Math.ceil(generalVideos.length / itemsPerPage);
   const totalPagesPublic = Math.ceil(videoItems.length / itemsPerPage);
   const totalPagesSubject = Math.ceil(filteredMaterials.length / itemsPerPage);
+
+  // Show full-page loading during initial data fetch
+  if (initialLoading) {
+    return (
+      <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
+        <Loader role="student" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen w-[95%] mx-auto mt-20 mb-20 font-poppins">

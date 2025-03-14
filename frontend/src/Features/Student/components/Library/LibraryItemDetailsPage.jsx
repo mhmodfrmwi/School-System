@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchLibraryItemDetails, fetchMaterialDetails, clearDetails } from "../StudentRedux/libraryStudentSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FaSpinner } from "react-icons/fa";
+import Loader from "../../../../ui/Loader";
 
 const LibraryItemDetailsPage = () => {
   const dispatch = useDispatch();
@@ -26,9 +26,8 @@ const LibraryItemDetailsPage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center text-center text-gray-500 mt-10">
-        <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
-        <p className="text-gray-700 text-lg font-semibold">Loading...</p>
+      <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
+        <Loader role="student"/>
       </div>
     );
   }
@@ -80,8 +79,10 @@ const LibraryItemDetailsPage = () => {
   return (
     <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
       <div className="w-full flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
+        <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
           {details?.title || "Item Details"}
+          <span className="absolute left-0 bottom-[-9px] w-[120px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+            
         </h1>
         <Button
           variant="solid"
