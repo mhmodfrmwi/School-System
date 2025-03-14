@@ -8,7 +8,7 @@ const ActivityToggle = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="w-full mx-auto mt-10 px-4">
+    <div className="w-full font-poppins mx-auto mt-10 px-4">
       <div className="flex flex-wrap md:flex-nowrap mb-20 border border-gray-300 rounded-full overflow-hidden max-w-[90%] md:w-[60%] mx-auto bg-[#F5F5F5]">
         <button
           onClick={() => navigate("/teacher/school-hubs")}

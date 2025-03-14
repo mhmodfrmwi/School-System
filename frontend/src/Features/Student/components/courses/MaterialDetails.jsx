@@ -9,6 +9,7 @@ import Loader from "../../../../ui/Loader";
 import subject from "../../../../assets/child.jpg";
 
 const MaterialDetails = () => {
+  const role = sessionStorage.getItem("role");
   const { subjectId, materialId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const MaterialDetails = () => {
   if (loading) {
     return (
       <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
-        <Loader />
+        <Loader role={role}/>
       </div>
     );
   }

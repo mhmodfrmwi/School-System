@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateSubmissionGrade } from '../../TeacherRedux/AssignmentSlice';
+import { toast } from 'react-toastify'; // استيراد مكتبة التوست
 
-const EditGradeModal = ({ isOpen, onClose, submissionId, currentGrade }) => {
+const EditGradeModal = ({ isOpen, onClose, submissionId, currentGrade, totalMarks }) => {
     const [grade, setGrade] = useState(currentGrade || '');
     const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (grade && !isNaN(grade)) {
+            if (parseFloat(grade) > totalMarks) {
+                toast.error('Grade cannot exceed the total marks of the assignment');
+                return;
+            }
             dispatch(updateSubmissionGrade({ submissionId, grade }))
                 .unwrap()
                 .then(() => {
                     onClose(); 
+                })
+                .catch((error) => {
+                    toast.error(error.message || 'Failed to update grade'); 
                 });
         } else {
-            alert('Please enter a valid grade.');
+            toast.error('Please enter a valid grade.'); 
         }
     };
 

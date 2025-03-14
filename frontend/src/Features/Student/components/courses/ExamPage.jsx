@@ -7,12 +7,15 @@ import {
   fetchSessions,
 } from "../../components/StudentRedux/examsSlice";
 import Swal from "sweetalert2";
-import { FaSpinner, FaClock } from "react-icons/fa";
+import { FaClock } from "react-icons/fa";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
+import Loader from "../../../../ui/Loader";
+
 
 const StudentExamPage = () => {
+  const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const { examId, gradeSubjectSemesterId } = useParams();
   const navigate = useNavigate();
@@ -291,9 +294,8 @@ const StudentExamPage = () => {
 
   if (loading) {
     return (
-      <div className="mt-10 flex items-center justify-center text-gray-500">
-        <FaSpinner className="mb-4 animate-spin text-4xl text-blue-500" />
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+      <div className=" mt-16 mb-20 min-h-screen w-[95%] mx-auto">
+      <Loader role={role}/>
       </div>
     );
   }

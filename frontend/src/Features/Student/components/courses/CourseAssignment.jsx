@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
 
 const AssignmentsSection = () => {
+    const role = sessionStorage.getItem("role");
     const dispatch = useDispatch();
     const { gradeSubjectSemesterId, classId } = useParams();
     const navigate = useNavigate();
@@ -237,7 +238,7 @@ const AssignmentsSection = () => {
     if (initialLoading) {
         return (
             <div className=" mt-16 mb-20 min-h-screen w-[95%] mx-auto">
-            <Loader/>
+            <Loader role={role}/>
             </div>
         );
     }

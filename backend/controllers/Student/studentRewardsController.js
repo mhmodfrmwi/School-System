@@ -62,8 +62,7 @@ const getSemesterPoints = expressAsyncHandler(async (req, res) => {
       userId: studentId,
       userType: "Student",
     });
-
-    let badge = null;
+    let badge = "green";
     if (userPoint) {
       badge = userPoint.badges;
     }
@@ -273,21 +272,14 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
     userId: studentId,
     userType: "Student",
   });
-
-  if (!userPoint) {
-    return res.status(404).json({
-      status: 404,
-      message: "No points found for this student",
-    });
-  }
-
+  const badges = userPoint?.badges? userPoint.badges : "green";
   res.status(200).json({
     success: true,
     status: 200,
-    message: "Student points fetched successfully",
+    message: userPoint ? "Student points fetched successfully" : "No points found for this Student yet",
     data: {
-      totalPoints: userPoint.totalPoints,
-      badges: userPoint.badges,
+      totalPoints: userPoint ? userPoint.totalPoints : 0,
+      badges: badges,
     },
   });
 });

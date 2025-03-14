@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
 
 const QuestionDetails = () => {
+  const role = sessionStorage.getItem("role");
   const { subjectId, questionId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const QuestionDetails = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader />
+        <Loader role={role}/>
       </div>
     );
   }

@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
 
 const SubmissionView = () => {
+  const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { assignmentId } = useParams();
@@ -35,7 +36,7 @@ const SubmissionView = () => {
   if (loadingSubmissions) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader />
+        <Loader role={role} />
       </div>
     );
   }

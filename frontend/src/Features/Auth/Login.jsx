@@ -35,7 +35,7 @@ function Login() {
   };
 
   return (
-    <section className="flex min-h-screen items-center justify-center bg-[#FFD1B0]">
+    <section className="flex min-h-screen items-center justify-center font-poppins bg-[#FFD1B0]">
       <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center rounded-lg bg-gradient-to-r from-[#FEDCC5] to-[#FEDDC6] shadow-lg lg:grid lg:grid-cols-2">
         <form
           className="flex w-full flex-col items-center justify-center p-6 lg:p-10"

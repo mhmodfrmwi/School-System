@@ -110,7 +110,7 @@ const AddMaterial = () => {
             {classteacher ? `${classteacher.subjectName} - ${classteacher.gradeName}` : "No Subject Assigned"}
           </div>
           {courses.map((course, index) => (
-            <div key={course.id} className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full">
+            <div key={course.id} className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full hover:bg-slate-100 transition-colors ">
               <div className="flex items-center">
                 <div className="flex items-center justify-center w-10 h-10 rounded-full mr-4" style={{ backgroundColor: `${getColor(index)}33` }}>
                   <FontAwesomeIcon className="h-5 w-5" icon={course.icon} style={{ color: getColor(index) }} />

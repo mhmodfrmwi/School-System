@@ -2,32 +2,45 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createTeam } from "../StudentRedux/teamSlice";
-import { getTeammates } from "../StudentRedux/studentcontestSlice"; // جلب الطلاب المتاحين
+import { getTeammates } from "../StudentRedux/studentcontestSlice";
 import { fetchStudentContests } from "../StudentRedux/contestSlice";
+import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
+import Loader from "@/ui/Loader";
 
 const CreateTeam = () => {
   const { contestId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const role = sessionStorage.getItem("role");
 
-  const { contests } = useSelector((state) => state.studentContests);
+  const { contests, loading: contestsLoading } = useSelector((state) => state.studentContests);
   const { students, loading: studentsLoading, error: studentsError } = useSelector(
-    (state) => state.studentcontest // استخدام studentcontest بدل teams
+    (state) => state.studentcontest
   );
 
   const [teamName, setTeamName] = useState("");
   const [teammates, setTeammates] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [showTeammates, setShowTeammates] = useState(false);
 
   useEffect(() => {
     dispatch(fetchStudentContests());
-    dispatch(getTeammates()); // جلب الطلاب المتاحين
+    dispatch(getTeammates());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (studentsError) {
+      Swal.fire({
+        title: "Error!",
+        text: studentsError,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  }, [studentsError]);
+
   const contest = contests.find((c) => c._id === contestId);
-  const maxMembers = contest?.numberOfTeamMembers || 1;
+  const maxMembers = contest?.numberOfTeamMembers - 1 || 1;
 
   const handleSelectChange = (index, event) => {
     const selectedStudent = students.find((s) => s._id === event.target.value);
@@ -55,120 +68,130 @@ const CreateTeam = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
-    setSuccessMessage("");
 
     const teamData = { teamName, teammates };
 
     try {
       await dispatch(createTeam({ contestId, teamData })).unwrap();
-      setSuccessMessage("Team created successfully! 🎉");
-      setTeamName("");
-      setTeammates([]);
-      setTimeout(() => {
+      Swal.fire({
+        title: "Success!",
+        text: "Team created successfully! 🎉",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        setTeamName("");
+        setTeammates([]);
         navigate("/student/activities/contests");
-      }, 2000);
+      });
     } catch (error) {
-      console.log("Server Error Response:", error);
-      setErrorMessage(error);
+      Swal.fire({
+        title: "Error!",
+        text: error || error.message ||"Failed to create team. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
-  if (studentsLoading) {
-    return <div className="w-full h-full flex justify-center items-center">Loading students...</div>;
-  }
-
-  if (studentsError) {
-    return <div className="text-red-500 text-center font-poppins">{studentsError}</div>;
+  if (contestsLoading || studentsLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader role={role} />
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow-lg rounded-2xl border-2 border-pink-300">
-      <h2 className="text-2xl font-poppins font-bold text-center bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
-        Create Your Team
-      </h2>
-
-      <form onSubmit={handleSubmit}>
-        <label className="block mt-4 text-gray-700 font-poppins">Team Name:</label>
-        <input
-          type="text"
-          value={teamName}
-          onChange={(e) => {
-            setTeamName(e.target.value);
-            if (e.target.value.trim() !== "" && teammates.length === 0) {
-              setTeammates([{ fullName: "", academic_number: "" }]);
-              setShowTeammates(true);
-            }
-          }}
-          required
-          className="w-full p-2 border rounded-md font-poppins focus:outline-none focus:ring-2 focus:ring-[#BC6FFB]"
-        />
-
-        {showTeammates && (
-          <>
-            <label className="block mt-4 text-gray-700 font-poppins">Team Members:</label>
-            {teammates.map((member, index) => (
-              <div key={index} className="flex gap-2 mt-2">
-                <select
-                  onChange={(e) => handleSelectChange(index, e)}
-                  required
-                  className="w-3/4 p-2 border rounded-md font-poppins focus:outline-none focus:ring-2 focus:ring-[#BC6FFB]"
-                >
-                  <option value="">Select Member</option>
-                  {students && students.length > 0 ? (
-                    students.map((student) => (
-                      <option key={student._id} value={student._id}>
-                        {student.fullName} - {student.academic_number}
-                      </option>
-                    ))
-                  ) : (
-                    <option disabled>No students available</option>
-                  )}
-                </select>
-
-                {index > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTeammate(index)}
-                    className="text-red-500 font-poppins hover:text-red-700"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-          </>
-        )}
-
-        {teammates.length < maxMembers && (
-          <button
-            type="button"
-            onClick={handleAddTeammate}
-            className="mt-3 text-gray-700 font-poppins hover:text-gray-800"
-          >
-            + Add Member
-          </button>
-        )}
-
-        <button
-          type="submit"
-          className="w-full mt-4 p-2 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white rounded-2xl font-poppins font-medium hover:opacity-90"
+    <div className="flex flex-wrap font-poppins gap-6 w-[90%] mx-auto mt-16 mb-20 min-h-[68vh]">
+      {/* Header */}
+      <div className="w-2/3 flex justify-between items-center mb-6 mx-auto">
+        <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
+          Create Your Team
+          <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+        </h1>
+        <Button
+          variant="solid"
+          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
+          onClick={() => navigate(-1)}
         >
-          Submit
-        </button>
-      </form>
+          Back
+        </Button>
+      </div>
 
-      {errorMessage && (
-        <div className="mt-4 p-2 text-red-700 bg-red-100 border border-red-400 rounded-md font-poppins text-center">
-          {errorMessage}
-        </div>
-      )}
+      {/* Form */}
+      <div className="w-2/3 mx-auto p-6 bg-white shadow-lg rounded-2xl border-2 border-pink-300">
+        <div className="p-6 rounded-lg h-full w-full">
+          <form onSubmit={handleSubmit} className="w-full">
+            <label className="block mt-4 text-gray-700 font-poppins">Team Name:</label>
+            <input
+              type="text"
+              value={teamName}
+              onChange={(e) => {
+                setTeamName(e.target.value);
+                if (e.target.value.trim() !== "" && teammates.length === 0) {
+                  setTeammates([{ fullName: "", academic_number: "" }]);
+                  setShowTeammates(true);
+                }
+              }}
+              required
+              className="w-full p-2 border rounded-md font-poppins focus:outline-none focus:ring-2 focus:ring-[#BC6FFB]"
+            />
 
-      {successMessage && (
-        <div className="mt-4 p-2 text-green-700 bg-green-100 border border-green-400 rounded-md font-poppins text-center">
-          {successMessage}
+            {showTeammates && (
+              <>
+                <label className="block mt-4 text-gray-700 font-poppins">Team Members:</label>
+                {teammates.map((member, index) => (
+                  <div key={index} className="flex gap-2 mt-2">
+                    <select
+                      onChange={(e) => handleSelectChange(index, e)}
+                      required
+                      className="w-3/4 p-2 border rounded-md font-poppins focus:outline-none focus:ring-2 focus:ring-[#BC6FFB]"
+                    >
+                      <option value="">Select Member</option>
+                      {students && students.length > 0 ? (
+                        students.map((student) => (
+                          <option key={student._id} value={student._id}>
+                            {student.fullName} - {student.academic_number}
+                          </option>
+                        ))
+                      ) : (
+                        <option disabled>No students available</option>
+                      )}
+                    </select>
+
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTeammate(index)}
+                        className="text-red-500 font-poppins hover:text-red-700"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+
+            {teammates.length < maxMembers && (
+              <button
+                type="button"
+                onClick={handleAddTeammate}
+                className="mt-3 text-gray-700 font-poppins hover:text-gray-800"
+              >
+                + Add Member
+              </button>
+            )}
+
+            <Button
+              type="submit"
+              className="w-full mt-4 p-2 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white rounded-2xl font-poppins font-medium hover:opacity-90"
+            >
+              Submit
+            </Button>
+          </form>
         </div>
-      )}
+      </div>
     </div>
   );
 };

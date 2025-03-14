@@ -49,25 +49,27 @@ const Contests = () => {
     return (
         <>
             <ActivityToggle />
-            <div className="col-span-2 flex flex-col justify-between ms-5 ">
-                <div className="flex justify-between items-center ms-7 mt-5">
-                    <div className="flex-1 text-lg sm:text-2xl font-poppins cursor-text text-[#105E6A] py-1 font-bold">
-                        Contests
-                    </div>
-
-                    <button className="bg-gradient-to-r from-[#105E6A] to-[#117C90] font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white"
-                        onClick={handleAddActivity}>
-                        Add Contest
-                    </button>
-                </div>
-                <p className="w-24 rounded-xl mb-2 border-t-4 border-[#117C90] ms-7"></p>
-            </div>
-
-
             <div className="flex flex-col p-4">
                 <div className="flex-1">
                     <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-full">
                         <div className="mx-auto w-full max-w-7xl px-4">
+
+             
+                            <div className="flex justify-between items-center mt-2"> 
+                                <div>
+                                    <div className="text-lg sm:text-2xl font-poppins cursor-text text-[#105E6A] py-1 font-bold">
+                                        Contests
+                                    </div>
+                                    <p className="w-24 rounded-xl mb-4 border-t-4 border-[#117C90]"></p>
+                                </div>
+                                <button
+                                    className="bg-gradient-to-r from-[#105E6A] to-[#117C90] font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white"
+                                    onClick={handleAddActivity}
+                                >
+                                    Add Contest
+                                </button>
+                            </div>
+
                             <div className="overflow-x-auto">
                                 <table className="min-w-full border-collapse rounded-2xl border-2 border-[#117C90] shadow-lg">
                                     <thead>
@@ -135,7 +137,6 @@ const Contests = () => {
                                             </tr>
                                         )}
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>

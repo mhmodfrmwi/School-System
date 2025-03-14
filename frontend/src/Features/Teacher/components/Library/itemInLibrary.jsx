@@ -31,42 +31,41 @@ const ItemInLibrary = () => {
   }
 
   return (
-    <div className="mx-auto mt-10 max-w-4xl rounded-lg bg-white p-6 shadow-lg">
+    <div className="mx-auto mt-10 max-w-4xl font-poppins rounded-lg bg-white p-6 shadow-lg">
       {generalLibrary ? (
         <div>
-          <h1 className="mb-4 text-3xl font-semibold text-[#244856]">
+          <h1 className="mb-4 text-3xl font-semibold text-[#117C90]">
             {generalLibrary.title}
           </h1>
           <p className="mb-2 text-xl">
-            <strong className="text-[#117C90]">Author:</strong>{" "}
+            <strong className=" text-black">Author:</strong>{" "}
             {generalLibrary.author}
           </p>
           <p className="mb-2 text-xl">
-            <strong className="text-[#117C90]">Type:</strong>{" "}
+            <strong className=" text-black">Type:</strong>{" "}
             {generalLibrary.type}
           </p>
           <p className="mb-4 text-xl">
-            <strong className="text-[#117C90]">Uploaded By:</strong>{" "}
+            <strong className=" text-black">Uploaded By:</strong>{" "}
             {generalLibrary.uploaded_by?.fullName}
           </p>
 
-          <div className="mb-6">
+          <div className="flex space-x-4">
             <a
               href={generalLibrary.item_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block rounded-md bg-[#117C90] px-4 py-2 font-semibold text-white transition duration-300"
+              className="inline-block rounded-md bg-[#117C90] px-4 py-2 font-semibold text-white transition duration-300 hover:bg-[#0e6a7a]"
             >
               View Item
             </a>
+            <button
+              onClick={handleCancel}
+              className="inline-block rounded-md bg-red-500 px-4 py-2 font-semibold text-white transition duration-300 hover:bg-red-600"
+            >
+              Cancel
+            </button>
           </div>
-
-          <button
-            onClick={handleCancel}
-            className="inline-block rounded-md bg-red-500 px-4 py-2 font-semibold text-white transition duration-300 hover:bg-red-600"
-          >
-            Cancel
-          </button>
         </div>
       ) : (
         <p className="text-center text-gray-500">No item found.</p>

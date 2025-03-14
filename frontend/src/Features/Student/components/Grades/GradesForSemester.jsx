@@ -24,7 +24,7 @@ function GradesForSemester() {
   return (
     <div className="mx-auto w-[90%]">
       <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
-        <div className="m-auto mb-6 mt-10 grid grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
+        <div className="m-auto mb-6 mt-10 grid grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2 font-poppins">
           <button
             className="flex cursor-pointer items-center justify-center rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-2 font-medium text-white focus:outline-none"
             onClick={() => navigate("/student/grades-for-semester")}
@@ -47,17 +47,17 @@ function GradesForSemester() {
         </div>
 
         {/* Table displaying semester grades */}
-        <div className="mt-8 overflow-x-auto">
-          <table className="min-w-full rounded-lg bg-white shadow-md">
+        <div className="mt-8 overflow-x-auto rounded-lg shadow-md font-poppins">
+          <table className="min-w-full bg-white">
             <thead>
               <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white">
-                <th className="px-4 py-3 text-left">Subject Name</th>
-                <th className="px-4 py-3 text-left">Midterm Degree</th>
-                <th className="px-4 py-3 text-left">Max Midterm Degree</th>
-                <th className="px-4 py-3 text-left">Final Degree</th>
-                <th className="px-4 py-3 text-left">Max Final Degree</th>
-                <th className="px-4 py-3 text-left">Subject Score</th>
-                <th className="px-4 py-3 text-left">Max Subject Score</th>
+                <th className="px-3 py-2 text-left text-sm">Subject Name</th>
+                <th className="px-3 py-2 text-left text-sm">Midterm Degree</th>
+                <th className="px-3 py-2 text-left text-sm">Max Midterm Degree</th>
+                <th className="px-3 py-2 text-left text-sm">Final Degree</th>
+                <th className="px-3 py-2 text-left text-sm">Max Final Degree</th>
+                <th className="px-3 py-2 text-left text-sm">Subject Score</th>
+                <th className="px-3 py-2 text-left text-sm">Max Subject Score</th>
               </tr>
             </thead>
             <tbody>
@@ -72,24 +72,27 @@ function GradesForSemester() {
                     (item.final?.finalDegree || 0);
 
                   return (
-                    <tr key={item.subjectId} className="border-b">
-                      <td className="px-4 py-3">{item.subjectName}</td>
-                      <td className="px-4 py-3">
+                    <tr
+                      key={item.subjectId}
+                      className="border-b transition-colors hover:bg-gray-50"
+                    >
+                      <td className="px-3 py-2 text-sm">{item.subjectName}</td>
+                      <td className="px-3 py-2 text-sm">
                         {item.midterm?.examGrade ? item.midterm.examGrade : "-"}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-3 py-2 text-sm">
                         {item.midterm?.finalDegree
                           ? item.midterm.finalDegree
                           : "-"}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-3 py-2 text-sm">
                         {item.final?.examGrade ? item.final.examGrade : "-"}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-3 py-2 text-sm">
                         {item.final?.finalDegree ? item.final.finalDegree : "-"}
                       </td>
-                      <td className="px-4 py-3">{scoreSubject}</td>
-                      <td className="px-4 py-3">{maxScoreSubject}</td>
+                      <td className="px-3 py-2 text-sm">{scoreSubject}</td>
+                      <td className="px-3 py-2 text-sm">{maxScoreSubject}</td>
                     </tr>
                   );
                 })
@@ -97,7 +100,7 @@ function GradesForSemester() {
                 <tr>
                   <td
                     colSpan="7"
-                    className="px-4 py-3 text-center text-lg text-gray-500"
+                    className="px-4 py-3 text-center text-sm text-gray-500"
                   >
                     No degrees available for this semester.
                   </td>

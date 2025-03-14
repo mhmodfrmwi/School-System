@@ -8,7 +8,7 @@ import { getSubmissionDetails } from '../../TeacherRedux/AssignmentSlice';
 const SubmissionDetails = () => {
     const { submissionId } = useParams();
     const dispatch = useDispatch();
-    const { submissionDetails, status, error } = useSelector((state) => state.assignmentsTeacher);
+    const { submissionDetails, status } = useSelector((state) => state.assignmentsTeacher);
 
     useEffect(() => {
         dispatch(getSubmissionDetails(submissionId));
@@ -25,10 +25,7 @@ const SubmissionDetails = () => {
         return <div>Loading...</div>;
     }
 
-    if (status === 'failed') {
-        return <div>Error: {error}</div>;
-    }
-
+   
     return (
         <div className="p-6 space-y-6 font-poppins">
             <h1 className="text-3xl font-bold font-poppins text-[#244856]">Submission Details</h1>

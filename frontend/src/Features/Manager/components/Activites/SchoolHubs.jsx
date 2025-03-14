@@ -27,7 +27,7 @@ const Activities = () => {
     return (
         <>
             <div className="col-span-2 flex flex-col justify-between ms-5">
-                <div className="flex justify-between items-center ms-7 mt-5">
+                <div className="flex justify-between items-center  mt-5">
                     <div className="text-2xl font-poppins cursor-text font-bold text-[#105E6A]">
                         School Hubs
                     </div>
@@ -40,7 +40,7 @@ const Activities = () => {
                         </button>
                     </div>
                 </div>
-                <p className="w-36 rounded-xl mb-2 border-t-4 border-[#117C90] ms-7"></p>
+                <p className="w-36 rounded-xl mb-2 border-t-4 border-[#117C90] "></p>
 
                 <div className="flex flex-col md:flex-row items-center justify-between mt-5 gap-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 w-full gap-4">
