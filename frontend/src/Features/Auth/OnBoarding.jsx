@@ -19,7 +19,7 @@ function OnBoarding() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="font-poppins">
       <header className="my-5 flex h-14 items-center justify-between border-b-2 border-Color2OnBoarding">
         <img src={logo} className="mb-5 ms-5 h-16 w-52" alt="Logo" />
         <button className="mr-5 flex h-10 w-40 items-center justify-center rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[3px]">
@@ -57,10 +57,10 @@ function OnBoarding() {
         <div className="mx-auto mb-12 grid gap-4 sm:grid-cols-2">
           <div className="mx-auto">
             {" "}
-            <h1 className="mb-3 ms-14 font-poppins bg-gradient-to-r from-Color1OnBoarding to-Color4OnBoarding bg-clip-text font-semibold text-transparent">
+            <h1 className="mb-1 ms-14 text-xl font-poppins bg-gradient-to-r from-Color1OnBoarding to-Color4OnBoarding bg-clip-text font-semibold text-transparent">
               Start a journey with us
             </h1>
-            <p className="mb-3 ms-14 font-poppins w-32 border-b-4 border-Color4OnBoarding"></p>
+            <p className="mb-3 ms-14 font-poppins w-32 rounded-xl border-b-4 border-Color1OnBoarding"></p>
             <p className="ms-10 p-5 font-poppins">
               Welcome to our platform! Our website is designed to help you get
               started smoothly, providing essential resources and a clear
@@ -85,7 +85,7 @@ function OnBoarding() {
           />
           <div className="mx-auto">
             {" "}
-            <h1 className="mb-6 mr-5 ms-6 font-poppins flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[1.5px] transition duration-300 sm:ms-14 md:w-72">
+            <h1 className="mb-6 mr-5 ms-6 text-white font-poppins flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-[1.5px] transition duration-300 sm:ms-14 md:w-72">
               Your journey start here
             </h1>
             <p className="ms-10 p-5 font-poppins">
@@ -94,9 +94,9 @@ function OnBoarding() {
               learning fosters growth, resilience, and the confidence needed to
               achieve your goals
             </p>
-            <p className="ms-14 mt-4 font-poppins text-blue-500">
+            <p className="ms-14 mt-4 font-poppins text-orange-400">
               Click here to{" "}
-              <button onClick={() => navigate("/role")}>login&rarr; </button>
+              <button className="text-orange-500" onClick={() => navigate("/role")}>login&rarr; </button>
             </p>
           </div>
         </div>

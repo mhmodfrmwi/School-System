@@ -14,12 +14,12 @@ import Icon7 from "../../../assets/StudentIcon/Icon7.png";
 import Icon8 from "../../../assets/StudentIcon/Icon8.png";
 // import Icon9 from "../../../assets/StudentIcon/Icon9.png";
 // import Icon10 from "../../../assets/StudentIcon/Icon10.png";
-import Icon11 from "../../../assets/StudentIcon/Icon11.png";
+// import Icon11 from "../../../assets/StudentIcon/Icon11.png";
 import Icon12 from "../../../assets/StudentIcon/Icon12.png";
-
+import {  useSelector } from "react-redux";
 const Sidebar = ({ closeSidebar }) => {
     const navigate = useNavigate();
-
+    const { fullName } = useSelector((state) => state.login);
     const menuItems = [
         { label: "Home", icon: Icon1, path: "/student" },
         { label: "Motivation", icon: Icon2, path: "/student/motivation" },
@@ -31,7 +31,7 @@ const Sidebar = ({ closeSidebar }) => {
         { label: "Library", icon: Icon8, path: "/student/library" },
         // { label: "Question Bank", icon: Icon9, path: "/student/question-bank" },
         // { label: "Virtual Rooms", icon: Icon10, path: "/student/virtualrooms" },
-        { label: "Chats", icon: Icon11, path: "/student/chats" },
+        // { label: "Chats", icon: Icon11, path: "/student/chats" },
         { label: "Logout", icon: Icon12, path: "/login" },
     ];
 
@@ -59,7 +59,7 @@ const Sidebar = ({ closeSidebar }) => {
         <div className="flex items-center p-4">
             <img src={userImage} alt="User" className="h-10 w-10 rounded-full" />
             <div className="ml-2">
-                <p className="font-semibold font-poppins">Zaina Shaheen</p>
+                <p className="font-semibold font-poppins">{fullName}</p>
                 <p className="text-sm font-poppins text-gray-400">G/3 Student</p>
             </div>
         </div>

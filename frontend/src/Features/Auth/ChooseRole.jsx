@@ -16,7 +16,7 @@ const ChooseRole = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center overflow-y-scroll bg-[#FEDDC6]">
+    <div className="flex h-screen w-screen items-center justify-center font-poppins overflow-y-scroll bg-[#FEDDC6]">
       <div className="justify-space flex h-full w-full flex-col items-center rounded-lg">
         <div>
           <img src={logo} alt="notfound" className="mx-auto" />

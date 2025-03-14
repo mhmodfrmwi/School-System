@@ -3,12 +3,12 @@ import userImage from "../../../assets/Girl.png";
 import trueIcon from "../../../assets/true icon.png";
 import awardIcon from "../../../assets/Award.png";
 import GradeIcon from "../../../assets/StudentIcon/Grade.png";
-import ChatIcon from "../../../assets/StudentIcon/Chat.png";
+// import ChatIcon from "../../../assets/StudentIcon/Chat.png";
 import AwardIcon from "../../../assets/StudentIcon/Awards.png";
 import ActivityIcon from "../../../assets/StudentIcon/Activites.png";
-import VirtualIcon from "../../../assets/StudentIcon/Virtual.png";
+// import VirtualIcon from "../../../assets/StudentIcon/Virtual.png";
 import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
-import QuestionsIcon from "../../../assets/StudentIcon/Questions.png";
+// import QuestionsIcon from "../../../assets/StudentIcon/Questions.png";
 import LibraryIcon from "../../../assets/StudentIcon/Library.png";
 import CourseIcon from "../../../assets/StudentIcon/Course.png";
 import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
@@ -31,10 +31,12 @@ import book2 from "../../../assets/StudentIcon/book21.png";
 import book3 from "../../../assets/StudentIcon/book31.png";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getSemesterReward } from "../components/StudentRedux/motivationSlice";
 
 function DashboardStudent() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { semesterReward } = useSelector((state) => state.motivation);
   const { fullName } = useSelector((state) => state.login);
 
@@ -289,21 +291,22 @@ function DashboardStudent() {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
           {[
-            { label: "Awards", icon: AwardIcon },
-            { label: "Courses", icon: CourseIcon },
-            { label: "Absence", icon: AbsenceIcon },
-            { label: "Schedule", icon: ScheduleIcon },
-            { label: "Grade Mngments", icon: GradeIcon },
-            { label: "Activities", icon: ActivityIcon },
-            { label: "Library", icon: LibraryIcon },
-            { label: "Question Bank", icon: QuestionsIcon },
-            { label: "Virtual Rooms", icon: VirtualIcon },
-            { label: "Chats", icon: ChatIcon },
+            { label: "Motivation", icon: AwardIcon, path: "/student/motivation" },
+            { label: "Courses", icon: CourseIcon, path: "/student/allcourses" },
+            { label: "Absence", icon: AbsenceIcon , path: "/student/attendance"},
+            { label: "Schedule", icon: ScheduleIcon , path: "/student/schedule"},
+            { label: "Grades", icon: GradeIcon , path: "/student/grades"},
+            { label: "Activities", icon: ActivityIcon , path: "/student/activities"},
+            { label: "Library", icon: LibraryIcon, path: "/student/library" },
+            // { label: "Question Bank", icon: QuestionsIcon },
+            // { label: "Virtual Rooms", icon: VirtualIcon },
+            // { label: "Chats", icon: ChatIcon },
           ].map((item, index) => (
             <div
               key={index}
+              onClick={() => navigate(item.path)}
               className="flex h-36 w-full transform flex-col items-center justify-center rounded-xl bg-[#F3F4F6] font-poppins font-semibold text-gray-700 transition-all duration-300 ease-in-out hover:scale-105 hover:cursor-pointer hover:shadow-md"
             >
               <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-[#BC6FFB] transition-all duration-300 ease-in-out">

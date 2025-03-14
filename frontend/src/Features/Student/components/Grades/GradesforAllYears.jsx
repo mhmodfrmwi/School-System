@@ -20,7 +20,7 @@ function GradesforAllYears() {
   return (
     <div className="mx-auto w-[90%]">
       <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
-        <div className="m-auto mb-6 mt-10 grid grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2">
+        <div className="m-auto mb-6 mt-10 grid grid-cols-1 gap-1 rounded-3xl bg-gray-100 font-poppins sm:grid-cols-2">
           <button
             className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-medium text-transparent focus:outline-none"
             onClick={() => navigate("/student/grades-for-semester")}
@@ -42,32 +42,26 @@ function GradesforAllYears() {
           </button>
         </div>
 
-        <div className="mt-8 overflow-x-auto">
+        <div className="mt-8 overflow-x-auto font-poppins">
           {allDegrees?.map((yearData) => (
             <div key={yearData.academicYear._id} className="mb-6">
-              <h2 className="mb-4 text-2xl font-bold">
+              <h2 className="mb-4 text-xl font-semibold">
                 Academic Year {yearData.academicYear.startYear} -{" "}
                 {yearData.academicYear.endYear}
               </h2>
               {yearData?.semester ? (
                 <div className="mb-4">
-                  <h3 className="text-xl font-semibold">{yearData.semester}</h3>
+                  <h3 className="text-lg font-semibold">{yearData.semester}</h3>
                   <table className="mt-4 min-w-full rounded-lg bg-white shadow-md">
                     <thead>
                       <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white">
-                        <th className="px-4 py-3 text-left">Subject Name</th>
-                        <th className="px-4 py-3 text-left">Midterm Degree</th>
-                        <th className="px-4 py-3 text-left">
-                          Max Midterm Degree
-                        </th>
-                        <th className="px-4 py-3 text-left">Final Degree</th>
-                        <th className="px-4 py-3 text-left">
-                          Max Final Degree
-                        </th>
-                        <th className="px-4 py-3 text-left">Subject Score</th>
-                        <th className="px-4 py-3 text-left">
-                          Max Subject Score
-                        </th>
+                        <th className="px-3 py-2 text-left text-sm">Subject Name</th>
+                        <th className="px-3 py-2 text-left text-sm">Midterm Degree</th>
+                        <th className="px-3 py-2 text-left text-sm">Max Midterm Degree</th>
+                        <th className="px-3 py-2 text-left text-sm">Final Degree</th>
+                        <th className="px-3 py-2 text-left text-sm">Max Final Degree</th>
+                        <th className="px-3 py-2 text-left text-sm">Subject Score</th>
+                        <th className="px-3 py-2 text-left text-sm">Max Subject Score</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -83,25 +77,23 @@ function GradesforAllYears() {
                           return (
                             <tr
                               key={gradeData.subjectId._id}
-                              className="border-b"
+                              className="border-b transition-colors hover:bg-gray-50"
                             >
-                              <td className="px-4 py-3">
-                                {gradeData.subjectName}
-                              </td>
-                              <td className="px-4 py-3">
+                              <td className="px-3 py-2 text-sm">{gradeData.subjectName}</td>
+                              <td className="px-3 py-2 text-sm">
                                 {gradeData?.midterm?.examGrade ?? "-"}
                               </td>
-                              <td className="px-4 py-3">
+                              <td className="px-3 py-2 text-sm">
                                 {gradeData?.midterm?.finalDegree ?? "-"}
                               </td>
-                              <td className="px-4 py-3">
+                              <td className="px-3 py-2 text-sm">
                                 {gradeData?.final?.examGrade ?? "-"}
                               </td>
-                              <td className="px-4 py-3">
+                              <td className="px-3 py-2 text-sm">
                                 {gradeData?.final?.finalDegree ?? "-"}
                               </td>
-                              <td className="px-4 py-3">{scoreSubject}</td>
-                              <td className="px-4 py-3">{maxScoreSubject}</td>
+                              <td className="px-3 py-2 text-sm">{scoreSubject}</td>
+                              <td className="px-3 py-2 text-sm">{maxScoreSubject}</td>
                             </tr>
                           );
                         })
@@ -109,7 +101,7 @@ function GradesforAllYears() {
                         <tr>
                           <td
                             colSpan="7"
-                            className="px-4 py-3 text-center text-lg text-gray-500"
+                            className="px-4 py-3 text-center text-sm text-gray-500"
                           >
                             No degrees available for this term.
                           </td>

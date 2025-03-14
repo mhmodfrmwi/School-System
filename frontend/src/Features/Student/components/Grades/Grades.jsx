@@ -6,7 +6,7 @@ function Grades() {
   return (
     <>
       <main>
-        <div className=" ">
+        <div className="font-poppins ">
           <img
             src={img1}
             alt="imgnotfound"
@@ -14,11 +14,11 @@ function Grades() {
             className="relative h-96 w-full md:h-[530px]"
           />
           <div className="z-100 absolute inset-0 left-20 top-40 sm:top-48 lg:top-60">
-            <h2 className="font-semibold text-white">
+            <h2 className="font-semibold text-lg text-white">
               Take a Look at your Grades.
             </h2>
             <p
-              className="my-24 w-52 rounded-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-3 font-semibold text-white"
+              className="my-24 w-52 rounded-xl cursor-pointer bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-3 font-semibold text-white"
               onClick={() => navigate("/student/grades-for-semester")}
             >
               View Your Grades
