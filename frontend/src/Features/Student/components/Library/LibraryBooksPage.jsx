@@ -13,6 +13,7 @@ import img2 from "../../../../assets/Rectangle 314.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../../ui/Loader";
 
 // Helper function to extract file ID and get the first page as an image
 const getFirstPageAsImage = (url) => {
@@ -46,6 +47,7 @@ const getFirstPageAsImage = (url) => {
 
   return img2; // Fallback image
 };
+
 // Pagination Controls Component
 const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
   return (
@@ -82,6 +84,7 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
     </div>
   );
 };
+
 const LibraryBooksPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -93,9 +96,9 @@ const LibraryBooksPage = () => {
     loading,
     error,
   } = useSelector((state) => state.libraryStudent);
-
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   // State for each tab
   const [tabStates, setTabStates] = useState({
@@ -123,8 +126,13 @@ const LibraryBooksPage = () => {
   const { currentPage, selectedGrade, selectedSemester } = currentTabState;
 
   useEffect(() => {
-    dispatch(fetchLibraryItems());
-    dispatch(fetchSubjectsWithPDFMaterial());
+    const fetchData = async () => {
+      await dispatch(fetchLibraryItems());
+      await dispatch(fetchSubjectsWithPDFMaterial());
+      setInitialLoading(false);
+    };
+
+    fetchData();
   }, [dispatch]);
 
   useEffect(() => {
@@ -202,6 +210,14 @@ const LibraryBooksPage = () => {
   const totalPagesAll = Math.ceil(generalPDFs.length / itemsPerPage);
   const totalPagesPublic = Math.ceil(generalItems.length / itemsPerPage);
   const totalPagesSubject = Math.ceil(filteredMaterials.length / itemsPerPage);
+
+ if (initialLoading) {
+    return (
+      <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
+        <Loader role="student" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen w-[95%] mx-auto mt-20 mb-20 font-poppins">
@@ -329,7 +345,7 @@ const LibraryBooksPage = () => {
                     <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                   </h2>
                 </div>
-                {!loading && generalPDFs.length === 0 ? (
+                {!loading && !initialLoading && generalPDFs.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
                       No books available at the moment.
@@ -405,7 +421,7 @@ const LibraryBooksPage = () => {
                     <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                   </h2>
                 </div>
-                {generalItems.length === 0 ? (
+                {!loading && !initialLoading && generalItems.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
                       No books available in the public library at the moment.
@@ -524,7 +540,7 @@ const LibraryBooksPage = () => {
                     </select>
                   </div>
                 </div>
-                {filteredMaterials.length === 0 ? (
+                {!loading && !initialLoading && filteredMaterials.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
                       No materials available for {selectedSubject.subject} at the moment.
