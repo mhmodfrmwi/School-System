@@ -6,6 +6,7 @@ import { fetchStudentContests } from "../StudentRedux/contestSlice";
 import { getTeammatesByContestId } from "../StudentRedux/teamSlice";
 import { v4 as uuidv4 } from 'uuid';
 import Loader from "@/ui/Loader";
+import Swal from "sweetalert2";
 const Contests = () => {
   const navigate = useNavigate();
   const role = sessionStorage.getItem("role");
@@ -34,8 +35,11 @@ const Contests = () => {
         navigate(`/student/activities/contests/teamdetails/${contestId}`);
       }
     } catch (error) {
-      console.error("Error fetching team data:", error);
-    }
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message,
+      });}
   };
 
   return (
