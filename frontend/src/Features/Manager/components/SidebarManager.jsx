@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-  faBars,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHome, faBars } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 import logo from "../../../assets/logologin.png";
 
@@ -26,12 +23,42 @@ const SidebarManager = () => {
   const currentPath = location.pathname;
 
   const menuItems = [
-    { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/manager/dashboard" },
-    { label: "School Hubs", icon: ActivityIcon, hoverIcon: ActivityIconH, href: "/manager/school-hubs" },
-    { label: "Absence", icon: AbsenceIcon, hoverIcon: AbsenceIconH, href: "#" },
-    { label: "Schedule", icon: ScheduleIcon, hoverIcon: ScheduleIconH, href: "/manager/schedule-table" },
-    { label: "Grades", icon: GradeIcon, hoverIcon: GradeIconH, href: "/manager/grade" },
-    { label: "Virtual Rooms", icon: VirtualIcon, hoverIcon: VirtualIconH, href: "/manager/virtual-room" },
+    {
+      label: "Dashboard",
+      icon: faHome,
+      hoverIcon: faHome,
+      href: "/manager/dashboard",
+    },
+    {
+      label: "School Hubs",
+      icon: ActivityIcon,
+      hoverIcon: ActivityIconH,
+      href: "/manager/school-hubs",
+    },
+    {
+      label: "Absence",
+      icon: AbsenceIcon,
+      hoverIcon: AbsenceIconH,
+      href: "/manager/get-all-classes",
+    },
+    {
+      label: "Schedule",
+      icon: ScheduleIcon,
+      hoverIcon: ScheduleIconH,
+      href: "/manager/schedule-table",
+    },
+    {
+      label: "Grades",
+      icon: GradeIcon,
+      hoverIcon: GradeIconH,
+      href: "/manager/grade",
+    },
+    {
+      label: "Virtual Rooms",
+      icon: VirtualIcon,
+      hoverIcon: VirtualIconH,
+      href: "/manager/virtual-room",
+    },
   ];
 
   return (
@@ -92,19 +119,25 @@ const SidebarContent = ({
           <a
             key={index}
             href={item.href}
-            className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${currentPath === item.href
+            className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${
+              currentPath === item.href
                 ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg"
                 : "text-white"
-              } ${hoveredIndex === index && currentPath !== item.href
+            } ${
+              hoveredIndex === index && currentPath !== item.href
                 ? "bg-white text-dashboard-bg"
                 : ""
-              }`}
+            }`}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {typeof item.icon === "string" ? (
               <img
-              src={hoveredIndex === index || currentPath === item.href ? item.hoverIcon : item.icon}
+                src={
+                  hoveredIndex === index || currentPath === item.href
+                    ? item.hoverIcon
+                    : item.icon
+                }
                 alt="icon"
                 className="mr-3 h-6 w-6 object-contain transition-all duration-300"
                 loading="lazy"
