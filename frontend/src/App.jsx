@@ -10,6 +10,10 @@ import TitleUpdater from "./ui/TitleUpdater";
 import SeeAllAssignments from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllAssignments";
 import AllSubmissionsForAssignment from "./Features/Teacher/components/courses/AllYearsMaterual/AllSubmissionsForAssignment";
 import GetStudentsWithGrades from "./Features/Teacher/components/Grades/GetStudentsWithGrades";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import GetAllClasses from "./Features/Manager/components/Attendance/GetAllClasses";
+import GetAttendanceClass from "./Features/Manager/components/Attendance/GetAttendanceClass";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -533,466 +537,498 @@ const ManagerGrade = lazy(
 );
 
 /* //////////////////////////////////////////////// */
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 0 },
+  },
+});
 function App() {
   const role =
     useSelector((state) => state.role.role) || localStorage.getItem("role");
 
   return (
-    <BrowserRouter>
-      <TitleUpdater />
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <BrowserRouter>
+        <TitleUpdater />
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
 
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          <Route index element={<Navigate replace to="onboarding" />} />
-          <Route path="onboarding" element={<OnBoarding />} />
-          <Route
-            path="/login"
-            element={role ? <Login /> : <Navigate to="/role" />}
-          />
-          <Route path="role" element={<ChooseRole />} />
-          {/* /////////////////adminpage//////////////////// */}
-          <Route
-            path="admin"
-            element={
-              <ProtectedRoute element={<Admins />} requiredRole="admin" />
-            }
-          >
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<DashboardAdmin />} />
-            <Route path="basicform" element={<BasicForm />} />
-            <Route path="studentform" element={<StudentForm />} />
-            <Route path="allstudent" element={<AllStudent />} />
-            <Route path="edit-student/:id" element={<EditStudent />} />
-            <Route path="managerform" element={<ManagerForm />} />
-            <Route path="allmanagers" element={<AllManagers />} />
-            <Route path="editmanagerform/:id" element={<EditManagerForm />} />
-            <Route path="allparents" element={<AllParents />} />
-            <Route path="parentform" element={<ParentForm />} />
-            <Route path="scheduleform" element={<ScheduleForm />} />
-            <Route path="allschedules" element={<AllSchedules />} />
-            <Route path="edit-schedule/:id" element={<EditSchedule />} />
-            <Route path="allTerms" element={<AllTerms />} />
-            <Route path="termform" element={<TermForm />} />
-            <Route path="edit-term/:id" element={<EditTermForm />} />
-            <Route path="allteachers" element={<AllTeachers />} />
-            <Route path="teacherform" element={<TeacherForm />} />
-            <Route path="edit-teacher/:id" element={<EditTeacher />} />
-            <Route path="teacherinfo" element={<TeacherInfo />} />
-            <Route path="allteachers/:id" element={<AllClassTeacher />} />
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route index element={<Navigate replace to="onboarding" />} />
+            <Route path="onboarding" element={<OnBoarding />} />
             <Route
-              path="edit-class-teacher/:id"
-              element={<EditClassTeacher />}
+              path="/login"
+              element={role ? <Login /> : <Navigate to="/role" />}
             />
-            <Route path="adminform" element={<AdminForm />} />
-            <Route path="alladmins" element={<AllAdmins />} />
-            <Route path="allacademicyears" element={<AllAcademicYears />} />
-            <Route path="academicyearform" element={<AcademicYearForm />} />
+            <Route path="role" element={<ChooseRole />} />
+            {/* /////////////////adminpage//////////////////// */}
             <Route
-              path="editacademicyearform/:id"
-              element={<EditAcademicYearForm />}
-            />
-            <Route path="editadminform/:id" element={<EditAdminForm />} />
-            <Route path="allgrades" element={<AllGrades />} />
-            <Route path="allgrades/:id" element={<GradesDetails />} />
-            <Route path="gradeform" element={<GradeForm />} />
-            <Route path="editGradeForm/:id" element={<EditGradeForm />} />
+              path="admin"
+              element={
+                <ProtectedRoute element={<Admins />} requiredRole="admin" />
+              }
+            >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<DashboardAdmin />} />
+              <Route path="basicform" element={<BasicForm />} />
+              <Route path="studentform" element={<StudentForm />} />
+              <Route path="allstudent" element={<AllStudent />} />
+              <Route path="edit-student/:id" element={<EditStudent />} />
+              <Route path="managerform" element={<ManagerForm />} />
+              <Route path="allmanagers" element={<AllManagers />} />
+              <Route path="editmanagerform/:id" element={<EditManagerForm />} />
+              <Route path="allparents" element={<AllParents />} />
+              <Route path="parentform" element={<ParentForm />} />
+              <Route path="scheduleform" element={<ScheduleForm />} />
+              <Route path="allschedules" element={<AllSchedules />} />
+              <Route path="edit-schedule/:id" element={<EditSchedule />} />
+              <Route path="allTerms" element={<AllTerms />} />
+              <Route path="termform" element={<TermForm />} />
+              <Route path="edit-term/:id" element={<EditTermForm />} />
+              <Route path="allteachers" element={<AllTeachers />} />
+              <Route path="teacherform" element={<TeacherForm />} />
+              <Route path="edit-teacher/:id" element={<EditTeacher />} />
+              <Route path="teacherinfo" element={<TeacherInfo />} />
+              <Route path="allteachers/:id" element={<AllClassTeacher />} />
+              <Route
+                path="edit-class-teacher/:id"
+                element={<EditClassTeacher />}
+              />
+              <Route path="adminform" element={<AdminForm />} />
+              <Route path="alladmins" element={<AllAdmins />} />
+              <Route path="allacademicyears" element={<AllAcademicYears />} />
+              <Route path="academicyearform" element={<AcademicYearForm />} />
+              <Route
+                path="editacademicyearform/:id"
+                element={<EditAcademicYearForm />}
+              />
+              <Route path="editadminform/:id" element={<EditAdminForm />} />
+              <Route path="allgrades" element={<AllGrades />} />
+              <Route path="allgrades/:id" element={<GradesDetails />} />
+              <Route path="gradeform" element={<GradeForm />} />
+              <Route path="editGradeForm/:id" element={<EditGradeForm />} />
+              <Route
+                path="editAssignedGrade/:id"
+                element={<EditAssignedGrade />}
+              />
+              <Route path="assigngrade" element={<AssignGrade />} />
+              <Route path="allsubjects" element={<SubjectsList />} />
+              <Route path="allsubjects/:id" element={<SubjectDetails />} />
+              <Route path="addsubject" element={<AddSubject />} />
+              <Route path="assignSubject" element={<AssignSubject />} />
+              <Route path="edit-subject/:id" element={<EditSubject />} />
+              <Route
+                path="edit-assigned-subject/:id"
+                element={<EditAssignedSubject />}
+              />
+              <Route path="edit-admin-profile" element={<EditProfilePage />} />
+              <Route path="editparentform/:id" element={<EditParentForm />} />
+            </Route>
+            {/* /////////////////studentpage//////////////////// */}
             <Route
-              path="editAssignedGrade/:id"
-              element={<EditAssignedGrade />}
-            />
-            <Route path="assigngrade" element={<AssignGrade />} />
-            <Route path="allsubjects" element={<SubjectsList />} />
-            <Route path="allsubjects/:id" element={<SubjectDetails />} />
-            <Route path="addsubject" element={<AddSubject />} />
-            <Route path="assignSubject" element={<AssignSubject />} />
-            <Route path="edit-subject/:id" element={<EditSubject />} />
-            <Route
-              path="edit-assigned-subject/:id"
-              element={<EditAssignedSubject />}
-            />
-            <Route path="edit-admin-profile" element={<EditProfilePage />} />
-            <Route path="editparentform/:id" element={<EditParentForm />} />
-          </Route>
-          {/* /////////////////studentpage//////////////////// */}
-          <Route
-            path="student"
-            element={
-              <ProtectedRoute element={<Students />} requiredRole="student" />
-            }
-          >
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<DashboardStudent />} />
-            <Route path="grades" element={<Grades />} />
+              path="student"
+              element={
+                <ProtectedRoute element={<Students />} requiredRole="student" />
+              }
+            >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<DashboardStudent />} />
+              <Route path="grades" element={<Grades />} />
 
-            <Route path="grades-for-semester" element={<GradesForSemester />} />
-            <Route path="grades-for-allyears" element={<GradesforAllYears />} />
-            <Route path="schedule" element={<Schedule />} />
-            <Route path="schedule/exam" element={<ScheduleExam />} />
-            <Route path="library" element={<LibraryPage />} />
+              <Route
+                path="grades-for-semester"
+                element={<GradesForSemester />}
+              />
+              <Route
+                path="grades-for-allyears"
+                element={<GradesforAllYears />}
+              />
+              <Route path="schedule" element={<Schedule />} />
+              <Route path="schedule/exam" element={<ScheduleExam />} />
+              <Route path="library" element={<LibraryPage />} />
 
-            <Route path="librarybooks" element={<LibraryBooksPage />} />
-            <Route path="libraryvideos" element={<LibraryVideosPage />} />
+              <Route path="librarybooks" element={<LibraryBooksPage />} />
+              <Route path="libraryvideos" element={<LibraryVideosPage />} />
+              <Route
+                path="library/:type/:itemId"
+                element={<LibraryItemDetailsPage />}
+              />
+              <Route path="motivation" element={<MotivationPage />} />
+              <Route
+                path="edit-student-profile"
+                element={<EditStudentProfile />}
+              />
+              <Route
+                path="activities/detailes/:id"
+                element={<DetailesActivity />}
+              />
+              <Route
+                path="activities/prizes/:id"
+                element={<PrizesActivity />}
+              />
+              <Route path="activities/contests" element={<Contests />} />
+              <Route
+                path="activities/contests/createteam/:contestId"
+                element={<CreateTeam />}
+              />
+              <Route
+                path="activities/contests/teamdetails/:teamId"
+                element={<TeamDetails />}
+              />
+              <Route
+                path="activities/contests/edit-team/:teamId"
+                element={<EditTeam />}
+              />
+              <Route path="activities" element={<Activities />} />
+              <Route path="allcourses" element={<AllCouses />} />
+              <Route
+                path="allcourses/videos/:subjectId"
+                element={<StudentCourseDetails />}
+              />
+              <Route
+                path="allcourses/materials/:subjectId"
+                element={<StudentMaterialDetails />}
+              />
+              <Route
+                path="/student/material-details/:subjectId/:materialId"
+                element={<MaterialDetails />}
+              />
+              <Route
+                path="allcourses/virtualrooms/:subjectId"
+                element={<StudentVirtualRooms />}
+              />
+              <Route
+                path="allcourses/questionbank/:subjectId"
+                element={<StudentQuestionBank />}
+              />
+              <Route
+                path="/student/question-details/:subjectId/:questionId"
+                element={<StudentQuestionDetailes />}
+              />
+              <Route
+                path="allcourses/exams/:gradeSubjectSemesterId"
+                element={<StudentExams />}
+              />
+              <Route
+                path="allcourses/exams/:gradeSubjectSemesterId/:examId"
+                element={<StudentExamPage />}
+              />
+              <Route
+                path="allcourses/exams/:gradeSubjectSemesterId/result/:examId"
+                element={<StudentExamResultPage />}
+              />
+              <Route
+                path="allcourses/assignments/:gradeSubjectSemesterId"
+                element={<StudentAssignments />}
+              />
+              <Route
+                path="allcourses/assignments/:gradeSubjectSemesterId/:assignmentId"
+                element={<StudentAssignmentPage />}
+              />
+              <Route
+                path="allcourses/assignments/:gradeSubjectSemesterId/submission/:assignmentId"
+                element={<StudentAssignmentSubmittedpage />}
+              />
+              <Route path="attendance" element={<AttendancePage />} />
+            </Route>
+            {/* /////////////////parentpage//////////////////// */}
             <Route
-              path="library/:type/:itemId"
-              element={<LibraryItemDetailsPage />}
-            />
-            <Route path="motivation" element={<MotivationPage />} />
+              path="parent"
+              element={
+                <ProtectedRoute element={<Parents />} requiredRole="parent" />
+              }
+            >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<DashboardParent />} />
+              <Route path="grades" element={<GradesParent />} />
+              <Route
+                path="edit-parent-profile"
+                element={<EditParentProfile />}
+              />
+              <Route
+                path="grades/assignment"
+                element={<GradesAssignmentParent />}
+              />
+              <Route path="grades/exam" element={<GradesExamParent />} />
+              <Route path="schedule" element={<ScheduleParent />} />
+              <Route path="schedule/exam" element={<ScheduleExamParent />} />
+            </Route>
+            {/* /////////////////teacher pages//////////////////// */}
             <Route
-              path="edit-student-profile"
-              element={<EditStudentProfile />}
-            />
-            <Route
-              path="activities/detailes/:id"
-              element={<DetailesActivity />}
-            />
-            <Route path="activities/prizes/:id" element={<PrizesActivity />} />
-            <Route path="activities/contests" element={<Contests />} />
-            <Route
-              path="activities/contests/createteam/:contestId"
-              element={<CreateTeam />}
-            />
-            <Route
-              path="activities/contests/teamdetails/:teamId"
-              element={<TeamDetails />}
-            />
-            <Route
-              path="activities/contests/edit-team/:teamId"
-              element={<EditTeam />}
-            />
-            <Route path="activities" element={<Activities />} />
-            <Route path="allcourses" element={<AllCouses />} />
-            <Route
-              path="allcourses/videos/:subjectId"
-              element={<StudentCourseDetails />}
-            />
-            <Route
-              path="allcourses/materials/:subjectId"
-              element={<StudentMaterialDetails />}
-            />
-            <Route
-              path="/student/material-details/:subjectId/:materialId"
-              element={<MaterialDetails />}
-            />
-            <Route
-              path="allcourses/virtualrooms/:subjectId"
-              element={<StudentVirtualRooms />}
-            />
-            <Route
-              path="allcourses/questionbank/:subjectId"
-              element={<StudentQuestionBank />}
-            />
-            <Route
-              path="/student/question-details/:subjectId/:questionId"
-              element={<StudentQuestionDetailes />}
-            />
-            <Route
-              path="allcourses/exams/:gradeSubjectSemesterId"
-              element={<StudentExams />}
-            />
-            <Route
-              path="allcourses/exams/:gradeSubjectSemesterId/:examId"
-              element={<StudentExamPage />}
-            />
-            <Route
-              path="allcourses/exams/:gradeSubjectSemesterId/result/:examId"
-              element={<StudentExamResultPage />}
-            />
-            <Route
-              path="allcourses/assignments/:gradeSubjectSemesterId"
-              element={<StudentAssignments />}
-            />
-            <Route
-              path="allcourses/assignments/:gradeSubjectSemesterId/:assignmentId"
-              element={<StudentAssignmentPage />}
-            />
-            <Route
-              path="allcourses/assignments/:gradeSubjectSemesterId/submission/:assignmentId"
-              element={<StudentAssignmentSubmittedpage />}
-            />
-            <Route path="attendance" element={<AttendancePage />} />
-          </Route>
-          {/* /////////////////parentpage//////////////////// */}
-          <Route
-            path="parent"
-            element={
-              <ProtectedRoute element={<Parents />} requiredRole="parent" />
-            }
-          >
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<DashboardParent />} />
-            <Route path="grades" element={<GradesParent />} />
-            <Route path="edit-parent-profile" element={<EditParentProfile />} />
-            <Route
-              path="grades/assignment"
-              element={<GradesAssignmentParent />}
-            />
-            <Route path="grades/exam" element={<GradesExamParent />} />
-            <Route path="schedule" element={<ScheduleParent />} />
-            <Route path="schedule/exam" element={<ScheduleExamParent />} />
-          </Route>
-          {/* /////////////////teacher pages//////////////////// */}
-          <Route
-            path="teacher"
-            element={
-              <ProtectedRoute element={<Teachers />} requiredRole="teacher" />
-            }
-          >
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<DashboardTeacher />} />
-            <Route
-              path="edit-teacher-profile"
-              element={<EditTeacherProfile />}
-            />
-            <Route path="school-hubs" element={<SchoolHubs />} />
-            <Route
-              path="school-hubs/detailes/:id"
-              element={<SchoolHubsDetailes />}
-            />
-            <Route
-              path="school-hubs/prizes/:id"
-              element={<SchoolHubsPrizes />}
-            />
-            <Route path="contests" element={<ActivityContests />} />
-            <Route
-              path="contests/participants/:contestId"
-              element={<ParticipantsContests />}
-            />
-            <Route path="contests/activity-form" element={<ActivityForm />} />
-            <Route
-              path="contests/edit-activity-form/:id"
-              element={<EditActivityForm />}
-            />
-            <Route path="weekly-schedule" element={<WeeklySchedule />} />
-            <Route path="exam-schedule" element={<ExamSchedule />} />
-            <Route path="currentCourse" element={<CurrentCourse />} />
-            <Route path="allcourses" element={<AllCourses />} />
-            <Route
-              path="currentcourseforattendance"
-              element={<CurrentCourseForAttendance />}
-            />
-            <Route
-              path="allcoursesforattendance"
-              element={<AllCoursesForAttendance />}
-            />
-            <Route
-              path="student-attendance-details/:id"
-              element={<StudentAttendanceDetails />}
-            />
-            <Route path="materialform" element={<MaterialForm />} />
-            <Route
-              path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId"
-              element={<AddMaterial />}
-            />
-            <Route
-              path="question-bank-form/:gradeSubjectSemesterId"
-              element={<QuestionForm />}
-            />
-            <Route
-              path="my-question-bank/:gradeSubjectSemesterId/my-questions"
-              element={<SeeMyQuestion />}
-            />
-            <Route
-              path="all-question-bank/:gradeSubjectSemesterId/all-questions"
-              element={<SeeAllQuestion />}
-            />
-            <Route
-              path="/teacher/my-all-question-bank/:gradeSubjectSemesterId/my-questions"
-              element={<SeeMyAllQuestionAllYears />}
-            />
-            <Route
-              path="/teacher/all-question-bank-allyears/:gradeSubjectSemesterId/all-questions"
-              element={<SeeAllQuestionAllYears />}
-            />
-            <Route
-              path="/teacher/edit-question/:questionId"
-              element={<EditQuestion />}
-            />
-            <Route
-              path="/teacher/exam-form/:classId/:gradeSubjectSemesterId"
-              element={<ExamForm />}
-            />
-            <Route
-              path="/teacher/my-exams/:gradeSubjectSemesterId"
-              element={<SeeMyExams />}
-            />
+              path="teacher"
+              element={
+                <ProtectedRoute element={<Teachers />} requiredRole="teacher" />
+              }
+            >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<DashboardTeacher />} />
+              <Route
+                path="edit-teacher-profile"
+                element={<EditTeacherProfile />}
+              />
+              <Route path="school-hubs" element={<SchoolHubs />} />
+              <Route
+                path="school-hubs/detailes/:id"
+                element={<SchoolHubsDetailes />}
+              />
+              <Route
+                path="school-hubs/prizes/:id"
+                element={<SchoolHubsPrizes />}
+              />
+              <Route path="contests" element={<ActivityContests />} />
+              <Route
+                path="contests/participants/:contestId"
+                element={<ParticipantsContests />}
+              />
+              <Route path="contests/activity-form" element={<ActivityForm />} />
+              <Route
+                path="contests/edit-activity-form/:id"
+                element={<EditActivityForm />}
+              />
+              <Route path="weekly-schedule" element={<WeeklySchedule />} />
+              <Route path="exam-schedule" element={<ExamSchedule />} />
+              <Route path="currentCourse" element={<CurrentCourse />} />
+              <Route path="allcourses" element={<AllCourses />} />
+              <Route
+                path="currentcourseforattendance"
+                element={<CurrentCourseForAttendance />}
+              />
+              <Route
+                path="allcoursesforattendance"
+                element={<AllCoursesForAttendance />}
+              />
+              <Route
+                path="student-attendance-details/:id"
+                element={<StudentAttendanceDetails />}
+              />
+              <Route path="materialform" element={<MaterialForm />} />
+              <Route
+                path="/teacher/addmaterial/:classId/:gradeSubjectSemesterId"
+                element={<AddMaterial />}
+              />
+              <Route
+                path="question-bank-form/:gradeSubjectSemesterId"
+                element={<QuestionForm />}
+              />
+              <Route
+                path="my-question-bank/:gradeSubjectSemesterId/my-questions"
+                element={<SeeMyQuestion />}
+              />
+              <Route
+                path="all-question-bank/:gradeSubjectSemesterId/all-questions"
+                element={<SeeAllQuestion />}
+              />
+              <Route
+                path="/teacher/my-all-question-bank/:gradeSubjectSemesterId/my-questions"
+                element={<SeeMyAllQuestionAllYears />}
+              />
+              <Route
+                path="/teacher/all-question-bank-allyears/:gradeSubjectSemesterId/all-questions"
+                element={<SeeAllQuestionAllYears />}
+              />
+              <Route
+                path="/teacher/edit-question/:questionId"
+                element={<EditQuestion />}
+              />
+              <Route
+                path="/teacher/exam-form/:classId/:gradeSubjectSemesterId"
+                element={<ExamForm />}
+              />
+              <Route
+                path="/teacher/my-exams/:gradeSubjectSemesterId"
+                element={<SeeMyExams />}
+              />
 
-            <Route path="/teacher/exams/:examId" element={<EditExam />} />
-            <Route
-              path="/teacher/exam-details/:examId"
-              element={<ExamDetailes />}
-            />
-            <Route
-              path="/teacher/exam-results/:examId"
-              element={<StudentResults />}
-            />
-            <Route
-              path="/teacher/see-all-exams/:gradeSubjectSemesterId"
-              element={<SeeAllExams />}
-            />
-            <Route
-              path="/teacher/assignment-form/:classId/:gradeSubjectSemesterId"
-              element={<AssignmentForm />}
-            />
-            <Route
-              path="/teacher/all-assignment/:gradeSubjectSemesterId"
-              element={<SeeAssignments />}
-            />
-            <Route
-              path="/teacher/assignment-submissions/:assignmentId"
-              element={<AssignmentSubmissions />}
-            />
+              <Route path="/teacher/exams/:examId" element={<EditExam />} />
+              <Route
+                path="/teacher/exam-details/:examId"
+                element={<ExamDetailes />}
+              />
+              <Route
+                path="/teacher/exam-results/:examId"
+                element={<StudentResults />}
+              />
+              <Route
+                path="/teacher/see-all-exams/:gradeSubjectSemesterId"
+                element={<SeeAllExams />}
+              />
+              <Route
+                path="/teacher/assignment-form/:classId/:gradeSubjectSemesterId"
+                element={<AssignmentForm />}
+              />
+              <Route
+                path="/teacher/all-assignment/:gradeSubjectSemesterId"
+                element={<SeeAssignments />}
+              />
+              <Route
+                path="/teacher/assignment-submissions/:assignmentId"
+                element={<AssignmentSubmissions />}
+              />
 
-            <Route
-              path="/teacher/edit-assignment/:assignmentId"
-              element={<EditAssignment />}
-            />
-            <Route
-              path="/teacher/submission-details/:submissionId"
-              element={<SubmissionDetails />}
-            />
-            <Route
-              path="/teacher/see-all-assignments-allYears/:gradeSubjectSemesterId"
-              element={<SeeAllAssignments />}
-            />
-            <Route
-              path="/teacher/all-assignment-submissions/:assignmentId"
-              element={<AllSubmissionsForAssignment />}
-            />
-            <Route
-              path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
-              element={<AllMaterialPage />}
-            />
-            <Route
-              path="/teacher/materialform/:classId/:gradeSubjectSemesterId"
-              element={<MaterialForm />}
-            />
-            <Route
-              path="/teacher/see-material/:grade_subject_semester_id"
-              element={<SeeMaterial />}
-            />
-            <Route
-              path="/teacher/see-all-material/:grade_subject_semester_id"
-              element={<SeeAllMaterial />}
-            />
-            <Route
-              path="update-material/:materialId"
-              element={<EditMaterial />}
-            />
-            <Route path="takeattendance/:id" element={<TakeAttendance />} />
-            <Route path="attendancereport/:id" element={<Attendancereport />} />
-            <Route
-              path="/teacher/virtual-room/:grade_subject_semester_id"
-              element={<SeeVR />}
-            />
-            <Route
-              path="/teacher/all-virtual-room/:grade_subject_semester_id"
-              element={<SeeAllVR />}
-            />
-            <Route
-              path="/teacher/VR-form/:classId/:gradeSubjectSemesterId"
-              element={<VRForm />}
-            />
-            <Route path="edit-vr/:id" element={<EditVR />} />
-            <Route path="library-form" element={<LibraryForm />} />
-            <Route
-              path="all-subjects-library"
-              element={<SubjectsInLibrary />}
-            />
-            <Route
-              path="all-materials-library/:id"
-              element={<MaterialsInLibrary />}
-            />
+              <Route
+                path="/teacher/edit-assignment/:assignmentId"
+                element={<EditAssignment />}
+              />
+              <Route
+                path="/teacher/submission-details/:submissionId"
+                element={<SubmissionDetails />}
+              />
+              <Route
+                path="/teacher/see-all-assignments-allYears/:gradeSubjectSemesterId"
+                element={<SeeAllAssignments />}
+              />
+              <Route
+                path="/teacher/all-assignment-submissions/:assignmentId"
+                element={<AllSubmissionsForAssignment />}
+              />
+              <Route
+                path="/teacher/allmaterial/:classId/:gradeSubjectSemesterId"
+                element={<AllMaterialPage />}
+              />
+              <Route
+                path="/teacher/materialform/:classId/:gradeSubjectSemesterId"
+                element={<MaterialForm />}
+              />
+              <Route
+                path="/teacher/see-material/:grade_subject_semester_id"
+                element={<SeeMaterial />}
+              />
+              <Route
+                path="/teacher/see-all-material/:grade_subject_semester_id"
+                element={<SeeAllMaterial />}
+              />
+              <Route
+                path="update-material/:materialId"
+                element={<EditMaterial />}
+              />
+              <Route path="takeattendance/:id" element={<TakeAttendance />} />
+              <Route
+                path="attendancereport/:id"
+                element={<Attendancereport />}
+              />
+              <Route
+                path="/teacher/virtual-room/:grade_subject_semester_id"
+                element={<SeeVR />}
+              />
+              <Route
+                path="/teacher/all-virtual-room/:grade_subject_semester_id"
+                element={<SeeAllVR />}
+              />
+              <Route
+                path="/teacher/VR-form/:classId/:gradeSubjectSemesterId"
+                element={<VRForm />}
+              />
+              <Route path="edit-vr/:id" element={<EditVR />} />
+              <Route path="library-form" element={<LibraryForm />} />
+              <Route
+                path="all-subjects-library"
+                element={<SubjectsInLibrary />}
+              />
+              <Route
+                path="all-materials-library/:id"
+                element={<MaterialsInLibrary />}
+              />
 
-            <Route path="library-item-form" element={<LibraryItemForm />} />
+              <Route path="library-item-form" element={<LibraryItemForm />} />
 
-            <Route path="items-in-library" element={<ItemsInLIbrary />} />
+              <Route path="items-in-library" element={<ItemsInLIbrary />} />
 
-            <Route path="item-in-library/:id" element={<ItemInLibrary />} />
-            <Route
-              path="update-item-library/:id"
-              element={<UpdateItemLIbrary />}
-            />
+              <Route path="item-in-library/:id" element={<ItemInLibrary />} />
+              <Route
+                path="update-item-library/:id"
+                element={<UpdateItemLIbrary />}
+              />
 
-            <Route path="teacher-library" element={<LibraryTeacherPage />} />
-            <Route
-              path="library/:type/:itemId"
-              element={<LibraryItemDetailsPageForTeacher />}
-            />
-            <Route path="motivation" element={<Motivation />} />
-            <Route
-              path="current-courses-for-grades"
-              element={<CurrentCoursesForGrades />}
-            />
+              <Route path="teacher-library" element={<LibraryTeacherPage />} />
+              <Route
+                path="library/:type/:itemId"
+                element={<LibraryItemDetailsPageForTeacher />}
+              />
+              <Route path="motivation" element={<Motivation />} />
+              <Route
+                path="current-courses-for-grades"
+                element={<CurrentCoursesForGrades />}
+              />
 
-            <Route
-              path="exam-score/:classId/:gradeSubjectSemesterId/students"
-              element={<GetStudentsForGrades />}
-            />
+              <Route
+                path="exam-score/:classId/:gradeSubjectSemesterId/students"
+                element={<GetStudentsForGrades />}
+              />
 
-            <Route
-              path="exam-score/upload/:classId/:gradeSubjectSemesterId"
-              element={<UploadFileGrades />}
-            />
+              <Route
+                path="exam-score/upload/:classId/:gradeSubjectSemesterId"
+                element={<UploadFileGrades />}
+              />
 
-            <Route
-              path="exam-results/:classId/:gradeSubjectSemesterId/:type"
-              element={<GetStudentsWithGrades />}
-            />
-          </Route>
+              <Route
+                path="exam-results/:classId/:gradeSubjectSemesterId/:type"
+                element={<GetStudentsWithGrades />}
+              />
+            </Route>
 
-          {/* ///////////////manager pages//////////////////// */}
-          <Route
-            path="manager"
-            element={
-              <ProtectedRoute element={<Manager />} requiredRole="manager" />
-            }
-          >
-            <Route index element={<Navigate replace to="dashboard" />} />
-            <Route path="dashboard" element={<DashboardManager />} />
+            {/* ///////////////manager pages//////////////////// */}
             <Route
-              path="edit-manager-profile"
-              element={<EditManagerProfile />}
-            />
-            <Route path="school-hubs" element={<ManagerSchoolHubs />} />
-            <Route
-              path="school-hubs/detailes/:id"
-              element={<ManagerSchoolHubsDetailes />}
-            />
-            <Route
-              path="school-hubs/prizes/:id"
-              element={<ManagerSchoolHubsPrizes />}
-            />
-            <Route
-              path="school-hubs/participants/:schoolHubId"
-              element={<ManagerSchoolHubsParticipants />}
-            />
-            <Route path="add-school-hubs" element={<ManagerSchoolHubsAdd />} />
-            <Route
-              path="edit-school-hubs/:id"
-              element={<ManagerSchoolHubsEdit />}
-            />
-            <Route path="schedule-table" element={<SchedualTable />} />
-            <Route path="schedule-form" element={<FormShedule />} />
-            <Route path="virtual-room" element={<ManagerVRTable />} />
-            <Route path="virtual-room-form" element={<ManagerVRForm />} />
-            <Route path="grade" element={<ManagerGrade />} />
-          </Route>
+              path="manager"
+              element={
+                <ProtectedRoute element={<Manager />} requiredRole="manager" />
+              }
+            >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<DashboardManager />} />
+              <Route
+                path="edit-manager-profile"
+                element={<EditManagerProfile />}
+              />
+              <Route path="school-hubs" element={<ManagerSchoolHubs />} />
+              <Route
+                path="school-hubs/detailes/:id"
+                element={<ManagerSchoolHubsDetailes />}
+              />
+              <Route
+                path="school-hubs/prizes/:id"
+                element={<ManagerSchoolHubsPrizes />}
+              />
+              <Route
+                path="school-hubs/participants/:schoolHubId"
+                element={<ManagerSchoolHubsParticipants />}
+              />
+              <Route
+                path="add-school-hubs"
+                element={<ManagerSchoolHubsAdd />}
+              />
+              <Route
+                path="edit-school-hubs/:id"
+                element={<ManagerSchoolHubsEdit />}
+              />
+              <Route path="schedule-table" element={<SchedualTable />} />
+              <Route path="schedule-form" element={<FormShedule />} />
+              <Route path="virtual-room" element={<ManagerVRTable />} />
+              <Route path="virtual-room-form" element={<ManagerVRForm />} />
+              <Route path="grade" element={<ManagerGrade />} />
 
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+              <Route path="get-all-classes" element={<GetAllClasses />} />
+              <Route
+                path="get-attendance-class/:id"
+                element={<GetAttendanceClass />}
+              />
+            </Route>
+
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
