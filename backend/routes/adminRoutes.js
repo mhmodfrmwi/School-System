@@ -110,7 +110,9 @@ const {
   updateParentStudent,
   getAllParentsStudent,
 } = require("../controllers/Admin/parentStudentController");
-const{seedRewards} = require("../controllers/General/rewardCatalogDataController")
+const {
+  seedRewards,
+} = require("../controllers/General/rewardCatalogDataController");
 const { login } = require("../controllers/auth/authAdminController");
 
 const router = express.Router();
@@ -127,7 +129,7 @@ router
   .get(validateJwt, validateAdmin, getAcademicYear)
   .patch(validateJwt, validateAdmin, updateAcademicYear)
   .delete(validateJwt, validateAdmin, deleteAcademicYear);
-router.get("/academicYear", validateJwt, validateAdmin, getAllAcademicYear);
+router.get("/academicYear", validateJwt, getAllAcademicYear);
 
 //grade routes
 router.post("/grade/createGrade", validateJwt, validateAdmin, createGrade);
@@ -136,7 +138,7 @@ router
   .get(validateJwt, validateAdmin, getGrade)
   .patch(validateJwt, validateAdmin, updateGrade)
   .delete(validateJwt, validateAdmin, deleteGrade);
-router.get("/grade", validateJwt, validateAdmin, getAllGrade);
+router.get("/grade", validateJwt, getAllGrade);
 
 //subject routes
 router.post(
@@ -150,7 +152,7 @@ router
   .get(validateJwt, validateAdmin, getSubject)
   .patch(validateJwt, validateAdmin, updateSubject)
   .delete(validateJwt, validateAdmin, deleteSubject);
-router.get("/subject", validateJwt, validateAdmin, getAllSubject);
+router.get("/subject", validateJwt, getAllSubject);
 
 //semester routes
 router.post(
@@ -164,7 +166,7 @@ router
   .get(validateJwt, validateAdmin, getSemester)
   .patch(validateJwt, validateAdmin, updateSemester)
   .delete(validateJwt, validateAdmin, deleteSemester);
-router.get("/semester", validateJwt, validateAdmin, getAllSemester);
+router.get("/semester", validateJwt, getAllSemester);
 
 //Grade Subjects Semester Routes
 router.post(
@@ -344,10 +346,5 @@ router
   .patch(validateJwt, validateAdmin, updateSchedule)
   .delete(validateJwt, validateAdmin, deleteSchedule);
 router.get("/schedule", validateJwt, validateAdmin, getAllSchedule);
-router.post(
-  "/reward",
-  validateJwt,
-  validateAdmin,
-  seedRewards
-);
+router.post("/reward", validateJwt, validateAdmin, seedRewards);
 module.exports = router;

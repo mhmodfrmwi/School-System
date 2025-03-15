@@ -6,6 +6,7 @@ const FetchClasses = async (req, res) => {
   try {
     const classes = await Class.find()
       .populate("gradeId", "gradeName")
+      .populate("academicYear_id", "startYear endYear")
       .select("-createdAt -updatedAt -__v");
     classes.sort((a, b) => {
       const gradeCompare = a.gradeId.gradeName.localeCompare(
