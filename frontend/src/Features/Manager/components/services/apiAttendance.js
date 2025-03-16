@@ -1,22 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = "http://localhost:4000/api/v1/manager/classes";
-//fetch Data
+
+// Fetch classes
 const fetchClasses = async () => {
   const token = sessionStorage.getItem("token");
   if (!token) {
     throw new Error("Authentication required. Please log in.");
   }
-  const { data } = await axios.get(API_URL, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
 
-  return data;
+  try {
+    const { data } = await axios.get(API_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    throw new Error(`Error fetching classes: ${error.message}`);
+  }
 };
 
 export const useClasses = () => {
@@ -30,7 +34,8 @@ export const useClasses = () => {
 
   return { isLoading, managerclasses };
 };
-//post Data
+
+// Format date
 const formatDate = (date) => {
   if (typeof date === "string") {
     const [year, month, day] = date.split("-");
@@ -40,6 +45,7 @@ const formatDate = (date) => {
   return `${newDate.getDate()} ${newDate.getMonth() + 1} ${newDate.getFullYear()}`;
 };
 
+// Create class data
 export const CreateClassData = async ({ classId, date }) => {
   const token = sessionStorage.getItem("token");
   if (!token) {
@@ -62,7 +68,7 @@ export const CreateClassData = async ({ classId, date }) => {
     if (response.data.attendances.length > 0) {
       toast.success("Class data posted successfully!");
     } else {
-      toast.success("Not found students");
+      toast.success("No students found for this class.");
     }
 
     return response.data.attendances || [];
@@ -70,4 +76,24 @@ export const CreateClassData = async ({ classId, date }) => {
     toast.error(`Error posting class data: ${error.message}`);
     throw error;
   }
+};
+
+export const useCreateClassData = () => {
+  const queryClient = useQueryClient();
+
+  const {
+    data,
+    mutate: createClassData,
+    isLoading: isCreating,
+  } = useMutation({
+    mutationFn: CreateClassData,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["managerclasses"] });
+    },
+    onError: (err) => {
+      toast.error(`Error creating class data: ${err.message}`);
+    },
+  });
+
+  return { createClassData, isCreating, data };
 };

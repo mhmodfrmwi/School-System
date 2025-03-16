@@ -1,0 +1,112 @@
+import React from "react";
+import img1 from "../../../../assets/schedule 1.png";
+
+import { useExamSchedules } from "../services/apiSchedule";
+
+function GetExamScheduleForStudent() {
+  const { studentExamSchedule } = useExamSchedules();
+
+  const schedule = [
+    ["Subject", "Exam Date", "Start Time", "End Time"],
+    ...(studentExamSchedule || []).map((exam) => [
+      exam.subject, // Subject
+      new Date(exam.exam_date).toLocaleDateString(),
+      exam.start_time,
+      exam.end_time,
+    ]),
+  ];
+
+  if (!studentExamSchedule || studentExamSchedule.length === 0) {
+    return (
+      <section className="mx-auto min-h-screen w-[95%] font-poppins">
+        {/* Header Section */}
+        <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-2">
+          <div className="mt-10 flex justify-between">
+            <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
+              <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
+                Exam Schedule
+                <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
+              </button>
+            </div>
+          </div>
+
+          {/* Image Section */}
+          <div className="flex items-center justify-center">
+            <img
+              src={img1}
+              className="mx-auto me-20 mt-10 w-72"
+              alt="Schedule"
+            />
+          </div>
+        </div>
+
+        {/* No Data Found Message */}
+        <div className="mx-auto mb-20 w-[88%] rounded-xl border border-gray-200 bg-white p-6 text-center font-poppins shadow-md">
+          <p className="text-lg text-gray-700">No exam schedules found.</p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="mx-auto min-h-screen w-[95%] font-poppins">
+      {/* Header Section */}
+      <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-2">
+        <div className="mt-10 flex justify-between">
+          <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
+            <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
+              Exam Schedule
+              <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
+            </button>
+          </div>
+        </div>
+
+        {/* Image Section */}
+        <div className="flex items-center justify-center">
+          <img src={img1} className="mx-auto me-20 mt-10 w-72" alt="Schedule" />
+        </div>
+      </div>
+
+      {/* Table Section */}
+      <div className="mx-auto mb-20 w-[88%] rounded-xl border border-gray-200 font-poppins shadow-md">
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto bg-white p-6 shadow-md">
+            <thead>
+              <tr>
+                {schedule[0].map((header, index) => (
+                  <th
+                    key={index}
+                    className="border-b border-l border-gray-200 bg-[#D6A3E1] px-4 py-4 text-center text-gray-700"
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {schedule.slice(1).map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  className={`border-b border-gray-200 ${
+                    rowIndex % 2 === 0 ? "bg-white" : "bg-[#F9F9F9]"
+                  } transition duration-200 hover:bg-[#F3E5F5]`}
+                >
+                  {row.map((cell, cellIndex) => (
+                    <td
+                      key={cellIndex}
+                      className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]"
+                    >
+                      {cell || "--"}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default GetExamScheduleForStudent;

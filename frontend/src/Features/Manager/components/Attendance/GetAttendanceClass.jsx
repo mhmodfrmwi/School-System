@@ -1,12 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { CreateClassData } from "../services/apiAttendance";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "@/ui/Loader";
-import Pagination from "../Pagination"; // Make sure the Pagination component is imported
+import Pagination from "../Pagination";
 import { useState } from "react";
+import { useCreateClassData } from "../services/apiAttendance";
 
 const GetAttendanceClass = () => {
   const { id: classId } = useParams();
@@ -17,17 +16,17 @@ const GetAttendanceClass = () => {
     reset,
   } = useForm();
 
-  const { mutate, data, isLoading } = useMutation(CreateClassData);
+  const { createClassData, isCreating, data } = useCreateClassData();
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
+  console.log(data);
   const onSubmit = (formData) => {
     if (classId && formData.date) {
-      mutate(
+      createClassData(
         { classId, date: formData.date },
         {
-          onSuccess: (data) => {
+          onSuccess: () => {
             reset();
           },
           onError: (error) => {
@@ -38,7 +37,7 @@ const GetAttendanceClass = () => {
     }
   };
 
-  if (isLoading) {
+  if (isCreating) {
     return <Loader />;
   }
 
@@ -72,7 +71,7 @@ const GetAttendanceClass = () => {
           <button
             type="submit"
             className="w-full rounded bg-[#117C90] px-4 py-2 text-white hover:bg-[#0f6a7d]"
-            disabled={isLoading}
+            disabled={isCreating}
           >
             Get Attendance
           </button>

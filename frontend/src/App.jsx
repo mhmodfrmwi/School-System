@@ -14,6 +14,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import GetAllClasses from "./Features/Manager/components/Attendance/GetAllClasses";
 import GetAttendanceClass from "./Features/Manager/components/Attendance/GetAttendanceClass";
+import CreateExamSchedule from "./Features/Manager/components/Schedule/CreateExamSchedule";
+import GetExamSchedules from "./Features/Manager/components/Schedule/GetExamSchedules";
+import GetExamSchedule from "./Features/Manager/components/Schedule/GetExamSchedule";
+import UpdateExamSchedule from "./Features/Manager/components/Schedule/UpdateExamSchedule";
+import GetExamScheduleForStudent from "./Features/Student/components/Schedule/GetExamScheduleForStudent";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -741,6 +746,10 @@ function App() {
                 element={<StudentAssignmentSubmittedpage />}
               />
               <Route path="attendance" element={<AttendancePage />} />
+              <Route
+                path="get-exam-schedule"
+                element={<GetExamScheduleForStudent />}
+              />
             </Route>
             {/* /////////////////parentpage//////////////////// */}
             <Route
@@ -1021,6 +1030,20 @@ function App() {
               <Route
                 path="get-attendance-class/:id"
                 element={<GetAttendanceClass />}
+              />
+              <Route
+                path="create-exam-schedule"
+                element={<CreateExamSchedule />}
+              />
+              <Route path="get-exam-schedules" element={<GetExamSchedules />} />
+              <Route
+                path="get-exam-schedule/:id"
+                element={<GetExamSchedule />}
+              />
+
+              <Route
+                path="update-exam-schedule/:id"
+                element={<UpdateExamSchedule />}
               />
             </Route>
 
