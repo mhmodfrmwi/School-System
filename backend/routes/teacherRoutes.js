@@ -69,6 +69,13 @@ const{
   deleteExamResults,
 }= require("../controllers/Teacher/subjectScore");
 
+const {
+  handleVrLinkClick,
+  getVirtualRoomsForTeacher,
+  getCompletedVirtualRooms,
+  getMissedVirtualRooms
+} = require("../controllers/Teacher/gettingManagerVirtualRooms");
+
 const router = express.Router();
 
 const upload = multer({ dest: 'uploads/' }); 
@@ -221,4 +228,29 @@ router
     validateTeacher,
     deleteExamResults
   )
+///manager vr
+  router.get(
+    "/virtual-rooms",
+    validateJwt,
+    validateTeacher,
+    getVirtualRoomsForTeacher
+  );
+  router.get(
+    "/virtual-rooms/completed",
+    validateJwt,
+    validateTeacher,
+    getCompletedVirtualRooms
+  );
+  router.get(
+    "/virtual-rooms/missed",
+    validateJwt,
+    validateTeacher,
+    getMissedVirtualRooms
+  );
+  router.post(
+    "/virtual-rooms/:virtualRoomId/click",
+    validateJwt,
+    validateTeacher,
+    handleVrLinkClick
+  );
 module.exports = router;

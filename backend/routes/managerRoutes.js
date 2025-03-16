@@ -32,6 +32,15 @@ const {
   getAttendanceForClassInPeriod,
 } = require("../controllers/Teacher/getAttendanceForClassInPeriod");
 
+//vr
+const {
+  createVirtualRoom,
+  updateVirtualRoom,
+  deleteVirtualRoom,
+  getVirtualRoom,
+  getAllVirtualRooms,
+} = require("../controllers/manager/virtualRoomController");
+
 const router = express.Router();
 
 router.post("/login", login);
@@ -91,4 +100,18 @@ router.post(
   validateManager,
   FetchAbsenceForClassInDay
 );
+
+//vr
+router.post(
+  "/virtualRoom",
+  validateJwt,
+  validateManager,
+  createVirtualRoom
+);
+router
+  .route("/virtualRoom/:id")
+  .get(validateJwt, validateManager, getVirtualRoom)
+  .patch(validateJwt, validateManager, updateVirtualRoom)
+  .delete(validateJwt, validateManager, deleteVirtualRoom);
+router.get("/virtualRoom", validateJwt, validateManager, getAllVirtualRooms);
 module.exports = router;
