@@ -7,7 +7,7 @@ import logo from "../../../assets/logologin.png";
 import GradeIconH from "../../../assets/TeacherIcon/Grade.png";
 import AwardIconH from "../../../assets/TeacherIcon/Awards.png";
 import ActivityIconH from "../../../assets/TeacherIcon/Activites.png";
-// import VirtualIconH from "../../../assets/TeacherIcon/Virtual.png";
+import VirtualIconH from "../../../assets/TeacherIcon/Virtual.png";
 import ScheduleIconH from "../../../assets/TeacherIcon/Schedule.png";
 // import QuestionsIconH from "../../../assets/TeacherIcon/Questions.png";
 import LibraryIconH from "../../../assets/TeacherIcon/Library.png";
@@ -17,7 +17,7 @@ import AbsenceIconH from "../../../assets/TeacherIcon/Absence.png";
 import GradeIcon from "../../../assets/StudentIcon/Grade.png";
 import AwardIcon from "../../../assets/StudentIcon/Awards.png";
 import ActivityIcon from "../../../assets/StudentIcon/Activites.png";
-// import VirtualIcon from "../../../assets/StudentIcon/Virtual.png";
+import VirtualIcon from "../../../assets/StudentIcon/Virtual.png";
 import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
 // import QuestionsIcon from "../../../assets/StudentIcon/Questions.png";
 import LibraryIcon from "../../../assets/StudentIcon/Library.png";
@@ -81,12 +81,12 @@ const SidebarTeacher = () => {
     //   hoverIcon: QuestionsIconH,
     //   href: "#",
     // },
-    // {
-    //   label: "Virtual Rooms",
-    //   icon: VirtualIcon,
-    //   hoverIcon: VirtualIconH,
-    //   href: "/teacher/virtualroom",
-    // },
+  {
+      label: "General Virtual Rooms",
+      icon: VirtualIcon,
+      hoverIcon: VirtualIconH,
+      href: "/teacher/vr-manger",
+    },
   ];
 
   return (
