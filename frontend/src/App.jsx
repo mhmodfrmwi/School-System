@@ -18,6 +18,7 @@ import GetExamSchedules from "./Features/Manager/components/Schedule/GetExamSche
 import GetExamSchedule from "./Features/Manager/components/Schedule/GetExamSchedule";
 import UpdateExamSchedule from "./Features/Manager/components/Schedule/UpdateExamSchedule";
 import GetExamScheduleForStudent from "./Features/Student/components/Schedule/GetExamScheduleForStudent";
+import EditVRManger from "./Features/Manager/components/VR/EditVRManger";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -1020,6 +1021,7 @@ function App() {
               <Route path="schedule-form" element={<FormShedule />} />
               <Route path="virtual-room" element={<ManagerVRTable />} />
               <Route path="virtual-room-form" element={<ManagerVRForm />} />
+              <Route path="/manager/edit-virtual-room/:id" element={<EditVRManger />} />
               <Route path="grade" element={<ManagerGrade />} />
 
               <Route path="get-all-classes" element={<GetAllClasses />} />

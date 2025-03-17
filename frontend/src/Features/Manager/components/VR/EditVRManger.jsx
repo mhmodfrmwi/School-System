@@ -1,58 +1,93 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { createTeacherVirtualRoom } from "../../TeacherRedux/VRSlice";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { fetchVirtualRooms, updateVirtualRoom } from "../ManagerRedux/VRMangerSlice";
+import { useParams, useNavigate } from "react-router-dom";
 
-const VRForm = () => {
+const EditVRManger = () => {
     const dispatch = useDispatch();
-    const { classId, gradeSubjectSemesterId } = useParams();
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { virtualRooms } = useSelector((state) => state.virtualRooms);
+    const virtualRoom = virtualRooms.find((room) => room._id === id);
+
     const [formData, setFormData] = useState({
         title: "",
         startTime: "",
         duration: "",
-        link: "",
-        class_id: classId,
-        grade_subject_semester_id: gradeSubjectSemesterId,
+        link: ""
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-    }
+    const formatStartTimeForInput = (startTime) => {
+        if (!startTime) return "";
+        const date = new Date(startTime);
+        return date.toISOString().slice(0, 16); 
+    };
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        if (!virtualRoom) {
+            dispatch(fetchVirtualRooms());
+        } else {
+            setFormData({
+                title: virtualRoom.title,
+                startTime: formatStartTimeForInput(virtualRoom.startTime),
+                duration: virtualRoom.duration,
+                link: virtualRoom.link
+            });
+        }
+    }, [id, dispatch, virtualRoom]);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        dispatch(createTeacherVirtualRoom(formData))
-            .unwrap()
-            .then(() => {
-                setFormData({
-                    title: "",
-                    startTime: "",
-                    duration: "",
-                    link: "",
-                    class_id: classId,
-                    grade_subject_semester_id: gradeSubjectSemesterId,
-                });
-            })
-            .catch((error) => {
-                toast.error(error.message || "An error occurred");
-            });
+        if (!formData.title || !formData.startTime || !formData.duration || !formData.link) {
+            toast.error("Please fill in all required fields.");
+            return;
+        }
+        const startTime = new Date(formData.startTime);
+        const currentTime = new Date();
+
+        if (startTime <= currentTime) {
+            toast.error("Start time must be in the future.");
+            return;
+        }
+
+        if (!id) {
+            toast.error("Error: VR ID is missing!");
+            return;
+        }
+
+        const payload = { ...formData };
+        console.log("Payload being sent:", payload);
+
+        try {
+            const result = await dispatch(updateVirtualRoom({ id, formData: payload }));
+
+            console.log("Update result:", result);
+
+            if (updateVirtualRoom.fulfilled.match(result)) {
+                toast.success("VR updated successfully");
+                navigate(-1); // Go back to the previous page
+            } else {
+                throw new Error(result.error.message);
+            }
+        } catch (error) {
+            console.error("Update failed:", error);
+            toast.error("Failed to update VR");
+        }
     };
 
     return (
         <>
-            <ToastContainer />
             <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
                 <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                    Upload VR
+                    Edit Virtual Rooms
                 </h1>
-                <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[130px]"></div>
+                <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[220px]"></div>
             </div>
             <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -106,7 +141,7 @@ const VRForm = () => {
                         type="submit"
                         className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
                     >
-                        Upload
+                        Update
                     </button>
                 </form>
             </div>
@@ -114,4 +149,4 @@ const VRForm = () => {
     );
 };
 
-export default VRForm;
+export default EditVRManger;

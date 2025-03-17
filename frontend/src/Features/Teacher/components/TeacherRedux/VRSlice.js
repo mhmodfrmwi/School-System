@@ -192,11 +192,11 @@ const PdfMaterial = createSlice({
                 state.teacherVirtualRooms = state.teacherVirtualRooms.filter(
                     (material) => material.id !== action.payload
                 );
-                toast.success("Material deleted successfully");
+                toast.success("virtual room deleted successfully");
             })
             .addCase(deleteVR.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.payload || "Failed to delete material";
+                state.error = action.payload || "Failed to delete virtual room";
                 state.loading = false;
                 toast.error(state.error);
             });

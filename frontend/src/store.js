@@ -50,6 +50,8 @@ import examScoresReducer from "./Features/Teacher/components/TeacherRedux/examSc
 import gradesStudentReducer from "./Features/Student/components/StudentRedux/gradesStudentSlice";
 import managerdashboardReducer from "./Features/Manager/pages/ManagerSlices/dashboardSlice";
 import gradeManagerReducer from "./Features/Manager//components/ManagerRedux/gradeSlice";
+import virtualRoomsReducer from "./Features/Manager//components/ManagerRedux/VRMangerSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -104,6 +106,7 @@ const store = configureStore({
     studentGrades: gradesStudentReducer,
     managerdashboard: managerdashboardReducer,
     gradeManager: gradeManagerReducer,
+    virtualRooms: virtualRoomsReducer,
   },
 });
 
