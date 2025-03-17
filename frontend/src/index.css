@@ -118,3 +118,8 @@
     display: none; /* For Chrome, Safari, and Edge: hides the scrollbar */
   }
 }
+
+::selection {
+  background-color: black;
+  color: white; /* Ensures selected text is visible */
+}

@@ -13,27 +13,27 @@ function Table() {
   }, [dispatch]);
   const [score] = useState([
     {
-      r11: "Exams, Homework Assignments/Activities",
+      r11: "Exams, Homework Assignments and Activities",
       r12: "For each question you solve",
-      r13: "15 points /question",
+      r13: "5 points",
       r14: "",
     },
     {
       r11: "Messages",
       r12: "For each message you end or reply to",
-      r13: "1 point /message",
+      r13: "5 points",
       r14: "Your score is based on the number of recipients who read your message. More reads = more points. If no one reads it, you get no points.",
     },
     {
       r11: "Course Materials",
       r12: "For each course material you download",
-      r13: "15 points /file",
+      r13: "5 points",
       r14: "",
     },
     {
       r11: "Virtual Classrooms",
       r12: "For each smart class you attend",
-      r13: "100 points /smart class",
+      r13: "5 points",
       r14: "",
     },
   ]);
@@ -98,7 +98,7 @@ function Table() {
 
         <div className="ms-28 flex flex-col p-6">
           <h1 className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-lg font-bold text-[#244856] text-transparent sm:text-xl lg:text-2xl">
-            My Friends
+            Top Students
           </h1>
           <div className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#BC6FFB]"></div>
         </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import img1 from "../../../../assets/schedule 1.png";
-
 import { useExamSchedules } from "../services/apiSchedule";
 import Loader from "../../../../ui/Loader";
 import { useNavigate } from "react-router-dom";
@@ -10,13 +9,19 @@ function GetExamScheduleForStudent() {
   const { isLoading, studentExamSchedule } = useExamSchedules();
 
   if (isLoading) {
-    <Loader role="student" />;
+    return <Loader role="student" />;
   }
+
+  const sortedSchedule = studentExamSchedule
+    ? [...studentExamSchedule].sort(
+        (a, b) => new Date(a.exam_date) - new Date(b.exam_date),
+      )
+    : [];
 
   const schedule = [
     ["Subject", "Exam Date", "Start Time", "End Time"],
-    ...(studentExamSchedule || []).map((exam) => [
-      exam.subject, // Subject
+    ...sortedSchedule.map((exam) => [
+      exam.subject,
       new Date(exam.exam_date).toLocaleDateString(),
       exam.start_time,
       exam.end_time,
@@ -26,12 +31,11 @@ function GetExamScheduleForStudent() {
   if (!studentExamSchedule || studentExamSchedule.length === 0) {
     return (
       <section className="mx-auto min-h-screen w-[95%] font-poppins">
-        {/* Header Section */}
         <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-3">
           <div className="col-span-2 flex flex-col justify-between">
             <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
               <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
-                Exam Schedule
+                Upcoming Smart Classes
                 <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
               </button>
             </div>
@@ -57,7 +61,6 @@ function GetExamScheduleForStudent() {
           />
         </div>
 
-        {/* No Data Found Message */}
         <div className="mx-auto mb-20 w-[88%] rounded-xl border border-gray-200 bg-white p-6 text-center font-poppins shadow-md">
           <p className="text-lg text-gray-700">No exam schedules found.</p>
         </div>
@@ -71,7 +74,7 @@ function GetExamScheduleForStudent() {
         <div className="col-span-2 flex flex-col justify-between">
           <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
             <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
-              Exam Schedule
+              Upcoming Smart Classes
               <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
             </button>
           </div>
@@ -96,7 +99,7 @@ function GetExamScheduleForStudent() {
           alt="Schedule"
         />
       </div>
-      {/* Table Section */}
+
       <div className="mx-auto mb-20 w-[88%] rounded-xl border border-gray-200 font-poppins shadow-md">
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto bg-white p-6 shadow-md">

@@ -11,6 +11,7 @@ import {
   getTeacherDailyReward,
   getTeacherPointsForTerm,
 } from "../TeacherRedux/motivationTeacherSlice";
+import about2 from "../../../../assets/about2.png";
 
 const Motivation = () => {
   const dispatch = useDispatch();
@@ -32,14 +33,15 @@ const Motivation = () => {
     <>
       <div className="flex justify-center">
         <div
-          className={`mt-4 flex w-[97%] items-center justify-between rounded-2xl p-6 shadow-lg ${teacherPointsForTerm.badge === "Green"
+          className={`mt-4 flex w-[97%] items-center justify-between rounded-2xl p-6 shadow-lg ${
+            teacherPointsForTerm.badge === "Green"
               ? "bg-green-500"
               : teacherPointsForTerm.badge === "Diamond"
                 ? "bg-[#6a6969]"
                 : teacherPointsForTerm.badge === "Gold"
                   ? "bg-yellow-500"
                   : "bg-green-500"
-            }`}
+          }`}
         >
           <div className="flex items-center space-x-4">
             <img
@@ -96,28 +98,30 @@ const Motivation = () => {
 
                 <div>
                   <p
-                    className={`font-poppins font-semibold ${teacherDailyReward.badge === "Green"
+                    className={`font-poppins font-semibold ${
+                      teacherDailyReward.badge === "Green"
                         ? "text-green-500"
                         : teacherDailyReward.badge === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherDailyReward.badge === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                      }`}
+                    }`}
                   >
                     Points Earned Today
                   </p>
                 </div>
                 <div>
                   <p
-                    className={`font-poppins text-2xl font-extrabold ${teacherDailyReward.badge === "Green"
+                    className={`font-poppins text-2xl font-extrabold ${
+                      teacherDailyReward.badge === "Green"
                         ? "text-green-500"
                         : teacherDailyReward.badge === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherDailyReward.badge === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                      }`}
+                    }`}
                   >
                     {teacherDailyReward.totalDailyPoints}
                   </p>
@@ -137,28 +141,30 @@ const Motivation = () => {
                 </div>
                 <div>
                   <p
-                    className={`font-poppins font-semibold ${teacherPointsForTerm.badge === "Green"
+                    className={`font-poppins font-semibold ${
+                      teacherPointsForTerm.badge === "Green"
                         ? "text-green-500"
                         : teacherPointsForTerm.badge === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherPointsForTerm.badge === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                      }`}
+                    }`}
                   >
                     Score for this Semester
                   </p>
                 </div>
                 <div>
                   <p
-                    className={`font-poppins text-2xl font-extrabold ${teacherPointsForTerm.badge === "Green"
+                    className={`font-poppins text-2xl font-extrabold ${
+                      teacherPointsForTerm.badge === "Green"
                         ? "text-green-500"
                         : teacherPointsForTerm.badge === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherPointsForTerm.badge === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                      }`}
+                    }`}
                   >
                     {teacherPointsForTerm.totalPoints}
                   </p>
@@ -179,28 +185,30 @@ const Motivation = () => {
                 </div>
                 <div>
                   <p
-                    className={`font-poppins font-semibold ${teacherReward.badges === "Green"
+                    className={`font-poppins font-semibold ${
+                      teacherReward.badges === "Green"
                         ? "text-green-500"
                         : teacherReward.badges === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherReward.badges === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                      }`}
+                    }`}
                   >
                     Score for all semesters
                   </p>
                 </div>
                 <div>
                   <p
-                    className={`font-poppins text-2xl font-extrabold ${teacherReward.badges === "Green"
+                    className={`font-poppins text-2xl font-extrabold ${
+                      teacherReward.badges === "Green"
                         ? "text-green-500"
                         : teacherReward.badges === "Diamond"
                           ? "text-[#6a6969]"
                           : teacherReward.badges === "Gold"
                             ? "text-yellow-500"
                             : "text-green-500"
-                      }`}
+                    }`}
                   >
                     {teacherReward.totalPoints}
                   </p>
@@ -210,70 +218,74 @@ const Motivation = () => {
           </div>
         </div>
 
-        <div>
-          <button className="cursor-text mt-6 py-2 font-poppins text-2xl font-bold text-[#117C90]">
-            Summary Of Your Score
-          </button>
-          <p className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
-          <p className="mb-4 font-poppins text-gray-700">
-            Every member starts his/her journey with green membership card, in
-            each semester you will start earning points from the first day in
-            the semester. Your final score at the end of the semester will
-            determine the type of card you deserve to use it throughout the next
-            semester as recognition for your efforts.
-          </p>
-          <section className="flex items-center space-x-4">
-            <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
+        <div className="grid grid-cols-1 items-center gap-6 bg-white lg:grid-cols-2">
+          <div className="">
+            <button className="py-2 font-poppins text-2xl font-bold text-[#117C90]">
+              Summary Of Your Score
+            </button>
 
-            <p className="text-md font-poppins">
-              If you are among the top <strong>55%</strong> in your school, you
-              will deserve Learnova{" "}
-              <strong className="text-lg font-bold text-green-500">
-                {" "}
-                Green
-              </strong>{" "}
-              card.
-            </p>
-          </section>
-          <section className="flex items-center space-x-4">
-            <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
+            <p className="mb-4 ms-1 w-16 rounded-xl border-t-4 border-[#117C90] sm:w-24"></p>
 
-            <p className="text-md font-poppins">
-              If you are among the top <strong>40%</strong> in your school, you
-              will deserve Learnova{" "}
-              <strong className="text-lg font-bold text-orange-400">
-                {" "}
-                Golden
-              </strong>{" "}
-              card.
+            <p className="mb-4 font-poppins text-sm text-gray-700 sm:text-base">
+              Every member starts his/her journey with a green membership card.
+              In each semester, you will start earning points from the first
+              day. Your final score at the end of the semester will determine
+              the type of card you deserve to use throughout the next semester
+              as recognition for your efforts.
             </p>
-          </section>
-          <section className="flex items-center space-x-4">
-            <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] via-[#0D6F7A] to-[#117C90]"></div>
 
-            <p className="text-md font-poppins">
-              If you are among the top <strong>5%</strong> in your school, you
-              truly deserve the{" "}
-              <strong className="text-lg font-bold text-gray-500">
-                {" "}
-                Diamond
-              </strong>{" "}
-              card.
-            </p>
-          </section>
+            <section className="mb-4 flex items-center space-x-4">
+              <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] to-[#117C90] sm:h-4 sm:w-4"></div>
+              <p className="font-poppins text-xs sm:text-sm">
+                If your points are between <strong>0 and 250</strong> in your
+                school, you will be eligible for the Learnova{" "}
+                <strong className="text-base font-bold text-green-500 sm:text-lg">
+                  Green
+                </strong>{" "}
+                Card.
+              </p>
+            </section>
+
+            <section className="mb-4 flex items-center space-x-4">
+              <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] to-[#117C90] sm:h-4 sm:w-4"></div>
+              <p className="font-poppins text-xs sm:text-sm">
+                If your points are between <strong>251 to 400</strong> in your
+                school, you will be eligible for the Learnova{" "}
+                <strong className="text-base font-bold text-yellow-500 sm:text-lg">
+                  Golden
+                </strong>{" "}
+                Card.
+              </p>
+            </section>
+
+            <section className="mb-4 flex items-center space-x-4">
+              <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] to-[#117C90] sm:h-4 sm:w-4"></div>
+              <p className="font-poppins text-xs sm:text-sm">
+                If your points are <strong>401 or more</strong> in your school,
+                you will be eligible for the Learnova{" "}
+                <strong className="text-base font-bold text-[#6a6969] sm:text-lg">
+                  Diamond
+                </strong>{" "}
+                Card.
+              </p>
+            </section>
+          </div>
+          <div className="flex items-center justify-center">
+            <img src={about2} alt="Score Illustration" className="w-70 h-80" />
+          </div>
         </div>
       </div>
       <div className="ms-6">
         <button className="cursor-text py-2 font-poppins text-2xl font-bold text-[#117C90]">
-          My Friends
+          Top Teachers
         </button>
         <p className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
       </div>
 
-      <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-[1200px]">
+      <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-[900px]">
         <div className="overflow-x-auto">
           <div className="max-h-[400px] overflow-y-auto">
-            <table className="min-w-full table-auto border-collapse border-2 border-[#117C90]  rounded-[1rem]  bg-[#FBE9D1] overflow-hidden">
+            <table className="min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1]">
               <thead className="bg-[#117C90] text-white">
                 <tr className="bg-[#117C90] text-white">
                   {" "}
@@ -297,7 +309,8 @@ const Motivation = () => {
               </thead>
               <tbody>
                 {allTeachersReward.map((teacher, index) => (
-                  <tr key={teacher._id}
+                  <tr
+                    key={teacher._id}
                     className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
                   >
                     <td className="border border-[#117C90] px-4 py-7 font-poppins text-xs sm:text-sm md:text-sm">

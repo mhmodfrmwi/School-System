@@ -74,16 +74,6 @@ const GetExamSchedule = () => {
               </p>
             </div>
 
-            {/* Semester */}
-            <div>
-              <h2 className="mb-1 text-lg font-semibold text-[#105E6A] sm:text-xl">
-                Semester
-              </h2>
-              <p className="text-sm text-gray-700 sm:text-base">
-                {managerExamSchedule?.semester_id?.semesterName}
-              </p>
-            </div>
-
             {/* Grade */}
             <div>
               <h2 className="mb-1 text-lg font-semibold text-[#105E6A] sm:text-xl">
@@ -91,6 +81,16 @@ const GetExamSchedule = () => {
               </h2>
               <p className="text-sm text-gray-700 sm:text-base">
                 {managerExamSchedule?.grade_id?.gradeName}
+              </p>
+            </div>
+
+            {/* Semester */}
+            <div>
+              <h2 className="mb-1 text-lg font-semibold text-[#105E6A] sm:text-xl">
+                Semester
+              </h2>
+              <p className="text-sm text-gray-700 sm:text-base">
+                {managerExamSchedule?.semester_id?.semesterName}
               </p>
             </div>
           </div>
