@@ -16,6 +16,7 @@ const fetchExamSchedules = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
+
     return response.data;
   } catch (error) {
     if (error.response?.status === 401) {
@@ -29,7 +30,11 @@ const fetchExamSchedules = async () => {
 };
 
 export const useExamSchedules = () => {
-  const { data: studentExamSchedule, error } = useQuery({
+  const {
+    data: studentExamSchedule,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ["studentExamSchedule"],
     queryFn: fetchExamSchedules,
     onError: (err) => {
@@ -37,5 +42,5 @@ export const useExamSchedules = () => {
     },
   });
 
-  return { studentExamSchedule, error };
+  return { isLoading, studentExamSchedule, error };
 };

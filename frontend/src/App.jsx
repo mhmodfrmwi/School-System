@@ -5,7 +5,6 @@ import { lazy, Suspense } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PageNotFound from "./ui/PageNotFound";
-import Loader from "./ui/Loader";
 import TitleUpdater from "./ui/TitleUpdater";
 import SeeAllAssignments from "./Features/Teacher/components/courses/AllYearsMaterual/SeeAllAssignments";
 import AllSubmissionsForAssignment from "./Features/Teacher/components/courses/AllYearsMaterual/AllSubmissionsForAssignment";
@@ -160,9 +159,7 @@ const Grades = lazy(
 const Schedule = lazy(
   () => import("./Features/Student/components/Schedule/schedule"),
 );
-const ScheduleExam = lazy(
-  () => import("./Features/Student/components/Schedule/scheduleExam"),
-);
+
 const LibraryPage = lazy(
   () => import("./Features/Student/components/Library/LibraryPage"),
 );
@@ -568,7 +565,7 @@ function App() {
           pauseOnHover
         />
 
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback>
           <Routes>
             <Route index element={<Navigate replace to="onboarding" />} />
             <Route path="onboarding" element={<OnBoarding />} />
@@ -660,7 +657,6 @@ function App() {
                 element={<GradesforAllYears />}
               />
               <Route path="schedule" element={<Schedule />} />
-              <Route path="schedule/exam" element={<ScheduleExam />} />
               <Route path="library" element={<LibraryPage />} />
 
               <Route path="librarybooks" element={<LibraryBooksPage />} />

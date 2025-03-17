@@ -72,11 +72,11 @@ function Schedule() {
 
           let durationText = "";
           if (hours > 0 && minutes > 0) {
-            durationText = `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''}`;
+            durationText = `${hours} hour${hours > 1 ? "s" : ""} and ${minutes} minute${minutes > 1 ? "s" : ""}`;
           } else if (hours > 0) {
-            durationText = `${hours} hour${hours > 1 ? 's' : ''}`;
+            durationText = `${hours} hour${hours > 1 ? "s" : ""}`;
           } else {
-            durationText = `${minutes} minute${minutes > 1 ? 's' : ''}`;
+            durationText = `${minutes} minute${minutes > 1 ? "s" : ""}`;
           }
 
           row.push(
@@ -94,14 +94,14 @@ function Schedule() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex min-h-screen items-center justify-center">
         <Loader role={role} />
       </div>
     );
   }
 
   return (
-    <section className="font-poppins min-h-screen w-[95%] mx-auto mt-10">
+    <section className="mx-auto mt-10 min-h-screen w-[95%] font-poppins">
       <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-3">
         <div className="col-span-2 flex flex-col justify-between">
           <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
@@ -110,16 +110,16 @@ function Schedule() {
               <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
             </button>
           </div>
-          <div className="mb-10 ms-8 mt-7 md:ms-14 lg:ms-20 flex items-center gap-8">
+          <div className="mb-10 ms-8 mt-7 flex items-center gap-8 md:ms-14 lg:ms-20">
             <button
-              className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-2 text-lg font-medium text-white focus:outline-none"
+              className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 font-poppins text-lg font-medium text-white focus:outline-none"
               onClick={() => navigate("/student/schedule")}
             >
               Weekly Schedule
             </button>
             <button
-              className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 text-lg font-medium text-transparent"
-              onClick={() => navigate("/student/schedule/exam")}
+              className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 font-poppins text-lg font-medium text-transparent"
+              onClick={() => navigate("/student/get-exam-schedule")}
             >
               Exams Schedule
             </button>
@@ -131,17 +131,18 @@ function Schedule() {
           alt="Schedule"
         />
       </div>
-      <div className="mx-auto w-[88%] rounded-xl border border-gray-200 shadow-md font-poppins mb-20">
+      <div className="mx-auto mb-20 w-[88%] rounded-xl border border-gray-200 font-poppins shadow-md">
         <div className="overflow-x-auto">
           {studentSchedule.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center my-16 font-poppins">
-              <div className="shadow-lg p-6 bg-gray-100 rounded-xl flex flex-col items-center font-poppins w-3/4 md:w-1/2">
-                <img src={img3} alt="No Schedule" className="w-1/4 mb-4" />
-                <h2 className="text-2xl font-semibold font-poppins text-gray-800 mb-2">
+            <div className="my-16 flex flex-col items-center justify-center text-center font-poppins">
+              <div className="flex w-3/4 flex-col items-center rounded-xl bg-gray-100 p-6 font-poppins shadow-lg md:w-1/2">
+                <img src={img3} alt="No Schedule" className="mb-4 w-1/4" />
+                <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-800">
                   No Schedule Available
                 </h2>
-                <p className="text-gray-600 font-poppins">
-                  It looks like there are no scheduled classes available at the moment.
+                <p className="font-poppins text-gray-600">
+                  It looks like there are no scheduled classes available at the
+                  moment.
                 </p>
               </div>
             </div>
@@ -150,7 +151,7 @@ function Schedule() {
               <thead>
                 <tr className="border-b border-gray-200">
                   <th colSpan="8" className="px-2 py-3 text-right">
-                    <div className="w-60 rounded-md bg-[#FFA4A4] px-4 py-3 font-poppins text-center text-white ml-auto">
+                    <div className="ml-auto w-60 rounded-md bg-[#FFA4A4] px-4 py-3 text-center font-poppins text-white">
                       {semesterInfo}
                     </div>
                   </th>
@@ -177,9 +178,7 @@ function Schedule() {
                       <td
                         key={cellIndex}
                         className={`border-l border-gray-200 px-4 py-4 text-center font-poppins ${
-                          cellIndex === 0
-                            ? "text-gray-800"
-                            : "text-[#E47986]"
+                          cellIndex === 0 ? "text-gray-800" : "text-[#E47986]"
                         }`}
                       >
                         {cell || "--"}

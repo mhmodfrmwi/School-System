@@ -2,9 +2,16 @@ import React from "react";
 import img1 from "../../../../assets/schedule 1.png";
 
 import { useExamSchedules } from "../services/apiSchedule";
+import Loader from "../../../../ui/Loader";
+import { useNavigate } from "react-router-dom";
 
 function GetExamScheduleForStudent() {
-  const { studentExamSchedule } = useExamSchedules();
+  const navigate = useNavigate();
+  const { isLoading, studentExamSchedule } = useExamSchedules();
+
+  if (isLoading) {
+    <Loader role="student" />;
+  }
 
   const schedule = [
     ["Subject", "Exam Date", "Start Time", "End Time"],
@@ -20,24 +27,34 @@ function GetExamScheduleForStudent() {
     return (
       <section className="mx-auto min-h-screen w-[95%] font-poppins">
         {/* Header Section */}
-        <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-2">
-          <div className="mt-10 flex justify-between">
+        <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-3">
+          <div className="col-span-2 flex flex-col justify-between">
             <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
               <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
                 Exam Schedule
                 <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
               </button>
             </div>
+            <div className="mb-10 ms-8 mt-7 flex items-center gap-8 md:ms-14 lg:ms-20">
+              <button
+                className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 font-poppins text-lg font-medium text-transparent"
+                onClick={() => navigate("/student/schedule")}
+              >
+                Weekly Schedule
+              </button>
+              <button
+                className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 font-poppins text-lg font-medium text-white focus:outline-none"
+                onClick={() => navigate("/student/get-exam-schedule")}
+              >
+                Exams Schedule
+              </button>
+            </div>
           </div>
-
-          {/* Image Section */}
-          <div className="flex items-center justify-center">
-            <img
-              src={img1}
-              className="mx-auto me-20 mt-10 w-72"
-              alt="Schedule"
-            />
-          </div>
+          <img
+            src={img1}
+            className="col-span-1 mx-auto mt-10 w-72"
+            alt="Schedule"
+          />
         </div>
 
         {/* No Data Found Message */}
@@ -50,23 +67,35 @@ function GetExamScheduleForStudent() {
 
   return (
     <section className="mx-auto min-h-screen w-[95%] font-poppins">
-      {/* Header Section */}
-      <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-2">
-        <div className="mt-10 flex justify-between">
+      <div className="mx-auto my-10 grid grid-cols-1 sm:grid-cols-3">
+        <div className="col-span-2 flex flex-col justify-between">
           <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
             <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
               Exam Schedule
               <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
             </button>
           </div>
+          <div className="mb-10 ms-8 mt-7 flex items-center gap-8 md:ms-14 lg:ms-20">
+            <button
+              className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 font-poppins text-lg font-medium text-transparent"
+              onClick={() => navigate("/student/schedule")}
+            >
+              Weekly Schedule
+            </button>
+            <button
+              className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 font-poppins text-lg font-medium text-white focus:outline-none"
+              onClick={() => navigate("/student/get-exam-schedule")}
+            >
+              Exams Schedule
+            </button>
+          </div>
         </div>
-
-        {/* Image Section */}
-        <div className="flex items-center justify-center">
-          <img src={img1} className="mx-auto me-20 mt-10 w-72" alt="Schedule" />
-        </div>
+        <img
+          src={img1}
+          className="col-span-1 mx-auto mt-10 w-72"
+          alt="Schedule"
+        />
       </div>
-
       {/* Table Section */}
       <div className="mx-auto mb-20 w-[88%] rounded-xl border border-gray-200 font-poppins shadow-md">
         <div className="overflow-x-auto">
