@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getDegreesBySemester } from "../StudentRedux/gradesStudentSlice";
 import Loader from "@/ui/Loader";
+import { Button } from "@/components/ui/button";
 
 function GradesForSemester() {
   const { semesterDegrees, loading } = useSelector(
     (state) => state.studentGrades,
   );
-
   const role = sessionStorage.getItem("role");
 
   const dispatch = useDispatch();
@@ -19,51 +19,63 @@ function GradesForSemester() {
 
   const navigate = useNavigate();
 
-  if (loading) return <Loader role={role} />;
+  if (loading) {
+     return (
+          <div className=" mt-16 mb-20 min-h-screen w-[95%] mx-auto">
+          <Loader role={role}/>
+          </div>
+        );
+  }
 
   return (
-    <div className="mx-auto w-[90%]">
-      <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
-        <div className="m-auto mb-6 mt-10 grid grid-cols-1 gap-1 rounded-3xl bg-gray-100 sm:grid-cols-2 font-poppins">
-          <button
-            className="flex cursor-pointer items-center justify-center rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-2 font-medium text-white focus:outline-none"
-            onClick={() => navigate("/student/grades-for-semester")}
-          >
-            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white">
-              1
-            </span>
+    <section className="font-poppins min-h-screen w-[88%] mx-auto mt-16 pt-4 mb-20">
+      {/* Header Section */}
+      <div className="w-full flex justify-between items-center mb-16">
+            <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
             Grades for Semester
-          </button>
+              <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+            </h1>
+            <Button
+              variant="solid"
+              className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </Button>
+          </div>
 
-          <button
-            className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-medium text-transparent focus:outline-none"
-            onClick={() => navigate("/student/grades-for-allyears")}
-          >
-            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white">
-              2
-            </span>
-            Grades All Years
-          </button>
-        </div>
-
-        {/* Table displaying semester grades */}
-        <div className="mt-8 overflow-x-auto rounded-lg shadow-md font-poppins">
-          <table className="min-w-full bg-white">
+      {/* Table Section */}
+      <div className="mx-auto  rounded-xl border border-gray-200 shadow-md font-poppins mb-20">
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto bg-white p-6 shadow-md">
             <thead>
-              <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white">
-                <th className="px-3 py-2 text-left text-sm">Subject Name</th>
-                <th className="px-3 py-2 text-left text-sm">Midterm Degree</th>
-                <th className="px-3 py-2 text-left text-sm">Max Midterm Degree</th>
-                <th className="px-3 py-2 text-left text-sm">Final Degree</th>
-                <th className="px-3 py-2 text-left text-sm">Max Final Degree</th>
-                <th className="px-3 py-2 text-left text-sm">Subject Score</th>
-                <th className="px-3 py-2 text-left text-sm">Max Subject Score</th>
+              <tr>
+                <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
+                  Subject Name
+                </th>
+                <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
+                  Midterm Degree
+                </th>
+                <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
+                  Max Midterm Degree
+                </th>
+                <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
+                  Final Degree
+                </th>
+                <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
+                  Max Final Degree
+                </th>
+                <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
+                  Subject Score
+                </th>
+                <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
+                  Max Subject Score
+                </th>
               </tr>
             </thead>
             <tbody>
               {semesterDegrees?.length > 0 ? (
-                semesterDegrees?.map((item) => {
-                  // Calculate Score Subject and Max Score Subject
+                semesterDegrees?.map((item, index) => {
                   const scoreSubject =
                     (item.midterm?.examGrade || 0) +
                     (item.final?.examGrade || 0);
@@ -74,25 +86,31 @@ function GradesForSemester() {
                   return (
                     <tr
                       key={item.subjectId}
-                      className="border-b transition-colors hover:bg-gray-50"
+                      className={`border-b border-gray-200 ${
+                        index % 2 === 0 ? "bg-white" : "bg-[#F9F9F9]"
+                      } hover:bg-[#F3E5F5] transition duration-200`}
                     >
-                      <td className="px-3 py-2 text-sm">{item.subjectName}</td>
-                      <td className="px-3 py-2 text-sm">
-                        {item.midterm?.examGrade ? item.midterm.examGrade : "-"}
+                      <td className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]">
+                        {item.subjectName}
                       </td>
-                      <td className="px-3 py-2 text-sm">
-                        {item.midterm?.finalDegree
-                          ? item.midterm.finalDegree
-                          : "-"}
+                      <td className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]">
+                        {item.midterm?.examGrade ?? "-"}
                       </td>
-                      <td className="px-3 py-2 text-sm">
-                        {item.final?.examGrade ? item.final.examGrade : "-"}
+                      <td className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]">
+                        {item.midterm?.finalDegree ?? "-"}
                       </td>
-                      <td className="px-3 py-2 text-sm">
-                        {item.final?.finalDegree ? item.final.finalDegree : "-"}
+                      <td className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]">
+                        {item.final?.examGrade ?? "-"}
                       </td>
-                      <td className="px-3 py-2 text-sm">{scoreSubject}</td>
-                      <td className="px-3 py-2 text-sm">{maxScoreSubject}</td>
+                      <td className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]">
+                        {item.final?.finalDegree ?? "-"}
+                      </td>
+                      <td className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]">
+                        {scoreSubject}
+                      </td>
+                      <td className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63]">
+                        {maxScoreSubject}
+                      </td>
                     </tr>
                   );
                 })
@@ -100,9 +118,9 @@ function GradesForSemester() {
                 <tr>
                   <td
                     colSpan="7"
-                    className="px-4 py-3 text-center text-sm text-gray-500"
+                    className="px-4 py-12 text-center text-lg text-gray-500"
                   >
-                    No degrees available for this semester.
+                    <p className="py-16">No degrees available for this semester.</p>
                   </td>
                 </tr>
               )}
@@ -110,7 +128,7 @@ function GradesForSemester() {
           </table>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
