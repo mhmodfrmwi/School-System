@@ -4,59 +4,74 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudentSchoolHubs } from "../StudentRedux/schoolhubSlice";
 import activityImage from "../../../../assets/activity2.png";
+import Loader from "@/ui/Loader";
+import Swal from "sweetalert2";
 
 const PrizesActivity = () => {
   const navigate = useNavigate();
-
   const { id } = useParams();
   const dispatch = useDispatch();
   const { schoolHubs = [], loading, error } = useSelector(
     (state) => state.studentSchoolHub || {}
   );
 
-
-
   useEffect(() => {
     dispatch(getStudentSchoolHubs());
   }, [dispatch]);
 
+  // Display SweetAlert for errors
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error,
+      });
+    }
+  }, [error]);
 
   const activity = schoolHubs.find((hub) => hub._id === id);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!activity) return <div>No activity found.</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader role="student" />
+      </div>
+    );
+  }
+
+  if (!activity) return <div className="font-poppins min-h-screen w-[90%] mx-auto mt-16 mb-10">No activity found.</div>;
 
   const { prizes } = activity;
 
   return (
-    <>
+    <div className="font-poppins min-h-screen w-[90%] mx-auto mt-16 relative mb-10">
       <div className="col-span-2 flex flex-col justify-between ms-5">
+        {/* Updated Header */}
+        <div className="mb-1">
+          <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-3xl font-semibold text-transparent">
+            Activities
+            <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
+          </h1>
 
-        <div className="text-2xl font-poppins cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-1 font-bold text-transparent ms-7 mt-5">
-          Activities
+          {/* Updated Buttons Section */}
+          <div className="mb-2 mt-22 flex items-center gap-8">
+            <button
+              className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 text-lg font-medium text-transparent mt-8"
+              onClick={() => navigate(`/student/activities/detailes/${id}`)}
+            >
+              Details
+            </button>
+            <button
+              className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-2 text-lg font-medium text-white focus:outline-none mt-8"
+              onClick={() => navigate(`/student/activities/prizes/${id}`)}
+            >
+              Prizes
+            </button>
+          </div>
         </div>
 
-        <p className="w-24 rounded-xl mb-2 border-t-4 border-[#BC6FFB] ms-7"></p>
-
-
-        <div className="mb-6 mt-4 flex flex-col sm:flex-row items-center gap-4">
-          <button
-            className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 text-lg font-medium text-white focus:outline-none"
-            onClick={() => navigate("/student/activities")}
-          >
-            School Hubs
-          </button>
-
-          <button
-            className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 text-lg font-medium text-transparent"
-            onClick={() => navigate("/student/activities/contests")}
-          >
-            Contests
-          </button>
-        </div>
-
-
+        {/* Prizes Section */}
         <div className="flex flex-col items-center mt-5">
           <img
             src={activityImage}
@@ -64,12 +79,11 @@ const PrizesActivity = () => {
             className="mb-6 w-full max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg"
           />
 
-          <div className="w-1/2 mx-auto flex justify-center flex-wrap gap-4 mt-4 p-4">
+          <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 p-4">
             {prizes.map((prize, index) => (
               <div
                 key={index}
-                className="border rounded-lg p-6 font-poppins text-center  bg-[#F5F5F5] shadow-md shadow-purple-300 hover:shadow-lg hover:shadow-purple-300 transition-shadow duration-300"
-                style={{ flex: "1 1 calc(50% - 1rem)" }}
+                className="border rounded-lg p-6 font-poppins text-center bg-[#F5F5F5] shadow-md shadow-purple-300 hover:shadow-lg hover:shadow-purple-300 transition-shadow duration-300"
               >
                 <h3 className="font-bold font-poppins text-lg">Level {index + 1}</h3>
                 <p className="text-sm mt-2">{prize}</p>
@@ -78,7 +92,7 @@ const PrizesActivity = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
