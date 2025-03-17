@@ -32,6 +32,17 @@
 //     );
 //   }
 
+//   // Sort exams by date within each schedule
+//   const sortedSchedules = managerExamSchedules.grades.map((grade) => ({
+//     ...grade,
+//     schedules: grade.schedules.map((schedule) => ({
+//       ...schedule,
+//       exams: schedule.exams
+//         ? schedule.exams.sort((a, b) => new Date(a.date) - new Date(b.date))
+//         : [],
+//     })),
+//   }));
+
 //   return (
 //     <div className="flex flex-col p-4">
 //       <div className="flex-1">
@@ -76,7 +87,7 @@
 //                   </tr>
 //                 </thead>
 //                 <tbody>
-//                   {managerExamSchedules.grades.map((grade) => {
+//                   {sortedSchedules.map((grade) => {
 //                     return (
 //                       <React.Fragment key={grade.grade}>
 //                         {grade.schedules.map((schedule, index) => (

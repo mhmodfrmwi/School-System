@@ -31,6 +31,10 @@ const GetExamSchedule = () => {
     return <Loader />;
   }
 
+  const sortedSubjects = managerExamSchedule?.subjects?.sort((a, b) => {
+    return new Date(a.exam_date) - new Date(b.exam_date);
+  });
+
   return (
     <div className="bg-gray-100 p-4 sm:p-6">
       <div className="mx-auto w-full max-w-2xl lg:max-w-4xl">
@@ -101,7 +105,7 @@ const GetExamSchedule = () => {
               Subjects
             </h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {managerExamSchedule?.subjects?.map((subject) => (
+              {sortedSubjects?.map((subject) => (
                 <div
                   key={subject._id}
                   className="rounded-lg border border-gray-200 bg-gray-50 p-3"
