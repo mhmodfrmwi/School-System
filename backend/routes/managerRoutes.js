@@ -41,6 +41,11 @@ const {
   getAllVirtualRooms,
 } = require("../controllers/manager/virtualRoomController");
 
+const {
+  getSchedule,
+  getScheduleByClassId,
+} = require("../controllers/Admin/scheduleController");
+
 const router = express.Router();
 
 router.post("/login", login);
@@ -102,16 +107,18 @@ router.post(
 );
 
 //vr
-router.post(
-  "/virtualRoom",
-  validateJwt,
-  validateManager,
-  createVirtualRoom
-);
+router.post("/virtualRoom", validateJwt, validateManager, createVirtualRoom);
 router
   .route("/virtualRoom/:id")
   .get(validateJwt, validateManager, getVirtualRoom)
   .patch(validateJwt, validateManager, updateVirtualRoom)
   .delete(validateJwt, validateManager, deleteVirtualRoom);
 router.get("/virtualRoom", validateJwt, validateManager, getAllVirtualRooms);
+
+router.get(
+  "/schedule/:classId",
+  validateJwt,
+  validateManager,
+  getScheduleByClassId
+);
 module.exports = router;

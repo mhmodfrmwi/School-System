@@ -332,7 +332,8 @@ const getSchedule = expressAsyncHandler(async (req, res) => {
       .populate("teacher_id", "fullName")
       .populate("grade_id", "gradeName")
       .populate("academic_year_id", "startYear endYear")
-      .populate("semester_id");
+      .populate("semester_id")
+      .select("-__v -createdAt -updatedAt");
 
     if (!schedule) {
       return res.status(404).json({
@@ -373,10 +374,38 @@ const getAllSchedule = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const getScheduleByClassId = async (req, res) => {
+  try {
+    const { classId } = req.params;
+    if (!validateObjectId(classId)) {
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid Class ID",
+      });
+    }
+    const schedules = await Schedule.find({ class_id: classId })
+      .populate("class_id", "className")
+      .populate("subject_id", "subjectName")
+      .populate("teacher_id", "fullName")
+      .populate("grade_id", "gradeName")
+      .populate("academic_year_id", "startYear endYear")
+      .populate("semester_id")
+      .select("-__v -createdAt -updatedAt");
+    res.status(200).json({
+      status: 200,
+      message: "Schedules retrieved successfully",
+      schedules,
+    });
+  } catch (error) {
+    console.log(`Failed ${error.message}`);
+    res.json({ message: `Failed ${error.message}` });
+  }
+};
 module.exports = {
   createSchedule,
   updateSchedule,
   deleteSchedule,
   getSchedule,
   getAllSchedule,
+  getScheduleByClassId,
 };
