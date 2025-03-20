@@ -139,6 +139,9 @@ const WeeklyScheduleForManager = () => {
                                       {scheduleItem.subject_id.subjectName}
                                     </p>
                                     <p className="text-xs">
+                                      {scheduleItem.teacher_id.fullName}
+                                    </p>
+                                    <p className="text-xs">
                                       {scheduleItem.grade_id.gradeName} |{" "}
                                       {scheduleItem.class_id.className}
                                     </p>
@@ -147,9 +150,6 @@ const WeeklyScheduleForManager = () => {
                                         scheduleItem.start_time,
                                         scheduleItem.end_time,
                                       )}
-                                    </p>
-                                    <p className="text-xs">
-                                      {scheduleItem.teacher_id.fullName}
                                     </p>
                                   </>
                                 ) : (

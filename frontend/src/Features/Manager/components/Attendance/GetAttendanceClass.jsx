@@ -48,10 +48,10 @@ const GetAttendanceClass = () => {
   return (
     <div className="mx-auto w-[360px] p-4 sm:w-[550px] md:w-[700px] md:p-6 lg:px-0 xl:w-full">
       <div className="mb-6 ml-6 flex flex-col">
-        <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+        <h1 className="font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
           Class Data
         </h1>
-        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px]"></div>
+        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#117C90] lg:h-[4px]"></div>
       </div>
 
       <div className="ml-6">
