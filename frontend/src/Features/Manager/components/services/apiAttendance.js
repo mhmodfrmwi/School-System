@@ -79,17 +79,12 @@ export const CreateClassData = async ({ classId, date }) => {
 };
 
 export const useCreateClassData = () => {
-  const queryClient = useQueryClient();
-
   const {
     data,
     mutate: createClassData,
     isLoading: isCreating,
   } = useMutation({
     mutationFn: CreateClassData,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["managerclasses"] });
-    },
     onError: (err) => {
       toast.error(`Error creating class data: ${err.message}`);
     },
