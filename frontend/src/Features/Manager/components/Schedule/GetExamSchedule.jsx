@@ -36,7 +36,7 @@ const GetExamSchedule = () => {
   });
 
   return (
-    <div className="bg-gray-100 p-4 sm:p-6">
+    <div className="mt-10 bg-gray-100 p-4 sm:p-6">
       <div className="mx-auto w-full max-w-2xl lg:max-w-4xl">
         {/* Header */}
         <div className="mb-6 flex flex-col items-center justify-between sm:flex-row">

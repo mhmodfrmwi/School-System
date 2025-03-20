@@ -190,6 +190,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../../../ui/Loader";
 import { useNavigate } from "react-router-dom";
+import ScheduleToggle from "./SelectPage";
 
 const GetExamSchedules = () => {
   const { isLoading, managerExamSchedules } = useExamSchedules();
@@ -205,130 +206,136 @@ const GetExamSchedules = () => {
 
   if (!managerExamSchedules || !hasSchedules) {
     return (
-      <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
-        <FontAwesomeIcon
-          icon={faCalendar}
-          className="mb-4 text-6xl text-gray-400"
-        />
-        <p className="mb-2 text-xl font-semibold text-gray-600">
-          No schedules found for the academic year
-        </p>
-        <p className="mb-4 max-w-xl text-center text-gray-500">
-          It seems like there are no exam schedules available at the moment.
-          Please check back later.
-        </p>
-      </div>
+      <>
+        <ScheduleToggle />
+        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
+          <FontAwesomeIcon
+            icon={faCalendar}
+            className="mb-4 text-6xl text-gray-400"
+          />
+          <p className="mb-2 text-xl font-semibold text-gray-600">
+            No schedules found for the academic year
+          </p>
+          <p className="mb-4 max-w-xl text-center text-gray-500">
+            It seems like there are no exam schedules available at the moment.
+            Please check back later.
+          </p>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="flex flex-col p-4">
-      <div className="flex-1">
-        <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-full">
-          <div className="mx-auto w-full max-w-7xl px-4">
-            {/* Header */}
-            <div className="my-2 flex items-center justify-between">
-              <div>
-                <div className="ms-4 cursor-text py-1 font-poppins text-sm font-bold text-[#105E6A] sm:text-xl">
-                  Exam Schedules - {managerExamSchedules.academic_year}
+    <>
+      <ScheduleToggle />
+      <div className="flex flex-col px-4">
+        <div className="flex-1">
+          <div className="mx-auto w-[360px] sm:w-[550px] md:w-[700px] xl:w-full">
+            <div className="mx-auto w-full max-w-7xl px-4">
+              {/* Header */}
+              <div className="my-2 flex items-center justify-between">
+                <div>
+                  <div className="ms-4 cursor-text py-1 font-poppins text-sm font-bold text-[#105E6A] sm:text-xl">
+                    Exam Schedules - {managerExamSchedules.academic_year}
+                  </div>
+                  <p className="mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
                 </div>
-                <p className="mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
+                <button
+                  className="me-0 rounded-2xl bg-gradient-to-r from-[#105E6A] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm xl:me-4"
+                  onClick={() => navigate("/manager/create-exam-schedule")}
+                >
+                  Create Schedule
+                </button>
               </div>
-              <button
-                className="rounded-2xl bg-gradient-to-r from-[#105E6A] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm"
-                onClick={() => navigate("/manager/create-exam-schedule")}
-              >
-                Create Schedule
-              </button>
-            </div>
 
-            <div className="overflow-x-auto p-4">
-              <table className="w-full min-w-[800px] border-collapse border border-gray-300 text-sm sm:text-base">
-                <thead>
-                  <tr className="bg-[#105E6A] text-white">
-                    <th className="border border-gray-300 p-2 font-poppins">
-                      Grade
-                    </th>
-                    <th className="border border-gray-300 p-2 font-poppins">
-                      Semester
-                    </th>
-                    <th className="border border-gray-300 p-2 font-poppins">
-                      Start Date
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {managerExamSchedules.grades.map((grade) => {
-                    return grade.schedules.map((schedule, index) => {
-                      if (schedule.message) {
+              <div className="overflow-x-auto p-4">
+                <table className="w-full min-w-[800px] border-collapse border border-gray-300 text-sm sm:text-base">
+                  <thead>
+                    <tr className="bg-[#105E6A] text-white">
+                      <th className="border border-gray-300 p-2 font-poppins">
+                        Grade
+                      </th>
+                      <th className="border border-gray-300 p-2 font-poppins">
+                        Semester
+                      </th>
+                      <th className="border border-gray-300 p-2 font-poppins">
+                        Start Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {managerExamSchedules.grades.map((grade) => {
+                      return grade.schedules.map((schedule, index) => {
+                        if (schedule.message) {
+                          return (
+                            <tr
+                              key={`${grade.grade}-${index}`}
+                              className="bg-white even:bg-gray-100"
+                            >
+                              <td className="border border-gray-300 p-2 text-center font-semibold">
+                                {grade.grade}
+                              </td>
+
+                              <td className="border border-gray-300 p-2 text-center">
+                                -
+                              </td>
+
+                              <td
+                                colSpan="1"
+                                className="border border-gray-300 p-2 text-center"
+                              >
+                                <p className="text-gray-600">
+                                  {schedule.message}
+                                </p>
+                              </td>
+                            </tr>
+                          );
+                        }
+
+                        const earliestDate =
+                          schedule.exams.length > 0
+                            ? new Date(
+                                Math.min(
+                                  ...schedule.exams.map((exam) =>
+                                    new Date(exam.date).getTime(),
+                                  ),
+                                ),
+                              ).toLocaleDateString()
+                            : "-";
+
                         return (
                           <tr
-                            key={`${grade.grade}-${index}`}
-                            className="bg-white even:bg-gray-100"
+                            key={`${grade.grade}-${schedule.schedule_id}`}
+                            className="cursor-pointer bg-white even:bg-gray-100 hover:bg-gray-200"
+                            onClick={() =>
+                              navigate(
+                                `/manager/get-exam-schedule/${schedule.schedule_id}`,
+                              )
+                            }
                           >
                             <td className="border border-gray-300 p-2 text-center font-semibold">
                               {grade.grade}
                             </td>
 
                             <td className="border border-gray-300 p-2 text-center">
-                              -
+                              {schedule.semester}
                             </td>
 
-                            <td
-                              colSpan="1"
-                              className="border border-gray-300 p-2 text-center"
-                            >
-                              <p className="text-gray-600">
-                                {schedule.message}
-                              </p>
+                            <td className="border border-gray-300 p-2 text-center">
+                              {earliestDate}
                             </td>
                           </tr>
                         );
-                      }
-
-                      const earliestDate =
-                        schedule.exams.length > 0
-                          ? new Date(
-                              Math.min(
-                                ...schedule.exams.map((exam) =>
-                                  new Date(exam.date).getTime(),
-                                ),
-                              ),
-                            ).toLocaleDateString()
-                          : "-";
-
-                      return (
-                        <tr
-                          key={`${grade.grade}-${schedule.schedule_id}`}
-                          className="cursor-pointer bg-white even:bg-gray-100 hover:bg-gray-200"
-                          onClick={() =>
-                            navigate(
-                              `/manager/get-exam-schedule/${schedule.schedule_id}`,
-                            )
-                          }
-                        >
-                          <td className="border border-gray-300 p-2 text-center font-semibold">
-                            {grade.grade}
-                          </td>
-
-                          <td className="border border-gray-300 p-2 text-center">
-                            {schedule.semester}
-                          </td>
-
-                          <td className="border border-gray-300 p-2 text-center">
-                            {earliestDate}
-                          </td>
-                        </tr>
-                      );
-                    });
-                  })}
-                </tbody>
-              </table>
+                      });
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

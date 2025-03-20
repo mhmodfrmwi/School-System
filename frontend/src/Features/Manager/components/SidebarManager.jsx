@@ -45,14 +45,9 @@ const SidebarManager = () => {
       label: "Schedule",
       icon: ScheduleIcon,
       hoverIcon: ScheduleIconH,
-      href: "/manager/schedule-table",
+      href: "/manager/get-all-schedule-classes",
     },
-    {
-      label: "Exams Schedules",
-      icon: ScheduleIcon,
-      hoverIcon: ScheduleIconH,
-      href: "/manager/get-exam-schedules",
-    },
+
     {
       label: "Grades",
       icon: GradeIcon,

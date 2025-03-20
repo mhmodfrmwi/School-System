@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:3000/exam-schedule";
 const API_URLToGet = "http://localhost:3000/exam-schedule/schedules/current";
+const API_URL_Schedule = "http://localhost:4000/api/v1/manager/schedule";
 // Create exam schedule
 const CreateExamScheduleData = async ({ formData }) => {
   const token = sessionStorage.getItem("token");
@@ -171,6 +172,37 @@ export const useEditExamSchedule = () => {
     },
     onError: (err) => {
       toast.error(err.message);
+    },
+  });
+};
+//fetch manager schedule
+
+const fetchSchedule = async (id) => {
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    throw new Error("Authentication required. Please log in.");
+  }
+  try {
+    const { data } = await axios.get(`${API_URL_Schedule}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch exam schedule",
+    );
+  }
+};
+
+export const useManagerSchedule = (id) => {
+  return useQuery({
+    queryKey: ["managerSchedule", id],
+    queryFn: () => fetchSchedule(id),
+    enabled: !!id,
+    onError: (err) => {
+      toast.error(`Error fetching exam schedule: ${err.message}`);
     },
   });
 };
