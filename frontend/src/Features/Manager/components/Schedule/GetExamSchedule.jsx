@@ -16,11 +16,7 @@ const GetExamSchedule = () => {
   const { isDeleting, deleteExamScheduleMutation } = useDeleteExamSchedule();
 
   const handleDelete = () => {
-    deleteExamScheduleMutation(id, {
-      onSuccess: () => {
-        navigate("/manager/get-exam-schedules");
-      },
-    });
+    deleteExamScheduleMutation(id);
   };
 
   const handleUpdate = () => {

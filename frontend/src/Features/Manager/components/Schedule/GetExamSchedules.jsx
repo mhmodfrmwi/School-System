@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import ScheduleToggle from "./SelectPage";
 
 const GetExamSchedules = () => {
-  const { isLoading, managerExamSchedules, isFetching } = useExamSchedules();
+  const { isLoading, managerExamSchedules } = useExamSchedules();
   const navigate = useNavigate();
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return <Loader />;
   }
 

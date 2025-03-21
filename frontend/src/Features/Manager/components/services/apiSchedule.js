@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:3000/exam-schedule";
@@ -64,11 +65,7 @@ const fetchExamSchedules = async () => {
 };
 
 export const useExamSchedules = () => {
-  const {
-    isLoading,
-    data: managerExamSchedules,
-    isFetching,
-  } = useQuery({
+  const { isLoading, data: managerExamSchedules } = useQuery({
     queryKey: ["managerExamSchedules"],
     queryFn: fetchExamSchedules,
     onError: (err) => {
@@ -76,7 +73,7 @@ export const useExamSchedules = () => {
     },
   });
 
-  return { isLoading, managerExamSchedules, isFetching };
+  return { isLoading, managerExamSchedules };
 };
 
 //fetch schedule
@@ -130,7 +127,7 @@ async function deleteExamSchedule(id) {
 
 export function useDeleteExamSchedule() {
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   const { isLoading: isDeleting, mutate: deleteExamScheduleMutation } =
     useMutation({
       mutationFn: deleteExamSchedule,
@@ -139,6 +136,7 @@ export function useDeleteExamSchedule() {
         queryClient.invalidateQueries({
           queryKey: ["managerExamSchedules"],
         });
+        navigate("/manager/get-exam-schedules");
       },
       onError: (err) => {
         toast.error(err.message);
@@ -165,6 +163,7 @@ const updateExamSchedule = async ({ id, formData }) => {
 
 export const useEditExamSchedule = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: ({ id, formData }) => updateExamSchedule({ id, formData }),
@@ -173,6 +172,7 @@ export const useEditExamSchedule = () => {
       queryClient.invalidateQueries({
         queryKey: ["managerExamSchedules"],
       });
+      navigate("/manager/get-exam-schedules");
     },
     onError: (err) => {
       toast.error(err.message);

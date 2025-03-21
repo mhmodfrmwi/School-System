@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import Loader from "../../../../ui/Loader";
 import { useEditExamSchedule, useExamSchedule } from "../services/apiSchedule";
@@ -8,7 +8,7 @@ import { fetchSubjects } from "../../../Admin/components/AdminRedux/subjectSlice
 
 const UpdateExamSchedule = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const { subjects = [] } = useSelector((state) => state.subject);
 
@@ -59,7 +59,6 @@ const UpdateExamSchedule = () => {
 
   const onSubmit = (formData) => {
     editExamSchedule({ id, formData });
-    navigate("/manager/get-exam-schedules");
   };
 
   if (isFetching || isEditing) {
