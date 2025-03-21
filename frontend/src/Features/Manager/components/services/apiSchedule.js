@@ -64,7 +64,11 @@ const fetchExamSchedules = async () => {
 };
 
 export const useExamSchedules = () => {
-  const { isLoading, data: managerExamSchedules } = useQuery({
+  const {
+    isLoading,
+    data: managerExamSchedules,
+    isFetching,
+  } = useQuery({
     queryKey: ["managerExamSchedules"],
     queryFn: fetchExamSchedules,
     onError: (err) => {
@@ -72,7 +76,7 @@ export const useExamSchedules = () => {
     },
   });
 
-  return { isLoading, managerExamSchedules };
+  return { isLoading, managerExamSchedules, isFetching };
 };
 
 //fetch schedule

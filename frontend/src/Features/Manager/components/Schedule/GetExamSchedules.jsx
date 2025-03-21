@@ -1,4 +1,3 @@
-import React from "react";
 import { useExamSchedules } from "../services/apiSchedule";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
@@ -7,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import ScheduleToggle from "./SelectPage";
 
 const GetExamSchedules = () => {
-  const { isLoading, managerExamSchedules } = useExamSchedules();
+  const { isLoading, managerExamSchedules, isFetching } = useExamSchedules();
   const navigate = useNavigate();
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <Loader />;
   }
 
