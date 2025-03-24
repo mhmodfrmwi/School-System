@@ -38,7 +38,7 @@ const MaterialsInLibrary = () => {
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <div className="flex flex-col p-4">
+    <div className="flex flex-col p-4 font-poppins">
       <div className=" ">
         <div className="mx-auto w-[400px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
           <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
