@@ -33,7 +33,7 @@ const GetExamSchedule = () => {
 
   return (
     <div className="mt-10 p-4 sm:p-6">
-      <div className="mx-auto w-full max-w-2xl lg:max-w-4xl">
+      <div className="mx-auto w-full max-w-2xl lg:max-w-5xl">
         <div className="mb-6 flex flex-col items-center justify-between sm:flex-row">
           <h1 className="mb-4 text-xl font-bold text-[#117C90] sm:mb-0 sm:text-2xl">
             Exam Schedule Details

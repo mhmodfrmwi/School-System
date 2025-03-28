@@ -65,15 +65,8 @@ export const CreateClassData = async ({ classId, date }) => {
       },
     );
 
-    if (response.data.attendances.length > 0) {
-      toast.success("Class data posted successfully!");
-    } else {
-      toast.success("No students found for this class.");
-    }
-
     return response.data.attendances || [];
   } catch (error) {
-    toast.error(`Error posting class data: ${error.message}`);
     throw error;
   }
 };
@@ -85,6 +78,9 @@ export const useCreateClassData = () => {
     isLoading: isCreating,
   } = useMutation({
     mutationFn: CreateClassData,
+    onSuccess: () => {
+      toast.success("Class data posted successfully!");
+    },
     onError: (err) => {
       toast.error(`Error creating class data: ${err.message}`);
     },

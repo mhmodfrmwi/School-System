@@ -52,7 +52,6 @@ const CreateExamSchedule = () => {
         onSuccess: () => {
           reset();
         },
-        onError: (error) => {},
       },
     );
   };

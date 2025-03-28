@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "@/ui/Loader";
 import Pagination from "../Pagination";
@@ -29,8 +28,8 @@ const GetAttendanceClass = () => {
           onSuccess: () => {
             reset();
           },
-          onError: (error) => {
-            toast.error(`Error: ${error.message}`);
+          onError: () => {
+            reset();
           },
         },
       );

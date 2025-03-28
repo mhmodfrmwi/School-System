@@ -41,7 +41,7 @@ export const useCreateExamSchedule = () => {
       queryClient.invalidateQueries({ queryKey: ["managerExamSchedules"] });
     },
     onError: (err) => {
-      toast.error(err.message);
+      toast.error("Failed to create exam schedule", err.message);
     },
   });
 
