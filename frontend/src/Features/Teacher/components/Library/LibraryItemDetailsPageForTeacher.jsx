@@ -80,12 +80,12 @@ const LibraryItemDetailsPage = () => {
   return (
     <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
       <div className="w-full flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
+        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-[#117C90]">
           {details?.title || "Item Details"}
         </h1>
         <Button
           variant="solid"
-          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
+          className="bg-[#117C90] text-white"
           onClick={() => navigate(-1)}
         >
           Back
