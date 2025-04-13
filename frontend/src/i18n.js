@@ -1,0 +1,379 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+i18n
+    .use(initReactI18next) 
+    .init({
+        resources: {
+            en: {
+                translation: {
+                    //Student
+
+                    //Nav
+                    SearchStudentPage: "Search Student Page",
+                    Logout: "Logout",
+                    EditProfile: "Edit Profile",
+                    NoMatches: " No matches found pages",
+                    "routes": {
+                        "grades": "Grades",
+                        "grades/assignment": "Assignments",
+                        "grades/exam": "Exams",
+                        "schedule": "Schedule",
+                        "schedule/exam": "Exam Schedule",
+                        "library": "Library",
+                        "motivation": "Motivation",
+                        "activities": "Activities",
+                        "activities/detailes": "Activity Details",
+                        "activities/prizes": "Prizes",
+                        "activities/contests": "Contests",
+                        "virtualrooms": "Virtual Rooms",
+                        "allcourses": "All Courses",
+                        "attendance": "Attendance"
+                    },
+                    //Sidebar
+                    KhatabSchool: "Khatab School",
+                    Home: "Home",
+                    Motivation: "Motivation",
+                    Courses: "Courses",
+                    Absence: "Absence",
+                    Schedule: "Schedule",
+                    GradeManagements: "Grade Managements",
+                    Activities: "Activities",
+                    Library: "Library",
+                    //Footer
+                    LearnGrawSuccess: "Learn,Graw,Success",
+                    EmpowerGrowth: "Empower Growth",
+                    InspireLearning: "Inspire Learning",
+                    DiscoverKowledge: "Discover Kowledge",
+                    ImagineMore: "Imagine More",
+                    Unlock: "Unlock",
+                    DreamBig: "Dream Big",
+                    ExploreIdeas: "Explore Ideas",
+                    AchieveGreatness: "Achieve Greatness",
+                    //Edit Profile
+                    editProfile: {
+                        title: "Edit Profile",
+                        profileImageAlt: "Profile Image",
+                        firstName: "First Name",
+                        lastName: "Last Name",
+                        gender: "Gender",
+                        genderMale: "Male",
+                        genderFemale: "Female",
+                        phoneNumber: "Phone Number",
+                        email: "Email",
+                        role: "Role",
+                        saveButton: "Save Changes",
+                        changePasswordTitle: "Change Password",
+                        currentPassword: "Current Password",
+                        newPassword: "New Password",
+                        confirmPassword: "Confirm New Password",
+                        otpCode: "OTP Verification Code",
+                        changePasswordButton: "Update Password",
+                    },
+                    //Dashboard
+                    dashboard: {
+                        profileImageAlt: "Student Profile Image",
+                        presentIconAlt: "Present Icon",
+                        presentToday: "You were present today!",
+                        greenLevel: "Green Level",
+                        diamondLevel: "Diamond Level",
+                        goldLevel: "Gold Level",
+                        awardIconAlt: "Award Icon",
+                        learningStreak: "Learning Streak",
+                        days: "days",
+                        yourScore: "Your Score",
+                        quickMenu: "Quick Menu",
+                        mainCategories: "Main Categories",
+                        continueReading: "Continue Reading",
+                        recommendedToWatch: "Recommended To Watch",
+                        continueButton: "Continue",
+                        watchNow: "Watch Now",
+                        type: "Type",
+                        onlineAssignments: "Online Assignments",
+                        exams: "Exams",
+                        courseMaterials: "Course Materials",
+                        reportCards: "Report Cards",
+                        mailbox: "Mailbox",
+                        assessments: "Assessments",
+                        activities: "Activities",
+                        virtualClassroom: "Virtual Classroom",
+                        announcements: "Announcements",
+                        videoLectures: "Video Lectures",
+                        spellingLesson: "Spelling - Learn How To Spell Letters",
+                        farmingLesson: "Lesson 1 - How to Grow and Take Care of Your Farm",
+                        adaptationLesson: "Adaptation - About Bears Life",
+                        atomVideo: "What is an atom?",
+                        spellingVideo: "Let's improve our Spelling!"
+                    },
+                    menu: {
+                        motivation: "Motivation",
+                        courses: "Courses",
+                        absence: "Absence",
+                        schedule: "Schedule",
+                        grades: "Grades",
+                        activities: "Activities",
+                        library: "Library"
+                    },
+                    subjects: {
+                        english: "English",
+                        arabic: "Arabic",
+                        science: "Science"
+                    },
+                    //Motivation
+
+                    motivation: {
+                        aboutScore: "About Your Score",
+                        newWayTitle: "The New Way of Learning",
+                        newWayDesc: "With the Score System, Learning is full of entertainment and fun. For the first time, your interaction with different school activities will give you rewards, discounts, and exclusive offers for our members in many famous places and shops.",
+                        whyTitle: "Why?",
+                        whyDesc: "When you interact with different learning objects and activates, you will earn points and start competing with your colleagues based on the score of each one, exactly as if you are competing with them in a game.",
+                        scoreIllustration: "Score Illustration",
+                        profileFrame: "Profile Frame",
+                        scheduleIcon: "Schedule Icon",
+                        score: "Score",
+                        forAllSemesters: "for all semesters",
+                        activitiesTitle: "Number of Activities",
+                        activitiesDesc: "The number of activities you interact with, for example, the number of discussions you participate in, the number of video lectures you view, the number of assignments you solve, the number of messages you send, and so on.",
+                        weightTitle: "Weight",
+                        weightDesc: "Each activity you do has a defined weight, for example, the weight of solving an assignment of 40 questions is definitely different from the weight of sending a message to your teacher and so on.",
+                        gradeTitle: "Grade (If Applicable)",
+                        gradeDesc: "In the exams or homework assignments, for example, the grade/mark you get will affect your score, so if you get the full mark you will get the maximum number of points for this exam/homework.",
+                        timeTitle: "Time (If Applicable)",
+                        timeDesc: "The faster you respond to your activities in Classera, the more points you get. For example, if you got a homework that is launched on Monday and is open until Thursday, if you submit it on Monday you will get up to 25% percent increase in your points, and if you submit it just before the deadline you will not get any extra bonus.",
+                        summaryTitle: "Summary Of Your Score",
+                        summaryDesc: "Every member starts his/her journey with a green membership card. In each semester, you will start earning points from the first day. Your final score at the end of the semester will determine the type of card you deserve to use throughout the next semester as recognition for your efforts.",
+                        range1: "0 and 250",
+                        range2: "251 to 400",
+                        range3: "401 or more",
+                        cardText: " Card.",
+                        summaryPoint1: "If your points are between",
+                        summaryPoint2: "in your school, you will be eligible for the Learnova",
+                        scoreFactors: "Your score is based on many factors, below are the four main factors that affect your score."
+                      },
+                      badges: {
+                        green: "Green",
+                        gold: "Golden",
+                        diamond: "Diamond"
+                      },
+                      table: {
+                        weightsLimits: "Weights & Limits",
+                        topStudents: "Top Students",
+                        fullName: "Full Name",
+                        academicNumber: "Academic Number",
+                        totalPoints: "Total Points",
+                        badge: "Badge",
+                        module: "Module",
+                        activity: "Activity",
+                        points: "Points",
+                        comments: "Comments",
+                        examsHomework: "Exams, Homework Assignments and Activities",
+                        eachQuestion: "For each question you solve",
+                        points5: "5 points",
+                        messages: "Messages",
+                        eachMessage: "For each message you end or reply to",
+                        messageComment: "Your score is based on the number of recipients who read your message. More reads = more points. If no one reads it, you get no points.",
+                        courseMaterials: "Course Materials",
+                        eachDownload: "For each course material you download",
+                        virtualClassrooms: "Virtual Classrooms",
+                        eachClass: "For each smart class you attend"
+                      },
+                      points: {
+                        title: "Points Summary",
+                        todayPoints: "Points Earned Today",
+                        semesterPoints: "Your Score for this Semester",
+                        allPoints: "Score for all semesters"
+                      }
+
+
+                }
+            },
+            ar: {
+                translation: {
+                    //Student
+
+                    //Nav
+                    SearchStudentPage: "البحث في صفحة الطالب",
+                    Logout: "تسجيل الخروج",
+                    EditProfile: "تعديل الملف الشخصي",
+                    NoMatches: "لم يتم العثور على صفحات مطابقة",
+                    "routes": {
+                        "grades": "الدرجات",
+                        "grades/assignment": "الواجبات",
+                        "grades/exam": "الامتحانات",
+                        "schedule": "الجدول",
+                        "schedule/exam": "جدول الامتحانات",
+                        "library": "المكتبة",
+                        "motivation": "التحفيز",
+                        "activities": "الأنشطة",
+                        "activities/detailes": "تفاصيل النشاط",
+                        "activities/prizes": "الجوائز",
+                        "activities/contests": "المسابقات",
+                        "virtualrooms": "الغرف الافتراضية",
+                        "allcourses": "جميع المواد",
+                        "attendance": "الحضور"
+                    },
+                    //Sidebar
+                    KhatabSchool: "مدرسة خطاب",
+                    Home: "الصفحة الرئيسية",
+                    Motivation: "التحفيز",
+                    Courses: "المواد",
+                    Absence: "الغياب",
+                    Schedule: "الجدول",
+                    GradeManagements: "الدرجات",
+                    Activities: "الأنشطة",
+                    Library: "المكتبة",
+                    //Footer
+                    LearnGrawSuccess: "تعلّم، نمُ، نجاح",
+                    EmpowerGrowth: "تمكين النمو",
+                    InspireLearning: "إلهام التعلم",
+                    DiscoverKowledge: "اكتشف المعرفة",
+                    ImagineMore: "تخيّل المزيد",
+                    Unlock: "افتح الإمكانيات",
+                    DreamBig: "احلم بشكل كبير",
+                    ExploreIdeas: "استكشِف الأفكار",
+                    AchieveGreatness: "حقق العظمة",
+                    //Edit Profile
+                    editProfile: {
+                        title: "تعديل الملف الشخصي",
+                        profileImageAlt: "صورة الملف الشخصي",
+                        firstName: "الاسم الأول",
+                        lastName: "الاسم الأخير",
+                        gender: "الجنس",
+                        genderMale: "ذكر",
+                        genderFemale: "أنثى",
+                        phoneNumber: "رقم الهاتف",
+                        email: "البريد الإلكتروني",
+                        role: "الدور",
+                        saveButton: "حفظ التغييرات",
+                        changePasswordTitle: "تغيير كلمة المرور",
+                        currentPassword: "كلمة المرور الحالية",
+                        newPassword: "كلمة المرور الجديدة",
+                        confirmPassword: "تأكيد كلمة المرور الجديدة",
+                        otpCode: "رمز التحقق OTP",
+                        changePasswordButton: "تحديث كلمة المرور",
+                    },
+                    //Dashboard
+                    dashboard: {
+                        profileImageAlt: "صورة الطالب الشخصية",
+                        presentIconAlt: "أيقونة الحضور",
+                        presentToday: "لقد حضرت اليوم!",
+                        greenLevel: "المستوى الأخضر",
+                        diamondLevel: "المستوى الماسي",
+                        goldLevel: "المستوى الذهبي",
+                        awardIconAlt: "أيقونة الجائزة",
+                        learningStreak: "سلسلة التعلم",
+                        days: "أيام",
+                        yourScore: "نقاطك",
+                        quickMenu: "القائمة السريعة",
+                        mainCategories: "الفئات الرئيسية",
+                        continueReading: "واصل القراءة",
+                        recommendedToWatch: "مقترح للمشاهدة",
+                        continueButton: "واصل",
+                        watchNow: "شاهد الآن",
+                        type: "النوع",
+                        onlineAssignments: "الواجبات عبر الإنترنت",
+                        exams: "الامتحانات",
+                        courseMaterials: "مواد الدورة",
+                        reportCards: "كشوف الدرجات",
+                        mailbox: "صندوق البريد",
+                        assessments: "التقييمات",
+                        activities: "الأنشطة",
+                        virtualClassroom: "الفصول الافتراضية",
+                        announcements: "الإعلانات",
+                        videoLectures: "المحاضرات المرئية",
+                        spellingLesson: "الهجاء - تعلم كيفية تهجئة الحروف",
+                        farmingLesson: "الدرس 1 - كيفية زراعة ورعاية مزرعتك",
+                        adaptationLesson: "التكيف - عن حياة الدببة",
+                        atomVideo: "ما هو الذرة؟",
+                        spellingVideo: "لنحسن تهجئتنا!"
+                    },
+                    menu: {
+                        motivation: "التحفيز",
+                        courses: "الكورسات",
+                        absence: "الحضور",
+                        schedule: "الجدول",
+                        grades: "الدرجات",
+                        activities: "الأنشطة",
+                        library: "المكتبة"
+                    },
+                    subjects: {
+                        english: "الإنجليزية",
+                        arabic: "العربية",
+                        science: "العلوم"
+                    },
+                    //Motivation
+
+                    motivation: {
+                        aboutScore: "حول نقاطك",
+                        newWayTitle: "طريقة التعلم الجديدة",
+                        newWayDesc: "مع نظام النقاط، يصبح التعلم مليئًا بالترفيه والمتعة. لأول مرة، ستمنحك تفاعلاتك مع الأنشطة المدرسية المختلفة مكافآت وخصومات وعروضًا حصرية لأعضائنا في العديد من الأماكن والمحلات المشهورة.",
+                        whyTitle: "لماذا؟",
+                        whyDesc: "عندما تتفاعل مع عناصر التعلم المختلفة والأنشطة، ستحصل على نقاط وتبدأ في التنافس مع زملائك بناءً على نقاط كل واحد، تمامًا كما لو كنت تتنافس معهم في لعبة.",
+                        scoreIllustration: "رسم توضيحي للنقاط",
+                        profileFrame: "إطار الصورة الشخصية",
+                        scheduleIcon: "أيقونة الجدول",
+                        score: "النقاط",
+                        forAllSemesters: "لجميع الفصول الدراسية",
+                        activitiesTitle: "عدد الأنشطة",
+                        activitiesDesc: "عدد الأنشطة التي تتفاعل معها، على سبيل المثال عدد المناقشات التي تشارك فيها، عدد المحاضرات المرئية التي تشاهدها، عدد الواجبات التي تحلها، عدد الرسائل التي ترسلها، وهكذا.",
+                        weightTitle: "الوزن",
+                        weightDesc: "كل نشاط تقوم به له وزن محدد، على سبيل المثال، وزن حل واجب من 40 سؤالًا يختلف بالتأكيد عن وزن إرسال رسالة إلى معلمك وهكذا.",
+                        gradeTitle: "الدرجة (إن وجدت)",
+                        gradeDesc: "في الاختبارات أو الواجبات المنزلية، على سبيل المثال، ستؤثر الدرجة/العلامة التي تحصل عليها على نقاطك، لذلك إذا حصلت على العلامة الكاملة فستحصل على الحد الأقصى من النقاط لهذا الاختبار/الواجب.",
+                        timeTitle: "الوقت (إن وجد)",
+                        timeDesc: "كلما استجبت لأنشطتك في كلاسيرا بشكل أسرع، كلما حصلت على نقاط أكثر. على سبيل المثال، إذا حصلت على واجب منزلي تم إطلاقه يوم الاثنين ومفتوح حتى يوم الخميس، إذا قمت بتسليمه يوم الاثنين فستحصل على زيادة تصل إلى 25٪ في نقاطك، وإذا قمت بتسليمه قبل الموعد النهائي مباشرة فلن تحصل على أي مكافأة إضافية.",
+                        summaryTitle: "ملخص نقاطك",
+                        summaryDesc: "يبدأ كل عضو رحلته ببطاقة عضوية خضراء. في كل فصل دراسي، ستبدأ في كسب النقاط من اليوم الأول. ستحدد نقاطك النهائية في نهاية الفصل الدراسي نوع البطاقة التي تستحق استخدامها طوال الفصل الدراسي التالي كاعتراف بجهودك.",
+                        range1: "0 و 250",
+                        range2: "251 إلى 400",
+                        range3: "401 أو أكثر",
+                        cardText: " بطاقة.",
+                        summaryPoint1: "إذا كانت نقاطك بين ",
+                        summaryPoint2: "في مدرستك، فستكون مؤهلاً للحصول على بطاقة ليرنوفا ",
+                        scoreFactors: "تعتمد نقاطك على العديد من العوامل، فيما يلي العوامل الأربعة الرئيسية التي تؤثر على نقاطك."
+                      },
+                      badges: {
+                        green: "أخضر",
+                        gold: "ذهبي",
+                        diamond: "ماسي"
+                      },
+                      table: {
+                        weightsLimits: "الأوزان والحدود",
+                        topStudents: "أفضل الطلاب",
+                        fullName: "الاسم الكامل",
+                        academicNumber: "الرقم الأكاديمي",
+                        totalPoints: "إجمالي النقاط",
+                        badge: "الشارة",
+                        module: "الوحدة",
+                        activity: "النشاط",
+                        points: "النقاط",
+                        comments: "ملاحظات",
+                        examsHomework: "الاختبارات والواجبات المنزلية والأنشطة",
+                        eachQuestion: "لكل سؤال تحله",
+                        points5: "5 نقاط",
+                        messages: "الرسائل",
+                        eachMessage: "لكل رسالة ترسلها أو ترد عليها",
+                        messageComment: "تعتمد نقاطك على عدد المستلمين الذين يقرؤون رسالتك. المزيد من القراء = المزيد من النقاط. إذا لم يقرأها أحد، فلن تحصل على أي نقاط.",
+                        courseMaterials: "مواد الدورة",
+                        eachDownload: "لكل مادة دراسية تقوم بتنزيلها",
+                        virtualClassrooms: "الفصول الافتراضية",
+                        eachClass: "لكل فصل ذكي تحضره"
+                      },
+                      points: {
+                        title: "ملخص النقاط",
+                        todayPoints: "النقاط المكتسبة اليوم",
+                        semesterPoints: "نقاطك لهذا الفصل",
+                        allPoints: "النقاط لجميع الفصول"
+                      }
+                
+                }
+            }
+        },
+        lng: localStorage.getItem('i18nextLng') || 'en',
+        fallbackLng: 'en',
+        interpolation: {
+            escapeValue: false,
+        },
+    });
+
+export default i18n;

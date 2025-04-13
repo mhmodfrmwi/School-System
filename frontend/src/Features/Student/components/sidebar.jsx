@@ -17,23 +17,25 @@ import Icon8 from "../../../assets/StudentIcon/Icon8.png";
 // import Icon11 from "../../../assets/StudentIcon/Icon11.png";
 import Icon12 from "../../../assets/StudentIcon/Icon12.png";
 import { useSelector } from "react-redux";
+import { useTranslation } from 'react-i18next';
 const Sidebar = ({ closeSidebar }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { fullName } = useSelector((state) => state.login);
   const menuItems = [
-    { label: "Home", icon: Icon1, path: "/student" },
-    { label: "Motivation", icon: Icon2, path: "/student/motivation" },
-    { label: "Courses", icon: Icon3, path: "/student/allcourses" },
-    { label: "Absence", icon: Icon4, path: "/student/attendance" },
-    { label: "Schedule", icon: Icon5, path: "/student/schedule" },
+    { label: t('Home'), icon: Icon1, path: "/student" },
+    { label: t('Motivation'), icon: Icon2, path: "/student/motivation" },
+    { label: t('Courses'), icon: Icon3, path: "/student/allcourses" },
+    { label: t('Absence'), icon: Icon4, path: "/student/attendance" },
+    { label: t('Schedule'), icon: Icon5, path: "/student/schedule" },
 
-    { label: "Grade Managements", icon: Icon6, path: "/student/grades" },
-    { label: "Activities", icon: Icon7, path: "/student/activities" },
-    { label: "Library", icon: Icon8, path: "/student/library" },
+    { label: t('GradeManagements'), icon: Icon6, path: "/student/grades" },
+    { label: t('Activities'), icon: Icon7, path: "/student/activities" },
+    { label: t('Library'), icon: Icon8, path: "/student/library" },
     // { label: "Question Bank", icon: Icon9, path: "/student/question-bank" },
     // { label: "Virtual Rooms", icon: Icon10, path: "/student/virtualrooms" },
     // { label: "Chats", icon: Icon11, path: "/student/chats" },
-    { label: "Logout", icon: Icon12, path: "/login" },
+    { label: t('Logout'), icon: Icon12, path: "/login" },
   ];
 
   return (
@@ -49,7 +51,7 @@ const Sidebar = ({ closeSidebar }) => {
         </button>
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-poppins text-lg font-bold">Khatab School</h2>
+            <h2 className="font-poppins text-lg font-bold"> {t('KhatabSchool')}</h2>
             <p className="font-poppins text-sm text-gray-400">
               Term1 2025-2026
             </p>
