@@ -14,7 +14,7 @@ const TermList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +26,7 @@ const TermList = () => {
 
   const paginatedTerms = terms.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handlePageChange = (page) => {
@@ -49,23 +49,23 @@ const TermList = () => {
   };
 
   if (loading) {
-    return <div className="w-full h-full"></div>; // Empty div during loading
+    return <div className="h-full w-full"></div>; // Empty div during loading
   }
 
   return (
     <div>
       <TermHeader />
       <div className="flex justify-center">
-        <div className="space-y-4 w-[90%]">
+        <div className="w-[90%] space-y-4">
           {paginatedTerms.length > 0 ? (
             paginatedTerms.map((term, index) => (
               <div
                 key={term._id}
-                className="flex items-center font-poppins justify-between bg-white rounded-lg shadow-md mb-4 p-4"
+                className="mb-4 flex items-center justify-between rounded-lg bg-white p-4 font-poppins shadow-md"
               >
                 <div className="flex items-center">
                   <div
-                    className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
+                    className="mr-4 flex h-10 w-10 items-center justify-center rounded-full"
                     style={{ backgroundColor: `${getColor(index)}33` }}
                   >
                     <FontAwesomeIcon
@@ -73,9 +73,9 @@ const TermList = () => {
                       style={{ color: getColor(index) }}
                     />
                   </div>
-                  <span className="text-gray-600 text-xl mx-2 h-8 border-l-2 border-gray-600"></span>
+                  <span className="mx-2 h-8 border-l-2 border-gray-600 text-xl text-gray-600"></span>
 
-                  <div className="flex flex-col ml-3">
+                  <div className="ml-3 flex flex-col">
                     <p className="m-0 font-poppins text-sm text-gray-500">
                       {term.academicYear_id
                         ? `${term.academicYear_id.startYear} - ${term.academicYear_id.endYear}`
@@ -94,7 +94,7 @@ const TermList = () => {
 
                 <div className="flex">
                   <button
-                    className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-[#043B44]"
                     onClick={() => handleEdit(term)}
                   >
                     <FontAwesomeIcon icon={faEdit} className="text-lg" />
@@ -103,20 +103,26 @@ const TermList = () => {
                     className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     onClick={() => handleDelete(term._id)}
                   >
-                    <i className="far fa-trash-alt" style={{ fontSize: "18px" }} />
+                    <i
+                      className="far fa-trash-alt"
+                      style={{ fontSize: "18px" }}
+                    />
                   </button>
                 </div>
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
+            <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
               <FontAwesomeIcon
                 icon={faCalendar}
-                className="text-6xl text-gray-400 mb-4"
+                className="mb-4 text-6xl text-gray-400"
               />
-              <p className="text-xl font-semibold text-gray-600 mb-2">No Terms Found</p>
-              <p className="text-gray-500 mb-4 text-center max-w-xl">
-                It seems like there are no Terms available at the moment. Please check back later or add new terms.
+              <p className="mb-2 text-xl font-semibold text-gray-600">
+                No Terms Found
+              </p>
+              <p className="mb-4 max-w-xl text-center text-gray-500">
+                It seems like there are no Terms available at the moment. Please
+                check back later or add new terms.
               </p>
             </div>
           )}

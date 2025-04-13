@@ -50,13 +50,15 @@ const EditTeacherForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-      // Find the subject object based on the selected subject ID
-  const selectedSubject = subjects.find(subject => subject._id === formData.subject);
+    // Find the subject object based on the selected subject ID
+    const selectedSubject = subjects.find(
+      (subject) => subject._id === formData.subject,
+    );
 
-  const updatedTeacher = {
-    ...formData,
-    subject: selectedSubject ? selectedSubject.subjectName : "", // Use subject name here
-  };
+    const updatedTeacher = {
+      ...formData,
+      subject: selectedSubject ? selectedSubject.subjectName : "", // Use subject name here
+    };
 
     dispatch(editTeacher({ id, updatedTeacher }))
       .unwrap()
@@ -69,85 +71,103 @@ const EditTeacherForm = () => {
   };
 
   return (
-    <div className="w-[80%] mx-auto mt-10">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Teacher</h1>
-      <div className="mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
+    <div className="mx-auto mt-10 w-[80%]">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        Edit Teacher
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form onSubmit={handleSubmit} className="m-6">
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Full Name</label>
+            <label className="text-md mb-2 block font-medium text-gray-700">
+              Full Name
+            </label>
             <input
               type="text"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:text-white dark:placeholder-white"
               placeholder="Enter full name"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Email Address</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter email address"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Gender</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Gender
+            </label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="" disabled>Select Gender</option>
+              <option value="" className="dark:text-white" disabled>
+                Select Gender
+              </option>
               <option value="M">Male</option>
               <option value="F">Female</option>
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Password</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Password
+            </label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter password"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Phone Number</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Phone Number
+            </label>
             <input
               type="text"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter phone number"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Subject</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Subject
+            </label>
             <select
               name="subject"
               value={formData.subject}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="" disabled>Select Subject</option>
+              <option value="" className="dark:text-white" disabled>
+                Select Subject
+              </option>
               {subjects.map((subject) => (
                 <option key={subject._id} value={subject._id}>
                   {subject.subjectName}
@@ -158,7 +178,7 @@ const EditTeacherForm = () => {
 
           <button
             type="submit"
-            className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+            className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
             Save Changes
           </button>

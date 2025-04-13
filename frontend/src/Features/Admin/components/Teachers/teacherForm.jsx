@@ -6,31 +6,31 @@ function TeacherManagementPage() {
   const [selectedTab, setSelectedTab] = useState("personal");
 
   return (
-    <div className="w-full mx-auto mt-10">
+    <div className="mx-auto mt-10 w-full">
       {/* شريط التبويبات */}
-      <div className="flex mb-20 border border-gray-300 rounded-full overflow-hidden w-[60%] mx-auto bg-[#F5F5F5]">
+      <div className="mx-auto mb-20 flex w-[60%] overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5]">
         <button
           onClick={() => setSelectedTab("personal")}
-          className={`flex-1 flex items-center justify-center gap-2 px-6 py-2 text-sm font-medium ${
+          className={`flex flex-1 items-center justify-center gap-2 px-6 py-2 text-sm font-medium ${
             selectedTab === "personal"
-              ? "bg-[#117C90] text-white"
+              ? "bg-[#117C90] text-white dark:bg-[#043B44]"
               : "bg-[#F5F5F5] text-gray-700"
           } rounded-full`}
         >
-          <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
+          <span className="dark:text-[#043B44 flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             1
           </span>
           Personal Data
         </button>
         <button
           onClick={() => setSelectedTab("academic")}
-          className={`flex-1 flex items-center justify-center gap-2 px-6 py-2 text-sm font-medium ${
+          className={`flex flex-1 items-center justify-center gap-2 px-6 py-2 text-sm font-medium ${
             selectedTab === "academic"
-              ? "bg-[#117C90] text-white"
+              ? "bg-[#117C90] text-white dark:bg-[#043B44]"
               : "bg-[#F5F5F5] text-gray-700"
           } rounded-full`}
         >
-          <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             2
           </span>
           Academic Data

@@ -1,189 +1,210 @@
 import React, { useState } from "react";
 
 const EditProfile = () => {
-    const [profile, setProfile] = useState({
-        firstName: "Omar",
-        lastName: "Ahmed",
-        gender: "Male",
-        phoneNumber: "+096624685879",
-        email: "omarahmed@gmail.com",
-        role: "Admin",
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-        otpCode: "",
+  const [profile, setProfile] = useState({
+    firstName: "Omar",
+    lastName: "Ahmed",
+    gender: "Male",
+    phoneNumber: "+096624685879",
+    email: "omarahmed@gmail.com",
+    role: "Admin",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+    otpCode: "",
+  });
+
+  const handleEditPicture = () => {
+    console.log("Edit picture button clicked");
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProfile({ ...profile, [name]: value });
+  };
+
+  const handleSave = () => {
+    // Handle save logic here
+    console.log("Profile saved:", profile);
+  };
+
+  const handlePasswordChange = () => {
+    // Handle password change logic here
+    console.log("Password updated:", {
+      currentPassword: profile.currentPassword,
+      newPassword: profile.newPassword,
+      otpCode: profile.otpCode,
     });
+  };
 
-
-    const handleEditPicture = () => {
-        console.log("Edit picture button clicked");
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setProfile({ ...profile, [name]: value });
-    };
-
-    const handleSave = () => {
-        // Handle save logic here
-        console.log("Profile saved:", profile);
-    };
-
-    const handlePasswordChange = () => {
-        // Handle password change logic here
-        console.log("Password updated:", {
-            currentPassword: profile.currentPassword,
-            newPassword: profile.newPassword,
-            otpCode: profile.otpCode,
-        });
-    };
-
-    return (
-        <div className="w-[80%] mx-auto my-10 font-poppins">
-            <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Profile</h1>
-            <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-            <div className="p-6 bg-white rounded-lg shadow-lg">
-                <div className="relative inline-block mb-6 ">
-                    <img
-                        src="../src/assets/user1.jpg"
-                        alt="Profile Avatar"
-                        className="w-24 h-24 rounded-full mr-4"
-                    />
-                    <button
-                        className="absolute bottom-2 right-2 bg-dashboard-bg text-white p-1 rounded-full cursor-pointer flex items-center justify-center"
-                        onClick={handleEditPicture}
-                    >
-                        <i className="fas fa-pencil-alt"></i>
-                    </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <label className="block text-sm font-medium">First Name</label>
-                        <input
-                            type="text"
-                            name="firstName"
-                            value={profile.firstName}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">Last Name</label>
-                        <input
-                            type="text"
-                            name="lastName"
-                            value={profile.lastName}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">Gender</label>
-                        <select
-                            name="gender"
-                            value={profile.gender}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        >
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">Phone Number</label>
-                        <input
-                            type="text"
-                            name="phoneNumber"
-                            value={profile.phoneNumber}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={profile.email}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">Role</label>
-                        <input
-                            type="text"
-                            name="role"
-                            value={profile.role}
-                            readOnly
-                            className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-100"
-                        />
-                    </div>
-                </div>
-
-
-                <button
-                    onClick={handleSave}
-                    className="px-6 py-2 bg-[#117C90] text-white rounded-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
-                >
-                    Save
-                </button>
-
-
-                <h2 className="text-xl font-semibold mt-8 mb-4">Edit Password</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium">Current Password</label>
-                        <input
-                            type="password"
-                            name="currentPassword"
-                            value={profile.currentPassword}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">New Password</label>
-                        <input
-                            type="password"
-                            name="newPassword"
-                            value={profile.newPassword}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">Re-enter New Password</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            value={profile.confirmPassword}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">OTP Code</label>
-                        <input
-                            type="text"
-                            name="otpCode"
-                            value={profile.otpCode}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                    </div>
-                </div>
-
-                <button
-              onClick={handlePasswordChange}
-              className="mt-4 px-6 py-2 bg-[#117C90] text-white rounded-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
-            >
-              Edit
-                </button>
-            </div>
+  return (
+    <div className="mx-auto my-10 w-[80%] font-poppins">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        Edit Profile
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-lg bg-white p-6 shadow-lg">
+        <div className="relative mb-6 inline-block">
+          <img
+            src="../src/assets/user1.jpg"
+            alt="Profile Avatar"
+            className="mr-4 h-24 w-24 rounded-full"
+          />
+          <button
+            className="absolute bottom-2 right-2 flex cursor-pointer items-center justify-center rounded-full bg-dashboard-bg p-1 text-white"
+            onClick={handleEditPicture}
+          >
+            <i className="fas fa-pencil-alt"></i>
+          </button>
         </div>
-    );
+
+        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              First Name
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              value={profile.firstName}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              Last Name
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              value={profile.lastName}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              Gender
+            </label>
+            <select
+              name="gender"
+              value={profile.gender}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              Phone Number
+            </label>
+            <input
+              type="text"
+              name="phoneNumber"
+              value={profile.phoneNumber}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={profile.email}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              Role
+            </label>
+            <input
+              type="text"
+              name="role"
+              value={profile.role}
+              readOnly
+              className="mt-1 w-full rounded border border-gray-300 bg-gray-100 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={handleSave}
+          className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+        >
+          Save
+        </button>
+
+        <h2 className="mb-4 mt-8 text-xl font-semibold dark:text-black">
+          Edit Password
+        </h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              Current Password
+            </label>
+            <input
+              type="password"
+              name="currentPassword"
+              value={profile.currentPassword}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              New Password
+            </label>
+            <input
+              type="password"
+              name="newPassword"
+              value={profile.newPassword}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              Re-enter New Password
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={profile.confirmPassword}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium dark:text-black">
+              OTP Code
+            </label>
+            <input
+              type="text"
+              name="otpCode"
+              value={profile.otpCode}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={handlePasswordChange}
+          className="mx-auto mt-4 block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default EditProfile;

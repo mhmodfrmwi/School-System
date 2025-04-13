@@ -78,8 +78,8 @@ const ManagerTable = () => {
 
       <div className="mt-7">
         <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
-            <thead className="bg-[#117C90] text-white">
+          <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
+            <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                   Name
@@ -124,7 +124,7 @@ const ManagerTable = () => {
                       <button
                         aria-label="Edit manager"
                         onClick={() => handleEditClick(manager._id)}
-                        className="text-[#117C90] transition duration-300 hover:text-[#244856]"
+                        className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-[#043B44]"
                       >
                         <i className="far fa-edit text-lg" />
                       </button>

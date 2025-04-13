@@ -72,21 +72,21 @@ function AcademicData() {
         Academic Data
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
-      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form
           onSubmit={handleSubmit}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
         >
           {/* Select Teacher - Dynamic options */}
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Teacher
             </label>
             <select
               name="teacherName"
               value={academicData.teacherName}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">Select Teacher</option>
               {teachers?.map((teacher) => (
@@ -99,14 +99,14 @@ function AcademicData() {
 
           {/* Select Class - Dynamic options */}
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Class
             </label>
             <select
               name="className"
               value={academicData.className}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">Select Class</option>
               {classes?.map((cls) => (
@@ -123,7 +123,7 @@ function AcademicData() {
           <div className="col-span-1 sm:col-span-2">
             <button
               type="submit"
-              className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+              className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
               Submit Academic Data
             </button>

@@ -129,7 +129,7 @@ const AdminTable = () => {
                       <button
                         aria-label="Edit admin"
                         onClick={() => handleEditClick(admin._id)}
-                        className="text-[#E74833] transition duration-300 hover:text-[#244856]"
+                        className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-[#043B44]"
                       >
                         <i className="far fa-edit text-lg" />
                       </button>

@@ -16,10 +16,18 @@ import img5 from "../../../assets/Group1.png";
 function BasicForm() {
   const dispatch = useDispatch();
   const networkErrorShownRef = useRef(false);
-  const { students, error: studentsError } = useSelector((state) => state.students);
-  const { teachers, error: teachersError } = useSelector((state) => state.teachers);
-  const { parents, error: parentsError } = useSelector((state) => state.parents);
-  const { managers, error: managersError } = useSelector((state) => state.managers);
+  const { students, error: studentsError } = useSelector(
+    (state) => state.students,
+  );
+  const { teachers, error: teachersError } = useSelector(
+    (state) => state.teachers,
+  );
+  const { parents, error: parentsError } = useSelector(
+    (state) => state.parents,
+  );
+  const { managers, error: managersError } = useSelector(
+    (state) => state.managers,
+  );
   const { admins, error: adminsError } = useSelector((state) => state.admins);
 
   useEffect(() => {
@@ -30,7 +38,7 @@ function BasicForm() {
     dispatch(fetchAdmins());
   }, [dispatch]);
 
-useEffect(() => {
+  useEffect(() => {
     const errors = [
       studentsError,
       teachersError,
@@ -41,21 +49,17 @@ useEffect(() => {
 
     // Check if any error is a network error
     const hasNetworkError = errors.some(
-      (error) => error && error.includes("NetworkError")
+      (error) => error && error.includes("NetworkError"),
     );
 
     // Show toast only once for network error
     if (hasNetworkError && !networkErrorShownRef.current) {
-      toast.error("NetworkError: Failed to fetch Some data. Please check your connection.");
+      toast.error(
+        "NetworkError: Failed to fetch Some data. Please check your connection.",
+      );
       networkErrorShownRef.current = true; // Mark network error toast as shown
     }
-  }, [
-    studentsError,
-    teachersError,
-    parentsError,
-    managersError,
-    adminsError,
-  ]);
+  }, [studentsError, teachersError, parentsError, managersError, adminsError]);
 
   const navigate = useNavigate();
 
@@ -65,96 +69,106 @@ useEffect(() => {
 
   return (
     <>
-      <div className="px-6 sm:px-12 md:px-16 lg:px-28 py-8 mb-6 ms-14 mt-2 md:ms-16">
-        <h2 className="w-full sm:w-52 font-poppins text-3xl font-bold text-[#043B44]">
+      <div className="mb-6 ms-14 mt-2 px-6 py-8 sm:px-12 md:ms-16 md:px-16 lg:px-28">
+        <h2 className="w-full font-poppins text-3xl font-bold text-[#043B44] sm:w-52">
           All Members
         </h2>
-        <div className="mt-1 h-[4px] w-24 sm:w-36 md:w-48 rounded-t-md bg-[#244856] mb-4"></div>
+        <div className="mb-4 mt-1 h-[4px] w-24 rounded-t-md bg-[#244856] sm:w-36 md:w-48"></div>
       </div>
 
       <div className="flex flex-col items-center px-4">
         <div className="grid gap-x-14 gap-y-8 sm:grid-cols-2 md:gap-x-16 lg:grid-cols-3 xl:gap-x-32">
           {/* Students Card */}
           <div
-            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105"
+            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105 dark:bg-[#117C90]"
             onClick={() => handleCardClick("/admin/allstudent")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#D1F3E0] p-2 text-4xl">
                 <img src={img1} alt="notfoundimage" />
               </div>
-              <h3 className="font-poppins text-xl text-[#A3A3A3]">Students</h3>
+              <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
+                Students
+              </h3>
             </div>
             <p className="border-t-2 border-[#3CB878]"></p>
-            <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
+            <p className="mt-8 text-center font-poppins text-xl font-bold text-black dark:text-white">
               {students?.length || 0}
             </p>
           </div>
 
           {/* Teachers Card */}
           <div
-            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105"
+            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105 dark:bg-[#117C90]"
             onClick={() => handleCardClick("/admin/allteachers")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#E1F1FF] p-2 text-4xl">
                 <img src={img2} alt="notfoundimage" />
               </div>
-              <h3 className="font-poppins text-xl text-[#A3A3A3]">Teachers</h3>
+              <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
+                Teachers
+              </h3>
             </div>
             <p className="border-t-2 border-[#7CA6FD]"></p>
-            <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
+            <p className="mt-8 text-center font-poppins text-xl font-bold text-black dark:text-white">
               {teachers?.length || 0}
             </p>
           </div>
 
           {/* Manager Card */}
           <div
-            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105"
+            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105 dark:bg-[#117C90]"
             onClick={() => handleCardClick("/admin/allmanagers")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#FFEAEA] p-2 text-4xl">
                 <img src={img3} alt="notfoundimage" />
               </div>
-              <h3 className="font-poppins text-xl text-[#A3A3A3]">Manager</h3>
+              <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
+                Manager
+              </h3>
             </div>
             <p className="border-t-2 border-[#F61414]"></p>
-            <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
+            <p className="mt-8 text-center font-poppins text-xl font-bold text-black dark:text-white">
               {managers?.length || 0}
             </p>
           </div>
 
           {/* Parents Card */}
           <div
-            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105"
+            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105 dark:bg-[#117C90]"
             onClick={() => handleCardClick("/admin/allparents")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#FFF2D8] p-2 text-4xl">
                 <img src={img4} alt="notfoundimage" />
               </div>
-              <h3 className="font-poppins text-xl text-[#A3A3A3]">Parents</h3>
+              <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
+                Parents
+              </h3>
             </div>
             <p className="border-t-2 border-[#F48301]"></p>
-            <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
+            <p className="mt-8 text-center font-poppins text-xl font-bold text-black dark:text-white">
               {parents?.length || 0}
             </p>
           </div>
 
           {/* Admin Card */}
           <div
-            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105"
+            className="cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-transform hover:scale-105 dark:bg-[#117C90]"
             onClick={() => handleCardClick("/admin/alladmins")}
           >
             <div className="my-3 flex items-center">
               <div className="mb-2 me-3 rounded-full bg-[#D1F3E0] p-2 text-4xl">
                 <img src={img5} alt="notfoundimage" />
               </div>
-              <h3 className="font-poppins text-xl text-[#A3A3A3]">Admin</h3>
+              <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
+                Admin
+              </h3>
             </div>
             <p className="border-t-2 border-[#30F587]"></p>
-            <p className="mt-8 text-center font-poppins text-xl font-bold text-black">
+            <p className="mt-8 text-center font-poppins text-xl font-bold text-black dark:text-white">
               {admins?.length || 0}
             </p>
           </div>

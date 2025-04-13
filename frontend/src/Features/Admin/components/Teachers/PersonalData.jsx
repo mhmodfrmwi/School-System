@@ -52,14 +52,19 @@ function AddTeacher() {
   };
 
   return (
-    <div className="w-[80%] mx-auto my-10 font-poppins">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Add Teacher</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
-        <form onSubmit={handleAddTeacher} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
+    <div className="mx-auto my-10 w-[80%] font-poppins">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        Add Teacher
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
+        <form
+          onSubmit={handleAddTeacher}
+          className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+        >
           {Object.keys(teacherData).map((key) => (
             <div className="mb-4" key={key}>
-              <label className="block text-md font-medium text-gray-700 mb-2 capitalize">
+              <label className="text-md mb-2 block font-medium capitalize text-gray-700 dark:text-white">
                 {key.replace(/([A-Z])/g, " $1")}
               </label>
               {key === "gender" ? (
@@ -67,7 +72,7 @@ function AddTeacher() {
                   name={key}
                   value={teacherData[key]}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                  className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
                   <option value="">Select Gender</option>
                   <option value="M">Male</option>
@@ -78,7 +83,7 @@ function AddTeacher() {
                   name={key}
                   value={teacherData[key]}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                  className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
                   <option value="">Select Subject</option>
                   {loading ? (
@@ -97,13 +102,13 @@ function AddTeacher() {
                     key === "password"
                       ? "password"
                       : key === "dateOfBirth"
-                      ? "date"
-                      : "text"
+                        ? "date"
+                        : "text"
                   }
                   name={key}
                   value={teacherData[key]}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                  className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                   placeholder={`Enter ${key.replace(/([A-Z])/g, " $1")}`}
                 />
               )}
@@ -113,7 +118,7 @@ function AddTeacher() {
           <div className="col-span-1 sm:col-span-2">
             <button
               type="submit"
-              className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+              className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
               Add Teacher
             </button>

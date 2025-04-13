@@ -62,11 +62,11 @@ const ParentHeader = ({ onSearchChange, onFilterChange }) => {
         </div>
 
         <div className="relative flex-grow">
-          <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-black sm:text-sm"></i>
+          <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-black dark:text-white sm:text-sm"></i>
           <input
             type="text"
             placeholder="Search for a parent by name, email"
-            className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-[#043B44] sm:text-sm"
+            className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#043B44] dark:text-white dark:placeholder-white dark:focus:ring-[#043B44] sm:text-sm"
             value={searchText}
             onChange={handleSearchChange}
           />

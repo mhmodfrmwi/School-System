@@ -133,7 +133,7 @@ const ParentTable = () => {
                       <button
                         aria-label="Edit parent"
                         onClick={() => handleEditClick(parent._id)}
-                        className="text-[#117C90] transition duration-300 hover:text-[#244856]"
+                        className="text-[#117C90] dark:text-[#043B44] transition duration-300 hover:text-[#244856]"
                       >
                         <i className="far fa-edit text-lg" />
                       </button>

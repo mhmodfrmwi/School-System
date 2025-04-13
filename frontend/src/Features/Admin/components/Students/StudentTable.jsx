@@ -190,7 +190,7 @@ const StudentTable = () => {
                       <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                         <button
                           onClick={() => handleEdit(student._id)}
-                          className="text-[#117C90] transition hover:text-[#244856]"
+                          className="text-[#117C90] transition hover:text-[#244856] dark:text-[#043B44]"
                         >
                           <i className="far fa-edit" />
                         </button>

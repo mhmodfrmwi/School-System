@@ -79,28 +79,27 @@ function ScheduleForm() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-    
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
         Add Schedule
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
-      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form
           onSubmit={handleSubmit}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
         >
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Academic Year
             </label>
             <select
               name="academicYear"
               value={formData.academicYear}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select Academic Year
               </option>
               {academicYears?.map((year) => (
@@ -115,17 +114,17 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Semester Name
             </label>
             <select
               name="semesterName"
               value={formData.semesterName}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select semester
               </option>
               {terms
@@ -142,17 +141,17 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Subject Name
             </label>
             <select
               name="subjectName"
               value={formData.subjectName}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select subject
               </option>
               {subjects?.map((subject) => (
@@ -164,17 +163,17 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Teacher Name
             </label>
             <select
               name="teacherName"
               value={formData.teacherName}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select teacher
               </option>
               {(() => {
@@ -199,17 +198,17 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Grade
             </label>
             <select
               name="grade"
               value={formData.grade}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select grade
               </option>
               {grades?.map((grade) => (
@@ -221,17 +220,17 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Class
             </label>
             <select
               name="className"
               value={formData.className}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select class
               </option>
               {(() => {
@@ -252,17 +251,17 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Day
             </label>
             <select
               name="day"
               value={formData.day}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select day
               </option>
               <option value="Monday">Monday</option>
@@ -274,7 +273,7 @@ function ScheduleForm() {
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               From
             </label>
             <input
@@ -282,13 +281,13 @@ function ScheduleForm() {
               name="startTime"
               value={formData.startTime}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               To
             </label>
             <input
@@ -296,7 +295,7 @@ function ScheduleForm() {
               name="endTime"
               value={formData.endTime}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               required
             />
           </div>
@@ -304,7 +303,7 @@ function ScheduleForm() {
           <div className="col-span-1 mt-6 sm:col-span-2">
             <button
               type="submit"
-              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
               Add Schedule
             </button>
