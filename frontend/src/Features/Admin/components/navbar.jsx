@@ -12,6 +12,7 @@ import language from "../../../assets/icons/language.svg";
 import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Navbar = () => {
   const [settingToggle, setSettingToggle] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const { fullName } = useSelector((state) => state.login);
 
   const routes = [
     { path: "basicform" },
@@ -124,11 +126,11 @@ const Navbar = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={handleBack}
-            className="hidden rounded-lg bg-dashboard-bg p-2 text-white lg:flex"
+            className="hidden rounded-lg bg-dashboard-bg p-2 text-white dark:bg-[#043B44] lg:flex"
           >
             <FaArrowLeft className="text-lg" />
           </button>
-          <p className="hidden font-inter text-lg font-semibold text-dashboard-header lg:flex">
+          <p className="p hidden font-inter text-lg font-semibold text-dashboard-bg dark:text-[#043B44] lg:flex">
             {adminName === "/admin" ? "dashboard" : `${name}`}
           </p>
         </div>
@@ -149,7 +151,7 @@ const Navbar = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none md:text-left md:text-base"
+              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none dark:text-black md:text-left md:text-base"
             />
 
             {isDropdownOpen && (
@@ -159,10 +161,10 @@ const Navbar = () => {
                     <li
                       key={route.path}
                       onClick={() => handleSelect(route.path)}
-                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] hover:bg-blue-100"
+                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] hover:bg-blue-100 dark:text-[#043B44]"
                     >
                       {route.path}
-                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#117C90]"></p>
+                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#117C90] dark:border-[#043B44]"></p>
                     </li>
                   ))
                 ) : (
@@ -201,8 +203,8 @@ const Navbar = () => {
               alt="User"
               className="h-8 w-8 rounded-full md:h-10 md:w-10"
             />
-            <span className="hidden font-poppins text-sm font-semibold text-dashboard-header md:text-base lg:flex">
-              Yasser
+            <span className="hidden font-poppins text-sm font-semibold text-dashboard-bg dark:text-[#043B44] md:text-base lg:flex">
+              {fullName}
             </span>
           </div>
           <button
@@ -215,7 +217,7 @@ const Navbar = () => {
           {settingToggle && (
             <div
               ref={settingsRef}
-              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]"
+              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90] dark:to-[#043B44]"
             >
               <div>
                 <div

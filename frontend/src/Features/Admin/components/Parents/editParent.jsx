@@ -7,7 +7,7 @@ const EditParentForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { parents} = useSelector((state) => state.parents);
+  const { parents } = useSelector((state) => state.parents);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -48,8 +48,7 @@ const EditParentForm = () => {
       .then(() => {
         navigate("/admin/allparents");
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
@@ -59,7 +58,7 @@ const EditParentForm = () => {
         </h2>
         <div className="mt-1 h-[4px] w-[155px] rounded-t-md bg-[#244856]"></div>
       </div>
-      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form
           onSubmit={handleSubmit}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
@@ -67,7 +66,7 @@ const EditParentForm = () => {
           <div className="mb-4">
             <label
               htmlFor="name"
-              className="my-2 block font-semibold text-gray-700"
+              className="my-2 block font-semibold text-gray-700 dark:text-white"
             >
               Name
             </label>
@@ -76,13 +75,13 @@ const EditParentForm = () => {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             />
           </div>
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="my-2 block font-semibold text-gray-700"
+              className="my-2 block font-semibold text-gray-700 dark:text-white"
             >
               Email
             </label>
@@ -92,21 +91,25 @@ const EditParentForm = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             />
           </div>
 
           <div>
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Gender
             </label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="" disabled className="font-poppins">
+              <option
+                value=""
+                disabled
+                className="font-poppins dark:text-white"
+              >
                 Select gender
               </option>
               <option value="M" className="font-poppins">
@@ -121,7 +124,7 @@ const EditParentForm = () => {
           <div className="mb-4">
             <label
               htmlFor="phone"
-              className="my-2 block font-semibold text-gray-700"
+              className="my-2 block font-semibold text-gray-700 dark:text-white"
             >
               phone
             </label>
@@ -131,12 +134,12 @@ const EditParentForm = () => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             />
           </div>
 
           <div className="mb-2">
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Password
             </label>
             <input
@@ -144,7 +147,7 @@ const EditParentForm = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter password"
               required
             />
@@ -153,7 +156,7 @@ const EditParentForm = () => {
           <div className="col-span-1 flex justify-end gap-4 sm:col-span-2">
             <button
               type="submit"
-              className="rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+              className="rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
               Save Changes
             </button>

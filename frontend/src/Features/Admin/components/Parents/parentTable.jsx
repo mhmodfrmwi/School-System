@@ -13,7 +13,8 @@ const ParentTable = () => {
   const navigate = useNavigate();
   const {
     parents = [],
-    message,loading
+    message,
+    loading,
   } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
 
@@ -73,7 +74,7 @@ const ParentTable = () => {
     navigate(`/admin/editparentform/${id}`);
   };
   if (loading) {
-    return <div className="w-full h-full"></div>; // Empty div during loading
+    return <div className="h-full w-full"></div>; // Empty div during loading
   }
   return (
     <div className="relative lg:px-0">
@@ -84,8 +85,8 @@ const ParentTable = () => {
 
       <div className="mt-7">
         <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
-            <thead className="bg-[#117C90] text-white">
+          <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
+            <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                   Name
@@ -108,24 +109,24 @@ const ParentTable = () => {
                 paginatedParents.map((parent, index) => (
                   <tr
                     key={parent._id || index}
-                    className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                    className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70 dark:hover:bg-[#043B44]/70`}
                   >
-                    <td className="flex items-center px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                    <td className="flex items-center px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                       <img
                         src={parent.profileImage}
                         alt="Profile"
                         className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                       />
-                      <span className="truncate font-poppins">
+                      <span className="truncate font-poppins dark:text-black">
                         {parent.fullName}
                       </span>
                     </td>
 
-                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                    <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                       {parent.email}
                     </td>
 
-                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                    <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                       {parent.gender}
                     </td>
                     <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
@@ -148,29 +149,33 @@ const ParentTable = () => {
                 ))
               ) : (
                 <tr>
-                <td colSpan="4" className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]">
-                  <p className="text-lg font-semibold text-gray-600">No Parents Found</p>
-                  <p className="text-sm text-gray-500 mt-2">It seems like there are no parents in the database at the moment.</p>
-                  
-                </td>
-              </tr>
+                  <td
+                    colSpan="4"
+                    className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
+                  >
+                    <p className="text-lg font-semibold text-gray-600">
+                      No Parents Found
+                    </p>
+                    <p className="mt-2 text-sm text-gray-500">
+                      It seems like there are no parents in the database at the
+                      moment.
+                    </p>
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
         </div>
         {paginatedParents.length > 0 ? (
-          
-        
-
-        <div className="mt-7 flex justify-center lg:justify-end">
-          <Pagination
-            totalItems={filteredParents.length}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
-      ) : null}
+          <div className="mt-7 flex justify-center lg:justify-end">
+            <Pagination
+              totalItems={filteredParents.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

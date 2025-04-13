@@ -7,7 +7,7 @@ const EditManagerForm = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { managers} = useSelector((state) => state.managers);
+  const { managers } = useSelector((state) => state.managers);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -52,14 +52,14 @@ const EditManagerForm = () => {
 
   return (
     <div className="relative mx-auto mt-10 w-[80%]">
-      <h1 className="pl-5 text-2xl font-poppins font-semibold text-[#244856]">
+      <h1 className="pl-5 font-poppins text-2xl font-semibold text-[#244856]">
         Edit Manager
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856]"></div>
-      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form onSubmit={handleSubmit} className="m-6">
           <div className="mb-4">
-            <label className="text-md mb-2 block font-poppins font-medium text-gray-700">
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
               Full Name
             </label>
             <input
@@ -67,14 +67,14 @@ const EditManagerForm = () => {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-2xl border font-poppins border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter full name"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-poppins font-medium text-gray-700">
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
               Email Address
             </label>
             <input
@@ -82,32 +82,36 @@ const EditManagerForm = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full rounded-2xl border font-poppins border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter email address"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-poppins font-medium text-gray-700">
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
               Gender
             </label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full rounded-2xl border font-poppins border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select Gender
               </option>
-              <option value="M" className="font-poppins">Male</option>
-              <option value="F" className="font-poppins">Female</option>
+              <option value="M" className="font-poppins">
+                Male
+              </option>
+              <option value="F" className="font-poppins">
+                Female
+              </option>
             </select>
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 font-poppins block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
               Password
             </label>
             <input
@@ -115,14 +119,14 @@ const EditManagerForm = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full rounded-2xl font-poppins border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter password"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-poppins font-medium text-gray-700">
+            <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
               Phone Number
             </label>
             <input
@@ -130,7 +134,7 @@ const EditManagerForm = () => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full rounded-2xl border font-poppins border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter phone number"
               required
             />
@@ -138,7 +142,7 @@ const EditManagerForm = () => {
 
           <button
             type="submit"
-            className="text-md mx-auto block font-poppins rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+            className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-poppins font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
             Save Changes
           </button>

@@ -10,7 +10,7 @@ function EditStudent() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { grades } = useSelector((state) => state.grades);
-  const { students} = useSelector((state) => state.students);
+  const { students } = useSelector((state) => state.students);
 
   const [studentData, setStudentData] = useState({
     fullName: "",
@@ -70,13 +70,13 @@ function EditStudent() {
         Edit Student
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[160px] rounded-t-md bg-[#244856]"></div>
-      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form
           onSubmit={handleSubmit}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
         >
           <div className="mb-4">
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Full Name
             </label>
             <input
@@ -84,11 +84,11 @@ function EditStudent() {
               name="fullName"
               value={studentData.fullName}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             />
           </div>
           <div className="mb-4">
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Email Address
             </label>
             <input
@@ -96,11 +96,11 @@ function EditStudent() {
               name="emailAddress"
               value={studentData.emailAddress}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             />
           </div>
           <div className="mb-4">
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Phone Number
             </label>
             <input
@@ -108,11 +108,11 @@ function EditStudent() {
               name="phoneNumber"
               value={studentData.phoneNumber}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             />
           </div>
           <div className="mb-4">
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Password
             </label>
             <input
@@ -120,11 +120,11 @@ function EditStudent() {
               name="password"
               value={studentData.password}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             />
           </div>
           <div className="mb-4">
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Date of Birth
             </label>
             <input
@@ -132,18 +132,18 @@ function EditStudent() {
               name="dateOfBirth"
               value={studentData.dateOfBirth}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             />
           </div>
           <div className="mb-4">
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Gender
             </label>
             <select
               name="gender"
               value={studentData.gender}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">Select Gender</option>
               <option value="M">Male</option>
@@ -151,14 +151,14 @@ function EditStudent() {
             </select>
           </div>
           <div className="mb-4">
-            <label className="my-2 block font-semibold text-gray-700">
+            <label className="my-2 block font-semibold text-gray-700 dark:text-white">
               Grade
             </label>
             <select
               name="grade"
               value={studentData.grade}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">Select Grade</option>
               {grades.map((g, index) => (
@@ -171,7 +171,7 @@ function EditStudent() {
           <div className="col-span-1 flex justify-end sm:col-span-2">
             <button
               type="submit"
-              className="rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+              className="rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
               Update Student
             </button>

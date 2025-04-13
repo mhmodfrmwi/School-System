@@ -15,7 +15,6 @@ import logo from "../../../assets/logologin.png";
 import { fetchTerms } from "../components/AdminRedux/termSlice";
 import { useNavigate } from "react-router-dom";
 
-
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -35,7 +34,7 @@ const Sidebar = () => {
   if (status === "failed") return <p>Error: {error}</p>;
 
   const menuItems = [
-    { label: "Dashboard", icon: faHome, href: "/admin" },
+    { label: "Dashboard", icon: faHome, href: "/admin/dashboard" },
     { label: "Members", icon: faUsers, href: "/admin/basicform" },
     { label: "Term Management", icon: faCalendar, href: "/admin/allTerms" },
     { label: "Course Management", icon: faPen, href: "/admin/allsubjects" },
@@ -59,7 +58,7 @@ const Sidebar = () => {
   return (
     <div className="relative">
       <button
-        className="fixed left-5 top-8 z-50 h-10 w-9 rounded-lg bg-dashboard-bg p-2 text-white shadow-md lg:hidden"
+        className="fixed left-5 top-8 z-50 h-10 w-9 rounded-lg bg-dashboard-bg p-2 text-white shadow-md dark:bg-[#043B44] lg:hidden"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         aria-label="Toggle Sidebar"
       >
@@ -72,7 +71,7 @@ const Sidebar = () => {
           onClick={() => setIsSidebarOpen(false)}
           aria-hidden="true"
         >
-          <div className="custom-scrollbar absolute left-0 top-0 flex h-full w-64 flex-col bg-dashboard-bg p-4 text-white transition-transform duration-300">
+          <div className="custom-scrollbar absolute left-0 top-0 flex h-full w-64 flex-col bg-dashboard-bg p-4 text-white transition-transform duration-300 dark:bg-[#043B44]">
             <SidebarContent
               menuItems={menuItems}
               hoveredIndex={hoveredIndex}
@@ -85,7 +84,7 @@ const Sidebar = () => {
         </div>
       )}
 
-      <div className="custom-scrollbar hidden h-screen w-64 flex-col bg-dashboard-bg p-4 text-white lg:flex">
+      <div className="custom-scrollbar hidden h-screen w-64 flex-col bg-dashboard-bg p-4 text-white dark:bg-[#043B44] lg:flex">
         <SidebarContent
           menuItems={menuItems}
           hoveredIndex={hoveredIndex}
@@ -120,32 +119,40 @@ const SidebarContent = ({
           <a
             key={index}
             href={item.href}
-            className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${currentPath === item.href
-              ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg"
-              : "text-white"
-              } ${hoveredIndex === index && currentPath !== item.href
-                ? "bg-white text-dashboard-bg"
+            className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${
+              currentPath === item.href
+                ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg dark:text-[#043B44]"
+                : "text-white"
+            } ${
+              hoveredIndex === index && currentPath !== item.href
+                ? "bg-white text-dashboard-bg dark:text-[#043B44]"
                 : ""
-              }`}
+            }`}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {typeof item.icon === "string" ? (
               <Icon
                 icon={item.icon}
-                className={`mr-3 transition-colors group-hover:text-dashboard-bg ${currentPath === item.href ? "text-dashboard-bg" : "text-white"
-                  } text-xl`}
+                className={`mr-3 transition-colors group-hover:text-dashboard-bg dark:group-hover:text-[#043B44] ${
+                  currentPath === item.href
+                    ? "text-dashboard-bg dark:text-[#043B44]"
+                    : "text-white"
+                } text-xl`}
                 style={{ fontSize: "1.5rem" }}
               />
             ) : (
               <FontAwesomeIcon
                 icon={item.icon}
-                className={`mr-3 transition-colors group-hover:text-dashboard-bg ${currentPath === item.href ? "text-dashboard-bg" : "text-white"
-                  }`}
+                className={`mr-3 transition-colors group-hover:text-dashboard-bg dark:group-hover:text-[#043B44] ${
+                  currentPath === item.href
+                    ? "text-dashboard-bg dark:text-[#043B44]"
+                    : "text-white"
+                }`}
               />
             )}
 
-            <span className="font-poppins text-sm transition-colors group-hover:font-semibold group-hover:text-dashboard-bg">
+            <span className="font-poppins text-sm transition-colors group-hover:font-semibold group-hover:text-dashboard-bg dark:group-hover:text-[#043B44]">
               {item.label}
             </span>
             {currentPath === item.href && (
@@ -164,22 +171,23 @@ const SidebarContent = ({
             (() => {
               const currentYear = new Date().getFullYear();
 
-              
               const currentYearTerms = terms.filter(
                 (term) =>
                   term.academicYear_id &&
                   term.academicYear_id.startYear <= currentYear &&
-                  term.academicYear_id.endYear >= currentYear
+                  term.academicYear_id.endYear >= currentYear,
               );
 
-             
-              const latestTerm = currentYearTerms.length > 0
-                ? currentYearTerms[currentYearTerms.length - 1] 
-                : null;
+              const latestTerm =
+                currentYearTerms.length > 0
+                  ? currentYearTerms[currentYearTerms.length - 1]
+                  : null;
 
               return latestTerm ? (
-                <div className="mb-4 rounded-md bg-white px-4 py-1 font-poppins text-xs text-dashboard-bg">
-                  {latestTerm.semesterName}: {latestTerm.academicYear_id.startYear} - {latestTerm.academicYear_id.endYear}
+                <div className="mb-4 rounded-md bg-white px-4 py-1 font-poppins text-xs text-dashboard-bg dark:text-[#043B44]">
+                  {latestTerm.semesterName}:{" "}
+                  {latestTerm.academicYear_id.startYear} -{" "}
+                  {latestTerm.academicYear_id.endYear}
                 </div>
               ) : (
                 <p>No current term available</p>
@@ -190,9 +198,10 @@ const SidebarContent = ({
           )}
         </div>
 
-
-        <button className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300"
-         onClick={() => navigate("/role")}>
+        <button
+          className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300 dark:text-[#043B44]"
+          onClick={() => navigate("/role")}
+        >
           Logout
         </button>
       </div>

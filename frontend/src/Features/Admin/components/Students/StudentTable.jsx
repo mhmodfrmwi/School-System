@@ -46,9 +46,9 @@ const StudentTable = () => {
       return student.fullName.toLowerCase().includes(lowerSearchText);
     }
     if (filterOption === "class") {
-      return (
-        student.classId?.className?.toLowerCase().includes(lowerSearchText)
-      );
+      return student.classId?.className
+        ?.toLowerCase()
+        .includes(lowerSearchText);
     }
     if (filterOption === "gender") {
       return student.gender?.toLowerCase().includes(lowerSearchText);
@@ -59,7 +59,7 @@ const StudentTable = () => {
 
   const paginatedStudents = filteredStudents.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDelete = async (id) => {
@@ -92,7 +92,6 @@ const StudentTable = () => {
     }
   }, [message, dispatch]);
 
-
   const handleExportCSV = () => {
     const csvData = students.map((student) => ({
       "Student ID": student.academic_number,
@@ -109,7 +108,7 @@ const StudentTable = () => {
     const csv = Papa.unparse(csvData);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
-    
+
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", "students.csv");
@@ -118,13 +117,12 @@ const StudentTable = () => {
     document.body.removeChild(link);
   };
 
-
   return (
     <div className="relative mx-auto px-4 lg:px-0">
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
-        onExportCSV={handleExportCSV} 
+        onExportCSV={handleExportCSV}
       />
       {/* {message && (
         <div className="mb-4 mt-6 rounded-lg border-l-4 border-green-500 bg-green-100 p-3 text-green-800 shadow-md">
@@ -134,11 +132,11 @@ const StudentTable = () => {
       <div className="mt-7">
         {/* Loading state check */}
         {loading ? (
-          <div className="w-full h-full"></div> // Show loading text or spinner
+          <div className="h-full w-full"></div> // Show loading text or spinner
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
-              <thead className="bg-[#117C90] text-white">
+            <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
+              <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
                 <tr>
                   <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                     Name
@@ -167,9 +165,9 @@ const StudentTable = () => {
                       key={student._id}
                       className={`${
                         index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
-                      } hover:bg-[#117C90]/70`}
+                      } hover:bg-[#117C90]/70 dark:hover:bg-[#043B44]/70`}
                     >
-                      <td className="flex items-center px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                      <td className="flex items-center px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                         <img
                           src={student.profileImage}
                           alt="Profile"
@@ -177,16 +175,16 @@ const StudentTable = () => {
                         />
                         {student.fullName}
                       </td>
-                      <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                      <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                         {student.academic_number}
                       </td>
-                      <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                      <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                         {student.email}
                       </td>
-                      <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                      <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                         {student.classId.className}
                       </td>
-                      <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                      <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                         {student.gender}
                       </td>
                       <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
@@ -209,12 +207,12 @@ const StudentTable = () => {
                   <tr>
                     <td
                       colSpan="6"
-                      className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]"
+                      className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                     >
                       <p className="text-lg font-semibold text-gray-600">
                         No Students Found
                       </p>
-                      <p className="text-sm text-gray-500 mt-2">
+                      <p className="mt-2 text-sm text-gray-500">
                         It seems like there are no students in the database at
                         the moment.
                       </p>

@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchManagers,
-  removeManager,
-} from "../AdminRedux/managerSlice";
+import { fetchManagers, removeManager } from "../AdminRedux/managerSlice";
 import Pagination from "../Pagination";
 import Header from "../Managers/managerHeader";
 
 const ManagerTable = () => {
   const navigate = useNavigate();
-  const { managers = [] , loading} = useSelector((state) => state.managers || {});
+  const { managers = [], loading } = useSelector(
+    (state) => state.managers || {},
+  );
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,24 +22,23 @@ const ManagerTable = () => {
     dispatch(fetchManagers());
   }, [dispatch]);
 
-const filteredManagers = managers.filter((manager) => {
-  const lowerSearchText = searchText.toLowerCase();
+  const filteredManagers = managers.filter((manager) => {
+    const lowerSearchText = searchText.toLowerCase();
 
-  if (filterOption) {
-    const value = manager[filterOption];
-    return value && value.toLowerCase().includes(lowerSearchText); 
-  }
+    if (filterOption) {
+      const value = manager[filterOption];
+      return value && value.toLowerCase().includes(lowerSearchText);
+    }
 
-  return (
-    (manager.fullName?.toLowerCase().includes(lowerSearchText) || // Safely check `name`
-    manager.email?.toLowerCase().includes(lowerSearchText)) // Safely check `email`
-  );
-});
+    return (
+      manager.fullName?.toLowerCase().includes(lowerSearchText) || // Safely check `name`
+      manager.email?.toLowerCase().includes(lowerSearchText) // Safely check `email`
+    );
+  });
 
-  
   const paginatedManagers = filteredManagers.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDelete = async (id) => {
@@ -69,15 +67,18 @@ const filteredManagers = managers.filter((manager) => {
     navigate(`/admin/editmanagerform/${id}`);
   };
   if (loading) {
-    return <div className="w-full h-full"></div>; // Empty div during loading
+    return <div className="h-full w-full"></div>; // Empty div during loading
   }
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0">
-      <Header onSearchChange={handleSearchChange} onFilterChange={handleFilterChange} />
+      <Header
+        onSearchChange={handleSearchChange}
+        onFilterChange={handleFilterChange}
+      />
 
       <div className="mt-7">
         <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
+          <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
             <thead className="bg-[#117C90] text-white">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
@@ -101,22 +102,22 @@ const filteredManagers = managers.filter((manager) => {
                     key={manager._id}
                     className={`${
                       index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
-                    } hover:bg-[#117C90]/70`}
+                    } hover:bg-[#117C90]/70 dark:hover:bg-[#043B44]/70`}
                   >
-                    <td className="flex items-center px-3 py-2 text-xs sm:text-sm md:text-base">
+                    <td className="flex items-center px-3 py-2 text-xs dark:text-black sm:text-sm md:text-base">
                       <img
                         src={manager.profileImage}
                         alt="Profile"
                         className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
                       />
-                      <span className="truncate font-poppins">
+                      <span className="truncate font-poppins dark:text-black">
                         {manager.fullName}
                       </span>
                     </td>
-                    <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                    <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                       {manager.email}
                     </td>
-                    <td className="px-3 py-2 text-xs font-poppins sm:text-sm md:text-base">
+                    <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                       {manager.gender}
                     </td>
                     <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
@@ -139,27 +140,33 @@ const filteredManagers = managers.filter((manager) => {
                 ))
               ) : (
                 <tr>
-                <td colSpan="4" className="rounded-lg bg-[#F7FAFC] py-28 text-center shadow-md border-2 border-[#E3E8F1]">
-                  <p className="text-lg font-semibold text-gray-600">No Manager Found</p>
-                  <p className="text-sm text-gray-500 mt-2">It seems like there are no managers in the database at the moment.</p>
-                  
-                </td>
-              </tr>
+                  <td
+                    colSpan="4"
+                    className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
+                  >
+                    <p className="text-lg font-semibold text-gray-600">
+                      No Manager Found
+                    </p>
+                    <p className="mt-2 text-sm text-gray-500">
+                      It seems like there are no managers in the database at the
+                      moment.
+                    </p>
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
         </div>
-{paginatedManagers.length > 0 ? (
-  
-        <div className="mt-7 flex justify-center lg:justify-end">
-          <Pagination
-            totalItems={filteredManagers.length}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
-      ) : null}
+        {paginatedManagers.length > 0 ? (
+          <div className="mt-7 flex justify-center lg:justify-end">
+            <Pagination
+              totalItems={filteredManagers.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

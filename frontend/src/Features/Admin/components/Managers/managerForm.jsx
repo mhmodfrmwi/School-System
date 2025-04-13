@@ -65,8 +65,7 @@ function ManagerForm() {
         phoneNumber: "",
         gender: "",
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
@@ -75,13 +74,13 @@ function ManagerForm() {
         Add Manager
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856]"></div>
-      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form
           onSubmit={handleSubmit}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
         >
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Full Name
             </label>
             <input
@@ -89,14 +88,14 @@ function ManagerForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter full name"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Email Address
             </label>
             <input
@@ -104,23 +103,23 @@ function ManagerForm() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter email address"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Gender
             </label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="" disabled>
+              <option value="" className="dark:text-white" disabled>
                 Select Gender
               </option>
               <option value="M">Male</option>
@@ -129,7 +128,7 @@ function ManagerForm() {
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Password
             </label>
             <input
@@ -137,14 +136,14 @@ function ManagerForm() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter password"
               required
             />
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               Phone Number
             </label>
             <input
@@ -152,7 +151,7 @@ function ManagerForm() {
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter phone number"
               required
             />
@@ -161,7 +160,7 @@ function ManagerForm() {
           <div className="col-span-1 sm:col-span-2">
             <button
               type="submit"
-              className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+              className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
               Add Manager
             </button>

@@ -20,19 +20,25 @@ function AdminForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (!formData.fullName || !formData.email || !formData.password || !formData.phoneNumber || !formData.gender) {
+
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.phoneNumber ||
+      !formData.gender
+    ) {
       alert("Please fill in all the fields.");
       return;
     }
-     const phoneRegex = /^[0-9]{11}$/; 
-     if (!phoneRegex.test(formData.phoneNumber)) {
-       toast.error("Phone number must be exactly 11 digits.");
-       return;
-     }
-  
+    const phoneRegex = /^[0-9]{11}$/;
+    if (!phoneRegex.test(formData.phoneNumber)) {
+      toast.error("Phone number must be exactly 11 digits.");
+      return;
+    }
+
     const genderMap = { Male: "M", Female: "F", Other: "O" };
-  
+
     const payload = {
       fullName: formData.fullName,
       email: formData.email,
@@ -40,7 +46,7 @@ function AdminForm() {
       phone: formData.phoneNumber,
       gender: genderMap[formData.gender],
     };
-  
+
     try {
       await dispatch(postAdmin(payload));
       setFormData({
@@ -51,39 +57,47 @@ function AdminForm() {
         gender: "",
       });
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Something went wrong. Please try again.";
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
       alert(errorMessage);
     }
   };
-  
 
   return (
-    <div className="w-[80%] mx-auto my-10 font-poppins">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Add Admin</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 m-6">
+    <div className="mx-auto my-10 w-[80%] font-poppins">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Add Admin</h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
+        <form
+          onSubmit={handleSubmit}
+          className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+        >
           {/* Full Name and Email */}
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Full Name</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Full Name
+            </label>
             <input
               type="text"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter full name"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Email Address</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter email address"
               required
             />
@@ -91,12 +105,14 @@ function AdminForm() {
 
           {/* Gender and Password */}
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Gender</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Gender
+            </label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90]"
               required
             >
               <option value="">Select Gender</option>
@@ -105,13 +121,15 @@ function AdminForm() {
             </select>
           </div>
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Password</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Password
+            </label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter password"
               required
             />
@@ -119,23 +137,25 @@ function AdminForm() {
 
           {/* Phone Number */}
           <div className="mb-4">
-            <label className="block text-md font-medium text-gray-700 mb-2">Phone Number</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Phone Number
+            </label>
             <input
               type="text"
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               placeholder="Enter phone number"
               required
             />
           </div>
 
           {/* Submit Button */}
-          <div className="col-span-1 sm:col-span-2 mt-4">
+          <div className="col-span-1 mt-4 sm:col-span-2">
             <button
               type="submit"
-              className="px-6 py-2 bg-[#117C90] text-white rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+              className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
               Add Admin
             </button>

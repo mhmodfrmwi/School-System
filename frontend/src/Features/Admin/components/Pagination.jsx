@@ -1,6 +1,11 @@
 import React from "react";
 
-const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
+const Pagination = ({
+  totalItems,
+  itemsPerPage,
+  currentPage,
+  onPageChange,
+}) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePrevPage = () => {
@@ -25,13 +30,13 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
   }
 
   return (
-    <div className="flex justify-center items-center mt-4 pt-4 mb-6">
+    <div className="mb-6 mt-4 flex items-center justify-center pt-4">
       <button
         onClick={handlePrevPage}
-        className={`px-3 py-2 text-center rounded-lg ${
+        className={`rounded-lg px-3 py-2 text-center ${
           currentPage === 1
-            ? "text-[#117C90] cursor-not-allowed"
-            : "bg-[#90AEAE] text-white hover:bg-[#117C90]"
+            ? "cursor-not-allowed text-[#117C90] dark:text-[#043B44]"
+            : "bg-[#90AEAE] text-white hover:bg-[#117C90] dark:hover:bg-[#043B44]"
         }`}
         disabled={currentPage === 1}
       >
@@ -41,10 +46,10 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`px-3 py-2 text-center rounded-lg mx-0 text-sm ${
+          className={`mx-0 rounded-lg px-3 py-2 text-center text-sm ${
             currentPage === page
-              ? "bg-[#117C90] text-white"
-              : "bg-transparent text-[#117C90] hover:bg-[#117C90] hover:text-white"
+              ? "bg-[#117C90] text-white dark:bg-[#043B44]"
+              : "bg-transparent text-[#117C90] hover:bg-[#117C90] hover:text-white dark:text-[#043B44] dark:hover:bg-[#043B44] dark:hover:text-white"
           }`}
         >
           {page}
@@ -52,10 +57,10 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
       ))}
       <button
         onClick={handleNextPage}
-        className={`px-3 py-2 text-center rounded-lg ${
+        className={`rounded-lg px-3 py-2 text-center ${
           currentPage === totalPages
-            ? "text-[#117C90] cursor-not-allowed"
-            : "bg-[#90AEAE] text-white hover:bg-[#117C90]"
+            ? "cursor-not-allowed text-[#117C90] dark:text-[#043B44]"
+            : "bg-[#90AEAE] text-white hover:bg-[#117C90] hover:text-white dark:bg-[#90AEAE] dark:hover:bg-[#043B44]"
         }`}
         disabled={currentPage === totalPages}
       >

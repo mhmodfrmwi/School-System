@@ -19,20 +19,20 @@ const ManagerHeader = ({ onSearchChange, onFilterChange }) => {
     <div className="mx-auto px-0">
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
-          <h1 className="text-lg font-poppins font-semibold  text-[#244856] sm:text-xl lg:text-2xl">
+          <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
             Managers
           </h1>
           <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[125px]"></div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
-          <button className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white sm:text-sm">
+          <button className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white dark:hover:bg-[#043B44] sm:text-sm">
             Export CSV
           </button>
 
           <NavLink
             to="/admin/managerform"
-            className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
+            className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] dark:bg-[#043B44] sm:text-sm"
           >
             Add Manager
           </NavLink>
@@ -44,7 +44,7 @@ const ManagerHeader = ({ onSearchChange, onFilterChange }) => {
           <select
             onChange={handleFilterChange}
             value={selectedFilter}
-            className="w-full rounded-md border bg-white px-3 py-2 font-poppins text-xs text-[#244856] focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:w-auto sm:text-sm"
+            className="w-full rounded-md border bg-white px-3 py-2 font-poppins text-xs text-[#244856] focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-[#043B44] sm:w-auto sm:text-sm"
           >
             <option value="" className="font-poppins">
               Select Filter
@@ -66,7 +66,7 @@ const ManagerHeader = ({ onSearchChange, onFilterChange }) => {
           <input
             type="text"
             placeholder="Search for a manager by name, email, or gender"
-            className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2  focus:ring-[#117C90] sm:text-sm"
+            className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-[#043B44] sm:text-sm"
             value={searchText}
             onChange={handleSearchChange}
           />
