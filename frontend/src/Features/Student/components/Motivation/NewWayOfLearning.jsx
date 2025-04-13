@@ -3,31 +3,28 @@ import img4 from "../../../../assets/img4.png";
 import img5 from "../../../../assets/img5.png";
 import img6 from "../../../../assets/img6.png";
 import img7 from "../../../../assets/img7.png";
-
+import { useTranslation } from 'react-i18next';
 const NewWayOfLearning = () => {
+    const { t } = useTranslation();
     const cards = [
         {
-            title: "Number of Activities",
-            description:
-                "The number of activities you interact with, for example, the number of discussions you participate in, the number of video lectures you view, the number of assignments you solve, the number of messages you send, and so on.",
+            title: t('motivation.activitiesTitle'),
+            description: t('motivation.activitiesDesc'),
             image: img4,
         },
         {
-            title: "Weight",
-            description:
-                "Each activity you do has a defined weight, for example, the weight of solving an assignment of 40 questions is definitely different from the weight of sending a message to your teacher and so on.",
+            title: t('motivation.weightTitle'),
+            description: t('motivation.weightDesc'),
             image: img5,
         },
         {
-            title: "Grade (If Applicable)",
-            description:
-                "In the exams or homework assignments, for example, the grade/mark you get will affect your score, so if you get the full mark you will get the maximum number of points for this exam/homework.",
+            title: t('motivation.gradeTitle'),
+            description: t('motivation.gradeDesc'),
             image: img7,
         },
         {
-            title: "Time (If Applicable)",
-            description:
-                "The faster you respond to your activities in Classera, the more points you get. For example, if you got a homework that is launched on Monday and is open until Thursday, if you submit it on Monday you will get up to 25% percent increase in your points, and if you submit it just before the deadline you will not get any extra bonus.",
+            title: t('motivation.timeTitle'),
+            description: t('motivation.timeDesc'),
             image: img6,
         },
     ];
@@ -38,11 +35,11 @@ const NewWayOfLearning = () => {
             <div className="bg-white p-6 rounded-2xl mt-6 grid grid-cols-1 pb-0 gap-6 items-center">
                 <div>
                     <button className="text-2xl font-poppins cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-bold text-transparent">
-                        The New Way of Learning
+                    {t('motivation.newWayTitle')}
                     </button>
                     <p className="ms-1 w-24 rounded-xl mb-4 border-t-4 border-[#BC6FFB]"></p>
                     <p className="font-poppins text-lg font-medium  md:text-left px-4 md:px-10">
-                        Your score is based on many factors, below are the four main factors that affect your score.
+                    {t('motivation.scoreFactors')}
                     </p>
                 </div>
             </div>

@@ -33,8 +33,9 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getSemesterReward } from "../components/StudentRedux/motivationSlice";
-
+import { useTranslation } from 'react-i18next';
 function DashboardStudent() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { semesterReward } = useSelector((state) => state.motivation);
@@ -45,40 +46,40 @@ function DashboardStudent() {
   }, [dispatch]);
 
   const mainCategories = [
-    { label: "Online Assignments", icon: editI, progress: "100%" },
-    { label: "Exams", icon: learningI, progress: "90%" },
-    { label: "Course Materials", icon: CourseI, progress: "80%" },
-    { label: "Report Cards", icon: VectorI, progress: "60%" },
-    { label: "Mailbox", icon: EmailI, progress: "50%" },
-    { label: "Assessments", icon: AbsenceI, progress: "70%" },
-    { label: "Activities", icon: ActivitesI, progress: "20%" },
-    { label: "Virtual Classroom", icon: VirtualI, progress: "10%" },
-    { label: "Announcements", icon: annonI, progress: "40%" },
-    { label: "Video Lectures", icon: GroupI, progress: "100%" },
+    { label: t('dashboard.onlineAssignments'), icon: editI, progress: "100%" },
+    { label: t('dashboard.exams'), icon: learningI, progress: "90%" },
+    { label: t('dashboard.courseMaterials'), icon: CourseI, progress: "80%" },
+    { label: t('dashboard.reportCards'), icon: VectorI, progress: "60%" },
+    { label: t('dashboard.mailbox'), icon: EmailI, progress: "50%" },
+    { label: t('dashboard.assessments'), icon: AbsenceI, progress: "70%" },
+    { label: t('dashboard.activities'), icon: ActivitesI, progress: "20%" },
+    { label: t('dashboard.virtualClassroom'), icon: VirtualI, progress: "10%" },
+    { label: t('dashboard.announcements'), icon: annonI, progress: "40%" },
+    { label: t('dashboard.videoLectures'), icon: GroupI, progress: "100%" },
   ];
 
   const readingList = [
     {
-      title: "English",
+      title: t('subjects.english'),
       description: "Spelling - Learn How To Spell Letters",
       link: book1,
     },
     {
-      title: "Arabic",
+      title: t('subjects.arabic'),
       description: "Lesson 1 - How to Grow and Take Care of Your Farm",
       link: book2,
     },
     {
-      title: "Science",
+      title: t('subjects.science'),
       description: "Adaptation - About Bears Life",
       link: book3,
     },
   ];
 
   const recommendedList = [
-    { title: "What is an atom?", type: "Science", link: video1 },
-    { title: "Let’s improve our Spelling!", type: "English", link: video2 },
-    { title: "What is an atom?", type: "Science", link: video1 },
+    { title: t('dashboard.atomVideo'), type: t('subjects.science'), link: video1 },
+    { title: t('dashboard.spellingVideo'), type: t('subjects.english'), link: video2 },
+    { title: t('dashboard.atomVideo'), type: t('subjects.science'), link: video1 },
   ];
 
   return (
@@ -90,7 +91,7 @@ function DashboardStudent() {
         <div className="flex items-center space-x-6 pl-10">
           <img
             src={userImage}
-            alt="Zaina Shaheen"
+            alt={t('dashboard.profileImageAlt')}
             className="h-40 w-40 rounded-full border-4 border-white bg-[#CA9C9C] shadow-lg"
           />
           <div className="space-y-2">
@@ -98,9 +99,9 @@ function DashboardStudent() {
               {fullName}
             </h2>
             <div className="flex items-center space-x-2">
-              <img src={trueIcon} alt="True Icon" className="h-6 w-6" />
+              <img src={trueIcon} alt={t('dashboard.presentIconAlt')} className="h-6 w-6" />
               <p className="font-poppins font-medium text-[#62413A]">
-                You were present today!
+                {t('dashboard.presentToday')}
               </p>
             </div>
           </div>
@@ -112,60 +113,58 @@ function DashboardStudent() {
               <div className="flex items-center space-x-2">
                 <FaCalendarAlt className="h-4 w-4 text-gray-600" />
                 <p className="text-sm font-semibold text-gray-600">
-                  15/10/2024 | 10:42:30
+                  {new Date().toLocaleDateString()} | {new Date().toLocaleTimeString()}
                 </p>
               </div>
               <div className="flex items-center space-x-8">
                 <p
-                  className={`font-poppins text-lg font-semibold ${
-                    semesterReward.badge === "Green"
+                  className={`font-poppins text-lg font-semibold ${semesterReward.badge === "Green"
                       ? "text-green-600"
                       : semesterReward.badge === "Diamond"
                         ? "text-gray-500"
                         : semesterReward.badge === "Gold"
                           ? "text-yellow-500"
                           : "text-green-700"
-                  }`}
+                    }`}
                 >
                   {semesterReward.badge === "Green"
-                    ? "Green Level"
+                    ? t('dashboard.greenLevel')
                     : semesterReward.badge === "Diamond"
-                      ? "Diamond Level"
+                      ? t('dashboard.diamondLevel')
                       : semesterReward.badge === "Gold"
-                        ? "Gold Level"
-                        : "Green Level"}
+                        ? t('dashboard.goldLevel')
+                        : t('dashboard.greenLevel')}
                 </p>
-                <img src={awardIcon} alt="Award Icon" className="h-10 w-10" />
+                <img src={awardIcon} alt={t('dashboard.awardIconAlt')} className="h-10 w-10" />
               </div>
             </div>
 
             <div className="flex flex-col items-center rounded-lg bg-white p-4 shadow-md">
               <p className="font-poppins text-xs font-medium text-gray-500">
-                Learning Streak
+                {t('dashboard.learningStreak')}
               </p>
               <div className="mt-2 flex space-x-1">
                 {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
                   <div
                     key={index}
-                    className={`h-6 w-6 rounded-full border text-center font-bold ${
-                      index < 3
+                    className={`h-6 w-6 rounded-full border text-center font-bold ${index < 3
                         ? "bg-[#FD813D] text-white"
                         : "bg-gray-200 text-gray-400"
-                    }`}
+                      }`}
                   >
                     {day}
                   </div>
                 ))}
               </div>
               <p className="mt-1 font-poppins text-sm font-medium text-gray-600">
-                3 days 🔥
+                3{t('dashboard.days')} 🔥
               </p>
             </div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-lg bg-white p-6 shadow-md">
             <p className="font-poppins text-lg font-semibold text-gray-600">
-              Your Score
+              {t('dashboard.yourScore')}
             </p>
 
             <div className="relative flex h-24 w-24 items-center justify-center">
@@ -265,15 +264,14 @@ function DashboardStudent() {
                 </defs>
               </svg>
               <p
-                className={`text-xl font-bold ${
-                  semesterReward.badge === "Green"
+                className={`text-xl font-bold ${semesterReward.badge === "Green"
                     ? "text-green-600"
                     : semesterReward.badge === "Diamond"
                       ? "text-gray-500"
                       : semesterReward.badge === "Gold"
                         ? "text-yellow-500"
                         : "text-green-700"
-                }`}
+                  }`}
               >
                 {semesterReward.totalSemesterPoints}
               </p>
@@ -287,19 +285,19 @@ function DashboardStudent() {
         <div className="flex items-center py-4">
           <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
-            Quick Menu
+            {t('dashboard.quickMenu')}
           </button>
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
           {[
-            { label: "Motivation", icon: AwardIcon, path: "/student/motivation" },
-            { label: "Courses", icon: CourseIcon, path: "/student/allcourses" },
-            { label: "Absence", icon: AbsenceIcon , path: "/student/attendance"},
-            { label: "Schedule", icon: ScheduleIcon , path: "/student/schedule"},
-            { label: "Grades", icon: GradeIcon , path: "/student/grades"},
-            { label: "Activities", icon: ActivityIcon , path: "/student/activities"},
-            { label: "Library", icon: LibraryIcon, path: "/student/library" },
+            { label: t('menu.motivation'), icon: AwardIcon, path: "/student/motivation" },
+            { label: t('menu.courses'), icon: CourseIcon, path: "/student/allcourses" },
+            { label: t('menu.absence'), icon: AbsenceIcon, path: "/student/attendance" },
+            { label: t('menu.schedule'), icon: ScheduleIcon, path: "/student/schedule" },
+            { label: t('menu.grades'), icon: GradeIcon, path: "/student/grades" },
+            { label: t('menu.activities'), icon: ActivityIcon, path: "/student/activities" },
+            { label: t('menu.library'), icon: LibraryIcon, path: "/student/library" },
             // { label: "Question Bank", icon: QuestionsIcon },
             // { label: "Virtual Rooms", icon: VirtualIcon },
             // { label: "Chats", icon: ChatIcon },
@@ -323,7 +321,7 @@ function DashboardStudent() {
         <div className="flex items-center">
           <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
-            Main Categories
+            {t('dashboard.mainCategories')}
           </button>
         </div>
 
@@ -372,7 +370,7 @@ function DashboardStudent() {
           }}
         >
           <h2 className="mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-2xl font-bold text-transparent">
-            Continue Reading
+            {t('dashboard.continueReading')}
           </h2>
           <ul className="space-y-6">
             {readingList.map((item, index) => (
@@ -393,7 +391,7 @@ function DashboardStudent() {
                     href="https://placehold.co/600x400"
                     className="mt-2 block font-poppins font-semibold text-purple-500"
                   >
-                    Continue
+                    {t('dashboard.continueButton')}
                   </a>
                 </div>
               </li>
@@ -410,7 +408,7 @@ function DashboardStudent() {
           }}
         >
           <h2 className="mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-2xl font-bold text-transparent">
-            Recommended To Watch
+            {t('dashboard.recommendedToWatch')}
           </h2>
           <ul className="space-y-6">
             {recommendedList.map((item, index) => (
@@ -425,13 +423,13 @@ function DashboardStudent() {
                     {item.title}
                   </p>
                   <p className="font-poppins text-gray-600">
-                    Type: {item.type}
+                    {t('dashboard.type')}: {item.type}
                   </p>
                   <a
                     href="https://placehold.co/600x400"
                     className="mt-2 block font-poppins font-semibold text-purple-500"
                   >
-                    Watch Now
+                    {t('dashboard.watchNow')}
                   </a>
                 </div>
               </li>
