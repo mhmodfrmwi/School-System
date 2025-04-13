@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 const EditProfile = () => {
+    const { t } = useTranslation();
     const [profile, setProfile] = useState({
         firstName: "Omar",
         lastName: "Ahmed",
@@ -41,7 +43,7 @@ const EditProfile = () => {
     return (
         <div className="w-[80%] mx-auto my-10 font-poppins">
             <h1 className="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#E47986] to-[#BC6FFB] pl-5">
-                Edit Profile
+                {t('editProfile.title')}
             </h1>
             <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-gradient-to-r from-[#CE4EA0] via-[#E47986] to-[#BC6FFB] ml-3"></div>
 
@@ -49,7 +51,7 @@ const EditProfile = () => {
                 <div className="relative inline-block mb-6 ">
                     <img
                         src="../src/assets/user1.jpg"
-                        alt="Profile Avatar"
+                        alt={t('editProfile.profileImageAlt')}
                         className="w-24 h-24 rounded-full mr-4"
                     />
                     <button
@@ -62,7 +64,7 @@ const EditProfile = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
-                        <label className="block text-sm font-medium">First Name</label>
+                        <label className="block text-sm font-medium">{t('editProfile.firstName')}</label>
                         <input
                             type="text"
                             name="firstName"
@@ -72,7 +74,7 @@ const EditProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Last Name</label>
+                        <label className="block text-sm font-medium">{t('editProfile.lastName')}</label>
                         <input
                             type="text"
                             name="lastName"
@@ -82,19 +84,19 @@ const EditProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Gender</label>
+                        <label className="block text-sm font-medium">{t('editProfile.gender')}</label>
                         <select
                             name="gender"
                             value={profile.gender}
                             onChange={handleInputChange}
                             className="w-full mt-1 p-2 border border-gray-300 rounded text-[#718EBF]"
                         >
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                            <option value="Male">{t('editProfile.genderMale')}</option>
+                            <option value="Female">{t('editProfile.genderFemale')}</option>
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Phone Number</label>
+                        <label className="block text-sm font-medium">{t('editProfile.phoneNumber')}</label>
                         <input
                             type="text"
                             name="phoneNumber"
@@ -104,7 +106,7 @@ const EditProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Email</label>
+                        <label className="block text-sm font-medium">{t('editProfile.email')}</label>
                         <input
                             type="email"
                             name="email"
@@ -114,7 +116,7 @@ const EditProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Role</label>
+                        <label className="block text-sm font-medium">{t('editProfile.role')}</label>
                         <input
                             type="text"
                             name="role"
@@ -130,14 +132,14 @@ const EditProfile = () => {
                     onClick={handleSave}
                     className="px-6 py-2 bg-[#849ED7] text-white rounded-md font-medium hover:bg-[#7393d6] transition mx-auto block"
                 >
-                    Save
+                    {t('editProfile.saveButton')}
                 </button>
 
 
-                <h2 className="text-xl font-semibold mt-8 mb-4">Edit Password</h2>
+                <h2 className="text-xl font-semibold mt-8 mb-4">{t('editProfile.changePasswordTitle')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium">Current Password</label>
+                        <label className="block text-sm font-medium">{t('editProfile.currentPassword')}</label>
                         <input
                             type="password"
                             name="currentPassword"
@@ -147,7 +149,7 @@ const EditProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">New Password</label>
+                        <label className="block text-sm font-medium">{t('editProfile.newPassword')}</label>
                         <input
                             type="password"
                             name="newPassword"
@@ -157,7 +159,7 @@ const EditProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Re-enter New Password</label>
+                        <label className="block text-sm font-medium">{t('editProfile.confirmPassword')}</label>
                         <input
                             type="password"
                             name="confirmPassword"
@@ -167,7 +169,7 @@ const EditProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">OTP Code</label>
+                        <label className="block text-sm font-medium">{t('editProfile.otpCode')}</label>
                         <input
                             type="text"
                             name="otpCode"
@@ -182,7 +184,7 @@ const EditProfile = () => {
                     onClick={handlePasswordChange}
                     className="mt-4 px-6 py-2 bg-[#849ED7] text-white rounded-md font-medium hover:bg-[#7393d6] transition mx-auto block"
                 >
-                    Edit
+                    {t('editProfile.changePasswordButton')}
                 </button>
             </div>
         </div>

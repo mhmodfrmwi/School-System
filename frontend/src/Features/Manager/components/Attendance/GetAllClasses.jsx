@@ -43,10 +43,10 @@ const GetAllClasses = () => {
     <div className="lg:px-0] mx-auto w-[90%] px-4 md:px-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+          <h1 className="font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
             Classes
           </h1>
-          <div className="mt-1 h-[3px] w-[70px] rounded-t-md bg-[#244856] lg:h-[4px] xl:w-[100px]"></div>
+          <div className="mt-1 h-[3px] w-[70px] rounded-t-md bg-[#117C90] lg:h-[4px] xl:w-[100px]"></div>
         </div>
         <input
           type="text"
@@ -68,14 +68,14 @@ const GetAllClasses = () => {
               <img src={bag} alt="bag" className="h-7 w-7" />
             </div>
 
-            <div className="font-poppins text-[#197080]">
+            <div className="font-poppins text-[#117C90]">
               {cls.gradeId?.gradeName}
             </div>
             <div className="font-poppins text-lg font-semibold">
               {cls.className}
             </div>
 
-            <p className="font-poppins text-[#197080]">
+            <p className="font-poppins text-[#117C90]">
               Students: {cls.student_count}
             </p>
           </div>

@@ -16,11 +16,7 @@ const GetExamSchedule = () => {
   const { isDeleting, deleteExamScheduleMutation } = useDeleteExamSchedule();
 
   const handleDelete = () => {
-    deleteExamScheduleMutation(id, {
-      onSuccess: () => {
-        navigate("/manager/get-exam-schedules");
-      },
-    });
+    deleteExamScheduleMutation(id);
   };
 
   const handleUpdate = () => {
@@ -36,27 +32,24 @@ const GetExamSchedule = () => {
   });
 
   return (
-    <div className="bg-gray-100 p-4 sm:p-6">
-      <div className="mx-auto w-full max-w-2xl lg:max-w-4xl">
-        {/* Header */}
+    <div className="mt-10 p-4 sm:p-6">
+      <div className="mx-auto w-full max-w-2xl lg:max-w-5xl">
         <div className="mb-6 flex flex-col items-center justify-between sm:flex-row">
-          <h1 className="mb-4 text-2xl font-bold text-[#105E6A] sm:mb-0 sm:text-3xl">
+          <h1 className="mb-4 text-xl font-bold text-[#117C90] sm:mb-0 sm:text-2xl">
             Exam Schedule Details
           </h1>
           <div className="flex space-x-4">
-            {/* Edit Button */}
             <button
               onClick={handleUpdate}
-              className="flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 hover:bg-[#105E6A] sm:px-4 sm:py-2 sm:text-base"
+              className="flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 hover:bg-[#117C90] sm:px-4 sm:py-2 sm:text-base"
             >
               <FontAwesomeIcon icon={faEdit} className="mr-2" />
               Edit Schedule
             </button>
 
-            {/* Delete Button */}
             <button
               onClick={handleDelete}
-              className="flex items-center rounded-lg bg-[#105E6A] px-3 py-1.5 text-sm text-white transition duration-300 sm:px-4 sm:py-2 sm:text-base"
+              className="flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 sm:px-4 sm:py-2 sm:text-base"
             >
               <FontAwesomeIcon icon={faTrash} className="mr-2" />
               Delete Schedule
@@ -64,69 +57,78 @@ const GetExamSchedule = () => {
           </div>
         </div>
 
-        {/* Details Card */}
-        <div className="rounded-xl bg-white p-4 shadow-lg sm:p-6">
-          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {/* Academic Year */}
+        <div className="mb-6 rounded-xl bg-white p-4 shadow-lg sm:p-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
-              <h2 className="mb-1 text-lg font-semibold text-[#105E6A] sm:text-xl">
+              <h3 className="text-base font-medium text-[#117C90] sm:text-lg md:text-xl">
                 Academic Year
-              </h2>
-              <p className="text-sm text-gray-700 sm:text-base">
+              </h3>
+              <p className="text-base text-gray-700 sm:text-lg md:text-xl">
                 {managerExamSchedule?.academic_year_id?.startYear} -{" "}
                 {managerExamSchedule?.academic_year_id?.endYear}
               </p>
             </div>
 
-            {/* Grade */}
             <div>
-              <h2 className="mb-1 text-lg font-semibold text-[#105E6A] sm:text-xl">
+              <h3 className="text-base font-medium text-[#117C90] sm:text-lg md:text-xl">
                 Grade
-              </h2>
-              <p className="text-sm text-gray-700 sm:text-base">
+              </h3>
+              <p className="text-base text-gray-700 sm:text-lg md:text-xl">
                 {managerExamSchedule?.grade_id?.gradeName}
               </p>
             </div>
 
-            {/* Semester */}
             <div>
-              <h2 className="mb-1 text-lg font-semibold text-[#105E6A] sm:text-xl">
+              <h3 className="text-base font-medium text-[#117C90] sm:text-lg md:text-xl">
                 Semester
-              </h2>
-              <p className="text-sm text-gray-700 sm:text-base">
+              </h3>
+              <p className="text-base text-gray-700 sm:text-lg md:text-xl">
                 {managerExamSchedule?.semester_id?.semesterName}
               </p>
             </div>
           </div>
+        </div>
 
-          {/* Subjects */}
-          <div className="mb-6">
-            <h2 className="mb-3 text-lg font-semibold text-[#105E6A] sm:text-xl">
-              Subjects
-            </h2>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="mx-auto mt-7 w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90]">
+          <table className="w-full">
+            <thead className="bg-[#117C90] text-left text-white">
+              <tr>
+                <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  Subject
+                </th>
+                <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  Exam Date
+                </th>
+                <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  Start Time
+                </th>
+                <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                  End Time
+                </th>
+              </tr>
+            </thead>
+            <tbody>
               {sortedSubjects?.map((subject) => (
-                <div
+                <tr
                   key={subject._id}
-                  className="rounded-lg border border-gray-200 bg-gray-50 p-3"
+                  className="bg-white hover:bg-[#117C90]/10"
                 >
-                  <h3 className="text-base font-medium text-[#117C90] sm:text-lg">
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {subject.subject_id?.subjectName}
-                  </h3>
-                  <div className="mt-1 text-xs text-gray-600 sm:text-sm">
-                    <p>
-                      <span className="font-semibold">Date:</span>{" "}
-                      {new Date(subject.exam_date).toLocaleDateString()}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Time:</span>{" "}
-                      {subject.start_time} - {subject.end_time}
-                    </p>
-                  </div>
-                </div>
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {new Date(subject.exam_date).toLocaleDateString()}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {subject.start_time}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {subject.end_time}
+                  </td>
+                </tr>
               ))}
-            </div>
-          </div>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

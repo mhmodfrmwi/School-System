@@ -71,7 +71,7 @@ function Grades() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
           {/* Card for Current Semester */}
-          <div className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-[#FD813D] border-opacity-80 border-2">
+          <div className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow  border-[#FD813D] border-opacity-80 border-2">
             {/* Image with Overlay */}
             <div className="relative">
               <img
@@ -99,7 +99,7 @@ function Grades() {
           </div>
 
           {/* Card for All Years */}
-          <div className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-[#FD813D] border-opacity-80 border-2">
+          <div className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow  border-[#FD813D] border-opacity-80 border-2">
             {/* Image with Overlay */}
             <div className="relative">
               <img

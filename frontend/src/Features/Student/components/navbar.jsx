@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -9,15 +10,18 @@ import { ReactSVG } from "react-svg";
 import { Link } from "react-router-dom";
 import InfoIcon from "../../../assets/icons/InfoS.svg";
 import userImage from "../../../assets/user.jpeg";
-import language from "../../../assets/icons/languageS.svg";
+import languageE from "../../../assets/icons/languageS.svg";
+import languageA from "../../../assets/icons/languageA.svg";
 import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
 import Logo from "../../../assets/logologin.png";
 import Menu from "../../../assets/StudentIcon/Menue.png";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import Sidebar from "./Sidebar";
+import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const settingsRef = useRef(null);
   const searchRef = useRef(null);
@@ -25,28 +29,30 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { fullName } = useSelector((state) => state.login);
 
   const routes = [
-    { path: "grades" },
-    { path: "grades/assignment" },
-    { path: "grades/exam" },
-    { path: "schedule" },
-    { path: "schedule/exam" },
-    { path: "library" },
-    { path: "motivation" },
-    { path: "activities" },
-    { path: "activities/detailes" },
-    { path: "activities/prizes" },
-    { path: "activities/contests" },
-    { path: "virtualrooms" },
-    { path: "allcourses" },
-    { path: "allcourses" },
-    { path: "attendance" },
+    { path: "grades", key: "grades" },
+    { path: "grades/assignment", key: "grades/assignment" },
+    { path: "grades/exam", key: "grades/exam" },
+    { path: "schedule", key: "schedule" },
+    { path: "schedule/exam", key: "schedule/exam" },
+    { path: "library", key: "library" },
+    { path: "motivation", key: "motivation" },
+    { path: "activities", key: "activities" },
+    { path: "activities/detailes", key: "activities/detailes" },
+    { path: "activities/prizes", key: "activities/prizes" },
+    { path: "activities/contests", key: "activities/contests" },
+    { path: "virtualrooms", key: "virtualrooms" },
+    { path: "allcourses", key: "allcourses" },
+    { path: "attendance", key: "attendance" }
   ];
 
-  const filteredRoutes = routes.filter((route) =>
-    route.path.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredRoutes = routes.filter((route) => {
+    const englishMatch = route.path.toLowerCase().includes(searchTerm.toLowerCase());
+    const arabicMatch = t(`routes.${route.key}`).includes(searchTerm);
+    return englishMatch || arabicMatch;
+  });
 
   const handleSelect = (path) => {
     setSearchTerm("");
@@ -71,11 +77,17 @@ const Navbar = () => {
     }
   };
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLang);
+    localStorage.setItem('i18nextLng', newLang);
+  };
+
   const url = window.location.pathname;
   const studentName = url.split("/student/").pop();
   const match = url.match(/\/student\/([^/]+)/);
   const name = match ? match[1] : "";
-  
+
 
 
   const handleBack = () => {
@@ -97,6 +109,11 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    // document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
 
   return (
     <div className="relative">
@@ -145,7 +162,7 @@ const Navbar = () => {
           <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
             <input
               type="text"
-              placeholder="Search Student Page"
+              placeholder={t('SearchStudentPage')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -161,13 +178,13 @@ const Navbar = () => {
                       onClick={() => handleSelect(route.path)}
                       className="cursor-pointer px-4 py-2 font-semibold text-[#C459D9] hover:bg-[#d8cbed]"
                     >
-                      {route.path}
+                      {t(`routes.${route.key}`)}
                       <p className="mx-auto my-2 w-[98%] border-b-2 border-[#C459D9]"></p>
                     </li>
                   ))
                 ) : (
                   <li className="px-4 py-2 text-red-900">
-                    No matches found pages
+                    {t('NoMatches')}
                   </li>
                 )}
               </ul>
@@ -202,7 +219,7 @@ const Navbar = () => {
               className="h-8 w-8 rounded-full md:h-10 md:w-10"
             />
             <span className="hidden font-poppins text-sm font-semibold text-dashboard-header md:text-base lg:flex">
-              Yasser
+              {fullName}
             </span>
           </div>
           <button
@@ -225,7 +242,7 @@ const Navbar = () => {
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
                   </button>
-                  <h2 className="font-semibold text-white">Edit Profile</h2>
+                  <h2 className="font-semibold text-white"> {t('EditProfile')} </h2>
                 </div>
                 <p className="mx-auto my-2 w-40 border-b-2 border-white"></p>
               </div>
@@ -234,8 +251,9 @@ const Navbar = () => {
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
-              <button className="mx-auto ms-6 p-2 text-[#C459D9]">
-                <ReactSVG src={language} className="r h-auto w-auto" />
+              <button className="mx-auto ms-6 p-2 text-[#C459D9]"
+                onClick={toggleLanguage}>
+                <ReactSVG src={i18n.language === 'en' ? languageA : languageE} className="r h-auto w-auto" />
               </button>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
 
@@ -246,7 +264,7 @@ const Navbar = () => {
                 <button className="p-2 text-gray-500">
                   <ReactSVG src={logout} className="r h-auto w-auto" />
                 </button>
-                <h2 className="font-semibold text-white">Logout</h2>
+                <h2 className="font-semibold text-white"> {t('Logout')} </h2>
               </div>
             </div>
           )}

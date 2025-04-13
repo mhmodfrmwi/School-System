@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:3000/exam-schedule";
 const API_URLToGet = "http://localhost:3000/exam-schedule/schedules/current";
+const API_URL_Schedule = "http://localhost:4000/api/v1/manager/schedule";
 // Create exam schedule
 const CreateExamScheduleData = async ({ formData }) => {
   const token = sessionStorage.getItem("token");
@@ -39,7 +41,7 @@ export const useCreateExamSchedule = () => {
       queryClient.invalidateQueries({ queryKey: ["managerExamSchedules"] });
     },
     onError: (err) => {
-      toast.error(err.message);
+      toast.error("Failed to create exam schedule", err.message);
     },
   });
 
@@ -125,7 +127,7 @@ async function deleteExamSchedule(id) {
 
 export function useDeleteExamSchedule() {
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   const { isLoading: isDeleting, mutate: deleteExamScheduleMutation } =
     useMutation({
       mutationFn: deleteExamSchedule,
@@ -134,6 +136,7 @@ export function useDeleteExamSchedule() {
         queryClient.invalidateQueries({
           queryKey: ["managerExamSchedules"],
         });
+        navigate("/manager/get-exam-schedules");
       },
       onError: (err) => {
         toast.error(err.message);
@@ -160,6 +163,7 @@ const updateExamSchedule = async ({ id, formData }) => {
 
 export const useEditExamSchedule = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: ({ id, formData }) => updateExamSchedule({ id, formData }),
@@ -168,9 +172,41 @@ export const useEditExamSchedule = () => {
       queryClient.invalidateQueries({
         queryKey: ["managerExamSchedules"],
       });
+      navigate("/manager/get-exam-schedules");
     },
     onError: (err) => {
       toast.error(err.message);
+    },
+  });
+};
+//fetch manager schedule
+
+const fetchSchedule = async (id) => {
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    throw new Error("Authentication required. Please log in.");
+  }
+  try {
+    const { data } = await axios.get(`${API_URL_Schedule}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch exam schedule",
+    );
+  }
+};
+
+export const useManagerSchedule = (id) => {
+  return useQuery({
+    queryKey: ["managerSchedule", id],
+    queryFn: () => fetchSchedule(id),
+    enabled: !!id,
+    onError: (err) => {
+      toast.error(`Error fetching exam schedule: ${err.message}`);
     },
   });
 };

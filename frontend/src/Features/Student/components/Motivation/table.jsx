@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudentWithFriendsReward } from "../StudentRedux/motivationSlice";
-
+import { useTranslation } from 'react-i18next';
 function Table() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { studentWithFriendsReward: friends } = useSelector(
     (state) => state.motivation,
@@ -11,49 +12,43 @@ function Table() {
   useEffect(() => {
     dispatch(getStudentWithFriendsReward());
   }, [dispatch]);
-  const [score] = useState([
+  const score = useMemo(() => [
     {
-      r11: "Exams, Homework Assignments and Activities",
-      r12: "For each question you solve",
-      r13: "5 points",
+      r11: t('table.examsHomework'),
+      r12: t('table.eachQuestion'),
+      r13: t('table.points5'),
       r14: "",
     },
     {
-      r11: "Messages",
-      r12: "For each message you end or reply to",
-      r13: "5 points",
-      r14: "Your score is based on the number of recipients who read your message. More reads = more points. If no one reads it, you get no points.",
+      r11: t('table.messages'),
+      r12: t('table.eachMessage'),
+      r13: t('table.points5'),
+      r14: t('table.messageComment'),
     },
     {
-      r11: "Course Materials",
-      r12: "For each course material you download",
-      r13: "5 points",
+      r11: t('table.courseMaterials'),
+      r12: t('table.eachDownload'),
+      r13: t('table.points5'),
       r14: "",
     },
     {
-      r11: "Virtual Classrooms",
-      r12: "For each smart class you attend",
-      r13: "5 points",
+      r11: t('table.virtualClassrooms'),
+      r12: t('table.eachClass'),
+      r13: t('table.points5'),
       r14: "",
     },
-  ]);
+  ], [t]);
 
   return (
     <>
       <section>
         <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
           <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
-            <div className="flex flex-col p-6">
+            <div className="ms-[-20px] flex flex-col p-6">
               <h1 className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-lg font-bold text-[#244856] text-transparent sm:text-xl lg:text-2xl">
-                Weights & Limits
+              {t('table.weightsLimits')}
               </h1>
               <div className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#BC6FFB]"></div>
-            </div>
-
-            <div className="sm:ml-30 mr-6 ms-5 flex flex-wrap items-center justify-start gap-2 sm:flex-nowrap sm:justify-start sm:gap-4">
-              <button className="rounded-2xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#117C90] hover:text-white sm:text-sm">
-                Export CSV
-              </button>
             </div>
           </div>
           <div className="overflow-x-auto">
@@ -61,16 +56,16 @@ function Table() {
               <thead>
                 <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white">
                   <th className="border border-[#FFA4A4] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Module
+                  {t('table.module')}
                   </th>
                   <th className="border border-[#FFA4A4] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Activity
+                  {t('table.activity')}
                   </th>
                   <th className="border border-[#FFA4A4] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Points
+                  {t('table.points')}
                   </th>
                   <th className="border border-[#FFA4A4] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Comments
+                  {t('table.comments')}
                   </th>
                 </tr>
               </thead>
@@ -96,14 +91,13 @@ function Table() {
           </div>
         </div>
 
-        <div className="ms-28 flex flex-col p-6">
-          <h1 className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-lg font-bold text-[#244856] text-transparent sm:text-xl lg:text-2xl">
-            Top Students
-          </h1>
-          <div className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#BC6FFB]"></div>
-        </div>
-
         <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+          <div className="ms-[-20px] flex flex-col p-6">
+            <h1 className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-lg font-bold text-[#244856] text-transparent sm:text-xl lg:text-2xl">
+            {t('table.topStudents')}
+            </h1>
+            <div className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#BC6FFB]"></div>
+          </div>
           <div className="overflow-x-auto">
             {" "}
             {/* Horizontal scrolling for the table */}
@@ -114,16 +108,16 @@ function Table() {
                 <thead>
                   <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white">
                     <th className="border border-[#FFA4A4] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                      Full Name
+                    {t('table.fullName')}
                     </th>
                     <th className="border border-[#FFA4A4] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                      Academic Number
+                    {t('table.academicNumber')}
                     </th>
                     <th className="border border-[#FFA4A4] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                      Total Points
+                    {t('table.totalPoints')}
                     </th>
                     <th className="border border-[#FFA4A4] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                      Badge
+                    {t('table.badge')}
                     </th>
                   </tr>
                 </thead>

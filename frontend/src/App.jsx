@@ -20,6 +20,8 @@ import UpdateExamSchedule from "./Features/Manager/components/Schedule/UpdateExa
 import GetExamScheduleForStudent from "./Features/Student/components/Schedule/GetExamScheduleForStudent";
 import EditVRManger from "./Features/Manager/components/VR/EditVRManger";
 import VirtualRoomsManger from "./Features/Teacher/components/MangerVR/MangerVR";
+import GetAllScheduleClasses from "./Features/Manager/components/Schedule/GetAllScheduleClasses";
+import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/WeekScheduleForManager";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -498,12 +500,6 @@ const SubmissionDetails = lazy(
 
 /* /////////////////manager imports//////////////////// */
 
-const SchedualTable = lazy(
-  () => import("./Features/Manager/components/Schedule/ScheduleTable"),
-);
-const FormShedule = lazy(
-  () => import("./Features/Manager/components/Schedule/ScheduleForm"),
-);
 const ManagerVRTable = lazy(
   () => import("./Features/Manager/components/VR/MangerVRTable"),
 );
@@ -1022,11 +1018,12 @@ function App() {
                 path="edit-school-hubs/:id"
                 element={<ManagerSchoolHubsEdit />}
               />
-              <Route path="schedule-table" element={<SchedualTable />} />
-              <Route path="schedule-form" element={<FormShedule />} />
               <Route path="virtual-room" element={<ManagerVRTable />} />
               <Route path="virtual-room-form" element={<ManagerVRForm />} />
-              <Route path="/manager/edit-virtual-room/:id" element={<EditVRManger />} />
+              <Route
+                path="/manager/edit-virtual-room/:id"
+                element={<EditVRManger />}
+              />
               <Route path="grade" element={<ManagerGrade />} />
 
               <Route path="get-all-classes" element={<GetAllClasses />} />
@@ -1047,6 +1044,15 @@ function App() {
               <Route
                 path="update-exam-schedule/:id"
                 element={<UpdateExamSchedule />}
+              />
+
+              <Route
+                path="get-all-schedule-classes"
+                element={<GetAllScheduleClasses />}
+              />
+              <Route
+                path="get-weekly-schedule/:id"
+                element={<WeeklyScheduleForManager />}
               />
             </Route>
 
