@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchAssignedSubjects, updateAssignedSubject } from "../AdminRedux/AssignSubjectSlice";  
+import {
+  fetchAssignedSubjects,
+  updateAssignedSubject,
+} from "../AdminRedux/AssignSubjectSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
-import { fetchSemesters } from "../AdminRedux/AssignSubjectSlice";  
+import { fetchSemesters } from "../AdminRedux/AssignSubjectSlice";
 import { toast } from "react-toastify";
 
 const EditAssignedSubject = () => {
-  const { id } = useParams();  
+  const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const [gradeName, setGradeName] = useState("");
   const [subjectName, setSubjectName] = useState("");
-  const [academicYear, setAcademicYear] = useState("");  
-  const [semesterName, setSemesterName] = useState("");  
+  const [academicYear, setAcademicYear] = useState("");
+  const [semesterName, setSemesterName] = useState("");
 
   const dispatch = useDispatch();
   const { assignedSubjects } = useSelector((state) => state.assignSubject);
@@ -40,9 +43,13 @@ const EditAssignedSubject = () => {
       setSemesterName(subject.term || "");
 
       // Set the academic year based on the selected semester
-      const selectedSemester = semesters.find(semester => semester.semesterName === subject.term);
+      const selectedSemester = semesters.find(
+        (semester) => semester.semesterName === subject.term,
+      );
       if (selectedSemester) {
-        setAcademicYear(selectedSemester.academicYear_id?.startYear?.toString() || "");
+        setAcademicYear(
+          selectedSemester.academicYear_id?.startYear?.toString() || "",
+        );
       }
     }
   }, [assignedSubjects, id, grades, semesters]);
@@ -65,31 +72,37 @@ const EditAssignedSubject = () => {
         // navigate("/admin/allsubjects");
       })
       .catch((error) => {
-       console.log(error.message || "Failed to update subject");
+        console.log(error.message || "Failed to update subject");
       });
   };
 
   const handleSemesterChange = (e) => {
-    const selectedSemester = semesters.find(semester => semester.semesterName === e.target.value);
+    const selectedSemester = semesters.find(
+      (semester) => semester.semesterName === e.target.value,
+    );
     setSemesterName(e.target.value);
-    setAcademicYear(selectedSemester?.academicYear_id?.startYear?.toString() || ""); 
+    setAcademicYear(
+      selectedSemester?.academicYear_id?.startYear?.toString() || "",
+    );
   };
 
   return (
-    <div className="w-[80%] mx-auto mt-10">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Assigned Subject</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
+    <div className="mx-auto mt-10 w-[80%]">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        Edit Assigned Subject
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form onSubmit={handleUpdateSubject} className="m-6">
           {/* Subject Dropdown */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
               Select Subject
             </label>
             <select
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">-- Select Subject --</option>
               {subjects.map((subject, index) => (
@@ -102,13 +115,13 @@ const EditAssignedSubject = () => {
 
           {/* Grade Dropdown */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
               Select Grade
             </label>
             <select
               value={gradeName}
               onChange={(e) => setGradeName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">-- Select Grade --</option>
               {grades.map((grade, index) => (
@@ -121,13 +134,13 @@ const EditAssignedSubject = () => {
 
           {/* Semester Dropdown */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
               Select Semester
             </label>
             <select
               value={semesterName}
               onChange={handleSemesterChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">-- Select Semester --</option>
               {semesters.map((semester, index) => (
@@ -148,7 +161,7 @@ const EditAssignedSubject = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="px-6 py-2 bg-[#117C90] text-white rounded-md text-sm font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+            className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 text-sm font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
             Update Subject
           </button>

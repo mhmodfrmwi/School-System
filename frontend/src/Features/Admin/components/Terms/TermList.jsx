@@ -61,7 +61,7 @@ const TermList = () => {
             paginatedTerms.map((term, index) => (
               <div
                 key={term._id}
-                className="mb-4 flex items-center justify-between rounded-lg bg-white p-4 font-poppins shadow-md"
+                className="mb-4 flex items-center justify-between rounded-lg bg-white p-4 font-poppins shadow-md dark:bg-[#117C90]"
               >
                 <div className="flex items-center">
                   <div
@@ -73,16 +73,16 @@ const TermList = () => {
                       style={{ color: getColor(index) }}
                     />
                   </div>
-                  <span className="mx-2 h-8 border-l-2 border-gray-600 text-xl text-gray-600"></span>
+                  <span className="mx-2 h-8 border-l-2 border-gray-600 text-xl text-gray-600 dark:border-white dark:text-white"></span>
 
                   <div className="ml-3 flex flex-col">
-                    <p className="m-0 font-poppins text-sm text-gray-500">
+                    <p className="m-0 font-poppins text-sm text-gray-500 dark:text-white">
                       {term.academicYear_id
                         ? `${term.academicYear_id.startYear} - ${term.academicYear_id.endYear}`
                         : "No Academic Year Available"}
                     </p>
 
-                    <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600">
+                    <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600 dark:text-white">
                       {term.semesterName &&
                       typeof term.semesterName === "string" &&
                       term.semesterName.trim() !== ""
@@ -94,7 +94,7 @@ const TermList = () => {
 
                 <div className="flex">
                   <button
-                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-[#043B44]"
+                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-white"
                     onClick={() => handleEdit(term)}
                   >
                     <FontAwesomeIcon icon={faEdit} className="text-lg" />

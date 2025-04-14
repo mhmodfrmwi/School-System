@@ -28,12 +28,12 @@ const GradeList = () => {
 
   const paginatedGrades = grades.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handleDelete = (_id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this grade?"
+      "Are you sure you want to delete this grade?",
     );
     if (confirmDelete) {
       dispatch(removeGrade(_id))
@@ -51,29 +51,32 @@ const GradeList = () => {
     setCurrentPage(page);
   };
   if (loading) {
-    return <div className="w-full h-full"></div>; // Empty div during loading
+    return <div className="h-full w-full"></div>; // Empty div during loading
   }
   return (
     <div>
       <Header />
       <div className="flex justify-center">
-        <div className="space-y-4 w-[90%]">
+        <div className="w-[90%] space-y-4">
           {paginatedGrades.length > 0 ? (
             paginatedGrades.map((grade, index) => (
               <div
                 key={grade._id}
-                className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full"
+                className="mb-4 flex max-w-full items-center justify-between rounded-lg bg-white p-4 shadow-md dark:bg-[#117C90]"
               >
                 <div className="flex items-center">
                   <div
-                    className="flex items-center justify-center w-10 h-10 rounded-full mr-4"
+                    className="mr-4 flex h-10 w-10 items-center justify-center rounded-full"
                     style={{ backgroundColor: `${getColor(index)}33` }}
                   >
-                    <FontAwesomeIcon icon={faCalendar} style={{ color: getColor(index) }} />
+                    <FontAwesomeIcon
+                      icon={faCalendar}
+                      style={{ color: getColor(index) }}
+                    />
                   </div>
 
-                  <div className="flex flex-col">
-                    <p className="m-0 text-lg font-bold text-gray-600">
+                  <div className="flex-co l flex">
+                    <p className="m-0 text-lg font-bold text-gray-600 dark:text-white">
                       {grade.gradeName}
                     </p>
                   </div>
@@ -82,12 +85,12 @@ const GradeList = () => {
                 <div className="flex">
                   <Link
                     to={`/admin/allgrades/${grade._id}`}
-                    className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-white"
                   >
-                    <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
+                    <FontAwesomeIcon icon={faEye} className="h-5 w-5" />
                   </Link>
                   <button
-                    className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-white"
                     onClick={() => handleEditClick(grade._id)}
                   >
                     <FontAwesomeIcon icon={faEdit} className="text-lg" />
@@ -96,24 +99,30 @@ const GradeList = () => {
                     className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                     onClick={() => handleDelete(grade._id)}
                   >
-                    <i className="far fa-trash-alt" style={{ fontSize: "18px" }} />
+                    <i
+                      className="far fa-trash-alt"
+                      style={{ fontSize: "18px" }}
+                    />
                   </button>
                 </div>
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center bg-[#F9FAFB] py-16 rounded-lg shadow-lg mt-10">
+            <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
               <FontAwesomeIcon
                 icon={faCalendar}
-                className="text-6xl text-gray-400 mb-4"
+                className="mb-4 text-6xl text-gray-400"
               />
-              <p className="text-xl font-semibold text-gray-600 mb-2">No Grades Found</p>
-              <p className="text-gray-500 mb-4 text-center max-w-xl">
-                It seems like there are no grades available at the moment. Please check back later or add new grades.
+              <p className="mb-2 text-xl font-semibold text-gray-600">
+                No Grades Found
+              </p>
+              <p className="mb-4 max-w-xl text-center text-gray-500">
+                It seems like there are no grades available at the moment.
+                Please check back later or add new grades.
               </p>
             </div>
           )}
-          
+
           {paginatedGrades.length > 0 && (
             <Pagination
               totalItems={grades.length}

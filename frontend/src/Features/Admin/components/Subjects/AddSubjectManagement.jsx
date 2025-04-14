@@ -6,31 +6,31 @@ function SubjectManagementPage() {
   const [selectedTab, setSelectedTab] = useState("add");
 
   return (
-    <div className="w-full mx-auto mt-10 px-4">
+    <div className="mx-auto mt-10 w-full px-4">
       {/* Tab navigation */}
-      <div className="flex mb-10 border border-gray-300 rounded-full overflow-hidden max-w-[90%] md:w-[60%] mx-auto bg-[#F5F5F5]">
+      <div className="mx-auto mb-10 flex max-w-[90%] overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5] md:w-[60%]">
         <button
           onClick={() => setSelectedTab("add")}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs md:text-sm font-medium ${
+          className={`flex flex-1 items-center justify-center gap-2 px-4 py-3 text-xs font-medium md:text-sm ${
             selectedTab === "add"
-              ? "bg-[#117C90] text-white"
+              ? "bg-[#117C90] text-white dark:bg-[#043B44]"
               : "bg-[#F5F5F5] text-gray-700"
           } rounded-full`}
         >
-          <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             1
           </span>
           Add Subject
         </button>
         <button
           onClick={() => setSelectedTab("assign")}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs md:text-sm font-medium ${
+          className={`flex flex-1 items-center justify-center gap-2 px-4 py-3 text-xs font-medium md:text-sm ${
             selectedTab === "assign"
-              ? "bg-[#117C90] text-white"
+              ? "bg-[#117C90] text-white dark:bg-[#043B44]"
               : "bg-[#F5F5F5] text-gray-700"
           } rounded-full`}
         >
-          <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             2
           </span>
           Assign Subject

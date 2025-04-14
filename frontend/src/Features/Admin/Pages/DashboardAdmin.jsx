@@ -386,9 +386,9 @@ const Dashboard = () => {
                   view === "month" &&
                   date.toDateString() === today.toDateString()
                 ) {
-                  return "bg-white dark:bg-[#043B44] rounded-lg text-[#117C90] dark:text-white hover:text-gray-700 dark:hover:text-gray-200 cursor-pointer";
+                  return "bg-white dark:bg-[#043B44] rounded-lg text-[#117C90] dark:text-white hover:text-gray-700 dark:hover:text-black cursor-pointer";
                 }
-                return "text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[#0e5a66] rounded-lg";
+                return "text-black dark:text-white hover:bg-gray-100 dark:hover:text-black dark:hover:bg-[#0e5a66] rounded-lg";
               }}
               className="!bg-transparent"
             />

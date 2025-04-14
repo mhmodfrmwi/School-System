@@ -8,30 +8,30 @@ const GradeToggle = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="w-full mx-auto mt-10 px-4">
-      <div className="flex flex-wrap md:flex-nowrap mb-20 border border-gray-300 rounded-full overflow-hidden max-w-[90%] md:w-[60%] mx-auto bg-[#F5F5F5]">
+    <div className="mx-auto mt-10 w-full px-4">
+      <div className="mx-auto mb-20 flex max-w-[90%] flex-wrap overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5] md:w-[60%] md:flex-nowrap">
         <button
           onClick={() => navigate("/admin/gradeform")}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-medium rounded-full text-center transition-all ${
+          className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm ${
             isActive("/admin/gradeform")
-              ? "bg-[#008394] text-white font-bold"
-              : "bg-[#f4f4f4] text-[#008394] font-normal"
+              ? "bg-[#008394] font-bold text-white dark:bg-[#043B44]"
+              : "bg-[#f4f4f4] font-normal text-[#008394] dark:text-[#043B44]"
           }`}
         >
-          <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             1
           </span>
           Add Grade
         </button>
         <button
           onClick={() => navigate("/admin/assigngrade")}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-medium rounded-full text-center transition-all ${
+          className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm ${
             isActive("/admin/assigngrade")
-              ? "bg-[#008394] text-white font-bold"
-              : "bg-[#f4f4f4] text-[#008394] font-normal"
+              ? "bg-[#008394] font-bold text-white dark:bg-[#043B44]"
+              : "bg-[#f4f4f4] font-normal text-[#008394] dark:text-[#043B44]"
           }`}
         >
-          <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             2
           </span>
           Assign Grade

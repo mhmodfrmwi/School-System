@@ -12,8 +12,10 @@ const EditTermForm = () => {
 
   const [termName, setTermName] = useState("");
   const [academicYear, setAcademicYear] = useState("");
-  
-  const academicYears = useSelector((state) => state.academicYears.academicYears);
+
+  const academicYears = useSelector(
+    (state) => state.academicYears.academicYears,
+  );
   const terms = useSelector((state) => state.terms.terms);
 
   useEffect(() => {
@@ -31,23 +33,22 @@ const EditTermForm = () => {
 
   const handleUpdateTerm = (e) => {
     e.preventDefault();
-  
+
     if (!termName || !academicYear) {
       toast.error("Please fill in all fields");
       return;
     }
-  
+
     const updatedData = {
       semesterName: termName,
       academicYear: academicYear, // استخدام academicYear بدلاً من academicYear_id
     };
-  
+
     console.log("Data being sent to server:", updatedData); // تسجيل البيانات المرسلة
-  
+
     dispatch(editTermAsync({ id, updatedData }))
       .unwrap()
       .then(() => {
-       
         dispatch(fetchTerms()); // إعادة جلب البيانات من الخادم
         navigate(-1);
       })
@@ -58,20 +59,20 @@ const EditTermForm = () => {
   };
 
   return (
-    <div className="w-[80%] mx-auto mt-10">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Term</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
+    <div className="mx-auto mt-10 w-[80%]">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Edit Term</h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form onSubmit={handleUpdateTerm} className="m-6">
           {/* Term Dropdown */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
               Select Term
             </label>
             <select
               value={termName}
               onChange={(e) => setTermName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">-- Select Term --</option>
               <option value="Semester 1">Semester 1</option>
@@ -81,13 +82,13 @@ const EditTermForm = () => {
 
           {/* Academic Year Dropdown */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
               Select Academic Year
             </label>
             <select
               value={academicYear}
               onChange={(e) => setAcademicYear(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="">-- Select Academic Year --</option>
               {academicYears.map((year, index) => (
@@ -101,7 +102,7 @@ const EditTermForm = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="px-6 py-2 bg-[#117C90] text-white rounded-md text-sm font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+            className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 text-sm font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
             Update Term
           </button>

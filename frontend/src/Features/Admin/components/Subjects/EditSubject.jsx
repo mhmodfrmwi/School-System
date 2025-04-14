@@ -8,7 +8,7 @@ const EditSubject = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { subjects} = useSelector((state) => state.subject);
+  const { subjects } = useSelector((state) => state.subject);
 
   const [subjectName, setSubjectName] = useState("");
 
@@ -41,32 +41,33 @@ const EditSubject = () => {
   };
 
   return (
-    <div className="w-[80%] mx-auto mt-10">
-      <h1 className="text-2xl font-semibold text-[#244856] pl-5">Edit Subject</h1>
-      <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
-      <div className="bg-[#F5F5F5] shadow-md p-6 rounded-3xl">
+    <div className="mx-auto mt-10 w-[80%]">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        Edit Subject
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form onSubmit={handleSubmit} className="m-6">
-            <>
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Enter Subject Name
-                </label>
-                <input
-                  type="text"
-                  value={subjectName}
-                  onChange={(e) => setSubjectName(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#117C90]"
-                  placeholder="Enter subject name"
-                />
-              </div>
-              <button
-                type="submit"
-                className="px-6 py-2 bg-[#117C90] text-white rounded-md text-sm font-medium hover:bg-[#0f6b7c] transition mx-auto block"
-              >
-                Save Changes
-              </button>
-            </>
-          
+          <>
+            <div className="mb-6">
+              <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
+                Enter Subject Name
+              </label>
+              <input
+                type="text"
+                value={subjectName}
+                onChange={(e) => setSubjectName(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
+                placeholder="Enter subject name"
+              />
+            </div>
+            <button
+              type="submit"
+              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 text-sm font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
+            >
+              Save Changes
+            </button>
+          </>
         </form>
       </div>
     </div>
