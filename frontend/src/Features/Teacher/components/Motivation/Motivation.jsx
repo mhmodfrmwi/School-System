@@ -12,8 +12,10 @@ import {
   getTeacherPointsForTerm,
 } from "../TeacherRedux/motivationTeacherSlice";
 import about2 from "../../../../assets/about2.png";
+import { useTranslation } from 'react-i18next';
 
 const Motivation = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const {
     teacherReward,
@@ -47,8 +49,8 @@ const Motivation = () => {
             <img
               src={Frame}
               className="h-24 w-24 md:h-32 md:w-32"
-              alt="Profile Frame"
-            />
+              alt={t('motivation.profileFrame')}
+              />
             <div className="flex flex-col">
               <h1 className="font-poppins text-xl font-semibold text-white md:text-2xl">
                 {teacherPointsForTerm.badge}
@@ -64,11 +66,11 @@ const Motivation = () => {
           {/* Circular content on the most right */}
           <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full border-4 border-white text-gray-800 shadow-md md:h-36 md:w-36">
             <p className="font-poppins text-lg font-bold text-white md:text-xl">
-              Score
+            {t('motivation.score')}
             </p>
 
             <p className="font-poppins text-xs text-white md:text-sm">
-              for all semesters
+            {t('motivation.forAllSemesters')}
             </p>
 
             <p className="text-2xl font-extrabold text-white md:text-3xl">
@@ -80,7 +82,7 @@ const Motivation = () => {
 
       <div className="mt-6 rounded-2xl p-6">
         <button className="py-2 font-poppins text-2xl font-bold text-[#117C90]">
-          Points Summary
+        {t('points.title')}
         </button>
         <p className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#117C90] text-[#117C90]"></p>
 
@@ -108,7 +110,7 @@ const Motivation = () => {
                             : "text-green-500"
                     }`}
                   >
-                    Points Earned Today
+                  {t('points.todayPoints')}
                   </p>
                 </div>
                 <div>
@@ -151,7 +153,7 @@ const Motivation = () => {
                             : "text-green-500"
                     }`}
                   >
-                    Score for this Semester
+                    {t('points.semesterPoints')}
                   </p>
                 </div>
                 <div>
@@ -195,7 +197,7 @@ const Motivation = () => {
                             : "text-green-500"
                     }`}
                   >
-                    Score for all semesters
+                  {t('points.allPoints')}
                   </p>
                 </div>
                 <div>
@@ -221,52 +223,46 @@ const Motivation = () => {
         <div className="grid grid-cols-1 items-center gap-6 bg-white lg:grid-cols-2">
           <div className="">
             <button className="py-2 font-poppins text-2xl font-bold text-[#117C90]">
-              Summary Of Your Score
+            {t('motivation.summaryTitle')}
             </button>
 
             <p className="mb-4 ms-1 w-16 rounded-xl border-t-4 border-[#117C90] sm:w-24"></p>
 
             <p className="mb-4 font-poppins text-sm text-gray-700 sm:text-base">
-              Every member starts his/her journey with a green membership card.
-              In each semester, you will start earning points from the first
-              day. Your final score at the end of the semester will determine
-              the type of card you deserve to use throughout the next semester
-              as recognition for your efforts.
+              {t('motivationteacher.motidesc')}
             </p>
 
             <section className="mb-4 flex items-center space-x-4">
               <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] to-[#117C90] sm:h-4 sm:w-4"></div>
               <p className="font-poppins text-xs sm:text-sm">
-                If your points are between <strong>0 and 250</strong> in your
-                school, you will be eligible for the Learnova{" "}
+              {t('motivationteacher.content01')}<strong> {t('motivationteacher.content05')}</strong> 
+              {t('motivationteacher.content02')}{" "}
                 <strong className="text-base font-bold text-green-500 sm:text-lg">
-                  Green
+                {t('motivationteacher.content03')}
                 </strong>{" "}
-                Card.
+                {t('motivationteacher.content04')}
               </p>
             </section>
 
             <section className="mb-4 flex items-center space-x-4">
               <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] to-[#117C90] sm:h-4 sm:w-4"></div>
               <p className="font-poppins text-xs sm:text-sm">
-                If your points are between <strong>251 to 400</strong> in your
-                school, you will be eligible for the Learnova{" "}
+              {t('motivationteacher.content11')} <strong>{t('motivationteacher.content15')}</strong>{t('motivationteacher.content12')}{" "}
                 <strong className="text-base font-bold text-yellow-500 sm:text-lg">
-                  Golden
+                {t('motivationteacher.content13')}
                 </strong>{" "}
-                Card.
+                {t('motivationteacher.content14')}
               </p>
             </section>
 
             <section className="mb-4 flex items-center space-x-4">
               <div className="h-3 w-3 rounded-full bg-gradient-to-r from-[#117C90] to-[#117C90] sm:h-4 sm:w-4"></div>
               <p className="font-poppins text-xs sm:text-sm">
-                If your points are <strong>401 or more</strong> in your school,
-                you will be eligible for the Learnova{" "}
+              {t('motivationteacher.content21')} <strong>{t('motivationteacher.content25')}</strong> {t('motivationteacher.content22')}{" "}
                 <strong className="text-base font-bold text-[#6a6969] sm:text-lg">
-                  Diamond
+                {t('motivationteacher.content23')}
                 </strong>{" "}
-                Card.
+                {t('motivationteacher.content24')}
               </p>
             </section>
           </div>
@@ -277,7 +273,7 @@ const Motivation = () => {
       </div>
       <div className="ms-6">
         <button className="cursor-text py-2 font-poppins text-2xl font-bold text-[#117C90]">
-          Top Teachers
+          {t('motivationteacher.TopTeachers')}
         </button>
         <p className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
       </div>
@@ -291,19 +287,19 @@ const Motivation = () => {
                   {" "}
                   {/* Use #117C90 as the background color */}
                   <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Full Name
+                  {t('table.fullName')}
                   </th>
                   <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Academic Number
+                  {t('table.academicNumber')}
                   </th>
                   <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Total Points
+                  {t('table.totalPoints')}
                   </th>
                   <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Badge
+                  {t('table.badge')}
                   </th>
                   <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
-                    Subject
+                    {t('motivationteacher.Subject')}
                   </th>
                 </tr>
               </thead>

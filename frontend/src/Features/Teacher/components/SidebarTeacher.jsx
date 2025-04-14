@@ -23,54 +23,54 @@ import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
 import LibraryIcon from "../../../assets/StudentIcon/Library.png";
 import CourseIcon from "../../../assets/StudentIcon/Course.png";
 import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
-
+import { useTranslation } from 'react-i18next';
 const SidebarTeacher = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const location = useLocation();
   const currentPath = location.pathname;
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const menuItems = [
-    { label: "Dashboard", icon: faHome, hoverIcon: faHome, href: "/teacher" },
+    { label: t('sidebar.Dashboard'), icon: faHome, hoverIcon: faHome, href: "/teacher" },
     {
-      label: "Motivation",
+      label: t('Motivation'),
       icon: AwardIcon,
       hoverIcon: AwardIconH,
       href: "/teacher/motivation",
     },
     {
-      label: "Courses",
+      label: t('Courses'),
       icon: CourseIcon,
       hoverIcon: CourseIconH,
       href: "/teacher/currentcourse",
     },
     {
-      label: "Absence",
+      label: t('Absence'),
       icon: AbsenceIcon,
       hoverIcon: AbsenceIconH,
       href: "/teacher/currentcourseforattendance",
     },
     {
-      label: "Schedule",
+      label: t('Schedule'),
       icon: ScheduleIcon,
       hoverIcon: ScheduleIconH,
       href: "/teacher/weekly-schedule",
     },
     {
-      label: "Grade Management",
+      label: t('GradeManagements'),
       icon: GradeIcon,
       hoverIcon: GradeIconH,
       href: "/teacher/current-courses-for-grades",
     },
     {
-      label: "Activities",
+      label: t('Activities'),
       icon: ActivityIcon,
       hoverIcon: ActivityIconH,
       href: "/teacher/school-hubs",
     },
     {
-      label: "Library",
+      label: t('Library'),
       icon: LibraryIcon,
       hoverIcon: LibraryIconH,
       href: "/teacher/teacher-library",
@@ -82,7 +82,7 @@ const SidebarTeacher = () => {
     //   href: "#",
     // },
   {
-      label: "General Virtual Rooms",
+      label: t('sidebar.GeneralVirtualRooms'),
       icon: VirtualIcon,
       hoverIcon: VirtualIconH,
       href: "/teacher/vr-manger",
@@ -124,6 +124,7 @@ const SidebarTeacher = () => {
           setHoveredIndex={setHoveredIndex}
           currentPath={currentPath}
           navigate={navigate}
+          t={t}
         />
       </div>
     </div>
@@ -136,13 +137,14 @@ const SidebarContent = ({
   setHoveredIndex,
   currentPath,
   navigate,
+  t
 }) => {
   return (
     <>
       <div className="mb-8 flex flex-col items-center justify-center">
         <img src={logo} alt="Logo" className="mb-2 h-12 w-12" />
         <h1 className="text-xl font-bold">LEARNOVA</h1>
-        <p className="font-poppins text-xs">Khatab School</p>
+        <p className="font-poppins text-xs"> {t('KhatabSchool')}</p>
       </div>
 
       <nav className="flex w-64 flex-col gap-2">
@@ -201,7 +203,7 @@ const SidebarContent = ({
           className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300"
           onClick={() => navigate("/role")}
         >
-          Logout
+          {t('Logout')}
         </button>
       </div>
     </>

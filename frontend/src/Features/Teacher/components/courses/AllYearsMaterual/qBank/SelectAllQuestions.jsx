@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate, useLocation ,useParams} from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const AllQuestionsToggle = () => {
     const location = useLocation();
+    const { t } = useTranslation();
     const { gradeSubjectSemesterId } = useParams();
     const navigate = useNavigate();
   
@@ -27,7 +28,7 @@ const AllQuestionsToggle = () => {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             1
           </span>
-          My Qustions
+          {t('tablesheader.Myquestions')}
         </button>
         <button
         onClick={() => navigate(`/teacher/all-question-bank-allyears/${gradeSubjectSemesterId}/all-questions`)}
@@ -40,7 +41,7 @@ const AllQuestionsToggle = () => {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             2
           </span>
-          All Questions
+          {t('tablesheader.AllQuestions')}
         </button>
       </div>
     </div>

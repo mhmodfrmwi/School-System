@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { postQuestionBank } from "../../TeacherRedux/QuestionBankSlice";
 import { toast, ToastContainer } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 import "react-toastify/dist/ReactToastify.css";
 
 const QuestionForm = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { gradeSubjectSemesterId } = useParams();
 
   const [formData, setFormData] = useState({
@@ -94,7 +96,7 @@ const QuestionForm = () => {
       <ToastContainer />
       <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
         <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-          Upload Question
+          {t('tablesheader.UploadQuestion')}
         </h1>
         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[200px]"></div>
       </div>
@@ -103,17 +105,17 @@ const QuestionForm = () => {
         <form onSubmit={handleSubmit} className="space-y-4 font-poppins">
           
           <div>
-            <label className="block font-medium">Question Type:</label>
+            <label className="block font-medium">{t('tablesheader.questionType')} :</label>
             <select name="questionType" value={formData.questionType} onChange={handleChange} className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]">
-              <option value="MCQ">Multiple Choice</option>
-              <option value="True/False">True/False</option>
-              <option value="Short Answer">Short Answer</option>
-              <option value="Essay">Essay</option>
+              <option value="MCQ">{t('tablesheader.MultipleChoice')}</option>
+              <option value="True/False">{t('tablesheader.TrueFalse')}</option>
+              <option value="Short Answer">{t('tablesheader.ShortAnswer')}</option>
+              <option value="Essay">{t('tablesheader.Essay')}</option>
             </select>
           </div>
 
           <div>
-            <label className="block font-medium">Question Text:</label>
+            <label className="block font-medium">{t('tablesheader.Question')}:</label>
             <input
               type="text"
               name="questionText"
@@ -126,7 +128,7 @@ const QuestionForm = () => {
 
           {formData.questionType === "MCQ" && (
             <div>
-              <label className="block font-medium">Choices:</label>
+              <label className="block font-medium">{t('tablesheader.Choices')}:</label>
               {formData.choices.map((choice, index) => (
                 <input
                   key={index}
@@ -139,7 +141,7 @@ const QuestionForm = () => {
                 />
               ))}
 
-              <label className="block font-medium mt-4">Correct Answer:</label>
+              <label className="block font-medium mt-4">{t('tablesheader.CorrectAnswer')}:</label>
               <select
                 name="answer"
                 value={formData.answer}
@@ -147,7 +149,7 @@ const QuestionForm = () => {
                 className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
                 required
               >
-                <option value="">Select Correct Answer</option>
+                <option value="">{t('tablesheader.SelectAnswer')}</option>
                 {formData.choices.map((choice, index) => (
                   <option key={index} value={choice}>
                     {choice}
@@ -159,7 +161,7 @@ const QuestionForm = () => {
 
           {formData.questionType === "True/False" && (
             <div>
-              <label className="block font-medium">Answer:</label>
+              <label className="block font-medium">{t('tablesheader.Answer')}:</label>
               <select name="answer" value={formData.answer} onChange={handleChange} 
               className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]">
                 <option value="">Select</option>
@@ -171,7 +173,7 @@ const QuestionForm = () => {
 
           {(formData.questionType === "Short Answer" || formData.questionType === "Essay") && (
             <div>
-              <label className="block font-medium">Answer:</label>
+              <label className="block font-medium">{t('tablesheader.Answer')}:</label>
               <textarea
                 name="answer"
                 value={formData.answer}
@@ -187,7 +189,8 @@ const QuestionForm = () => {
             type="submit"
             className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
           >
-            Upload
+          {t('tablesheader.Upload')}
+
           </button>
         </form>
       </div>

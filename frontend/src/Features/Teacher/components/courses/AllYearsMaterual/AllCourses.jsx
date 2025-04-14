@@ -6,12 +6,13 @@ import bag from "../../../../../assets/bag.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import CourseToggle from "../SelectCoursePage";
+import { useTranslation } from 'react-i18next';
 
 const AllCourses = ({ onSearchChange }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
-
+  const { t } = useTranslation();
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
     onSearchChange(e.target.value);
@@ -66,7 +67,7 @@ const AllCourses = ({ onSearchChange }) => {
         <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
           <div className="flex flex-col">
             <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-              All Courses
+              {t('coursest.AllCourses')}
             </h1>
             <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[140px]"></div>
           </div>
@@ -77,7 +78,7 @@ const AllCourses = ({ onSearchChange }) => {
                 <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-gray-500 sm:text-sm"></i>
                 <input
                   type="text"
-                  placeholder="Search ..."
+                  placeholder={t('coursest.Search')}
                   className="w-full rounded-md border-2 border-gray-300 bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:text-sm"
                   value={searchText}
                   onChange={handleSearchChange}

@@ -7,9 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchClassTeacher } from "../components/TeacherRedux/TeacherClassSlice";
 import bag from "../../../assets/bag.png";
 import { getTeacherPointsForTerm } from "../components/TeacherRedux/motivationTeacherSlice";
+import { useTranslation } from 'react-i18next';
 
 const DashboardTeacher = () => {
   const dispatch = useDispatch();
+    const { t } = useTranslation();
+  
   const { classTeachers = [] } = useSelector(
     (state) => state.classTeachers || {},
   );
@@ -32,10 +35,10 @@ const DashboardTeacher = () => {
   });
 
   const [categories, setCategories] = useState([
-    { name: "Mailbox", icon: "mail", count: 3 },
-    { name: "Discussion Rooms", icon: "message-circle", count: 0 },
-    { name: "Custom Libraries", icon: "book-open", count: 3 },
-    { name: "Academic Calendar", icon: "calendar", count: 0 },
+    { name: t('dashboardteacher.Mailbox'), icon: "mail", count: 3 },
+    { name: t('dashboardteacher.DiscussionRooms'), icon: "message-circle", count: 0 },
+    { name: t('dashboardteacher.CustomLibraries'), icon: "book-open", count: 3 },
+    { name: t('dashboardteacher.AcademicCalendar'), icon: "calendar", count: 0 },
   ]);
   const [virtualClassrooms, setVirtualClassrooms] = useState([]);
 
@@ -61,8 +64,8 @@ const DashboardTeacher = () => {
             </div>
             <div className="flex flex-col items-start">
               <div className="ml-2 grid grid-cols-1 gap-1 text-center">
-                <span className="text-xs font-medium text-white md:text-sm">
-                  Welcome
+                <span className="text-lg font-bold text-white md:text-sm">
+                  {t('dashboardteacher.Welcome')}
                 </span>
                 <span className="mt-4 text-2xl font-bold text-white md:text-xl xl:text-3xl">
                   {fullName}
@@ -71,7 +74,8 @@ const DashboardTeacher = () => {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <span className="text-sm text-white md:text-lg">Your score</span>
+            <span className="text-sm text-white md:text-lg">{t('dashboard.yourScore')}
+            </span>
             <div className="relative flex items-center justify-center">
               <div
                 className={`flex h-12 w-12 items-center justify-center rounded-full border-4 ${teacherPointsForTerm.badge === "Green"
@@ -93,7 +97,7 @@ const DashboardTeacher = () => {
 
         <div className="grid h-48 rounded-md bg-[#117C90] p-4">
           <span className="ml-4 block text-start text-sm font-semibold text-white md:text-lg">
-            NOTIFICATIONS CENTER
+          {t('dashboardteacher.notify')}
           </span>
           <div className="flex h-14 w-full justify-center gap-4">
             <div className="flex items-center rounded-md bg-gray-100 px-3 py-1">
@@ -122,7 +126,7 @@ const DashboardTeacher = () => {
           <div className="ml-0">
             <div className="flex flex-col">
               <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-3xl">
-                Courses
+                {t('Courses')}
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[125px]"></div>
             </div>
@@ -178,7 +182,7 @@ const DashboardTeacher = () => {
           <div className="ml-0">
             <div className="mb-7 flex flex-col">
               <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-2xl">
-                Main Categories
+              {t('dashboard.mainCategories')}
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[205px]"></div>
             </div>
@@ -205,7 +209,7 @@ const DashboardTeacher = () => {
           <div className="ml-0">
             <div className="mb-6 flex flex-col">
               <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-2xl">
-                Virtual Classrooms
+              {t('dashboardteacher.VirtualClassrooms')}
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[235px]"></div>
             </div>
@@ -213,7 +217,7 @@ const DashboardTeacher = () => {
               <div>{/* Render virtual classrooms here */}</div>
             ) : (
               <p className="w-[70%] bg-slate-100 p-10 text-lg font-medium text-gray-600 md:text-2xl">
-                You don’t have any new virtual classrooms today.
+              {t('dashboardteacher.contentvr')}
               </p>
             )}
           </div>

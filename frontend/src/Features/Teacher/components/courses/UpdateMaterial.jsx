@@ -3,12 +3,14 @@ import { useParams,useNavigate } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { toast } from "react-toastify";
 import { updateMaterial ,fetchMaterials} from "../TeacherRedux/PdfMaterialSlice";  
+import { useTranslation } from 'react-i18next';
 
 
 const EditMaterial = () => {    
     const { materialId } = useParams(); 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const selectedMaterial = useSelector((state) =>
       state.pdfMaterials.pdfMaterials.find((mat) => mat._id === materialId)
     );
@@ -70,7 +72,7 @@ const EditMaterial = () => {
     <>
     <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
     <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-     Edit Material</h1>
+     {t('tablesheader.EditMaterial')}</h1>
      
      <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[190px]"></div>
      </div>
@@ -78,7 +80,7 @@ const EditMaterial = () => {
        <form onSubmit={handleSubmit} className="space-y-4">
          <div>
            <label className="block font-poppins font-medium">
-             Title <span className="text-red-500">*</span>
+           {t('tablesheader.Title')} <span className="text-red-500">*</span>
            </label>
            <input
              type="text"
@@ -90,7 +92,7 @@ const EditMaterial = () => {
            />
          </div>
          <div>
-           <label className="block font-poppins font-medium">Description </label>
+           <label className="block font-poppins font-medium">{t('tablesheader.Description')} </label>
            <input
              type="text"
              name="description"
@@ -101,7 +103,7 @@ const EditMaterial = () => {
            />
          </div>
          <div>
-           <label className="block font-poppins font-medium">Type</label>
+           <label className="block font-poppins font-medium">{t('tablesheader.Type')}</label>
            <select
              name="type"
              value={formData.type}
@@ -115,7 +117,7 @@ const EditMaterial = () => {
          {formData.type !== "Link" && (
            <div>
              <label className="block font-poppins font-medium">
-               File URL <span className="text-red-500">*</span>
+             {t('tablesheader.FileUrl')} <span className="text-red-500">*</span>
              </label>
              <input
                type="text"
@@ -131,7 +133,7 @@ const EditMaterial = () => {
            type="submit"
            className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
          >
-           Update
+           {t('tablesheader.Update')}
          </button>
        </form>
      </div>

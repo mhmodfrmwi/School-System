@@ -2,10 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMaterials } from "../../TeacherRedux/PdfMaterialSlice";
 import { useParams } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const SeeAllMaterial = () => {
   const { grade_subject_semester_id } = useParams();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const pdfMaterials = useSelector((state) => state.pdfMaterials.pdfMaterials);
 
   console.log("grade_subject_semester_id:", grade_subject_semester_id);
@@ -24,7 +27,7 @@ const SeeAllMaterial = () => {
         <div className="mx-auto w-[400px] p-6 sm:w-[550px] md:w-full xl:w-full">
           <div className="flex ml-8 flex-col">
             <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-              All Materials
+            {t('tablesheader.Materials')}
             </h1>
             <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></div>
           </div>
@@ -35,16 +38,16 @@ const SeeAllMaterial = () => {
                   <thead className="bg-[#117C90] text-white">
                     <tr>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Title
+                      {t('tablesheader.Title')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Description
+                      {t('tablesheader.Description')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Type
+                      {t('tablesheader.Type')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        FileUrl
+                      {t('tablesheader.FileUrl')}
                       </th>
                     </tr>
                   </thead>
@@ -71,7 +74,7 @@ const SeeAllMaterial = () => {
                               rel="noopener noreferrer"
                               className="text-[#20606b] hover:underline"
                             >
-                              View File
+                            {t('tablesheader.ViewFile')}
                             </a>
                           </td>
                           

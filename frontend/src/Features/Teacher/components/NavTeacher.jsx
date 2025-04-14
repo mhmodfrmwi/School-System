@@ -11,10 +11,13 @@ import userImage from "../../../assets/user.jpeg";
 import language from "../../../assets/icons/language.svg";
 import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
+import languageE from "../../../assets/icons/languageS.svg";
+import languageA from "../../../assets/icons/languageA.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
-
+import { useTranslation } from 'react-i18next';
 const NavTeacher = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const settingsRef = useRef(null);
   const searchRef = useRef(null);
   const [settingToggle, setSettingToggle] = useState(false);
@@ -52,9 +55,11 @@ const NavTeacher = () => {
     { path: "all-materials-library/:id" },
   ];
 
-  const filteredRoutes = routes.filter((route) =>
-    route.path.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredRoutes = routes.filter((route) => {
+    const englishMatch = route.path.toLowerCase().includes(searchTerm.toLowerCase());
+    const arabicMatch = t(`routes.${route.key}`).includes(searchTerm);
+    return englishMatch || arabicMatch;
+  });
 
   const handleSelect = (path) => {
     setSearchTerm("");
@@ -78,7 +83,11 @@ const NavTeacher = () => {
       }
     }
   };
-
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLang);
+    localStorage.setItem('i18nextLng', newLang);
+  };
   const url = window.location.pathname;
   const teacherName = url.split("/teacher/").pop();
   const match = url.match(/\/teacher\/([^/]+)/);
@@ -103,6 +112,10 @@ const NavTeacher = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    // document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
 
   return (
     <div className="relative">
@@ -153,7 +166,7 @@ const NavTeacher = () => {
                   ))
                 ) : (
                   <li className="px-4 py-2 text-red-900">
-                    No matches found pages
+                    {t('NoMatches')}
                   </li>
                 )}
               </ul>
@@ -220,8 +233,9 @@ const NavTeacher = () => {
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
-              <button className="mx-auto ms-6 p-2 text-gray-500">
-                <ReactSVG src={language} className="r h-auto w-auto" />
+              <button className="mx-auto ms-6 p-2 text-[#C459D9]"
+                onClick={toggleLanguage}>
+                <ReactSVG src={i18n.language === 'en' ? languageA : languageE} className="r h-auto w-auto" />
               </button>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
 

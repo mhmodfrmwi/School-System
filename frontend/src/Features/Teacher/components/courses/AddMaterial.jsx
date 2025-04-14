@@ -9,41 +9,47 @@ import { fetchAllQuestions } from "../TeacherRedux/QuestionBankSlice";
 import { fetchExamsForTeacher } from "../TeacherRedux/ExamSlice"; 
 import { fetchAssignments } from "../TeacherRedux/AssignmentSlice"; 
 import { fetchVR } from "../TeacherRedux/VRSlice";
+import { useTranslation } from 'react-i18next';
 
 const AddMaterial = () => {
   const { classId, gradeSubjectSemesterId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   const handleNavigation = (courseName, actionType) => {
     if (!gradeSubjectSemesterId) {
       console.error("gradeSubjectSemesterId is undefined");
       return;
     }
-
+  
     let targetUrl = "";
-    if (courseName === "Video Lectures" || courseName === "Course Material") {
+    
+    if (courseName === t('addmaterial.VideoLectures')) {
       targetUrl = actionType === "see"
         ? `/teacher/see-material/${gradeSubjectSemesterId}`
         : `/teacher/materialform/${classId}/${gradeSubjectSemesterId}`;
-    } else if (courseName === "Virtual Room") {
+    } else if (courseName === t('addmaterial.CourseMaterial')) {
+      targetUrl = actionType === "see"
+        ? `/teacher/see-material/${gradeSubjectSemesterId}`
+        : `/teacher/materialform/${classId}/${gradeSubjectSemesterId}`;
+    } else if (courseName === t('addmaterial.VirtualRoom')) {
       targetUrl = actionType === "see"
         ? `/teacher/virtual-room/${gradeSubjectSemesterId}`
         : `/teacher/VR-form/${classId}/${gradeSubjectSemesterId}`;
-      } else if (courseName === "Question Bank") {
-        targetUrl = actionType === "see"
-          ? `/teacher/my-question-bank/${gradeSubjectSemesterId}/my-questions`
-          : `/teacher/question-bank-form/${gradeSubjectSemesterId}`;
-    } else if (courseName === "Assignments") {
+    } else if (courseName === t('addmaterial.QuestionBank')) {
       targetUrl = actionType === "see"
-          ? `/teacher/all-assignment/${gradeSubjectSemesterId}`
-          : `/teacher/assignment-form/${classId}/${gradeSubjectSemesterId}`;
-    } else if (courseName === "Exams") {
+        ? `/teacher/my-question-bank/${gradeSubjectSemesterId}/my-questions`
+        : `/teacher/question-bank-form/${gradeSubjectSemesterId}`;
+    } else if (courseName === t('addmaterial.Assignments')) {
       targetUrl = actionType === "see"
-      ? `/teacher/my-exams/${gradeSubjectSemesterId}`
-      : `/teacher/exam-form/${classId}/${gradeSubjectSemesterId}`;
+        ? `/teacher/all-assignment/${gradeSubjectSemesterId}`
+        : `/teacher/assignment-form/${classId}/${gradeSubjectSemesterId}`;
+    } else if (courseName === t('addmaterial.Exams')) {
+      targetUrl = actionType === "see"
+        ? `/teacher/my-exams/${gradeSubjectSemesterId}`
+        : `/teacher/exam-form/${classId}/${gradeSubjectSemesterId}`;
     }
-
+  
     if (targetUrl) {
       navigate(targetUrl);
     }
@@ -92,12 +98,12 @@ const AddMaterial = () => {
 
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
-    { id: 1, name: "Video Lectures", total: videoCount, icon: faVideo },
-    { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
-    { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
-    { id: 4, name: "Question Bank", total: questionBankCount, icon: faVideo },
-    { id: 5, name: "Assignments", total: filteredAssignments, icon: faTasks },
-    { id: 6, name: "Exams", total: examCount, icon: faFileAlt },
+    { id: 1, name: t('addmaterial.VideoLectures'), identifier: "video", total: videoCount, icon: faVideo },
+    { id: 2, name: t('addmaterial.CourseMaterial'), identifier: "material", total: pdfCount, icon: faBook },
+    { id: 3, name: t('addmaterial.VirtualRoom'), identifier: "vr", total: vrCount, icon: faVideo },
+    { id: 4, name: t('addmaterial.QuestionBank'), total: questionBankCount, icon: faVideo },
+    { id: 5, name: t('addmaterial.Assignments'), total: filteredAssignments, icon: faTasks },
+    { id: 6, name: t('addmaterial.Exams'), total: examCount, icon: faFileAlt },
   ];
 
   const getColor = (index) => colors[index % colors.length];
@@ -117,7 +123,7 @@ const AddMaterial = () => {
                 </div>
                 <div className="flex flex-col">
                   <p className="m-0 text-lg font-poppins font-semibold text-gray-600">{course.name}</p>
-                  <p className="text-gray-500 font-poppins text-sm">Total: {course.total}</p>
+                <p className="text-gray-500 font-poppins text-sm">{t('addmaterial.Total')}: {course.total}</p>
                 </div>
               </div>
               <div className="flex">

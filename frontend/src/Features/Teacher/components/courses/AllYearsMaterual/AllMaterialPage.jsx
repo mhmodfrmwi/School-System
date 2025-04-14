@@ -9,49 +9,41 @@ import { fetchVR } from "../../TeacherRedux/VRSlice";
 import { fetchAllQuestions } from "../../TeacherRedux/QuestionBankSlice"; 
 import { fetchExamsForTeacher } from "../../TeacherRedux/ExamSlice"; 
 import { fetchAssignments } from "../../TeacherRedux/AssignmentSlice"; 
-
+import { useTranslation } from 'react-i18next';
 
 const AllMaterialPage = () => {
-  const {  gradeSubjectSemesterId } = useParams();
+  const { gradeSubjectSemesterId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
-  const handleNavigation = (courseName, actionType) => {
+  const handleNavigation = (courseIdentifier) => {
     if (!gradeSubjectSemesterId) {
       console.error("gradeSubjectSemesterId is undefined");
       return;
     }
   
-    let targetUrl = "";
-    if (courseName === "Video Lectures" || courseName === "Course Material") {
-      targetUrl = `/teacher/see-all-material/${gradeSubjectSemesterId}` ;
-    } else if (courseName === "Virtual Room") {
-      targetUrl = `/teacher/all-virtual-room/${gradeSubjectSemesterId}`;
-      } else if (courseName === "Question Bank") {
-        targetUrl = `/teacher/my-all-question-bank/${gradeSubjectSemesterId}/my-questions`
-    } else if (courseName === "Assignments") {
-      targetUrl = `/teacher/see-all-assignments-allYears/${gradeSubjectSemesterId}`;
-    } else if (courseName === "Exams") {
-      targetUrl = `/teacher/see-all-exams/${gradeSubjectSemesterId}`;
-    }
+    const routes = {
+      video: `/teacher/see-all-material/${gradeSubjectSemesterId}`,
+      material: `/teacher/see-all-material/${gradeSubjectSemesterId}`,
+      vr: `/teacher/all-virtual-room/${gradeSubjectSemesterId}`,
+      questionbank: `/teacher/my-all-question-bank/${gradeSubjectSemesterId}/my-questions`,
+      assignments: `/teacher/see-all-assignments-allYears/${gradeSubjectSemesterId}`,
+      exams: `/teacher/see-all-exams/${gradeSubjectSemesterId}`
+    };
   
-    if (targetUrl) {
-      navigate(targetUrl);
+    if (routes[courseIdentifier]) {
+      navigate(routes[courseIdentifier]);
     }
   };
 
   const { classTeachers = [], message, loading } = useSelector((state) => state.classTeachers || {});
   const pdfMaterials = useSelector((state) => state.pdfMaterials.pdfMaterials || []);
   const teacherVirtualRooms = useSelector((state) => state.teacherVirtualRooms.teacherVirtualRooms || []);
-  const myQuestions = useSelector((state) => {
-    return state.questionbank.questionbank; 
-  });
-  const exams = useSelector((state) => {
-    return state.exam.exams; 
-  });
-  const assignment = useSelector((state) => {
-    return state.assignmentsTeacher.assignment;
-});
+  const myQuestions = useSelector((state) => state.questionbank.questionbank || []);
+  const exams = useSelector((state) => state.exam.exams || []);
+  const assignment = useSelector((state) => state.assignmentsTeacher.assignment || []);
+
   useEffect(() => {
     dispatch(fetchALLClassTeacher());
   }, [dispatch]);
@@ -79,19 +71,14 @@ const AllMaterialPage = () => {
   const examCount = exams.filter((exam) => exam.teacherId === classteacher?._id).length;
   const filteredAssignments = assignment.filter((assignment) => assignment.teacherId === classteacher?._id).length;
 
-
-  // console.log("Selected Class Teacher:", classteacher);
-  // console.log("Grade Subject Semester ID:", gradeSubjectSemesterId);
-  // console.log("All Class Teachers Data:", classTeachers);
-
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const courses = [
-    { id: 1, name: "Video Lectures", total: videoCount, icon: faVideo },
-    { id: 2, name: "Course Material", total: pdfCount, icon: faBook },
-    { id: 3, name: "Virtual Room", total: vrCount, icon: faVideo },
-    { id: 4, name: "Question Bank", total: questionBankCount, icon: faVideo },
-    { id: 5, name: "Assignments", total: filteredAssignments, icon: faTasks },
-    { id: 6, name: "Exams", total: examCount, icon: faFileAlt },
+    { id: 1, name: t('addmaterial.VideoLectures'), identifier: "video", total: videoCount, icon: faVideo },
+    { id: 2, name: t('addmaterial.CourseMaterial'), identifier: "material", total: pdfCount, icon: faBook },
+    { id: 3, name: t('addmaterial.VirtualRoom'), identifier: "vr", total: vrCount, icon: faVideo },
+    { id: 4, name: t('addmaterial.QuestionBank'), identifier: "questionbank", total: questionBankCount, icon: faVideo },
+    { id: 5, name: t('addmaterial.Assignments'), identifier: "assignments", total: filteredAssignments, icon: faTasks },
+    { id: 6, name: t('addmaterial.Exams'), identifier: "exams", total: examCount, icon: faFileAlt },
   ];
 
   const getColor = (index) => colors[index % colors.length];
@@ -104,21 +91,23 @@ const AllMaterialPage = () => {
             {classteacher ? `${classteacher.subjectName} - ${classteacher.gradeName}` : "No Subject Assigned"}
           </div>
           {courses.map((course, index) => (
-            <div key={course.id} className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full">
+            <div key={course.id} className="flex items-center justify-between bg-white rounded-lg shadow-md mb-4 p-4 max-w-full hover:bg-slate-100 transition-colors">
               <div className="flex items-center">
                 <div className="flex items-center justify-center w-10 h-10 rounded-full mr-4" style={{ backgroundColor: `${getColor(index)}33` }}>
                   <FontAwesomeIcon className="h-5 w-5" icon={course.icon} style={{ color: getColor(index) }} />
                 </div>
                 <div className="flex flex-col">
                   <p className="m-0 text-lg font-poppins font-semibold text-gray-600">{course.name}</p>
-                  <p className="text-gray-500 font-poppins text-sm">Total: {course.total}</p>
+                  <p className="text-gray-500 font-poppins text-sm">{t('addmaterial.Total')}: {course.total}</p>
                 </div>
               </div>
               <div className="flex">
-                <button onClick={() => handleNavigation(course.name, "see")} className="border-none bg-none text-[#117C90] cursor-pointer mr-2">
+                <button 
+                  onClick={() => handleNavigation(course.identifier)} 
+                  className="border-none bg-none text-[#117C90] cursor-pointer mr-2"
+                >
                   <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
                 </button>
-                
               </div>
             </div>
           ))}

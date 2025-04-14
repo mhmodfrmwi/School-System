@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { fetchVR, updateTeacherVirtualRoom } from "../../TeacherRedux/VRSlice";
 import { useParams,useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const EditVR = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const teacherVirtualRooms = useSelector((state) => state.teacherVirtualRooms.teacherVirtualRooms);
     const virtualRoom = teacherVirtualRooms.find((room) => room._id === id);
@@ -82,7 +84,7 @@ const EditVR = () => {
         <>
             <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
                 <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                    Edit Virtual Rooms
+                {t('tablesheader.EditVirtualRooms')}
                 </h1>
                 <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[220px]"></div>
             </div>
@@ -90,7 +92,8 @@ const EditVR = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block font-poppins font-medium">
-                            Title <span className="text-red-500">*</span>
+                        {t('tablesheader.Title')}
+                         <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
@@ -102,7 +105,9 @@ const EditVR = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-poppins font-medium">Start Time </label>
+                        <label className="block font-poppins font-medium">
+                        {t('tablesheader.StartTime')}
+                        </label>
                         <input
                             type="datetime-local"
                             name="startTime"
@@ -113,7 +118,9 @@ const EditVR = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-poppins font-medium">Duration </label>
+                        <label className="block font-poppins font-medium">
+                        {t('tablesheader.Duration')}
+                        </label>
                         <input
                             type="number"
                             name="duration"
@@ -124,7 +131,9 @@ const EditVR = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-poppins font-medium">Link </label>
+                        <label className="block font-poppins font-medium">
+                        {t('tablesheader.Link')}
+                        </label>
                         <input
                             type="text"
                             name="link"
@@ -138,7 +147,7 @@ const EditVR = () => {
                         type="submit"
                         className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
                     >
-                        Update
+                    {t('tablesheader.Update')}
                     </button>
                 </form>
             </div>

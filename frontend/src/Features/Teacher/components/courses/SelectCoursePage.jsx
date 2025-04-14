@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const CourseToggle = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
+  const { t } = useTranslation();
 
   return (
     <div className="w-full mx-auto mt-10 px-4">
@@ -21,7 +23,7 @@ const CourseToggle = () => {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             1
           </span>
-          Current Course
+          {t('coursest.CurrentCourse')}
         </button>
         <button
           onClick={() => navigate("/teacher/allcourses")}
@@ -34,7 +36,7 @@ const CourseToggle = () => {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             2
           </span>
-          All Courses
+          {t('coursest.AllCourses')}
         </button>
       </div>
     </div>

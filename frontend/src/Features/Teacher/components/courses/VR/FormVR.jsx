@@ -4,9 +4,10 @@ import { useDispatch } from "react-redux";
 import { createTeacherVirtualRoom } from "../../TeacherRedux/VRSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useTranslation } from 'react-i18next';
 const VRForm = () => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const { classId, gradeSubjectSemesterId } = useParams();
     const [formData, setFormData] = useState({
         title: "",
@@ -50,7 +51,8 @@ const VRForm = () => {
             <ToastContainer />
             <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
                 <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                    Upload VR
+                {t('tablesheader.UploadVirtualRooms')}
+
                 </h1>
                 <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[130px]"></div>
             </div>
@@ -58,7 +60,8 @@ const VRForm = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block font-poppins font-medium">
-                            Title <span className="text-red-500">*</span>
+                        {t('tablesheader.Title')}
+                        <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
@@ -70,7 +73,9 @@ const VRForm = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-poppins font-medium">Start Time </label>
+                        <label className="block font-poppins font-medium">                                                    
+                        {t('tablesheader.StartTime')}
+                        </label>
                         <input
                             type="datetime-local"
                             name="startTime"
@@ -81,7 +86,9 @@ const VRForm = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-poppins font-medium">Duration </label>
+                        <label className="block font-poppins font-medium">
+                        {t('tablesheader.Duration')}
+                        </label>
                         <input
                             type="number"
                             name="duration"
@@ -92,7 +99,9 @@ const VRForm = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-poppins font-medium">Link </label>
+                        <label className="block font-poppins font-medium">
+                        {t('tablesheader.Link')}
+                        </label>
                         <input
                             type="text"
                             name="link"
@@ -106,7 +115,7 @@ const VRForm = () => {
                         type="submit"
                         className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
                     >
-                        Upload
+                    {t('tablesheader.Upload')}
                     </button>
                 </form>
             </div>

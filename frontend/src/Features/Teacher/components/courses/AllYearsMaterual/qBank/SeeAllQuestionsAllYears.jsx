@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllQuestions } from "../../../TeacherRedux/QuestionBankSlice"; 
 import { useParams } from "react-router-dom";
 import AllQuestionsToggle from "./SelectAllQuestions";
+import { useTranslation } from 'react-i18next';
+
 const SeeAllQuestionAllYears = () => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const { gradeSubjectSemesterId } = useParams();
   
 if (!gradeSubjectSemesterId) {
@@ -29,7 +32,7 @@ const myQuestions = useSelector((state) => {
             <div className="mx-auto w-[400px] p-0 sm:w-[550px] md:w-full xl:w-full">
                 <div className="flex ml-8 flex-col">
                         <h1 className="text-lg  font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                            All Questions For This Subject
+                        {t('tablesheader.allquestions')}
                         </h1>
                         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[350px]"></div>
                     </div>
@@ -41,9 +44,9 @@ const myQuestions = useSelector((state) => {
                                 <thead className="bg-[#117C90] text-white">
                                 <tr>
                                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">#</th>
-                                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Question</th>
-                                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Type</th>
-                                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Answer</th>
+                                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('tablesheader.Question')}</th>
+                                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('tablesheader.Type')} </th>
+                                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('tablesheader.Answer')}</th>
                                 </tr>
                             </thead>
                             

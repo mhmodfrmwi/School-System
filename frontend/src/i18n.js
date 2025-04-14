@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import AddMaterial from './Features/Teacher/components/courses/AddMaterial';
 
 i18n
     .use(initReactI18next) 
@@ -182,7 +183,96 @@ i18n
                         todayPoints: "Points Earned Today",
                         semesterPoints: "Your Score for this Semester",
                         allPoints: "Score for all semesters"
-                      }
+                      },
+                      ///////teacher
+
+                      //sidebar
+                      sidebar:{
+                        Dashboard:"Dashboard",
+                        GeneralVirtualRooms:"General Virtual Rooms"
+                      },
+                      //dashboard
+                      dashboardteacher:{
+                      Mailbox:"Mailbox",
+                      DiscussionRooms:"Discussion Rooms",
+                      CustomLibraries:"Custom Libraries",
+                      AcademicCalendar:"Academic Calendar",
+                      Welcome:"Welcome",
+                      notify:"NOTIFICATIONS CENTER",
+                      VirtualClassrooms:"Virtual Classrooms",
+                      contentvr:"You don’t have any new virtual classrooms today.",
+                      },
+                     //motivation
+                     motivationteacher:{
+                        motidesc:"Every member starts his/her journey with a green membership card. In each semester, you will start earning points from the first day. Your final score at the end of the semester will determine the type of card you deserve to use throughout the next semester as recognition for your efforts.",
+                        content01:"If your points are between",
+                        content02:"in your school, you will be eligible for the Learnova",
+                        content03:"Green",
+                        content04:"Card.",
+                        content05:"0 and 250",
+                        content11:"If your points are between Golden ",
+                        content12:" in your school, you will be eligible for the Learnova ",
+                        content13:"Golden ",
+                        content14:" Card.",
+                        content15:"251 to 400 ",
+                        content21:"If your points are ",
+                        content22:" in your school, you will be eligible for the Learnova ",
+                        content23:"Diamond ",
+                        content24:" Card.",
+                        content25:"401 or more ",
+                        TopTeachers:"Top Teachers",
+                        Subject:"Subject",
+                      } ,
+                      //courses
+                      coursest:{
+                        AllCourses:"All Courses",
+                        CurrentCourse:"Current Courses",
+                        Search:"Search...",
+                    },
+                    //addmateial
+                    addmaterial:{
+                        Exams:"Exams",
+                        Assignments:"Assignments",
+                        QuestionBank:"Question Bank",
+                        VirtualRoom:"Virtual Room",
+                        CourseMaterial:"Course Material",
+                        VideoLectures:"Video Lectures",
+                        Total:"Total",
+                    },
+                    tablesheader:{
+                        Materials:"All Materials",
+                        Title:"Title",
+                        Description:"Description",
+                        Type:"Type",
+                        FileUrl:"FileUrl",
+                        Actions:"Actions",
+                        ViewFile:" View File",
+                        EditMaterial:"Edit Material",
+                        Update:"Update",
+                        UploadMaterial:"UploadMaterial",
+                        Upload:"Upload",
+                        Link:"Link",
+                        Duration:"Duration",
+                        StartTime:"Start Time",
+                        EditVirtualRooms:"Edit Virtual Rooms",
+                        UploadVirtualRooms:" Upload Virtual Rooms ",
+                        Answer:"Answer",
+                        Question:"Question",
+                        allquestions:"All Questions For This Subject",
+                        Myquestions:" My questions",
+                        AllQuestions:"All Questions ",
+                        questionType:"question Type",
+                        Essay:"Essay",
+                        ShortAnswer:"Short Answer",
+                        TrueFalse:"True/False",
+                        MultipleChoice:"Multiple Choice",
+                        Choices:"Choices",
+                        CorrectAnswer:"Correct Answer",
+                        SelectAnswer:"Select Correct Answer",
+                        UploadQuestion:"Upload Question",
+                        EditQuestion:"Edit Question",
+
+                    }
 
 
                 }
@@ -364,7 +454,99 @@ i18n
                         todayPoints: "النقاط المكتسبة اليوم",
                         semesterPoints: "نقاطك لهذا الفصل",
                         allPoints: "النقاط لجميع الفصول"
-                      }
+                      },
+
+                      ///////teacher
+
+                      //sidebar
+                      sidebar:{
+                        Dashboard:"الصفحة الرئيسية",
+                        GeneralVirtualRooms:"الغرف الافتراضية العامة"
+                      },
+                      //dashboard
+                      dashboardteacher:{
+                        Mailbox:"صندوق البريد",
+                        DiscussionRooms:"غرف النقاش",
+                        CustomLibraries:"المكتبات المخصصة",
+                        AcademicCalendar:"التقويم الأكاديمي",
+                        Welcome:"اهلا",
+                        notify:"مركز الإشعارات",
+                        VirtualClassrooms:"الغرف الافتراضية  " ,
+                        contentvr:"لا توجد فصول دراسية افتراضية جديدة اليوم.",
+                        },
+                      //motivation
+                      motivationteacher:{
+                        motidesc:"يبدأ كل عضو رحلته ببطاقة عضوية خضراء. في كل فصل دراسي، ستبدأ بجمع النقاط من اليوم الأول. نتيجتك النهائية في نهاية الفصل الدراسي ستحدد نوع البطاقة التي تستحق استخدامها خلال الفصل الدراسي التالي تقديرًا لجهودك.",
+                        content01:"إذا كانت نقاطك بين 0 و250 في مدرستك، تكون مؤهلة لبطاقة Learnova.",
+                        content02:" ",
+                        content03:" ",
+                        content04:" ",
+                        content05:" ",
+                        content11:"إذا كانت نقاطك تتراوح بين 251 إلى 400 في مدرستك، فسوف تكون مؤهلاً للحصول على بطاقة Learnova الذهبية.",
+                        content12:" ",
+                        content13:" ",
+                        content14:" ",
+                        content15:" ",
+                        content21:"إذا كانت نقاطك 401 أو أكثر في مدرستك، فسوف تكون مؤهلاً للحصول على بطاقة Learnova الماسية. ",
+                        content22:" ",
+                        content23:" ",
+                        content24:"  .",
+                        content25:" ",
+                        TopTeachers:"أفضل المعلمين",
+                        Subject:"المادة",
+                      },
+                     //courses 
+                    coursest:{
+                        AllCourses:"كل المواد",
+                        CurrentCourse:"المواد الحالية",
+                        Search:"ابحث...",
+                    },
+                    //addmateial
+                    addmaterial:{
+                        Exams:"امتحانات",
+                        Assignments:"واجبات",
+                        QuestionBank:"بنك أسئلة",
+                        VirtualRoom:"غرفة افتراضية",
+                        CourseMaterial:"محاضرات PDF",
+                        VideoLectures:"محاضرات فيديو",
+                        Total:"المجموع",
+                    },
+                    tablesheader:{
+                        Materials:"جميع المقررات للمحتوى",
+                        Title:"العنوان",
+                        Description:"الوصف",
+                        Type:"النوع",
+                        FileUrl:"عنوان الملف",
+                        Actions:"الإجراءات",
+                        ViewFile:"اعرض الملف",
+                        EditMaterial:"تحرير المحتوى",
+                        Update:"تحديث",
+                        UploadMaterial:"رفع المحتوى",
+                        Upload:"رفع",
+                        Link:"الرابط",
+                        Duration:"مدة الجلسة",
+                        StartTime:"وقت البدأ",
+                        EditVirtualRooms:"تحرير الغرف الافتراضية",
+                        UploadVirtualRooms:"رفع الغرف الافتراضية",
+                        Answer:"الاجابة",
+                        Question:"السؤال",
+                        allquestions:"جميع الاسئلة لهذه المادة",
+                        Myquestions:"أسألتى",
+                        AllQuestions:"جميع الاسئلة",
+                        questionType:"نوع السؤال",
+                        Essay:"مقتال",
+                        ShortAnswer:"اجابة مختصرة",
+                        TrueFalse:"صح /خطأ",
+                        MultipleChoice:"اختيار من متعدد",
+                        Choices:"الاختيارات",
+                        CorrectAnswer:"الاجابة الصحيحة",
+                        SelectAnswer:"اختر الاجابة الصحيحة",
+                        UploadQuestion:"رفع السؤال",
+                        EditQuestion:"تحرير السؤال",
+
+                    }
+
+
                 
                 }
             }
