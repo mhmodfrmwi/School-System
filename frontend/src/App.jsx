@@ -10,7 +10,6 @@ import SeeAllAssignments from "./Features/Teacher/components/courses/AllYearsMat
 import AllSubmissionsForAssignment from "./Features/Teacher/components/courses/AllYearsMaterual/AllSubmissionsForAssignment";
 import GetStudentsWithGrades from "./Features/Teacher/components/Grades/GetStudentsWithGrades";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import GetAllClasses from "./Features/Manager/components/Attendance/GetAllClasses";
 import GetAttendanceClass from "./Features/Manager/components/Attendance/GetAttendanceClass";
 import CreateExamSchedule from "./Features/Manager/components/Schedule/CreateExamSchedule";

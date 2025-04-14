@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import img1 from "../../../../assets/img1.png";
 import img2 from "../../../../assets/img2.png";
@@ -10,7 +10,7 @@ const PointsSummary = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { reward, semesterReward, dailyReward } = useSelector(
-    (state) => state.motivation,
+    (state) => state.motivation
   );
 
   useEffect(() => {
@@ -20,46 +20,50 @@ const PointsSummary = () => {
   }, [dispatch]);
 
   const getBadgeColor = (badge) => {
-    switch(badge) {
-      case "Green": return "text-green-500";
-      case "Diamond": return "text-[#6a6969]";
-      case "Gold": return "text-yellow-500";
-      default: return "text-green-700";
+    switch (badge) {
+      case "Green":
+        return "text-green-500 dark:text-green-400";
+      case "Diamond":
+        return "text-[#6a6969] dark:text-[#A3BFFA]";
+      case "Gold":
+        return "text-yellow-500 dark:text-yellow-400";
+      default:
+        return "text-green-700 dark:text-green-400";
     }
   };
 
   const pointsData = [
     {
-      title: t('points.todayPoints'),
+      title: t("points.todayPoints"),
       points: dailyReward.totalDailyPoints,
       badge: dailyReward.badge,
       icon: img1,
     },
     {
-      title: t('points.semesterPoints'),
+      title: t("points.semesterPoints"),
       points: semesterReward.totalSemesterPoints,
       badge: semesterReward.badge,
       icon: img2,
     },
     {
-      title: t('points.allPoints'),
+      title: t("points.allPoints"),
       points: reward.totalPoints,
       badge: reward.badges,
       icon: img3,
-    }
+    },
   ];
 
   return (
-    <div className="mt-6 rounded-2xl bg-white p-6">
-      <h1 className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
-        {t('points.title')}
+    <div className="mt-6  p-6 ">
+      <h1 className=" relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
+        {t("points.title")}
+        <span className="absolute left-0 bottom-[-9px] w-[120px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
       </h1>
-      <p className="mb-4 ms-1 w-24 rounded-xl border-t-4 border-[#BC6FFB]"></p>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-8">
         {pointsData.map((item, index) => (
           <div key={index} className="relative rounded-2xl p-3">
-            <div className="rounded-2xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-[3px]">
-              <div className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-md">
+            <div className="rounded-2xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:bg-[#281459] p-[3px]">
+              <div className="flex items-center justify-between rounded-2xl bg-white dark:bg-[#281459] p-4 shadow-md dark:shadow-none">
                 <div>
                   <img
                     src={item.icon}

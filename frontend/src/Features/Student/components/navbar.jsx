@@ -18,7 +18,7 @@ import Logo from "../../../assets/logologin.png";
 import Menu from "../../../assets/StudentIcon/Menue.png";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import Sidebar from "./Sidebar";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -45,7 +45,7 @@ const Navbar = () => {
     { path: "activities/contests", key: "activities/contests" },
     { path: "virtualrooms", key: "virtualrooms" },
     { path: "allcourses", key: "allcourses" },
-    { path: "attendance", key: "attendance" }
+    { path: "attendance", key: "attendance" },
   ];
 
   const filteredRoutes = routes.filter((route) => {
@@ -63,32 +63,28 @@ const Navbar = () => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       const route = routes.find((r) =>
-        r.path.toLowerCase().includes(searchTerm.toLowerCase()),
+        r.path.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      const count = searchTerm.length;
       setSearchTerm("");
       setIsDropdownOpen(false);
-
-      if (route.path.length === count) {
+      if (route) {
         navigate(`/student/${searchTerm}`);
       } else {
-        alert("No matching page found.");
+        alert("No matches found.");
       }
     }
   };
 
   const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    const newLang = i18n.language === "en" ? "ar" : "en";
     i18n.changeLanguage(newLang);
-    localStorage.setItem('i18nextLng', newLang);
+    localStorage.setItem("i18nextLng", newLang);
   };
 
   const url = window.location.pathname;
   const studentName = url.split("/student/").pop();
   const match = url.match(/\/student\/([^/]+)/);
   const name = match ? match[1] : "";
-
-
 
   const handleBack = () => {
     navigate(-1);
@@ -111,13 +107,12 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    // document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
   return (
-    <div className="relative">
-      <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md">
+    <div className="relative z-50">
+   <div className="flex h-16 w-full max-w-full items-center justify-between bg-white dark:bg-[#13082F] px-4 shadow-md  dark:shadow-[0_4px_15px_rgba(224,170,238,0.3)]">
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -127,7 +122,7 @@ const Navbar = () => {
           </button>
           <button
             onClick={handleBack}
-            className="hidden rounded-lg bg-[#FFD4AD] p-1 text-[#FD813D] lg:flex border-2 border-[#FD813D]"
+            className="hidden rounded-lg bg-[#FFD4AD] dark:bg-[#6B4B3E] p-1 text-[#FD813D] dark:text-[#FFD4AD] lg:flex border-2 border-[#FD813D] dark:border-[#FFD4AD]"
           >
             <FaArrowLeft className="text-lg" />
           </button>
@@ -139,7 +134,7 @@ const Navbar = () => {
             />
           </Link>
           <p
-            className="hidden font-inter text-lg font-semibold text-[#3D52A1] lg:flex"
+            className="hidden font-inter text-lg font-semibold text-[#3D52A1] dark:text-[#A3BFFA] lg:flex"
             onClick={() => {
               if (name !== "/student") {
                 navigate(`/student/${name}`);
@@ -156,35 +151,35 @@ const Navbar = () => {
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
           <div className="absolute left-14 top-1/2 z-10 -translate-y-1/2 transform lg:left-6">
-            <FaSearch className="text-lg text-gray-400" />
+            <FaSearch className="text-lg text-gray-400 dark:text-gray-300" />
           </div>
 
           <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
             <input
               type="text"
-              placeholder={t('SearchStudentPage')}
+              placeholder={t("SearchStudentPage")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none md:text-left md:text-base"
+              className="w-full rounded-full border bg-gray-100 dark:bg-gray-700 py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 dark:text-gray-200 focus:outline-none md:text-left md:text-base"
             />
 
             {isDropdownOpen && (
-              <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-y-scroll rounded-lg border bg-white shadow-md">
+              <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-y-scroll rounded-lg border bg-white dark:bg-gray-800 shadow-md dark:border-gray-600">
                 {filteredRoutes.length > 0 ? (
                   filteredRoutes.map((route) => (
                     <li
                       key={route.path}
                       onClick={() => handleSelect(route.path)}
-                      className="cursor-pointer px-4 py-2 font-semibold text-[#C459D9] hover:bg-[#d8cbed]"
+                      className="cursor-pointer px-4 py-2 font-semibold text-[#C459D9] dark:text-[#D6BCFA] hover:bg-[#d8cbed] dark:hover:bg-gray-700"
                     >
                       {t(`routes.${route.key}`)}
-                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#C459D9]"></p>
+                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#C459D9] dark:border-[#D6BCFA]"></p>
                     </li>
                   ))
                 ) : (
-                  <li className="px-4 py-2 text-red-900">
-                    {t('NoMatches')}
+                  <li className="px-4 py-2 text-red-900 dark:text-red-400">
+                    {t("NoMatches")}
                   </li>
                 )}
               </ul>
@@ -194,20 +189,20 @@ const Navbar = () => {
           <div className="absolute right-14 top-1/2 -translate-y-1/2 transform lg:right-7">
             <FontAwesomeIcon
               icon={faSliders}
-              className="text-lg text-gray-400"
+              className="text-lg text-gray-400 dark:text-gray-300"
             />
           </div>
         </div>
 
         <div className="flex items-center space-x-2 md:space-x-6">
-          <button className="relative p-2 text-gray-500">
+          <button className="relative p-2 text-gray-500 dark:text-gray-300">
             <FaBell className="text-xl" />
             <span className="absolute right-2 top-1 block h-3.5 w-3.5 rounded-full bg-red-500"></span>
           </button>
-          <button className="text-xl text-gray-500">
+          <button className="text-xl text-gray-500 dark:text-gray-300">
             <FontAwesomeIcon icon={faEnvelope} className="text-2xl" />
           </button>
-          <button className="p-2 text-gray-500">
+          <button className="p-2 text-gray-500 dark:text-gray-300">
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
           </button>
           <ThemeSwitcher />
@@ -218,12 +213,12 @@ const Navbar = () => {
               alt="User"
               className="h-8 w-8 rounded-full md:h-10 md:w-10"
             />
-            <span className="hidden font-poppins text-sm font-semibold text-dashboard-header md:text-base lg:flex">
+            <span className="hidden font-poppins text-sm font-semibold text-[#3D52A1] dark:text-[#A3BFFA] md:text-base lg:flex">
               {fullName}
             </span>
           </div>
           <button
-            className="p-2 text-2xl text-gray-500 md:text-3xl"
+            className="p-2 text-2xl text-gray-500 dark:text-gray-300 md:text-3xl"
             onClick={() => setSettingToggle(!settingToggle)}
           >
             <IoSettingsOutline />
@@ -232,39 +227,41 @@ const Navbar = () => {
           {settingToggle && (
             <div
               ref={settingsRef}
-              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#D1B5FF] to-[#AB92ED]"
+              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#D1B5FF] to-[#AB92ED] dark:from-[#4B3D6B] dark:to-[#2D1E4A]"
             >
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
                   onClick={() => navigate("edit-student-profile")}
                 >
-                  <button className="p-2 text-gray-500">
-                    <ReactSVG src={Vector} className="r h-auto w-auto" />
+                  <button className="p-2 text-gray-500 dark:text-gray-300">
+                    <ReactSVG src={Vector} className="h-auto w-auto" />
                   </button>
-                  <h2 className="font-semibold text-white"> {t('EditProfile')} </h2>
+                  <h2 className="font-semibold text-white dark:text-gray-200">{t("EditProfile")}</h2>
                 </div>
-                <p className="mx-auto my-2 w-40 border-b-2 border-white"></p>
+                <p className="mx-auto my-2 w-40 border-b-2 border-white dark:border-gray-500"></p>
               </div>
 
               <div className="ms-20">
                 <ThemeSwitcher />
               </div>
-              <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
-              <button className="mx-auto ms-6 p-2 text-[#C459D9]"
-                onClick={toggleLanguage}>
-                <ReactSVG src={i18n.language === 'en' ? languageA : languageE} className="r h-auto w-auto" />
+              <p className="mx-auto my-2 w-28 border-b-2 border-white dark:border-gray-500"></p>
+              <button
+                className="mx-auto ms-6 p-2 text-[#C459D9] dark:text-[#D6BCFA]"
+                onClick={toggleLanguage}
+              >
+                <ReactSVG src={i18n.language === "en" ? languageA : languageE} className="h-auto w-auto" />
               </button>
-              <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
+              <p className="mx-auto my-2 w-28 border-b-2 border-white dark:border-gray-500"></p>
 
               <div
                 className="mx-auto ms-12 mt-5 flex flex-row items-center"
                 onClick={() => navigate("/login")}
               >
-                <button className="p-2 text-gray-500">
-                  <ReactSVG src={logout} className="r h-auto w-auto" />
+                <button className="p-2 text-gray-500 dark:text-gray-300">
+                  <ReactSVG src={logout} className="h-auto w-auto" />
                 </button>
-                <h2 className="font-semibold text-white"> {t('Logout')} </h2>
+                <h2 className="font-semibold text-white dark:text-gray-200">{t("Logout")}</h2>
               </div>
             </div>
           )}
@@ -273,7 +270,7 @@ const Navbar = () => {
       {isSidebarOpen && (
         <>
           <div
-            className="fixed inset-0 z-10 bg-black bg-opacity-30 backdrop-blur-sm"
+            className="fixed inset-0 z-10 bg-black dark:bg-gray-900 bg-opacity-30 dark:bg-opacity-50 backdrop-blur-sm"
             onClick={() => setIsSidebarOpen(false)}
           ></div>
           <Sidebar closeSidebar={() => setIsSidebarOpen(false)} />
@@ -282,4 +279,5 @@ const Navbar = () => {
     </div>
   );
 };
+
 export default Navbar;

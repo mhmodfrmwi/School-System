@@ -6,43 +6,48 @@ import {
   getAllReward,
   getSemesterReward,
 } from "../StudentRedux/motivationSlice";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+
 function HeaderInfo() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { reward, semesterReward } = useSelector((state) => state.motivation);
 
-  console.log(semesterReward);
   useEffect(() => {
     dispatch(getAllReward());
     dispatch(getSemesterReward());
   }, [dispatch]);
+
   return (
     <div className="flex justify-center">
-      <div className="mt-4 flex w-[97%] items-center justify-between rounded-2xl bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding p-6 shadow-lg">
+      <div className="mt-4 flex w-[97%] items-center justify-between rounded-2xl bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding dark:bg-[#312A5E] p-6 shadow-lg dark:shadow-gray-900">
         {/* Profile image and details on the left */}
         <div className="flex items-center space-x-4">
           <img
             src={Frame}
             className="h-24 w-24 md:h-32 md:w-32"
-            alt={t('motivation.profileFrame')}
+            alt={t("motivation.profileFrame")}
           />
           <div className="flex flex-col">
             <h1
-              className={`font-poppins text-xl font-semibold md:text-2xl ${semesterReward.badge === "Green"
-                  ? "text-green-700"
+              className={`font-poppins text-xl font-semibold md:text-2xl ${
+                semesterReward.badge === "Green"
+                  ? "text-green-700 dark:text-green-400"
                   : semesterReward.badge === "Diamond"
-                    ? "text-[#6a6969]"
-                    : semesterReward.badge === "Gold"
-                      ? "text-yellow-500"
-                      : "text-green-700"
-                }`}
+                  ? "text-[#6a6969] dark:text-[#A3BFFA]"
+                  : semesterReward.badge === "Gold"
+                  ? "text-yellow-500 dark:text-yellow-400"
+                  : "text-green-700 dark:text-green-400"
+              }`}
             >
-              {semesterReward.badge ? semesterReward.badge : t('badges.green')}
+              {semesterReward.badge ? semesterReward.badge : t("badges.green")}
             </h1>
-
-            <img src={ScheduleIcon} className="h-6 w-6" alt={t('motivation.scheduleIcon')} />
-            <p className="mt-1 text-3xl text-white">
+            <img
+              src={ScheduleIcon}
+              className="h-6 w-6"
+              alt={t("motivation.scheduleIcon")}
+            />
+            <p className="mt-1 text-3xl text-white dark:text-white">
               {semesterReward.totalSemesterPoints}
             </p>
           </div>
@@ -50,42 +55,43 @@ function HeaderInfo() {
 
         {/* Circular content on the most right */}
         <div
-          className={`flex h-28 w-28 flex-col items-center justify-center rounded-full border-4 text-gray-800 shadow-md md:h-36 md:w-36 ${reward.badges === "Green"
-              ? "border-green-500"
+          className={`flex h-28 w-28 flex-col items-center justify-center rounded-full border-4 text-gray-800 shadow-md md:h-36 md:w-36 ${
+            reward.badges === "Green"
+              ? "border-green-500 dark:border-green-400"
               : reward.badges === "Diamond"
-                ? "border-[#6a6969]"
-                : reward.badges === "Gold"
-                  ? "border-yellow-500"
-                  : "border-green-500"
-            }`}
+              ? "border-[#6a6969] dark:border-[#A3BFFA]"
+              : reward.badges === "Gold"
+              ? "border-yellow-500 dark:border-yellow-400"
+              : "border-green-500 dark:border-green-400"
+          }`}
         >
           <p
-            className={`font-poppins text-lg font-bold md:text-xl ${reward.badges === "Green"
-                ? "text-green-700"
+            className={`font-poppins text-lg font-bold md:text-xl ${
+              reward.badges === "Green"
+                ? "text-green-700 dark:text-green-400"
                 : reward.badges === "Diamond"
-                  ? "text-[#6a6969]"
-                  : reward.badges === "Gold"
-                    ? "text-yellow-500"
-                    : "text-green-700"
-              }`}
+                ? "text-[#6a6969] dark:text-[#A3BFFA]"
+                : reward.badges === "Gold"
+                ? "text-yellow-500 dark:text-yellow-400"
+                : "text-green-700 dark:text-green-400"
+            }`}
           >
-           {t('motivation.score')}
+            {t("motivation.score")}
           </p>
-
           <p
-            className={`font-poppins text-xs md:text-sm ${reward.badges === "Green"
-                ? "text-green-700"
+            className={`font-poppins text-xs md:text-sm ${
+              reward.badges === "Green"
+                ? "text-green-700 dark:text-green-400"
                 : reward.badges === "Diamond"
-                  ? "text-[#6a6969]"
-                  : reward.badges === "Gold"
-                    ? "text-yellow-500"
-                    : "text-green-700"
-              }`}
+                ? "text-[#6a6969] dark:text-[#A3BFFA]"
+                : reward.badges === "Gold"
+                ? "text-yellow-500 dark:text-yellow-400"
+                : "text-green-700 dark:text-green-400"
+            }`}
           >
-            {t('motivation.forAllSemesters')}
+            {t("motivation.forAllSemesters")}
           </p>
-
-          <p className="text-2xl font-extrabold text-white md:text-3xl">
+          <p className="text-2xl font-extrabold text-white dark:text-white md:text-3xl">
             {reward.totalPoints}
           </p>
         </div>
