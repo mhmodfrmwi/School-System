@@ -9,7 +9,7 @@ const showKids = async (req, res) => {
 
     if (!students || students.length === 0) {
       return res
-        .status(404)
+        .status(200)
         .json({ message: "No students found for this parent" });
     }
 
