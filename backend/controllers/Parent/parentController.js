@@ -8,7 +8,9 @@ const showKids = async (req, res) => {
     }).populate("student_id");
 
     if (!students || students.length === 0) {
-      throw new Error("No students found for this parent");
+      return res
+        .status(404)
+        .json({ message: "No students found for this parent" });
     }
 
     res.status(200).json(students);
@@ -24,14 +26,15 @@ const chooseKid = async (req, res) => {
     const relationship = await ParentStudent.findOne({
       parent_id: req.user.id,
       student_id: id,
-    });
-
+    }).populate("student_id", "fullName");
+    console.log(relationship);
+    const fullName = relationship.student_id.fullName;
     if (!relationship) {
       throw new Error("Not authorized to access this student");
     }
 
     const token = signToken(id, email, role, classId);
-    res.status(200).json({ student_token: token });
+    res.status(200).json({ student_token: token, email, role, fullName });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
