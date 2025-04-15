@@ -65,7 +65,7 @@ const SidebarManager = () => {
   return (
     <div className="relative">
       <button
-        className="fixed left-5 top-8 z-50 h-10 w-9 rounded-lg bg-dashboard-bg p-2 text-white shadow-md lg:hidden"
+        className="dark:bg-DarkManager fixed left-5 top-8 z-50 h-10 w-9 rounded-lg bg-dashboard-bg p-2 text-white shadow-md lg:hidden"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         aria-label="Toggle Sidebar"
       >
@@ -78,7 +78,7 @@ const SidebarManager = () => {
           onClick={() => setIsSidebarOpen(false)}
           aria-hidden="true"
         >
-          <div className="custom-scrollbar absolute left-0 top-0 flex h-full w-64 flex-col bg-dashboard-bg p-4 text-white transition-transform duration-300">
+          <div className="custom-scrollbar dark:bg- dark:bg-DarkManager absolute left-0 top-0 flex h-full w-64 flex-col bg-dashboard-bg p-4 text-white transition-transform duration-300">
             <SidebarContent
               menuItems={menuItems}
               hoveredIndex={hoveredIndex}
@@ -89,7 +89,7 @@ const SidebarManager = () => {
         </div>
       )}
 
-      <div className="custom-scrollbar hidden h-screen w-64 flex-col bg-dashboard-bg p-4 text-white lg:flex">
+      <div className="custom-scrollbar dark:bg-DarkManager hidden h-screen w-64 flex-col bg-dashboard-bg p-4 text-white lg:flex">
         <SidebarContent
           menuItems={menuItems}
           hoveredIndex={hoveredIndex}
@@ -122,7 +122,7 @@ const SidebarContent = ({
             href={item.href}
             className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${
               currentPath === item.href
-                ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg"
+                ? "dark:text-DarkManager rounded-l-[30px] bg-white font-semibold text-dashboard-bg"
                 : "text-white"
             } ${
               hoveredIndex === index && currentPath !== item.href
@@ -146,11 +146,11 @@ const SidebarContent = ({
             ) : (
               <FontAwesomeIcon
                 icon={item.icon}
-                className="mr-3 text-lg transition-colors group-hover:text-dashboard-bg"
+                className="dark:group-hover:text-DarkManager mr-3 text-lg transition-colors group-hover:text-dashboard-bg"
               />
             )}
 
-            <span className="font-poppins text-sm transition-colors group-hover:font-semibold group-hover:text-dashboard-bg">
+            <span className="dark:group-hover:text-DarkManager font-poppins text-sm transition-colors group-hover:font-semibold group-hover:text-dashboard-bg">
               {item.label}
             </span>
             {currentPath === item.href && (
@@ -164,10 +164,10 @@ const SidebarContent = ({
       </nav>
 
       <div className="mt-10 flex flex-col items-center">
-        <div className="mb-4 rounded-md bg-white px-4 py-1 font-poppins text-xs text-dashboard-bg">
+        <div className="dark:text-DarkManager mb-4 rounded-md bg-white px-4 py-1 font-poppins text-xs text-dashboard-bg">
           Term: 2023-2024
         </div>
-        <button className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300">
+        <button className="dark:text-DarkManager rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300">
           Logout
         </button>
       </div>

@@ -35,19 +35,18 @@ function AddSchoolHubForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-   
-    const cleanedPrizes = formData.prizes.filter((prize) => prize.trim() !== "");
+    const cleanedPrizes = formData.prizes.filter(
+      (prize) => prize.trim() !== "",
+    );
 
-   
     try {
       await dispatch(
         createSchoolHub({
           ...formData,
           prizes: cleanedPrizes,
-        })
-      ).unwrap(); 
+        }),
+      ).unwrap();
 
-     
       navigate("/manager/school-hubs");
     } catch (err) {
       console.error("Failed to create school hub:", err);
@@ -56,73 +55,87 @@ function AddSchoolHubForm() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Add School Hub</h1>
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        Add School Hub
+      </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
-      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="dark:bg-DarkManager2 rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
         <form onSubmit={handleSubmit} className="m-6">
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">Title *</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Title *
+            </label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
               placeholder="Enter school hub title"
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Registration Start</label>
+              <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+                Registration Start
+              </label>
               <input
                 type="date"
                 name="registrationStart"
                 value={formData.registrationStart}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Registration End</label>
+              <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+                Registration End
+              </label>
               <input
                 type="date"
                 name="registrationEnd"
                 value={formData.registrationEnd}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Contest Date</label>
+              <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+                Contest Date
+              </label>
               <input
                 type="date"
                 name="contestDate"
                 value={formData.contestDate}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Location</label>
+              <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+                Location
+              </label>
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="Enter school hub location"
-                className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                 required
               />
             </div>
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">Prizes</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Prizes
+            </label>
             {formData.prizes.map((prize, index) => (
               <input
                 key={index}
@@ -130,21 +143,29 @@ function AddSchoolHubForm() {
                 value={prize}
                 onChange={(e) => handleChange(e, index, "prizes")}
                 placeholder={`Level ${index + 1} Prize`}
-                className="mb-2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                className="dark:bg-DarkManager2 mb-2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
               />
             ))}
-            <button type="button" onClick={() => addField("prizes")} className="mt-2 text-[#117C90] ">
+            <button
+              type="button"
+              onClick={() => addField("prizes")}
+              className="mt-2 rounded-full p-2 text-[#117C90] dark:bg-white dark:text-black"
+            >
               + Add Prize
             </button>
           </div>
 
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">Details</label>
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              Details
+            </label>
             <textarea
               value={formData.details}
-              onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, details: e.target.value })
+              }
               placeholder="Enter school hub details"
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
               rows="3"
             />
           </div>
@@ -153,7 +174,7 @@ function AddSchoolHubForm() {
             <button
               type="submit"
               disabled={loading}
-              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] disabled:bg-gray-400"
+              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] disabled:bg-gray-400 dark:bg-white dark:text-black"
             >
               {loading ? "Saving..." : "Save"}
             </button>

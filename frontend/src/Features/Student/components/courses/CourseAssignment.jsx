@@ -14,8 +14,10 @@ import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
 import backgroundWaves from "../../../../assets/StudentIcon/bg-color2.png";
 import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
-
+import { useTranslation } from 'react-i18next';
 const AssignmentsSection = () => {
+    const { t,i18n } = useTranslation();
+    const isRTL = i18n.language === 'ar';
     const role = sessionStorage.getItem("role");
     const dispatch = useDispatch();
     const { gradeSubjectSemesterId, classId } = useParams();
@@ -67,10 +69,10 @@ const AssignmentsSection = () => {
     useEffect(() => {
         if (error) {
             Swal.fire({
-                title: "Error!",
+                title: t('assignments.alerts.error.title'),
                 text: error,
                 icon: "error",
-                confirmButtonText: "OK",
+                confirmButtonText:  t('assignments.alerts.error.confirmButton'),
             }).then(() => {
                 dispatch(clearError());
             });
@@ -279,7 +281,7 @@ const AssignmentsSection = () => {
                                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                                 onClick={() => navigate(`/student/allcourses/videos/${gradeSubjectSemesterId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">01</span> Video Lectures
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">01</span> {t('assignments.sidebar.videoLectures')}
                             </Button>
                         </li>
                         <li>
@@ -288,7 +290,7 @@ const AssignmentsSection = () => {
                                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                                 onClick={() => navigate(`/student/allcourses/materials/${gradeSubjectSemesterId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">02</span> Course Material
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">02</span>{t('assignments.sidebar.courseMaterial')}
                             </Button>
                         </li>
                         <li>
@@ -297,7 +299,7 @@ const AssignmentsSection = () => {
                                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                                 onClick={() => navigate(`/student/allcourses/virtualrooms/${gradeSubjectSemesterId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span> Virtual Rooms
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span> {t('assignments.sidebar.virtualRooms')}
                             </Button>
                         </li>
                         <li>
@@ -305,7 +307,7 @@ const AssignmentsSection = () => {
                                 variant="solid"
                                 className="md:w-11/12 bg-[#BFBFBF] dark:bg-[#C459D9] text-white font-medium py-4 rounded-lg"
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">04</span> Assignments
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">04</span>{t('assignments.sidebar.assignments')}
                             </Button>
                         </li>
                         <li>
@@ -314,7 +316,7 @@ const AssignmentsSection = () => {
                                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                                 onClick={() => navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">05</span> Exams
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">05</span> {t('assignments.sidebar.exams')}
                             </Button>
                         </li>
                         <li>
@@ -323,7 +325,7 @@ const AssignmentsSection = () => {
                                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                                 onClick={() => navigate(`/student/allcourses/questionbank/${gradeSubjectSemesterId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">06</span> Question Bank
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">06</span> {t('assignments.sidebar.questionBank')}
                             </Button>
                         </li>
                     </ul>
@@ -331,7 +333,7 @@ const AssignmentsSection = () => {
 
                 {/* Main Content */}
                 <div className="flex-1 w-full md:w-3/4 p-4 mt-6">
-                    <h1 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-300 mb-4">Assignments</h1>
+                    <h1 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-300 mb-4">{t('assignments.main.title')}</h1>
 
                     {/* Filter Buttons */}
                     <div className="flex flex-wrap gap-3 mb-6">
@@ -344,7 +346,7 @@ const AssignmentsSection = () => {
                             } px-4 md:px-6 py-2 rounded-full`}
                             onClick={() => setActiveTab("all")}
                         >
-                            All ({assignments.length})
+                             {t('assignments.main.allTab')}  ({assignments.length})
                         </Button>
                         <Button
                             variant={activeTab === "submitted" ? "outline" : "solid"}
@@ -355,7 +357,7 @@ const AssignmentsSection = () => {
                             } px-4 md:px-6 py-2 rounded-full`}
                             onClick={() => setActiveTab("submitted")}
                         >
-                            Submitted ({studentSubmissions.length})
+                          { t('assignments.main.submittedTab') } ({studentSubmissions.length})
                         </Button>
                         <Button
                             variant={activeTab === "pending" ? "outline" : "solid"}
@@ -366,7 +368,7 @@ const AssignmentsSection = () => {
                             } px-4 md:px-6 py-2 rounded-full`}
                             onClick={() => setActiveTab("pending")}
                         >
-                            Pending ({assignments.filter((assignment) => {
+                            {t('assignments.main.pendingTab')}({assignments.filter((assignment) => {
                                 const isSubmitted = studentSubmissions.some(
                                     (submission) => submission.assignment_id?._id === assignment._id
                                 );
@@ -384,7 +386,7 @@ const AssignmentsSection = () => {
                             } px-4 md:px-6 py-2 rounded-full`}
                             onClick={() => setActiveTab("missed")}
                         >
-                            Missed ({assignments.filter((assignment) => {
+                           {t('assignments.main.missedTab')} ({assignments.filter((assignment) => {
                                 const isSubmitted = studentSubmissions.some(
                                     (submission) => submission.assignment_id?._id === assignment._id
                                 );
@@ -399,7 +401,7 @@ const AssignmentsSection = () => {
                     {loading && !initialLoading && (
                         <div className="flex items-center justify-center text-center text-gray-500 dark:text-gray-300 mt-10">
                             <FaSpinner className="animate-spin text-4xl text-blue-500 dark:text-[#C459D9] mb-4 mr-5" />
-                            <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold">Loading...</p>
+                            <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold"> {t('assignments.main.loading')}</p>
                         </div>
                     )}
 
@@ -407,7 +409,7 @@ const AssignmentsSection = () => {
                     {!initialLoading && filteredAssignments.length === 0 && !loading && !error && (
                         <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center dark:bg-[#281459]">
                             <CardContent className="text-center p-4 text-gray-600 dark:text-gray-300">
-                                No assignments available.
+                            {t('assignments.main.noAssignments')}
                             </CardContent>
                         </Card>
                     )}
@@ -423,10 +425,10 @@ const AssignmentsSection = () => {
                                         </div>
                                         <div>
                                             <h2 className="text-base md:text-lg font-semibold text-gray-800 dark:text-gray-300">{assignment.title}</h2>
-                                            <p className="text-md text-gray-700 dark:text-gray-400">Description: {assignment.description}</p>
-                                            <p className="text-sm text-gray-700 dark:text-gray-400">Created By: {assignment.created_by.fullName}</p>
+                                            <p className="text-md text-gray-700 dark:text-gray-400">{t('assignments.main.assignmentCard.description')}: {assignment.description}</p>
+                                            <p className="text-sm text-gray-700 dark:text-gray-400">{t('assignments.main.assignmentCard.createdBy')}: {assignment.created_by.fullName}</p>
                                             <p className="text-sm text-gray-700 dark:text-gray-400">
-                                                Due Date: {new Date(assignment.due_date).toLocaleString()}
+                                            {t('assignments.main.assignmentCard.dueDate')}: {new Date(assignment.due_date).toLocaleString(i18n.language)}
                                             </p>
                                         </div>
                                     </div>
@@ -448,7 +450,7 @@ const AssignmentsSection = () => {
                                                         className="text-white bg-gray-400 dark:bg-gray-600 px AV px-4 py-2 rounded-lg cursor-not-allowed"
                                                         disabled
                                                     >
-                                                        Missed
+                                                          {t('assignments.main.assignmentCard.missed')}
                                                     </Button>
                                                 );
                                             } else if (isSubmitted) {
@@ -458,7 +460,7 @@ const AssignmentsSection = () => {
                                                         className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] px-3 py-2 rounded-lg"
                                                         onClick={() => handleViewAssignment(assignment._id)}
                                                     >
-                                                        View Submission
+                                                        {t('assignments.main.assignmentCard.viewSubmission')}
                                                     </Button>
                                                 );
                                             } else {
@@ -468,7 +470,7 @@ const AssignmentsSection = () => {
                                                         className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] px-3 py-2 rounded-lg"
                                                         onClick={() => handleViewAssignment(assignment._id)}
                                                     >
-                                                        Submit Assignment
+                                                      {t('assignments.main.assignmentCard.submitAssignment')}
                                                     </Button>
                                                 );
                                             }
@@ -490,7 +492,7 @@ const AssignmentsSection = () => {
                                 <FaChevronLeft />
                             </button>
                             <span className="text-gray-800 dark:text-gray-300 font-medium">
-                                Page {currentPage} of {totalPages}
+                            {t('assignments.main.page')}  {currentPage} {t('assignments.main.of')}  {totalPages}
                             </span>
                             <button
                                 onClick={nextPage}

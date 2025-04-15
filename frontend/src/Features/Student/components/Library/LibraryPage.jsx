@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import librarybg from "../../../../assets/librarybg.jpg";
-
+import { useTranslation } from 'react-i18next';
 const LibraryPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleNavigate = (page) => {
@@ -13,7 +14,7 @@ const LibraryPage = () => {
     <div className="w-[90%] mx-auto min-h-screen flex flex-col items-center font-poppins mt-12 pt-12">
       {/* Header */}
       <h2 className="text-2xl text-center md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-        Your Literary Journey Starts Here
+      {t('library.title')}
         <span className="absolute left-1/2 transform -translate-x-1/2 bottom-[-33px] w-[50%] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
       </h2>
 
@@ -34,7 +35,7 @@ const LibraryPage = () => {
           onClick={() => handleNavigate("/student/librarybooks")}
         >
           <span className="text-[3rem] font-bold text-white gradient-stroke">
-            Books
+          {t('library.books')}
           </span>
         </div>
 
@@ -44,7 +45,7 @@ const LibraryPage = () => {
           onClick={() => handleNavigate("/student/libraryvideos")}
         >
           <span className="text-[3rem] font-bold text-white gradient-stroke">
-            Videos
+          {t('library.videos')}
           </span>
         </div>
       </div>

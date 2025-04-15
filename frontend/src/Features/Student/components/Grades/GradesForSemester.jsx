@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { getDegreesBySemester } from "../StudentRedux/gradesStudentSlice";
 import Loader from "@/ui/Loader";
 import { Button } from "@/components/ui/button";
-
+import { useTranslation } from 'react-i18next';
 function GradesForSemester() {
+  const { t } = useTranslation();
   const { semesterDegrees, loading } = useSelector(
     (state) => state.studentGrades,
   );
@@ -32,7 +33,7 @@ function GradesForSemester() {
       {/* Header Section */}
       <div className="w-full flex justify-between items-center mb-16">
             <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-            Grades for Semester
+            {t("gradesSemester.title")}
               <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
             </h1>
             <Button
@@ -40,7 +41,7 @@ function GradesForSemester() {
               className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
               onClick={() => navigate(-1)}
             >
-              Back
+              {t("gradesSemester.back")}
             </Button>
           </div>
 
@@ -51,25 +52,26 @@ function GradesForSemester() {
             <thead>
               <tr>
                 <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                  Subject Name
+                {t("gradesSemester.headers.subjectName")}
                 </th>
                 <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                  Midterm Degree
+                {t("gradesSemester.headers.midtermDegree")}
                 </th>
                 <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                  Max Midterm Degree
+                {t("gradesSemester.headers.maxMidtermDegree")}
                 </th>
                 <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                  Final Degree
+                {t("gradesSemester.headers.finalDegree")}
                 </th>
                 <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                  Max Final Degree
+                {t("gradesSemester.headers.maxFinalDegree")}
                 </th>
                 <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                  Subject Score
+                {t("gradesSemester.headers.subjectScore")}
                 </th>
                 <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                  Max Subject Score
+                {t("gradesSemester.headers.maxSubjectScore")}
+
                 </th>
               </tr>
             </thead>
@@ -120,7 +122,7 @@ function GradesForSemester() {
                     colSpan="7"
                     className="px-4 py-12 text-center text-lg text-gray-500"
                   >
-                    <p className="py-16">No degrees available for this semester.</p>
+                    <p className="py-16">{t("gradesSemester.noDegrees")}</p>
                   </td>
                 </tr>
               )}

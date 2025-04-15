@@ -5,7 +5,7 @@ import Sidebar from "../components/SidebarManager";
 function Manager() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <div className="flex min-h-screen bg-[#117C90]">
+    <div className="dark:bg-DarkManager flex min-h-screen bg-[#117C90]">
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}

@@ -12,29 +12,30 @@ import ErrorComponent from "@/ui/ErrorComponent";
 import { motion } from "framer-motion";
 import backgroundWaves from "../../../../assets/StudentIcon/bg-color2.png";
 import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
-
+import { useTranslation } from 'react-i18next';
 const images = [sub1, sub2];
 
 const AllCourses = () => {
+  const { t ,i18n} = useTranslation();
   const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { subjects, loading, error } = useSelector((state) => state.allSubjectsStudent);
-  const [activeButton, setActiveButton] = useState("All Subjects");
+  const [activeButton, setActiveButton] = useState(t('courses.allSubjects'));
 
   useEffect(() => {
     dispatch(fetchSubjects());
   }, [dispatch]);
 
   const buttons = [
-    { label: "All Subjects", key: "all" },
+    { label: t('courses.allSubjects'), key: "all" },
     ...subjects.map((subject) => ({
       label: subject.subjectName,
       key: subject.subjectName.toLowerCase(),
     })),
   ];
 
-  const filteredSubjects = activeButton === "All Subjects"
+  const filteredSubjects = activeButton === t('courses.allSubjects')
     ? subjects
     : subjects.filter((subject) => subject.subjectName === activeButton);
 
@@ -61,7 +62,7 @@ const AllCourses = () => {
           {/* Illustration with Animation */}
           <motion.img
             src={subject}
-            alt="No Subjects"
+            alt={t('courses.noSubjectsAlt')} 
             className="w-full lg:w-1/2 mb-8 rounded-3xl h-[50vh] lg:h-[75vh] object-cover shadow-lg"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -75,10 +76,10 @@ const AllCourses = () => {
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
           >
             <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">
-              No Subjects Available
+            {t('courses.noSubjectsTitle')}
             </h2>
             <p className="text-gray-600 dark:text-gray-300 mb-6 w-3/4 text-lg">
-              It looks like there are no subjects assigned to you at the moment. Please check back later.
+            {t('courses.noSubjectsMessage')}
             </p>
             {/* Decorative Elements with Animation */}
             <motion.div
@@ -97,6 +98,7 @@ const AllCourses = () => {
     }
     return null;
   };
+  
 
   return (
     <div
@@ -185,9 +187,9 @@ const AllCourses = () => {
                         />
                       </div>
                       <div>
-                        <span className="font-poppins">Last Update:</span>
+                        <span className="font-poppins">{t('courses.lastUpdate')}:</span>
                         <span className="font-poppins">
-                          {new Date(subject.updatedAt).toLocaleString()}
+                          {new Date(subject.updatedAt).toLocaleString(i18n.language)}
                         </span>
                       </div>
                     </div>
@@ -195,7 +197,7 @@ const AllCourses = () => {
                       className="bg-blue-100 dark:bg-[#C459D9] font-poppins text-blue-600 dark:text-white py-1 px-3 rounded-md border border-blue-600 dark:border-[#E0AAEE]"
                       onClick={() => handleStartClick(subject.id)}
                     >
-                      Start
+                      {t('courses.startButton')}
                     </button>
                   </div>
                 </div>

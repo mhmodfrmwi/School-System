@@ -6,8 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
-
+import { useTranslation } from 'react-i18next';
 const SubmissionView = () => {
+  const { t,i18n } = useTranslation();
   const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,10 +21,10 @@ const SubmissionView = () => {
   useEffect(() => {
     if (error) {
       Swal.fire({
-        title: "Error!",
+        title:t("submission.view.error.title"),
         text: error,
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: t("submission.view.error.confirmButton"),
       }).then(() => {
         dispatch(clearError());
       });
@@ -46,7 +47,7 @@ const SubmissionView = () => {
       {/* Header */}
       <div className="w-full flex justify-between items-center mb-6">
         <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-          {submission ? submission.assignment_id?.title : "Submission Details"} 
+          {submission ? submission.assignment_id?.title :t("submission.view.title")} 
           <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
         </h1>
         <Button
@@ -54,7 +55,7 @@ const SubmissionView = () => {
           className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
           onClick={() => navigate(-1)}
         >
-          Back
+         {t("submission.view.back")}
         </Button>
       </div>
 
@@ -65,7 +66,7 @@ const SubmissionView = () => {
             <CardContent className="p-6 border border-gray-200 rounded-lg">
               <div className="mb-6">
                 <p className="text-lg font-semibold text-transparent bg-clip-text bg-[#fc9e6e]">
-                  Your Grade: {submission.grade !== undefined ? submission.grade : "Not graded yet"}
+                {t("submission.view.yourGrade")}: {submission.grade !== undefined ? submission.grade : t("submission.view.notGraded")}
                 </p>
               </div>
 
@@ -73,12 +74,12 @@ const SubmissionView = () => {
 
               <div className="mb-6">
                 <p className="text-sm text-gray-600">
-                  Due Date: {new Date(submission.assignment_id?.due_date).toLocaleString()}
+                {t("submission.view.dueDate")}: {new Date(submission.assignment_id?.due_date).toLocaleString(i18n.language)}
                 </p>
               </div>
 
               <div className="mt-6 p-6 bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10 rounded-lg">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Your Submission:</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">{t("submission.view.yourSubmission")}:</h3>
                 <p className="text-gray-700 whitespace-pre-wrap">{submission.submission_text}</p>
               </div>
             </CardContent>
@@ -89,9 +90,9 @@ const SubmissionView = () => {
           <Card className="border border-gray-200 rounded-xl shadow-sm p-6">
             <CardContent className="p-6 border border-gray-200 rounded-lg font-poppins flex flex-col items-center justify-center min-h-[38vh]">
               <h2 className="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mb-4">
-                No Submission Found
+              {t("submission.view.noSubmission")}
               </h2>
-              <p className="text-gray-600">You have not submitted anything for this assignment yet.</p>
+              <p className="text-gray-600">{t("submission.view.noSubmissionFound")}</p>
             </CardContent>
           </Card>
         </div>

@@ -21,15 +21,15 @@ const GetExamSchedules = () => {
     return (
       <>
         <ScheduleToggle />
-        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
+        <div className="dark:bg-DarkManager2 mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
           <FontAwesomeIcon
             icon={faCalendar}
-            className="mb-4 text-6xl text-gray-400"
+            className="mb-4 text-6xl text-gray-400 dark:text-white"
           />
-          <p className="mb-2 text-xl font-semibold text-gray-600">
+          <p className="mb-2 text-xl font-semibold text-gray-600 dark:text-white">
             No schedules found for the academic year
           </p>
-          <p className="mb-4 max-w-xl text-center text-gray-500">
+          <p className="mb-4 max-w-xl text-center text-gray-500 dark:text-white">
             It seems like there are no exam schedules available at the moment.
             Please check back later.
           </p>
@@ -48,13 +48,13 @@ const GetExamSchedules = () => {
               {/* Header */}
               <div className="my-2 flex items-center justify-between">
                 <div>
-                  <div className="ms-4 cursor-text py-1 font-poppins text-sm font-bold text-[#117C90] sm:text-xl">
+                  <div className="dark:text-DarkManager ms-4 cursor-text py-1 font-poppins text-sm font-bold text-[#117C90] sm:text-xl">
                     Exams Schedules - {managerExamSchedules.academic_year}
                   </div>
-                  <p className="mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
+                  <p className="dark:border-DarkManager mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
                 </div>
                 <button
-                  className="me-0 rounded-2xl bg-gradient-to-r from-[#117C90] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm xl:me-4"
+                  className="dark:from-DarkManager dark:to-DarkManager me-0 rounded-2xl bg-gradient-to-r from-[#117C90] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm xl:me-4"
                   onClick={() => navigate("/manager/create-exam-schedule")}
                 >
                   Create Exam Schedule
@@ -62,8 +62,8 @@ const GetExamSchedules = () => {
               </div>
 
               <div className="overflow-x-auto p-4">
-                <table className="w-full min-w-[800px] border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90]">
-                  <thead className="bg-[#117C90] text-center text-white">
+                <table className="dark:shadow-DarkManager w-full min-w-[800px] border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90]">
+                  <thead className="dark:bg-DarkManager bg-[#117C90] text-center text-white">
                     <tr>
                       <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
                         Grade
@@ -83,7 +83,7 @@ const GetExamSchedules = () => {
                           return (
                             <tr
                               key={`${grade.grade}-${index}`}
-                              className="bg-white even:bg-[#F5FAFF]"
+                              className="bg-white even:bg-[#F5FAFF] dark:text-black"
                             >
                               <td className="px-3 py-2 text-center text-xs sm:text-sm md:text-base">
                                 {grade.grade}
@@ -119,7 +119,7 @@ const GetExamSchedules = () => {
                         return (
                           <tr
                             key={`${grade.grade}-${schedule.schedule_id}`}
-                            className="cursor-pointer bg-white even:bg-[#F5FAFF] hover:bg-[#117C90]/10"
+                            className="dark:hover:bg-DarkManager/10 cursor-pointer bg-white even:bg-[#F5FAFF] hover:bg-[#117C90]/10 dark:text-black"
                             onClick={() =>
                               navigate(
                                 `/manager/get-exam-schedule/${schedule.schedule_id}`,

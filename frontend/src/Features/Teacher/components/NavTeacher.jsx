@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,11 +9,12 @@ import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { ReactSVG } from "react-svg";
 import InfoIcon from "../../../assets/icons/Info.svg";
 import userImage from "../../../assets/user.jpeg";
-import language from "../../../assets/icons/language.svg";
+import languageE from "../../../assets/icons/languageET.svg";
+import languageA from "../../../assets/icons/languageAT.svg";
 import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
-import languageE from "../../../assets/icons/languageS.svg";
-import languageA from "../../../assets/icons/languageA.svg";
+// import languageE from "../../../assets/icons/languageS.svg";
+// import languageA from "../../../assets/icons/languageA.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useTranslation } from 'react-i18next';
 const NavTeacher = () => {
@@ -23,6 +25,7 @@ const NavTeacher = () => {
   const [settingToggle, setSettingToggle] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const { fullName } = useSelector((state) => state.login);
 
   const routes = [
     { path: "edit-teacher-profile" },
@@ -144,7 +147,7 @@ const NavTeacher = () => {
           <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
             <input
               type="text"
-              placeholder="Search Admin Page"
+              placeholder={t("SearchTeacherPage")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -201,7 +204,7 @@ const NavTeacher = () => {
               className="h-8 w-8 rounded-full md:h-10 md:w-10"
             />
             <span className="hidden font-poppins text-sm font-semibold text-dashboard-header md:text-base lg:flex">
-              Yasser
+            {fullName}
             </span>
           </div>
           <button
@@ -224,7 +227,7 @@ const NavTeacher = () => {
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
                   </button>
-                  <h2 className="font-semibold text-white">Edit Profile</h2>
+                  <h2 className="font-semibold text-white">{t("EditProfile")}</h2>
                 </div>
                 <p className="mx-auto my-2 w-40 border-b-2 border-white"></p>
               </div>
@@ -250,7 +253,7 @@ const NavTeacher = () => {
                   className="cursor-pointer font-semibold text-white"
                   onClick={() => navigate("/role")}
                 >
-                  Logout
+                  {t("Logout")}
                 </h2>
               </div>
             </div>

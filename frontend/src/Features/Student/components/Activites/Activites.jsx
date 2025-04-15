@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getStudentSchoolHubs, createStudentSchoolHub, getStudentSchoolHubById, deleteStudentSchoolHub } from "../StudentRedux/schoolhubSlice";
 import Loader from "@/ui/Loader";
 import Swal from "sweetalert2";
+import { useTranslation } from 'react-i18next';
 
 const Activities = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const role = sessionStorage.getItem("role");
     const dispatch = useDispatch();
@@ -20,8 +22,8 @@ const Activities = () => {
         if (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: error,
+                title:  t("activities.errors.title"),
+                text: error||t("activities.errors.default"),
             });
         }
     }, [error]);
@@ -60,8 +62,8 @@ const Activities = () => {
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: error.message,
+                title: t("activities.errors.title"),
+                text: error.message|| t("activities.errors.default"),
             });
         }
     };
@@ -81,7 +83,7 @@ const Activities = () => {
                 {/* Updated Header */}
                 <div className="mb-1">
                     <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-3xl font-semibold text-transparent">
-                        Activities
+                    {t("activities.title")}
                         <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
                     </h1>
 
@@ -91,13 +93,13 @@ const Activities = () => {
                             className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-2 text-lg font-medium text-white focus:outline-none mt-8"
                             onClick={() => navigate("/student/activities")}
                         >
-                            School Hubs
+                            {t("activities.tabs.schoolHubs")}
                         </button>
                         <button
                             className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 text-lg font-medium text-transparent mt-8"
                             onClick={() => navigate("/student/activities/contests")}
                         >
-                            Contests
+                            {t("activities.tabs.contests")}
                         </button>
                     </div>
                 </div>
@@ -113,15 +115,15 @@ const Activities = () => {
                                         <h3 className="font-bold font-poppins text-xl text-[#CF72C0]">{hub.title}</h3>
                                         <hr className="my-4 border-t border-gray-300" />
                                         <div className="flex flex-col items-center mt-2">
-                                            <p className="text-sm font-poppins">Contest Registration Start:</p>
+                                            <p className="text-sm font-poppins">{t("activities.hubCard.registrationStart")}:</p>
                                             <p className="text-sm font-semibold font-poppins">{new Date(hub.registrationStart).toLocaleString()}</p>
                                         </div>
                                         <div className="flex flex-col items-center mt-2">
-                                            <p className="text-sm font-poppins">Contest Ends:</p>
+                                            <p className="text-sm font-poppins">{t("activities.hubCard.registrationEnd")}:</p>
                                             <p className="text-sm font-semibold font-poppins">{new Date(hub.registrationEnd).toLocaleString()}</p>
                                         </div>
                                         <div className="flex flex-col items-center mt-2">
-                                            <p className="text-sm font-poppins">Contest Date:</p>
+                                            <p className="text-sm font-poppins">{t("activities.hubCard.contestDate")}:</p>
                                             <p className="text-sm font-semibold font-poppins">{new Date(hub.contestDate).toLocaleString()}</p>
                                         </div>
 
@@ -131,29 +133,29 @@ const Activities = () => {
                                                     className="cursor-pointer font-poppins rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 text-sm font-medium text-white transition-transform transform hover:scale-105 shadow-md"
                                                     onClick={() => navigate(`/student/activities/detailes/${hub._id}`)}
                                                 >
-                                                    Details
+                                                     {t("activities.hubCard.details")}
                                                 </button>
                                                 <button
                                                     className="cursor-pointer font-poppins rounded-3xl border border-[#CF72C0] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 text-sm font-medium text-transparent transition-transform transform hover:scale-105 shadow-md"
                                                     onClick={() => navigate(`/student/activities/prizes/${hub._id}`)}
                                                 >
-                                                    Prizes
+                                                    {t("activities.hubCard.prizes")}
                                                 </button>
                                             </div>
                                             <button
                                                 className={`cursor-pointer font-poppins rounded-3xl border border-[#CF72C0] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 text-sm font-medium text-transparent transition-transform transform hover:scale-105 shadow-md`}
                                                 onClick={() => handleToggleParticipation(hub._id)}
                                             >
-                                                {participationStatus[hub._id] ? "Disjoin" : "Join"}
+                                                {participationStatus[hub._id] ? t("activities.hubCard.disjoin") :  t("activities.hubCard.join")}
                                             </button>
                                         </div>
                                     </div>
                                 ))
                             ) : (
                                 <div className="flex flex-col items-center justify-center font-poppins bg-[#F9FAFB] min-h-[200px] w-full sm:w-2/3 px-6 sm:px-12 py-10 rounded-lg shadow-lg mt-10 text-center col-span-full">
-                                    <p className="text-xl font-semibold text-gray-600 mb-2">No school hubs available.</p>
+                                    <p className="text-xl font-semibold text-gray-600 mb-2">{t("activities.hubCard.noHubs")}</p>
                                     <p className="text-gray-500 mb-4 text-center max-w-lg">
-                                        It seems like there are no school hubs available at the moment. Please check back later.
+                                    {t("activities.hubCard.noHubsMessage")}
                                     </p>
                                 </div>
                             )}

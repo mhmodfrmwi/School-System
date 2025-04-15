@@ -63,15 +63,15 @@ const WeeklyScheduleForManager = () => {
   if (schedules.length === 0) {
     return (
       <>
-        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
+        <div className="dark:bg-DarkManager2 mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:text-white">
           <FontAwesomeIcon
             icon={faCalendar}
-            className="mb-4 text-6xl text-gray-400"
+            className="mb-4 text-6xl text-gray-400 dark:text-white"
           />
-          <p className="mb-2 text-xl font-semibold text-gray-600">
+          <p className="mb-2 text-xl font-semibold text-gray-600 dark:text-white">
             No schedules Found
           </p>
-          <p className="mb-4 max-w-xl text-center text-gray-500">
+          <p className="mb-4 max-w-xl text-center text-gray-500 dark:text-white">
             It seems like there are no schedules available at the moment. Please
             check back later.
           </p>
@@ -88,19 +88,19 @@ const WeeklyScheduleForManager = () => {
             <div className="mx-auto w-full max-w-7xl px-4">
               <div className="my-2 flex items-center justify-between">
                 <div>
-                  <div className="ms-4 cursor-text py-1 font-poppins text-lg font-bold text-[#105E6A] sm:text-2xl">
+                  <div className="dark:text-DarkManager ms-4 cursor-text py-1 font-poppins text-lg font-bold text-dashboard-bg sm:text-2xl">
                     Weekly Schedule - {semesterName} ({startYear}-{endYear})
                   </div>
-                  <p className="mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
+                  <p className="dark:border-DarkManager mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
                 </div>
-                <button className="rounded-2xl bg-gradient-to-r from-[#105E6A] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm">
+                <button className="dark:to-DarkManager rounded-2xl bg-gradient-to-r from-[#105E6A] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm">
                   Export as PDF
                 </button>
               </div>
               <div className="overflow-x-auto p-4">
                 <table className="w-full min-w-[800px] border-collapse border border-gray-300 text-sm sm:text-base">
                   <thead>
-                    <tr className="bg-[#105E6A] text-white">
+                    <tr className="dark:bg-DarkManager bg-dashboard-bg text-white">
                       <th className="border border-gray-300 p-2 font-poppins">
                         Time
                       </th>
@@ -117,7 +117,7 @@ const WeeklyScheduleForManager = () => {
                   <tbody>
                     {timeslots.map((time) => (
                       <tr key={time} className="bg-gray-100 even:bg-white">
-                        <td className="border border-gray-300 p-2 text-center font-poppins font-bold">
+                        <td className="border border-gray-300 p-2 text-center font-poppins font-bold dark:text-black">
                           {time}
                         </td>
                         {days.map((day) => {
@@ -132,7 +132,7 @@ const WeeklyScheduleForManager = () => {
                               key={`${day}-${time}`}
                               className="border border-gray-300 p-2 text-center"
                             >
-                              <div className="rounded-lg bg-white p-2 font-poppins shadow-md">
+                              <div className="rounded-lg bg-white p-2 font-poppins shadow-md dark:text-black">
                                 {scheduleItem ? (
                                   <>
                                     <p className="font-semibold">

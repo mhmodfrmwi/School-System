@@ -75,7 +75,7 @@ const UpdateExamSchedule = () => {
         Update Exam Schedule
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
-      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="dark:bg-DarkManager2 rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
@@ -90,7 +90,7 @@ const UpdateExamSchedule = () => {
             >
               {/* Subject ID */}
               <div className="mb-4">
-                <label className="text-md mb-2 block font-medium text-gray-700">
+                <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
                   Subject
                 </label>
                 <Controller
@@ -100,7 +100,7 @@ const UpdateExamSchedule = () => {
                   render={({ field }) => (
                     <select
                       {...field}
-                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                      className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                     >
                       <option value="">Select Subject</option>
                       {subjects.map((subject) => (
@@ -112,7 +112,7 @@ const UpdateExamSchedule = () => {
                   )}
                 />
                 {errors.subjects?.[index]?.subject_id && (
-                  <p className="mt-1 text-sm text-red-600">
+                  <p className="mt-1 text-sm text-red-600 dark:text-green-400">
                     {errors.subjects[index].subject_id.message}
                   </p>
                 )}
@@ -120,7 +120,7 @@ const UpdateExamSchedule = () => {
 
               {/* Exam Date */}
               <div className="mb-4">
-                <label className="text-md mb-2 block font-medium text-gray-700">
+                <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
                   Exam Date
                 </label>
                 <Controller
@@ -131,12 +131,12 @@ const UpdateExamSchedule = () => {
                     <input
                       type="date"
                       {...field}
-                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                      className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                     />
                   )}
                 />
                 {errors.subjects?.[index]?.exam_date && (
-                  <p className="mt-1 text-sm text-red-600">
+                  <p className="mt-1 text-sm text-red-600 dark:text-green-400">
                     {errors.subjects[index].exam_date.message}
                   </p>
                 )}
@@ -144,7 +144,7 @@ const UpdateExamSchedule = () => {
 
               {/* Start Time */}
               <div className="mb-4">
-                <label className="text-md mb-2 block font-medium text-gray-700">
+                <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
                   Start Time
                 </label>
                 <Controller
@@ -155,12 +155,12 @@ const UpdateExamSchedule = () => {
                     <input
                       type="time"
                       {...field}
-                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                      className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                     />
                   )}
                 />
                 {errors.subjects?.[index]?.start_time && (
-                  <p className="mt-1 text-sm text-red-600">
+                  <p className="mt-1 text-sm text-red-600 dark:text-green-400">
                     {errors.subjects[index].start_time.message}
                   </p>
                 )}
@@ -168,7 +168,7 @@ const UpdateExamSchedule = () => {
 
               {/* End Time */}
               <div className="mb-4">
-                <label className="text-md mb-2 block font-medium text-gray-700">
+                <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
                   End Time
                 </label>
                 <Controller
@@ -179,12 +179,12 @@ const UpdateExamSchedule = () => {
                     <input
                       type="time"
                       {...field}
-                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+                      className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                     />
                   )}
                 />
                 {errors.subjects?.[index]?.end_time && (
-                  <p className="mt-1 text-sm text-red-600">
+                  <p className="mt-1 text-sm text-red-600 dark:text-green-400">
                     {errors.subjects[index].end_time.message}
                   </p>
                 )}
@@ -204,7 +204,7 @@ const UpdateExamSchedule = () => {
                   end_time: "",
                 })
               }
-              className="ms-4 rounded-md bg-[#117C90] px-4 py-2 text-white"
+              className="ms-4 rounded-md bg-[#117C90] px-4 py-2 text-white dark:bg-white dark:text-black dark:placeholder-white"
             >
               Add other subjects
             </button>
@@ -214,7 +214,7 @@ const UpdateExamSchedule = () => {
           <div className="col-span-2 mt-6">
             <button
               type="submit"
-              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
+              className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
               Update Schedule
             </button>

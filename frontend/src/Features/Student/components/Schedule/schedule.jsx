@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentSchedule } from "../StudentRedux/studentScheduleSlice";
 import Loader from "@/ui/Loader";
+import { useTranslation } from 'react-i18next';
 
 function Schedule() {
+    const { t ,i18n} = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { studentSchedule, loading } = useSelector(
@@ -33,10 +35,23 @@ function Schedule() {
         `${semester_id.semesterName}, ${academic_year_id.startYear}-${academic_year_id.endYear}`,
       );
     }
-  }, [studentSchedule]);
+  }, [studentSchedule, i18n.language]);
 
+
+   const translateDay = (englishDay) => {
+    const daysMap = {
+      'Sunday': t("schedule.days.sunday"),
+      'Monday': t("schedule.days.monday"),
+      'Tuesday': t("schedule.days.tuesday"),
+      'Wednesday': t("schedule.days.wednesday"),
+      'Thursday': t("schedule.days.thursday"),
+      'Friday': t("schedule.days.friday"),
+      'Saturday': t("schedule.days.saturday")
+    };
+    return daysMap[englishDay] || englishDay;
+  };
   function formatSchedule(scheduleData) {
-    const days = [
+    const englishDays = [
       "Sunday",
       "Monday",
       "Tuesday",
@@ -45,7 +60,11 @@ function Schedule() {
       "Friday",
       "Saturday",
     ];
-    let formatted = [[...days]];
+    
+
+    const translatedDays = englishDays.map(day => translateDay(day));
+    let formatted = [[...translatedDays]];
+    
     const timeSlots = [
       "08:00",
       "09:00",
@@ -58,9 +77,9 @@ function Schedule() {
 
     timeSlots.forEach((time) => {
       let row = [time];
-      days.forEach((day) => {
+      englishDays.forEach((englishDay) => {
         const session = scheduleData.find(
-          (s) => s.day_of_week === day && s.start_time === time,
+          (s) => s.day_of_week === englishDay && s.start_time === time,
         );
         if (session) {
           const startTime = new Date(`1970-01-01T${session.start_time}:00Z`);
@@ -72,11 +91,11 @@ function Schedule() {
 
           let durationText = "";
           if (hours > 0 && minutes > 0) {
-            durationText = `${hours} hour${hours > 1 ? "s" : ""} and ${minutes} minute${minutes > 1 ? "s" : ""}`;
+            durationText = `${hours} ${hours > 1 ? t("schedule.duration.hours") : t("schedule.duration.hour")} ${t("schedule.duration.and")} ${minutes} ${minutes > 1 ? t("schedule.duration.minutes") : t("schedule.duration.minute")}`;
           } else if (hours > 0) {
-            durationText = `${hours} hour${hours > 1 ? "s" : ""}`;
+            durationText = `${hours} ${hours > 1 ? t("schedule.duration.hours") : t("schedule.duration.hour")}`;
           } else {
-            durationText = `${minutes} minute${minutes > 1 ? "s" : ""}`;
+            durationText = `${minutes} ${minutes > 1 ? t("schedule.duration.minutes") : t("schedule.duration.minute")}`;
           }
 
           row.push(
@@ -106,7 +125,7 @@ function Schedule() {
         <div className="col-span-2 flex flex-col justify-between">
           <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
             <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
-              Upcoming Smart Classes
+            {t("schedule.title")}
               <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
             </button>
           </div>
@@ -115,13 +134,13 @@ function Schedule() {
               className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 font-poppins text-lg font-medium text-white focus:outline-none"
               onClick={() => navigate("/student/schedule")}
             >
-              Weekly Schedule
+               {t("schedule.weeklySchedule")}
             </button>
             <button
               className="me-10 cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 font-poppins text-lg font-medium text-transparent"
               onClick={() => navigate("/student/get-exam-schedule")}
             >
-              Exam Schedule
+               {t("schedule.examSchedule")}
             </button>
           </div>
         </div>
@@ -138,11 +157,10 @@ function Schedule() {
               <div className="flex w-3/4 flex-col items-center rounded-xl bg-gray-100 p-6 font-poppins shadow-lg md:w-1/2">
                 <img src={img3} alt="No Schedule" className="mb-4 w-1/4" />
                 <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-800">
-                  No Schedule Available
+                {t("schedule.noSchedule.title")}
                 </h2>
                 <p className="font-poppins text-gray-600">
-                  It looks like there are no scheduled classes available at the
-                  moment.
+                {t("schedule.noSchedule.message")}
                 </p>
               </div>
             </div>
