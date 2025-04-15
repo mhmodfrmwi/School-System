@@ -25,7 +25,12 @@ const ManagerVRForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.startTime || !formData.duration || !formData.link) {
+    if (
+      !formData.title ||
+      !formData.startTime ||
+      !formData.duration ||
+      !formData.link
+    ) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -55,16 +60,16 @@ const ManagerVRForm = () => {
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
-        <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+      <div className="mx-auto flex w-[80%] flex-col px-4 md:px-6 lg:px-0">
+        <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
           Upload VR
         </h1>
         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[130px]"></div>
       </div>
-      <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
+      <div className="dark:bg-DarkManager2 mx-auto w-[80%] rounded-xl bg-gray-100 p-6 shadow-md">
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block font-poppins font-medium">
+            <label className="block font-poppins font-medium dark:text-white">
               Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -72,47 +77,53 @@ const ManagerVRForm = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:text-white dark:placeholder-white"
               required
             />
           </div>
           <div>
-            <label className="block font-poppins font-medium">Start Time </label>
+            <label className="block font-poppins font-medium dark:text-white">
+              Start Time{" "}
+            </label>
             <input
               type="datetime-local"
               name="startTime"
               value={formData.startTime}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
               required
             />
           </div>
           <div>
-            <label className="block font-poppins font-medium">Duration </label>
+            <label className="block font-poppins font-medium dark:text-white">
+              Duration{" "}
+            </label>
             <input
               type="number"
               name="duration"
               value={formData.duration}
               onChange={handleChange}
-              className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:text-white dark:placeholder-white"
               required
             />
           </div>
           <div>
-            <label className="block font-poppins font-medium">Link </label>
+            <label className="block font-poppins font-medium dark:text-white">
+              Link{" "}
+            </label>
             <input
               type="text"
               name="link"
               value={formData.link}
               onChange={handleChange}
-              className="w-full font-poppins text-gray-600 px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:text-white dark:placeholder-white"
               required
             />
           </div>
           <button
             type="submit"
             disabled={status === "loading"}
-            className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
+            className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-poppins font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
             {status === "loading" ? "Uploading..." : "Upload"}
           </button>

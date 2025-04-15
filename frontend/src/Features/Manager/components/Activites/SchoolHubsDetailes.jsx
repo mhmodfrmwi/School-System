@@ -1,63 +1,59 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getSchoolHubs } from "../ManagerRedux/schoolhubSlice"; 
+import { getSchoolHubs } from "../ManagerRedux/schoolhubSlice";
 import activityImage from "../../../../assets/TeacherIcon/img2.png";
 
 const DetailesActivity = () => {
-    const { id } = useParams(); 
-    const dispatch = useDispatch();
-    const { schoolHubs, loading, error } = useSelector((state) => state.schoolhub); 
-   
-    useEffect(() => {
-        dispatch(getSchoolHubs());
-    }, [dispatch]);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { schoolHubs, loading, error } = useSelector(
+    (state) => state.schoolhub,
+  );
 
-   
-    const activity = schoolHubs.find((hub) => hub._id === id);
+  useEffect(() => {
+    dispatch(getSchoolHubs());
+  }, [dispatch]);
 
-    if (loading) return <div>Loading...</div>; 
-    if (error) return <div>Error: {error}</div>;
-    if (!activity) return <div>No activity found.</div>; 
+  const activity = schoolHubs.find((hub) => hub._id === id);
 
-    const { details, location } = activity;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!activity) return <div>No activity found.</div>;
 
-    return (
-        <>
-            <div className="col-span-2 flex flex-col justify-between ms-5">
-                
-                <div className="text-2xl font-poppins cursor-text text-[#105E6A] py-1 font-bold  ms-7 mt-5">
-                    Details
-                </div>
-                
-                <p className="w-24 rounded-xl mb-2 border-t-4 border-[#117C90] ms-7"></p>
+  const { details, location } = activity;
 
-                
-                <div className="flex flex-col items-center mt-5">
-                    <img
-                        src={activityImage}
-                        alt="Activities"
-                        className="mb-6 w-full max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg"
-                    />
+  return (
+    <>
+      <div className="col-span-2 ms-5 flex flex-col justify-between">
+        <div className="dark:text-DarkManager ms-7 mt-5 cursor-text py-1 font-poppins text-2xl font-bold text-[#105E6A]">
+          Details
+        </div>
 
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-6 w-full max-w-4xl">
-                       
-                        <div className="border rounded-lg p-6 font-poppins text-center bg-[#F5F5F5] shadow-md shadow-[#105E6A]">
-                            <h3 className="font-bold font-poppins text-xl">Location</h3>
-                            <p className="text-md mt-2">{location}</p>
-                        </div>
+        <p className="dark:border-DarkManager mb-2 ms-7 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
 
-                       
-                        <div className="border rounded-lg p-6 font-poppins text-center bg-[#F5F5F5] shadow-md shadow-[#117C90]">
-                            <h3 className="font-bold font-poppins text-xl">Details</h3>
-                            <p className="text-md mt-2">{details}</p>
-                        </div>
-                    </div>
-                </div>
+        <div className="mt-5 flex flex-col items-center">
+          <img
+            src={activityImage}
+            alt="Activities"
+            className="mb-6 w-full max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg"
+          />
+
+          <div className="mt-6 grid w-full max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+            <div className="dark:shadow-DarkManager dark:bg-DarkManager2 rounded-lg border bg-[#F5F5F5] p-6 text-center font-poppins shadow-md shadow-[#105E6A]">
+              <h3 className="font-poppins text-xl font-bold">Location</h3>
+              <p className="text-md mt-2">{location}</p>
             </div>
-        </>
-    );
+
+            <div className="dark:shadow-DarkManager dark:bg-DarkManager2 rounded-lg border bg-[#F5F5F5] p-6 text-center font-poppins shadow-md shadow-[#117C90]">
+              <h3 className="font-poppins text-xl font-bold">Details</h3>
+              <p className="text-md mt-2">{details}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default DetailesActivity;

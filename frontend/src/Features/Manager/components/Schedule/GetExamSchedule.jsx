@@ -35,13 +35,13 @@ const GetExamSchedule = () => {
     <div className="mt-10 p-4 sm:p-6">
       <div className="mx-auto w-full max-w-2xl lg:max-w-5xl">
         <div className="mb-6 flex flex-col items-center justify-between sm:flex-row">
-          <h1 className="mb-4 text-xl font-bold text-[#117C90] sm:mb-0 sm:text-2xl">
+          <h1 className="dark:text-DarkManager mb-4 text-xl font-bold text-[#117C90] sm:mb-0 sm:text-2xl">
             Exam Schedule Details
           </h1>
           <div className="flex space-x-4">
             <button
               onClick={handleUpdate}
-              className="flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 hover:bg-[#117C90] sm:px-4 sm:py-2 sm:text-base"
+              className="dark:bg-DarkManager dark:hover:bg-DarkManager flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 hover:bg-[#117C90] sm:px-4 sm:py-2 sm:text-base"
             >
               <FontAwesomeIcon icon={faEdit} className="mr-2" />
               Edit Schedule
@@ -49,7 +49,7 @@ const GetExamSchedule = () => {
 
             <button
               onClick={handleDelete}
-              className="flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 sm:px-4 sm:py-2 sm:text-base"
+              className="dark:bg-DarkManager flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 sm:px-4 sm:py-2 sm:text-base"
             >
               <FontAwesomeIcon icon={faTrash} className="mr-2" />
               Delete Schedule
@@ -57,41 +57,41 @@ const GetExamSchedule = () => {
           </div>
         </div>
 
-        <div className="mb-6 rounded-xl bg-white p-4 shadow-lg sm:p-6">
+        <div className="dark:bg-DarkManager mb-6 rounded-xl bg-white p-4 shadow-lg sm:p-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
-              <h3 className="text-base font-medium text-[#117C90] sm:text-lg md:text-xl">
+              <h3 className="text-base font-medium text-[#117C90] dark:text-white sm:text-lg md:text-xl">
                 Academic Year
               </h3>
-              <p className="text-base text-gray-700 sm:text-lg md:text-xl">
+              <p className="text-base text-gray-700 dark:text-white sm:text-lg md:text-xl">
                 {managerExamSchedule?.academic_year_id?.startYear} -{" "}
                 {managerExamSchedule?.academic_year_id?.endYear}
               </p>
             </div>
 
             <div>
-              <h3 className="text-base font-medium text-[#117C90] sm:text-lg md:text-xl">
+              <h3 className="text-base font-medium text-[#117C90] dark:text-white sm:text-lg md:text-xl">
                 Grade
               </h3>
-              <p className="text-base text-gray-700 sm:text-lg md:text-xl">
+              <p className="text-base text-gray-700 dark:text-white sm:text-lg md:text-xl">
                 {managerExamSchedule?.grade_id?.gradeName}
               </p>
             </div>
 
             <div>
-              <h3 className="text-base font-medium text-[#117C90] sm:text-lg md:text-xl">
+              <h3 className="text-base font-medium text-[#117C90] dark:text-white sm:text-lg md:text-xl">
                 Semester
               </h3>
-              <p className="text-base text-gray-700 sm:text-lg md:text-xl">
+              <p className="text-base text-gray-700 dark:text-white sm:text-lg md:text-xl">
                 {managerExamSchedule?.semester_id?.semesterName}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto mt-7 w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90]">
+        <div className="dark:shadow-DarkManager mx-auto mt-7 w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90]">
           <table className="w-full">
-            <thead className="bg-[#117C90] text-left text-white">
+            <thead className="dark:bg-DarkManager bg-[#117C90] text-left text-white">
               <tr>
                 <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
                   Subject
@@ -111,7 +111,7 @@ const GetExamSchedule = () => {
               {sortedSubjects?.map((subject) => (
                 <tr
                   key={subject._id}
-                  className="bg-white hover:bg-[#117C90]/10"
+                  className="dark:hover:bg-DarkManager/10 bg-white hover:bg-[#117C90]/10 dark:text-black"
                 >
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {subject.subject_id?.subjectName}

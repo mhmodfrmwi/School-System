@@ -27,6 +27,8 @@ export default {
         Color2OnBoarding: "#E47986",
         Color3OnBoarding: "#CF72C0",
         Color4OnBoarding: "#BC6FFB",
+        DarkManager: "#043B44",
+        DarkManager2: "#117C90",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

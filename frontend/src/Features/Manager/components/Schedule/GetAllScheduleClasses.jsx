@@ -21,15 +21,15 @@ const GetAllScheduleClasses = () => {
     return (
       <>
         <ScheduleToggle />
-        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
+        <div className="dark:bg-DarkManager2 mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
           <FontAwesomeIcon
             icon={faCalendar}
-            className="mb-4 text-6xl text-gray-400"
+            className="mb-4 text-6xl text-gray-400 dark:text-white"
           />
-          <p className="mb-2 font-poppins text-xl font-semibold text-gray-600">
+          <p className="mb-2 font-poppins text-xl font-semibold text-gray-600 dark:text-white">
             No Manager Classes Found
           </p>
-          <p className="mb-4 max-w-xl text-center font-poppins text-gray-500">
+          <p className="mb-4 max-w-xl text-center font-poppins text-gray-500 dark:text-white">
             It seems like there are no available manager classes at the moment.
           </p>
         </div>
@@ -49,15 +49,15 @@ const GetAllScheduleClasses = () => {
       <div className="lg:px-0] mx-auto w-[90%] px-4 md:px-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
+            <h1 className="dark:text-DarkManager font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
               Classes
             </h1>
-            <div className="mt-1 h-[3px] w-[70px] rounded-t-md bg-[#117C90] lg:h-[4px] xl:w-[100px]"></div>
+            <div className="dark:bg-DarkManager mt-1 h-[3px] w-[70px] rounded-t-md bg-[#117C90] lg:h-[4px] xl:w-[100px]"></div>
           </div>
           <input
             type="text"
             placeholder="Search by class or grade..."
-            className="w-44 rounded-md border-2 border-gray-300 bg-[#FCFAFA] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#117C90] sm:w-64"
+            className="dark:focus:ring-DarkManager w-44 rounded-md border-2 border-gray-300 bg-[#FCFAFA] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:text-black sm:w-64"
             value={searchText}
             onChange={handleSearchChange}
           />
@@ -70,20 +70,20 @@ const GetAllScheduleClasses = () => {
               onClick={() =>
                 navigate(`/manager/get-weekly-schedule/${cls._id}`)
               }
-              className="relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
+              className="dark:bg-DarkManager2 relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
             >
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
                 <img src={bag} alt="bag" className="h-7 w-7" />
               </div>
 
-              <div className="font-poppins text-[#117C90]">
+              <div className="font-poppins text-[#117C90] dark:text-white">
                 {cls.gradeId?.gradeName}
               </div>
               <div className="font-poppins text-lg font-semibold">
                 {cls.className}
               </div>
 
-              <p className="font-poppins text-[#117C90]">
+              <p className="font-poppins text-[#117C90] dark:text-white">
                 Students: {cls.student_count}
               </p>
             </div>
