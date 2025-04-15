@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
 import Loader from "@/ui/Loader";
 import { useTranslation } from 'react-i18next';
+import backgroundWaves from "@/assets/StudentIcon/bg-color2.png";
+import backgroundStars from "@/assets/StudentIcon/bg-color1.png";
 
 const TeamDetails = () => {
   const { t } = useTranslation();
@@ -15,7 +17,6 @@ const TeamDetails = () => {
   const navigate = useNavigate();
   const { teammates, loading, error } = useSelector((state) => state.teams);
   const { contests } = useSelector((state) => state.studentContests);
-
 
   useEffect(() => {
     dispatch(getTeammatesByContestId(teamId));
@@ -27,7 +28,7 @@ const TeamDetails = () => {
   const handleDelete = async () => {
     const result = await Swal.fire({
       title: t('teamDetails.deleteConfirmation.title'),
-      text:t('teamDetails.deleteConfirmation.text'),
+      text: t('teamDetails.deleteConfirmation.text'),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#FD813D",
@@ -64,7 +65,7 @@ const TeamDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#13082F]">
         <Loader role="student" />
       </div>
     );
@@ -72,23 +73,36 @@ const TeamDetails = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-500 font-poppins">{error}</div>
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#13082F]">
+        <div className="text-red-500 dark:text-[#D1D5DB] font-poppins">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-wrap font-poppins gap-6 w-[90%] mx-auto mt-16 mb-20 min-h-[68vh]">
+    <div className="min-h-screen bg-white dark:bg-[#13082F] p-8 relative font-poppins">
+      <div
+        className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
+        style={{
+          backgroundImage: `url(${backgroundStars})`,
+        }}
+      ></div>
+      <div
+        className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
+        style={{
+          backgroundImage: `url(${backgroundWaves})`,
+        }}
+      ></div>
+    <div className="flex flex-wrap font-poppins gap-6 w-[90%] mx-auto mt-16 mb-20 min-h-[68vh] ">
       {/* Header */}
-      <div className="w-2/3 flex justify-between items-center mb-6 mx-auto">
-        <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-        {t('teamDetails.title')}
-          <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+      <div className="w-2/3 flex justify-between items-center mb-6 mx-auto relative z-10">
+        <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
+          {t('teamDetails.title')}
+          <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
         </h1>
         <Button
           variant="solid"
-          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
+          className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white hover:shadow-lg transition-shadow duration-300"
           onClick={() => navigate(-1)}
         >
           {t('teamDetails.back')}
@@ -96,14 +110,15 @@ const TeamDetails = () => {
       </div>
 
       {/* Content */}
-      <div className="w-2/3 mx-auto p-6 bg-white shadow-lg rounded-2xl border-2 border-pink-300">
-        <p className="mb-2 text-gray-700 font-poppins">
+      <div className="w-2/3 mx-auto p-6 bg-white dark:bg-[#281459] shadow-lg rounded-2xl border-2 border-pink-300 dark:border-[#E0AAEE] relative z-10">
+        <p className="mb-2 text-gray-700 dark:text-[#D1D5DB] font-poppins">
           <strong>{t('teamDetails.teamName')}:</strong> {teammates[0]?.teamName}
         </p>
-        <p className="mb-4 text-gray-700 font-poppins">
+        <p className="mb-4 text-gray-7
+00 dark:text-[#D1D5DB] font-poppins">
           <strong>{t('teamDetails.contest')}:</strong> {contest?.title || "N/A"}
         </p>
-        <p className="mb-4 text-gray-700 font-poppins">
+        <p className="mb-4 text-gray-700 dark:text-[#D1D5DB] font-poppins">
           <strong>{t('teamDetails.teammates')}:</strong>
         </p>
         {teammates[0]?.teamMembers?.map((member) => {
@@ -112,7 +127,7 @@ const TeamDetails = () => {
           return (
             <p
               key={member.academic_number}
-              className="p-2 border rounded-md bg-gray-100 mb-1 text-gray-700 font-poppins"
+              className="p-2 border rounded-md bg-gray-100 dark:bg-[#3B1E77] mb-1 text-gray-700 dark:text-[#D1D5DB] font-poppins dark:border-[#E0AAEE]"
             >
               {member.fullName} ({member.academic_number}){" "}
               {isLeader && <span className="text-green-500">{t('teamDetails.leader')}</span>}
@@ -122,19 +137,20 @@ const TeamDetails = () => {
 
         <div className="flex space-x-4 mt-4">
           <Button
-            className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
+            className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white hover:shadow-lg transition-shadow duration-300"
             onClick={handleDelete}
           >
             {t('teamDetails.deleteTeam')}
           </Button>
           <Button
-            className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
+            className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white hover:shadow-lg transition-shadow duration-300"
             onClick={() => navigate(`/student/activities/contests/edit-team/${teamId}`)}
           >
             {t('teamDetails.editTeam')}
           </Button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

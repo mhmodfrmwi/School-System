@@ -15,6 +15,8 @@ import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../../ui/Loader";
 import { useTranslation } from 'react-i18next';
+import backgroundWaves from "@/assets/StudentIcon/bg-color2.png";
+import backgroundStars from "@/assets/StudentIcon/bg-color1.png";
 
 // Helper function to extract file ID and get the first page as an image
 const getFirstPageAsImage = (url) => {
@@ -56,7 +58,7 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 mx-1 bg-gray-200 rounded disabled:opacity-50"
+        className="px-4 py-2 mx-1 bg-gray-200 dark:bg-[#3B1E77] text-black dark:text-[#D1D5DB] rounded disabled:opacity-50"
       >
         &lt;
       </button>
@@ -68,7 +70,9 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
             key={pageNumber}
             onClick={() => onPageChange(pageNumber)}
             className={`px-4 py-2 mx-1 ${
-              currentPage === pageNumber ? "bg-blue-500 text-white" : "bg-gray-200"
+              currentPage === pageNumber
+                ? "bg-blue-500 dark:bg-[#AE45FB] text-white"
+                : "bg-gray-200 dark:bg-[#3B1E77] text-black dark:text-[#D1D5DB]"
             } rounded`}
           >
             {pageNumber}
@@ -78,7 +82,7 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 mx-1 bg-gray-200 rounded disabled:opacity-50"
+        className="px-4 py-2 mx-1 bg-gray-200 dark:bg-[#3B1E77] text-black dark:text-[#D1D5DB] rounded disabled:opacity-50"
       >
         &gt;
       </button>
@@ -213,36 +217,50 @@ const LibraryBooksPage = () => {
   const totalPagesPublic = Math.ceil(generalItems.length / itemsPerPage);
   const totalPagesSubject = Math.ceil(filteredMaterials.length / itemsPerPage);
 
- if (initialLoading) {
+  if (initialLoading) {
     return (
-      <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
+      <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto bg-white dark:bg-[#13082F]">
         <Loader role="student" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen w-[95%] mx-auto mt-20 mb-20 font-poppins">
+    <div className="min-h-screen bg-white dark:bg-[#13082F] p-8 relative font-poppins">
+      <div
+        className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
+        style={{
+          backgroundImage: `url(${backgroundStars})`,
+        }}
+      ></div>
+      <div
+        className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
+        style={{
+          backgroundImage: `url(${backgroundWaves})`,
+        }}
+      ></div>
+    <div className="flex min-h-screen w-[95%] mx-auto mt-20 mb-20 font-poppins ">
+
       {/* Sidebar Toggle Button for Small Screens */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="fixed top-24 left-5 z-50 p-2 bg-gray-100 rounded-lg shadow md:hidden"
+        className="fixed top-24 left-5 z-50 p-2 bg-gray-100 dark:bg-[#3B1E77] rounded-lg shadow md:hidden text-black dark:text-[#D1D5DB]"
       >
         {isSidebarOpen ? "✕" : "☰"}
       </button>
 
       {/* Sidebar */}
       <div
-        className={`fixed md:relative z-40 w-64 bg-gray-100 p-6 border h-fit min-h-[75vh] shadow transform transition-transform duration-300 ${
+        className={`fixed md:relative z-40 w-64 bg-gray-100 dark:bg-[#281459] p-6 border border-gray-200 dark:border-[#E0AAEE] h-fit min-h-[75vh] shadow transform transition-transform duration-300 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
-        <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
-        {t('libraryBooks.subjectsTitle')}
+        <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-transparent">
+          {t('libraryBooks.subjectsTitle')}
         </h2>
         <ul>
           <li
-            className="flex items-center cursor-pointer p-2 hover:bg-gray-200 rounded"
+            className="flex items-center cursor-pointer p-2 hover:bg-gray-200 dark:hover:bg-[#3B1E77] rounded"
             onClick={() => {
               setSelectedSubject("all");
               setIsSidebarOpen(!isSidebarOpen);
@@ -261,14 +279,14 @@ const LibraryBooksPage = () => {
               name="subject"
               checked={selectedSubject === "all"}
               onChange={() => setSelectedSubject("all")}
-              className="form-radio h-4 w-4 text-[#BC6FFB] border-[#BC6FFB] focus:ring-[#BC6FFB]"
+              className="form-radio h-4 w-4 text-[#BC6FFB] dark:text-[#AE45FB] border-[#BC6FFB] dark:border-[#AE45FB] focus:ring-[#BC6FFB] dark:focus:ring-[#AE45FB]"
             />
-            <span className="ml-2 text-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
-            {t('libraryBooks.all')}
+            <span className="ml-2 text-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-transparent">
+              {t('libraryBooks.all')}
             </span>
           </li>
           <li
-            className="flex items-center cursor-pointer p-2 hover:bg-gray-200 rounded"
+            className="flex items-center cursor-pointer p-2 hover:bg-gray-200 dark:hover:bg-[#3B1E77] rounded"
             onClick={() => {
               setSelectedSubject("public");
               setIsSidebarOpen(!isSidebarOpen);
@@ -287,16 +305,16 @@ const LibraryBooksPage = () => {
               name="subject"
               checked={selectedSubject === "public"}
               onChange={() => setSelectedSubject("public")}
-              className="form-radio h-4 w-4 text-[#BC6FFB] border-[#BC6FFB] focus:ring-[#BC6FFB]"
+              className="form-radio h-4 w-4 text-[#BC6FFB] dark:text-[#AE45FB] border-[#BC6FFB] dark:border-[#AE45FB] focus:ring-[#BC6FFB] dark:focus:ring-[#AE45FB]"
             />
-            <span className="ml-2 text-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
-            {t('libraryBooks.public')}
+            <span className="ml-2 text-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-transparent">
+              {t('libraryBooks.public')}
             </span>
           </li>
           {pdfSubjects.map((subject, index) => (
             <li
               key={subject.id || index}
-              className="flex items-center cursor-pointer p-2 hover:bg-gray-200 rounded"
+              className="flex items-center cursor-pointer p-2 hover:bg-gray-200 dark:hover:bg-[#3B1E77] rounded"
               onClick={() => {
                 setSelectedSubject(subject);
                 setIsSidebarOpen(!isSidebarOpen);
@@ -315,9 +333,9 @@ const LibraryBooksPage = () => {
                 name="subject"
                 checked={selectedSubject === subject}
                 onChange={() => setSelectedSubject(subject)}
-                className="form-radio h-4 w-4 text-[#BC6FFB] border-[#BC6FFB] focus:ring-[#BC6FFB]"
+                className="form-radio h-4 w-4 text-[#BC6FFB] dark:text-[#AE45FB] border-[#BC6FFB] dark:border-[#AE45FB] focus:ring-[#BC6FFB] dark:focus:ring-[#AE45FB]"
               />
-              <span className="ml-2 text-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
+              <span className="ml-2 text-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-transparent">
                 {subject.subject}
               </span>
             </li>
@@ -326,15 +344,15 @@ const LibraryBooksPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full md:w-4/5 pl-8">
+      <div className="w-full md:w-4/5 pl-8 relative z-10">
         {loading ? (
-          <div className="flex items-center justify-center text-center text-gray-500 mt-10">
-            <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
-            <p className="text-gray-700 text-lg font-semibold">{t('libraryBooks.loading')}</p>
+          <div className="flex items-center justify-center text-center text-gray-500 dark:text-[#D1D5DB] mt-10">
+            <FaSpinner className="animate-spin text-4xl text-blue-500 dark:text-[#AE45FB] mb-4 mr-5" />
+            <p className="text-gray-700 dark:text-[#D1D5DB] text-lg font-semibold">{t('libraryBooks.loading')}</p>
           </div>
         ) : error ? (
-          <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
-            <CardContent className="text-center p-4 text-gray-600">{error}</CardContent>
+          <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center bg-white dark:bg-[#281459]">
+            <CardContent className="text-center p-4 text-gray-600 dark:text-[#D1D5DB]">{error}</CardContent>
           </Card>
         ) : (
           <div>
@@ -342,15 +360,15 @@ const LibraryBooksPage = () => {
             {selectedSubject === "all" && (
               <div>
                 <div className="flex justify-center items-center md:items-start md:justify-start">
-                  <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-                  {t('libraryBooks.libraryTitle')}
-                    <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+                  <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] relative">
+                    {t('libraryBooks.libraryTitle')}
+                    <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
                   </h2>
                 </div>
                 {!loading && !initialLoading && generalPDFs.length === 0 ? (
-                  <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
-                    <CardContent className="text-center p-4 text-gray-600">
-                    {t('libraryBooks.noBooks')}
+                  <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center bg-white dark:bg-[#281459]">
+                    <CardContent className="text-center p-4 text-gray-600 dark:text-[#D1D5DB]">
+                      {t('libraryBooks.noBooks')}
                     </CardContent>
                   </Card>
                 ) : (
@@ -381,7 +399,7 @@ const LibraryBooksPage = () => {
                                 ) : (
                                   <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
                                 )}
-                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white dark:bg-[#281459] text-center text-black dark:text-[#D1D5DB]">
                                   {globalIndex}
                                 </p>
                                 <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
@@ -389,8 +407,8 @@ const LibraryBooksPage = () => {
                                 </h3>
                               </div>
                             </div>
-                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName ||  t('libraryBooks.general')}
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto text-black dark:text-[#D1D5DB]">
+                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || t('libraryBooks.general')}
                             </h2>
                           </div>
                         );
@@ -418,15 +436,15 @@ const LibraryBooksPage = () => {
             {selectedSubject === "public" && (
               <div>
                 <div className="flex justify-center items-center md:items-start md:justify-start">
-                  <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-                  {t('libraryBooks.publicLibraryTitle')}
-                    <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+                  <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] relative">
+                    {t('libraryBooks.publicLibraryTitle')}
+                    <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
                   </h2>
                 </div>
                 {!loading && !initialLoading && generalItems.length === 0 ? (
-                  <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
-                    <CardContent className="text-center p-4 text-gray-600">
-                    {t('libraryBooks.noPublicBooks')}
+                  <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center bg-white dark:bg-[#281459]">
+                    <CardContent className="text-center p-4 text-gray-600 dark:text-[#D1D5DB]">
+                      {t('libraryBooks.noPublicBooks')}
                     </CardContent>
                   </Card>
                 ) : (
@@ -455,7 +473,7 @@ const LibraryBooksPage = () => {
                                 ) : (
                                   <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
                                 )}
-                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white dark:bg-[#281459] text-center text-black dark:text-[#D1D5DB]">
                                   {globalIndex}
                                 </p>
                                 <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
@@ -463,7 +481,9 @@ const LibraryBooksPage = () => {
                                 </h3>
                               </div>
                             </div>
-                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">{t('libraryBooks.general')}</h2>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto text-black dark:text-[#D1D5DB]">
+                              {t('libraryBooks.general')}
+                            </h2>
                           </div>
                         );
                       })}
@@ -491,15 +511,15 @@ const LibraryBooksPage = () => {
               <div>
                 <div className="flex flex-row justify-between items-center mb-8">
                   <div className="flex justify-center items-center md:items-start md:justify-start">
-                    <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
+                    <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] relative">
                       {selectedSubject.subject} {t('libraryBooks.materialsTitle')}
-                      <span className="absolute left-0 bottom-[-9px] w-[85px] md:w-[155px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+                      <span className="absolute left-0 bottom-[-9px] w-[85px] md:w-[155px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
                     </h2>
                   </div>
                   <div className="flex flex-row gap-4 mt-4 sm:mt-0">
                     {/* Grades Select */}
                     <select
-                      className="p-2 border rounded"
+                      className="p-2 border rounded bg-white dark:bg-[#3B1E77] text-gray-700 dark:text-[#D1D5DB] border-gray-300 dark:border-[#E0AAEE]"
                       value={selectedGrade}
                       onChange={(e) => {
                         setTabStates((prev) => ({
@@ -514,14 +534,14 @@ const LibraryBooksPage = () => {
                       <option value="">{t('libraryBooks.filters.allGrades')}</option>
                       {grades.map((grade) => (
                         <option key={grade} value={grade}>
-                           {t('libraryBooks.filters.grade')} {grade}
+                          {t('libraryBooks.filters.grade')} {grade}
                         </option>
                       ))}
                     </select>
 
                     {/* Semesters Select */}
                     <select
-                      className="p-2 border rounded"
+                      className="p-2 border rounded bg-white dark:bg-[#3B1E77] text-gray-700 dark:text-[#D1D5DB] border-gray-300 dark:border-[#E0AAEE]"
                       value={selectedSemester}
                       onChange={(e) => {
                         setTabStates((prev) => ({
@@ -536,16 +556,16 @@ const LibraryBooksPage = () => {
                       <option value="">{t('libraryBooks.filters.allSemesters')}</option>
                       {semesters.map((semester) => (
                         <option key={semester} value={semester}>
-                           {t('libraryBooks.filters.semester')} {semester}
+                          {t('libraryBooks.filters.semester')} {semester}
                         </option>
                       ))}
                     </select>
                   </div>
                 </div>
                 {!loading && !initialLoading && filteredMaterials.length === 0 ? (
-                  <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
-                    <CardContent className="text-center p-4 text-gray-600">
-                    {t('libraryBooks.noMaterials')} {selectedSubject.subject} {t('libraryBooks.noMaterials2')}
+                  <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center bg-white dark:bg-[#281459]">
+                    <CardContent className="text-center p-4 text-gray-600 dark:text-[#D1D5DB]">
+                      {t('libraryBooks.noMaterials')} {selectedSubject.subject} {t('libraryBooks.noMaterials2')}
                     </CardContent>
                   </Card>
                 ) : (
@@ -574,7 +594,7 @@ const LibraryBooksPage = () => {
                                 ) : (
                                   <img src={img2} alt="No preview available" className="w-60 h-[250px] object-cover" />
                                 )}
-                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white text-center text-black">
+                                <p className="z-15 absolute left-28 mx-auto top-[285px] size-5 rounded-full bg-white dark:bg-[#281459] text-center text-black dark:text-[#D1D5DB]">
                                   {globalIndex}
                                 </p>
                                 <h3 className="flex items-center justify-center h-[40px] pt-5 text-[13px] text-white line-clamp-1">
@@ -582,7 +602,7 @@ const LibraryBooksPage = () => {
                                 </h3>
                               </div>
                             </div>
-                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto text-black dark:text-[#D1D5DB]">
                               {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName} -{" "}
                               {item.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName}
                             </h2>
@@ -610,6 +630,8 @@ const LibraryBooksPage = () => {
           </div>
         )}
       </div>
+    </div>
+
     </div>
   );
 };

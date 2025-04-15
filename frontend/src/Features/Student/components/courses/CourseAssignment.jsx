@@ -17,7 +17,6 @@ import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
 import { useTranslation } from 'react-i18next';
 const AssignmentsSection = () => {
     const { t,i18n } = useTranslation();
-    const isRTL = i18n.language === 'ar';
     const role = sessionStorage.getItem("role");
     const dispatch = useDispatch();
     const { gradeSubjectSemesterId, classId } = useParams();
@@ -77,7 +76,7 @@ const AssignmentsSection = () => {
                 dispatch(clearError());
             });
         }
-    }, [error, dispatch]);
+    }, [error, dispatch,t]);
 
     // Categorize and sort assignments for the "All" tab
     const categorizeAndSortAssignments = useCallback(

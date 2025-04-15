@@ -16,7 +16,10 @@ import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
-import { useTranslation } from 'react-i18next';
+import backgroundWaves from "../../../../assets/StudentIcon/bg-color2.png";
+import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
+import { useTranslation } from "react-i18next";
+
 const ExamsSection = () => {
   const { t } = useTranslation();
   const role = sessionStorage.getItem("role");
@@ -77,15 +80,15 @@ const ExamsSection = () => {
   useEffect(() => {
     if (error) {
       Swal.fire({
-        title:t('exams.alerts.error.title'),
+        title: t("exams.alerts.error.title"),
         text: error,
         icon: "error",
-        confirmButtonText: t('exams.alerts.error.confirmButton'),
+        confirmButtonText: t("exams.alerts.error.confirmButton"),
       }).then(() => {
         dispatch(clearError());
       });
     }
-  }, [error, dispatch]);
+  }, [error, dispatch, t]);
 
   // Categorize and sort exams for the "All" tab
   const categorizeAndSortExams = useCallback(
@@ -98,36 +101,29 @@ const ExamsSection = () => {
         const bStart = new Date(b.start_time);
         const bEnd = new Date(b.end_time);
 
-        // Check if the exam is active (started but not ended)
         const isAActive = aStart <= now && aEnd > now;
         const isBActive = bStart <= now && bEnd > now;
 
-        // Check if the exam is submitted or expired
         const aSession = sessions.find((session) => session.exam_id?._id === a._id);
         const bSession = sessions.find((session) => session.exam_id?._id === b._id);
         const isASubmittedOrExpired = aSession?.status === "Submitted" || aSession?.isExpired === true;
         const isBSubmittedOrExpired = bSession?.status === "Submitted" || bSession?.isExpired === true;
 
-        // Priority 1: Active exams that are not submitted or expired
         if (isAActive && !isASubmittedOrExpired && !(isBActive && !isBSubmittedOrExpired)) return -1;
         if (isBActive && !isBSubmittedOrExpired && !(isAActive && !isASubmittedOrExpired)) return 1;
 
-        // Priority 2: Not started exams
         if (aStart > now && bStart <= now) return -1;
         if (bStart > now && aStart <= now) return 1;
 
-        // Priority 3: Active exams that are submitted or expired
         if (isAActive && isASubmittedOrExpired && !(isBActive && isBSubmittedOrExpired)) return -1;
         if (isBActive && isBSubmittedOrExpired && !(isAActive && isASubmittedOrExpired)) return 1;
 
-        // Priority 4: Completed or missed exams
-        return bEnd - aEnd; // Sort by end time (most recent first)
+        return bEnd - aEnd;
       });
     },
-    [sessions] // sessions is a dependency because it's used inside the function
+    [sessions]
   );
 
-  // Update filteredExams when activeTab, exams, or sessions change
   useEffect(() => {
     let examsToDisplay = [];
     if (activeTab === "all") {
@@ -149,20 +145,20 @@ const ExamsSection = () => {
 
     if (now < startTime) {
       Swal.fire({
-        title:  t('exams.alerts.notStarted.title'),
-        text:  t('exams.alerts.notStarted.message'),
+        title: t("exams.alerts.notStarted.title"),
+        text: t("exams.alerts.notStarted.message"),
         icon: "warning",
-        confirmButtonText:t('exams.alerts.notStarted.confirmButton'),
+        confirmButtonText: t("exams.alerts.notStarted.confirmButton"),
       });
       return;
     }
 
     if (now > endTime) {
       Swal.fire({
-        title:  t('exams.alerts.examEnded.title'),
-        text:  t('exams.alerts.examEnded.message'),
+        title: t("exams.alerts.examEnded.title"),
+        text: t("exams.alerts.examEnded.message"),
         icon: "error",
-        confirmButtonText: t('exams.alerts.examEnded.confirmButton'),
+        confirmButtonText: t("exams.alerts.examEnded.confirmButton"),
       });
       return;
     }
@@ -171,36 +167,32 @@ const ExamsSection = () => {
 
     if (session && session.status === "Expired") {
       Swal.fire({
-        title:  t('exams.alerts.sessionExpired.title'),
-        text:  t('exams.alerts.sessionExpired.message'),
+        title: t("exams.alerts.sessionExpired.title"),
+        text: t("exams.alerts.sessionExpired.message"),
         icon: "error",
-        confirmButtonText:  t('exams.alerts.sessionExpired.confirmButton'),
+        confirmButtonText: t("exams.alerts.sessionExpired.confirmButton"),
       });
       return;
     }
 
     dispatch(startExamSession(exam._id)).then((action) => {
       if (startExamSession.fulfilled.match(action)) {
-        // If the session starts successfully, navigate to the exam page
         navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
       } else {
-        // Check if the error message indicates an active session
         if (action.payload === "You already have an active session for this exam") {
           Swal.fire({
-            title: t('exams.alerts.activeSession.title'),
-            text: t('exams.alerts.activeSession.message'),
+            title: t("exams.alerts.activeSession.title"),
+            text: t("exams.alerts.activeSession.message"),
             icon: "warning",
-            confirmButtonText:  t('exams.alerts.activeSession.confirmButton'),
+            confirmButtonText: t("exams.alerts.activeSession.confirmButton"),
           });
-          // Navigate to the exam page even if this error occurs
           navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
         } else {
-          // Handle other errors normally
           Swal.fire({
-            title: t('exams.alerts.error.title'),
-            text: action.payload || t('exams.alerts.error.message'),
+            title: t("exams.alerts.error.title"),
+            text: action.payload || t("exams.alerts.error.message"),
             icon: "error",
-            confirmButtonText: t('exams.alerts.error.confirmButton'),
+            confirmButtonText: t("exams.alerts.error.confirmButton"),
           });
         }
       }
@@ -208,20 +200,35 @@ const ExamsSection = () => {
   };
 
   // Pagination logic
-  const currentPage = activeTab === "all" ? currentPageAll : activeTab === "upcoming" ? currentPageUpcoming : activeTab === "completed" ? currentPageCompleted : currentPageMissed;
+  const currentPage =
+    activeTab === "all"
+      ? currentPageAll
+      : activeTab === "upcoming"
+      ? currentPageUpcoming
+      : activeTab === "completed"
+      ? currentPageCompleted
+      : currentPageMissed;
   const totalPagesAll = Math.ceil(filteredExams.length / itemsPerPage);
   const totalPagesUpcoming = Math.ceil(upcomingExams.length / itemsPerPage);
   const totalPagesCompleted = Math.ceil(completedExams.length / itemsPerPage);
   const totalPagesMissed = Math.ceil(missedExams.length / itemsPerPage);
-  const totalPages = activeTab === "all" ? totalPagesAll : activeTab === "upcoming" ? totalPagesUpcoming : activeTab === "completed" ? totalPagesCompleted : totalPagesMissed;
+  const totalPages =
+    activeTab === "all"
+      ? totalPagesAll
+      : activeTab === "upcoming"
+      ? totalPagesUpcoming
+      : activeTab === "completed"
+      ? totalPagesCompleted
+      : totalPagesMissed;
 
-  const paginatedExams = activeTab === "all"
-    ? filteredExams.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage)
-    : activeTab === "upcoming"
+  const paginatedExams =
+    activeTab === "all"
+      ? filteredExams.slice((currentPageAll - 1) * itemsPerPage, currentPageAll * itemsPerPage)
+      : activeTab === "upcoming"
       ? upcomingExams.slice((currentPageUpcoming - 1) * itemsPerPage, currentPageUpcoming * itemsPerPage)
       : activeTab === "completed"
-        ? completedExams.slice((currentPageCompleted - 1) * itemsPerPage, currentPageCompleted * itemsPerPage)
-        : missedExams.slice((currentPageMissed - 1) * itemsPerPage, currentPageMissed * itemsPerPage);
+      ? completedExams.slice((currentPageCompleted - 1) * itemsPerPage, currentPageCompleted * itemsPerPage)
+      : missedExams.slice((currentPageMissed - 1) * itemsPerPage, currentPageMissed * itemsPerPage);
 
   const nextPage = () => {
     if (activeTab === "all" && currentPageAll < totalPagesAll) {
@@ -247,261 +254,306 @@ const ExamsSection = () => {
     }
   };
 
-  // Show full-page loading during initial data fetch
   if (initialLoading) {
     return (
-      <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
-        <Loader role={role}/>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#13082F]">
+        <Loader role={role} />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-12 mb-20">
-      {/* Sidebar */}
-      <div className="w-full md:w-1/4 bg-white md:border-r border-gray-300 p-6 mt-2 md:h-[550px]">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-          {subjectName}
-          <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
-        </h2>
-        <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
-          <li>
-            <Button
-              variant="solid"
-              className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-              onClick={() => navigate(`/student/allcourses/videos/${gradeSubjectSemesterId}`)}
-            >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> {t('exams.sidebar.videoLectures')}
-            </Button>
-          </li>
-          <li>
-            <Button
-              variant="solid"
-              className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-              onClick={() => navigate(`/student/allcourses/materials/${gradeSubjectSemesterId}`)}
-            >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">02</span> {t('exams.sidebar.courseMaterial')}
-            </Button>
-          </li>
-          <li>
-            <Button
-              variant="solid"
-              className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-              onClick={() => navigate(`/student/allcourses/virtualrooms/${gradeSubjectSemesterId}`)}
-            >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span>  {t('exams.sidebar.virtualRooms')}
-            </Button>
-          </li>
-          <li>
-            <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-              onClick={() => navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}`)}
-            >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> {t('exams.sidebar.assignments') }
-            </Button>
-          </li>
-          <li>
-            <Button variant="solid" className="md:w-11/12 bg-[#BFBFBF] text-white font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span>  {t('exams.sidebar.exams')}
-            </Button>
-          </li>
-          <li>
-            <Button
-              variant="solid"
-              className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
-              onClick={() => navigate(`/student/allcourses/questionbank/${gradeSubjectSemesterId}`)}
-            >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> {t('exams.sidebar.questionBank')}
-            </Button>
-          </li>
-        </ul>
-      </div>
+    <div className="min-h-screen bg-white dark:bg-[#13082F] p-6 relative">
+      <div
+        className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
+        style={{
+          backgroundImage: `url(${backgroundStars})`,
+        }}
+      ></div>
 
-      {/* Main Content */}
-      <div className="flex-1 w-full md:w-3/4 p-4 mt-6">
-        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">{t('exams.main.title')}</h1>
+      <div
+        className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
+        style={{
+          backgroundImage: `url(${backgroundWaves})`,
+        }}
+      ></div>
 
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap gap-3 mb-6">
-          <Button
-            variant={activeTab === "all" ? "outline" : "solid"}
-            className={`${activeTab === "all"
-              ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
-              : "border border-gray-500 text-gray-800"
-              } px-4 md:px-6 py-2 rounded-full`}
-            onClick={() => setActiveTab("all")}
-          >
-            {t('exams.main.allTab')} ({exams.length})
-          </Button>
-          <Button
-            variant={activeTab === "upcoming" ? "outline" : "solid"}
-            className={`${activeTab === "upcoming"
-              ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
-              : "border border-gray-500 text-gray-800"
-              } px-4 md:px-6 py-2 rounded-full`}
-            onClick={() => setActiveTab("upcoming")}
-          >
-            {t('exams.main.upcomingTab')} ({upcomingExams.length})
-          </Button>
-          <Button
-            variant={activeTab === "completed" ? "outline" : "solid"}
-            className={`${activeTab === "completed"
-              ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
-              : "border border-gray-500 text-gray-800"
-              } px-4 md:px-6 py-2 rounded-full`}
-            onClick={() => setActiveTab("completed")}
-          >
-            {t('exams.main.completedTab')} ({completedExams.length})
-          </Button>
-          <Button
-            variant={activeTab === "missed" ? "outline" : "solid"}
-            className={`${activeTab === "missed"
-              ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
-              : "border border-gray-500 text-gray-800"
-              } px-4 md:px-6 py-2 rounded-full`}
-            onClick={() => setActiveTab("missed")}
-          >
-            {t('exams.main.missedTab')} ({missedExams.length})
-          </Button>
+      <div className="relative z-10 flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-12 mb-20">
+        {/* Sidebar */}
+        <div className="w-full md:w-1/4 bg-white dark:bg-[#13082F] md:border-r border-gray-300 dark:border-[#E0AAEE] p-6 mt-2 md:h-[550px]">
+          <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] relative">
+            {subjectName}
+            <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
+          </h2>
+          <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
+            <li>
+              <Button
+                variant="solid"
+                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
+                onClick={() => navigate(`/student/allcourses/videos/${gradeSubjectSemesterId}`)}
+              >
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">01</span>
+                {t("exams.sidebar.videoLectures")}
+              </Button>
+            </li>
+            <li>
+              <Button
+                variant="solid"
+                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
+                onClick={() => navigate(`/student/allcourses/materials/${gradeSubjectSemesterId}`)}
+              >
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">02</span>
+                {t("exams.sidebar.courseMaterial")}
+              </Button>
+            </li>
+            <li>
+              <Button
+                variant="solid"
+                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
+                onClick={() => navigate(`/student/allcourses/virtualrooms/${gradeSubjectSemesterId}`)}
+              >
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span>
+                {t("exams.sidebar.virtualRooms")}
+              </Button>
+            </li>
+            <li>
+              <Button
+                variant="solid"
+                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
+                onClick={() => navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}`)}
+              >
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">04</span>
+                {t("exams.sidebar.assignments")}
+              </Button>
+            </li>
+            <li>
+              <Button
+                variant="solid"
+                className="md:w-11/12 bg-[#BFBFBF] dark:bg-[#C459D9] text-white font-medium py-4 rounded-lg"
+              >
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">05</span>
+                {t("exams.sidebar.exams")}
+              </Button>
+            </li>
+            <li>
+              <Button
+                variant="solid"
+                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
+                onClick={() => navigate(`/student/allcourses/questionbank/${gradeSubjectSemesterId}`)}
+              >
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">06</span>
+                {t("exams.sidebar.questionBank")}
+              </Button>
+            </li>
+          </ul>
         </div>
 
-        {/* Secondary Loading State (for actions after initial load) */}
-        {loading && !initialLoading && (
-          <div className="flex items-center justify-center text-center text-gray-500 mt-10">
-            <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
-            <p className="text-gray-700 text-lg font-semibold">{t('exams.main.loading')}</p>
+        {/* Main Content */}
+        <div className="flex-1 w-full md:w-3/4 p-4 mt-6">
+          <h1 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-300 mb-4">
+            {t("exams.main.title")}
+          </h1>
+
+          {/* Filter Buttons */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            <Button
+              variant={activeTab === "all" ? "outline" : "solid"}
+              className={`${
+                activeTab === "all"
+                  ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                  : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+              } px-4 md:px-6 py-2 rounded-full`}
+              onClick={() => setActiveTab("all")}
+            >
+              {t("exams.main.allTab")} ({exams.length})
+            </Button>
+            <Button
+              variant={activeTab === "upcoming" ? "outline" : "solid"}
+              className={`${
+                activeTab === "upcoming"
+                  ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                  : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+              } px-4 md:px-6 py-2 rounded-full`}
+              onClick={() => setActiveTab("upcoming")}
+            >
+              {t("exams.main.upcomingTab")} ({upcomingExams.length})
+            </Button>
+            <Button
+              variant={activeTab === "completed" ? "outline" : "solid"}
+              className={`${
+                activeTab === "completed"
+                  ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                  : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+              } px-4 md:px-6 py-2 rounded-full`}
+              onClick={() => setActiveTab("completed")}
+            >
+              {t("exams.main.completedTab")} ({completedExams.length})
+            </Button>
+            <Button
+              variant={activeTab === "missed" ? "outline" : "solid"}
+              className={`${
+                activeTab === "missed"
+                  ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                  : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+              } px-4 md:px-6 py-2 rounded-full`}
+              onClick={() => setActiveTab("missed")}
+            >
+              {t("exams.main.missedTab")} ({missedExams.length})
+            </Button>
           </div>
-        )}
 
-        {/* Content Area - only show when not in loading state */}
-        {!loading && (
-          <>
-            {/* No Exams Message */}
-            {activeTab === "all" && filteredExams.length === 0 && (
-              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-                <CardContent className="text-center p-4 text-gray-600">
-                {t('exams.main.noExams.all')}
-                </CardContent>
-              </Card>
-            )}
-            {activeTab === "upcoming" && upcomingExams.length === 0 && (
-              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-                <CardContent className="text-center p-4 text-gray-600">
-                {t('exams.main.noExams.upcoming')}
-                </CardContent>
-              </Card>
-            )}
-            {activeTab === "completed" && completedExams.length === 0 && (
-              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-                <CardContent className="text-center p-4 text-gray-600">
-                {t('exams.main.noExams.completed')}
-                </CardContent>
-              </Card>
-            )}
-            {activeTab === "missed" && missedExams.length === 0 && (
-              <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-                <CardContent className="text-center p-4 text-gray-600">
-                {t('exams.main.noExams.missed')}
-                </CardContent>
-              </Card>
-            )}
+          {/* Secondary Loading State (for actions after initial load) */}
+          {loading && !initialLoading && (
+            <div className="flex items-center justify-center text-center text-gray-500 dark:text-gray-300 mt-10">
+              <FaSpinner className="animate-spin text-4xl text-blue-500 dark:text-[#C459D9] mb-4 mr-5" />
+              <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold">
+                {t("exams.main.loading")}
+              </p>
+            </div>
+          )}
 
-            {/* Exam Cards */}
-            {filteredExams.length > 0 && (
-              <div className="space-y-4">
-                {paginatedExams.map((exam, index) => (
-                  <Card key={exam._id} className="border border-gray-200 rounded-xl shadow-sm">
-                    <CardContent className="flex items-center justify-center p-4 bg-gray-100">
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className="w-10 h-10 flex items-center justify-center bg-pink-200 rounded-full text-pink-600 font-bold">
-                          {index + 1 + (currentPage - 1) * itemsPerPage}
+          {/* Content Area - only show when not in loading state */}
+          {!loading && (
+            <>
+              {/* No Exams Message */}
+              {activeTab === "all" && filteredExams.length === 0 && (
+                <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center dark:bg-[#281459]">
+                  <CardContent className="text-center p-4 text-gray-600 dark:text-gray-300">
+                    {t("exams.main.noExams.all")}
+                  </CardContent>
+                </Card>
+              )}
+              {activeTab === "upcoming" && upcomingExams.length === 0 && (
+                <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center dark:bg-[#281459]">
+                  <CardContent className="text-center p-4 text-gray-600 dark:text-gray-300">
+                    {t("exams.main.noExams.upcoming")}
+                  </CardContent>
+                </Card>
+              )}
+              {activeTab === "completed" && completedExams.length === 0 && (
+                <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center dark:bg-[#281459]">
+                  <CardContent className="text-center p-4 text-gray-600 dark:text-gray-300">
+                    {t("exams.main.noExams.completed")}
+                  </CardContent>
+                </Card>
+              )}
+              {activeTab === "missed" && missedExams.length === 0 && (
+                <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center dark:bg-[#281459]">
+                  <CardContent className="text-center p-4 text-gray-600 dark:text-gray-300">
+                    {t("exams.main.noExams.missed")}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Exam Cards */}
+              {filteredExams.length > 0 && (
+                <div className="space-y-4">
+                  {paginatedExams.map((exam, index) => (
+                    <Card key={exam._id} className="border border-gray-200 dark:border-none rounded-xl shadow-sm">
+                      <CardContent className="flex items-center justify-center p-4 bg-gray-100 dark:bg-[#281459]">
+                        <div className="flex items-center gap-3 flex-1">
+                          <div className="w-10 h-10 flex items-center justify-center bg-pink-200 dark:bg-[#C459D9] rounded-full text-pink-600 dark:text-white font-bold">
+                            {index + 1 + (currentPage - 1) * itemsPerPage}
+                          </div>
+                          <div>
+                            <h2 className="text-base md:text-lg font-semibold text-gray-800 dark:text-gray-300">
+                              {exam.title}
+                            </h2>
+                            <p className="text-md text-gray-700 dark:text-gray-400">
+                              {t("exams.main.examCard.description")}: {exam.description}
+                            </p>
+                            <p className="text-sm text-gray-700 dark:text-gray-400">
+                              {t("exams.main.examCard.createdBy")}: {exam.created_by.fullName}
+                            </p>
+                            <p className="text-sm text-gray-700 dark:text-gray-400">
+                              {t("exams.main.examCard.duration")}: {exam.duration}{" "}
+                              {t("exams.main.examCard.minutes")}
+                            </p>
+                            <p className="text-sm text-gray-700 dark:text-gray-400">
+                              {t("exams.main.examCard.startTime")}:{" "}
+                              {new Date(exam.start_time).toLocaleString()}
+                              <span className="text-pink-600 dark:text-[#C459D9]"> | </span>
+                              {t("exams.main.examCard.endTime")}:{" "}
+                              {new Date(exam.end_time).toLocaleString()}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h2 className="text-base md:text-lg font-semibold text-gray-800">{exam.title}</h2>
-                          <p className="text-md text-gray-700">{t('exams.main.examCard.description')}: {exam.description}</p>
-                          <p className="text-sm text-gray-700">{t('exams.main.examCard.createdBy')}: {exam.created_by.fullName}</p>
-                          <p className="text-sm text-gray-700">{t('exams.main.examCard.duration')}: {exam.duration}  {t('exams.main.examCard.minutes')}</p>
-                          <p className="text-sm text-gray-700">
-                          {t('exams.main.examCard.startTime')}: {new Date(exam.start_time).toLocaleString()}
-                            <span className="text-pink-600"> | </span>
-                            {t('exams.main.examCard.endTime')}: {new Date(exam.end_time).toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
 
-                      {/* Start Exam */}
-                      <div
-                        className="ml-4"
-                        title={
-                          new Date() < new Date(exam.start_time)
-                            ?  t('exams.main.examCard.notStartedTooltip')
-                            : new Date() > new Date(exam.end_time)
-                              ?t('exams.main.examCard.endedTooltip')
+                        {/* Start Exam */}
+                        <div
+                          className="ml-4"
+                          title={
+                            new Date() < new Date(exam.start_time)
+                              ? t("exams.main.examCard.notStartedTooltip")
+                              : new Date() > new Date(exam.end_time)
+                              ? t("exams.main.examCard.endedTooltip")
                               : ""
-                        }
-                      >
-                        <Button
-                          variant="solid"
-                          className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-3 py-2 rounded-lg"
-                          onClick={() => {
-                            const session = sessions.find((session) => session.exam_id?._id === exam._id);
-                            if (
-                              session?.status === "Submitted" ||
-                              session?.isExpired === true
-                            ) {
-                              // Navigate to the results page
-                              navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/result/${exam._id}`);
-                            } else {
-                              // Handle starting the exam
-                              handleStartExam(exam);
-                            }
-                          }}
-                          disabled={
-                            (new Date() > new Date(exam.end_time) && !sessions.find((session) => session.exam_id?._id === exam._id)) ||
-                            new Date() < new Date(exam.start_time) ||
-                            exam.type === "Offline"
                           }
                         >
-                          {(() => {
-                            if (exam.type === "Offline") return t('exams.main.examCard.offline');
-                            const session = sessions.find((session) => session.exam_id?._id === exam._id);
-                            if (session?.status === "Submitted") return t('exams.main.examCard.view');
-                            if (session?.isExpired === true) return t('exams.main.examCard.view');
-                            if (new Date() < new Date(exam.start_time)) return t('exams.main.examCard.notStarted');
-                            if (new Date() > new Date(exam.end_time)) return t('exams.main.examCard.ended');
-                            return t('exams.main.examCard.start');
-                          })()}
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
+                          <Button
+                            variant="solid"
+                            className="text-white bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] px-3 py-2 rounded-lg"
+                            onClick={() => {
+                              const session = sessions.find((session) => session.exam_id?._id === exam._id);
+                              if (session?.status === "Submitted" || session?.isExpired === true) {
+                                navigate(
+                                  `/student/allcourses/exams/${gradeSubjectSemesterId}/result/${exam._id}`
+                                );
+                              } else {
+                                handleStartExam(exam);
+                              }
+                            }}
+                            disabled={
+                              (new Date() > new Date(exam.end_time) &&
+                                !sessions.find((session) => session.exam_id?._id === exam._id)) ||
+                              new Date() < new Date(exam.start_time) ||
+                              exam.type === "Offline"
+                            }
+                          >
+                            {(() => {
+                              if (exam.type === "Offline") return t("exams.main.examCard.offline");
+                              const session = sessions.find((session) => session.exam_id?._id === exam._id);
+                              if (session?.status === "Submitted") return t("exams.main.examCard.view");
+                              if (session?.isExpired === true) return t("exams.main.examCard.view");
+                              if (new Date() < new Date(exam.start_time))
+                                return t("exams.main.examCard.notStarted");
+                              if (new Date() > new Date(exam.end_time))
+                                return t("exams.main.examCard.ended");
+                              return t("exams.main.examCard.start");
+                            })()}
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
 
-            {/* Pagination Controls */}
-            {filteredExams.length > itemsPerPage && (
-              <div className="flex justify-center items-center gap-4 mb-4 mt-10">
-                <button
-                  onClick={prevPage}
-                  disabled={currentPage === 1}
-                  className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-                >
-                  <FaChevronLeft />
-                </button>
-                <span className="text-gray-800 font-medium">
-                {t('exams.main.page')} {currentPage} {t('exams.main.of')} {totalPages}
-                </span>
-                <button
-                  onClick={nextPage}
-                  disabled={currentPage === totalPages}
-                  className="p-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-                >
-                  <FaChevronRight />
-                </button>
-              </div>
-            )}
-          </>
-        )}
+              {/* Pagination Controls */}
+              {filteredExams.length > itemsPerPage && (
+                <div className="flex justify-center items-center gap-4 mb-4 mt-10">
+                  <button
+                    onClick={prevPage}
+                    disabled={currentPage === 1}
+                    className="p-2 bg-gray-200 dark:bg-[#312A5E] text-gray-700 dark:text-gray-300 rounded-full disabled:opacity-50"
+                  >
+                    <FaChevronLeft />
+                  </button>
+                  <span className="text-gray-800 dark:text-gray-300 font-medium">
+                    {t("exams.main.page")} {currentPage} {t("exams.main.of")} {totalPages}
+                  </span>
+                  <button
+                    onClick={nextPage}
+                    disabled={currentPage === totalPages}
+                    className="p-2 bg-gray-200 dark:bg-[#312A5E] text-gray-700 dark:text-gray-300 rounded-full disabled:opacity-50"
+                  >
+                    <FaChevronRight />
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

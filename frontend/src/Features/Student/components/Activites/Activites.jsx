@@ -5,6 +5,8 @@ import { getStudentSchoolHubs, createStudentSchoolHub, getStudentSchoolHubById, 
 import Loader from "@/ui/Loader";
 import Swal from "sweetalert2";
 import { useTranslation } from 'react-i18next';
+import backgroundWaves from "@/assets/StudentIcon/bg-color2.png";
+import backgroundStars from "@/assets/StudentIcon/bg-color1.png";
 
 const Activities = () => {
     const { t } = useTranslation();
@@ -22,11 +24,11 @@ const Activities = () => {
         if (error) {
             Swal.fire({
                 icon: 'error',
-                title:  t("activities.errors.title"),
-                text: error||t("activities.errors.default"),
+                title: t("activities.errors.title"),
+                text: error || t("activities.errors.default"),
             });
         }
-    }, [error]);
+    }, [error, t]);
 
     useEffect(() => {
         if (schoolHubs.length > 0) {
@@ -63,40 +65,52 @@ const Activities = () => {
             Swal.fire({
                 icon: 'error',
                 title: t("activities.errors.title"),
-                text: error.message|| t("activities.errors.default"),
+                text: error.message || t("activities.errors.default"),
             });
         }
     };
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
+            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#13082F]">
                 <Loader role={role} />
             </div>
         );
     }
 
     return (
-        <div className="font-poppins min-h-screen w-[90%] mx-auto mt-16">
-            
-            <div className="col-span-2 flex flex-col justify-between ms-5">
+        <div className="min-h-screen bg-white dark:bg-[#13082F] p-8 relative font-poppins">
+      <div
+        className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
+        style={{
+          backgroundImage: `url(${backgroundStars})`,
+        }}
+      ></div>
+      <div
+        className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
+        style={{
+          backgroundImage: `url(${backgroundWaves})`,
+        }}
+      ></div>
+        <div className="font-poppins min-h-screen w-[90%] mx-auto mt-16 ">
+            <div className="col-span-2 flex flex-col justify-between ms-5 relative z-10">
                 {/* Updated Header */}
                 <div className="mb-1">
-                    <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-3xl font-semibold text-transparent">
-                    {t("activities.title")}
-                        <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
+                    <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-3xl font-semibold text-transparent">
+                        {t("activities.title")}
+                        <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></span>
                     </h1>
 
                     {/* Updated Buttons Section */}
                     <div className="mb-2 mt-22 flex items-center gap-8">
                         <button
-                            className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-2 text-lg font-medium text-white focus:outline-none mt-8"
+                            className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] py-2 text-lg font-medium text-white focus:outline-none mt-8"
                             onClick={() => navigate("/student/activities")}
                         >
                             {t("activities.tabs.schoolHubs")}
                         </button>
                         <button
-                            className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 text-lg font-medium text-transparent mt-8"
+                            className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text py-2 text-lg font-medium text-transparent mt-8"
                             onClick={() => navigate("/student/activities/contests")}
                         >
                             {t("activities.tabs.contests")}
@@ -111,51 +125,51 @@ const Activities = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             {Array.isArray(schoolHubs) && schoolHubs.length > 0 ? (
                                 schoolHubs.map((hub) => (
-                                    <div key={hub._id} className="flex flex-col w-full border rounded-lg p-5 text-center bg-[#F5F5F5] shadow-md hover:shadow-lg">
-                                        <h3 className="font-bold font-poppins text-xl text-[#CF72C0]">{hub.title}</h3>
-                                        <hr className="my-4 border-t border-gray-300" />
+                                    <div key={hub._id} className="flex flex-col w-full border rounded-lg p-5 text-center bg-[#F5F5F5] dark:bg-[#281459] shadow-md hover:shadow-lg dark:border-[#E0AAEE]">
+                                        <h3 className="font-bold font-poppins text-xl text-[#CF72C0] dark:text-[#E0AAEE]">{hub.title}</h3>
+                                        <hr className="my-4 border-t border-gray-300 dark:border-[#E0AAEE]" />
                                         <div className="flex flex-col items-center mt-2">
-                                            <p className="text-sm font-poppins">{t("activities.hubCard.registrationStart")}:</p>
-                                            <p className="text-sm font-semibold font-poppins">{new Date(hub.registrationStart).toLocaleString()}</p>
+                                            <p className="text-sm font-poppins text-[#5e5b63] dark:text-[#D1D5DB]">{t("activities.hubCard.registrationStart")}:</p>
+                                            <p className="text-sm font-semibold font-poppins text-[#5e5b63] dark:text-[#E0AAEE]">{new Date(hub.registrationStart).toLocaleString()}</p>
                                         </div>
                                         <div className="flex flex-col items-center mt-2">
-                                            <p className="text-sm font-poppins">{t("activities.hubCard.registrationEnd")}:</p>
-                                            <p className="text-sm font-semibold font-poppins">{new Date(hub.registrationEnd).toLocaleString()}</p>
+                                            <p className="text-sm font-poppins text-[#5e5b63] dark:text-[#D1D5DB]">{t("activities.hubCard.registrationEnd")}:</p>
+                                            <p className="text-sm font-semibold font-poppins text-[#5e5b63] dark:text-[#E0AAEE]">{new Date(hub.registrationEnd).toLocaleString()}</p>
                                         </div>
                                         <div className="flex flex-col items-center mt-2">
-                                            <p className="text-sm font-poppins">{t("activities.hubCard.contestDate")}:</p>
-                                            <p className="text-sm font-semibold font-poppins">{new Date(hub.contestDate).toLocaleString()}</p>
+                                            <p className="text-sm font-poppins text-[#5e5b63] dark:text-[#D1D5DB]">{t("activities.hubCard.contestDate")}:</p>
+                                            <p className="text-sm font-semibold font-poppins text-[#5e5b63] dark:text-[#E0AAEE]">{new Date(hub.contestDate).toLocaleString()}</p>
                                         </div>
 
                                         <div className="flex flex-col items-center gap-4 mt-4">
                                             <div className="flex gap-2">
                                                 <button
-                                                    className="cursor-pointer font-poppins rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 text-sm font-medium text-white transition-transform transform hover:scale-105 shadow-md"
+                                                    className="cursor-pointer font-poppins rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] px-5 py-2 text-sm font-medium text-white transition-transform transform hover:scale-105 shadow-md"
                                                     onClick={() => navigate(`/student/activities/detailes/${hub._id}`)}
                                                 >
-                                                     {t("activities.hubCard.details")}
+                                                    {t("activities.hubCard.details")}
                                                 </button>
                                                 <button
-                                                    className="cursor-pointer font-poppins rounded-3xl border border-[#CF72C0] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 text-sm font-medium text-transparent transition-transform transform hover:scale-105 shadow-md"
+                                                    className="cursor-pointer font-poppins rounded-3xl border border-[#CF72C0] dark:border-[#E0AAEE] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text px-5 py-2 text-sm font-medium text-transparent transition-transform transform hover:scale-105 shadow-md"
                                                     onClick={() => navigate(`/student/activities/prizes/${hub._id}`)}
                                                 >
                                                     {t("activities.hubCard.prizes")}
                                                 </button>
                                             </div>
                                             <button
-                                                className={`cursor-pointer font-poppins rounded-3xl border border-[#CF72C0] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 text-sm font-medium text-transparent transition-transform transform hover:scale-105 shadow-md`}
+                                                className={`cursor-pointer font-poppins rounded-3xl border border-[#CF72C0] dark:border-[#E0AAEE] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text px-5 py-2 text-sm font-medium text-transparent transition-transform transform hover:scale-105 shadow-md`}
                                                 onClick={() => handleToggleParticipation(hub._id)}
                                             >
-                                                {participationStatus[hub._id] ? t("activities.hubCard.disjoin") :  t("activities.hubCard.join")}
+                                                {participationStatus[hub._id] ? t("activities.hubCard.disjoin") : t("activities.hubCard.join")}
                                             </button>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="flex flex-col items-center justify-center font-poppins bg-[#F9FAFB] min-h-[200px] w-full sm:w-2/3 px-6 sm:px-12 py-10 rounded-lg shadow-lg mt-10 text-center col-span-full">
-                                    <p className="text-xl font-semibold text-gray-600 mb-2">{t("activities.hubCard.noHubs")}</p>
-                                    <p className="text-gray-500 mb-4 text-center max-w-lg">
-                                    {t("activities.hubCard.noHubsMessage")}
+                                <div className="flex flex-col items-center justify-center font-poppins bg-[#F9FAFB] dark:bg-[#281459] min-h-[200px] w-full sm:w-2/3 px-6 sm:px-12 py-10 rounded-lg shadow-lg mt-10 text-center col-span-full border dark:border-[#E0AAEE]">
+                                    <p className="text-xl font-semibold text-gray-600 dark:text-[#E0AAEE] mb-2">{t("activities.hubCard.noHubs")}</p>
+                                    <p className="text-gray-500 dark:text-[#D1D5DB] mb-4 text-center max-w-lg">
+                                        {t("activities.hubCard.noHubsMessage")}
                                     </p>
                                 </div>
                             )}
@@ -163,6 +177,7 @@ const Activities = () => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 };

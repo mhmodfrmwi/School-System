@@ -13,13 +13,22 @@ import Icon6 from "../../../assets/StudentIcon/Icon6.png";
 import Icon7 from "../../../assets/StudentIcon/Icon7.png";
 import Icon8 from "../../../assets/StudentIcon/Icon8.png";
 import Icon12 from "../../../assets/StudentIcon/Icon12.png";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from 'react-i18next';
+import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
 
 const Sidebar = ({ closeSidebar }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { fullName } = useSelector((state) => state.login);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    sessionStorage.removeItem("role");
+    navigate("/role");
+    closeSidebar();
+  };
 
   const menuItems = [
     { label: t('Home'), icon: Icon1, path: "/student" },
@@ -30,7 +39,11 @@ const Sidebar = ({ closeSidebar }) => {
     { label: t('GradeManagements'), icon: Icon6, path: "/student/grades" },
     { label: t('Activities'), icon: Icon7, path: "/student/activities" },
     { label: t('Library'), icon: Icon8, path: "/student/library" },
-    { label: t('Logout'), icon: Icon12, path: "/login" },
+    { 
+      label: t('Logout'), 
+      icon: Icon12, 
+      onClick: handleLogout 
+    },
   ];
 
   return (
@@ -69,8 +82,12 @@ const Sidebar = ({ closeSidebar }) => {
             <li
               key={index}
               onClick={() => {
-                navigate(item.path);
-                closeSidebar();
+                if (item.onClick) {
+                  item.onClick();
+                } else {
+                  navigate(item.path);
+                  closeSidebar();
+                }
               }}
               className="flex cursor-pointer items-center p-2 font-poppins text-[#043B44] dark:text-white transition-transform duration-200 hover:bg-gray-100 dark:hover:bg-[#5A4A7B] hover:shadow-sm"
             >

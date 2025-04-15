@@ -93,7 +93,7 @@ const MaterialSection = () => {
         dispatch(clearError());
       });
     }
-  }, [error, dispatch]);
+  }, [error, dispatch, t]);
 
   // pagination
   const currentPage = activeTab === "all" ? currentPageAll : currentPageBookmarks;

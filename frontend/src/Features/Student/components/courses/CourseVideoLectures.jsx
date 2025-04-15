@@ -20,7 +20,7 @@ import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
 import { useTranslation } from 'react-i18next';
 
 const VideoSection = () => {
-  const { t ,i18n} = useTranslation();
+  const { t} = useTranslation();
   const role = sessionStorage.getItem("role");
   const [currentPageAll, setCurrentPageAll] = useState(1);
   const [currentPageBookmarks, setCurrentPageBookmarks] = useState(1);

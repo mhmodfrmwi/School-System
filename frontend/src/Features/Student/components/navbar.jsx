@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -13,16 +13,18 @@ import userImage from "../../../assets/user.jpeg";
 import languageE from "../../../assets/icons/languageS.svg";
 import languageA from "../../../assets/icons/languageA.svg";
 import Vector from "../../../assets/icons/Vector.svg";
-import logout from "../../../assets/icons/logout.svg";
+import logout2 from "../../../assets/icons/logout.svg";
 import Logo from "../../../assets/logologin.png";
 import Menu from "../../../assets/StudentIcon/Menue.png";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import Sidebar from "./Sidebar";
 import { useTranslation } from "react-i18next";
+import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const settingsRef = useRef(null);
   const searchRef = useRef(null);
   const [settingToggle, setSettingToggle] = useState(false);
@@ -30,6 +32,12 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { fullName } = useSelector((state) => state.login);
+
+  const handleUserLogout = () => {
+    dispatch(logout());
+    sessionStorage.removeItem("role");
+    navigate("/role");
+  };
 
   const routes = [
     { path: "grades", key: "grades" },
@@ -107,13 +115,12 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    // document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
   return (
     <div className="relative z-50">
-   <div className="flex h-16 w-full max-w-full items-center justify-between bg-white dark:bg-[#13082F] px-4 shadow-md  dark:shadow-[0_4px_15px_rgba(224,170,238,0.3)]">
+      <div className="flex h-16 w-full max-w-full items-center justify-between bg-white dark:bg-[#13082F] px-4 shadow-md dark:shadow-[0_4px_15px_rgba(224,170,238,0.3)]">
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -256,11 +263,11 @@ const Navbar = () => {
               <p className="mx-auto my-2 w-28 border-b-2 border-white dark:border-gray-500"></p>
 
               <div
-                className="mx-auto ms-12 mt-5 flex flex-row items-center"
-                onClick={() => navigate("/login")}
+                className="mx-auto ms-12 mt-5 flex flex-row items-center cursor-pointer"
+                onClick={handleUserLogout}
               >
                 <button className="p-2 text-gray-500 dark:text-gray-300">
-                  <ReactSVG src={logout} className="h-auto w-auto" />
+                  <ReactSVG src={logout2} className="h-auto w-auto" />
                 </button>
                 <h2 className="font-semibold text-white dark:text-gray-200">{t("Logout")}</h2>
               </div>

@@ -77,7 +77,7 @@ const VirtualRoomsSection = () => {
         dispatch(clearError());
       });
     }
-  }, [error, dispatch]);
+  }, [error, dispatch,t]);
 
   const handleViewRoom = (roomId) => {
     dispatch(markRoomAsViewed(roomId));
