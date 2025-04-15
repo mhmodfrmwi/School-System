@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContests, updateContest } from "../TeacherRedux/ContestSlice";
-import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice"; // Import fetchClassTeacher
+import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice"; 
+import { useTranslation } from 'react-i18next';
 
 
 function EditActivityForm() {
   const { id } = useParams();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { contests, status } = useSelector((state) => state.contests);
-  const { classTeachers = [] } = useSelector((state) => state.classTeachers || {}); // Fetch classTeachers
+  const { classTeachers = [] } = useSelector((state) => state.classTeachers || {}); 
 
   const [formData, setFormData] = useState({
     title: "",
@@ -22,15 +24,13 @@ function EditActivityForm() {
     gradeName: "",
   });
 
-  // جلب المسابقات و classTeachers عند تحميل الصفحة
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchContests());
     }
-    dispatch(fetchClassTeacher()); // Fetch classTeachers
+    dispatch(fetchClassTeacher()); 
   }, [dispatch, status]);
 
-  // تعبئة البيانات عند العثور على المسابقة المطلوبة
   useEffect(() => {
     const selectedContest = contests.find((contest) => contest._id === id);
     if (selectedContest) {
@@ -62,13 +62,13 @@ function EditActivityForm() {
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
-      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">Edit Contest</h1>
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">{t('activitiest.EditContest')}</h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
         <form onSubmit={handleSubmit} className="m-6">
           {/* Contest Title */}
           <div className="mb-4">
-            <label className="text-md mb-2 block font-medium text-gray-700">Contest Title *</label>
+            <label className="text-md mb-2 block font-medium text-gray-700">{t("contests.table.headers.title")} *</label>
             <input
               type="text"
               name="title"
@@ -82,7 +82,7 @@ function EditActivityForm() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {/* Start Date */}
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Start Date</label>
+              <label className="text-md mb-2 block font-medium text-gray-700">{t("contests.table.headers.startDate")}</label>
               <input
                 type="date"
                 name="startDate"
@@ -95,7 +95,7 @@ function EditActivityForm() {
 
             {/* End Date */}
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">End Date</label>
+              <label className="text-md mb-2 block font-medium text-gray-700">{t("contests.table.headers.endDate")}</label>
               <input
                 type="date"
                 name="endDate"
@@ -108,7 +108,7 @@ function EditActivityForm() {
 
             {/* Subject Name */}
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Subject Name</label>
+              <label className="text-md mb-2 block font-medium text-gray-700">{t("contests.table.headers.subject")}</label>
               <select
                 name="subjectName"
                 value={formData.subjectName}
@@ -127,7 +127,7 @@ function EditActivityForm() {
 
             {/* Class Name */}
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Class Name</label>
+              <label className="text-md mb-2 block font-medium text-gray-700">{t('attendans.Class')}</label>
               <select
                 name="className"
                 value={formData.className}
@@ -146,7 +146,7 @@ function EditActivityForm() {
 
             {/* Grade Name */}
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Grade Name</label>
+              <label className="text-md mb-2 block font-medium text-gray-700">{t('examst.Grade')}</label>
               <select
                 name="gradeName"
                 value={formData.gradeName}
@@ -165,7 +165,7 @@ function EditActivityForm() {
 
             {/* Number of Team Members */}
             <div className="mb-4">
-              <label className="text-md mb-2 block font-medium text-gray-700">Number of Team Members</label>
+              <label className="text-md mb-2 block font-medium text-gray-700">{t("contests.table.headers.teamMembers")}</label>
               <input
                 type="number"
                 name="numberOfTeamMembers"
@@ -179,7 +179,7 @@ function EditActivityForm() {
 
           {/* Requirements */}
           <div className="mb-4 sm:col-span-2">
-            <label className="text-md mb-2 block font-medium text-gray-700">Requirements</label>
+            <label className="text-md mb-2 block font-medium text-gray-700">{t("contests.table.headers.requirements")}</label>
             <textarea
               name="requirements"
               value={formData.requirements}
@@ -196,7 +196,7 @@ function EditActivityForm() {
               type="submit"
               className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
             >
-              Save Changes
+            {t('tablesheader.Update')}
             </button>
           </div>
         </form>

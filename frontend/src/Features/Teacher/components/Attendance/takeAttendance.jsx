@@ -8,12 +8,14 @@ import {
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
 import Loader from "@/ui/Loader";
+import { useTranslation } from 'react-i18next';
 
 function TakeAttendance() {
   const { studentsforsubject, loading } = useSelector(
     (state) => state.attendanceTeacher,
   );
   const isActive = (path) => location.pathname === path;
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -88,7 +90,7 @@ function TakeAttendance() {
             <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90]">
               1
             </span>
-            Take Attendance
+            {t('attendans.TakeAttendance')}
           </button>
 
           <button
@@ -102,7 +104,7 @@ function TakeAttendance() {
             <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
               2
             </span>
-            Attendance Report
+            {t('attendans.AttendanceReport')}
           </button>
         </div>
       </div>
@@ -112,11 +114,11 @@ function TakeAttendance() {
           <thead className="bg-[#117C90] text-left text-white">
             <tr>
               <th className="px-3 py-2">#</th>
-              <th className="px-3 py-2">Name</th>
-              <th className="px-3 py-2">Academic Number</th>
-              <th className="px-3 py-2">Grade</th>
-              <th className="px-3 py-2">Class</th>
-              <th className="px-3 py-2 text-center">Status</th>
+              <th className="px-3 py-2">{t('assignmentt.StudentName')}</th>
+              <th className="px-3 py-2">{t('attendans.AcademicNumber')}</th>
+              <th className="px-3 py-2">{t('examst.Grade')}</th>
+              <th className="px-3 py-2">{t('attendans.Class')}</th>
+              <th className="px-3 py-2 text-center">{t('assignmentt.Status')}</th>
             </tr>
           </thead>
           <tbody>
@@ -166,7 +168,7 @@ function TakeAttendance() {
           type="submit"
           className="rounded-lg font-poppins bg-[#117C90] px-6 py-3 text-lg font-semibold text-white hover:bg-[#0f6a7d]"
         >
-          Submit Attendance
+          {t('attendans.SubmitAttendance')}
         </button>
       </form>
     </div>

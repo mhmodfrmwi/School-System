@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const ActivityToggle = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { t } = useTranslation();
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -21,8 +22,8 @@ const ActivityToggle = () => {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             1
           </span>
-          School Hubs
-        </button>
+          {t("activities.tabs.schoolHubs")}
+          </button>
         <button
           onClick={() => navigate("/teacher/contests")}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-medium rounded-full text-center transition-all ${
@@ -34,8 +35,8 @@ const ActivityToggle = () => {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             2
           </span>
-          Contests
-        </button>
+          {t("activities.tabs.contests")}
+          </button>
       </div>
     </div>
   );

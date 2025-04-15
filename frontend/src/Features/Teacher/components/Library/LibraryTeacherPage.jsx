@@ -12,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FaSpinner } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 // Helper function to extract YouTube Video ID
 const extractYouTubeVideoId = (url) => {
@@ -113,6 +114,8 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
 const LibraryTeacherPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const {
     allGeneralMaterialVideoPdf,
     teacherGeneralItems,
@@ -217,8 +220,8 @@ const LibraryTeacherPage = () => {
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
             1
           </span>
-          Library
-        </button>
+          {t('libraryt.Library')}
+          </button>
 
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
@@ -227,8 +230,8 @@ const LibraryTeacherPage = () => {
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
             2
           </span>
-          Teacher Library
-        </button>
+          {t('libraryt.TeacherLibrary')}
+          </button>
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
           onClick={() => navigate("/teacher/items-in-library")}
@@ -236,8 +239,8 @@ const LibraryTeacherPage = () => {
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
             3
           </span>
-          General Library
-        </button>
+          {t('libraryt.GeneralLibrary')}
+          </button>
       </div>
 
       <div className="mx-auto mb-20 mt-20 flex min-h-screen w-[95%] font-poppins">
@@ -255,7 +258,9 @@ const LibraryTeacherPage = () => {
             isSidebarOpen ? "translate-x-0" : "ms-[-40px] -translate-x-full"
           } md:translate-x-0`}
         >
-          <h2 className="mb-4 text-xl font-bold text-[#117C90]">Subjects</h2>
+          <h2 className="mb-4 text-xl font-bold text-[#117C90]">
+          {t('libraryVideos.subjectsTitle')}
+          </h2>
           <ul>
             <li
               className="flex cursor-pointer items-center rounded p-2 hover:bg-gray-200"
@@ -272,7 +277,9 @@ const LibraryTeacherPage = () => {
                 onChange={() => setSelectedSubject("all")}
                 className="form-radio h-4 w-4 border-[#117C90] text-[#117C90] focus:ring-[#117C90]"
               />
-              <span className="ml-2 text-xl text-[#117C90]">All</span>
+              <span className="ml-2 text-xl text-[#117C90]">
+              {t('libraryVideos.all')}
+              </span>
             </li>
             <li
               className="flex cursor-pointer items-center rounded p-2 hover:bg-gray-200"
@@ -289,7 +296,9 @@ const LibraryTeacherPage = () => {
                 onChange={() => setSelectedSubject("public")}
                 className="form-radio h-4 w-4 border-[#117C90] text-[#117C90] focus:ring-[#117C90]"
               />
-              <span className="ml-2 text-xl text-[#117C90]">Public</span>
+              <span className="ml-2 text-xl text-[#117C90]">
+              {t('libraryVideos.public')}
+              </span>
             </li>
             {teacherSubjects.map((subject, index) => (
               <li

@@ -4,15 +4,17 @@ import { fetchTeacherSchedule } from "../TeacherRedux/teacherScheduleSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import ScheduleToggle from "./SelectPage";
+import { useTranslation } from 'react-i18next';
 
 const WeeklySchedule = () => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const teacherSchedule = useSelector(state => state.teacherSchedule.teacherSchedule);
     const loading = useSelector(state => state.teacherSchedule.loading);
     const error = useSelector(state => state.teacherSchedule.error);
 
     const days = [
-        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+        t('schaduel.Sunday'), t('schaduel.Monday'), t('schaduel.Tuesday'), t('schaduel.Wednesday'), t('schaduel.Thursday'),t('schaduel.Friday'), t('schaduel.Saturday')
     ];
     const timeslots = [
         "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"
@@ -75,12 +77,12 @@ const WeeklySchedule = () => {
                             <div className="flex justify-between items-center my-2">
                                 <div>
                                     <div className="text-lg sm:text-2xl font-poppins cursor-text text-[#105E6A] ms-4 py-1 font-bold">
-                                        Weekly Schedule - {semesterName} ({startYear}-{endYear})
+                                         {semesterName} ({startYear}-{endYear})
                                     </div>
                                     <p className="w-24 rounded-xl mb-4 border-t-4 border-[#117C90] ms-4"></p>
                                 </div>
                                 <button className="bg-gradient-to-r from-[#105E6A] to-[#117C90] font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white">
-                                    Export as PDF
+                                {t('schaduel.ExportPDF')}
                                 </button>
                             </div>
                             <div className="overflow-x-auto p-4">

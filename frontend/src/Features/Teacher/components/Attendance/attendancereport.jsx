@@ -6,9 +6,11 @@ import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import Loader from "@/ui/Loader";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 function Attendancereport() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const isActive = (path) => location.pathname === path;
   const navigate = useNavigate();
   const { id } = useParams();
@@ -156,7 +158,7 @@ function Attendancereport() {
             <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
               1
             </span>
-            Take Attendance
+            {t('attendans.TakeAttendance')}
           </button>
           {/* ))} */}
           <button
@@ -170,16 +172,16 @@ function Attendancereport() {
             <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
               2
             </span>
-            Attendance Report
+            {t('attendans.AttendanceReport')}
           </button>
         </div>
       </div>
 
       <div className="flex ml-8 mb-6 flex-col">
         <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-          See Attendance Summary
+        {t('attendans.AttendanceSummary')}
         </h1>
-        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[260px]"></div>
+        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
       </div>
       <div className="ml-6">
       <form
@@ -219,7 +221,7 @@ function Attendancereport() {
           type="submit"
           className="w-full rounded bg-[#117C90] px-4 py-2 text-white hover:bg-[#0f6a7d]"
         >
-          Generate Report
+         {t('attendans.GenerateReport')}
         </button>
       </form>
       </div>
@@ -231,10 +233,10 @@ function Attendancereport() {
           <thead className="bg-[#117C90] text-left text-white">
               <tr className="bg-[#117C90] text-white">
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">#</th>
-                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Academic Number</th>
-                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Name</th>
-                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Class</th>
-                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Absences</th>
+                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('attendans.AcademicNumber')}</th>
+                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.StudentName')}</th>
+                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('attendans.Class')}</th>
+                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.Status')}</th>
               </tr>
             </thead>
             <tbody>

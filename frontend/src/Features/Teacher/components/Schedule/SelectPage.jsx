@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const ScheduleToggle = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { t } = useTranslation();
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -21,7 +22,7 @@ const ScheduleToggle = () => {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             1
           </span>
-          Weekly Schedule
+          {t('schaduel.WeeklySchedule')}
         </button>
         <button
           onClick={() => navigate("/teacher/exam-schedule")}
@@ -34,7 +35,7 @@ const ScheduleToggle = () => {
           <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
             2
           </span>
-          Exams Schedule
+          {t('schaduel.ExamsSchedule')}
         </button>
       </div>
     </div>

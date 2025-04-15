@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import bag from "../../../../assets/bag.png";
 import Loader from "@/ui/Loader";
 import { fetchSubjectsInLibrary } from "../TeacherRedux/teacherLibrarySlice";
+import { useTranslation } from 'react-i18next';
 
 const SubjectsInLibrary = ({ onSearchChange }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
-
+  const { t } = useTranslation();
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
     onSearchChange(e.target.value);
@@ -47,7 +48,8 @@ const SubjectsInLibrary = ({ onSearchChange }) => {
             <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
               1
             </span>
-            Library
+            {t('libraryt.Library')}
+
           </button>
 
           <button
@@ -57,7 +59,8 @@ const SubjectsInLibrary = ({ onSearchChange }) => {
             <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
               2
             </span>
-            Teacher Library
+            {t('libraryt.TeacherLibrary')}
+
           </button>
           <button
             className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
@@ -66,13 +69,13 @@ const SubjectsInLibrary = ({ onSearchChange }) => {
             <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
               3
             </span>
-            General Library
+            {t('libraryt.GeneralLibrary')}
           </button>
         </div>
         <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
           <div className="flex flex-col">
             <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-              All Courses In Library
+            {t('coursest.AllCourses')}
             </h1>
             <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[140px]"></div>
           </div>

@@ -3,12 +3,13 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getTeacherSchoolHubs } from "../TeacherRedux/schoolhubSlice"; 
 import activityImage from "../../../../assets/TeacherIcon/img2.png";
+import { useTranslation } from 'react-i18next';
 
 const DetailesActivity = () => {
     const { id } = useParams(); 
     const dispatch = useDispatch();
    const { schoolHubs, loading, error } = useSelector((state) => state.teacherSchoolHub);
-   
+   const { t } = useTranslation();
     useEffect(() => {
         dispatch(getTeacherSchoolHubs());
     }, [dispatch]);
@@ -27,7 +28,7 @@ const DetailesActivity = () => {
             <div className="col-span-2 flex flex-col justify-between ms-5">
                 
                 <div className="text-2xl font-poppins cursor-text text-[#105E6A] py-1 font-bold  ms-7 mt-5">
-                    Details
+                {t("activityDetails.title")}
                 </div>
                 
                 <p className="w-24 rounded-xl mb-2 border-t-4 border-[#117C90] ms-7"></p>
@@ -44,13 +45,13 @@ const DetailesActivity = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-6 w-full max-w-4xl">
                        
                         <div className="border rounded-lg p-6 font-poppins text-center bg-[#F5F5F5] shadow-md shadow-[#105E6A]">
-                            <h3 className="font-bold font-poppins text-xl">Location</h3>
+                            <h3 className="font-bold font-poppins text-xl">{t("activityDetails.sections.location")}</h3>
                             <p className="text-md mt-2">{location}</p>
                         </div>
 
                        
                         <div className="border rounded-lg p-6 font-poppins text-center bg-[#F5F5F5] shadow-md shadow-[#117C90]">
-                            <h3 className="font-bold font-poppins text-xl">Details</h3>
+                            <h3 className="font-bold font-poppins text-xl">{t("activityDetails.sections.details")}</h3>
                             <p className="text-md mt-2">{details}</p>
                         </div>
                     </div>

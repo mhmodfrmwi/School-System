@@ -10,10 +10,12 @@ import Pagination from "../Pagination";
 import Loader from "@/ui/Loader";
 import { toast } from "react-toastify";
 import Papa from "papaparse";
+import { useTranslation } from 'react-i18next';
 
 function GetStudentsWithGrades() {
   const { classId, gradeSubjectSemesterId, type } = useParams();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { studentResult, loading } = useSelector((state) => state.examScores);
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
@@ -143,7 +145,7 @@ function GetStudentsWithGrades() {
   return (
     <div className="mx-auto font-poppins w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-[90%]">
       <h1 className=" text-2xl font-semibold text-[#117C90]">
-        Student Exam Results
+        {t('gradest.StudentExamResults')}
       </h1>
 
       {students.length ? (
@@ -151,11 +153,11 @@ function GetStudentsWithGrades() {
           {/* Display type and finalDegree above the table */}
           <div className="mb-4 flex flex-col gap-2 py-4">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-black">Type:</span>
+              <span className="font-semibold text-black">{t('tablesheader.Type')}:</span>
               <span>{studentResult?.data?.type}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-black">Final Degree:</span>
+              <span className="font-semibold text-black">{t('gradest.FinalDegree')}:</span>
               <span >
                 {studentResult?.data?.finalDegree}
               </span>
@@ -168,13 +170,13 @@ function GetStudentsWithGrades() {
                 <tr>
                 <th className="px-4 py-3 text-left font-poppins font-semibold">#</th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
-                    Academic Number
+                    {t('attendans.AcademicNumber')}
                   </th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
-                    Full Name
+                  {t('assignmentt.StudentName')}
                   </th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
-                    Exam Grade
+                  {t('assignmentt.Marks')}
                   </th>
                 </tr>
               </thead>
@@ -216,7 +218,7 @@ function GetStudentsWithGrades() {
                     : "border-gray-400 bg-gray-100 text-gray-500"
                     }`}
                 >
-                  {file ? file.name : "Choose a file"}
+                  {file ? file.name : t('gradest.Choosefile')}
                   <input
                     type="file"
                     accept=".csv"
@@ -228,7 +230,7 @@ function GetStudentsWithGrades() {
                   onClick={handleUpload}
                   className="w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
                 >
-                  Upload & Update
+                 {t('gradest.UploadUpdate')} 
                 </button>
               </div>
 
@@ -237,13 +239,14 @@ function GetStudentsWithGrades() {
                   onClick={handleExport}
                   className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
                 >
-                  Export Data
+                 {t('gradest.ExportData')} 
+  
                 </button>
                 <button
                   onClick={handleDeleteAll}
                   className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
                 >
-                  Delete All Data
+                {t('gradest.DeleteAllData')} 
                 </button>
               </div>
             </div>

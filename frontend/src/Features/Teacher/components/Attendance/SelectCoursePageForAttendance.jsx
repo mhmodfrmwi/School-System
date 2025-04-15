@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const CourseToggle = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { t } = useTranslation();
   const isActive = (path) => location.pathname === path;
-
+   
   return (
     <div className="mx-auto mt-10 w-full px-4">
       <div className="mx-auto mb-20 flex max-w-[90%] flex-wrap overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5] md:w-[60%] md:flex-nowrap">
@@ -21,7 +22,8 @@ const CourseToggle = () => {
           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90]">
             1
           </span>
-          Current Course
+          {t('coursest.CurrentCourse')} 
+
         </button>
         <button
           onClick={() => navigate("/teacher/allcoursesforattendance")}
@@ -34,7 +36,7 @@ const CourseToggle = () => {
           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90]">
             2
           </span>
-          All Courses
+          {t('coursest.AllCourses')}
         </button>
       </div>
     </div>

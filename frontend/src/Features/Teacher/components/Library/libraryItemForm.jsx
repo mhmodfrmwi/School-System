@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 import { createLibraryItem } from "../TeacherRedux/generalLibrarySlice";
 
 function LibraryItemForm() {
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -41,7 +41,7 @@ function LibraryItemForm() {
   return (
     <div className="mx-auto mb-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Add Library Item
+        {t('libraryt.AddLibraryItem')}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[150px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
@@ -51,7 +51,7 @@ function LibraryItemForm() {
         >
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Title
+            {t('libraryItem.title')}
             </label>
             <input
               type="text"
@@ -65,7 +65,7 @@ function LibraryItemForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Author
+            {t('libraryItem.author')}
             </label>
             <input
               type="text"
@@ -79,7 +79,8 @@ function LibraryItemForm() {
 
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Library URL
+            {t('tablesheader.FileUrl')}
+
             </label>
             <input
               type="url"
@@ -93,7 +94,7 @@ function LibraryItemForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700">
-              Type
+            {t('libraryItem.type')}
             </label>
             <select
               name="type"
@@ -112,7 +113,8 @@ function LibraryItemForm() {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
             >
-              Add Library Item
+            {t('tablesheader.Upload')}
+
             </button>
           </div>
         </form>

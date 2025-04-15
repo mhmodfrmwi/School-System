@@ -5,10 +5,12 @@ import { fetchLibraryItemDetails, fetchMaterialDetails, clearDetails } from "../
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaSpinner } from "react-icons/fa";
+import { useTranslation } from 'react-i18next';
 
 const LibraryItemDetailsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { itemId, type } = useParams();
   const { teacherItemDetails, teacherMaterialDetails, loading, error } = useSelector((state) => state.libraryTeacher);
 
@@ -100,32 +102,32 @@ const LibraryItemDetailsPage = () => {
                 <tbody>
                     {type === "material" && (
                        <tr>
-                       <td className="py-2 font-semibold text-gray-700">Description</td>
+                       <td className="py-2 font-semibold text-gray-700">{t('libraryItem.description')}</td>
                        <td className="py-2 text-gray-600">{details?.description || "N/A"}</td>
                      </tr> 
                     )}
                     {type === "general" && (
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Author</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.author')}</td>
                         <td className="py-2 text-gray-600">{details?.author|| "N/A"}</td>
                       </tr>
                     )}
                     {type === "material" && (
                     <>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Grade</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.grade')}</td>
                         <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName || "N/A"}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Subject</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.subject')}</td>
                         <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "N/A"}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Semester</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.semester')}</td>
                         <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.semester_id?.semesterName || "N/A"}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Academic Year</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.academicYear')}</td>
                         <td className="py-2 text-gray-600">
                           {`${details?.grade_subject_semester_id?.semester_id?.academicYear_id?.startYear} - ${details?.grade_subject_semester_id?.semester_id?.academicYear_id?.endYear}` || "N/A"}
                         </td>
@@ -134,17 +136,17 @@ const LibraryItemDetailsPage = () => {
                   )}
                   
                   <tr>
-                    <td className="py-2 font-semibold text-gray-700">Type</td>
+                    <td className="py-2 font-semibold text-gray-700">{t('libraryItem.type')}</td>
                     <td className="py-2 text-gray-600">{details?.type || "N/A"}</td>
                   </tr>
                   <tr>
-                    <td className="py-2 font-semibold text-gray-700">Uploaded By</td>
+                    <td className="py-2 font-semibold text-gray-700">{t('libraryItem.uploadedBy')}</td>
                     <td className="py-2 text-gray-600">{details?.uploaded_by?.fullName || "Unknown"}</td>
                   </tr>
                   
                   {fileUrl && (
   <tr>
-    <td className="py-2 font-semibold text-gray-700">Download</td>
+    <td className="py-2 font-semibold text-gray-700">{t('libraryItem.download')}</td>
     <td className="py-2">
       <a href={fileUrl} download target="_blank" rel="noopener noreferrer">
         <Button
@@ -161,7 +163,7 @@ const LibraryItemDetailsPage = () => {
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 12l4-4m-4 4l-4-4M4 20h16" />
           </svg>
-          Download Material
+          {t('libraryItem.downloadMaterial')}
         </Button>
       </a>
     </td>

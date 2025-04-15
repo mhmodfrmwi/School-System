@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLibraryItemById } from "../TeacherRedux/generalLibrarySlice";
+import { useTranslation } from 'react-i18next';
 
 const ItemInLibrary = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const { generalLibrary, loading, error } = useSelector(
     (state) => state.generalLibrary || {},
   );
@@ -38,15 +39,15 @@ const ItemInLibrary = () => {
             {generalLibrary.title}
           </h1>
           <p className="mb-2 text-xl">
-            <strong className=" text-black">Author:</strong>{" "}
+            <strong className=" text-black">{t('libraryItem.author')}:</strong>{" "}
             {generalLibrary.author}
           </p>
           <p className="mb-2 text-xl">
-            <strong className=" text-black">Type:</strong>{" "}
+            <strong className=" text-black">{t('libraryItem.type')}:</strong>{" "}
             {generalLibrary.type}
           </p>
           <p className="mb-4 text-xl">
-            <strong className=" text-black">Uploaded By:</strong>{" "}
+            <strong className=" text-black">{t('libraryItem.uploadedBy')}:</strong>{" "}
             {generalLibrary.uploaded_by?.fullName}
           </p>
 
@@ -63,7 +64,7 @@ const ItemInLibrary = () => {
               onClick={handleCancel}
               className="inline-block rounded-md bg-red-500 px-4 py-2 font-semibold text-white transition duration-300 hover:bg-red-600"
             >
-              Cancel
+              {t('assignmentt.Cancel')}
             </button>
           </div>
         </div>

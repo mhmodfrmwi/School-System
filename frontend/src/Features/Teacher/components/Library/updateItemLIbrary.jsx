@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 import {
   fetchLibraryItemById,
@@ -10,6 +11,7 @@ import {
 
 const UpdateItemLibrary = () => {
   const { id } = useParams();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const { generalLibrary } = useSelector((state) => state.generalLibrary || {});
@@ -57,7 +59,7 @@ const UpdateItemLibrary = () => {
     <>
       <div className="mx-auto flex w-[80%] flex-col px-4 md:px-6 lg:px-0">
         <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-          Edit Material
+          {t('libraryt.EditMaterial')}
         </h1>
 
         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[190px]"></div>
@@ -66,7 +68,7 @@ const UpdateItemLibrary = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-poppins font-medium">
-              Title <span className="text-red-500">*</span>
+            {t('libraryItem.title')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -79,7 +81,7 @@ const UpdateItemLibrary = () => {
           </div>
           <div>
             <label className="block font-poppins font-medium">
-              Author <span className="text-red-500">*</span>
+            {t('libraryItem.author')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -92,7 +94,8 @@ const UpdateItemLibrary = () => {
           </div>
           <div>
             <label className="block font-poppins font-medium">
-              Library URL <span className="text-red-500">*</span>
+            {t('tablesheader.FileUrl')}
+            <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -104,7 +107,7 @@ const UpdateItemLibrary = () => {
             />
           </div>
           <div>
-            <label className="block font-poppins font-medium">Type</label>
+            <label className="block font-poppins font-medium">{t('libraryItem.type')}</label>
             <select
               name="type"
               value={formData.type}
@@ -120,7 +123,7 @@ const UpdateItemLibrary = () => {
             type="submit"
             className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-poppins font-medium text-white transition hover:bg-[#0f6b7c]"
           >
-            Update
+          {t('tablesheader.Update')}
           </button>
         </form>
       </div>

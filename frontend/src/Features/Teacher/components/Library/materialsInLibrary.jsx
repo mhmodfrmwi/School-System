@@ -9,12 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
 
 const MaterialsInLibrary = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const {
     teacherLibrary = [],
     loading,
@@ -44,7 +45,7 @@ const MaterialsInLibrary = () => {
           <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
             <div className="">
               <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                All Materials in Library
+                {t('libraryt.AllMaterialsLibrary')}
               </h1>
               <p className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></p>
             </div>
@@ -53,7 +54,7 @@ const MaterialsInLibrary = () => {
               className="flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none sm:ml-auto"
               onClick={() => navigate("/teacher/library-form")}
             >
-              Add Materials
+              {t('libraryt.AddItem')}
             </div>
           </div>
           <div className="mt-7">
@@ -62,22 +63,22 @@ const MaterialsInLibrary = () => {
                 <thead className="bg-[#117C90] text-white">
                   <tr>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Title
+                    {t('libraryItem.title')}
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Description
+                    {t('libraryItem.description')}
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Type
+                    {t('libraryItem.type')}
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Grade
+                      {t('examst.Grade')}
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Subject
+                    {t('libraryItem.subject')}
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Actions
+                    {t('tablesheader.Actions')}
                     </th>
                   </tr>
                 </thead>

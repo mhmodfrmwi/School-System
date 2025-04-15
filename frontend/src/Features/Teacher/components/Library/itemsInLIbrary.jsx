@@ -8,10 +8,12 @@ import {
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
 
 const ItemsInLibrary = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { generalLibrary = [] } = useSelector(
     (state) => state.generalLibrary || {},
   );
@@ -39,8 +41,8 @@ const ItemsInLibrary = () => {
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
             1
           </span>
-          Library
-        </button>
+          {t('libraryt.Library')}
+          </button>
 
         <button
           className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
@@ -49,8 +51,8 @@ const ItemsInLibrary = () => {
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
             2
           </span>
-          Teacher Library
-        </button>
+          {t('libraryt.TeacherLibrary')}
+          </button>
         <button
           className="flex cursor-pointer items-center justify-center rounded-b-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none md:rounded-3xl"
           onClick={() => navigate("/teacher/items-in-library")}
@@ -58,15 +60,15 @@ const ItemsInLibrary = () => {
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
             3
           </span>
-          General Library
-        </button>
+          {t('libraryt.GeneralLibrary')}
+          </button>
       </div>
       <div className="flex flex-col p-4 font-poppins">
         <div className="mx-auto w-[400px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
           <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
             <div className="">
               <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                Library Materials
+                {t('libraryt.LibraryMaterials')}
               </h1>
               <p className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></p>
             </div>
@@ -75,7 +77,7 @@ const ItemsInLibrary = () => {
               className="flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none sm:ml-auto"
               onClick={() => navigate("/teacher/library-item-form")}
             >
-              Add Item
+              {t('libraryt.AddItem')}
             </div>
           </div>
           <div className="mt-7">
@@ -84,19 +86,20 @@ const ItemsInLibrary = () => {
                 <thead className="bg-[#117C90] text-white">
                   <tr>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Title
+                    {t('libraryVideos.subjectsTitle')}
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Author
+                    {t('libraryItem.author')}
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Type
+                    {t('libraryItem.type')}
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Link
+                    {t('tablesheader.FileUrl')}
+
                     </th>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                      Actions
+                    {t('tablesheader.Actions')}
                     </th>
                   </tr>
                 </thead>

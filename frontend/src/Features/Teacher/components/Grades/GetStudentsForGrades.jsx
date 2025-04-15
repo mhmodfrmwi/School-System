@@ -5,10 +5,12 @@ import Papa from "papaparse";
 import { fetchExamScores } from "../TeacherRedux/examScoreSlice";
 import Loader from "@/ui/Loader";
 import Pagination from "../Pagination";
+import { useTranslation } from 'react-i18next';
 
 const GetStudentsForGrades = () => {
   const { classId, gradeSubjectSemesterId } = useParams();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { scores, loading, error } = useSelector((state) => state.examScores);
   const navigate = useNavigate();
 
@@ -77,7 +79,7 @@ const GetStudentsForGrades = () => {
     <div className="mx-auto font-poppins w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
       <div className="flex flex-col">
         <h1 className="font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
-          Exam Scores
+          {t('gradest.ExamScores')}
         </h1>
         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#117C90] lg:h-[4px] lg:w-[140px]"></div>
       </div>
@@ -92,16 +94,16 @@ const GetStudentsForGrades = () => {
       {scores?.data?.students?.length > 0 ? (
         <>
           <div className="my-4 text-lg text-black">
-            <span className="text-xl font-semibold">Academic Year:</span>{" "}
+            <span className="text-xl font-semibold">{t('gradest.AcademicYear')}:</span>{" "}
             {scores.data.grade.academicYear.startYear} -{" "}
             {scores.data.grade.academicYear.endYear}
           </div>
           <div className="my-4 text-lg text-black">
-            <span className="text-xl font-semibold">Grade:</span>{" "}
+            <span className="text-xl font-semibold">{t('examst.Grade')}:</span>{" "}
             {scores.data.grade.gradeName}{" "}
           </div>
           <div className="my-4 text-lg text-black">
-            <span className="text-xl font-semibold">Subject:</span>{" "}
+            <span className="text-xl font-semibold">{t('examst.Subject')}:</span>{" "}
             {scores.data.subject.subjectName}
           </div>
 
@@ -110,14 +112,14 @@ const GetStudentsForGrades = () => {
               onClick={handleExportCSV}
               className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
             >
-              Export to CSV
+            {t('gradest.ExportCSV')}
             </button>
 
             <button
               onClick={handleGoToUploadPage}
               className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
             >
-              Go to Upload File
+            {t('gradest.UploadFile')}
             </button>
           </div>
 
@@ -128,10 +130,10 @@ const GetStudentsForGrades = () => {
                 <tr className="bg-[#117C90] text-white">
                  <th className="px-4 py-3 text-left font-poppins font-semibold">#</th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
-                    Academic Number
+                  {t('attendans.AcademicNumber')} 
                   </th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
-                    Full Name
+                  {t('assignmentt.StudentName')}
                   </th>
                 </tr>
               </thead>

@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 import bag from "../../../../assets/bag.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
-
+import { useTranslation } from 'react-i18next';
 import Loader from "@/ui/Loader";
 
 const CurrentCoursesForGrades = ({ onSearchChange }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (e) => {
@@ -58,7 +59,7 @@ const CurrentCoursesForGrades = ({ onSearchChange }) => {
         <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
           <div className="flex flex-col">
             <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-              Current Courses
+              {t('coursest.CurrentCourse')} 
             </h1>
             <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[140px]"></div>
           </div>

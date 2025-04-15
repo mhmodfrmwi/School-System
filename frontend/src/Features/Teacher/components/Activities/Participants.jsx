@@ -2,9 +2,11 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeams } from "../TeacherRedux/participantsSlice";
+import { useTranslation } from 'react-i18next';
 
 const Participants = () => {
     const { contestId } = useParams();
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const { teams, loading, error } = useSelector((state) => state.participants);
 
@@ -29,7 +31,7 @@ const Participants = () => {
             <div className="col-span-2 flex flex-col justify-between ms-5 ">
                 <div className="flex justify-between items-center ms-7 mt-5">
                     <div className="flex-1 text-lg sm:text-2xl font-poppins cursor-text text-[#105E6A] py-1 font-bold">
-                        Participants
+                        {t('activitiest.Participants')}
                     </div>
                 </div>
                 <p className="w-36 rounded-xl mb-2 border-t-4 border-[#117C90] ms-7"></p>
@@ -43,9 +45,9 @@ const Participants = () => {
                                 <table className="min-w-full border-collapse rounded-2xl border-2 border-[#117C90] shadow-lg">
                                     <thead>
                                         <tr className="bg-[#105E6A] font-poppins text-white text-xs sm:text-sm md:text-base">
-                                            <th className="border border-[#117C90] px-2 sm:px-4 py-2 text-left">Team Name</th>
-                                            <th className="border border-[#117C90] px-2 sm:px-4 py-2 text-left">Leader</th>
-                                            <th className="border border-[#117C90] px-2 sm:px-4 py-2 text-left">Members</th>
+                                            <th className="border border-[#117C90] px-2 sm:px-4 py-2 text-left">{t('teamDetails.teamName')}</th>
+                                            <th className="border border-[#117C90] px-2 sm:px-4 py-2 text-left">{t('teamDetails.leader')}</th>
+                                            <th className="border border-[#117C90] px-2 sm:px-4 py-2 text-left">{t('teamDetails.teammates')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

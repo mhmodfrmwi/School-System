@@ -1028,6 +1028,60 @@ i18n
                         CreateExam:"Create Exam",
                         UpdateExam:"Update Exam",
 
+                    },
+                    attendans:{
+                        AcademicNumber:"Academic Number",
+                        Class:"Class",
+                        SubmitAttendance:"Submit Attendance",
+                        TakeAttendance:"Take Attendance",
+                        AttendanceReport:"Attendance Report",
+                        AttendanceSummary:" Attendance Summary",
+                        GenerateReport:" Generate Report",
+                    },
+                    schaduel:{
+                      Saturday:"Saturday",
+                      Friday:"Friday",
+                      Thursday:"Thursday",
+                      Wednesday:"Wednesday",
+                      Tuesday:"Tuesday",
+                      Monday:"Wednesday",
+                      Sunday:"Sunday",
+                      ExportPDF:"Export as PDF",
+                      ExamsSchedule:"Exams Schedule",
+                      WeeklySchedule:"Weekly Schedule",
+                    },
+                    gradest:{
+                        ExamScores:"Exam Scores",
+                        AcademicYear:"Academic Year",
+                        ExportCSV:"Export to CSV",
+                        UploadFile:"Go to Upload File",
+                        GetStudentsGrades:"Get Students Grades",
+                        Choosefile:"Choose a file",
+                        UploadGradesFile:"Upload Grades File",
+                        Gradestudents:"Grades For Students",
+                        Selectexamtype:"  Select exam type",
+                        FinalDegree:"Final Degree",
+                        StudentExamResults:"Student Exam Results",
+                        DeleteAllData:"Delete All Data",
+                        ExportData:"Export Data",
+                        UploadUpdate:"Upload & Update",
+
+                    },
+                    activitiest:{
+                        AddContest:"Add Contest",
+                        Participants:"Participants",
+                        EditContest:"Edit Contest",
+                    },
+                    libraryt:{
+                        AddLibraryItem:"Add Library Item",
+                        AddItem:"Add Item",
+                        LibraryMaterials:"Library Materials",
+                        AllMaterialsLibrary:"All Materials in Library  ",
+                        GeneralLibrary:"General Library",
+                        TeacherLibrary:"Teacher Library",
+                        Library:"Library",
+                        EditMaterial:"Edit Material",
+
                     }
 
 
@@ -2057,7 +2111,60 @@ i18n
                         CreateExam:"إنشاء امتحان",
                         UpdateExam:"تحرير الامتحان",
 
-                    }
+                    },
+                    attendans:{
+                        AcademicNumber:"الرقم الاكاديمي",
+                        Class:"الفصل",
+                        SubmitAttendance:"إرسال الحضور",
+                        TakeAttendance:"تسجيل الحضور",
+                        AttendanceReport:"تقرير الحضور",
+                        AttendanceSummary:" ملخص الحضور",
+                        GenerateReport:"انشاء التقرير",
+                    },
+                    schaduel:{
+                      Saturday:"السبت",
+                      Friday:"الجمعة",
+                      Thursday:"الخميس",
+                      Wednesday:"الاربعاء",
+                      Tuesday:"الثلاثاء",
+                      Monday:"الاثنين",
+                      Sunday:"الاحد",
+                      ExportPDF:"تصدير بصيغة PDF",
+                      ExamsSchedule:"جدول الامتحانات",
+                      WeeklySchedule:"الجدول الاسبوعى ",
+                      
+                    },
+                    gradest:{
+                        ExamScores:"درجات الامتحان",
+                        AcademicYear:"السنة الدراسية",
+                        ExportCSV:"تصدير إلى CSV",
+                        UploadFile:"   تحميل الملف",
+                        GetStudentsGrades:"احصل على درجات الطلاب",
+                        Choosefile:"اختر ملفًا",
+                        UploadGradesFile:"تحميل ملف الدرجات",
+                        Gradestudents:"درجات الطلاب",
+                        Selectexamtype:"اختر نوع الامتحان",
+                        FinalDegree:"الدرجة النهائية",
+                        StudentExamResults:"نتائج الامتحان",
+                        DeleteAllData:"حذف جميع البيانات",
+                        ExportData:"تصدير البيانات",
+                        UploadUpdate:"تعديل ورفع",
+                    },
+                    activitiest:{
+                        AddContest:"اضافة مسابقة",
+                        Participants:"المشتركين",
+                        EditContest:"تحرير المسابقة",
+                      },
+                    libraryt:{
+                        AddLibraryItem:"إضافة عناصر المكتبة",
+                        AddItem:"اضافة عنصر جديد",
+                        LibraryMaterials:"عناصر المكتبة ",
+                        AllMaterialsLibrary:"جميع عناصر المكتبة",
+                        GeneralLibrary:"المكتبة العامة",
+                        TeacherLibrary:"مكتبة المدرس",
+                        Library:"المكتبة",
+                        EditMaterial:"تعديل المحتوى", 
+                    }  
 
 
 
