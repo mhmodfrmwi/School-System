@@ -16,8 +16,9 @@ import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
-
+import { useTranslation } from 'react-i18next';
 const ExamsSection = () => {
+  const { t } = useTranslation();
   const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const [initialLoading, setInitialLoading] = useState(true);
@@ -76,10 +77,10 @@ const ExamsSection = () => {
   useEffect(() => {
     if (error) {
       Swal.fire({
-        title: "Error!",
+        title:t('exams.alerts.error.title'),
         text: error,
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: t('exams.alerts.error.confirmButton'),
       }).then(() => {
         dispatch(clearError());
       });
@@ -148,20 +149,20 @@ const ExamsSection = () => {
 
     if (now < startTime) {
       Swal.fire({
-        title: "Not Started!",
-        text: "The exam has not started yet.",
+        title:  t('exams.alerts.notStarted.title'),
+        text:  t('exams.alerts.notStarted.message'),
         icon: "warning",
-        confirmButtonText: "OK",
+        confirmButtonText:t('exams.alerts.notStarted.confirmButton'),
       });
       return;
     }
 
     if (now > endTime) {
       Swal.fire({
-        title: "Exam Ended!",
-        text: "The exam has already ended.",
+        title:  t('exams.alerts.examEnded.title'),
+        text:  t('exams.alerts.examEnded.message'),
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: t('exams.alerts.examEnded.confirmButton'),
       });
       return;
     }
@@ -170,10 +171,10 @@ const ExamsSection = () => {
 
     if (session && session.status === "Expired") {
       Swal.fire({
-        title: "Session Expired!",
-        text: "You cannot enter this exam as the session has expired.",
+        title:  t('exams.alerts.sessionExpired.title'),
+        text:  t('exams.alerts.sessionExpired.message'),
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText:  t('exams.alerts.sessionExpired.confirmButton'),
       });
       return;
     }
@@ -186,20 +187,20 @@ const ExamsSection = () => {
         // Check if the error message indicates an active session
         if (action.payload === "You already have an active session for this exam") {
           Swal.fire({
-            title: "Warning!",
-            text: "You already have an active session. Resuming your previous exam.",
+            title: t('exams.alerts.activeSession.title'),
+            text: t('exams.alerts.activeSession.message'),
             icon: "warning",
-            confirmButtonText: "Proceed",
+            confirmButtonText:  t('exams.alerts.activeSession.confirmButton'),
           });
           // Navigate to the exam page even if this error occurs
           navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}/${exam._id}`);
         } else {
           // Handle other errors normally
           Swal.fire({
-            title: "Error!",
-            text: action.payload || "Failed to start the exam.",
+            title: t('exams.alerts.error.title'),
+            text: action.payload || t('exams.alerts.error.message'),
             icon: "error",
-            confirmButtonText: "OK",
+            confirmButtonText: t('exams.alerts.error.confirmButton'),
           });
         }
       }
@@ -270,7 +271,7 @@ const ExamsSection = () => {
               className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/videos/${gradeSubjectSemesterId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> Video Lectures
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">01</span> {t('exams.sidebar.videoLectures')}
             </Button>
           </li>
           <li>
@@ -279,7 +280,7 @@ const ExamsSection = () => {
               className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/materials/${gradeSubjectSemesterId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">02</span> Course Material
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">02</span> {t('exams.sidebar.courseMaterial')}
             </Button>
           </li>
           <li>
@@ -288,19 +289,19 @@ const ExamsSection = () => {
               className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/virtualrooms/${gradeSubjectSemesterId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span> Virtual Rooms
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">03</span>  {t('exams.sidebar.virtualRooms')}
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> Assignments
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">04</span> {t('exams.sidebar.assignments') }
             </Button>
           </li>
           <li>
             <Button variant="solid" className="md:w-11/12 bg-[#BFBFBF] text-white font-medium py-4 rounded-lg">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span> Exams
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">05</span>  {t('exams.sidebar.exams')}
             </Button>
           </li>
           <li>
@@ -309,7 +310,7 @@ const ExamsSection = () => {
               className="md:w-11/12 bg-gray-100 text-gray-700 font-medium py-4 rounded-lg"
               onClick={() => navigate(`/student/allcourses/questionbank/${gradeSubjectSemesterId}`)}
             >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> Question Bank
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mr-2">06</span> {t('exams.sidebar.questionBank')}
             </Button>
           </li>
         </ul>
@@ -317,7 +318,7 @@ const ExamsSection = () => {
 
       {/* Main Content */}
       <div className="flex-1 w-full md:w-3/4 p-4 mt-6">
-        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">Exams</h1>
+        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">{t('exams.main.title')}</h1>
 
         {/* Filter Buttons */}
         <div className="flex flex-wrap gap-3 mb-6">
@@ -329,7 +330,7 @@ const ExamsSection = () => {
               } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("all")}
           >
-            All ({exams.length})
+            {t('exams.main.allTab')} ({exams.length})
           </Button>
           <Button
             variant={activeTab === "upcoming" ? "outline" : "solid"}
@@ -339,7 +340,7 @@ const ExamsSection = () => {
               } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("upcoming")}
           >
-            Upcoming ({upcomingExams.length})
+            {t('exams.main.upcomingTab')} ({upcomingExams.length})
           </Button>
           <Button
             variant={activeTab === "completed" ? "outline" : "solid"}
@@ -349,7 +350,7 @@ const ExamsSection = () => {
               } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("completed")}
           >
-            Completed ({completedExams.length})
+            {t('exams.main.completedTab')} ({completedExams.length})
           </Button>
           <Button
             variant={activeTab === "missed" ? "outline" : "solid"}
@@ -359,7 +360,7 @@ const ExamsSection = () => {
               } px-4 md:px-6 py-2 rounded-full`}
             onClick={() => setActiveTab("missed")}
           >
-            Missed ({missedExams.length})
+            {t('exams.main.missedTab')} ({missedExams.length})
           </Button>
         </div>
 
@@ -367,7 +368,7 @@ const ExamsSection = () => {
         {loading && !initialLoading && (
           <div className="flex items-center justify-center text-center text-gray-500 mt-10">
             <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
-            <p className="text-gray-700 text-lg font-semibold">Loading...</p>
+            <p className="text-gray-700 text-lg font-semibold">{t('exams.main.loading')}</p>
           </div>
         )}
 
@@ -378,28 +379,28 @@ const ExamsSection = () => {
             {activeTab === "all" && filteredExams.length === 0 && (
               <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
                 <CardContent className="text-center p-4 text-gray-600">
-                  No exams available.
+                {t('exams.main.noExams.all')}
                 </CardContent>
               </Card>
             )}
             {activeTab === "upcoming" && upcomingExams.length === 0 && (
               <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
                 <CardContent className="text-center p-4 text-gray-600">
-                  No upcoming exams available.
+                {t('exams.main.noExams.upcoming')}
                 </CardContent>
               </Card>
             )}
             {activeTab === "completed" && completedExams.length === 0 && (
               <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
                 <CardContent className="text-center p-4 text-gray-600">
-                  No completed exams available.
+                {t('exams.main.noExams.completed')}
                 </CardContent>
               </Card>
             )}
             {activeTab === "missed" && missedExams.length === 0 && (
               <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
                 <CardContent className="text-center p-4 text-gray-600">
-                  No missed exams available.
+                {t('exams.main.noExams.missed')}
                 </CardContent>
               </Card>
             )}
@@ -416,13 +417,13 @@ const ExamsSection = () => {
                         </div>
                         <div>
                           <h2 className="text-base md:text-lg font-semibold text-gray-800">{exam.title}</h2>
-                          <p className="text-md text-gray-700">Description: {exam.description}</p>
-                          <p className="text-sm text-gray-700">Created By: {exam.created_by.fullName}</p>
-                          <p className="text-sm text-gray-700">Duration: {exam.duration} minutes</p>
+                          <p className="text-md text-gray-700">{t('exams.main.examCard.description')}: {exam.description}</p>
+                          <p className="text-sm text-gray-700">{t('exams.main.examCard.createdBy')}: {exam.created_by.fullName}</p>
+                          <p className="text-sm text-gray-700">{t('exams.main.examCard.duration')}: {exam.duration}  {t('exams.main.examCard.minutes')}</p>
                           <p className="text-sm text-gray-700">
-                            Start Time: {new Date(exam.start_time).toLocaleString()}
+                          {t('exams.main.examCard.startTime')}: {new Date(exam.start_time).toLocaleString()}
                             <span className="text-pink-600"> | </span>
-                            End Time: {new Date(exam.end_time).toLocaleString()}
+                            {t('exams.main.examCard.endTime')}: {new Date(exam.end_time).toLocaleString()}
                           </p>
                         </div>
                       </div>
@@ -432,9 +433,9 @@ const ExamsSection = () => {
                         className="ml-4"
                         title={
                           new Date() < new Date(exam.start_time)
-                            ? "The exam has not started yet."
+                            ?  t('exams.main.examCard.notStartedTooltip')
                             : new Date() > new Date(exam.end_time)
-                              ? "The exam has already ended."
+                              ?t('exams.main.examCard.endedTooltip')
                               : ""
                         }
                       >
@@ -461,13 +462,13 @@ const ExamsSection = () => {
                           }
                         >
                           {(() => {
-                            if (exam.type === "Offline") return "Offline";
+                            if (exam.type === "Offline") return t('exams.main.examCard.offline');
                             const session = sessions.find((session) => session.exam_id?._id === exam._id);
-                            if (session?.status === "Submitted") return "View";
-                            if (session?.isExpired === true) return "View";
-                            if (new Date() < new Date(exam.start_time)) return "Not Started";
-                            if (new Date() > new Date(exam.end_time)) return "Exam Ended";
-                            return "Start Exam";
+                            if (session?.status === "Submitted") return t('exams.main.examCard.view');
+                            if (session?.isExpired === true) return t('exams.main.examCard.view');
+                            if (new Date() < new Date(exam.start_time)) return t('exams.main.examCard.notStarted');
+                            if (new Date() > new Date(exam.end_time)) return t('exams.main.examCard.ended');
+                            return t('exams.main.examCard.start');
                           })()}
                         </Button>
                       </div>
@@ -488,7 +489,7 @@ const ExamsSection = () => {
                   <FaChevronLeft />
                 </button>
                 <span className="text-gray-800 font-medium">
-                  Page {currentPage} of {totalPages}
+                {t('exams.main.page')} {currentPage} {t('exams.main.of')} {totalPages}
                 </span>
                 <button
                   onClick={nextPage}

@@ -6,8 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
-
+import { useTranslation } from 'react-i18next';
 const AssignmentView = () => {
+  const { t } = useTranslation();
   const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const { assignmentId, gradeSubjectSemesterId } = useParams();
@@ -23,10 +24,10 @@ const AssignmentView = () => {
   useEffect(() => {
     if (error) {
       Swal.fire({
-        title: "Error!",
+        title: t("assignment.view.error.title"),
         text: error,
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: t("assignment.view.error.confirmButton"),
       }).then(() => {
         dispatch(clearError());
       });
@@ -36,10 +37,10 @@ const AssignmentView = () => {
   const handleSubmit = async () => {
     if (!submissionText.trim()) {
       Swal.fire({
-        title: "Error!",
-        text: "Please enter your submission text.",
+        title: t("assignment.view.error.title"),
+        text: t("assignment.view.error.emptySubmission"),
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: t("assignment.view.error.confirmButton"),
       });
       return;
     }
@@ -51,10 +52,10 @@ const AssignmentView = () => {
     const result = await dispatch(submitAssignment({ assignmentId, submissionData }));
     if (submitAssignment.fulfilled.match(result)) {
       Swal.fire({
-        title: "Success!",
-        text: "Assignment submitted successfully.",
+        title: t("assignment.view.success.title"),
+        text: t("assignment.view.success.submitted"),
         icon: "success",
-        confirmButtonText: "OK",
+        confirmButtonText: t("assignment.view.success.confirmButton"),
       }).then(() => {
         navigate(`/student/allcourses/assignments/${gradeSubjectSemesterId}`);
       });
@@ -76,9 +77,9 @@ const AssignmentView = () => {
         <Card className="border border-gray-200 rounded-xl shadow-sm w-full max-w-2xl p-6 bg-white">
           <CardContent>
             <h2 className="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] mb-4">
-              No Assignment Found
+            {t("assignment.view.noAssignment")}
             </h2>
-            <p className="text-gray-600">The requested assignment could not be found.</p>
+            <p className="text-gray-600">{t("assignment.view.noAssignmentFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -98,7 +99,7 @@ const AssignmentView = () => {
           className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
           onClick={() => navigate(-1)}
         >
-          Back
+         {t("assignment.view.back")}
         </Button>
       </div>
 
@@ -110,7 +111,7 @@ const AssignmentView = () => {
 
             <div className="mb-6">
               <p className="text-lg text-gray-600">
-                Due Date: {new Date(currentAssignment.due_date).toLocaleString()}
+              {t("assignment.view.dueDate")}: {new Date(currentAssignment.due_date).toLocaleString()}
               </p>
             </div>
 
@@ -118,7 +119,7 @@ const AssignmentView = () => {
               <textarea
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows="6"
-                placeholder="Enter your answer here..."
+                placeholder={t("assignment.view.enterAnswer")}
                 value={submissionText}
                 onChange={(e) => setSubmissionText(e.target.value)}
                 disabled={isSubmitted}
@@ -132,7 +133,7 @@ const AssignmentView = () => {
                 onClick={handleSubmit}
                 disabled={isSubmitted}
               >
-                {isSubmitted ? "View Submission" : "Submit Assignment"}
+                {isSubmitted ?  t("assignment.view.viewSubmission")  :  t("assignment.view.submitAssignment")}
               </Button>
             </div>
           </CardContent>

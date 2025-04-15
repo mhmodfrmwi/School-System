@@ -17,8 +17,10 @@ import Swal from 'sweetalert2';
 import Loader from "../../../../ui/Loader";
 import backgroundWaves from "../../../../assets/StudentIcon/bg-color2.png";
 import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
+import { useTranslation } from 'react-i18next';
 
 const VideoSection = () => {
+  const { t ,i18n} = useTranslation();
   const role = sessionStorage.getItem("role");
   const [currentPageAll, setCurrentPageAll] = useState(1);
   const [currentPageBookmarks, setCurrentPageBookmarks] = useState(1);
@@ -162,7 +164,7 @@ const VideoSection = () => {
                 variant="solid"
                 className="md:w-11/12 bg-[#BFBFBF] dark:bg-[#C459D9] text-white font-medium py-4 rounded-lg"
               >
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">01</span> Video Lectures
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">01</span>{t('videoSection.sidebar.videoLectures')}
               </Button>
             </li>
             <li>
@@ -171,7 +173,7 @@ const VideoSection = () => {
                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                 onClick={() => navigate(`/student/allcourses/materials/${subjectId}`)}
               >
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">02</span> Course Material
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">02</span> {t('videoSection.sidebar.courseMaterial')}
               </Button>
             </li>
             <li>
@@ -180,7 +182,7 @@ const VideoSection = () => {
                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                 onClick={() => navigate(`/student/allcourses/virtualrooms/${subjectId}`)}
               >
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span> Virtual Rooms
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span> {t('videoSection.sidebar.virtualRooms')}
               </Button>
             </li>
             <li>
@@ -189,7 +191,7 @@ const VideoSection = () => {
                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                 onClick={() => navigate(`/student/allcourses/assignments/${subjectId}`)}
               >
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">04</span> Assignments
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">04</span> {t('videoSection.sidebar.assignments')}
               </Button>
             </li>
             <li>
@@ -198,7 +200,7 @@ const VideoSection = () => {
                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                 onClick={() => navigate(`/student/allcourses/exams/${subjectId}`)}
               >
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">05</span> Exams
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">05</span> {t('videoSection.sidebar.exams')}
               </Button>
             </li>
             <li>
@@ -207,7 +209,7 @@ const VideoSection = () => {
                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
                 onClick={() => navigate(`/student/allcourses/questionbank/${subjectId}`)}
               >
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">06</span> Question Bank
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">06</span> {t('videoSection.sidebar.questionBank')}
               </Button>
             </li>
           </ul>
@@ -215,7 +217,7 @@ const VideoSection = () => {
 
         {/* Main Content */}
         <div className="flex-1 w-full md:w-3/4 p-4 mt-6">
-          <h1 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-300 mb-4">Video Lectures</h1>
+          <h1 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-300 mb-4">{t('videoSection.main.title')}</h1>
 
           {/* Filter Buttons */}
           <div className="flex flex-wrap gap-3 mb-6">
@@ -228,7 +230,7 @@ const VideoSection = () => {
               } px-4 md:px-6 py-2 rounded-full`}
               onClick={() => setActiveTab("all")}
             >
-              All ({videoMaterials.length})
+              {t('videoSection.main.allTab')} ({videoMaterials.length})
             </Button>
             <Button
               variant={activeTab === "bookmarks" ? "outline" : "solid"}
@@ -239,7 +241,7 @@ const VideoSection = () => {
               } px-4 md:px-6 py-2 rounded-full`}
               onClick={() => setActiveTab("bookmarks")}
             >
-              Bookmarks ({bookmarkedMaterials.length})
+              {t('videoSection.main.bookmarksTab')} ({bookmarkedMaterials.length})
             </Button>
           </div>
 
@@ -247,7 +249,7 @@ const VideoSection = () => {
           {loading && !initialLoading && (
             <div className="flex items-center justify-center text-center text-gray-500 dark:text-gray-300 mt-10">
               <FaSpinner className="animate-spin text-4xl text-blue-500 dark:text-[#C459D9] mb-4 mr-5" />
-              <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold">Loading...</p>
+              <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold"> {t('videoSection.main.loading')}</p>
             </div>
           )}
 
@@ -258,14 +260,14 @@ const VideoSection = () => {
               {activeTab === "all" && videoMaterials.length === 0 && (
                 <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center dark:bg-[#281459]">
                   <CardContent className="text-center p-4 text-gray-600 dark:text-gray-300">
-                    No video materials available for this subject.
+                  {t('videoSection.main.noVideos')}
                   </CardContent>
                 </Card>
               )}
               {activeTab === "bookmarks" && bookmarkedMaterials.length === 0 && (
                 <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center dark:bg-[#281459]">
                   <CardContent className="text-center p-4 text-gray-600 dark:text-gray-300">
-                    You haven't bookmarked any videos yet.
+                  {t('videoSection.main.noBookmarks')}
                   </CardContent>
                 </Card>
               )}
@@ -331,7 +333,7 @@ const VideoSection = () => {
                     <FaChevronLeft />
                   </button>
                   <span className="text-gray-800 dark:text-gray-300 font-medium">
-                    Page {currentPage} of {totalPages}
+                  {t('videoSection.main.page')} {currentPage}{t('videoSection.main.of')} {totalPages}
                   </span>
                   <button
                     onClick={nextPage}

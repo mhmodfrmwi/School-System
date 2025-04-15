@@ -5,8 +5,9 @@ import { fetchLibraryItemDetails, fetchMaterialDetails, clearDetails } from "../
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Loader from "../../../../ui/Loader";
-
+import { useTranslation } from 'react-i18next';
 const LibraryItemDetailsPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { itemId, type } = useParams();
@@ -27,7 +28,7 @@ const LibraryItemDetailsPage = () => {
   if (loading) {
     return (
       <div className="mt-16 mb-20 min-h-screen w-[95%] mx-auto">
-        <Loader role="student"/>
+        <Loader role="student" />
       </div>
     );
   }
@@ -80,16 +81,16 @@ const LibraryItemDetailsPage = () => {
     <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
       <div className="w-full flex justify-between items-center mb-6">
         <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-          {details?.title || "Item Details"}
+          {details?.title || t('libraryItem.title')}
           <span className="absolute left-0 bottom-[-9px] w-[120px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
-            
+
         </h1>
         <Button
           variant="solid"
           className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white"
           onClick={() => navigate(-1)}
         >
-          Back
+          {t('libraryItem.back')}
         </Button>
       </div>
 
@@ -99,75 +100,75 @@ const LibraryItemDetailsPage = () => {
             <CardContent className="p-4">
               <table className="w-full table-auto">
                 <tbody>
-                    {type === "material" && (
-                       <tr>
-                       <td className="py-2 font-semibold text-gray-700">Description</td>
-                       <td className="py-2 text-gray-600">{details?.description || "N/A"}</td>
-                     </tr> 
-                    )}
-                    {type === "general" && (
-                      <tr>
-                        <td className="py-2 font-semibold text-gray-700">Author</td>
-                        <td className="py-2 text-gray-600">{details?.author|| "N/A"}</td>
-                      </tr>
-                    )}
-                    {type === "material" && (
+                  {type === "material" && (
+                    <tr>
+                      <td className="py-2 font-semibold text-gray-700">{t('libraryItem.description')}</td>
+                      <td className="py-2 text-gray-600">{details?.description || t('libraryItem.na')}</td>
+                    </tr>
+                  )}
+                  {type === "general" && (
+                    <tr>
+                      <td className="py-2 font-semibold text-gray-700">{t('libraryItem.author')}</td>
+                      <td className="py-2 text-gray-600">{details?.author || t('libraryItem.na')}</td>
+                    </tr>
+                  )}
+                  {type === "material" && (
                     <>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Grade</td>
-                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName || "N/A"}</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.grade')}</td>
+                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName || t('libraryItem.na')}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Subject</td>
-                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "N/A"}</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.subject')}</td>
+                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || t('libraryItem.na')}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Semester</td>
-                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.semester_id?.semesterName || "N/A"}</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.semester')}</td>
+                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.semester_id?.semesterName || t('libraryItem.na')}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">Academic Year</td>
+                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.academicYear')}</td>
                         <td className="py-2 text-gray-600">
-                          {`${details?.grade_subject_semester_id?.semester_id?.academicYear_id?.startYear} - ${details?.grade_subject_semester_id?.semester_id?.academicYear_id?.endYear}` || "N/A"}
+                          {`${details?.grade_subject_semester_id?.semester_id?.academicYear_id?.startYear} - ${details?.grade_subject_semester_id?.semester_id?.academicYear_id?.endYear}` || t('libraryItem.na')}
                         </td>
                       </tr>
                     </>
                   )}
-                  
+
                   <tr>
-                    <td className="py-2 font-semibold text-gray-700">Type</td>
-                    <td className="py-2 text-gray-600">{details?.type || "N/A"}</td>
+                    <td className="py-2 font-semibold text-gray-700">{t('libraryItem.type')}</td>
+                    <td className="py-2 text-gray-600">{details?.type || t('libraryItem.na')}</td>
                   </tr>
                   <tr>
-                    <td className="py-2 font-semibold text-gray-700">Uploaded By</td>
-                    <td className="py-2 text-gray-600">{details?.uploaded_by?.fullName || "Unknown"}</td>
+                    <td className="py-2 font-semibold text-gray-700">{t('libraryItem.uploadedBy')}</td>
+                    <td className="py-2 text-gray-600">{details?.uploaded_by?.fullName || t('libraryItem.unknown')}</td>
                   </tr>
-                  
+
                   {fileUrl && (
-  <tr>
-    <td className="py-2 font-semibold text-gray-700">Download</td>
-    <td className="py-2">
-      <a href={fileUrl} download target="_blank" rel="noopener noreferrer">
-        <Button
-          variant="solid"
-          className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] text-white flex items-center gap-2"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 12l4-4m-4 4l-4-4M4 20h16" />
-          </svg>
-          Download Material
-        </Button>
-      </a>
-    </td>
-  </tr>
-)}
+                    <tr>
+                      <td className="py-2 font-semibold text-gray-700">{t('libraryItem.download')}</td>
+                      <td className="py-2">
+                        <a href={fileUrl} download target="_blank" rel="noopener noreferrer">
+                          <Button
+                            variant="solid"
+                            className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] text-white flex items-center gap-2"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="2"
+                              stroke="currentColor"
+                              className="w-5 h-5"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 12l4-4m-4 4l-4-4M4 20h16" />
+                            </svg>
+                            {t('libraryItem.downloadMaterial')}
+                          </Button>
+                        </a>
+                      </td>
+                    </tr>
+                  )}
 
                 </tbody>
               </table>
@@ -188,26 +189,26 @@ const LibraryItemDetailsPage = () => {
                 ) : isVideo ? (
                   <video width="100%" controls>
                     <source src={fileUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
+                    {t('libraryItem.noSupport')}
                   </video>
                 ) : isGoogleDocs ? (
-                    <iframe
-                      src={getGoogleEmbedUrl(fileUrl)}
-                      width="100%"
-                      height="500px"
-                      title="Google Document"
-                      className="border rounded"
-                    ></iframe>
-                  ) : isGoogleDrive ? (
-                    <iframe src={fileUrl.replace("/view", "/preview")} width="100%" height="400px" title="Google Drive File"></iframe>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-[400px] border border-gray-200 rounded-xl shadow-sm
+                  <iframe
+                    src={getGoogleEmbedUrl(fileUrl)}
+                    width="100%"
+                    height="500px"
+                    title="Google Document"
+                    className="border rounded"
+                  ></iframe>
+                ) : isGoogleDrive ? (
+                  <iframe src={fileUrl.replace("/view", "/preview")} width="100%" height="400px" title="Google Drive File"></iframe>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-[400px] border border-gray-200 rounded-xl shadow-sm
                     ">
                     <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] " >
-                      Download Material
+                      {t('libraryItem.downloadMaterial')}
                     </a>
-                    </div>
-                  )}
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}

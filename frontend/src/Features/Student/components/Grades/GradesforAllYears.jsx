@@ -4,8 +4,9 @@ import { getDegreesAllYears } from "../StudentRedux/gradesStudentSlice";
 import { useEffect } from "react";
 import Loader from "@/ui/Loader";
 import { Button } from "@/components/ui/button";
-
+import { useTranslation } from 'react-i18next';
 function GradesforAllYears() {
+  const { t } = useTranslation();
   const { allDegrees, loading } = useSelector((state) => state.studentGrades);
   const dispatch = useDispatch();
   const role = sessionStorage.getItem("role");
@@ -29,7 +30,7 @@ function GradesforAllYears() {
       {/* Header Section */}
       <div className="w-full flex justify-between items-center mb-16">
         <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-          Grades for All Years
+        {t("gradesAllYears.title")}
           <span className="absolute left-0 bottom-[-10px] w-[120px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
         </h1>
         <Button
@@ -37,7 +38,7 @@ function GradesforAllYears() {
           className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
           onClick={() => navigate(-1)}
         >
-          Back
+         {t("gradesAllYears.back")}
         </Button>
       </div>
 
@@ -52,7 +53,7 @@ function GradesforAllYears() {
 
                 {/* Academic Year Text */}
                 <h2 className="text-lg font-semibold text-[#5e5b63]">
-                  Academic Year {yearData.academicYear.startYear} -{" "}
+                {t("gradesAllYears.academicYear")} {yearData.academicYear.startYear} -{" "}
                   {yearData.academicYear.endYear}
                 </h2>
               </div>
@@ -64,25 +65,25 @@ function GradesforAllYears() {
                     <thead>
                       <tr>
                         <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                          Subject Name
+                        {t("gradesAllYears.headers.subjectName")}
                         </th>
                         <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                          Midterm Degree
+                        {t("gradesAllYears.headers.midtermDegree")}
                         </th>
                         <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                          Max Midterm Degree
+                        {t("gradesAllYears.headers.maxMidtermDegree")}
                         </th>
                         <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                          Final Degree
+                        {t("gradesAllYears.headers.finalDegree")}
                         </th>
                         <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                          Max Final Degree
+                        {t("gradesAllYears.headers.maxFinalDegree")}
                         </th>
                         <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                          Subject Score
+                        {t("gradesAllYears.headers.subjectScore")}
                         </th>
                         <th className="border-b border-l border-gray-200 px-4 py-4 text-center text-gray-700 bg-[#D6A3E1]">
-                          Max Subject Score
+                        {t("gradesAllYears.headers.maxSubjectScore")}
                         </th>
                       </tr>
                     </thead>
@@ -133,7 +134,7 @@ function GradesforAllYears() {
                             colSpan="7"
                             className="px-4 py-12 text-center text-lg text-gray-500 border border-gray-200"
                           >
-                            <p className="py-16">No degrees available for this term.</p>
+                            <p className="py-16">{t("gradesAllYears.noDegreesTerm")}</p>
                           </td>
                         </tr>
                       )}
@@ -147,7 +148,7 @@ function GradesforAllYears() {
                     colSpan="7"
                     className="px-4 py-12 text-center text-lg text-gray-500"
                   >
-                    <p className="py-16">No degrees available for this academic year.</p>
+                    <p className="py-16">{t("gradesAllYears.noDegreesYear")}</p>
                   </td>
                 </tr>
               )}

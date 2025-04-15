@@ -3,8 +3,9 @@ import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentAttendance } from "../StudentRedux/studentAttendanceSlice";
 import Loader from "@/ui/Loader";
-
+import { useTranslation } from 'react-i18next';
 const AttendancePage = () => {
+  const { t } = useTranslation();
   const { studentAttendance, loading } = useSelector(
     (state) => state.studentAttendance,
   );
@@ -71,6 +72,11 @@ const AttendancePage = () => {
     return acc;
   }, {});
 
+  const getTranslatedDay = (date) => {
+    const day = dayjs(date).format("dddd").toLowerCase();
+    return t(`attendance.days.${day}`);
+  };
+
   if (loading) return <Loader role={role} />;
 
   return (
@@ -78,19 +84,19 @@ const AttendancePage = () => {
       <div className="w-[90%]">
         <div className="mb-8">
           <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-3xl font-semibold text-transparent">
-            Attendance Level
+          {t("attendance.title")}
             <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
           </h1>
 
           <div className="flex flex-col space-y-4 sm:ml-8 sm:flex-row sm:items-center sm:space-x-8 sm:space-y-0">
             <span className="flex items-center p-4 text-lg font-medium text-green-600 sm:mr-12">
               <span className="mr-2 h-4 w-4 rounded-full bg-green-600"></span>
-              Present:{" "}
+              {t("attendance.present")}:{" "}
               {attendanceStats.reduce((sum, day) => sum + day.presentCount, 0)}
             </span>
             <span className="flex items-center p-4 text-lg font-medium text-red-600 sm:mr-12">
               <span className="mr-2 h-4 w-4 rounded-full bg-red-600"></span>
-              Absent:{" "}
+              {t("attendance.absent")}:{" "}
               {attendanceStats.reduce((sum, day) => sum + day.absentCount, 0)}
             </span>
           </div>
@@ -126,13 +132,14 @@ const AttendancePage = () => {
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="border-b border-gray-200 px-2 py-4 text-center text-gray-700">
-                  Academic Number: {Object.values(groupedAttendance)[0]?.academic_number || "N/A"}
+                {t("attendance.academicNumber")}: {Object.values(groupedAttendance)[0]?.academic_number || t("attendance.notAvailable")}
                 </th>
                 <th colSpan="6">
                   <div className="mb-6 mr-6 mt-6 flex flex-nowrap items-center justify-end">
                     <button
                       onClick={handlePreviousWeek}
                       className="rounded-xl border-2 border-[#FFB7B7] bg-white px-2 py-2 font-medium text-[#FFB7B7] hover:text-gray-800"
+                      aria-label={t("attendance.weekNavigation.previous")}
                     >
                       &lt;
                     </button>
@@ -143,6 +150,7 @@ const AttendancePage = () => {
                     <button
                       onClick={handleNextWeek}
                       className="rounded-xl border-2 border-[#FFB7B7] bg-white px-2 py-2 font-medium text-[#FFB7B7] hover:text-gray-800"
+                      aria-label={t("attendance.weekNavigation.next")}
                     >
                       &gt;
                     </button>
@@ -164,7 +172,8 @@ const AttendancePage = () => {
                         <td  style={{ minWidth: "70px", width: "70px" }}
                           className={`border-l border-gray-200 px-2 py-5 text-center text-gray-800 ${isToday ? "bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10" : ""}`}
                         >
-                          {dayjs(day).format("dddd DD")}
+                          {/* {dayjs(day).format("dddd DD")} */}
+                          {getTranslatedDay(day)} {dayjs(day).format("DD")}
                         </td>
                         <td  style={{minWidth: "70px" ,width: "70px" }}
                           className={`border-l border-gray-200 px-5 py-5 text-center ${status === "P" ? "bg-green-600 text-white" : status === "A" ? "bg-red-600 text-white" : ""}`}

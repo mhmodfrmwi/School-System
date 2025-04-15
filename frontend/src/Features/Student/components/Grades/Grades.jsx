@@ -7,8 +7,10 @@ import img1 from "../../../../assets/gradeshere.png";
 import img2 from "../../../../assets/grade1.jpg";
 import img3 from "../../../../assets/grade2.jpg";
 import Loader from "@/ui/Loader";
+import { useTranslation } from 'react-i18next';
 
 function Grades() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { allDegrees, loading } = useSelector((state) => state.studentGrades);
@@ -50,12 +52,12 @@ function Grades() {
           />
           <div className="z-100 absolute inset-0 left-20 top-40 sm:top-48 lg:top-60">
             <h2 className="font-semibold text-lg text-white">
-              Take a Look at your Grades.
+            {t("grades.header.title")}
             </h2>
             <p
               className="my-24 w-52 rounded-xl cursor-pointer bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-3 font-semibold text-white text-center"
             >
-              Great Achievements
+               {t("grades.header.subtitle")}
             </p>
           </div>
         </div>
@@ -66,7 +68,7 @@ function Grades() {
         <div className="flex items-center py-4">
           <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
-            Your Grades
+          {t("grades.title")}
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
@@ -83,7 +85,7 @@ function Grades() {
                 className="absolute inset-0 bg-[#FD813D] bg-opacity-75 flex items-center justify-center"
                 style={{ borderRadius: "8px 8px 0 0" }}
               >
-                <h3 className="text-xl font-semibold text-white">Current Semester</h3>
+                <h3 className="text-xl font-semibold text-white">{t("grades.cards.currentSemester")}</h3>
               </div>
             </div>
 
@@ -93,7 +95,7 @@ function Grades() {
                 className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white py-2 px-6 rounded-lg hover:opacity-90 transition-opacity"
                 onClick={() => navigate("/student/grades-for-semester")}
               >
-                View Grades
+                 {t("grades.cards.viewGrades")}
               </button>
             </div>
           </div>
@@ -111,7 +113,7 @@ function Grades() {
                 className="absolute inset-0 bg-[#FD813D] bg-opacity-75 flex items-center justify-center"
                 style={{ borderRadius: "8px 8px 0 0" }}
               >
-                <h3 className="text-xl font-semibold text-white">All Years</h3>
+                <h3 className="text-xl font-semibold text-white">{t("grades.cards.allYears")}</h3>
               </div>
             </div>
 
@@ -121,7 +123,7 @@ function Grades() {
                 className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white py-2 px-6 rounded-lg hover:opacity-90 transition-opacity"
                 onClick={() => navigate("/student/grades-for-allyears")}
               >
-                View Grades
+                {t("grades.cards.viewGrades")}
               </button>
             </div>
           </div>
@@ -132,7 +134,7 @@ function Grades() {
           <div className="flex items-center py-4 mb-4">
             <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
             <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
-              Performance Evolution Over Semesters
+            {t("grades.performance.title")}
             </button>
           </div>
           {performanceData?.length > 0 ? (
@@ -159,7 +161,7 @@ function Grades() {
             </div>
           ) : (
             <div className="bg-white rounded-lg shadow-lg p-6 w-full md:w-[50%] border h-[200px] flex items-center justify-center">
-              <p className="text-center text-gray-500">Not enough data to display performance evolution.</p>
+              <p className="text-center text-gray-500">{t("grades.performance.noData")}</p>
             </div>
           )}
         </div>

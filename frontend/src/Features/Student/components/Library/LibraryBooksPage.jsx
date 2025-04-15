@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../../ui/Loader";
+import { useTranslation } from 'react-i18next';
 
 // Helper function to extract file ID and get the first page as an image
 const getFirstPageAsImage = (url) => {
@@ -86,6 +87,7 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
 };
 
 const LibraryBooksPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -236,7 +238,7 @@ const LibraryBooksPage = () => {
         } md:translate-x-0`}
       >
         <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
-          Subjects
+        {t('libraryBooks.subjectsTitle')}
         </h2>
         <ul>
           <li
@@ -262,7 +264,7 @@ const LibraryBooksPage = () => {
               className="form-radio h-4 w-4 text-[#BC6FFB] border-[#BC6FFB] focus:ring-[#BC6FFB]"
             />
             <span className="ml-2 text-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
-              All
+            {t('libraryBooks.all')}
             </span>
           </li>
           <li
@@ -288,7 +290,7 @@ const LibraryBooksPage = () => {
               className="form-radio h-4 w-4 text-[#BC6FFB] border-[#BC6FFB] focus:ring-[#BC6FFB]"
             />
             <span className="ml-2 text-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent">
-              Public
+            {t('libraryBooks.public')}
             </span>
           </li>
           {pdfSubjects.map((subject, index) => (
@@ -328,7 +330,7 @@ const LibraryBooksPage = () => {
         {loading ? (
           <div className="flex items-center justify-center text-center text-gray-500 mt-10">
             <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4 mr-5" />
-            <p className="text-gray-700 text-lg font-semibold">Loading...</p>
+            <p className="text-gray-700 text-lg font-semibold">{t('libraryBooks.loading')}</p>
           </div>
         ) : error ? (
           <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
@@ -341,14 +343,14 @@ const LibraryBooksPage = () => {
               <div>
                 <div className="flex justify-center items-center md:items-start md:justify-start">
                   <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-                    Library
+                  {t('libraryBooks.libraryTitle')}
                     <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                   </h2>
                 </div>
                 {!loading && !initialLoading && generalPDFs.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
-                      No books available at the moment.
+                    {t('libraryBooks.noBooks')}
                     </CardContent>
                   </Card>
                 ) : (
@@ -388,7 +390,7 @@ const LibraryBooksPage = () => {
                               </div>
                             </div>
                             <h2 className="mt-3 font-semibold text-center w-40 mx-auto">
-                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
+                              {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName ||  t('libraryBooks.general')}
                             </h2>
                           </div>
                         );
@@ -417,14 +419,14 @@ const LibraryBooksPage = () => {
               <div>
                 <div className="flex justify-center items-center md:items-start md:justify-start">
                   <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-                    Public Library
+                  {t('libraryBooks.publicLibraryTitle')}
                     <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                   </h2>
                 </div>
                 {!loading && !initialLoading && generalItems.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
-                      No books available in the public library at the moment.
+                    {t('libraryBooks.noPublicBooks')}
                     </CardContent>
                   </Card>
                 ) : (
@@ -461,7 +463,7 @@ const LibraryBooksPage = () => {
                                 </h3>
                               </div>
                             </div>
-                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">General</h2>
+                            <h2 className="mt-3 font-semibold text-center w-40 mx-auto">{t('libraryBooks.general')}</h2>
                           </div>
                         );
                       })}
@@ -490,7 +492,7 @@ const LibraryBooksPage = () => {
                 <div className="flex flex-row justify-between items-center mb-8">
                   <div className="flex justify-center items-center md:items-start md:justify-start">
                     <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] relative">
-                      {selectedSubject.subject} Materials
+                      {selectedSubject.subject} {t('libraryBooks.materialsTitle')}
                       <span className="absolute left-0 bottom-[-9px] w-[85px] md:w-[155px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
                     </h2>
                   </div>
@@ -509,10 +511,10 @@ const LibraryBooksPage = () => {
                         }));
                       }}
                     >
-                      <option value="">All Grades</option>
+                      <option value="">{t('libraryBooks.filters.allGrades')}</option>
                       {grades.map((grade) => (
                         <option key={grade} value={grade}>
-                          Grade {grade}
+                           {t('libraryBooks.filters.grade')} {grade}
                         </option>
                       ))}
                     </select>
@@ -531,10 +533,10 @@ const LibraryBooksPage = () => {
                         }));
                       }}
                     >
-                      <option value="">All Semesters</option>
+                      <option value="">{t('libraryBooks.filters.allSemesters')}</option>
                       {semesters.map((semester) => (
                         <option key={semester} value={semester}>
-                          Semester {semester}
+                           {t('libraryBooks.filters.semester')} {semester}
                         </option>
                       ))}
                     </select>
@@ -543,7 +545,7 @@ const LibraryBooksPage = () => {
                 {!loading && !initialLoading && filteredMaterials.length === 0 ? (
                   <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[450px] flex items-center justify-center">
                     <CardContent className="text-center p-4 text-gray-600">
-                      No materials available for {selectedSubject.subject} at the moment.
+                    {t('libraryBooks.noMaterials')} {selectedSubject.subject} {t('libraryBooks.noMaterials2')}
                     </CardContent>
                   </Card>
                 ) : (

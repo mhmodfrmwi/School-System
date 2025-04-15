@@ -7,7 +7,9 @@ import { getTeammatesByContestId } from "../StudentRedux/teamSlice";
 import { v4 as uuidv4 } from 'uuid';
 import Loader from "@/ui/Loader";
 import Swal from "sweetalert2";
+import { useTranslation } from 'react-i18next';
 const Contests = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const role = sessionStorage.getItem("role");
   const { contests, loading } = useSelector((state) => state.studentContests);
@@ -37,8 +39,8 @@ const Contests = () => {
     } catch (error) {
       Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: error.message,
+          title: t("contests.errors.title"),
+          text: error.message|| t("contests.errors.default"),
       });}
   };
 
@@ -53,7 +55,7 @@ const Contests = () => {
         {/* Updated Header */}
         <div className="mb-1">
                     <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-3xl font-semibold text-transparent">
-                        Activities
+                    {t("contests.title")}
                         <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
                     </h1>
 
@@ -63,13 +65,13 @@ const Contests = () => {
                             className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 text-lg font-medium text-transparent mt-8"
                             onClick={() => navigate("/student/activities")}
                         >
-                            School Hubs
+                            {t("contests.tabs.schoolHubs")}
                         </button>
                         <button
                             className="px-5 font-poppins cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-2 text-lg font-medium text-white focus:outline-none mt-8"
                             onClick={() => navigate("/student/activities/contests")}
                         >
-                            Contests
+                            {t("contests.tabs.contests")}
                         </button>
                     </div>
                 </div>
@@ -80,14 +82,14 @@ const Contests = () => {
             <table className="min-w-full border-collapse rounded-2xl border-2 border-pink-300 shadow-lg">
               <thead>
                 <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white font-poppins">
-                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">Title</th>
-                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">Teacher</th>
-                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">Subject</th>
-                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">Start Date</th>
-                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">End Date</th>
-                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">Num of team members</th>
-                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">Requirements</th>
-                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">Action</th>
+                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.title")}</th>
+                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.teacher")}</th>
+                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.subject")}</th>
+                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.startDate")}</th>
+                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.endDate")}</th>
+                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.teamMembers")}</th>
+                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.requirements")}</th>
+                  <th className="border border-[#FFA4A4] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.action")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -110,7 +112,7 @@ const Contests = () => {
                           className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-2xl px-4 py-2 text-xs text-white sm:text-sm transition-transform transform hover:scale-105 shadow-md"
                           onClick={() => handleEnterContest(contest._id)}
                         >
-                          Enter
+                            {t("contests.table.enter")}
                         </button>
                       </td>
                     </tr>
@@ -118,7 +120,7 @@ const Contests = () => {
                 ) : (
                   <tr>
                     <td colSpan="8" className="border border-[#FFA4A4] px-4 py-6 text-center font-poppins text-sm sm:text-base md:text-lg text-gray-500">
-                      No contests available
+                    {t("contests.table.noData")}
                     </td>
                   </tr>
                 )}

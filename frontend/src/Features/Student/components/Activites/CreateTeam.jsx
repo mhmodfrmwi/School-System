@@ -7,8 +7,10 @@ import { fetchStudentContests } from "../StudentRedux/contestSlice";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
 import Loader from "@/ui/Loader";
+import { useTranslation } from 'react-i18next';
 
 const CreateTeam = () => {
+  const { t } = useTranslation();
   const { contestId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,10 +33,10 @@ const CreateTeam = () => {
   useEffect(() => {
     if (studentsError) {
       Swal.fire({
-        title: "Error!",
+        title:  t('createTeam.error.title'),
         text: studentsError,
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText:  t('createTeam.error.confirmButton'),
       });
     }
   }, [studentsError]);
@@ -74,10 +76,10 @@ const CreateTeam = () => {
     try {
       await dispatch(createTeam({ contestId, teamData })).unwrap();
       Swal.fire({
-        title: "Success!",
-        text: "Team created successfully! 🎉",
+        title:t('createTeam.success.title'),
+        text: t('createTeam.success.text'),
         icon: "success",
-        confirmButtonText: "OK",
+        confirmButtonText: t('createTeam.success.confirmButton'),
       }).then(() => {
         setTeamName("");
         setTeammates([]);
@@ -85,10 +87,10 @@ const CreateTeam = () => {
       });
     } catch (error) {
       Swal.fire({
-        title: "Error!",
-        text: error || error.message ||"Failed to create team. Please try again.",
+        title: t('createTeam.error.title'),
+        text: error || error.message  || t('createTeam.error.text'),
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText:  t('createTeam.error.confirmButton'),
       });
     }
   };
@@ -106,7 +108,7 @@ const CreateTeam = () => {
       {/* Header */}
       <div className="w-2/3 flex justify-between items-center mb-6 mx-auto">
         <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-          Create Your Team
+        {t('createTeam.title')}
           <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
         </h1>
         <Button
@@ -114,7 +116,7 @@ const CreateTeam = () => {
           className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
           onClick={() => navigate(-1)}
         >
-          Back
+          {t('createTeam.back')}
         </Button>
       </div>
 
@@ -122,7 +124,7 @@ const CreateTeam = () => {
       <div className="w-2/3 mx-auto p-6 bg-white shadow-lg rounded-2xl border-2 border-pink-300">
         <div className="p-6 rounded-lg h-full w-full">
           <form onSubmit={handleSubmit} className="w-full">
-            <label className="block mt-4 text-gray-700 font-poppins">Team Name:</label>
+            <label className="block mt-4 text-gray-700 font-poppins"> {t('createTeam.teamName')}:</label>
             <input
               type="text"
               value={teamName}
@@ -139,7 +141,7 @@ const CreateTeam = () => {
 
             {showTeammates && (
               <>
-                <label className="block mt-4 text-gray-700 font-poppins">Team Members:</label>
+                <label className="block mt-4 text-gray-700 font-poppins">{t('createTeam.teamMembers')}:</label>
                 {teammates.map((member, index) => (
                   <div key={index} className="flex gap-2 mt-2">
                     <select
@@ -147,7 +149,7 @@ const CreateTeam = () => {
                       required
                       className="w-3/4 p-2 border rounded-md font-poppins focus:outline-none focus:ring-2 focus:ring-[#BC6FFB]"
                     >
-                      <option value="">Select Member</option>
+                      <option value="">{t('createTeam.selectMember')}</option>
                       {students && students.length > 0 ? (
                         students.map((student) => (
                           <option key={student._id} value={student._id}>
@@ -155,7 +157,7 @@ const CreateTeam = () => {
                           </option>
                         ))
                       ) : (
-                        <option disabled>No students available</option>
+                        <option disabled>{t('createTeam.noStudents')}</option>
                       )}
                     </select>
 
@@ -165,7 +167,7 @@ const CreateTeam = () => {
                         onClick={() => handleRemoveTeammate(index)}
                         className="text-red-500 font-poppins hover:text-red-700"
                       >
-                        Remove
+                          {t('createTeam.remove')}
                       </button>
                     )}
                   </div>
@@ -179,7 +181,7 @@ const CreateTeam = () => {
                 onClick={handleAddTeammate}
                 className="mt-3 text-gray-700 font-poppins hover:text-gray-800"
               >
-                + Add Member
+                {t('createTeam.addMember')}
               </button>
             )}
 
@@ -187,7 +189,7 @@ const CreateTeam = () => {
               type="submit"
               className="w-full mt-4 p-2 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white rounded-2xl font-poppins font-medium hover:opacity-90"
             >
-              Submit
+               {t('createTeam.submit')}
             </Button>
           </form>
         </div>

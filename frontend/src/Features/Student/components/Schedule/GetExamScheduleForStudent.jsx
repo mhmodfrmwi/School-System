@@ -3,8 +3,9 @@ import img1 from "../../../../assets/schedule 1.png";
 import { useExamSchedules } from "../services/apiSchedule";
 import Loader from "../../../../ui/Loader";
 import { useNavigate } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 function GetExamScheduleForStudent() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isLoading, studentExamSchedule } = useExamSchedules();
 
@@ -19,7 +20,12 @@ function GetExamScheduleForStudent() {
     : [];
 
   const schedule = [
-    ["Subject", "Exam Date", "Start Time", "End Time"],
+    [
+      t("examSchedule.headers.subject"),
+      t("examSchedule.headers.examDate"),
+      t("examSchedule.headers.startTime"),
+      t("examSchedule.headers.endTime")
+    ],
     ...sortedSchedule.map((exam) => [
       exam.subject,
       new Date(exam.exam_date).toLocaleDateString(),
@@ -35,7 +41,7 @@ function GetExamScheduleForStudent() {
           <div className="col-span-2 flex flex-col justify-between">
             <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
               <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
-                Upcoming Smart Classes
+              {t("examSchedule.title")}
                 <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
               </button>
             </div>
@@ -44,13 +50,13 @@ function GetExamScheduleForStudent() {
                 className="me-10 cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 font-poppins text-lg font-medium text-transparent"
                 onClick={() => navigate("/student/schedule")}
               >
-                Weekly Schedule
+                {t("examSchedule.weeklySchedule")}
               </button>
               <button
                 className="me-10 cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 font-poppins text-lg font-medium text-white focus:outline-none"
                 onClick={() => navigate("/student/get-exam-schedule")}
               >
-                Exam Schedule
+                 {t("examSchedule.examSchedule")}
               </button>
             </div>
           </div>
@@ -62,7 +68,7 @@ function GetExamScheduleForStudent() {
         </div>
 
         <div className="mx-auto mb-20 w-[88%] rounded-xl border border-gray-200 bg-white p-6 text-center font-poppins shadow-md">
-          <p className="text-lg text-gray-700">No exam schedules found.</p>
+          <p className="text-lg text-gray-700">{t("examSchedule.noSchedules")}</p>
         </div>
       </section>
     );
@@ -74,7 +80,7 @@ function GetExamScheduleForStudent() {
         <div className="col-span-2 flex flex-col justify-between">
           <div className="ml-4 ms-8 flex items-center py-4 md:ml-16 md:ms-14 lg:ms-20">
             <button className="relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent md:text-2xl">
-              Upcoming Smart Classes
+            {t("examSchedule.title")}
               <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]"></span>
             </button>
           </div>
@@ -83,13 +89,13 @@ function GetExamScheduleForStudent() {
               className="cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text px-5 py-2 font-poppins text-lg font-medium text-transparent"
               onClick={() => navigate("/student/schedule")}
             >
-              Weekly Schedule
+               {t("examSchedule.weeklySchedule")}
             </button>
             <button
               className="me-10 cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-5 py-2 font-poppins text-lg font-medium text-white focus:outline-none"
               onClick={() => navigate("/student/get-exam-schedule")}
             >
-              Exam Schedule
+              {t("examSchedule.examSchedule")}
             </button>
           </div>
         </div>

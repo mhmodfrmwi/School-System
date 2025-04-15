@@ -7,8 +7,10 @@ import { fetchStudentContests } from "../StudentRedux/contestSlice";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
 import Loader from "@/ui/Loader";
+import { useTranslation } from 'react-i18next';
 
 const EditTeam = () => {
+  const { t } = useTranslation();
   const { teamId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -68,6 +70,7 @@ const EditTeam = () => {
       Swal.fire({
         title: "Limit Reached!",
         text: `The team cannot have more than ${maxMembers} members.`,
+        // text:  t('editTeam.maxMembers', { max: maxMembers }),
         icon: "error",
         confirmButtonColor: "#FD813D",
       });
@@ -101,8 +104,8 @@ const EditTeam = () => {
       ).unwrap();
 
       Swal.fire({
-        title: "Success!",
-        text: "Team updated successfully! 🎉",
+        title: t('editTeam.success.title'),
+        text:  t('editTeam.success.text'),
         icon: "success",
         confirmButtonColor: "#FD813D",
       }).then(() => {
@@ -110,8 +113,8 @@ const EditTeam = () => {
       });
     } catch (error) {
       Swal.fire({
-        title: "Error!",
-        text: error.message || "An error occurred while updating the team.",
+        title:  t('editTeam.error.title'),
+        text: error.message || t('editTeam.error.text'),
         icon: "error",
         confirmButtonColor: "#FD813D",
       });
@@ -129,7 +132,7 @@ const EditTeam = () => {
   if (teamError || studentsError) {
     Swal.fire({
       title: "Error!",
-      text: teamError || studentsError || "An error occurred while fetching data.",
+      text: teamError || studentsError || t('editTeam.error.text'),
       icon: "error",
       confirmButtonColor: "#FD813D",
     });
@@ -140,7 +143,7 @@ const EditTeam = () => {
       {/* Header */}
       <div className="w-2/3 flex justify-between items-center mb-6 mx-auto">
         <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]">
-          Edit Your Team
+        {t('editTeam.title')}
           <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
         </h1>
         <Button
@@ -148,14 +151,14 @@ const EditTeam = () => {
           className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white hover:shadow-lg transition-shadow duration-300"
           onClick={() => navigate(-1)}
         >
-          Back
+          {t('editTeam.back')}
         </Button>
       </div>
 
       {/* Form */}
       <div className="w-2/3 mx-auto p-6 bg-white shadow-lg rounded-2xl border-2 border-pink-300">
         <form onSubmit={handleSubmit}>
-          <label className="block mt-4 text-gray-700 font-poppins">Team Name:</label>
+          <label className="block mt-4 text-gray-700 font-poppins">{t('editTeam.teamName')}:</label>
           <input
             type="text"
             value={teamName}
@@ -164,7 +167,7 @@ const EditTeam = () => {
             className="w-full p-2 border rounded-md font-poppins focus:outline-none focus:ring-2 focus:ring-[#BC6FFB]"
           />
 
-          <label className="block mt-4 text-gray-700 font-poppins">Team Members:</label>
+          <label className="block mt-4 text-gray-700 font-poppins">{t('editTeam.teamMembers')}:</label>
 
           {/* Leader */}
           {currentTeammates.length > 0 && (
@@ -172,7 +175,7 @@ const EditTeam = () => {
               <p className="p-2 border rounded-md bg-gray-100 flex-1 text-gray-700 font-poppins">
                 {currentTeammates[0].leaderId?.fullName} (
                 {currentTeammates[0].leaderId?.academic_number}){" "}
-                <span className="text-green-500">(Leader)</span>
+                <span className="text-green-500">{t('editTeam.leader')}</span>
               </p>
             </div>
           )}
@@ -186,7 +189,7 @@ const EditTeam = () => {
                 className="w-3/4 p-2 border rounded-md font-poppins focus:outline-none focus:ring-2 focus:ring-[#BC6FFB]"
                 value={member._id || ""}
               >
-                <option value="">Select Member</option>
+                <option value="">{t('editTeam.selectMember')}</option>
                 {allStudents.map((student) => (
                   <option key={student._id} value={student._id}>
                     {student.fullName} - {student.academic_number}
@@ -198,7 +201,7 @@ const EditTeam = () => {
                 onClick={() => handleRemoveTeammate(index)}
                 className="text-red-500 hover:text-red-700"
               >
-                Remove
+                 {t('editTeam.remove')}
               </button>
             </div>
           ))}
@@ -209,7 +212,7 @@ const EditTeam = () => {
               onClick={handleAddTeammate}
               className="mt-3 text-gray-700 font-poppins hover:text-gray-800"
             >
-              + Add Member
+               {t('editTeam.addMember')}
             </button>
           )}
 
@@ -217,7 +220,7 @@ const EditTeam = () => {
             type="submit"
             className="w-full mt-4 p-2 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white rounded-2xl font-poppins font-medium hover:opacity-90"
           >
-            Save Changes
+           {t('editTeam.saveChanges')}
           </Button>
         </form>
       </div>

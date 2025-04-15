@@ -12,9 +12,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
 import Loader from "../../../../ui/Loader";
-
+import { useTranslation } from 'react-i18next';
 
 const StudentExamPage = () => {
+  const { t } = useTranslation();
   const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const { examId, gradeSubjectSemesterId } = useParams();
@@ -150,10 +151,10 @@ const StudentExamPage = () => {
 
         if (unansweredQuestions.length > 0) {
           Swal.fire({
-            title: "Incomplete Exam",
-            text: "Please answer all questions before submitting.",
+            title:  t('exam.alerts.incompleteExam.title'),
+            text: t('exam.alerts.incompleteExam.message'),
             icon: "warning",
-            confirmButtonText: "OK",
+            confirmButtonText: t('exam.alerts.incompleteExam.confirmButton'),
           }).then(() => {
             // Reset submission flags
             submissionInProgressRef.current = false;
@@ -177,10 +178,10 @@ const StudentExamPage = () => {
 
       if (!activeSession) {
         Swal.fire({
-          title: "No Active Session",
-          text: "Either the exam is already submitted or the session has expired.",
+          title: t('exam.alerts.noActiveSession.title'),
+          text: t('exam.alerts.noActiveSession.message'),
           icon: "warning",
-          confirmButtonText: "OK",
+          confirmButtonText:t('exam.alerts.noActiveSession.confirmButton'),
         }).then(() => {
           // Mark as completed since there's no valid session
           submissionCompletedRef.current = true;
@@ -216,11 +217,12 @@ const StudentExamPage = () => {
         if (action.payload) {
           Swal.fire({
             title: isAutomatic
-              ? "Time's Up! Exam Auto-Submitted"
-              : "Exam Submitted!",
-            text: `Your score is ${action.payload.score || 0}`,
+              ? t('exam.timer.timeUp')
+              :  t('exam.alerts.submitted.title'),
+            // text: `Your score is ${action.payload.score || 0}`,
+            text: t('exam.alerts.submitted.message', { score: action.payload.score || 0 }),
             icon: "success",
-            confirmButtonText: "OK",
+            confirmButtonText:  t('exam.alerts.submitted.confirmButton'),
           }).then(() => {
             navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`);
           });
@@ -232,10 +234,10 @@ const StudentExamPage = () => {
           // Don't reset the completed flag here, as the server might have processed it
 
           Swal.fire({
-            title: "Error!",
-            text: error.message || "Failed to submit exam",
+            title: t('exam.alerts.error.title'),
+            text: error.message || t('exam.alerts.error.message'),
             icon: "error",
-            confirmButtonText: "OK",
+            confirmButtonText: t('exam.alerts.error.confirmButton'),
           }).then(() => {
             setIsSubmitting(false);
 
@@ -248,10 +250,10 @@ const StudentExamPage = () => {
           // It was already submitted, so mark as completed
           submissionCompletedRef.current = true;
           Swal.fire({
-            title: "Already Submitted",
-            text: "Your exam was already submitted. Returning to exam list.",
+            title: t('exam.alerts.alreadySubmitted.title'),
+            text: t('exam.alerts.alreadySubmitted.message'),
             icon: "info",
-            confirmButtonText: "OK",
+            confirmButtonText: t('exam.alerts.alreadySubmitted.confirmButton'),
           }).then(() => {
             navigate(`/student/allcourses/exams/${gradeSubjectSemesterId}`);
           });
@@ -306,7 +308,7 @@ const StudentExamPage = () => {
 
   if (!currentExam || !currentExam.exam || !currentExam.exam.exam_questions) {
     return (
-      <div className="text-center text-gray-500">No exam questions found.</div>
+      <div className="text-center text-gray-500">{t('exam.errors.noQuestions')}</div>
     );
   }
 
@@ -323,7 +325,7 @@ const StudentExamPage = () => {
           className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white transition-all duration-300 hover:from-[#CF72C0] hover:to-[#FD813D]"
           onClick={() => navigate(-1)}
         >
-          Back
+          {t('exam.header.backButton')}
         </Button>
       </div>
 
@@ -338,7 +340,7 @@ const StudentExamPage = () => {
                   <div className="flex w-full items-center">
                     {/* Time Left */}
                     <p className={`text-xl font-bold ${timeColor}`}>
-                      Time Left: {formattedAvailableTime}
+                    {t('exam.timer.timeLeft')}: {formattedAvailableTime}
                     </p>
 
                     {/* Progress Bar */}
@@ -382,10 +384,10 @@ const StudentExamPage = () => {
                   <CardContent className="p-6">
                     <div className="mb-4 flex items-center justify-between">
                       <h3 className="text-xl font-semibold text-gray-800">
-                        Question {index + 1}: {question.question_text}
+                      {t('exam.questions.question')} {index + 1}: {question.question_text}
                       </h3>
                       <span className="text-lg font-semibold text-gray-600">
-                        Marks: {question.marks}
+                      {t('exam.questions.marks')}: {question.marks}
                       </span>
                     </div>
                     <div className="space-y-3">
@@ -433,7 +435,7 @@ const StudentExamPage = () => {
                 className="w-full rounded-lg bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] py-3 text-white transition-all duration-300 hover:from-[#CF72C0] hover:to-[#FD813D]"
                 disabled={isSubmitting || submissionCompletedRef.current}
               >
-                {isSubmitting ? "Submitting..." : "Submit Exam"}
+                {isSubmitting ?  t('exam.questions.submitting') :  t('exam.questions.submitButton')}
               </Button>
             </div>
           </tbody>
