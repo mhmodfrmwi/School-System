@@ -5,10 +5,12 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 const StudentResults = () => {
     const dispatch = useDispatch();
     const { examId } = useParams();
+    const { t } = useTranslation(); 
     const { examResults, loading, error } = useSelector((state) => state.exam);
     useEffect(() => {
         if (examId) {
@@ -32,7 +34,7 @@ const StudentResults = () => {
                 <div className="mx-auto w-[400px] p-0 sm:w-[550px] md:w-full xl:w-full">
                     <div className="flex m-auto w-[85%] flex-col">
                         <h1 className="text-lg  font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                            Exam Results                    </h1>
+                        {t('examst.ExamResults')}  </h1>
                         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[170px]"></div>
                     </div>
                     <div className="relative w-[90%] m-auto px-4 sm:px-6 lg:px-8 font-poppins">
@@ -42,10 +44,10 @@ const StudentResults = () => {
                                 <table className="min-w-full table-auto border-collapse border-2 border-[#117C90] border-re rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
                                     <thead className="bg-[#117C90] text-white">
                                         <tr>
-                                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Student Name</th>
-                                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Total Marks</th>
-                                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Percentage</th>
-                                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Status</th>
+                                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.StudentName')}</th>
+                                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.Marks')}</th>
+                                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('examst.Percentage')}</th>
+                                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.Status')}</th>
                                         </tr>
                                     </thead>
 

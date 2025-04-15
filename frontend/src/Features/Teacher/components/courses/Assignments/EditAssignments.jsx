@@ -4,10 +4,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { editAssignment, fetchAssignments } from '../../TeacherRedux/AssignmentSlice';
+import { useTranslation } from 'react-i18next';
 
 const EditAssignment = () => {
     const { assignmentId } = useParams();
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { assignment } = useSelector((state) => state.assignmentsTeacher);
     const [formData, setFormData] = useState({
@@ -58,7 +60,7 @@ const EditAssignment = () => {
             <ToastContainer />
             <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
                 <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                    Update Assignment
+                {t('assignmentt.UpdateAssignment')}
                 </h1>
                 <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[240px]"></div>
             </div>
@@ -66,7 +68,7 @@ const EditAssignment = () => {
             <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
                 <form onSubmit={handleSubmit} className="space-y-4 font-poppins">
                     <div>
-                        <label className="block font-medium">Title</label>
+                        <label className="block font-medium">{t('tablesheader.Title')}</label>
                         <input
                             type="text"
                             name="title"
@@ -77,7 +79,7 @@ const EditAssignment = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-medium">Description</label>
+                        <label className="block font-medium">{t('tablesheader.Description')}</label>
                         <textarea
                             name="description"
                             value={formData.description}
@@ -87,7 +89,7 @@ const EditAssignment = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-medium">Due Date</label>
+                        <label className="block font-medium">{t('assignmentt.Due')} </label>
                         <input
                             type="datetime-local"
                             name="due_date"
@@ -98,7 +100,7 @@ const EditAssignment = () => {
                         />
                     </div>
                     <div>
-                        <label className="block font-medium">Total Marks</label>
+                        <label className="block font-medium">{t('assignmentt.Marks')}</label>
                         <input
                             type="number"
                             name="total_marks"
@@ -112,7 +114,7 @@ const EditAssignment = () => {
                         type="submit"
                         className="px-6 py-2 bg-[#117C90] text-white font-poppins rounded-md text-md font-medium hover:bg-[#0f6b7c] transition mx-auto block"
                     >
-                        Edit Assignment
+                    {t('tablesheader.Update')}
                     </button>
                 </form>
             </div>

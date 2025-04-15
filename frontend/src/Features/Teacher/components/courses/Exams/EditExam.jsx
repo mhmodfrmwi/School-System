@@ -4,11 +4,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchExamsForTeacher, updateExam } from '../../TeacherRedux/ExamSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 const EditExam = () => {
   const { examId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { exams, status, error } = useSelector((state) => state.exam);
   const [formData, setFormData] = useState({
     title: '',
@@ -114,7 +116,7 @@ const EditExam = () => {
       <ToastContainer />
       <div className="flex flex-col w-[80%] mx-auto px-4 md:px-6 lg:px-0">
         <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-          Update Exam
+        {t('examst.UpdateExam')}
         </h1>
         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[165px]"></div>
       </div>
@@ -122,7 +124,7 @@ const EditExam = () => {
       <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
         <form onSubmit={handleSubmit} className="space-y-4 font-poppins">
           <div>
-            <label className="block font-medium">Title:</label>
+            <label className="block font-medium">{t('tablesheader.Title')}:</label>
             <input
               type="text"
               name="title"
@@ -133,7 +135,7 @@ const EditExam = () => {
             />
           </div>
           <div>
-            <label className="block font-medium">Description:</label>
+            <label className="block font-medium">{t('tablesheader.Description')}:</label>
             <textarea
               name="description"
               value={formData.description}
@@ -142,7 +144,7 @@ const EditExam = () => {
             />
           </div>
           <div>
-            <label className="block font-medium">Type:</label>
+            <label className="block font-medium">{t('tablesheader.Type')}:</label>
             <select
               name="type"
               value={formData.type}
@@ -155,7 +157,7 @@ const EditExam = () => {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="block font-medium">Start Time:</label>
+              <label className="block font-medium">{t('examst.Start')}:</label>
               <input
                 type="datetime-local"
                 name="start_time"
@@ -166,7 +168,7 @@ const EditExam = () => {
               />
             </div>
             <div>
-              <label className="block font-medium">End Time:</label>
+              <label className="block font-medium">{t('examst.End')}:</label>
               <input
                 type="datetime-local"
                 name="end_time"
@@ -179,7 +181,7 @@ const EditExam = () => {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="block font-medium">Duration (minutes):</label>
+              <label className="block font-medium">{t('examst.Duration')} (minutes):</label>
               <input
                 type="number"
                 name="duration"
@@ -190,7 +192,7 @@ const EditExam = () => {
               />
             </div>
             <div>
-              <label className="block font-medium">Total Marks:</label>
+              <label className="block font-medium">{t('assignmentt.Marks')}:</label>
               <input
                 type="number"
                 name="total_marks"
@@ -205,7 +207,7 @@ const EditExam = () => {
           {/* Added Questions */}
           {formData.exam_questions?.map((q, index) => (
             <div key={index} className="p-4 border border-gray-300 rounded-lg mb-4">
-              <h3 className="font-medium mb-2">Question {index + 1}</h3>
+              <h3 className="font-medium mb-2">{t('tablesheader.Question')} {index + 1}</h3>
               <div>
                 <label className="block font-medium">Question Text:</label>
                 <input
@@ -218,7 +220,7 @@ const EditExam = () => {
                 />
               </div>
               <div>
-                <label className="block font-medium">Options (comma-separated):</label>
+                <label className="block font-medium">{t('examst.Options')} ({t('examst.commaseparated')}):</label>
                 <input
                   type="text"
                   name="options"
@@ -230,7 +232,7 @@ const EditExam = () => {
                 />
               </div>
               <div>
-                <label className="block font-medium">Correct Answer:</label>
+                <label className="block font-medium">{t('tablesheader.CorrectAnswer')}:</label>
                 <select
                   name="correct_answer"
                   value={q.correct_answer}
@@ -247,7 +249,7 @@ const EditExam = () => {
                 </select>
               </div>
               <div>
-                <label className="block font-medium">Marks:</label>
+                <label className="block font-medium">{t('assignmentt.Marks')}:</label>
                 <input
                   type="number"
                   name="marks"
@@ -275,7 +277,8 @@ const EditExam = () => {
             disabled={status === 'loading'}
             className="w-full px-4 py-2 bg-[#117C90] text-white rounded-2xl"
           >
-            {status === 'loading' ? 'Updating Exam...' : 'Update Exam'}
+            {status === 'loading' ? 'Updating Exam...' : t('tablesheader.Update')
+          }
           </button>
           {error && <p className="text-red-500">{error}</p>}
         </form>

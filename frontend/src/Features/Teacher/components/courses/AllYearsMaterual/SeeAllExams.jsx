@@ -4,6 +4,7 @@ import { fetchExamsForTeacher } from "../../TeacherRedux/ExamSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faEye, faCalendar, faChartBar } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate ,useParams} from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const formatStartTime = (startTime) => {
   const date = new Date(startTime);
@@ -13,6 +14,8 @@ const formatStartTime = (startTime) => {
 };
 
 const ExamCard = ({ exam, onView, onEdit, onDelete, onViewResults }) => {
+   const { t, i18n } = useTranslation();
+    const isRTL = i18n.language === 'ar';
   const typeColor = exam.type === "Online" ? "text-green-600" : "text-red-600";
 
   return (
@@ -23,43 +26,43 @@ const ExamCard = ({ exam, onView, onEdit, onDelete, onViewResults }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
         <div className="flex items-center space-x-1">
-          <span className="text-sm font-semibold text-gray-700">Duration:</span>
-          <span className="text-sm text-gray-600">{exam.duration} mins</span>
+          <span className="text-sm font-semibold text-gray-700">{t('examst.Duration')}:</span>
+          <span className="text-sm text-gray-600">{exam.duration} {t('minutes')}</span>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-sm font-semibold text-gray-700">Total Marks:</span>
+          <span className="text-sm font-semibold text-gray-700">{t('assignmentt.Marks')}:</span>
           <span className="text-sm text-gray-600">{exam.total_marks}</span>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-sm font-semibold text-gray-700">Start:</span>
+          <span className="text-sm font-semibold text-gray-700">{t('examst.Start')}:</span>
           <span className="text-sm text-gray-600">{formatStartTime(exam.start_time)}</span>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-sm font-semibold text-gray-700">End:</span>
+          <span className="text-sm font-semibold text-gray-700">{t('examst.End')}:</span>
           <span className="text-sm text-gray-600">{formatStartTime(exam.end_time)}</span>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-lg font-semibold text-gray-700">Type:</span>
+          <span className="text-lg font-semibold text-gray-700">{t('tablesheader.Type')}:</span>
           <span className={`text-sm font-semibold ${typeColor}`}>{exam.type}</span>
         </div>
       </div>
 
-      <div className="flex justify-end space-x-4 mt-4">
-        <button
-          aria-label="View Exam"
-          className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
-          onClick={onView}
-        >
-          <FontAwesomeIcon icon={faEye} className="text-xl" />
-        </button>
-        <button
-          aria-label="View Results"
-          className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
-          onClick={onViewResults}
-        >
-          <FontAwesomeIcon icon={faChartBar} className="text-xl" />
-        </button>
-      </div>
+      <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'} space-x-4 mt-4`}>
+              <button
+                aria-label={t('actions.View')}
+                className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
+                onClick={onView}
+              >
+                <FontAwesomeIcon icon={faEye} className="text-xl" />
+              </button>
+              <button
+                aria-label={t('actions.ViewResults')}
+                className="text-[#117C90] hover:text-[#244856] transition-colors duration-300"
+                onClick={onViewResults}
+              >
+                <FontAwesomeIcon icon={faChartBar} className="text-xl" />
+              </button>
+            </div>
     </div>
   );
 };
@@ -67,8 +70,11 @@ const ExamCard = ({ exam, onView, onEdit, onDelete, onViewResults }) => {
 const SeeAllExams = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+   const { t, i18n } = useTranslation();
+    const isRTL = i18n.language === 'ar';
+    const direction = isRTL ? 'rtl' : 'ltr';
+    const textAlign = isRTL ? 'text-right' : 'text-left';
 
-  // Fetch exams on component mount
    const { gradeSubjectSemesterId } = useParams();
    const { exams, loading, error } = useSelector((state) => state.exam);
  
@@ -85,17 +91,19 @@ const SeeAllExams = () => {
     navigate(`/teacher/exam-results/${examId}`);
   };
   if (loading) {
-    return <p className="text-center text-lg font-semibold">Loading...</p>;
+    return <p className={`text-center text-lg font-semibold ${textAlign}`}>{t('loading')}</p>;
   }
 
   if (error) {
-    return <p className="text-center text-lg font-semibold text-red-500">{error}</p>;
+    return <p className={`text-center text-lg font-semibold text-red-500 ${textAlign}`}>{error}</p>;
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold font-poppins text-[#244856]">My Exams</h1>
-      <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
+    <div className="p-6 space-y-6" dir={direction}>
+      <div className={`flex flex-col ${isRTL ? 'items-end' : 'items-start'}`}>
+        <h1 className={`text-3xl font-bold font-poppins text-[#244856] ${textAlign}`}>{t('examst.MyExams')}</h1>
+        <div className={`mt-1 h-[3px] rounded-t-md bg-[#244856] ${isRTL ? 'mr-0' : 'ml-0'} w-[100px] lg:h-[4px] lg:w-[160px]`}></div>
+      </div>
       <div className="grid font-poppins gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
         {exams && exams.length > 0 ? (
           exams.map((exam) => (

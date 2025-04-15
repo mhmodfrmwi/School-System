@@ -4,6 +4,7 @@ import { faEye, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAssignmentSubmissions } from '../../TeacherRedux/AssignmentSlice';
+import { useTranslation } from 'react-i18next';
 
 const AllSubmissionsForAssignment = () => {
     const formatStartTime = (submitted_at) => {
@@ -15,6 +16,7 @@ const AllSubmissionsForAssignment = () => {
     const { assignmentId } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { submissions, status, error } = useSelector((state) => state.assignmentsTeacher);
 
     useEffect(() => {
@@ -35,18 +37,18 @@ const AllSubmissionsForAssignment = () => {
 
     return (
         <div className="p-6 space-y-6">
-            <h1 className="text-3xl font-bold font-poppins text-[#244856]"> Submissions</h1>
+            <h1 className="text-3xl font-bold font-poppins text-[#244856]"> {t('assignmentt.Submissions')}</h1>
             <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[200px]"></div>
             <div className="overflow-x-auto">
                 <table className="min-w-full font-poppins table-auto border-collapse border-2 border-[#117C90] rounded-[1rem] shadow-md shadow-[#117C90] bg-[#FBE9D1] overflow-hidden">
                     <thead className="bg-[#117C90] text-white">
                         <tr>
                             <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">#</th>
-                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Student Name</th>
-                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Submission Date</th>
-                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Status</th>
-                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Grades</th>
-                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">Action</th>
+                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.StudentName')}</th>
+                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.SubmissionDate')}</th>
+                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.Status')}</th>
+                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.Marks')}</th>
+                            <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('tablesheader.Actions')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,9 +76,9 @@ const AllSubmissionsForAssignment = () => {
                             <tr>
                                 <td colSpan="6" className="w-full text-center py-16 bg-[#F9FAFB] rounded-lg shadow-lg">
                                     <FontAwesomeIcon icon={faCalendar} className="text-6xl text-gray-400 mb-4" />
-                                    <p className="text-xl font-semibold text-gray-600 mb-2">No Submissions Found</p>
+                                    <p className="text-xl font-semibold text-gray-600 mb-2">{t('assignmentt.NoSubmissions')}</p>
                                     <p className="text-gray-500 max-w-xl mx-auto">
-                                        It seems like there are no Submissions available at the moment.
+                                    {t('assignmentt.descs')}.
                                     </p>
                                 </td>
                             </tr>

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateSubmissionGrade } from '../../TeacherRedux/AssignmentSlice';
-import { toast } from 'react-toastify'; // استيراد مكتبة التوست
+import { toast } from 'react-toastify'; 
+import { useTranslation } from 'react-i18next';
 
 const EditGradeModal = ({ isOpen, onClose, submissionId, currentGrade, totalMarks }) => {
     const [grade, setGrade] = useState(currentGrade || '');
     const dispatch = useDispatch();
-
+    const { t } = useTranslation();
     const handleSubmit = (e) => {
         e.preventDefault();
         if (grade && !isNaN(grade)) {
@@ -32,10 +33,10 @@ const EditGradeModal = ({ isOpen, onClose, submissionId, currentGrade, totalMark
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-lg font-semibold text-[#244856] mb-4">Edit Grade</h2>
+                <h2 className="text-lg font-semibold text-[#244856] mb-4">{t('assignmentt.EditGrade')}</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block font-medium">Grade</label>
+                        <label className="block font-medium">{t('assignmentt.Grade')}</label>
                         <input
                             type="number"
                             value={grade}
@@ -50,13 +51,13 @@ const EditGradeModal = ({ isOpen, onClose, submissionId, currentGrade, totalMark
                             onClick={onClose}
                             className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition"
                         >
-                            Cancel
+                        {t('assignmentt.Cancel')}
                         </button>
                         <button
                             type="submit"
                             className="px-4 py-2 bg-[#117C90] text-white rounded-md hover:bg-[#0f6b7c] transition"
                         >
-                            Save
+                        {t('assignmentt.Save')}
                         </button>
                     </div>
                 </form>

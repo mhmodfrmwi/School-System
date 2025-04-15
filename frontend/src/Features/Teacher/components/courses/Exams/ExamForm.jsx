@@ -4,9 +4,11 @@ import { createExam } from '../../TeacherRedux/ExamSlice';
 import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 const ExamForm = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { classId, gradeSubjectSemesterId } = useParams();
   const { status} = useSelector((state) => state.exam);
 
@@ -196,7 +198,7 @@ const ExamForm = () => {
       <div className="mx-auto w-[80%] p-6 bg-gray-100 rounded-xl shadow-md">
         <form onSubmit={handleSubmit} className="space-y-4 font-poppins">
           <div>
-            <label className="block font-medium">Title:</label>
+            <label className="block font-medium">{t('tablesheader.Title')}:</label>
             <input
               type="text"
               name="title"
@@ -207,7 +209,7 @@ const ExamForm = () => {
             />
           </div>
           <div>
-            <label className="block font-medium">Description:</label>
+            <label className="block font-medium">{t('tablesheader.Description')}:</label>
             <textarea
               name="description"
               value={examData.description}
@@ -216,7 +218,7 @@ const ExamForm = () => {
             />
           </div>
           <div>
-            <label className="block font-medium">Type:</label>
+            <label className="block font-medium">{t('tablesheader.Type')}:</label>
             <select
               name="type"
               value={examData.type}
@@ -229,7 +231,7 @@ const ExamForm = () => {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="block font-medium">Start Time:</label>
+              <label className="block font-medium">{t('examst.Start')}:</label>
               <input
                 type="datetime-local"
                 name="start_time"
@@ -240,7 +242,7 @@ const ExamForm = () => {
               />
             </div>
             <div>
-              <label className="block font-medium">End Time:</label>
+              <label className="block font-medium">{t('examst.Start')}:</label>
               <input
                 type="datetime-local"
                 name="end_time"
@@ -253,7 +255,7 @@ const ExamForm = () => {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="block font-medium">Duration (minutes):</label>
+              <label className="block font-medium">{t('examst.Duration')} (minutes):</label>
               <input
                 type="number"
                 name="duration"
@@ -264,7 +266,7 @@ const ExamForm = () => {
               />
             </div>
             <div>
-              <label className="block font-medium">Total Marks:</label>
+              <label className="block font-medium">{t('assignmentt.Marks')}:</label>
               <input
                 type="number"
                 name="total_marks"
@@ -280,7 +282,7 @@ const ExamForm = () => {
             <>
               {examData.exam_questions.map((q, index) => (
                 <div key={index} className="p-4 border border-gray-300 rounded-lg mb-4">
-                  <h3 className="font-bold text-[#244856] mb-2">Question {index + 1}</h3>
+                  <h3 className="font-bold text-[#244856] mb-2">{t('tablesheader.Question')} {index + 1}</h3>
                   <div>
                     <label className="block font-medium">Question Text:</label>
                     <input
@@ -293,7 +295,7 @@ const ExamForm = () => {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium">Options (comma-separated):</label>
+                    <label className="block font-medium">{t('examst.Options')} ({t('examst.commaseparated')}):</label>
                     <input
                       type="text"
                       name="options"
@@ -305,7 +307,7 @@ const ExamForm = () => {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium">Correct Answer:</label>
+                    <label className="block font-medium">{t('tablesheader.CorrectAnswer')}:</label>
                     <select
                       name="correct_answer"
                       value={q.correct_answer}
@@ -322,7 +324,7 @@ const ExamForm = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block font-medium">Marks:</label>
+                    <label className="block font-medium">{t('assignmentt.Marks')}:</label>
                     <input
                       type="number"
                       name="marks"
@@ -340,7 +342,7 @@ const ExamForm = () => {
                 onClick={addNewQuestion}
                 className="mt-2 px-4 py-2 bg-[#117C90] text-white rounded-2xl"
               >
-                Add Question
+              {t('examst.AddQuestion')}
               </button>
             </>
           )}
@@ -351,7 +353,7 @@ const ExamForm = () => {
             disabled={status === 'loading'}
             className="w-full px-4 py-2 bg-[#117C90] text-white rounded-2xl"
           >
-            {status === 'loading' ? 'Creating Exam...' : 'Create Exam'}
+            {status === 'loading' ? 'Creating Exam...' : t('examst.CreateExam')}
           </button>
         </form>
       </div>
