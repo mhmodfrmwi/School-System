@@ -3,13 +3,14 @@ import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ element, requiredRole }) => {
   const isAuthenticated = useSelector((state) => state.login.token);
-  const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
+  const role =
+    useSelector((state) => state.role.role) || localStorage.getItem("role");
 
   if (!isAuthenticated || role !== requiredRole || !role) {
     return <Navigate to="/role" />;
   }
 
-  return element; 
+  return element;
 };
 
 export default ProtectedRoute;

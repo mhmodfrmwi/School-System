@@ -21,6 +21,8 @@ import EditVRManger from "./Features/Manager/components/VR/EditVRManger";
 import VirtualRoomsManger from "./Features/Teacher/components/MangerVR/MangerVR";
 import GetAllScheduleClasses from "./Features/Manager/components/Schedule/GetAllScheduleClasses";
 import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/WeekScheduleForManager";
+import ParentKids from "./Features/Parent/ParentKids";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -248,28 +250,7 @@ const MaterialDetails = lazy(
 
 /* /////////////////parent imports//////////////////// */
 
-const Parents = lazy(() => import("./Features/Parent/pages/Parents"));
-const DashboardParent = lazy(
-  () => import("./Features/Parent/pages/DashboardParent"),
-);
-const GradesParent = lazy(
-  () => import("./Features/Parent/components/Grades/Grades"),
-);
-const EditParentProfile = lazy(
-  () => import("./Features/Parent/pages/EditProfilePage"),
-);
-const GradesAssignmentParent = lazy(
-  () => import("./Features/Parent/components/Grades/GradesAssignment"),
-);
-const GradesExamParent = lazy(
-  () => import("./Features/Parent/components/Grades/GradesExam"),
-);
-const ScheduleParent = lazy(
-  () => import("./Features/Parent/components/Schedule/schedule"),
-);
-const ScheduleExamParent = lazy(
-  () => import("./Features/Parent/components/Schedule/scheduleExam"),
-);
+const Parents = lazy(() => import("./Features/Parent/Parents"));
 
 /* /////////////////teacher imports//////////////////// */
 
@@ -547,7 +528,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <TitleUpdater />
         <ToastContainer
@@ -745,26 +726,14 @@ function App() {
               />
             </Route>
             {/* /////////////////parentpage//////////////////// */}
+
             <Route
               path="parent"
               element={
                 <ProtectedRoute element={<Parents />} requiredRole="parent" />
               }
             >
-              <Route index element={<Navigate replace to="dashboard" />} />
-              <Route path="dashboard" element={<DashboardParent />} />
-              <Route path="grades" element={<GradesParent />} />
-              <Route
-                path="edit-parent-profile"
-                element={<EditParentProfile />}
-              />
-              <Route
-                path="grades/assignment"
-                element={<GradesAssignmentParent />}
-              />
-              <Route path="grades/exam" element={<GradesExamParent />} />
-              <Route path="schedule" element={<ScheduleParent />} />
-              <Route path="schedule/exam" element={<ScheduleExamParent />} />
+              <Route path="parent-kids" element={<ParentKids />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route
