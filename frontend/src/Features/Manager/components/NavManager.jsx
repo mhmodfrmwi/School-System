@@ -126,7 +126,7 @@ const NavManager = () => {
           <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
             <input
               type="text"
-              placeholder="Search Manager Page"
+              placeholder={t("SearchMangerPage")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}

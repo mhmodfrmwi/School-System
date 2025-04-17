@@ -31,7 +31,7 @@ const SidebarManager = () => {
       href: "/manager/dashboard",
     },
     {
-      label: "School Hubs",
+      label: t("activities.tabs.schoolHubs"),
       icon: ActivityIcon,
       hoverIcon: ActivityIconH,
       href: "/manager/school-hubs",
@@ -50,13 +50,13 @@ const SidebarManager = () => {
     },
 
     {
-      label: "Grades",
+      label: t('gradest.Gradestudents'),
       icon: GradeIcon,
       hoverIcon: GradeIconH,
       href: "/manager/grade",
     },
     {
-      label: "Virtual Rooms",
+      label: t('dashboardteacher.VirtualClassrooms'),
       icon: VirtualIcon,
       hoverIcon: VirtualIconH,
       href: "/manager/virtual-room",
@@ -96,6 +96,7 @@ const SidebarManager = () => {
           hoveredIndex={hoveredIndex}
           setHoveredIndex={setHoveredIndex}
           currentPath={currentPath}
+          t={t}
         />
       </div>
     </div>
@@ -107,13 +108,14 @@ const SidebarContent = ({
   hoveredIndex,
   setHoveredIndex,
   currentPath,
+  t
 }) => {
   return (
     <>
       <div className="mb-8 flex flex-col items-center justify-center">
         <img src={logo} alt="Logo" className="mb-2 h-12 w-12" />
         <h1 className="text-xl font-bold">LEARNOVA</h1>
-        <p className="font-poppins text-xs">Khatab School</p>
+        <p className="font-poppins text-xs">{t('KhatabSchool')}</p>
       </div>
 
       <nav className="flex w-64 flex-col gap-2">
@@ -169,7 +171,7 @@ const SidebarContent = ({
           Term: 2023-2024
         </div>
         <button className="dark:text-DarkManager rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300">
-          Logout
+        {t('Logout')}
         </button>
       </div>
     </>

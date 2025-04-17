@@ -6,8 +6,11 @@ import {
 } from "../ManagerRedux/gradeSlice";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
+import { useTranslation } from 'react-i18next';
+
 function GradeManager() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const {
     gradeResults,
     classNames,
@@ -75,18 +78,18 @@ function GradeManager() {
       {/* Search Section */}
       <section className="mx-auto max-w-6xl">
         <h2 className="dark:text-DarkManager mb-4 font-poppins text-3xl font-bold text-[#117C90]">
-          Grade Manager
+          {t('gradesm.Grades')}
         </h2>
         <div className="dark:bg-DarkManager mb-6 mt-1 h-[4px] w-[120px] rounded-full bg-[#117C90]"></div>
 
         <div className="dark:bg-DarkManager2 mb-8 rounded-2xl bg-white p-8 shadow-xl">
           <h3 className="mb-6 text-center font-poppins text-2xl font-semibold text-[#117C90] dark:text-white">
-            Search for Results
+          {t('gradesm.SearchResults')}
           </h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-[#117C90] dark:text-white">
-                Grade Name
+              {t('gradesm.Grade')} 
               </label>
               <select
                 name="gradeName"
@@ -104,7 +107,7 @@ function GradeManager() {
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-[#117C90] dark:text-white">
-                Class Name
+              {t('gradesm.Class')} 
               </label>
               <select
                 name="className"
@@ -122,7 +125,7 @@ function GradeManager() {
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-[#117C90] dark:text-white">
-                Subject Name
+              {t('gradesm.Subject')} 
               </label>
               <select
                 name="subjectName"
@@ -143,7 +146,7 @@ function GradeManager() {
             onClick={handleSearch}
             className="mt-6 w-full rounded-lg bg-[#117C90] px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-[#0E6A7D] dark:bg-white dark:text-black sm:w-auto"
           >
-            Search
+          {t('gradesm.Search')}
           </button>
         </div>
       </section>
@@ -158,10 +161,10 @@ function GradeManager() {
           ) : notFound ? (
             <div className="mx-auto max-w-6xl rounded-2xl bg-white p-8 text-center shadow-xl">
               <h3 className="dark:text-DarkManager mb-4 text-2xl font-semibold text-[#117C90]">
-                No Results Found
+              {t('gradesm.NoResultsFound')}
               </h3>
               <p className="text-gray-600">
-                No data found for the given criteria.
+              {t('gradesm.Nodatafound')}
               </p>
             </div>
           ) : gradeResults && gradeResults.data.students.length > 0 ? (
@@ -170,33 +173,33 @@ function GradeManager() {
                 <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-full">
                   <section className="mx-auto max-w-6xl">
                     <h3 className="dark:text-DarkManager mb-6 text-center font-poppins text-2xl font-semibold text-[#117C90]">
-                      Results for {gradeResults.data.grade.gradeName} -{" "}
+                      {t('gradesm.Resultsfor')} {gradeResults.data.grade.gradeName} -{" "}
                       {gradeResults.data.subject.subjectName}
                     </h3>
                     <button
                       onClick={handleExportToCSV}
                       className="dark:bg-DarkManager mb-4 rounded-lg bg-[#117C90] px-4 py-2 font-semibold text-white shadow-lg transition-all hover:bg-[#0E6A7D]"
                     >
-                      Export to CSV
+                    {t('gradesm.ExporttoCSV')}
                     </button>
                     <div className="overflow-x-auto rounded-2xl shadow-xl">
                       <table className="min-w-full bg-white">
                         <thead className="dark:bg-DarkManager bg-[#117C90] text-white">
                           <tr>
                             <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
-                              Student Name
+                            {t('gradesm.StudentName')}
                             </th>
                             <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
-                              Academic Number
+                            {t('gradesm.AcademicNumber')}
                             </th>
                             <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
-                              Midterm Degree
+                            {t('gradesm.MidtermDegree')}
                             </th>
                             <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
-                              Final Degree
+                            {t('gradesm.FinalDegree')}
                             </th>
                             <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
-                              Total Degree
+                            {t('gradesm.TotalDegree')}
                             </th>
                           </tr>
                         </thead>

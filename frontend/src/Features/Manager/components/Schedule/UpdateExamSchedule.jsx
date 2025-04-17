@@ -5,10 +5,11 @@ import Loader from "../../../../ui/Loader";
 import { useEditExamSchedule, useExamSchedule } from "../services/apiSchedule";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSubjects } from "../../../Admin/components/AdminRedux/subjectSlice";
+import { useTranslation } from 'react-i18next';
 
 const UpdateExamSchedule = () => {
   const { id } = useParams();
-
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { subjects = [] } = useSelector((state) => state.subject);
 
@@ -72,8 +73,7 @@ const UpdateExamSchedule = () => {
   return (
     <div className="relative mx-auto my-10 w-[90%] font-poppins md:w-[80%]">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Update Exam Schedule
-      </h1>
+      {t('schedulem.Edit')}       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="dark:bg-DarkManager2 rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
         <form
@@ -91,7 +91,7 @@ const UpdateExamSchedule = () => {
               {/* Subject ID */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  Subject
+                {t('schedulem.Subject')} 
                 </label>
                 <Controller
                   name={`subjects[${index}].subject_id`}
@@ -121,7 +121,7 @@ const UpdateExamSchedule = () => {
               {/* Exam Date */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  Exam Date
+                  {t('schedulem.ExamDate')} 
                 </label>
                 <Controller
                   name={`subjects[${index}].exam_date`}
@@ -145,7 +145,7 @@ const UpdateExamSchedule = () => {
               {/* Start Time */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  Start Time
+                  {t('schedulem.StartTime')} 
                 </label>
                 <Controller
                   name={`subjects[${index}].start_time`}
@@ -169,7 +169,7 @@ const UpdateExamSchedule = () => {
               {/* End Time */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  End Time
+                  {t('schedulem.EndTime')} 
                 </label>
                 <Controller
                   name={`subjects[${index}].end_time`}
@@ -206,7 +206,7 @@ const UpdateExamSchedule = () => {
               }
               className="ms-4 rounded-md bg-[#117C90] px-4 py-2 text-white dark:bg-white dark:text-black dark:placeholder-white"
             >
-              Add other subjects
+            {t('schedulem.Addothersubjects')} 
             </button>
           </div>
 
@@ -216,7 +216,7 @@ const UpdateExamSchedule = () => {
               type="submit"
               className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Update Schedule
+            {t('tablesheader.Update')}
             </button>
           </div>
         </form>

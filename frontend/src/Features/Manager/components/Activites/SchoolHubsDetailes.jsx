@@ -2,10 +2,12 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSchoolHubs } from "../ManagerRedux/schoolhubSlice";
-import activityImage from "../../../../assets/TeacherIcon/img2.png";
+import activityImage from "../../../../assets/TeacherIcon/img2.png";import { useTranslation } from 'react-i18next';
 
 const DetailesActivity = () => {
   const { id } = useParams();
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const { schoolHubs, loading, error } = useSelector(
     (state) => state.schoolhub,
@@ -27,7 +29,7 @@ const DetailesActivity = () => {
     <>
       <div className="col-span-2 ms-5 flex flex-col justify-between">
         <div className="dark:text-DarkManager ms-7 mt-5 cursor-text py-1 font-poppins text-2xl font-bold text-[#105E6A]">
-          Details
+          {t("activityDetails.title")}
         </div>
 
         <p className="dark:border-DarkManager mb-2 ms-7 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
@@ -41,12 +43,12 @@ const DetailesActivity = () => {
 
           <div className="mt-6 grid w-full max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
             <div className="dark:shadow-DarkManager dark:bg-DarkManager2 rounded-lg border bg-[#F5F5F5] p-6 text-center font-poppins shadow-md shadow-[#105E6A]">
-              <h3 className="font-poppins text-xl font-bold">Location</h3>
+              <h3 className="font-poppins text-xl font-bold">{t("activityDetails.sections.location")}</h3>
               <p className="text-md mt-2">{location}</p>
             </div>
 
             <div className="dark:shadow-DarkManager dark:bg-DarkManager2 rounded-lg border bg-[#F5F5F5] p-6 text-center font-poppins shadow-md shadow-[#117C90]">
-              <h3 className="font-poppins text-xl font-bold">Details</h3>
+              <h3 className="font-poppins text-xl font-bold">{t("activityDetails.sections.details")}</h3>
               <p className="text-md mt-2">{details}</p>
             </div>
           </div>

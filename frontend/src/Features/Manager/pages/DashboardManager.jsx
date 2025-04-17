@@ -21,6 +21,8 @@ import {
   getStudentsRanks,
   getTeachersRanks,
 } from "./ManagerSlices/dashboardSlice";
+import { useTranslation } from 'react-i18next';
+
 
 function DashboardManager() {
   const dispatch = useDispatch();
@@ -33,6 +35,7 @@ function DashboardManager() {
     loading,
     error,
   } = useSelector((state) => state.managerdashboard);
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getGeneralStatistics());
@@ -152,32 +155,32 @@ function DashboardManager() {
       {/* Search Section */}
       <section>
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-          Overview
+        {t("dashboard.overview")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856]"></div>
 
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[
             {
-              label: "Students",
+              label:  t("dashboard.users.students"),
               value: students,
               icon: "/src/assets/students 1.png",
               bgColor: "#D1F3E0",
             },
             {
-              label: "Teachers",
+              label: t("dashboard.users.teachers"),
               value: teachers,
               icon: "/src/assets/Group.png",
               bgColor: "#E1F1FF",
             },
             {
-              label: "Parents",
+              label: t("dashboard.users.parents"),
               value: parents,
               icon: "/src/assets/vector.png",
               bgColor: "#FFF2D8",
             },
             {
-              label: "Schedule",
+              label: t('Schedule'),
               value: schedules,
               icon: "/src/assets/Schedule.png",
               bgColor: "#FFEAEA",
@@ -215,7 +218,7 @@ function DashboardManager() {
       {/* Statistics Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-          Statistics of users
+        {t("dashboard.statistics")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[200px] rounded-t-md bg-[#244856]"></div>
 
@@ -223,7 +226,7 @@ function DashboardManager() {
           {/* Students Chart */}
           <div className="dark:bg-DarkManager2 rounded-lg bg-white p-6 shadow-md">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-              Students
+            {t("dashboard.charts.students")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {students > 0 ? (
@@ -231,11 +234,11 @@ function DashboardManager() {
                   <Pie
                     data={[
                       {
-                        name: "Female",
+                        name: t("dashboard.charts.female"),
                         value: femaleStudents,
                         color: "#4CAF50",
                       },
-                      { name: "Male", value: maleStudents, color: "#2196F3" },
+                      { name: t("dashboard.charts.male"), value: maleStudents, color: "#2196F3" },
                     ]}
                     dataKey="value"
                     cx="50%"
@@ -257,7 +260,7 @@ function DashboardManager() {
           {/* Teachers Chart */}
           <div className="dark:bg-DarkManager2 rounded-lg bg-white p-6 shadow-md dark:text-white">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-              Teachers
+            {t("dashboard.charts.teachers")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {teachers > 0 ? (
@@ -265,11 +268,11 @@ function DashboardManager() {
                   <Pie
                     data={[
                       {
-                        name: "Female",
+                        name: t("dashboard.charts.female"),
                         value: femaleTeachers,
                         color: "#4CAF50",
                       },
-                      { name: "Male", value: maleTeachers, color: "#2196F3" },
+                      { name: t("dashboard.charts.male"), value: maleTeachers, color: "#2196F3" },
                     ]}
                     dataKey="value"
                     cx="50%"
@@ -291,7 +294,7 @@ function DashboardManager() {
           {/* Pie Chart */}
           <div className="dark:bg-DarkManager2 col-span-1 rounded-lg bg-white p-6 shadow-md dark:text-white sm:col-span-2 lg:col-span-1">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-              Percentage Of Users By Type
+            {t("dashboard.charts.percentage")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {pieData[0].value > 0 ||
@@ -324,14 +327,14 @@ function DashboardManager() {
       {/* Grades and Absence Statistics Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-          Grades and Absence Statistics
+        {t('dashboardm.GradesAbsenceStatistics')}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[200px] rounded-t-md bg-[#244856]"></div>
 
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="dark:bg-DarkManager2 rounded-lg bg-white p-6 shadow-md dark:text-white">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-              Grades Statistics (Percentage)
+            {t('dashboardm.GradesStatistics')} (Percentage)
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={gradesData}>
@@ -347,7 +350,7 @@ function DashboardManager() {
 
           <div className="dark:bg-DarkManager2 rounded-lg bg-white p-6 shadow-md">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-              Absence Statistics
+            {t('dashboardm.AbsenceStatistics')}
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={absenceData}>
@@ -370,7 +373,7 @@ function DashboardManager() {
       {/* Ranks Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-          Ranks
+        {t('dashboardm.Ranks')}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[200px] rounded-t-md bg-[#244856]"></div>
 
@@ -378,18 +381,18 @@ function DashboardManager() {
           {/* Students Ranks Table */}
           <div className="rounded-lg bg-white p-6 shadow-xl">
             <h3 className="dark:text-DarkManager mb-4 text-center font-poppins text-lg font-medium text-gray-600">
-              Top Students
+            {t('dashboardm.TopStudents')}
             </h3>
             <div className="overflow-x-auto">
               <table className="dark:bg-DarkManager2 min-w-full bg-white">
                 <thead>
                   <tr>
-                    <th className="border-b px-4 py-2">Rank</th>
-                    <th className="border-b px-4 py-2">Name</th>
-                    <th className="border-b px-4 py-2">Academic Number</th>
-                    <th className="border-b px-4 py-2">Grade</th>
-                    <th className="border-b px-4 py-2">Total Points</th>
-                    <th className="border-b px-4 py-2">Badge</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.Rank')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.Name')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.AcademicNumber')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.Grade')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.TotalPoints')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.Badge')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -424,18 +427,18 @@ function DashboardManager() {
           {/* Teachers Ranks Table */}
           <div className="rounded-lg bg-white p-6 shadow-xl">
             <h3 className="dark:text-DarkManager mb-4 text-center font-poppins text-lg font-medium text-gray-600">
-              Top Teachers
+            {t('dashboardm.TopTeachers')}
             </h3>
             <div className="overflow-x-auto">
               <table className="dark:bg-DarkManager2 min-w-full bg-white">
                 <thead>
                   <tr>
-                    <th className="border-b px-4 py-2">Rank</th>
-                    <th className="border-b px-4 py-2">Name</th>
-                    <th className="border-b px-4 py-2">Academic Number</th>
-                    <th className="border-b px-4 py-2">Subject</th>
-                    <th className="border-b px-4 py-2">Total Points</th>
-                    <th className="border-b px-4 py-2">Badge</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.Rank')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.Name')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.AcademicNumber')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.Subject')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.TotalPoints')}</th>
+                    <th className="border-b px-4 py-2">{t('dashboardm.Badge')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -474,7 +477,7 @@ function DashboardManager() {
       {/* Calendar Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-          Calendar
+        {t("dashboard.calendar")}
         </h2>
         <div className="mb-6 mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856]"></div>
         <div className="max-w-[400px] rounded-lg bg-white p-6 shadow-md dark:bg-[#117C90]">

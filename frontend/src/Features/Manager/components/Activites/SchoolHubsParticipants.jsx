@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getParticipants } from "../ManagerRedux/participantSlice";
+import { useTranslation } from 'react-i18next';
 
 const SchoolHubsParticipant = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const { schoolHubId } = useParams();
   const { participants, loading, error } = useSelector(
     (state) => state.participant,
@@ -24,7 +27,7 @@ const SchoolHubsParticipant = () => {
         <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-full">
           <div className="mx-auto w-full max-w-7xl px-4">
             <h2 className="dark:text-DarkManager mb-2 font-poppins text-xl font-bold text-[#105E6A] sm:text-2xl">
-              Participants
+            {t('activitiest.Participants')}
             </h2>
             <p className="dark:border-DarkManager mb-4 w-32 rounded-xl border-t-4 border-[#117C90]"></p>
 
@@ -33,22 +36,22 @@ const SchoolHubsParticipant = () => {
                 <thead>
                   <tr className="dark:bg-DarkManager bg-[#105E6A] font-poppins text-xs text-white sm:text-sm md:text-base">
                     <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
-                      Academic Number
+                      {t('dashboardm.AcademicNumber')}
                     </th>
                     <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
-                      First Name
+                       {t('dashboardm.Name')}
                     </th>
                     <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
-                      Phone
+                    {t('schoolhubs.Phone')}
                     </th>
                     <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
-                      Email
+                    {t('schoolhubs.Email')}
                     </th>
                     <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
-                      Grade
+                    {t('schoolhubs.Grade')}
                     </th>
                     <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
-                      Class
+                      {t('schoolhubs.Class')}
                     </th>
                   </tr>
                 </thead>

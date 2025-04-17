@@ -42,6 +42,7 @@ i18n
                     GradeManagements: "Grade Managements",
                     Activities: "Activities",
                     Library: "Library",
+                    SearchMangerPage:"Search Manger Page",
                     //Footer
                     LearnGrawSuccess: "Learn,Graw,Success",
                     EmpowerGrowth: "Empower Growth",
@@ -1084,6 +1085,71 @@ i18n
                         EditMaterial: "Edit Material",
 
                     },
+                    //////////////////////////////////////////manager/////////////////////////////////////
+                    dashboardm:{
+                        AbsenceStatistics:"Absence Statistics ",
+                        GradesStatistics:"Grades Statistics ",
+                        GradesAbsenceStatistics:"Grades And Absence Statistics  ",
+                        Ranks:"Ranks",
+                        TopStudents:"Top Students ",
+                        TopTeachers:"Top Teachers ",
+                        Subject:"Subject",
+                        Badge:"Badge",
+                        TotalPoints:" Total Points",
+                        Grade:"Grade",
+                        AcademicNumber:"Academic Number ",
+                        Name:"Name",
+                        Rank:"Rank",
+
+                    },
+                    schoolhubs:{
+                        AddSchoolHubs:"Add School Hubs ",
+                        Class:"Class",
+                        Grade:"Grade",
+                        Email:"Email",
+                        Phone:"Phone",
+                        AddPrize:"Add Prize",
+                        EditSchoolHub:"Edit School Hub"
+                    },
+                    attendanse:{
+                        Classes:"Classes",
+                        Search:"Search by class or grade...",
+                        ClassData:"Class Data",
+                        Noattendance:"No attendance records found",
+                    },
+                    scheduleة:{
+                        Time:"Time",
+                        Addothersubjects:"Add other subjects",
+                        EndTime:"End Time",
+                        StartTime:"Start Time",
+                        ExamDate:"Exam Date",
+                        Subject:"Subject",
+                        Grade:"Grade",
+                        Semester:"Semester",
+                        AcademicYear:"Academic Year",
+                        AddExamSchedule:"Add Exam Schedule",
+                        Edit:"Edit Exam Schedule",
+                        ExamScheduleDetails:"   Exam Schedule Details ",
+                        DeleteSchedule:" Delete Schedule  ",
+                        ExamSchedule:" Exam Schedules",
+                    },
+                    gradesm:{
+                        TotalDegree:"Total Degree",
+                        FinalDegree:"Final Degree",
+                        MidtermDegree:"Midterm Degree",
+                        AcademicNumber:"Academic Number",
+                        StudentName:"Student Name",
+                        ExporttoCSV:"Export to CSV",
+                        Nodatafound:"No data found for the given criteria.",
+                        NoResultsFound:"No Results Found",
+                        Search:"Search",
+                        Subject:"Subject",
+                        Class:"Class",
+                        Grade:"Grade",
+                        SearchResults:"Search for Results",
+                        Grades:"Grades",
+                        Resultsfor:"Results for"
+                    },
 
                     ////////////////////////////////Admin//////////////////////////////////////////////////////////
 
@@ -1346,6 +1412,7 @@ i18n
                     GradeManagements: "الدرجات",
                     Activities: "الأنشطة",
                     Library: "المكتبة",
+                    SearchMangerPage:"بحث فى صفح المدير",
                     //Footer
                     LearnGrawSuccess: "تعلّم، نمُ، نجاح",
                     EmpowerGrowth: "تمكين النمو",
@@ -1559,8 +1626,8 @@ i18n
                         "details": {
                             "description": "الوصف",
                             "type": "النوع",
-                            "uploadedBy": "تم الرفع بواسطة",
-                            "uploadDate": "تاريخ الرفع",
+                            "uploadedBy": "تم الاضافة بواسطة",
+                            "uploadDate": "تاريخ الاضافة",
                             "download": "تحميل",
                             "downloadButton": "تحميل المادة",
                             "noFile": "لا يوجد ملف متاح لهذه المادة."
@@ -2268,13 +2335,13 @@ i18n
                         ViewFile: "اعرض الملف",
                         EditMaterial: "تحرير المحتوى",
                         Update: "تحديث",
-                        UploadMaterial: "رفع المحتوى",
-                        Upload: "رفع",
+                        UploadMaterial: "اضافة المحتوى",
+                        Upload: "اضافة",
                         Link: "الرابط",
                         Duration: "مدة الجلسة",
                         StartTime: "وقت البدأ",
                         EditVirtualRooms: "تحرير الغرف الافتراضية",
-                        UploadVirtualRooms: "رفع الغرف الافتراضية",
+                        UploadVirtualRooms: "اضافة الغرف الافتراضية",
                         Answer: "الاجابة",
                         Question: "السؤال",
                         allquestions: "جميع الاسئلة لهذه المادة",
@@ -2288,7 +2355,7 @@ i18n
                         Choices: "الاختيارات",
                         CorrectAnswer: "الاجابة الصحيحة",
                         SelectAnswer: "اختر الاجابة الصحيحة",
-                        UploadQuestion: "رفع السؤال",
+                        UploadQuestion: "اضافة السؤال",
                         EditQuestion: "تحرير السؤال",
 
                     },
@@ -2314,7 +2381,7 @@ i18n
                         Grade: "الدرجة",
                         EditGrade: "تعديل الدرجة ",
                         UpdateAssignment: "تعديل الواجب",
-                        UploadAssignment: "رفع الواجب"
+                        UploadAssignment: "اضافة الواجب"
 
                     },
                     examst: {
@@ -2373,7 +2440,7 @@ i18n
                         StudentExamResults: "نتائج الامتحان",
                         DeleteAllData: "حذف جميع البيانات",
                         ExportData: "تصدير البيانات",
-                        UploadUpdate: "تعديل ورفع",
+                        UploadUpdate: "تعديل واضافة",
                     },
                     activitiest: {
                         AddContest: "اضافة مسابقة",
@@ -2389,6 +2456,73 @@ i18n
                         TeacherLibrary: "مكتبة المدرس",
                         Library: "المكتبة",
                         EditMaterial: "تعديل المحتوى",
+                    },
+
+                    //////////////////////////////////////////manager/////////////////////////////////////
+                    dashboardm:{
+                        AbsenceStatistics:"إحصائيات الغياب",
+                        GradesStatistics:"إحصائيات الدرجات",
+                        GradesAbsenceStatistics:"إحصائيات الدرجات والغياب",
+                        Ranks:"الترتيب",
+                        TopStudents:"أفضل الطلاب",
+                        TopTeachers:"أفضل المعلمين",
+                        Subject:"المادة",
+                        Badge:"الشارة",
+                        TotalPoints:"إجمالي النقاط",
+                        Grade:"الصف",
+                        AcademicNumber:"الرقم الأكاديمي",
+                        Name:"الاسم",
+                        Rank:"الترتيب",
+
+                    },
+                    schoolhubs:{
+                        AddSchoolHubs:"اضافة مركز مدرسي" ,
+                        Class:"الفصل",
+                        Grade:"الصف",
+                        Email:"الايميل",
+                        Phone:"رقم التليفون",
+                        AddPrize:"اضافة جائزة اخرى",
+                        EditSchoolHub:"تحرير المركز المدرسي",
+                        
+                    },
+                    attendanse:{
+                        Classes:"الفصول",
+                        Search:"ابحث بواسطة الفصل او الصف ...",
+                        ClassData:"بيانات الفصل",
+                        Noattendance:"لا يوجد غياب مسجل على هذا التاريخ",
+                    },
+                    schedulem:{
+                        Time:"الوقت",
+                        Addothersubjects:"اضافة مادة اخرى",
+                        EndTime:" وقت الانتهاء",
+                        StartTime:"وقت البدأ",
+                        ExamDate:"تاريخ الامتحان",
+                        Subject:"المادة",
+                        Grade:"الصف",
+                        Semester:"الترم",
+                        AcademicYear:"السنة الدراسية",
+                        AddExamSchedule:"اضافة جدول الامتحان",
+                        Edit:"تحرير جدول الامتحان",
+                        ExamScheduleDetails:" تفاصيل جدول الامتحان ",
+                        DeleteSchedule:"حذف جدول الامتحان ",
+                        ExamSchedule:" جدول الامتحانات",
+                    },
+                    gradesm:{
+                        TotalDegree:"الدرجة الكلية",
+                        FinalDegree:"الدرجة النهائية",
+                        MidtermDegree:"درجة منتصف الفصل الدراسي",
+                        AcademicNumber:"الرقم الأكاديمي",
+                        StudentName:"اسم الطالب",
+                        ExporttoCSV:"تصدير إلى CSV",
+                        Nodatafound:"لم يتم العثور على بيانات للمعايير المحددة.",
+                        NoResultsFound:"لم يتم العثور على نتائج",
+                        Search:"بحث",
+                        Subject:"المادة",
+                        Class:"الفصل",
+                        Grade:"الصف",
+                        SearchResults:"نتائج البحث",
+                        Grades:"الدرجات",
+                        Resultsfor:"نتيجة"
                     },
                     ///////////////////////////////////////////////////Admin///////////////////////////////////////////
 

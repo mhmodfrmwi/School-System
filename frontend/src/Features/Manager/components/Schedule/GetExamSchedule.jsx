@@ -7,11 +7,12 @@ import {
 } from "../services/apiSchedule";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
 
 const GetExamSchedule = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const { isLoading, managerExamSchedule } = useExamSchedule(id);
   const { isDeleting, deleteExamScheduleMutation } = useDeleteExamSchedule();
 
@@ -36,7 +37,7 @@ const GetExamSchedule = () => {
       <div className="mx-auto w-full max-w-2xl lg:max-w-5xl">
         <div className="mb-6 flex flex-col items-center justify-between sm:flex-row">
           <h1 className="dark:text-DarkManager mb-4 text-xl font-bold text-[#117C90] sm:mb-0 sm:text-2xl">
-            Exam Schedule Details
+            {t('schedulem.ExamScheduleDetails')}
           </h1>
           <div className="flex space-x-4">
             <button
@@ -44,7 +45,7 @@ const GetExamSchedule = () => {
               className="dark:bg-DarkManager dark:hover:bg-DarkManager flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 hover:bg-[#117C90] sm:px-4 sm:py-2 sm:text-base"
             >
               <FontAwesomeIcon icon={faEdit} className="mr-2" />
-              Edit Schedule
+              {t('schedulem.Edit')} 
             </button>
 
             <button
@@ -52,7 +53,7 @@ const GetExamSchedule = () => {
               className="dark:bg-DarkManager flex items-center rounded-lg bg-[#117C90] px-3 py-1.5 text-sm text-white transition duration-300 sm:px-4 sm:py-2 sm:text-base"
             >
               <FontAwesomeIcon icon={faTrash} className="mr-2" />
-              Delete Schedule
+              {t('schedulem.DeleteSchedule')}
             </button>
           </div>
         </div>
@@ -61,7 +62,7 @@ const GetExamSchedule = () => {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
               <h3 className="text-base font-medium text-[#117C90] dark:text-white sm:text-lg md:text-xl">
-                Academic Year
+              {t('schedulem.AcademicYear')} 
               </h3>
               <p className="text-base text-gray-700 dark:text-white sm:text-lg md:text-xl">
                 {managerExamSchedule?.academic_year_id?.startYear} -{" "}
@@ -71,7 +72,7 @@ const GetExamSchedule = () => {
 
             <div>
               <h3 className="text-base font-medium text-[#117C90] dark:text-white sm:text-lg md:text-xl">
-                Grade
+              {t('schedulem.Grade')} 
               </h3>
               <p className="text-base text-gray-700 dark:text-white sm:text-lg md:text-xl">
                 {managerExamSchedule?.grade_id?.gradeName}
@@ -80,7 +81,7 @@ const GetExamSchedule = () => {
 
             <div>
               <h3 className="text-base font-medium text-[#117C90] dark:text-white sm:text-lg md:text-xl">
-                Semester
+              {t('schedulem.Semester')} 
               </h3>
               <p className="text-base text-gray-700 dark:text-white sm:text-lg md:text-xl">
                 {managerExamSchedule?.semester_id?.semesterName}
@@ -94,16 +95,16 @@ const GetExamSchedule = () => {
             <thead className="dark:bg-DarkManager bg-[#117C90] text-left text-white">
               <tr>
                 <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                  Subject
+                {t('schedulem.Subject')} 
                 </th>
                 <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                  Exam Date
+                {t('schedulem.ExamDate')} 
                 </th>
                 <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                  Start Time
+                {t('schedulem.StartTime')} 
                 </th>
                 <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                  End Time
+                {t('schedulem.EndTime')} 
                 </th>
               </tr>
             </thead>

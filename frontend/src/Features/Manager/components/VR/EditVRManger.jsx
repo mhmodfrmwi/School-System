@@ -6,9 +6,11 @@ import {
   updateVirtualRoom,
 } from "../ManagerRedux/VRMangerSlice";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const EditVRManger = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { virtualRooms } = useSelector((state) => state.virtualRooms);
@@ -95,7 +97,7 @@ const EditVRManger = () => {
     <>
       <div className="mx-auto flex w-[80%] flex-col px-4 md:px-6 lg:px-0">
         <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-          Edit Virtual Rooms
+        {t('tablesheader.EditVirtualRooms')}
         </h1>
         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[220px]"></div>
       </div>
@@ -103,7 +105,7 @@ const EditVRManger = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-poppins font-medium dark:text-white">
-              Title <span className="text-red-500">*</span>
+            {t('tablesheader.Title')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -116,7 +118,7 @@ const EditVRManger = () => {
           </div>
           <div>
             <label className="block font-poppins font-medium dark:text-white">
-              Start Time{" "}
+            {t('tablesheader.StartTime')}{" "}
             </label>
             <input
               type="datetime-local"
@@ -129,7 +131,7 @@ const EditVRManger = () => {
           </div>
           <div>
             <label className="block font-poppins font-medium dark:text-white">
-              Duration{" "}
+            {t('tablesheader.Duration')}{" "}
             </label>
             <input
               type="number"
@@ -142,7 +144,7 @@ const EditVRManger = () => {
           </div>
           <div>
             <label className="block font-poppins font-medium dark:text-white">
-              Link{" "}
+            {t('tablesheader.Link')}{" "}
             </label>
             <input
               type="text"
@@ -157,7 +159,8 @@ const EditVRManger = () => {
             type="submit"
             className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-poppins font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
-            Update
+          {t('tablesheader.Update')}
+
           </button>
         </form>
       </div>

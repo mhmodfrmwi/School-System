@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSchoolHubs, deleteSchoolHub } from "../ManagerRedux/schoolhubSlice";
+import { useTranslation } from 'react-i18next';
 
 const Activities = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const { schoolHubs, loading, error } = useSelector(
     (state) => state.schoolhub,
@@ -29,14 +32,14 @@ const Activities = () => {
       <div className="col-span-2 ms-5 flex flex-col justify-between">
         <div className="mt-5 flex items-center justify-between">
           <div className="dark:text-DarkManager cursor-text font-poppins text-2xl font-bold text-[#105E6A]">
-            School Hubs
+          {t("activities.tabs.schoolHubs")}
           </div>
           <div className="mr-4 flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
             <button
               onClick={() => navigate("/manager/add-school-hubs")}
               className="dark:bg-DarkManager rounded-3xl bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
             >
-              Add School Hubs
+              {t('schoolhubs.AddSchoolHubs')}
             </button>
           </div>
         </div>
@@ -55,7 +58,7 @@ const Activities = () => {
                   </h3>
                   <div className="mt-2 flex flex-col items-center">
                     <p className="font-poppins text-sm">
-                      Contest Registration Start:
+                    {t("activities.hubCard.registrationStart")}:
                     </p>
                     <p className="font-poppins text-sm font-semibold">
                       {" "}
@@ -63,13 +66,13 @@ const Activities = () => {
                     </p>
                   </div>
                   <div className="mt-2 flex flex-col items-center">
-                    <p className="font-poppins text-sm">Contest Ends:</p>
+                    <p className="font-poppins text-sm">{t("activities.hubCard.registrationEnd")}:</p>
                     <p className="font-poppins text-sm font-semibold">
                       {new Date(hub.registrationEnd).toLocaleString()}
                     </p>
                   </div>
                   <div className="mt-2 flex flex-col items-center">
-                    <p className="font-poppins text-sm">Contest Date:</p>
+                    <p className="font-poppins text-sm">{t("activities.hubCard.contestDate")}:</p>
                     <p className="font-poppins text-sm font-semibold">
                       {new Date(hub.contestDate).toLocaleString()}
                     </p>
@@ -81,7 +84,7 @@ const Activities = () => {
                         navigate(`/manager/school-hubs/detailes/${hub._id}`);
                       }}
                     >
-                      Details
+                    {t("activities.hubCard.details")}
                     </button>
                     <button
                       className="cursor-pointer rounded-3xl border border-[#117C90] px-4 py-2 font-poppins text-lg font-medium text-[#117C90] dark:text-white"
@@ -89,7 +92,7 @@ const Activities = () => {
                         navigate(`/manager/school-hubs/prizes/${hub._id}`);
                       }}
                     >
-                      Prizes
+                    {t("activities.hubCard.prizes")}
                     </button>
                     <div className="dark:border-DarkManager flex gap-3 rounded-3xl border border-[#117C90] px-4 py-2">
                       <button

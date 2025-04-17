@@ -3,23 +3,18 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import { useManagerSchedule } from "../services/apiSchedule";
 import Loader from "@/ui/Loader";
+import { useTranslation } from 'react-i18next';
 
 const WeeklyScheduleForManager = () => {
   const { id } = useParams();
-
+  const { t } = useTranslation();
   const { data: managerSchedule, isLoading: loading } = useManagerSchedule(id);
 
   console.log("API Response:", managerSchedule);
 
   const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+    t('schaduel.Sunday'), t('schaduel.Monday'), t('schaduel.Tuesday'), t('schaduel.Wednesday'), t('schaduel.Thursday'),t('schaduel.Friday'), t('schaduel.Saturday')
+];
   const timeslots = [
     "08:00",
     "09:00",
@@ -89,12 +84,12 @@ const WeeklyScheduleForManager = () => {
               <div className="my-2 flex items-center justify-between">
                 <div>
                   <div className="dark:text-DarkManager ms-4 cursor-text py-1 font-poppins text-lg font-bold text-dashboard-bg sm:text-2xl">
-                    Weekly Schedule - {semesterName} ({startYear}-{endYear})
+                    {semesterName} ({startYear}-{endYear})
                   </div>
                   <p className="dark:border-DarkManager mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
                 </div>
                 <button className="dark:to-DarkManager rounded-2xl bg-gradient-to-r from-[#105E6A] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm">
-                  Export as PDF
+                  {t('schaduel.ExportPDF')}
                 </button>
               </div>
               <div className="overflow-x-auto p-4">
@@ -102,7 +97,7 @@ const WeeklyScheduleForManager = () => {
                   <thead>
                     <tr className="dark:bg-DarkManager bg-dashboard-bg text-white">
                       <th className="border border-gray-300 p-2 font-poppins">
-                        Time
+                        {t('schedulem.Time')}
                       </th>
                       {days.map((day) => (
                         <th

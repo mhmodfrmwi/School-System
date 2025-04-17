@@ -4,10 +4,12 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../../../ui/Loader";
 import { useNavigate } from "react-router-dom";
 import ScheduleToggle from "./SelectPage";
+import { useTranslation } from 'react-i18next';
 
 const GetExamSchedules = () => {
   const { isLoading, managerExamSchedules } = useExamSchedules();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return <Loader />;
@@ -49,7 +51,7 @@ const GetExamSchedules = () => {
               <div className="my-2 flex items-center justify-between">
                 <div>
                   <div className="dark:text-DarkManager ms-4 cursor-text py-1 font-poppins text-sm font-bold text-[#117C90] sm:text-xl">
-                    Exams Schedules - {managerExamSchedules.academic_year}
+                    {t('schedulem.ExamSchedule')}  {managerExamSchedules.academic_year}
                   </div>
                   <p className="dark:border-DarkManager mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
                 </div>
@@ -57,7 +59,7 @@ const GetExamSchedules = () => {
                   className="dark:from-DarkManager dark:to-DarkManager me-0 rounded-2xl bg-gradient-to-r from-[#117C90] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm xl:me-4"
                   onClick={() => navigate("/manager/create-exam-schedule")}
                 >
-                  Create Exam Schedule
+                  {t('schedulem.AddExamSchedule')} 
                 </button>
               </div>
 
@@ -66,13 +68,13 @@ const GetExamSchedules = () => {
                   <thead className="dark:bg-DarkManager bg-[#117C90] text-center text-white">
                     <tr>
                       <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                        Grade
+                        {t('schedulem.Grade')} 
                       </th>
                       <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                        Semester
+                        {t('schedulem.Semester')} 
                       </th>
                       <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                        Start Date
+                        {t('schedulem.StartTime')} 
                       </th>
                     </tr>
                   </thead>

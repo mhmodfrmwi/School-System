@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSchoolHubs, updateSchoolHub } from "../ManagerRedux/schoolhubSlice";
+import { useTranslation } from 'react-i18next';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -13,6 +14,7 @@ const formatDate = (dateString) => {
 
 function EditSchoolHubForm() {
   const { id } = useParams();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { schoolHubs, loading, error } = useSelector(
@@ -84,14 +86,14 @@ function EditSchoolHubForm() {
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Edit School Hub
+        {t('schoolhubs.EditSchoolHub')}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="dark:bg-DarkManager2 rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
         <form onSubmit={handleSubmit} className="m-6">
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Title *
+              {t('tablesheader.Title')} *
             </label>
             <input
               type="text"
@@ -106,7 +108,7 @@ function EditSchoolHubForm() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Registration Start
+              {t("activities.hubCard.registrationStart")}
               </label>
               <input
                 type="date"
@@ -119,7 +121,7 @@ function EditSchoolHubForm() {
             </div>
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Registration End
+              {t("activities.hubCard.registrationEnd")}
               </label>
               <input
                 type="date"
@@ -132,7 +134,7 @@ function EditSchoolHubForm() {
             </div>
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Contest Date
+              {t("activities.hubCard.contestDate")}
               </label>
               <input
                 type="date"
@@ -145,7 +147,7 @@ function EditSchoolHubForm() {
             </div>
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Location
+              {t("activityDetails.sections.location")}
               </label>
               <input
                 type="text"
@@ -160,7 +162,7 @@ function EditSchoolHubForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Prizes
+            {t("activities.hubCard.prizes")}
             </label>
             {formData.prizes.map((prize, index) => (
               <input
@@ -176,13 +178,13 @@ function EditSchoolHubForm() {
               onClick={() => addField("prizes")}
               className="mt-2 rounded-full p-2 text-[#117C90] dark:bg-white dark:text-black"
             >
-              + Add Prize
+              + {t('schoolhubs.AddPrize')}
             </button>
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Details
+            {t("activities.hubCard.details")}
             </label>
             <textarea
               name="details"
@@ -201,7 +203,7 @@ function EditSchoolHubForm() {
               disabled={loading}
               className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] disabled:bg-gray-400 dark:bg-white dark:text-black"
             >
-              {loading ? "Saving..." : "Save Changes"}
+              {loading ? "Saving..." : t('tablesheader.Update')}
             </button>
           </div>
 

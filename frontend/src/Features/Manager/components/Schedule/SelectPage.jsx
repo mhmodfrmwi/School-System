@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const ScheduleToggle = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const isActive = (path) => location.pathname === path;
 
@@ -21,7 +23,7 @@ const ScheduleToggle = () => {
           <span className="dark:border-DarkManager dark:text-DarkManager flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90]">
             1
           </span>
-          Weekly Schedule
+          {t('schaduel.WeeklySchedule')}
         </button>
         <button
           onClick={() => navigate("/manager/get-exam-schedules")}
@@ -34,7 +36,7 @@ const ScheduleToggle = () => {
           <span className="dark:text-DarkManager dark:border-DarkManager flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90]">
             2
           </span>
-          Exams Schedules
+          {t('schaduel.ExamsSchedule')}
         </button>
       </div>
     </div>

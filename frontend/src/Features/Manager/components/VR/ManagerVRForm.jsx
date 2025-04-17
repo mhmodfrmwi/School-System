@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { postVR } from "../ManagerRedux/VRMangerSlice";
+import { useTranslation } from 'react-i18next';
 
 const ManagerVRForm = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { status } = useSelector((state) => state.virtualRooms);
   const [formData, setFormData] = useState({
     title: "",
@@ -62,7 +64,7 @@ const ManagerVRForm = () => {
       <ToastContainer />
       <div className="mx-auto flex w-[80%] flex-col px-4 md:px-6 lg:px-0">
         <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-          Upload VR
+        {t('tablesheader.UploadVirtualRooms')}
         </h1>
         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[130px]"></div>
       </div>
@@ -70,7 +72,7 @@ const ManagerVRForm = () => {
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block font-poppins font-medium dark:text-white">
-              Title <span className="text-red-500">*</span>
+            {t('tablesheader.Title')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -83,7 +85,7 @@ const ManagerVRForm = () => {
           </div>
           <div>
             <label className="block font-poppins font-medium dark:text-white">
-              Start Time{" "}
+            {t('tablesheader.StartTime')}{" "}
             </label>
             <input
               type="datetime-local"
@@ -96,7 +98,7 @@ const ManagerVRForm = () => {
           </div>
           <div>
             <label className="block font-poppins font-medium dark:text-white">
-              Duration{" "}
+            {t('tablesheader.Duration')}{" "}
             </label>
             <input
               type="number"
@@ -109,7 +111,7 @@ const ManagerVRForm = () => {
           </div>
           <div>
             <label className="block font-poppins font-medium dark:text-white">
-              Link{" "}
+            {t('tablesheader.Link')}{" "}
             </label>
             <input
               type="text"
@@ -125,7 +127,7 @@ const ManagerVRForm = () => {
             disabled={status === "loading"}
             className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-poppins font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
-            {status === "loading" ? "Uploading..." : "Upload"}
+            {status === "loading" ? "Uploading..." :  t('tablesheader.Upload')}
           </button>
         </form>
       </div>

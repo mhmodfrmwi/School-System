@@ -6,10 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import Loader from "@/ui/Loader";
 import ScheduleToggle from "./SelectPage";
+import { useTranslation } from 'react-i18next';
 
 const GetAllScheduleClasses = () => {
   const { managerclasses, isLoading } = useClasses();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (e) => {
@@ -50,14 +52,14 @@ const GetAllScheduleClasses = () => {
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="dark:text-DarkManager font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
-              Classes
+              {t('attendanse.Classes')}
             </h1>
             <div className="dark:bg-DarkManager mt-1 h-[3px] w-[70px] rounded-t-md bg-[#117C90] lg:h-[4px] xl:w-[100px]"></div>
           </div>
           <input
             type="text"
-            placeholder="Search by class or grade..."
-            className="dark:focus:ring-DarkManager w-44 rounded-md border-2 border-gray-300 bg-[#FCFAFA] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:text-black sm:w-64"
+            placeholder={t('attendanse.Search')}
+            className="dark:focus:ring-DarkManager font-poppins w-44 rounded-md border-2 border-gray-300 bg-[#FCFAFA] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:text-black sm:w-64"
             value={searchText}
             onChange={handleSearchChange}
           />

@@ -7,9 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { fetchVirtualRooms } from "../ManagerRedux/VRMangerSlice";
 import { deleteVR } from "../ManagerRedux/VRMangerSlice";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 const ManagerVRTable = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { virtualRooms, status, error } = useSelector(
     (state) => state.virtualRooms,
@@ -77,7 +80,7 @@ const ManagerVRTable = () => {
             <div className="mb-4 mt-4 flex w-[95%] flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
               <div>
                 <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-                  Virtual Room
+                {t('dashboardteacher.VirtualClassrooms')}
                 </h1>
                 <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
               </div>
@@ -85,7 +88,7 @@ const ManagerVRTable = () => {
                 className="dark:bg-DarkManager rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] sm:text-sm"
                 onClick={() => GoToForm()}
               >
-                Add Virtual Room
+              {t('tablesheader.UploadVirtualRooms')}
               </button>
             </div>
           </div>
@@ -96,19 +99,19 @@ const ManagerVRTable = () => {
                   <thead className="dark:bg-DarkManager bg-[#117C90] text-white">
                     <tr>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Title
+                      {t('tablesheader.Title')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Date
+                      {t('tablesheader.StartTime')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Duration
+                      {t('tablesheader.Duration')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Link
+                      {t('tablesheader.Link')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Actions
+                        {t('tablesheader.Actions')}
                       </th>
                     </tr>
                   </thead>
@@ -134,7 +137,7 @@ const ManagerVRTable = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              Open Link
+                            {t('tablesheader.ViewFile')}
                             </a>
                           </td>
                           <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">

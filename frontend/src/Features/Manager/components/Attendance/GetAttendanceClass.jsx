@@ -5,9 +5,12 @@ import Loader from "@/ui/Loader";
 import Pagination from "../Pagination";
 import { useState } from "react";
 import { useCreateClassData } from "../services/apiAttendance";
+import { useTranslation } from 'react-i18next';
 
 const GetAttendanceClass = () => {
   const { id: classId } = useParams();
+  const { t } = useTranslation();
+
   const {
     register,
     formState: { errors },
@@ -48,7 +51,7 @@ const GetAttendanceClass = () => {
     <div className="mx-auto w-[360px] p-4 sm:w-[550px] md:w-[700px] md:p-6 lg:px-0 xl:w-full">
       <div className="mb-6 ml-6 flex flex-col">
         <h1 className="dark:text-DarkManager font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
-          Class Data
+          {t('attendanse.ClassData')}
         </h1>
         <div className="dark:bg-DarkManager mt-1 h-[3px] w-[100px] rounded-t-md bg-[#117C90] lg:h-[4px]"></div>
       </div>
@@ -72,7 +75,7 @@ const GetAttendanceClass = () => {
             className="dark:bg-DarkManager w-full rounded bg-[#117C90] px-4 py-2 text-white hover:bg-[#0f6a7d]"
             disabled={isCreating}
           >
-            Get Attendance
+            {t('Absence')}
           </button>
         </form>
       </div>
@@ -87,16 +90,16 @@ const GetAttendanceClass = () => {
                     #
                   </th>
                   <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    Academic Number
+                  {t('attendans.AcademicNumber')}
                   </th>
                   <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    Name
+                  {t('assignmentt.StudentName')}
                   </th>
                   <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    Class
+                  {t('attendans.Class')}
                   </th>
                   <th className="px-3 py-2 text-xs sm:text-sm md:text-base">
-                    Status
+                  {t('assignmentt.Status')}
                   </th>
                 </tr>
               </thead>
@@ -137,8 +140,8 @@ const GetAttendanceClass = () => {
           />
         </>
       ) : (
-        <div className="text-center text-gray-500">
-          No attendance records found
+        <div className="text-center font-poppins text-gray-500">
+          {t('attendanse.Noattendance')}
         </div>
       )}
     </div>

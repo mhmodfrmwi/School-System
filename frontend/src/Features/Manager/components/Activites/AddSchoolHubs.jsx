@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createSchoolHub } from "../ManagerRedux/schoolhubSlice";
+import { useTranslation } from 'react-i18next';
+
 
 function AddSchoolHubForm() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.schoolhub);
 
@@ -56,14 +59,14 @@ function AddSchoolHubForm() {
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Add School Hub
+      {t('schoolhubs.AddSchoolHubs')}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="dark:bg-DarkManager2 rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
         <form onSubmit={handleSubmit} className="m-6">
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Title *
+              {t('tablesheader.Title')} *
             </label>
             <input
               type="text"
@@ -79,7 +82,7 @@ function AddSchoolHubForm() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Registration Start
+              {t("activities.hubCard.registrationStart")}
               </label>
               <input
                 type="date"
@@ -92,7 +95,7 @@ function AddSchoolHubForm() {
             </div>
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Registration End
+              {t("activities.hubCard.registrationEnd")}
               </label>
               <input
                 type="date"
@@ -105,7 +108,7 @@ function AddSchoolHubForm() {
             </div>
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Contest Date
+              {t("activities.hubCard.contestDate")}
               </label>
               <input
                 type="date"
@@ -118,7 +121,7 @@ function AddSchoolHubForm() {
             </div>
             <div className="mb-4">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Location
+              {t("activityDetails.sections.location")}
               </label>
               <input
                 type="text"
@@ -134,7 +137,7 @@ function AddSchoolHubForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Prizes
+            {t("activities.hubCard.prizes")}
             </label>
             {formData.prizes.map((prize, index) => (
               <input
@@ -151,13 +154,13 @@ function AddSchoolHubForm() {
               onClick={() => addField("prizes")}
               className="mt-2 rounded-full p-2 text-[#117C90] dark:bg-white dark:text-black"
             >
-              + Add Prize
+              + {t('schoolhubs.AddPrize')}
             </button>
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Details
+            {t("activities.hubCard.details")}
             </label>
             <textarea
               value={formData.details}
@@ -176,7 +179,7 @@ function AddSchoolHubForm() {
               disabled={loading}
               className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] disabled:bg-gray-400 dark:bg-white dark:text-black"
             >
-              {loading ? "Saving..." : "Save"}
+              {loading ? "Saving..." : t('tablesheader.Upload')}
             </button>
           </div>
 

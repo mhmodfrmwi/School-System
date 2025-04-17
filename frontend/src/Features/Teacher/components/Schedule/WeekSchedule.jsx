@@ -89,7 +89,7 @@ const WeeklySchedule = () => {
                                 <table className="min-w-[800px] w-full border-collapse border border-gray-300 text-sm sm:text-base">
                                     <thead>
                                         <tr className="bg-[#105E6A] text-white">
-                                            <th className="border border-gray-300 p-2 font-poppins">Time</th>
+                                            <th className="border border-gray-300 p-2 font-poppins">{t('schedulem.Time')}</th>
                                             {days.map(day => (
                                                 <th key={day} className="border border-gray-300 p-2 font-poppins">{day}</th>
                                             ))}

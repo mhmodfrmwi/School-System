@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSchoolHubs } from "../ManagerRedux/schoolhubSlice";
 import activityImage from "../../../../assets/TeacherIcon/img1.png";
+import { useTranslation } from 'react-i18next';
 
 const PrizesActivity = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { schoolHubs, loading, error } = useSelector(
     (state) => state.schoolhub,
   );
@@ -27,7 +29,8 @@ const PrizesActivity = () => {
     <>
       <div className="col-span-2 ms-5 flex flex-col justify-between">
         <div className="dark:text-DarkManager ms-7 mt-5 cursor-text py-1 font-poppins text-2xl font-bold text-[#105E6A]">
-          Prizes
+        {t("activityPrizes.title")}
+
         </div>
 
         <p className="dark:border-DarkManager mb-2 ms-7 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
@@ -47,7 +50,7 @@ const PrizesActivity = () => {
                 style={{ flex: "1 1 calc(50% - 1rem)" }}
               >
                 <h3 className="font-poppins text-lg font-bold">
-                  Level {index + 1}
+                {t("activityPrizes.prizeLevel")}  {index + 1}
                 </h3>
                 <p className="mt-2 text-sm">{prize}</p>
               </div>
