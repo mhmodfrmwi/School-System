@@ -182,7 +182,7 @@ const DashboardTeacher = () => {
           <div className="ml-0">
             <div className="mb-7 flex flex-col">
               <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-2xl">
-              {t('dashboard.mainCategories')}
+              {t('dashboardteacher.mainCategories')}
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[205px]"></div>
             </div>

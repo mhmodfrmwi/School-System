@@ -910,6 +910,7 @@ i18n
                         CustomLibraries: "Custom Libraries",
                         AcademicCalendar: "Academic Calendar",
                         Welcome: "Welcome",
+                        mainCategories:"mainCategories",
                         notify: "NOTIFICATIONS CENTER",
                         VirtualClassrooms: "Virtual Classrooms",
                         contentvr: "You don’t have any new virtual classrooms today.",
@@ -2204,7 +2205,7 @@ i18n
                     //navbar
                     SearchTeacherPage: "البحث في صفحة المدرس",
                     //sidebar
-                    sidebart: {
+                    sidebar: {
                         Dashboard: "الصفحة الرئيسية",
                         GeneralVirtualRooms: "الغرف الافتراضية العامة"
                     },
@@ -2212,6 +2213,7 @@ i18n
                     dashboardteacher: {
                         Mailbox: "صندوق البريد",
                         DiscussionRooms: "غرف النقاش",
+                        mainCategories:"العناصر الرئيسية",
                         CustomLibraries: "المكتبات المخصصة",
                         AcademicCalendar: "التقويم الأكاديمي",
                         Welcome: "اهلا",
