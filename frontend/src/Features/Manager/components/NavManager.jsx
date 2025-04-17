@@ -9,15 +9,20 @@ import { ReactSVG } from "react-svg";
 import InfoIcon from "../../../assets/icons/Info.svg";
 import userImage from "../../../assets/user.jpeg";
 import language from "../../../assets/icons/language.svg";
+import languageE from "../../../assets/icons/languageET.svg";
+import languageA from "../../../assets/icons/languageAT.svg";
 import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const NavManager = () => {
   const navigate = useNavigate();
   const settingsRef = useRef(null);
   const searchRef = useRef(null);
+  const { t, i18n } = useTranslation();
+
   const [settingToggle, setSettingToggle] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,6 +63,12 @@ const NavManager = () => {
     }
   };
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(newLang);
+    localStorage.setItem("i18nextLng", newLang);
+  };
+  
   const url = window.location.pathname;
   const managerName = url.split("/manager/").pop();
   const match = url.match(/\/manager\/([^/]+)/);
@@ -82,6 +93,11 @@ const NavManager = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  
+    useEffect(() => {
+      document.documentElement.lang = i18n.language;
+    }, [i18n.language]);
+  
 
   return (
     <div className="relative">
@@ -199,8 +215,9 @@ const NavManager = () => {
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
-              <button className="mx-auto ms-6 p-2 text-gray-500">
-                <ReactSVG src={language} className="r h-auto w-auto" />
+              <button className="mx-auto ms-6 p-2 text-gray-500"
+              onClick={toggleLanguage}>
+                <ReactSVG src={i18n.language === "en" ? languageA : languageE} className="h-auto w-auto" />
               </button>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
 

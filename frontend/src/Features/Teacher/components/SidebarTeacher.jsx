@@ -32,7 +32,7 @@ const SidebarTeacher = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const menuItems = [
-    { label: t('sidebar.Dashboard'), icon: faHome, hoverIcon: faHome, href: "/teacher" },
+    { label: t('sidebart.Dashboard'), icon: faHome, hoverIcon: faHome, href: "/teacher" },
     {
       label: t('Motivation'),
       icon: AwardIcon,
@@ -82,7 +82,7 @@ const SidebarTeacher = () => {
     //   href: "#",
     // },
   {
-      label: t('sidebar.GeneralVirtualRooms'),
+      label: t('sidebart.GeneralVirtualRooms'),
       icon: VirtualIcon,
       hoverIcon: VirtualIconH,
       href: "/teacher/vr-manger",

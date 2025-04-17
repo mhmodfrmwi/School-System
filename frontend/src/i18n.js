@@ -899,7 +899,7 @@ i18n
                     //navbar
                     SearchTeacherPage: "Search Teacher Page",
                     //sidebar
-                    sidebar: {
+                    sidebart: {
                         Dashboard: "Dashboard",
                         GeneralVirtualRooms: "General Virtual Rooms"
                     },
@@ -2204,7 +2204,7 @@ i18n
                     //navbar
                     SearchTeacherPage: "البحث في صفحة المدرس",
                     //sidebar
-                    sidebar: {
+                    sidebart: {
                         Dashboard: "الصفحة الرئيسية",
                         GeneralVirtualRooms: "الغرف الافتراضية العامة"
                     },

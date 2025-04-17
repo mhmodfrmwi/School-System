@@ -9,22 +9,23 @@ import ActivityIconH from "../../../assets/TeacherIcon/Activites.png";
 import VirtualIconH from "../../../assets/TeacherIcon/Virtual.png";
 import ScheduleIconH from "../../../assets/TeacherIcon/Schedule.png";
 import AbsenceIconH from "../../../assets/TeacherIcon/Absence.png";
-
 import GradeIcon from "../../../assets/StudentIcon/Grade.png";
 import ActivityIcon from "../../../assets/StudentIcon/Activites.png";
 import VirtualIcon from "../../../assets/StudentIcon/Virtual.png";
 import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
 import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
+import { useTranslation } from 'react-i18next';
 
 const SidebarManager = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const location = useLocation();
   const currentPath = location.pathname;
+  const { t } = useTranslation();
 
   const menuItems = [
     {
-      label: "Dashboard",
+      label: t('sidebart.Dashboard'),
       icon: faHome,
       hoverIcon: faHome,
       href: "/manager/dashboard",
@@ -36,13 +37,13 @@ const SidebarManager = () => {
       href: "/manager/school-hubs",
     },
     {
-      label: "Absence",
+      label: t('Absence'),
       icon: AbsenceIcon,
       hoverIcon: AbsenceIconH,
       href: "/manager/get-all-classes",
     },
     {
-      label: "Schedule",
+      label: t('Schedule'),
       icon: ScheduleIcon,
       hoverIcon: ScheduleIconH,
       href: "/manager/get-all-schedule-classes",
