@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchClasses } from "../AdminRedux/classSlice"; // Fetch classes
 import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Fetch teachers
 import { postClassTeacher } from "../AdminRedux/classTeacherSlice"; // Add class teacher
-
+import { useTranslation } from 'react-i18next';
 function AcademicData() {
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   // State to hold form data
   const [academicData, setAcademicData] = useState({
     teacherName: "",
@@ -69,7 +69,7 @@ function AcademicData() {
   return (
     <div className="mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Academic Data
+      {t("datatype.AcademicData")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -80,7 +80,7 @@ function AcademicData() {
           {/* Select Teacher - Dynamic options */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Teacher
+            {t("teacherdata.Teacher")}
             </label>
             <select
               name="teacherName"
@@ -88,7 +88,7 @@ function AcademicData() {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">Select Teacher</option>
+              <option value="">{t("teacherdata.SelectTeacher")}</option>
               {teachers?.map((teacher) => (
                 <option key={teacher._id} value={teacher._id}>
                   {teacher.fullName} - {teacher.subjectId?.subjectName}
@@ -100,7 +100,7 @@ function AcademicData() {
           {/* Select Class - Dynamic options */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Class
+            {t("teacherdata.Class")}
             </label>
             <select
               name="className"
@@ -108,7 +108,7 @@ function AcademicData() {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">Select Class</option>
+              <option value="">{t("teacherdata.SelectClass")}</option>
               {classes?.map((cls) => (
                 <option key={cls._id} value={cls._id}>
                   {cls.className} - {cls.gradeId?.gradeName} -{" "}
@@ -125,7 +125,7 @@ function AcademicData() {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Submit Academic Data
+              {t("teacherdata.SubmitAcademicData")}
             </button>
           </div>
         </form>

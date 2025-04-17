@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { editManager, fetchManagers } from "../AdminRedux/managerSlice";
-
+import { useTranslation } from 'react-i18next';
 const EditManagerForm = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,14 +54,14 @@ const EditManagerForm = () => {
   return (
     <div className="relative mx-auto mt-10 w-[80%]">
       <h1 className="pl-5 font-poppins text-2xl font-semibold text-[#244856]">
-        Edit Manager
+      {t("edit.manager")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form onSubmit={handleSubmit} className="m-6">
           <div className="mb-4">
             <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
-              Full Name
+            {t("formLabels.fullName")}
             </label>
             <input
               type="text"
@@ -68,14 +69,14 @@ const EditManagerForm = () => {
               value={formData.fullName}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter full name"
+              placeholder={t("placeholders.fullName")}
               required
             />
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
-              Email Address
+            {t("formLabels.email")}
             </label>
             <input
               type="email"
@@ -83,14 +84,14 @@ const EditManagerForm = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter email address"
+              placeholder={t("placeholders.email")}
               required
             />
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
-              Gender
+            {t("formLabels.gender")}
             </label>
             <select
               name="gender"
@@ -99,20 +100,20 @@ const EditManagerForm = () => {
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="" className="dark:text-white" disabled>
-                Select Gender
+              {t("genderOptions.select")}
               </option>
               <option value="M" className="font-poppins">
-                Male
+              {t("genderOptions.male")}
               </option>
               <option value="F" className="font-poppins">
-                Female
+              {t("genderOptions.female")}
               </option>
             </select>
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
-              Password
+            {t("formLabels.password")}
             </label>
             <input
               type="password"
@@ -120,14 +121,14 @@ const EditManagerForm = () => {
               value={formData.password}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter password"
+              placeholder={t("placeholders.password")}
               required
             />
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
-              Phone Number
+            {t("formLabels.phoneNumber")}
             </label>
             <input
               type="text"
@@ -135,7 +136,7 @@ const EditManagerForm = () => {
               value={formData.phone}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter phone number"
+              placeholder={t("placeholders.phoneNumber")}
               required
             />
           </div>
@@ -144,7 +145,7 @@ const EditManagerForm = () => {
             type="submit"
             className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-poppins font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
-            Save Changes
+            {t("placeholders.SaveChanges")}
           </button>
         </form>
       </div>

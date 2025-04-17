@@ -5,8 +5,9 @@ import { fetchClasses } from "../AdminRedux/classSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import { editClassTeacher } from "../AdminRedux/classTeacherSlice";
-
+import { useTranslation } from 'react-i18next';
 const EditClassTeacherForm = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const EditClassTeacherForm = () => {
   return (
     <div className="mx-auto mt-10 w-[80%]">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Edit Class Teacher
+      {t("edit.classteacher")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -100,7 +101,7 @@ const EditClassTeacherForm = () => {
           {/* Teacher-Subject Field */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Teacher-Subject
+            {t("teacherdata.TeacherSubject")}
             </label>
             <select
               name="teacherSubject"
@@ -108,7 +109,7 @@ const EditClassTeacherForm = () => {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">Select Teacher-Subject</option>
+              <option value="">{t("teacherdata.SelectTeacherSubject")}</option>
               {teachers?.map((teacher) =>
                 subjects?.map((subject) => (
                   <option
@@ -125,7 +126,7 @@ const EditClassTeacherForm = () => {
           {/* Class-Academic Year Field */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Class-Academic Year
+            {t("teacherdata.ClassAcademicYear")}
             </label>
             <select
               name="classAcademicYear"
@@ -133,7 +134,7 @@ const EditClassTeacherForm = () => {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">Select Class-Academic Year</option>
+              <option value="">{t("teacherdata.SelectClassAcademicYear")}</option>
               {classes?.map((cls) => (
                 <option
                   key={cls._id}
@@ -152,7 +153,7 @@ const EditClassTeacherForm = () => {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Save Changes
+                  {t("placeholders.SaveChanges")}
             </button>
           </div>
         </form>

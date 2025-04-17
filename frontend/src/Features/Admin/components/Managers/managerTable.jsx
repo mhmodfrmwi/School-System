@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { fetchManagers, removeManager } from "../AdminRedux/managerSlice";
 import Pagination from "../Pagination";
 import Header from "../Managers/managerHeader";
-
+import { useTranslation } from 'react-i18next';
 const ManagerTable = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { managers = [], loading } = useSelector(
     (state) => state.managers || {},
@@ -42,7 +43,7 @@ const ManagerTable = () => {
   );
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this manager?")) {
+    if (window.confirm(t("managerTable.deleteConfirmation"))) {
       try {
         await dispatch(removeManager(id));
       } catch (error) {
@@ -82,16 +83,16 @@ const ManagerTable = () => {
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Name
+                {t("tableHeaders.name")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Email
+                {t("tableHeaders.email")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Gender
+                {t("tableHeaders.gender")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Actions
+                {t("tableHeaders.actions")}
                 </th>
               </tr>
             </thead>
@@ -145,11 +146,10 @@ const ManagerTable = () => {
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                      No Manager Found
+                    {t("managerTable.noManagersFound.title")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                      It seems like there are no managers in the database at the
-                      moment.
+                    {t("managerTable.noManagersFound.description")}
                     </p>
                   </td>
                 </tr>

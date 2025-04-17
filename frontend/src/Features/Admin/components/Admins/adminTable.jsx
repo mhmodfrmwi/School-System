@@ -8,8 +8,10 @@ import {
 import Pagination from "../Pagination";
 import Header from "../Admins/adminHeader";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const AdminTable = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { admins, message, loading } = useSelector((state) => state.admins);
   const dispatch = useDispatch();
@@ -47,7 +49,7 @@ const AdminTable = () => {
   const handlePageChange = (page) => setCurrentPage(page);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this admin?")) {
+    if (window.confirm(t("adminTable.deleteConfirmation"))) {
       await dispatch(removeAdmin(id));
     }
   };
@@ -81,19 +83,19 @@ const AdminTable = () => {
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Name
+                {t("tableHeaders.name")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Email
+                {t("tableHeaders.email")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Gender
+                {t("tableHeaders.gender")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Phone
+                {t("tableHeaders.phone")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Actions
+                {t("tableHeaders.actions")}
                 </th>
               </tr>
             </thead>
@@ -150,11 +152,10 @@ const AdminTable = () => {
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                      No Admin Found
+                    {t("adminTable.noAdminsFound.title")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                      It seems like there are no admins in the database at the
-                      moment.
+                    {t("adminTable.noAdminsFound.description")}
                     </p>
                   </td>
                 </tr>

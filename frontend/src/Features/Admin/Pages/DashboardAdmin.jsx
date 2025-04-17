@@ -12,8 +12,10 @@ import { fetchScheduals } from "../components/AdminRedux/scheduleSlice";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const networkErrorShownRef = useRef(false); // Use a ref to track if network error toast is shown
   const tokenErrorShownRef = useRef(false);
@@ -95,13 +97,13 @@ const Dashboard = () => {
     // Show toast only once for network error
     if (hasNetworkError && !networkErrorShownRef.current) {
       toast.error(
-        "NetworkError: Failed to fetch Some data. Please check your connection.",
+        t("dashboard.errors.network")
       );
       networkErrorShownRef.current = true; // Mark network error toast as shown
     }
     // Show toast only once for token error
     if (hasTokenError && !tokenErrorShownRef.current) {
-      toast.error("Token is required! Please log in again.");
+      toast.error(t("dashboard.errors.token"));
       tokenErrorShownRef.current = true;
     }
   }, [
@@ -127,27 +129,27 @@ const Dashboard = () => {
 
   const pieData = [
     {
-      name: "Students",
+      name: t("dashboard.users.students"),
       value: loadingStudents ? 0 : students?.length || 0,
       color: "#4CAF50",
     },
     {
-      name: "Parents",
+      name: t("dashboard.users.parents"),
       value: loadingParents ? 0 : parents?.length || 0,
       color: "#FF9800",
     },
     {
-      name: "Teachers",
+      name: t("dashboard.users.teachers"),
       value: loadingTeachers ? 0 : teachers?.length || 0,
       color: "#2196F3",
     },
     {
-      name: "Managers",
+      name: t("dashboard.users.manager"),
       value: loadingManagers ? 0 : managers?.length || 0,
       color: "#F44336",
     },
     {
-      name: "Admins",
+      name: t("dashboard.users.admin"),
       value: loadingAdmins ? 0 : admins?.length || 0,
       color: "#9C27B0",
     },
@@ -176,56 +178,56 @@ const Dashboard = () => {
       {/* Overview Section */}
       <section>
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-          Overview
+        {t("dashboard.overview")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856]"></div>
 
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[
             {
-              label: "Students",
+              label:  t("dashboard.users.students"),
               value: loadingStudents ? 0 : students.length,
               icon: "/src/assets/students 1.png",
               bgColor: "#D1F3E0",
             },
             {
-              label: "Teachers",
+              label: t("dashboard.users.teachers"),
               value: loadingTeachers ? 0 : teachers.length,
               icon: "/src/assets/Group.png",
               bgColor: "#E1F1FF",
             },
             {
-              label: "Parents",
+              label: t("dashboard.users.parents"),
               value: loadingParents ? 0 : parents.length,
               icon: "/src/assets/vector.png",
               bgColor: "#FFF2D8",
             },
             {
-              label: "Manager",
+              label:t("dashboard.users.manager"),
               value: loadingManagers ? 0 : managers.length,
               icon: "/src/assets/people.png",
               bgColor: "#FFEAEA",
             },
             {
-              label: "Admin",
+              label:  t("dashboard.users.admin"),
               value: loadingAdmins ? 0 : admins.length,
               icon: "/src/assets/Group1.png",
               bgColor: "#D1F3E0",
             },
             {
-              label: "Terms",
+              label: t("dashboard.users.terms"),
               value: loadingTerms ? 0 : terms.length,
               icon: "/src/assets/Term.png",
               bgColor: "#E1F1FF",
             },
             {
-              label: "Courses",
+              label: t("dashboard.users.courses"),
               value: loadingSubjects ? 0 : subjects.length,
               icon: "/src/assets/Course.png",
               bgColor: "#FFF2D8",
             },
             {
-              label: "Schedule",
+              label: t("dashboard.users.schedule"),
               value: loadingSchedules ? 0 : schedules ? schedules.length : 0,
               icon: "/src/assets/Schedule.png",
               bgColor: "#FFEAEA",
@@ -263,7 +265,7 @@ const Dashboard = () => {
       {/* Statistics Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-          Statistics of users
+        {t("dashboard.statistics")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[200px] rounded-t-md bg-[#244856]"></div>
 
@@ -271,7 +273,7 @@ const Dashboard = () => {
           {/* Students Chart */}
           <div className="rounded-lg bg-white p-6 shadow-md dark:bg-[#117C90]">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-              Students
+            {t("dashboard.charts.students")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {students.length > 0 ? (
@@ -279,11 +281,11 @@ const Dashboard = () => {
                   <Pie
                     data={[
                       {
-                        name: "Female",
+                        name: t("dashboard.charts.female"),
                         value: femaleStudents,
                         color: "#4CAF50",
                       },
-                      { name: "Male", value: maleStudents, color: "#2196F3" },
+                      { name: t("dashboard.charts.male"), value: maleStudents, color: "#2196F3" },
                     ]}
                     dataKey="value"
                     cx="50%"
@@ -305,7 +307,7 @@ const Dashboard = () => {
           {/* Teachers Chart */}
           <div className="rounded-lg bg-white p-6 shadow-md dark:bg-[#117C90]">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-              Teachers
+            {t("dashboard.charts.teachers")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {teachers.length > 0 ? (
@@ -313,11 +315,11 @@ const Dashboard = () => {
                   <Pie
                     data={[
                       {
-                        name: "Female",
+                        name:t("dashboard.charts.female"),
                         value: femaleTeachers,
                         color: "#4CAF50",
                       },
-                      { name: "Male", value: maleTeachers, color: "#2196F3" },
+                      { name:  t("dashboard.charts.male"), value: maleTeachers, color: "#2196F3" },
                     ]}
                     dataKey="value"
                     cx="50%"
@@ -339,7 +341,7 @@ const Dashboard = () => {
           {/* Pie Chart */}
           <div className="col-span-1 rounded-lg bg-white p-6 shadow-md dark:bg-[#117C90] sm:col-span-2 lg:col-span-1">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-              Percentage Of Users By Type
+            {t("dashboard.charts.percentage")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {pieData[0].value > 0 ||
@@ -373,7 +375,7 @@ const Dashboard = () => {
       {/* Calendar Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-          Calendar
+        {t("dashboard.calendar")}
         </h2>
         <div className="mb-6 mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856]"></div>
 

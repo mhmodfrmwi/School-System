@@ -9,8 +9,9 @@ import { fetchTeachers } from "../AdminRedux/teacherSlice"; // Fetch teachers
 import Pagination from "../Pagination";
 import Header from "./classTeacherHeader";
 import { Link, useParams } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const ClassTeacherTable = () => {
+  const { t } = useTranslation();
   const { classTeachers = [], loading } = useSelector(
     (state) => state.classTeacher || {},
   );
@@ -98,7 +99,7 @@ const ClassTeacherTable = () => {
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this class teacher?",
+      t("teacherTable.deleteConfirmation1"),
     );
     if (confirmDelete) {
       try {
@@ -127,16 +128,16 @@ const ClassTeacherTable = () => {
           className: classItem.class_name || classItem.className,
           gradeName: classItem.gradeId
             ? classItem.gradeId.gradeName || classItem.grade_id
-            : "No Grade",
+            :t("teacherdata.NoGrade"),
         };
       }
-      return { className: "Class not found", gradeName: "No Grade" };
+      return { className: t("teacherdata.Classnotfound"), gradeName: t("teacherdata.NoGrade") };
     };
   }, [classes]);
 
   const getTeacherName = (teacherId) => {
     const teacher = teachers.find((t) => t._id === teacherId);
-    return teacher ? teacher.fullName : "No Teacher Assigned";
+    return teacher ? teacher.fullName : t("teacherdata.NoTeacherAssigned");
   };
   if (loading) {
     return <div className="h-full w-full"></div>; // Empty div during loading
@@ -154,19 +155,19 @@ const ClassTeacherTable = () => {
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Class
+                {t("tableHeaders.Class")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Subject
+                {t("tableHeaders.subject")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Teacher
+                {t("tableHeaders.teacher")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Academic Year
+                {t("tableHeaders.AcademicYear")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Actions
+                {t("tableHeaders.actions")}
                 </th>
               </tr>
             </thead>
@@ -217,11 +218,10 @@ const ClassTeacherTable = () => {
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                      No Class Teachers Found
+                    {t("teacherTable.noTeachersFound.title1")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                      It seems like there are no class teachers in the database
-                      at the moment.
+                    {t("teacherTable.noTeachersFound.description1")}
                     </p>
                   </td>
                 </tr>

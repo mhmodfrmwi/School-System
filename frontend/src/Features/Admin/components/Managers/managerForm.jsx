@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postManager } from "../AdminRedux/managerSlice";
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 function ManagerForm() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { managers } = useSelector((state) => state.managers);
   const [formData, setFormData] = useState({
@@ -28,13 +29,13 @@ function ManagerForm() {
       !formData.password ||
       !formData.phoneNumber
     ) {
-      toast.warning("Please fill in all required fields.");
+      toast.warning(t("validation.requiredFields"));
       return;
     }
 
     const phoneRegex = /^[0-9]{11}$/;
     if (!phoneRegex.test(formData.phoneNumber)) {
-      toast.error("Phone number must be exactly 11 digits.");
+      toast.error(t("validation.phoneValidation"));
       return;
     }
 
@@ -43,7 +44,7 @@ function ManagerForm() {
     );
 
     if (emailExists) {
-      toast.error("Email already exists. Please use another email.");
+      toast.error(t("validation.emailValidation"));
       return;
     }
 
@@ -71,7 +72,7 @@ function ManagerForm() {
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Add Manager
+      {t("managerHeader.add")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -81,7 +82,7 @@ function ManagerForm() {
         >
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Full Name
+            {t("formLabels.fullName")}
             </label>
             <input
               type="text"
@@ -89,14 +90,14 @@ function ManagerForm() {
               value={formData.fullName}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter full name"
+              placeholder={t("placeholders.fullName")}
               required
             />
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Email Address
+            {t("formLabels.email")}
             </label>
             <input
               type="email"
@@ -104,14 +105,14 @@ function ManagerForm() {
               value={formData.email}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter email address"
+              placeholder={t("placeholders.email")}
               required
             />
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Gender
+            {t("formLabels.gender")}
             </label>
             <select
               name="gender"
@@ -120,16 +121,16 @@ function ManagerForm() {
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
               <option value="" className="dark:text-white" disabled>
-                Select Gender
+              {t("genderOptions.select")}
               </option>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
+              <option value="M">{t("genderOptions.male")}</option>
+              <option value="F">{t("genderOptions.female")}</option>
             </select>
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Password
+            {t("formLabels.password")}
             </label>
             <input
               type="password"
@@ -137,14 +138,14 @@ function ManagerForm() {
               value={formData.password}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter password"
+              placeholder={t("placeholders.password")}
               required
             />
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Phone Number
+            {t("formLabels.phoneNumber")}
             </label>
             <input
               type="text"
@@ -152,7 +153,7 @@ function ManagerForm() {
               value={formData.phoneNumber}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter phone number"
+              placeholder={t("placeholders.phoneNumber")}
               required
             />
           </div>
@@ -162,7 +163,7 @@ function ManagerForm() {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Add Manager
+              {t("managerHeader.add")}
             </button>
           </div>
         </form>

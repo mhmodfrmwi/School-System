@@ -8,8 +8,9 @@ import {
 import Pagination from "../Pagination";
 import Header from "../Parents/parentHeader";
 import { useNavigate } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const ParentTable = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     parents = [],
@@ -45,7 +46,7 @@ const ParentTable = () => {
   );
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this parent?")) {
+    if (window.confirm(t("parentTable.deleteConfirmation"))) {
       await dispatch(removeParent(id));
     }
   };
@@ -89,18 +90,18 @@ const ParentTable = () => {
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Name
+                {t("tableHeaders.name")}
                 </th>
 
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Email
+                {t("tableHeaders.email")}
                 </th>
 
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Gender
+                {t("tableHeaders.gender")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Actions
+                {t("tableHeaders.actions")}
                 </th>
               </tr>
             </thead>
@@ -154,11 +155,10 @@ const ParentTable = () => {
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                      No Parents Found
+                    {t("parentTable.noParentsFound.title")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                      It seems like there are no parents in the database at the
-                      moment.
+                    {t("parentTable.noParentsFound.description")}
                     </p>
                   </td>
                 </tr>

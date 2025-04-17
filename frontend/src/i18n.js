@@ -894,7 +894,7 @@ i18n
                         "noSupport": "Your browser does not support the video tag.",
                     },
 
-                   /////////////////////////////////////////////teacher////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////teacher////////////////////////////////////////////////////////////////
 
                     //navbar
                     SearchTeacherPage: "Search Teacher Page",
@@ -985,104 +985,327 @@ i18n
                         EditQuestion: "Edit Question",
 
                     },
-                    assignmentt:{
-                        MyAssignment:"My Assignment",
-                        Due:"Due",
-                        Marks:"Marks",
-                        NoAssignments:"No Assignments Found",
-                        desc:" It seems like there are no Assignments available at the moment.",
-                        Submissions:"Submissions",
-                        Status:"Status",
-                        SubmissionDate:"Submission Date",
-                        StudentName:"Student Name",
-                        NoSubmissions :"No Submissions Found",
-                        descs:"It seems like there are no Submissions available at the moment",
-                        SubmissionDetails:"Submission Details",
-                        Submittedby:"Submitted by",
-                        SubmissionText:"Submission Text",
-                        Submission :"Submission ",
-                        Assignment:"Assignment",
-                        Save:"Save",
-                        Cancel:"Cancel",
-                        Grade:"Grade",
-                        EditGrade:"Edit Grade",
-                        UpdateAssignment:"Update Assignment",
-                        UploadAssignment:"Upload Assignment",
+                    assignmentt: {
+                        MyAssignment: "My Assignment",
+                        Due: "Due",
+                        Marks: "Marks",
+                        NoAssignments: "No Assignments Found",
+                        desc: " It seems like there are no Assignments available at the moment.",
+                        Submissions: "Submissions",
+                        Status: "Status",
+                        SubmissionDate: "Submission Date",
+                        StudentName: "Student Name",
+                        NoSubmissions: "No Submissions Found",
+                        descs: "It seems like there are no Submissions available at the moment",
+                        SubmissionDetails: "Submission Details",
+                        Submittedby: "Submitted by",
+                        SubmissionText: "Submission Text",
+                        Submission: "Submission ",
+                        Assignment: "Assignment",
+                        Save: "Save",
+                        Cancel: "Cancel",
+                        Grade: "Grade",
+                        EditGrade: "Edit Grade",
+                        UpdateAssignment: "Update Assignment",
+                        UploadAssignment: "Upload Assignment",
                     },
-                    examst:{
-                        MyExams:"My Exams",
-                        End:"End Time",
-                        Start:"Start Time",
-                        Duration:"Duration",
-                        GeneralInformation:"General Information",
-                        Grade:"Grade",
-                        Subject:"Subject",
-                        Options:"Options",
-                        ExamQuestions:"Exam Questions",
-                        noExamsFound:"No Exams Found",
-                        noExamsDescription:"It seems like there are no exams available at the moment",
-                        ExamResults :"Exam Results ",
-                        Percentage:"Percentage",
-                        commaseparated:"comma-separated ," ,
-                        AddQuestion:"Add Question",
-                        CreateExam:"Create Exam",
-                        UpdateExam:"Update Exam",
+                    examst: {
+                        MyExams: "My Exams",
+                        End: "End Time",
+                        Start: "Start Time",
+                        Duration: "Duration",
+                        GeneralInformation: "General Information",
+                        Grade: "Grade",
+                        Subject: "Subject",
+                        Options: "Options",
+                        ExamQuestions: "Exam Questions",
+                        noExamsFound: "No Exams Found",
+                        noExamsDescription: "It seems like there are no exams available at the moment",
+                        ExamResults: "Exam Results ",
+                        Percentage: "Percentage",
+                        commaseparated: "comma-separated ,",
+                        AddQuestion: "Add Question",
+                        CreateExam: "Create Exam",
+                        UpdateExam: "Update Exam",
 
                     },
-                    attendans:{
-                        AcademicNumber:"Academic Number",
-                        Class:"Class",
-                        SubmitAttendance:"Submit Attendance",
-                        TakeAttendance:"Take Attendance",
-                        AttendanceReport:"Attendance Report",
-                        AttendanceSummary:" Attendance Summary",
-                        GenerateReport:" Generate Report",
+                    attendans: {
+                        AcademicNumber: "Academic Number",
+                        Class: "Class",
+                        SubmitAttendance: "Submit Attendance",
+                        TakeAttendance: "Take Attendance",
+                        AttendanceReport: "Attendance Report",
+                        AttendanceSummary: " Attendance Summary",
+                        GenerateReport: " Generate Report",
                     },
-                    schaduel:{
-                      Saturday:"Saturday",
-                      Friday:"Friday",
-                      Thursday:"Thursday",
-                      Wednesday:"Wednesday",
-                      Tuesday:"Tuesday",
-                      Monday:"Wednesday",
-                      Sunday:"Sunday",
-                      ExportPDF:"Export as PDF",
-                      ExamsSchedule:"Exams Schedule",
-                      WeeklySchedule:"Weekly Schedule",
+                    schaduel: {
+                        Saturday: "Saturday",
+                        Friday: "Friday",
+                        Thursday: "Thursday",
+                        Wednesday: "Wednesday",
+                        Tuesday: "Tuesday",
+                        Monday: "Wednesday",
+                        Sunday: "Sunday",
+                        ExportPDF: "Export as PDF",
+                        ExamsSchedule: "Exams Schedule",
+                        WeeklySchedule: "Weekly Schedule",
                     },
-                    gradest:{
-                        ExamScores:"Exam Scores",
-                        AcademicYear:"Academic Year",
-                        ExportCSV:"Export to CSV",
-                        UploadFile:"Go to Upload File",
-                        GetStudentsGrades:"Get Students Grades",
-                        Choosefile:"Choose a file",
-                        UploadGradesFile:"Upload Grades File",
-                        Gradestudents:"Grades For Students",
-                        Selectexamtype:"  Select exam type",
-                        FinalDegree:"Final Degree",
-                        StudentExamResults:"Student Exam Results",
-                        DeleteAllData:"Delete All Data",
-                        ExportData:"Export Data",
-                        UploadUpdate:"Upload & Update",
+                    gradest: {
+                        ExamScores: "Exam Scores",
+                        AcademicYear: "Academic Year",
+                        ExportCSV: "Export to CSV",
+                        UploadFile: "Go to Upload File",
+                        GetStudentsGrades: "Get Students Grades",
+                        Choosefile: "Choose a file",
+                        UploadGradesFile: "Upload Grades File",
+                        Gradestudents: "Grades For Students",
+                        Selectexamtype: "  Select exam type",
+                        FinalDegree: "Final Degree",
+                        StudentExamResults: "Student Exam Results",
+                        DeleteAllData: "Delete All Data",
+                        ExportData: "Export Data",
+                        UploadUpdate: "Upload & Update",
 
                     },
-                    activitiest:{
-                        AddContest:"Add Contest",
-                        Participants:"Participants",
-                        EditContest:"Edit Contest",
+                    activitiest: {
+                        AddContest: "Add Contest",
+                        Participants: "Participants",
+                        EditContest: "Edit Contest",
                     },
-                    libraryt:{
-                        AddLibraryItem:"Add Library Item",
-                        AddItem:"Add Item",
-                        LibraryMaterials:"Library Materials",
-                        AllMaterialsLibrary:"All Materials in Library  ",
-                        GeneralLibrary:"General Library",
-                        TeacherLibrary:"Teacher Library",
-                        Library:"Library",
-                        EditMaterial:"Edit Material",
+                    libraryt: {
+                        AddLibraryItem: "Add Library Item",
+                        AddItem: "Add Item",
+                        LibraryMaterials: "Library Materials",
+                        AllMaterialsLibrary: "All Materials in Library  ",
+                        GeneralLibrary: "General Library",
+                        TeacherLibrary: "Teacher Library",
+                        Library: "Library",
+                        EditMaterial: "Edit Material",
 
-                    }
+                    },
+
+                    ////////////////////////////////Admin//////////////////////////////////////////////////////////
+
+                    //Nav
+                    SearchAdminPage: "Search Admin Page",
+                    //Dashboard
+                    "dashboard": {
+                        "overview": "Overview",
+                        "statistics": "Statistics of users",
+                        "calendar": "Calendar",
+                        "users": {
+                            "students": "Students",
+                            "teachers": "Teachers",
+                            "parents": "Parents",
+                            "manager": "Manager",
+                            "admin": "Admin",
+                            "terms": "Terms",
+                            "courses": "Courses",
+                            "schedule": "Schedule"
+                        },
+                        "charts": {
+                            "students": "Students",
+                            "teachers": "Teachers",
+                            "percentage": "Percentage Of Users By Type",
+                            "female": "Female",
+                            "male": "Male"
+                        },
+                        "errors": {
+                            "network": "NetworkError: Failed to fetch Some data. Please check your connection.",
+                            "token": "Token is required! Please log in again."
+                        }
+                    },
+                    //Sidebar
+                    "sidebar": {
+                        "dashboard": "Dashboard",
+                        "members": "Members",
+                        "termManagement": "Term Management",
+                        "courseManagement": "Course Management",
+                        "academicYear": "Academic Year",
+                        "gradeManagement": "Grade Management",
+                        "scheduleManagement": "Schedule Management",
+                        "logout": "Logout",
+                        "noCurrentTerm": "No current term available",
+                        "noTerms": "No terms available",
+                        "schoolName": "Khatab School",
+                        "loading": "Loading...",
+                    },
+                    //basicform
+                    AllMembers: "All Members",
+                    //header
+                    "Header": {
+                        "exportCSV": "Export CSV",
+                        "selectFilter": "Select Filter",
+                        "filterOptions": {
+                            "name": "Name",
+                            "gender": "Gender",
+                            "email":"Email",
+                            "subject":"Subject",
+                            "Class":"Class",
+                            "Teacher":"Teacher",
+                            "AcademicYear":"Academic Year ",
+                        },
+                    },
+                    "studentHeader": {
+                        "add": "Add Student",
+                        "searchPlaceholder": "Search for a student by name or gender"
+                    },
+                    "teacherHeader": {
+                        "add": "Add Teacher",
+                        "searchPlaceholder": "Search for a teacher by name , email , gender or subject ",
+                        "searchPlaceholder1":"Search for a class teacher by class, subject, teacher, or academic year"
+                    },
+                    "parentHeader": {
+                        "add": "Add Parent",
+                        "searchPlaceholder": "Search for a parent by name , email or gender"
+                    },
+                    "managerHeader": {
+                        "add": "Add Manager",
+                        "searchPlaceholder": "Search for a manager by name , email or gender"
+                    },
+                    "adminHeader": {
+                        "add": "Add Admin",
+                        "searchPlaceholder": "Search for a admin by name , email or gender"
+                    },
+                    //table
+                    "tableHeaders": {
+                        "name": "Name",
+                        "email": "Email",
+                        "gender": "Gender",
+                        "phone": "Phone",
+                        "actions": "Actions",
+                        "Class":"Class",
+                        "StudentID":"Student ID",
+                        "AcademicNumber":"Academic Number",
+                         "subject":"Subject",
+                         "teacher":"Teacher",
+                        "AcademicYear":"Academic Year "
+                      },
+                    "adminTable": {
+                        "deleteConfirmation": "Are you sure you want to delete this admin?",
+                        "noAdminsFound": {
+                          "title": "No Admin Found",
+                          "description": "It seems like there are no admins in the database at the moment."
+                        }
+                      },
+                      "parentTable": {
+                        "deleteConfirmation": "Are you sure you want to delete this parent?",
+                        "noParentsFound": {
+                          "title": "No Parent Found",
+                          "description": "It seems like there are no parentS in the database at the moment."
+                        }
+                      },
+                      "managerTable": {
+                        "deleteConfirmation": "Are you sure you want to delete this manager?",
+                        "noManagersFound": {
+                          "title": "No Manager Found",
+                          "description": "It seems like there are no managers in the database at the moment."
+                        }
+                      },
+                      "studentTable": {
+                        "deleteConfirmation": "Are you sure you want to delete this student?",
+                        "noStudentsFound": {
+                          "title": "No Student Found",
+                          "description": "It seems like there are no students in the database at the moment."
+                        }
+                      },
+                      "teacherTable": {
+                        "deleteConfirmation": "Are you sure you want to delete this teacher?",
+                        "deleteConfirmation1": "Are you sure you want to delete this Class teacher?",
+                        "noTeachersFound": {
+                          "title": "No Teacher Found",
+                          "description": "It seems like there are no teachers in the database at the moment.",
+                           "title1": "No Class Teacher Found",
+                          "description1": "It seems like there are no class teachers in the database at the moment."
+                        }
+                      },
+                      "formLabels": {
+                        "fullName": "Full Name",
+                        "email": "Email Address",
+                        "emailAddress":"Email Address",
+                        "gender": "Gender",
+                        "password": "Password",
+                        "phoneNumber": "Phone Number",
+                        "phone": "Phone Number",
+                        "subject": "Subject",
+                        "dateOfBirth": "Date of Birth",
+                        "grade": "Grade",
+                        "address": "Address",
+                        "StudentName":" Student Name",
+                        "SelectStudentID":"Select StudentID",
+                        "UploadStudents":" Upload Students ",
+                        "UploadExcelFile":" Upload Excel File "
+                      },
+                      "placeholders": {
+                        "fullName": "Enter full name",
+                        "email": "Enter email address",
+                        "password": "Enter password",
+                        "password1": "Enter new password (leave blank to keep current password)",
+                        "phoneNumber": "Enter phone number",
+                         "enter": "Enter",
+                         "SaveChanges": "Save Changes",
+                         "Updating": "Updating...",
+                      },
+                      "genderOptions": {
+                        "select": "Select Gender",
+                        "male": "Male",
+                        "female": "Female",
+                      },
+                      "gradeOptions": {
+                        "select": "Select Grade"
+                      },
+                      "subjectOptions": {
+                        "select": "Select Subject",
+                        "loading":"Loading subjects..."
+                      },
+                      "validation": {
+                        "requiredFields": "Please fill in all the fields.",
+                        "phoneValidation": "Phone number must be exactly 11 digits.",
+                        "errorMessage": "Something went wrong. Please try again.",
+                        "emailValidation":"Email already exists. Please use another email.",
+                        "addsuccessstudent":"Student added successfully!",
+                        "nodata":"No data found in the uploaded file",
+                        "addsuccessstudents":"students added successfully!",
+                        "addsuccessstudents1":"students added successfully. Waiting for",
+                        "addsuccessstudents2":" students to be added.",
+                        "addfailstudents":"Failed to add the following students",
+                      },
+                      "datatype":{
+                        "AcademicData":"Academic Data",
+                        "PersonalData":"Personal Data"
+                      },
+                      "teacherdata":{
+                        "Teacher":"Teacher",
+                        "SelectTeacher":"Select Teacher",
+                        "Class":"Class",
+                        "SelectClass":"Select Class",
+                        "SubmitAcademicData":"Submit Academic Data",
+                        "AssignTeacherInfo":" Assign Teacher Info",
+                        "AssignTeacher":"Assign Teacher",
+                        "Addanother":"Add another",
+                        "SelectGrade":"Select Grade",
+                        "grade":"grade",
+                        "Subject":"Subject",
+                        "Selectsubject":" Select subject",
+                        "NoTeacherAssigned":"No Teacher Assigned",
+                        "NoGrade":"No Grade",
+                        "Classnotfound":"Class not found",
+                        "ClassAcademicYear":"Class-Academic Year",
+                        "SelectTeacherSubject":"Select Teacher-Subject",
+                        "SelectClassAcademicYear":"Select Class-Academic Year",
+                        "TeacherSubject":" Teacher-Subject",
+                      },
+                      "edit":{
+                        "admin":"Edit Admin",
+                        "manager":"Edit Manager",
+                        "parent":"Edit Parent",
+                        "student":"Edit Student",
+                        "teacher":"Edit Teacher",
+                        "classteacher":"Edit Class Teacher",
+                        "UpdateStudent":"Update Student"
+                      }
+
+                 
 
 
                 }
@@ -2067,104 +2290,325 @@ i18n
                         EditQuestion: "تحرير السؤال",
 
                     },
-                    assignmentt:{
-                        MyAssignment:"واجباتى",
-                        Due:"موعد الانتهاء",
-                        Marks:"الدرجة",
-                        NoAssignments:"لا يوجد واجبات",
-                        desc:" لا يوجد واجبات متاحة فى هذا الوقت على هذا المحتوى.",
-                        Submissions:"التقديمات",
-                        Status:"الحالة",
-                        SubmissionDate:"موعد التقديم",
-                        StudentName:"اسم الطالب",
-                        NoSubmissions :"لا يوجد تقديمات",
-                        descs:"لا يوجد تقديمات لهذا الواجب فى هذا الوقت",
-                        SubmissionDetails:"تفاصيل التقديم",
-                        Submittedby:"مقدم بواسطة",
-                        SubmissionText:"التقديم",
-                        Submission :"التقديم",
-                        Assignment:"الواجب",
-                        Save:"حفظ",
-                        Cancel:"الغاء",
-                        Grade:"الدرجة",
-                        EditGrade:"تعديل الدرجة ",
-                        UpdateAssignment:"تعديل الواجب",
-                        UploadAssignment:"رفع الواجب"
+                    assignmentt: {
+                        MyAssignment: "واجباتى",
+                        Due: "موعد الانتهاء",
+                        Marks: "الدرجة",
+                        NoAssignments: "لا يوجد واجبات",
+                        desc: " لا يوجد واجبات متاحة فى هذا الوقت على هذا المحتوى.",
+                        Submissions: "التقديمات",
+                        Status: "الحالة",
+                        SubmissionDate: "موعد التقديم",
+                        StudentName: "اسم الطالب",
+                        NoSubmissions: "لا يوجد تقديمات",
+                        descs: "لا يوجد تقديمات لهذا الواجب فى هذا الوقت",
+                        SubmissionDetails: "تفاصيل التقديم",
+                        Submittedby: "مقدم بواسطة",
+                        SubmissionText: "التقديم",
+                        Submission: "التقديم",
+                        Assignment: "الواجب",
+                        Save: "حفظ",
+                        Cancel: "الغاء",
+                        Grade: "الدرجة",
+                        EditGrade: "تعديل الدرجة ",
+                        UpdateAssignment: "تعديل الواجب",
+                        UploadAssignment: "رفع الواجب"
 
                     },
-                    examst:{
-                        MyExams:"امتحاناتى",
-                        End:"نهاية الوقت",
-                        Start:"بداية الوقت",
-                        Duration:"مدة الامتحان",
-                        GeneralInformation:"تفاصيل المتحان",
-                        Grade:"الصف",
-                        Subject:"المادة",
-                        Options:"الاختيارات",
-                        ExamQuestions:"اسئلة الامتحان",
-                        noExamsFound:"لا يوجد امتحانات",
-                        noExamsDescription:"لا يوجد امتحانات متاحة فى هذا الوقت",
-                        ExamResults :"نتيجة الامتحان ",
-                        Percentage:"النسبة المئوية",
-                        commaseparated:"افصل بفصلة ,",
-                        AddQuestion:"اضف سؤال اخر",
-                        CreateExam:"إنشاء امتحان",
-                        UpdateExam:"تحرير الامتحان",
+                    examst: {
+                        MyExams: "امتحاناتى",
+                        End: "نهاية الوقت",
+                        Start: "بداية الوقت",
+                        Duration: "مدة الامتحان",
+                        GeneralInformation: "تفاصيل المتحان",
+                        Grade: "الصف",
+                        Subject: "المادة",
+                        Options: "الاختيارات",
+                        ExamQuestions: "اسئلة الامتحان",
+                        noExamsFound: "لا يوجد امتحانات",
+                        noExamsDescription: "لا يوجد امتحانات متاحة فى هذا الوقت",
+                        ExamResults: "نتيجة الامتحان ",
+                        Percentage: "النسبة المئوية",
+                        commaseparated: "افصل بفصلة ,",
+                        AddQuestion: "اضف سؤال اخر",
+                        CreateExam: "إنشاء امتحان",
+                        UpdateExam: "تحرير الامتحان",
 
                     },
-                    attendans:{
-                        AcademicNumber:"الرقم الاكاديمي",
-                        Class:"الفصل",
-                        SubmitAttendance:"إرسال الحضور",
-                        TakeAttendance:"تسجيل الحضور",
-                        AttendanceReport:"تقرير الحضور",
-                        AttendanceSummary:" ملخص الحضور",
-                        GenerateReport:"انشاء التقرير",
+                    attendans: {
+                        AcademicNumber: "الرقم الاكاديمي",
+                        Class: "الفصل",
+                        SubmitAttendance: "إرسال الحضور",
+                        TakeAttendance: "تسجيل الحضور",
+                        AttendanceReport: "تقرير الحضور",
+                        AttendanceSummary: " ملخص الحضور",
+                        GenerateReport: "انشاء التقرير",
                     },
-                    schaduel:{
-                      Saturday:"السبت",
-                      Friday:"الجمعة",
-                      Thursday:"الخميس",
-                      Wednesday:"الاربعاء",
-                      Tuesday:"الثلاثاء",
-                      Monday:"الاثنين",
-                      Sunday:"الاحد",
-                      ExportPDF:"تصدير بصيغة PDF",
-                      ExamsSchedule:"جدول الامتحانات",
-                      WeeklySchedule:"الجدول الاسبوعى ",
-                      
+                    schaduel: {
+                        Saturday: "السبت",
+                        Friday: "الجمعة",
+                        Thursday: "الخميس",
+                        Wednesday: "الاربعاء",
+                        Tuesday: "الثلاثاء",
+                        Monday: "الاثنين",
+                        Sunday: "الاحد",
+                        ExportPDF: "تصدير بصيغة PDF",
+                        ExamsSchedule: "جدول الامتحانات",
+                        WeeklySchedule: "الجدول الاسبوعى ",
+
                     },
-                    gradest:{
-                        ExamScores:"درجات الامتحان",
-                        AcademicYear:"السنة الدراسية",
-                        ExportCSV:"تصدير إلى CSV",
-                        UploadFile:"   تحميل الملف",
-                        GetStudentsGrades:"احصل على درجات الطلاب",
-                        Choosefile:"اختر ملفًا",
-                        UploadGradesFile:"تحميل ملف الدرجات",
-                        Gradestudents:"درجات الطلاب",
-                        Selectexamtype:"اختر نوع الامتحان",
-                        FinalDegree:"الدرجة النهائية",
-                        StudentExamResults:"نتائج الامتحان",
-                        DeleteAllData:"حذف جميع البيانات",
-                        ExportData:"تصدير البيانات",
-                        UploadUpdate:"تعديل ورفع",
+                    gradest: {
+                        ExamScores: "درجات الامتحان",
+                        AcademicYear: "السنة الدراسية",
+                        ExportCSV: "تصدير إلى CSV",
+                        UploadFile: "   تحميل الملف",
+                        GetStudentsGrades: "احصل على درجات الطلاب",
+                        Choosefile: "اختر ملفًا",
+                        UploadGradesFile: "تحميل ملف الدرجات",
+                        Gradestudents: "درجات الطلاب",
+                        Selectexamtype: "اختر نوع الامتحان",
+                        FinalDegree: "الدرجة النهائية",
+                        StudentExamResults: "نتائج الامتحان",
+                        DeleteAllData: "حذف جميع البيانات",
+                        ExportData: "تصدير البيانات",
+                        UploadUpdate: "تعديل ورفع",
                     },
-                    activitiest:{
-                        AddContest:"اضافة مسابقة",
-                        Participants:"المشتركين",
-                        EditContest:"تحرير المسابقة",
+                    activitiest: {
+                        AddContest: "اضافة مسابقة",
+                        Participants: "المشتركين",
+                        EditContest: "تحرير المسابقة",
+                    },
+                    libraryt: {
+                        AddLibraryItem: "إضافة عناصر المكتبة",
+                        AddItem: "اضافة عنصر جديد",
+                        LibraryMaterials: "عناصر المكتبة ",
+                        AllMaterialsLibrary: "جميع عناصر المكتبة",
+                        GeneralLibrary: "المكتبة العامة",
+                        TeacherLibrary: "مكتبة المدرس",
+                        Library: "المكتبة",
+                        EditMaterial: "تعديل المحتوى",
+                    },
+                    ///////////////////////////////////////////////////Admin///////////////////////////////////////////
+
+                    //Nav
+                    SearchAdminPage: "البحث في صفحة المشرف",
+                    //Dashboard
+                    "dashboard": {
+                        "overview": "نظرة عامة",
+                        "statistics": "إحصائيات المستخدمين",
+                        "calendar": "التقويم",
+                        "users": {
+                            "students": "الطلاب",
+                            "teachers": "المعلمين",
+                            "parents": "أولياء الأمور",
+                            "manager": "المدير",
+                            "admin": "المشرف",
+                            "terms": "الفصول",
+                            "courses": "الكورسات",
+                            "schedule": "الجدول"
+                        },
+                        "charts": {
+                            "students": "الطلاب",
+                            "teachers": "المعلمين",
+                            "percentage": "نسبة المستخدمين حسب النوع",
+                            "female": "إناث",
+                            "male": "ذكور"
+                        },
+                        "errors": {
+                            "network": "خطأ في الشبكة: فشل في جلب بعض البيانات. يرجى التحقق من اتصالك بالإنترنت.",
+                            "token": "مطلوب توكن! يرجى تسجيل الدخول مرة أخرى."
+                        }
+                    },
+                    //sidebar
+                    "sidebar": {
+                        "dashboard": "لوحة التحكم",
+                        "members": "الأعضاء",
+                        "termManagement": "إدارة الفصول",
+                        "courseManagement": "إدارة الكورسات",
+                        "academicYear": "السنة الأكاديمية",
+                        "gradeManagement": "إدارة الصفوف",
+                        "scheduleManagement": "إدارة الجدول",
+                        "logout": "تسجيل الخروج",
+                        "noCurrentTerm": "لا يوجد فصل دراسي حالياً",
+                        "noTerms": "لا توجد فصول متاحة",
+                        "schoolName": "مدرسة الخطاب",
+                        "loading": "جاري التحميل...",
+                    },
+                    //basicform
+                    AllMembers: "كل الأعضاء"
+                    ,
+                    //header
+                    "Header": {
+                        "exportCSV": "تصدير CSV",
+                        "selectFilter": "اختر تصفية",
+                        "filterOptions": {
+                          "name": "الاسم",
+                          "gender": "النوع",
+                          "email":"الايميل",
+                          "subject":"الماده",
+                          "Class":"الفصل",
+                          "Teacher":"المدرس",
+                          "AcademicYear":"الرقم ألاكاديمي",
+                        },
                       },
-                    libraryt:{
-                        AddLibraryItem:"إضافة عناصر المكتبة",
-                        AddItem:"اضافة عنصر جديد",
-                        LibraryMaterials:"عناصر المكتبة ",
-                        AllMaterialsLibrary:"جميع عناصر المكتبة",
-                        GeneralLibrary:"المكتبة العامة",
-                        TeacherLibrary:"مكتبة المدرس",
-                        Library:"المكتبة",
-                        EditMaterial:"تعديل المحتوى", 
-                    }  
+                      "studentHeader":{
+                        "add": "إضافة طالب",
+                        "searchPlaceholder": "ابحث عن طالب بالاسم أو النوع"
+                      },
+                      "teacherHeader":{
+                        "add": "إضافة مدرس",
+                        "searchPlaceholder": "ابحث عن مدرس بالاسم أو البريد الإلكتروني او النوع او الماده",
+                        "searchPlaceholder1":"ابحث عن معلم صف حسب الفصل أو المادة أو المعلم أو السنة الدراسية"
+                      },
+                      "parentHeader":{
+                        "add": "إضافة ولي أمر",
+                        "searchPlaceholder": " ابحث عن ولي أمر بالاسم أو البريد الإلكتروني او النوع"
+                      },
+                      "managerHeader":{
+                        "add": "إضافة مدير",
+                        "searchPlaceholder": " ابحث عن مدير بالاسم أو البريد الإلكتروني او النوع"
+                      },
+                      "adminHeader":{
+                        "add": "إضافة مشرف",
+                        "searchPlaceholder": " ابحث عن مشرف بالاسم أو البريد الإلكتروني او النوع"
+                      },
+                      //table
+                      "tableHeaders": {
+                        "name": "الاسم",
+                        "email": "البريد الإلكتروني",
+                        "gender": "النوع",
+                        "phone": "الهاتف",
+                        "actions": "الإجراءات",
+                        "Class":"الصف",
+                        "StudentID":"معرف الطالب",
+                        "AcademicNumber":"الرقم الاكاديمي ",
+                        "subject":"الماده",
+                        "teacher":"المدرس",
+                        "AcademicYear":"السنه الاكاديميه"
+                      },
+                      "adminTable": {
+                        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المشرف؟",
+                        "noAdminsFound": {
+                          "title": "لا يوجد مشرفون",
+                          "description": "يبدو أنه لا يوجد مشرفون في قاعدة البيانات حالياً."
+                        }
+                      },
+                      "parentTable": {
+                        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا الولي ألامر",
+                        "noParentsFound": {
+                          "title": "لا يوجد أولياء امور",
+                          "description": "يبدو أنه لا يوجد أولياء أمور في قاعدة البيانات حالياً."
+                        }
+                      },
+                      "managerTable": {
+                        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المدير",
+                        "noManagersFound": {
+                          "title": "لا يوجد مديرين",
+                          "description": "يبدو أنه لا يوجد مديرين في قاعدة البيانات حالياً."
+                        }
+                      },
+                      "studentTable": {
+                        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا الطالب",
+                        "noStudentsFound": {
+                          "title": "لا يوجد طلبه",
+                          "description": "يبدو أنه لا يوجد طلبه في قاعدة البيانات حالياً."
+                        }
+                      },
+                      "teacherTable": {
+                        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المدرس",
+                        "deleteConfirmation1": "هل أنت متأكد أنك تريد حذف هذا المعلم صف",
+                        "noTeachersFound": {
+                          "title": "لا يوجد مدرسون",
+                          "description": "يبدو أنه لا يوجد مدرسون في قاعدة البيانات حالياً.",
+                            "title1": " لا يوجد مدرسون صف",
+                          "description1": "يبدو أنه لا يوجد مدرسون صف  في قاعدة البيانات حالياً."
+                        }
+                      },
+                      "formLabels": {
+                        "fullName": "الاسم الكامل",
+                        "email": "البريد الإلكتروني",
+                        "emailAddress":"البريد الإلكتروني",
+                        "gender": "النوع",
+                        "password": "كلمة المرور",
+                        "phoneNumber": "رقم الهاتف",
+                        "phone": "رقم الهاتف",
+                        "subject": "الماده ",
+                        "dateOfBirth": "تاريخ الميلاد",
+                        "grade": "الصف",
+                        "address": "العنوان",
+                        "StudentName":" اسم الطالب",
+                        "SelectStudentID":"اختر معرف الطالب",
+                        "UploadStudents":"تحميل الطلاب",
+                        "UploadExcelFile":"تحميل ملف اكسل"
+                      },
+                      "placeholders": {
+                        "fullName": "أدخل الاسم الكامل",
+                        "email": "أدخل البريد الإلكتروني",
+                        "password": "أدخل كلمة المرور",
+                        "password1": "أدخل كلمة المرور الجديدة (اتركها فارغة للاحتفاظ بكلمة المرور الحالية)",
+                        "phoneNumber": "أدخل رقم الهاتف",
+                          "enter": "أدخل",
+                          "SaveChanges": "حفظ التغيرات",
+                          "Updating": "جارٍ التحديث...",
+                      },
+                      "genderOptions": {
+                        "select": "اختر النوع",
+                        "male": "ذكر",
+                        "female": "أنثى"
+                      },
+                      "gradeOptions": {
+                        "select": "اختر الصف"
+                      },
+                      "subjectOptions": {
+                        "select": "اختر الماده",
+                        "loading":"تحميل المواد ...."
+                      },
+                      "validation": {
+                        "requiredFields": "يرجى ملء جميع الحقول.",
+                        "phoneValidation": "يجب أن يتكون رقم الهاتف من 11 رقمًا.",
+                        "errorMessage": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+                        "emailValidation":"البريد الإلكتروني موجود بالفعل. يُرجى استخدام بريد إلكتروني آخر.",
+                        "addsuccessstudent":"تم إضافة الطالب بنجاح !",
+                        "nodata":"لم يتم العثور على أي بيانات في الملف الذي تم تحميله",
+                        "addsuccessstudents":"تمت إضافة الطلاب بنجاح.  ",
+                        "addsuccessstudents1":"تمت إضافة الطلاب بنجاح. في انتظار",
+                        "addsuccessstudents2":" الطلاب المراد إضافتهم.",
+                        "addfailstudents":"فشل في إضافة الطلاب التاليين",
+                      },
+                      "datatype":{
+                        "AcademicData":"البيانات الأكاديميه",
+                        "PersonalData":"البيانات الشخصيه"
+                      },
+                      "teacherdata":{
+                        "Teacher":"المدرس",
+                        "SelectTeacher":"اختر المدرس",
+                        "Class":"الفصل",
+                        "SelectClass":"اختر الفصل",
+                        "SubmitAcademicData":"أرسل البيانات ألاكاديميه",
+                        "AssignTeacherInfo":"تعيين معلومات المعلم",
+                        "AssignTeacher":"تعيين المعلم",
+                        "Addanother":"أضف آخر",
+                        "SelectGrade":"اختر الصف",
+                        "grade":"الصف",
+                        "Subject":"الماده",
+                        "Selectsubject":"اختر الماده",
+                        "NoTeacherAssigned":"لم يتم تعيين معلم",
+                        "NoGrade":"لا صف",
+                        "Classnotfound":"لم يتم العثور على الفصل",
+                        "ClassAcademicYear":"الفصل - السنه الدراسيه",
+                        "SelectTeacherSubject":"اختر المدرس - الماده",
+                        "SelectClassAcademicYear":"اختر الفصل - السنه الدراسيه",
+                        "TeacherSubject":"المدرس - الماده",
+                      },
+                      "edit":{
+                        "admin":"تعديل المشرف",
+                        "manager":"تعديل المدير",
+                        "parent":" تعديل ولي ألامر",
+                        "student":" تعديل الطالب",
+                        "teacher":" تعديل المدرس",
+                        "classteacher":" تعديل صف المدرس",
+                        "UpdateStudent":"تحديث الطالب"
+                      }
 
 
 

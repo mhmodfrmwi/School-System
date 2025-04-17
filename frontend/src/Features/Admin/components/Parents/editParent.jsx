@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editParentAsync } from "../AdminRedux/parentSlice";
-
+import { useTranslation } from 'react-i18next';
 const EditParentForm = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ const EditParentForm = () => {
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <div className="mb-6">
         <h2 className="font-poppins text-2xl font-semibold text-[#244856]">
-          Edit Parent
+        {t("edit.parent")}
         </h2>
         <div className="mt-1 h-[4px] w-[155px] rounded-t-md bg-[#244856]"></div>
       </div>
@@ -68,7 +69,7 @@ const EditParentForm = () => {
               htmlFor="name"
               className="my-2 block font-semibold text-gray-700 dark:text-white"
             >
-              Name
+              {t("formLabels.fullName")}
             </label>
             <input
               type="text"
@@ -83,7 +84,7 @@ const EditParentForm = () => {
               htmlFor="email"
               className="my-2 block font-semibold text-gray-700 dark:text-white"
             >
-              Email
+              {t("formLabels.email")}
             </label>
             <input
               type="text"
@@ -97,7 +98,7 @@ const EditParentForm = () => {
 
           <div>
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Gender
+            {t("formLabels.gender")}
             </label>
             <select
               name="gender"
@@ -110,13 +111,13 @@ const EditParentForm = () => {
                 disabled
                 className="font-poppins dark:text-white"
               >
-                Select gender
+                {t("genderOptions.select")}
               </option>
               <option value="M" className="font-poppins">
-                M
+              {t("genderOptions.male")}
               </option>
               <option value="F" className="font-poppins">
-                F
+              {t("genderOptions.female")}
               </option>
             </select>
           </div>
@@ -126,7 +127,7 @@ const EditParentForm = () => {
               htmlFor="phone"
               className="my-2 block font-semibold text-gray-700 dark:text-white"
             >
-              phone
+               {t("formLabels.phoneNumber")}
             </label>
             <input
               type="text"
@@ -140,7 +141,7 @@ const EditParentForm = () => {
 
           <div className="mb-2">
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Password
+            {t("formLabels.password")}
             </label>
             <input
               type="password"
@@ -148,7 +149,7 @@ const EditParentForm = () => {
               value={formData.password}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter password"
+              placeholder={t("placeholders.password")}
               required
             />
           </div>
@@ -158,7 +159,7 @@ const EditParentForm = () => {
               type="submit"
               className="rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Save Changes
+                   {t("placeholders.SaveChanges")}
             </button>
           </div>
         </form>

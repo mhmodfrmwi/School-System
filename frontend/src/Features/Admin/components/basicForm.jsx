@@ -12,8 +12,10 @@ import img2 from "../../../assets/Group.png";
 import img3 from "../../../assets/people.png";
 import img4 from "../../../assets/Vector.png";
 import img5 from "../../../assets/Group1.png";
+import { useTranslation } from 'react-i18next';
 
 function BasicForm() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const networkErrorShownRef = useRef(false);
   const { students, error: studentsError } = useSelector(
@@ -55,7 +57,7 @@ function BasicForm() {
     // Show toast only once for network error
     if (hasNetworkError && !networkErrorShownRef.current) {
       toast.error(
-        "NetworkError: Failed to fetch Some data. Please check your connection.",
+        t("dashboard.errors.network")
       );
       networkErrorShownRef.current = true; // Mark network error toast as shown
     }
@@ -71,7 +73,7 @@ function BasicForm() {
     <>
       <div className="mb-6 ms-14 mt-2 px-6 py-8 sm:px-12 md:ms-16 md:px-16 lg:px-28">
         <h2 className="w-full font-poppins text-3xl font-bold text-[#043B44] sm:w-52">
-          All Members
+        {t("AllMembers")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-24 rounded-t-md bg-[#244856] sm:w-36 md:w-48"></div>
       </div>
@@ -88,7 +90,7 @@ function BasicForm() {
                 <img src={img1} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-                Students
+              {t("dashboard.users.students")}
               </h3>
             </div>
             <p className="border-t-2 border-[#3CB878]"></p>
@@ -107,7 +109,7 @@ function BasicForm() {
                 <img src={img2} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-                Teachers
+              {t("dashboard.users.teachers")}
               </h3>
             </div>
             <p className="border-t-2 border-[#7CA6FD]"></p>
@@ -126,7 +128,7 @@ function BasicForm() {
                 <img src={img3} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-                Manager
+              {t("dashboard.users.manager")}
               </h3>
             </div>
             <p className="border-t-2 border-[#F61414]"></p>
@@ -145,7 +147,7 @@ function BasicForm() {
                 <img src={img4} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-                Parents
+              {t("dashboard.users.parents")}
               </h3>
             </div>
             <p className="border-t-2 border-[#F48301]"></p>
@@ -164,7 +166,7 @@ function BasicForm() {
                 <img src={img5} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-                Admin
+             { t("dashboard.users.admin")}
               </h3>
             </div>
             <p className="border-t-2 border-[#30F587]"></p>

@@ -14,8 +14,10 @@ import { useLocation } from "react-router-dom";
 import logo from "../../../assets/logologin.png";
 import { fetchTerms } from "../components/AdminRedux/termSlice";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const Sidebar = () => {
+  const { t } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const location = useLocation();
@@ -30,26 +32,26 @@ const Sidebar = () => {
     }
   }, [status, terms.length, dispatch]);
 
-  if (status === "loading") return <p>Loading...</p>;
-  if (status === "failed") return <p>Error: {error}</p>;
+  if (status === "loading") return <p>{t("sidebar.loading")}</p>;
+  if (status === "failed") return <p>{t("errors.title")}: {error}</p>;
 
   const menuItems = [
-    { label: "Dashboard", icon: faHome, href: "/admin/dashboard" },
-    { label: "Members", icon: faUsers, href: "/admin/basicform" },
-    { label: "Term Management", icon: faCalendar, href: "/admin/allTerms" },
-    { label: "Course Management", icon: faPen, href: "/admin/allsubjects" },
+    { label: t("sidebar.dashboard"), icon: faHome, href: "/admin/dashboard" },
+    { label: t("sidebar.members"), icon: faUsers, href: "/admin/basicform" },
+    { label: t("sidebar.termManagement"), icon: faCalendar, href: "/admin/allTerms" },
+    { label: t("sidebar.courseManagement"), icon: faPen, href: "/admin/allsubjects" },
     {
-      label: "Academic Year",
+      label:  t("sidebar.academicYear"),
       icon: "fluent:number-row-24-regular",
       href: "/admin/allacademicyears",
     },
     {
-      label: "Grade Management",
+      label: t("sidebar.gradeManagement"),
       icon: "octicon:number-16",
       href: "/admin/allGrades",
     },
     {
-      label: "Schedule Management",
+      label: t("sidebar.scheduleManagement"),
       icon: faClock,
       href: "/admin/allschedules",
     },
@@ -92,6 +94,7 @@ const Sidebar = () => {
           currentPath={currentPath}
           terms={terms}
           navigate={navigate}
+          t={t}
         />
       </div>
     </div>
@@ -105,13 +108,14 @@ const SidebarContent = ({
   currentPath,
   terms,
   navigate,
+  t
 }) => {
   return (
     <>
       <div className="mb-8 flex flex-col items-center justify-center">
         <img src={logo} alt="Logo" className="mb-2 h-12 w-12" />
         <h1 className="text-xl font-bold">LEARNOVA</h1>
-        <p className="font-poppins text-xs">Khatab School</p>
+        <p className="font-poppins text-xs">{t("sidebar.schoolName")}</p>
       </div>
 
       <nav className="flex w-64 flex-col gap-2">
@@ -190,11 +194,11 @@ const SidebarContent = ({
                   {latestTerm.academicYear_id.endYear}
                 </div>
               ) : (
-                <p>No current term available</p>
+                <p>{t("sidebar.noCurrentTerm")}</p>
               );
             })()
           ) : (
-            <p>No terms available</p>
+            <p>{t("sidebar.noTerms")}</p>
           )}
         </div>
 
@@ -202,7 +206,7 @@ const SidebarContent = ({
           className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300 dark:text-[#043B44]"
           onClick={() => navigate("/role")}
         >
-          Logout
+          {t("sidebar.logout")}
         </button>
       </div>
     </>

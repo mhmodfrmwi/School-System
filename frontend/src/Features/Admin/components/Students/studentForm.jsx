@@ -4,11 +4,11 @@ import * as XLSX from "xlsx";
 import { postStudent } from "../AdminRedux/studentSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 function AddStudent() {
   const dispatch = useDispatch();
   const { grades } = useSelector((state) => state.grades);
-
+  const { t } = useTranslation();
   const [studentData, setStudentData] = useState({
     fullName: "",
     emailAddress: "",
@@ -36,7 +36,7 @@ function AddStudent() {
     dispatch(postStudent(studentData))
       .unwrap()
       .then(() => {
-        toast.success("Student added successfully!");
+        toast.success(t("validation.addsuccessstudent"));
         setStudentData({
           fullName: "",
           emailAddress: "",
@@ -70,7 +70,7 @@ function AddStudent() {
 
   const handleBulkUpload = async () => {
     if (excelData.length === 0) {
-      toast.error("No data found in the uploaded file.");
+      toast.error(t("validation.nodata"));
       return;
     }
 
@@ -88,15 +88,15 @@ function AddStudent() {
 
     if (successCount > 0 && failedStudents.length > 0) {
       toast.info(
-        `${successCount} students added successfully. Waiting for ${failedStudents.length} students to be added.`,
+        `${successCount}${t("validation.addsuccessstudents1")} ${failedStudents.length} ${t("validation.addsuccessstudents2")}`,
       );
     } else if (successCount > 0) {
-      toast.success(`${successCount} students added successfully!`);
+      toast.success(`${successCount} ${t("validation.addsuccessstudents")}`);
     }
 
     if (failedStudents.length > 0) {
       toast.error(
-        `Failed to add the following students: ${failedStudents.join(", ")}`,
+        `${t("validation.addfailstudents")}: ${failedStudents.join(", ")}`,
       );
     }
   };
@@ -104,7 +104,7 @@ function AddStudent() {
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Add Student
+      {t("studentHeader.add")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[160px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -115,7 +115,8 @@ function AddStudent() {
           {Object.keys(studentData).map((key) => (
             <div className="mb-4" key={key}>
               <label className="text-md mb-2 block font-medium capitalize text-gray-700 dark:text-white">
-                {key.replace(/([A-Z])/g, " $1")}
+                {/* {key.replace(/([A-Z])/g, " $1")} */}
+                {t(`formLabels.${key}`)}
               </label>
               {key === "gender" ? (
                 <select
@@ -124,9 +125,9 @@ function AddStudent() {
                   onChange={handleChange}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">Select Gender</option>
-                  <option value="M">Male</option>
-                  <option value="F">Female</option>
+                  <option value="">{t("genderOptions.select")}</option>
+                  <option value="M">{t("genderOptions.male")}</option>
+                  <option value="F">{t("genderOptions.female")}</option>
                 </select>
               ) : key === "grade" ? (
                 <select
@@ -135,7 +136,7 @@ function AddStudent() {
                   onChange={handleChange}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90]"
                 >
-                  <option value=""> Select Grade </option>
+                  <option value=""> {t("gradeOptions.select")} </option>
                   {grades.map((g, index) => (
                     <option key={index} value={g.gradeName}>
                       {g.gradeName}
@@ -155,7 +156,8 @@ function AddStudent() {
                   value={studentData[key]}
                   onChange={handleChange}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:text-white dark:placeholder-white"
-                  placeholder={`Enter ${key.replace(/([A-Z])/g, " $1")}`}
+                  // placeholder={`Enter ${key.replace(/([A-Z])/g, " $1")}`}
+                  placeholder={`${t("placeholders.enter")} ${t(`formLabels.${key}`)}`}
                 />
               )}
             </div>
@@ -166,7 +168,7 @@ function AddStudent() {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Add Student
+               {t("studentHeader.add")}
             </button>
           </div>
         </form>
@@ -174,7 +176,7 @@ function AddStudent() {
         {/* Excel Upload Section */}
         <div className="mt-6">
           <h2 className="text-xl font-semibold text-gray-700">
-            Upload Excel File
+          {t("formLabels.UploadExcelFile")}
           </h2>
           <input
             type="file"
@@ -186,7 +188,7 @@ function AddStudent() {
             onClick={handleBulkUpload}
             className="text-md mx-auto mt-4 block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
-            Upload Students
+           {t("formLabels.UploadStudents")}
           </button>
         </div>
       </div>

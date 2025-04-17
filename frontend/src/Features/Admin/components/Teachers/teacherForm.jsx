@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import PersonalData from "./PersonalData"; // مكون لإدخال البيانات الشخصية
-import AcademicData from "./AcademicData"; // مكون لإدخال البيانات الأكاديمية
-
+import PersonalData from "./PersonalData"; 
+import AcademicData from "./AcademicData"; 
+import { useTranslation } from 'react-i18next';
 function TeacherManagementPage() {
   const [selectedTab, setSelectedTab] = useState("personal");
-
+  const { t } = useTranslation();
   return (
     <div className="mx-auto mt-10 w-full">
       {/* شريط التبويبات */}
@@ -20,7 +20,7 @@ function TeacherManagementPage() {
           <span className="dark:text-[#043B44 flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             1
           </span>
-          Personal Data
+          {t("datatype.PersonalData")}
         </button>
         <button
           onClick={() => setSelectedTab("academic")}
@@ -33,7 +33,7 @@ function TeacherManagementPage() {
           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             2
           </span>
-          Academic Data
+          {t("datatype.AcademicData")}
         </button>
       </div>
 

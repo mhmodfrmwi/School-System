@@ -4,8 +4,10 @@ import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchStudents, editStudent } from "../AdminRedux/studentSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 function EditStudent() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -67,7 +69,7 @@ function EditStudent() {
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Edit Student
+      {t("edit.student")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[160px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -77,7 +79,7 @@ function EditStudent() {
         >
           <div className="mb-4">
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Full Name
+            {t("formLabels.fullName")}
             </label>
             <input
               type="text"
@@ -89,7 +91,7 @@ function EditStudent() {
           </div>
           <div className="mb-4">
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Email Address
+            {t("formLabels.email")}
             </label>
             <input
               type="email"
@@ -101,7 +103,7 @@ function EditStudent() {
           </div>
           <div className="mb-4">
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Phone Number
+            {t("formLabels.phoneNumber")}
             </label>
             <input
               type="text"
@@ -113,7 +115,7 @@ function EditStudent() {
           </div>
           <div className="mb-4">
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Password
+            {t("formLabels.password")}
             </label>
             <input
               type="password"
@@ -125,7 +127,7 @@ function EditStudent() {
           </div>
           <div className="mb-4">
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Date of Birth
+            {t("formLabels.dateOfBirth")}
             </label>
             <input
               type="date"
@@ -137,7 +139,7 @@ function EditStudent() {
           </div>
           <div className="mb-4">
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Gender
+            {t("formLabels.gender")}
             </label>
             <select
               name="gender"
@@ -145,14 +147,14 @@ function EditStudent() {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">Select Gender</option>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
+              <option value=""> {t("genderOptions.select")}</option>
+              <option value="M">{t("genderOptions.male")}</option>
+              <option value="F">{t("genderOptions.female")}</option>
             </select>
           </div>
           <div className="mb-4">
             <label className="my-2 block font-semibold text-gray-700 dark:text-white">
-              Grade
+            {t("formLabels.grade")}
             </label>
             <select
               name="grade"
@@ -160,7 +162,7 @@ function EditStudent() {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">Select Grade</option>
+              <option value="">{t("gradeOptions.select")}</option>
               {grades.map((g, index) => (
                 <option key={index} value={g.gradeName}>
                   {g.gradeName}
@@ -173,7 +175,7 @@ function EditStudent() {
               type="submit"
               className="rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Update Student
+                   {t("edit.UpdateStudent")}
             </button>
           </div>
         </form>

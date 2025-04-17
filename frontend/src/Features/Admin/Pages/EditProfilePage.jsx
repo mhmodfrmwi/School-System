@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 const EditProfile = () => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState({
     firstName: "Omar",
     lastName: "Ahmed",
@@ -40,14 +42,14 @@ const EditProfile = () => {
   return (
     <div className="mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Edit Profile
+      {t('editProfile.title')}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-lg bg-white p-6 shadow-lg">
         <div className="relative mb-6 inline-block">
           <img
             src="../src/assets/user1.jpg"
-            alt="Profile Avatar"
+            alt={t('editProfile.profileImageAlt')}
             className="mr-4 h-24 w-24 rounded-full"
           />
           <button
@@ -61,7 +63,7 @@ const EditProfile = () => {
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              First Name
+            {t('editProfile.firstName')}
             </label>
             <input
               type="text"
@@ -73,7 +75,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              Last Name
+            {t('editProfile.lastName')}
             </label>
             <input
               type="text"
@@ -85,7 +87,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              Gender
+            {t('editProfile.gender')}
             </label>
             <select
               name="gender"
@@ -93,13 +95,13 @@ const EditProfile = () => {
               onChange={handleInputChange}
               className="mt-1 w-full rounded border border-gray-300 p-2 dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <option value="Male">{t('editProfile.genderMale')}</option>
+              <option value="Female">{t('editProfile.genderFemale')}</option>
             </select>
           </div>
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              Phone Number
+            {t('editProfile.phoneNumber')}
             </label>
             <input
               type="text"
@@ -111,7 +113,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              Email
+            {t('editProfile.email')}
             </label>
             <input
               type="email"
@@ -123,7 +125,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              Role
+            {t('editProfile.role')}
             </label>
             <input
               type="text"
@@ -139,16 +141,16 @@ const EditProfile = () => {
           onClick={handleSave}
           className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
         >
-          Save
+          {t('editProfile.saveButton')}
         </button>
 
         <h2 className="mb-4 mt-8 text-xl font-semibold dark:text-black">
-          Edit Password
+        {t('editProfile.changePasswordTitle')}
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              Current Password
+            {t('editProfile.currentPassword')}
             </label>
             <input
               type="password"
@@ -160,7 +162,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              New Password
+            {t('editProfile.newPassword')}
             </label>
             <input
               type="password"
@@ -172,7 +174,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              Re-enter New Password
+            {t('editProfile.confirmPassword')}
             </label>
             <input
               type="password"
@@ -184,7 +186,7 @@ const EditProfile = () => {
           </div>
           <div>
             <label className="block text-sm font-medium dark:text-black">
-              OTP Code
+            {t('editProfile.otpCode')}
             </label>
             <input
               type="text"
@@ -200,7 +202,7 @@ const EditProfile = () => {
           onClick={handlePasswordChange}
           className="mx-auto mt-4 block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c]"
         >
-          Edit
+          {t('editProfile.changePasswordButton')}
         </button>
       </div>
     </div>

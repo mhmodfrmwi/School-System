@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const ParentHeader = ({ onSearchChange, onFilterChange }) => {
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
 
@@ -20,21 +21,21 @@ const ParentHeader = ({ onSearchChange, onFilterChange }) => {
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
           <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-            Parents
+          {t("dashboard.users.parents")}
           </h1>
           <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[95px]"></div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
           <button className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white dark:hover:bg-[#043B44] sm:text-sm">
-            Export CSV
+          {t("Header.exportCSV")}
           </button>
 
           <NavLink
             to="/admin/parentform"
             className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-xs text-white transition hover:bg-[#0E6B7A] dark:bg-[#043B44] sm:text-sm"
           >
-            Add Parent
+             {t("parentHeader.add")}
           </NavLink>
         </div>
       </div>
@@ -47,16 +48,16 @@ const ParentHeader = ({ onSearchChange, onFilterChange }) => {
             className="w-full rounded-md border bg-white px-3 py-2 font-poppins text-xs text-[#244856] focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-[#043B44] sm:w-auto sm:text-sm"
           >
             <option value="" className="font-poppins">
-              Select Filter
+            {t("Header.selectFilter")}
             </option>
             <option value="name" className="font-poppins">
-              Name
+            {t("Header.filterOptions.name")}
             </option>
             <option value="email" className="font-poppins">
-              Email
+            {t("Header.filterOptions.email")}
             </option>
             <option value="gender" className="font-poppins">
-              Gender
+            {t("Header.filterOptions.gender")}
             </option>
           </select>
         </div>
@@ -65,7 +66,7 @@ const ParentHeader = ({ onSearchChange, onFilterChange }) => {
           <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-black dark:text-white sm:text-sm"></i>
           <input
             type="text"
-            placeholder="Search for a parent by name, email"
+            placeholder={t("parentHeader.searchPlaceholder")}
             className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-xs text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#043B44] dark:text-white dark:placeholder-white dark:focus:ring-[#043B44] sm:text-sm"
             value={searchText}
             onChange={handleSearchChange}

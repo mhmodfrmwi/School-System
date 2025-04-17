@@ -9,10 +9,10 @@ import Pagination from "../Pagination";
 import Header from "./studentHeader";
 import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const StudentTable = () => {
   const { students, message, loading } = useSelector((state) => state.students);
-
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ const StudentTable = () => {
   );
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this manager?")) {
+    if (window.confirm(t("studentTable.deleteConfirmation"))) {
       await dispatch(removeStudent(id));
     }
   };
@@ -139,22 +139,22 @@ const StudentTable = () => {
               <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
                 <tr>
                   <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                    Name
+                  {t("tableHeaders.name")}
                   </th>
                   <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                    Student ID
+                  {t("tableHeaders.StudentID")}
                   </th>
                   <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                    Email
+                  {t("tableHeaders.email")}
                   </th>
                   <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                    Class
+                  {t("tableHeaders.Class")}
                   </th>
                   <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                    Gender
+                  {t("tableHeaders.gender")}
                   </th>
                   <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                    Actions
+                  {t("tableHeaders.actions")}
                   </th>
                 </tr>
               </thead>
@@ -210,11 +210,10 @@ const StudentTable = () => {
                       className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                     >
                       <p className="text-lg font-semibold text-gray-600">
-                        No Students Found
+                      {t("studentTable.noStudentsFound.title")}
                       </p>
                       <p className="mt-2 text-sm text-gray-500">
-                        It seems like there are no students in the database at
-                        the moment.
+                      {t("studentTable.noStudentsFound.description")}
                       </p>
                     </td>
                   </tr>

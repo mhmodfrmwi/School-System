@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postTeacher } from "../AdminRedux/teacherSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
-
+import { useTranslation } from 'react-i18next';
 function AddTeacher() {
   const dispatch = useDispatch();
   const { subjects, loading } = useSelector((state) => state.subject);
-
+  const { t } = useTranslation();
   const [teacherData, setTeacherData] = useState({
     fullName: "",
     dateOfBirth: "",
@@ -54,7 +54,7 @@ function AddTeacher() {
   return (
     <div className="mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Add Teacher
+      {t("teacherHeader.add")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -65,7 +65,8 @@ function AddTeacher() {
           {Object.keys(teacherData).map((key) => (
             <div className="mb-4" key={key}>
               <label className="text-md mb-2 block font-medium capitalize text-gray-700 dark:text-white">
-                {key.replace(/([A-Z])/g, " $1")}
+                {/* {key.replace(/([A-Z])/g, " $1")} */}
+                {t(`formLabels.${key}`)}
               </label>
               {key === "gender" ? (
                 <select
@@ -74,9 +75,9 @@ function AddTeacher() {
                   onChange={handleChange}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">Select Gender</option>
-                  <option value="M">Male</option>
-                  <option value="F">Female</option>
+                  <option value="">{t("genderOptions.select")}</option>
+                  <option value="M">{t("genderOptions.male")}</option>
+                  <option value="F">{t("genderOptions.female")}</option>
                 </select>
               ) : key === "subject" ? (
                 <select
@@ -85,9 +86,9 @@ function AddTeacher() {
                   onChange={handleChange}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">Select Subject</option>
+                  <option value="">{t("subjectOptions.select")}</option>
                   {loading ? (
-                    <option disabled>Loading subjects...</option>
+                    <option disabled>{t("subjectOptions.loading")}</option>
                   ) : (
                     subjects.map((subject) => (
                       <option key={subject._id} value={subject.subjectName}>
@@ -109,7 +110,8 @@ function AddTeacher() {
                   value={teacherData[key]}
                   onChange={handleChange}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-                  placeholder={`Enter ${key.replace(/([A-Z])/g, " $1")}`}
+                  // placeholder={`Enter ${key.replace(/([A-Z])/g, " $1")}`}
+                  placeholder={`${t("placeholders.enter")} ${t(`formLabels.${key}`)}`}
                 />
               )}
             </div>
@@ -120,7 +122,7 @@ function AddTeacher() {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Add Teacher
+              {t("teacherHeader.add")}
             </button>
           </div>
         </form>

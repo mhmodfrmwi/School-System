@@ -4,11 +4,12 @@ import { fetchTeachers, removeTeacher } from "../AdminRedux/teacherSlice";
 import Pagination from "../Pagination";
 import Header from "../Teachers/teacherHeader";
 import { Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const TeacherTable = () => {
   const { teachers = [] } = useSelector((state) => state.teachers || {});
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [searchText, setSearchText] = useState("");
@@ -45,7 +46,7 @@ const TeacherTable = () => {
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this teacher?",
+      t("teacherTable.deleteConfirmation"),
     );
     if (confirmDelete) {
       try {
@@ -77,22 +78,22 @@ const TeacherTable = () => {
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Name
+                {t("tableHeaders.name")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Subject
+                {t("tableHeaders.subject")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Email
+                {t("tableHeaders.email")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Academic Number
+                {t("tableHeaders.AcademicNumber")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Gender
+                {t("tableHeaders.gender")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Actions
+                {t("tableHeaders.actions")}
                 </th>
               </tr>
             </thead>
@@ -151,11 +152,10 @@ const TeacherTable = () => {
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                      No Teachers Found
+                    {t("teacherTable.noTeachersFound.title")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                      It seems like there are no Teachers in the database at the
-                      moment.
+                    {t("teacherTable.noTeachersFound.description")}
                     </p>
                   </td>
                 </tr>
