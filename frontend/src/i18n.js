@@ -2205,7 +2205,7 @@ i18n
                     //navbar
                     SearchTeacherPage: "البحث في صفحة المدرس",
                     //sidebar
-                    sidebar: {
+                    sidebart: {
                         Dashboard: "الصفحة الرئيسية",
                         GeneralVirtualRooms: "الغرف الافتراضية العامة"
                     },
