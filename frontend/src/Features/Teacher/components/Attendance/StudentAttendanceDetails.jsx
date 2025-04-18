@@ -61,11 +61,11 @@ function StudentAttendanceDetails() {
 
   return (
     <div className="mx-auto w-full max-w-2xl p-6 font-poppins">
-      <h2 className="mb-6 text-center text-2xl font-bold text-[#117C90]">
+      <h2 className="mb-6 text-center text-2xl font-bold text-[#117C90] dark:text-DarkManager">
         Attendance Details for {student?.fullName || "Unknown"}
       </h2>
 
-      <div className="rounded-lg border bg-white p-4 shadow-md">
+      <div className="rounded-lg border bg-white p-4 shadow-md dark:text-black">
         <p className="mb-2">
           <strong>Academic Number:</strong> {student?.academicNumber || "N/A"}
         </p>
@@ -84,7 +84,7 @@ function StudentAttendanceDetails() {
         <div className="mt-6 max-h-[300px] overflow-auto border border-gray-300">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-[#117C90] text-white">
+              <tr className="bg-[#117C90] text-white dark:bg-DarkManager">
                 <th className="border p-2">Date</th>
                 <th className="border p-2">Status</th>
               </tr>
@@ -92,7 +92,7 @@ function StudentAttendanceDetails() {
             <tbody>
               {Object.entries(attendanceStats).map(
                 ([date, { isAbsent, isPresent }]) => (
-                  <tr key={date} className="border text-center">
+                  <tr key={date} className="border text-center dark:text-black">
                     <td className="border p-2">{date}</td>
                     <td className="border p-2 font-bold">
                       {isAbsent ? (

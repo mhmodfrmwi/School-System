@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const ActivityToggle = () => {
   const navigate = useNavigate();
@@ -9,34 +9,34 @@ const ActivityToggle = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="w-full font-poppins mx-auto mt-10 px-4">
-      <div className="flex flex-wrap md:flex-nowrap mb-20 border border-gray-300 rounded-full overflow-hidden max-w-[90%] md:w-[60%] mx-auto bg-[#F5F5F5]">
+    <div className="mx-auto mt-10 w-full px-4 font-poppins">
+      <div className="mx-auto mb-20 flex max-w-[90%] flex-wrap overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5] md:w-[60%] md:flex-nowrap">
         <button
           onClick={() => navigate("/teacher/school-hubs")}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-medium rounded-full text-center transition-all ${
+          className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm ${
             isActive("/teacher/school-hubs")
-              ? "bg-[#008394] text-white font-bold"
-              : "bg-[#f4f4f4] text-[#008394] font-normal"
+              ? "bg-[#008394] font-bold text-white dark:bg-DarkManager"
+              : "bg-[#f4f4f4] font-normal text-[#008394] dark:text-DarkManager"
           }`}
         >
-          <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-DarkManager dark:text-DarkManager">
             1
           </span>
           {t("activities.tabs.schoolHubs")}
-          </button>
+        </button>
         <button
           onClick={() => navigate("/teacher/contests")}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-medium rounded-full text-center transition-all ${
+          className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm ${
             isActive("/teacher/contests")
-              ? "bg-[#008394] text-white font-bold"
-              : "bg-[#f4f4f4] text-[#008394] font-normal"
+              ? "bg-[#008394] font-bold text-white dark:bg-DarkManager"
+              : "bg-[#f4f4f4] font-normal text-[#008394] dark:text-DarkManager"
           }`}
         >
-          <span className="w-5 h-5 flex items-center justify-center border border-[#117C90] text-[#117C90] bg-white rounded-full">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-DarkManager dark:text-DarkManager">
             2
           </span>
           {t("activities.tabs.contests")}
-          </button>
+        </button>
       </div>
     </div>
   );

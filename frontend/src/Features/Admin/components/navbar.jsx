@@ -14,10 +14,10 @@ import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useSelector } from "react-redux";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
-  const { t ,i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const settingsRef = useRef(null);
   const searchRef = useRef(null);
@@ -131,7 +131,6 @@ const Navbar = () => {
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
-
   return (
     <div className="relative">
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md">
@@ -163,7 +162,7 @@ const Navbar = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none dark:text-black md:text-left md:text-base"
+              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none dark:border-gray-200 dark:text-black md:text-left md:text-base"
             />
 
             {isDropdownOpen && (
@@ -180,9 +179,7 @@ const Navbar = () => {
                     </li>
                   ))
                 ) : (
-                  <li className="px-4 py-2 text-red-900">
-                    {t("NoMatches")}
-                  </li>
+                  <li className="px-4 py-2 text-red-900">{t("NoMatches")}</li>
                 )}
               </ul>
             )}
@@ -239,7 +236,9 @@ const Navbar = () => {
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="r h-auto w-auto" />
                   </button>
-                  <h2 className="font-semibold text-white">{t("EditProfile")}</h2>
+                  <h2 className="font-semibold text-white">
+                    {t("EditProfile")}
+                  </h2>
                 </div>
                 <p className="mx-auto my-2 w-40 border-b-2 border-white"></p>
               </div>
@@ -248,8 +247,14 @@ const Navbar = () => {
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
-              <button className="mx-auto ms-6 p-2 text-gray-500" onClick={toggleLanguage}>
-              <ReactSVG src={i18n.language === "en" ? languageA : languageE} className="h-auto w-auto" />
+              <button
+                className="mx-auto ms-6 p-2 text-gray-500"
+                onClick={toggleLanguage}
+              >
+                <ReactSVG
+                  src={i18n.language === "en" ? languageA : languageE}
+                  className="h-auto w-auto"
+                />
               </button>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
 

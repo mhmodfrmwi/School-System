@@ -8,7 +8,7 @@ import {
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
 import Loader from "@/ui/Loader";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function TakeAttendance() {
   const { studentsforsubject, loading } = useSelector(
@@ -80,45 +80,46 @@ function TakeAttendance() {
         <div className="mx-auto mb-20 flex max-w-[90%] flex-wrap overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5] md:w-[60%] md:flex-nowrap">
           <button
             onClick={() => navigate(`/teacher/takeattendance/${id}`)}
-
-            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm 
-              ${isActive(`/teacher/takeattendance/${id}`)
-                ? "bg-[#008394] font-bold text-white"
-                : "bg-[#f4f4f4] font-normal text-[#008394]"
-              }`}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm ${
+              isActive(`/teacher/takeattendance/${id}`)
+                ? "bg-[#008394] font-bold text-white dark:bg-DarkManager"
+                : "bg-[#f4f4f4] font-normal text-[#008394] dark:text-DarkManager"
+            }`}
           >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90]">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-DarkManager dark:text-DarkManager">
               1
             </span>
-            {t('attendans.TakeAttendance')}
+            {t("attendans.TakeAttendance")}
           </button>
 
           <button
             onClick={() => navigate(`/teacher/attendancereport/${id}`)}
-            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm 
-              ${isActive(`/teacher/attendancereport/${id}`)
-                ? "bg-[#008394] font-bold text-white"
-                : "bg-[#f4f4f4] font-normal text-[#008394]"
-              }`}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm ${
+              isActive(`/teacher/attendancereport/${id}`)
+                ? "bg-[#008394] font-bold text-white dark:bg-DarkManager"
+                : "bg-[#f4f4f4] font-normal text-[#008394] dark:text-DarkManager"
+            }`}
           >
-            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white dark:bg-DarkManager">
               2
             </span>
-            {t('attendans.AttendanceReport')}
+            {t("attendans.AttendanceReport")}
           </button>
         </div>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="mx-auto w-full font-poppins table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
-          <thead className="bg-[#117C90] text-left text-white">
+        <table className="mx-auto w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90] dark:shadow-DarkManager">
+          <thead className="bg-[#117C90] text-left text-white dark:bg-DarkManager">
             <tr>
               <th className="px-3 py-2">#</th>
-              <th className="px-3 py-2">{t('assignmentt.StudentName')}</th>
-              <th className="px-3 py-2">{t('attendans.AcademicNumber')}</th>
-              <th className="px-3 py-2">{t('examst.Grade')}</th>
-              <th className="px-3 py-2">{t('attendans.Class')}</th>
-              <th className="px-3 py-2 text-center">{t('assignmentt.Status')}</th>
+              <th className="px-3 py-2">{t("assignmentt.StudentName")}</th>
+              <th className="px-3 py-2">{t("attendans.AcademicNumber")}</th>
+              <th className="px-3 py-2">{t("examst.Grade")}</th>
+              <th className="px-3 py-2">{t("attendans.Class")}</th>
+              <th className="px-3 py-2 text-center">
+                {t("assignmentt.Status")}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -127,7 +128,7 @@ function TakeAttendance() {
               .map((student, index) => (
                 <tr
                   key={student._id}
-                  className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                  className={`dark:text-black ${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70 dark:hover:bg-DarkManager/70`}
                 >
                   <td className="px-3 py-2">
                     {indexOfFirstStudent + index + 1}
@@ -166,9 +167,9 @@ function TakeAttendance() {
       <form onSubmit={handleSubmit} className="mt-4 flex justify-center">
         <button
           type="submit"
-          className="rounded-lg font-poppins bg-[#117C90] px-6 py-3 text-lg font-semibold text-white hover:bg-[#0f6a7d]"
+          className="rounded-lg bg-[#117C90] px-6 py-3 font-poppins text-lg font-semibold text-white hover:bg-[#0f6a7d] dark:bg-DarkManager"
         >
-          {t('attendans.SubmitAttendance')}
+          {t("attendans.SubmitAttendance")}
         </button>
       </form>
     </div>

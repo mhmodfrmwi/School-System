@@ -68,7 +68,7 @@ const NavManager = () => {
     i18n.changeLanguage(newLang);
     localStorage.setItem("i18nextLng", newLang);
   };
-  
+
   const url = window.location.pathname;
   const managerName = url.split("/manager/").pop();
   const match = url.match(/\/manager\/([^/]+)/);
@@ -93,11 +93,10 @@ const NavManager = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
-    useEffect(() => {
-      document.documentElement.lang = i18n.language;
-    }, [i18n.language]);
-  
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
 
   return (
     <div className="relative">
@@ -105,11 +104,11 @@ const NavManager = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={handleBack}
-            className="dark:bg-DarkManager hidden rounded-lg bg-dashboard-bg p-2 text-white lg:flex"
+            className="hidden rounded-lg bg-dashboard-bg p-2 text-white dark:bg-DarkManager lg:flex"
           >
             <FaArrowLeft className="text-lg" />
           </button>
-          <p className="dark:text-DarkManager hidden font-inter text-lg font-semibold text-dashboard-bg lg:flex">
+          <p className="hidden font-inter text-lg font-semibold text-dashboard-bg dark:text-DarkManager lg:flex">
             {managerName === "/manager" ? "dashboard" : `${name}`}
           </p>
         </div>
@@ -130,7 +129,7 @@ const NavManager = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none dark:text-black md:text-left md:text-base"
+              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none dark:border-gray-200 dark:text-black md:text-left md:text-base"
             />
 
             {isDropdownOpen && (
@@ -140,10 +139,10 @@ const NavManager = () => {
                     <li
                       key={route.path}
                       onClick={() => handleSelect(route.path)}
-                      className="dark:text-DarkManager cursor-pointer px-4 py-2 font-semibold text-[#117C90] hover:bg-blue-100"
+                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] hover:bg-blue-100 dark:text-DarkManager"
                     >
                       {route.path}
-                      <p className="dark:border-DarkManager mx-auto my-2 w-[98%] border-b-2 border-[#117C90]"></p>
+                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#117C90] dark:border-DarkManager"></p>
                     </li>
                   ))
                 ) : (
@@ -182,7 +181,7 @@ const NavManager = () => {
               alt="User"
               className="h-8 w-8 rounded-full md:h-10 md:w-10"
             />
-            <span className="dark:text-DarkManager hidden font-poppins text-sm font-semibold text-dashboard-bg md:text-base lg:flex">
+            <span className="hidden font-poppins text-sm font-semibold text-dashboard-bg dark:text-DarkManager md:text-base lg:flex">
               {fullName}
             </span>
           </div>
@@ -196,7 +195,7 @@ const NavManager = () => {
           {settingToggle && (
             <div
               ref={settingsRef}
-              className="dark:to-DarkManager absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]"
+              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90] dark:to-DarkManager"
             >
               <div>
                 <div
@@ -215,9 +214,14 @@ const NavManager = () => {
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
-              <button className="mx-auto ms-6 p-2 text-gray-500"
-              onClick={toggleLanguage}>
-                <ReactSVG src={i18n.language === "en" ? languageA : languageE} className="h-auto w-auto" />
+              <button
+                className="mx-auto ms-6 p-2 text-gray-500"
+                onClick={toggleLanguage}
+              >
+                <ReactSVG
+                  src={i18n.language === "en" ? languageA : languageE}
+                  className="h-auto w-auto"
+                />
               </button>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
 

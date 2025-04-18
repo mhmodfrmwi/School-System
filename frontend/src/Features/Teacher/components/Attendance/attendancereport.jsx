@@ -6,7 +6,7 @@ import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import Loader from "@/ui/Loader";
 import { toast } from "react-toastify";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function Attendancereport() {
   const dispatch = useDispatch();
@@ -137,16 +137,16 @@ function Attendancereport() {
 
   return (
     <div className="mx-auto w-[360px] p-4 sm:w-[550px] md:w-[700px] md:p-6 lg:px-0 xl:w-full">
-      <div className="mx-auto  mt-5 w-full px-4">
+      <div className="mx-auto mt-5 w-full px-4">
         <div className="mx-auto mb-20 flex max-w-[90%] flex-wrap overflow-hidden rounded-full border border-gray-300 bg-[#F5F5F5] md:w-[60%] md:flex-nowrap">
           {/* {classTeachers.map((classteacher) => ( */}
           <button
             key={id}
-            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm 
-              ${isActive(`/teacher/takeattendance/${id}`)
-                ? "bg-[#008394] font-bold text-white"
-                : "bg-[#f4f4f4] font-normal text-[#008394]"
-              }`}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm ${
+              isActive(`/teacher/takeattendance/${id}`)
+                ? "bg-[#008394] font-bold text-white dark:bg-DarkManager"
+                : "bg-[#f4f4f4] font-normal text-[#008394] dark:text-DarkManager"
+            }`}
             onClick={() => {
               navigate(`/teacher/takeattendance/${id}`, {
                 state: {
@@ -155,95 +155,105 @@ function Attendancereport() {
               });
             }}
           >
-            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white dark:bg-DarkManager">
               1
             </span>
-            {t('attendans.TakeAttendance')}
+            {t("attendans.TakeAttendance")}
           </button>
           {/* ))} */}
           <button
             onClick={() => navigate("/teacher/attendancereport")}
-            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm 
-            ${isActive(`/teacher/attendancereport/${id}`)
-                ? "bg-[#008394] font-bold text-white"
-                : "bg-[#f4f4f4] font-normal text-[#008394]"
-              }`}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 text-center font-poppins text-xs font-medium transition-all md:px-6 md:py-3 md:text-sm ${
+              isActive(`/teacher/attendancereport/${id}`)
+                ? "bg-[#008394] font-bold text-white dark:bg-DarkManager"
+                : "bg-[#f4f4f4] font-normal text-[#008394] dark:text-DarkManager"
+            }`}
           >
-            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
+            <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90] dark:text-DarkManager">
               2
             </span>
-            {t('attendans.AttendanceReport')}
+            {t("attendans.AttendanceReport")}
           </button>
         </div>
       </div>
 
-      <div className="flex ml-8 mb-6 flex-col">
-        <h1 className="text-lg font-poppins font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-        {t('attendans.AttendanceSummary')}
+      <div className="mb-6 ml-8 flex flex-col">
+        <h1 className="font-poppins text-lg font-semibold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-2xl">
+          {t("attendans.AttendanceSummary")}
         </h1>
-        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[160px]"></div>
+        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] dark:bg-DarkManager lg:h-[4px] lg:w-[160px]"></div>
       </div>
       <div className="ml-6">
-      <form
-        onSubmit={handleSubmit}
-        className="mb-4 grid font-poppins grid-cols-1 gap-4 md:grid-cols-4"
-      >
-        <select
-          name="classId"
-          onChange={handleFilterChange}
-          value={filters.classId}
-          className="h-11 w-full border p-2"
+        <form
+          onSubmit={handleSubmit}
+          className="mb-4 grid grid-cols-1 gap-4 font-poppins md:grid-cols-4"
         >
-          <option value="">Select Class</option>
-          {classTeachers.map((teacher) => (
-            <option key={teacher.classId?._id} value={teacher.classId?._id}>
-              {` ${teacher.gradeName} - ${teacher.classId?.className}   `}
-            </option>
-          ))}
-        </select>
+          <select
+            name="classId"
+            onChange={handleFilterChange}
+            value={filters.classId}
+            className="h-11 w-full border p-2 dark:text-black"
+          >
+            <option value="">Select Class</option>
+            {classTeachers.map((teacher) => (
+              <option key={teacher.classId?._id} value={teacher.classId?._id}>
+                {` ${teacher.gradeName} - ${teacher.classId?.className}   `}
+              </option>
+            ))}
+          </select>
 
-        <input
-          type="date"
-          name="startDate"
-          value={filters.startDate}
-          onChange={handleFilterChange}
-          className="w-full border p-2"
-        />
-        <input
-          type="date"
-          name="endDate"
-          value={filters.endDate}
-          onChange={handleFilterChange}
-          className="w-full border p-2"
-        />
+          <input
+            type="date"
+            name="startDate"
+            value={filters.startDate}
+            onChange={handleFilterChange}
+            className="w-full border p-2 dark:text-black"
+          />
+          <input
+            type="date"
+            name="endDate"
+            value={filters.endDate}
+            onChange={handleFilterChange}
+            className="w-full border p-2 dark:text-black"
+          />
 
-        <button
-          type="submit"
-          className="w-full rounded bg-[#117C90] px-4 py-2 text-white hover:bg-[#0f6a7d]"
-        >
-         {t('attendans.GenerateReport')}
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full rounded bg-[#117C90] px-4 py-2 text-white hover:bg-[#0f6a7d] dark:bg-DarkManager"
+          >
+            {t("attendans.GenerateReport")}
+          </button>
+        </form>
       </div>
       {attendanceStatus === "loading" ? (
         <div>Loading attendance data...</div>
       ) : currentStudents.length > 0 ? (
         <>
-        <table className="mx-auto w-full mt-7 font-poppins table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
-          <thead className="bg-[#117C90] text-left text-white">
-              <tr className="bg-[#117C90] text-white">
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">#</th>
-                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('attendans.AcademicNumber')}</th>
-                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.StudentName')}</th>
-                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('attendans.Class')}</th>
-                <th className=" px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">{t('assignmentt.Status')}</th>
+          <table className="mx-auto mt-7 w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90] dark:shadow-DarkManager">
+            <thead className="bg-[#117C90] text-left text-white dark:bg-DarkManager">
+              <tr className="bg-[#117C90] text-white dark:bg-DarkManager">
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  #
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  {t("attendans.AcademicNumber")}
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  {t("assignmentt.StudentName")}
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  {t("attendans.Class")}
+                </th>
+                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                  {t("assignmentt.Status")}
+                </th>
               </tr>
             </thead>
             <tbody>
-              {currentStudents.map((student,index) => (
+              {currentStudents.map((student, index) => (
                 <tr
                   key={student?.student_id?.id}
-                  className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                  className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70 dark:text-black dark:hover:bg-DarkManager/70`}
                   onClick={() =>
                     navigate(
                       `/teacher/student-attendance-details/${student.student_id}`,
@@ -253,11 +263,21 @@ function Attendancereport() {
                     )
                   }
                 >
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{index + 1}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.academicNumber}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.fullName}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.className}</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">{student.absences}</td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {index + 1}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {student.academicNumber}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {student.fullName}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {student.className}
+                  </td>
+                  <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
+                    {student.absences}
+                  </td>
                 </tr>
               ))}
             </tbody>
