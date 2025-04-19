@@ -9,8 +9,9 @@ import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import Pagination from "../Pagination";
 import Header from "./scheduleHeader";
 import { useNavigate } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const SchedualTable = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -67,7 +68,7 @@ const SchedualTable = () => {
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this schedule?",
+      t("schedule.table.deleteConfirm"),
     );
     if (confirmDelete) {
       try {
@@ -98,7 +99,7 @@ const SchedualTable = () => {
 
   const getTeacherName = (teacherId) => {
     const teacher = teachers.find((t) => t._id === teacherId);
-    return teacher ? teacher.fullName : "Unknown Teacher";
+    return teacher ? teacher.fullName : t("schedule.table.unknownTeacher");
   };
 
   const handleEdit = (scheduleId) => {
@@ -121,25 +122,25 @@ const SchedualTable = () => {
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Subject Name
+                {t("schedule.table.columns.subject")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Teacher
+                {t("schedule.table.columns.teacher")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Grade
+                {t("schedule.table.columns.grade")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Day
+                {t("schedule.table.columns.day")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  From
+                {t("schedule.table.columns.from")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  To
+                {t("schedule.table.columns.to")}
                 </th>
                 <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                  Actions
+                {t("schedule.table.columns.actions")}
                 </th>
               </tr>
             </thead>
@@ -158,30 +159,30 @@ const SchedualTable = () => {
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       {schedule?.teacher_id
                         ? getTeacherName(schedule.teacher_id._id)
-                        : "Unknown Teacher"}
+                        : t("schedule.table.unknownTeacher")}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.grade_id?.gradeName || "No grade"}
+                      {schedule?.grade_id?.gradeName ||t("schedule.table.noGrade")}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.day_of_week || "No day"}
+                      {schedule?.day_of_week ||  t("schedule.table.noDay")}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.start_time || "No start time"}
+                      {schedule?.start_time ||  t("schedule.table.noStartTime")}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.end_time || "No end time"}
+                      {schedule?.end_time ||  t("schedule.table.noEndTime")}
                     </td>
                     <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
                       <button
-                        aria-label="Edit schedule"
+                        aria-label={t("schedule.table.editAriaLabel")}
                         onClick={() => handleEdit(schedule?._id)}
                         className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-[#043B44]"
                       >
                         <i className="far fa-edit text-lg" />
                       </button>
                       <button
-                        aria-label="Delete schedule"
+                        aria-label={t("schedule.table.deleteAriaLabel")}
                         onClick={() => handleDelete(schedule?._id)}
                         className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                       >
@@ -197,11 +198,10 @@ const SchedualTable = () => {
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                      No Schedules Found
+                    {t("schedule.table.noData.title")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                      It seems like there are no schedules in the database at
-                      the moment.
+                    {t("schedule.table.noData.message")}
                     </p>
                   </td>
                 </tr>

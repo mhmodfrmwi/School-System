@@ -8,8 +8,9 @@ import {
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchAcademicYears } from "../AdminRedux/academicYearSlice";
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 const EditAssignedGrade = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ const EditAssignedGrade = () => {
 
     // Validate form data
     if (!formData.gradeId || !formData.academicYear) {
-      toast.error("Please fill in all fields");
+      toast.error(t("grade.form.messages.error"));
       return;
     }
 
@@ -59,7 +60,7 @@ const EditAssignedGrade = () => {
 
     // Validate selections
     if (!selectedGrade || !selectedYear) {
-      toast.error("Invalid grade or academic year selection");
+      toast.error(t(t("grade.table.error")));
       return;
     }
 
@@ -80,7 +81,7 @@ const EditAssignedGrade = () => {
   return (
     <div className="mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Edit Assigned Grade
+      {t("grade.form.editAssignTitle")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] dark:bg-[#117C90]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -91,7 +92,7 @@ const EditAssignedGrade = () => {
           {/* Grade Dropdown */}
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Select Grade
+            {t("grade.form.fields.selectGrade")}
             </label>
             <select
               name="gradeId"
@@ -99,7 +100,7 @@ const EditAssignedGrade = () => {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">-- Select Grade --</option>
+              <option value="">{t("grade.form.placeholders.selectGrade")}</option>
               {grades.map((grade) => (
                 <option key={grade._id} value={grade._id}>
                   {grade.gradeName}
@@ -111,7 +112,7 @@ const EditAssignedGrade = () => {
           {/* Academic Year Dropdown */}
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Academic Year
+            {t("grade.form.fields.academicYear")}
             </label>
             <select
               name="academicYear"
@@ -119,7 +120,7 @@ const EditAssignedGrade = () => {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">-- Select Academic Year --</option>
+              <option value="">{t("grade.form.placeholders.selectYear")}</option>
               {academicYears.map((year) => (
                 <option key={year._id} value={year._id}>
                   {year.startYear} - {year.endYear}
@@ -134,7 +135,7 @@ const EditAssignedGrade = () => {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Update Grade
+              {t("grade.form.buttons.update")}
             </button>
           </div>
         </form>

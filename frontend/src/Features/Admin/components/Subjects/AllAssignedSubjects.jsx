@@ -9,8 +9,9 @@ import { fetchGrades } from "../AdminRedux/gradeSlice";
 import Loader from "@/ui/Loader";
 import SubjectsHeader from "./AssignSubjectHeader";
 import Pagination from "../Pagination";
-
+import { useTranslation } from 'react-i18next';
 const AssignedSubjects = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { assignedSubjects, loading: loadingSubjects } = useSelector(
     (state) => state.assignSubject,
@@ -64,7 +65,7 @@ const AssignedSubjects = () => {
   );
 
   const handleDeleteSubject = (_id) => {
-    if (window.confirm("Are you sure you want to delete this subject?")) {
+    if (window.confirm(t('assignedSubjects.deleteConfirmation'))) {
       dispatch(deleteAssignedSubject(_id));
     }
   };
@@ -111,16 +112,16 @@ const AssignedSubjects = () => {
                   <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
                     <tr>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Subject
+                      {t('assignedSubjects.tableHeaders.subject')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Grade
+                      {t('assignedSubjects.tableHeaders.grade')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Term
+                      {t('assignedSubjects.tableHeaders.term')}
                       </th>
                       <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                        Actions
+                      {t('assignedSubjects.tableHeaders.actions')}
                       </th>
                     </tr>
                   </thead>
@@ -165,11 +166,10 @@ const AssignedSubjects = () => {
                           className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                         >
                           <p className="text-lg font-semibold text-gray-600">
-                            No Subjects Found
+                          {t('assignedSubjects.emptyState.title')}
                           </p>
                           <p className="mt-2 text-sm text-gray-500">
-                            It seems like there are no subjects in the database
-                            at the moment.
+                          {t('assignedSubjects.emptyState.description')}
                           </p>
                         </td>
                       </tr>

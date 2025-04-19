@@ -9,8 +9,9 @@ import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchSemesters } from "../AdminRedux/AssignSubjectSlice";
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 const EditAssignedSubject = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -58,7 +59,7 @@ const EditAssignedSubject = () => {
     e.preventDefault();
 
     if (!gradeName || !subjectName || !academicYear || !semesterName) {
-      toast.error("Please fill in all fields");
+      toast.error(t('editAssignedSubject.messages.requiredFields'));
       return;
     }
 
@@ -67,12 +68,12 @@ const EditAssignedSubject = () => {
     dispatch(updateAssignedSubject({ id, updatedData }))
       .unwrap()
       .then(() => {
-        toast.success("Subject updated successfully");
+        toast.success(t('editAssignedSubject.messages.success'));
         navigate(-1);
         // navigate("/admin/allsubjects");
       })
       .catch((error) => {
-        console.log(error.message || "Failed to update subject");
+        console.log(error.message ||  t('editAssignedSubject.messages.error'));
       });
   };
 
@@ -89,7 +90,7 @@ const EditAssignedSubject = () => {
   return (
     <div className="mx-auto mt-10 w-[80%]">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Edit Assigned Subject
+      {t('editAssignedSubject.title')}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -97,14 +98,14 @@ const EditAssignedSubject = () => {
           {/* Subject Dropdown */}
           <div className="mb-6">
             <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
-              Select Subject
+            {t('editAssignedSubject.labels.subject')}
             </label>
             <select
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
               className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">-- Select Subject --</option>
+              <option value="">{t('editAssignedSubject.placeholders.subject')}</option>
               {subjects.map((subject, index) => (
                 <option key={index} value={subject.subjectName}>
                   {subject.subjectName}
@@ -116,14 +117,14 @@ const EditAssignedSubject = () => {
           {/* Grade Dropdown */}
           <div className="mb-6">
             <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
-              Select Grade
+            {t('editAssignedSubject.labels.grade')}
             </label>
             <select
               value={gradeName}
               onChange={(e) => setGradeName(e.target.value)}
               className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">-- Select Grade --</option>
+              <option value="">{t('editAssignedSubject.placeholders.grade')}</option>
               {grades.map((grade, index) => (
                 <option key={index} value={grade.gradeName}>
                   {grade.gradeName}
@@ -135,14 +136,14 @@ const EditAssignedSubject = () => {
           {/* Semester Dropdown */}
           <div className="mb-6">
             <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
-              Select Semester
+            {t('editAssignedSubject.labels.semester')}
             </label>
             <select
               value={semesterName}
               onChange={handleSemesterChange}
               className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">-- Select Semester --</option>
+              <option value="">{t('editAssignedSubject.placeholders.semester')}</option>
               {semesters.map((semester, index) => (
                 <option key={index} value={semester.semesterName}>
                   {semester.semesterName}
@@ -163,7 +164,7 @@ const EditAssignedSubject = () => {
             type="submit"
             className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 text-sm font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
           >
-            Update Subject
+             {t('editAssignedSubject.buttons.submit')}
           </button>
         </form>
       </div>

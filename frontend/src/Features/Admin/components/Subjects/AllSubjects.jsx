@@ -8,8 +8,10 @@ import SubjectsHeader from "./SubjectsHeader";
 import Pagination from "../Pagination";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from 'react-i18next';
 
 const SubjectsList = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { subjects = [] } = useSelector((state) => state.subject);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -31,12 +33,12 @@ const SubjectsList = () => {
 
   const handleDelete = (_id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this subject?",
+      t('subjectsList.deleteConfirmation'),
     );
     if (confirmDelete) {
       dispatch(removeSubject(_id))
         .unwrap()
-        .then(() => toast.success("Subject deleted successfully!"))
+        .then(() => toast.success(t('subjectsList.deleteSuccess')))
         .catch((err) => console.error(err));
     }
   };
@@ -75,8 +77,11 @@ const SubjectsList = () => {
                   </div>
                   <div className="flex items-center">
                     <span className="mx-2 h-7 border-l-2 border-gray-600 text-xl text-gray-600 dark:border-white dark:text-white"></span>
-                    <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600 dark:text-white">
+                    {/* <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600 dark:text-white">
                       {subject.subjectName}
+                    </h3> */}
+                    <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600 dark:text-white">
+                      {t(`subjectsList.subjectNames.${subject.subjectName}`, subject.subjectName)}
                     </h3>
                   </div>
                 </div>
@@ -112,11 +117,10 @@ const SubjectsList = () => {
                 className="mb-4 text-6xl text-gray-400"
               />
               <p className="mb-2 text-xl font-semibold text-gray-600">
-                No Subjects Found
+                {t('subjectsList.emptyState.title')}
               </p>
               <p className="mb-4 max-w-xl text-center text-gray-500">
-                It seems like there are no subjects available at the moment.
-                Please check back later or add new subjects.
+                {t('subjectsList.emptyState.description')}
               </p>
             </div>
           )}

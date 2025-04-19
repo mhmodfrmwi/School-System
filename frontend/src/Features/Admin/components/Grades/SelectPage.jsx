@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const GradeToggle = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,7 +22,7 @@ const GradeToggle = () => {
           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             1
           </span>
-          Add Grade
+          {t("grade.toggle.add")}
         </button>
         <button
           onClick={() => navigate("/admin/assigngrade")}
@@ -34,7 +35,7 @@ const GradeToggle = () => {
           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
             2
           </span>
-          Assign Grade
+          {t("grade.toggle.assign")}
         </button>
       </div>
     </div>

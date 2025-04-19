@@ -10,8 +10,9 @@ import Header from "./GradeHeader";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
-
+import { useTranslation } from 'react-i18next';
 const AllAssignedGrades = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { assignedGrades, loading } = useSelector((state) => state.assignGrade);
   const { id } = useParams();
@@ -31,7 +32,7 @@ const AllAssignedGrades = () => {
   const gradesWithGradeName = filteredGrades.map((gradeData) => {
     return {
       ...gradeData,
-      gradeName: gradeData.gradeId ? gradeData.gradeId.gradeName : "Unknown",
+      gradeName: gradeData.gradeId ? gradeData.gradeId.gradeName : t("grade.table.unknown"),
       startYear: gradeData.academicYear_id.startYear,
       endYear: gradeData.academicYear_id.endYear,
     };
@@ -40,13 +41,13 @@ const AllAssignedGrades = () => {
   const handleDeleteGrade = (_id) => {
     if (_id) {
       const confirmDelete = window.confirm(
-        "Are you sure you want to delete this grade?",
+        t("grade.form.messages.deleteConfirm"),
       );
       if (confirmDelete) {
         dispatch(deleteAssignedGrade(_id));
       }
     } else {
-      toast.error("Invalid grade ID. Cannot delete grade.");
+      toast.error(t("grade.table.error"));
     }
   };
 
@@ -67,13 +68,13 @@ const AllAssignedGrades = () => {
           <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
             <tr>
               <th className="px-4 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
-                Grade
+              {t("grade.table.columns.grade")}
               </th>
               <th className="px-4 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
-                Academic Year
+              {t("grade.table.columns.academicYear")}
               </th>
               <th className="px-4 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
-                Actions
+              {t("grade.table.columns.actions")}
               </th>
             </tr>
           </thead>
@@ -114,11 +115,10 @@ const AllAssignedGrades = () => {
                   className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                 >
                   <p className="text-lg font-semibold text-gray-600">
-                    No Grades Found
+                  {t("grade.form.messages.noGrades")}
                   </p>
                   <p className="mt-2 text-sm text-gray-500">
-                    It seems like there are no grades in the database at the
-                    moment.
+                  {t("grade.form.messages.noGradesMessage")}
                   </p>
                 </td>
               </tr>

@@ -5,8 +5,9 @@ import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchAcademicYears } from "../AdminRedux/academicYearSlice";
 import { assignGrade } from "../AdminRedux/AssignGradeSlice";
 import GradeToggle from "./SelectPage";
-
+import { useTranslation } from 'react-i18next';
 function AssignGrade() {
+  const { t } = useTranslation();
   const [gradeName, setGradeName] = useState("");
   const [academicYear, setAcademicYear] = useState("");
 
@@ -31,7 +32,7 @@ function AssignGrade() {
     e.preventDefault();
 
     if (!gradeName || !academicYear) {
-      toast.error("Please select a grade and academic year");
+      toast.error(t("grade.form.messages.error"));
       return;
     }
 
@@ -50,7 +51,7 @@ function AssignGrade() {
       <GradeToggle />
       <div className="mx-auto my-10 w-[80%] font-poppins">
         <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-          Assign Grade
+        {t("grade.form.assignTitle")}
         </h1>
         <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
         <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -61,18 +62,18 @@ function AssignGrade() {
             {/* Grade Dropdown */}
             <div className="mb-4 sm:col-span-2">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Select Grade
+              {t("grade.form.fields.selectGrade")}
               </label>
               <select
                 value={gradeName}
                 onChange={(e) => setGradeName(e.target.value)}
                 className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               >
-                <option value="">-- Select Grade --</option>
+                <option value="">{t("grade.form.placeholders.selectGrade")}</option>
                 {gradeLoading ? (
-                  <option>Loading grades...</option>
+                  <option>{t("grade.table.loading")}</option>
                 ) : gradeError ? (
-                  <option>Error loading grades</option>
+                  <option>{t("grade.table.error")}</option>
                 ) : (
                   grades.map((gradeItem) => (
                     <option
@@ -89,18 +90,18 @@ function AssignGrade() {
             {/* Academic Year Dropdown */}
             <div className="mb-4 sm:col-span-2">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Select Academic Year
+              {t("grade.form.fields.academicYear")}
               </label>
               <select
                 value={academicYear}
                 onChange={(e) => setAcademicYear(e.target.value)}
                 className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               >
-                <option value="">-- Select Academic Year --</option>
+                <option value="">{t("grade.form.placeholders.selectYear")}</option>
                 {yearLoading ? (
-                  <option>Loading academic years...</option>
+                  <option>{t("grade.table.loading")}</option>
                 ) : yearError ? (
-                  <option>Error loading academic years</option>
+                  <option>{t("grade.table.error")}</option>
                 ) : (
                   academicYears.map((year) => (
                     <option
@@ -121,7 +122,7 @@ function AssignGrade() {
                 className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
                 disabled={gradeLoading || yearLoading}
               >
-                {gradeLoading || yearLoading ? "Loading..." : "Assign Grade"}
+                {gradeLoading || yearLoading ? t("grade.table.loading") : t("grade.form.buttons.assign")}
               </button>
             </div>
           </form>

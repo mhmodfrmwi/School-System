@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const SubjectHeader = ({ onSearchChange, onFilterChange }) => {
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
 
@@ -20,21 +21,21 @@ const SubjectHeader = ({ onSearchChange, onFilterChange }) => {
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
           <h1 className="font-poppins text-2xl font-semibold text-[#244856]">
-            Subjects
+          {t('subjectHeader.title')}
           </h1>
           <div className="mt-1 h-[4px] w-[95px] rounded-t-md bg-[#244856]"></div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
           <button className="rounded-md px-4 py-2 font-poppins text-sm text-[#244856] transition hover:bg-[#117C90] hover:text-white dark:hover:bg-[#043B44]">
-            Export CSV
+          {t('subjectHeader.buttons.export')}
           </button>
 
           <NavLink
             to="/admin/addsubject"
             className="rounded-md bg-[#117C90] px-4 py-2 font-poppins text-sm text-white transition hover:bg-[#0E6B7A] dark:bg-[#043B44]"
           >
-            Add Subject
+              {t('subjectHeader.buttons.add')}
           </NavLink>
         </div>
       </div>
@@ -47,13 +48,13 @@ const SubjectHeader = ({ onSearchChange, onFilterChange }) => {
             className="w-full rounded-md border bg-white px-3 py-2 font-poppins text-sm text-[#244856] focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-[#043B44] sm:w-auto"
           >
             <option value="" className="font-poppins">
-              Select Filter
+            {t('subjectHeader.filters.default')}
             </option>
             <option value="term" className="font-poppins">
-              Term
+            {t('subjectHeader.filters.term')}
             </option>
             <option value="gradeName" className="font-poppins">
-              Grade
+            {t('subjectHeader.filters.grade')}
             </option>
           </select>
         </div>
@@ -62,7 +63,7 @@ const SubjectHeader = ({ onSearchChange, onFilterChange }) => {
           <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-black dark:text-white sm:text-sm"></i>
           <input
             type="text"
-            placeholder="Search by term or grade"
+            placeholder={t('subjectHeader.search.placeholder')}
             className="w-full rounded-md bg-[#FCFAFA] px-3 py-2 pl-10 font-poppins text-sm text-black focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#043B44] dark:text-white dark:placeholder-white dark:focus:ring-[#043B44]"
             value={searchText}
             onChange={handleSearchChange}

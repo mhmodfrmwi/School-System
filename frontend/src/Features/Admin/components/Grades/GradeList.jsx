@@ -8,8 +8,9 @@ import Pagination from "../Pagination";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 const GradeList = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const getColor = (index) => {
@@ -25,6 +26,10 @@ const GradeList = () => {
   useEffect(() => {
     dispatch(fetchGrades());
   }, [dispatch]);
+  
+  const translateGradeName = (gradeName) => {
+    return t(`grade.gradeNames.${gradeName}`, { defaultValue: gradeName });
+  };
 
   const paginatedGrades = grades.slice(
     (currentPage - 1) * itemsPerPage,
@@ -33,12 +38,12 @@ const GradeList = () => {
 
   const handleDelete = (_id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this grade?",
+      t("grade.form.messages.deleteConfirm"),
     );
     if (confirmDelete) {
       dispatch(removeGrade(_id))
         .unwrap()
-        .then(() => toast.success("Grade deleted successfully!"))
+        .then(() => toast.success(t("grade.form.messages.successAdd")))
         .catch((err) => console.error(err));
     }
   };
@@ -77,7 +82,8 @@ const GradeList = () => {
 
                   <div className="flex-co l flex">
                     <p className="m-0 text-lg font-bold text-gray-600 dark:text-white">
-                      {grade.gradeName}
+                      {/* {grade.gradeName} */}
+                      {translateGradeName(grade.gradeName)}
                     </p>
                   </div>
                 </div>
@@ -114,11 +120,10 @@ const GradeList = () => {
                 className="mb-4 text-6xl text-gray-400"
               />
               <p className="mb-2 text-xl font-semibold text-gray-600">
-                No Grades Found
+              {t("grade.form.messages.noGrades")}
               </p>
               <p className="mb-4 max-w-xl text-center text-gray-500">
-                It seems like there are no grades available at the moment.
-                Please check back later or add new grades.
+              {t("grade.form.messages.noGradesMessage")}
               </p>
             </div>
           )}

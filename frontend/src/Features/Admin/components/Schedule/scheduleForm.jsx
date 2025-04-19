@@ -8,10 +8,10 @@ import { fetchTerms } from "../AdminRedux/termSlice";
 import { fetchClasses } from "../AdminRedux/classSlice";
 import { fetchAcademicYears } from "../AdminRedux/academicYearSlice";
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 function ScheduleForm() {
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   const teachers = useSelector((state) => state.teachers.teachers);
   const subjects = useSelector((state) => state.subject.subjects);
   const grades = useSelector((state) => state.grades.grades);
@@ -50,7 +50,7 @@ function ScheduleForm() {
     dispatch(postSchedual(formData))
       .unwrap()
       .then(() => {
-        toast.success("Schedule added successfully!");
+        toast.success(t("schedule.form.messages.successAdd"));
         setFormData({
           className: "",
           subjectName: "",
@@ -64,7 +64,7 @@ function ScheduleForm() {
         });
       })
       .catch((error) => {
-        toast.error(error);
+        toast.error(error || t("schedule.form.messages.error"));
       });
   };
 
@@ -80,7 +80,7 @@ function ScheduleForm() {
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Add Schedule
+      {t("schedule.form.addTitle")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -90,7 +90,7 @@ function ScheduleForm() {
         >
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Academic Year
+            {t("schedule.form.fields.academicYear")}
             </label>
             <select
               name="academicYear"
@@ -100,7 +100,7 @@ function ScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-                Select Academic Year
+              {t("schedule.form.placeholders.selectAcademicYear")}
               </option>
               {academicYears?.map((year) => (
                 <option
@@ -115,7 +115,7 @@ function ScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Semester Name
+            {t("schedule.form.fields.semester")}
             </label>
             <select
               name="semesterName"
@@ -125,7 +125,7 @@ function ScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-                Select semester
+              {t("schedule.form.placeholders.selectSemester")}
               </option>
               {terms
                 .filter((term) => {
@@ -142,7 +142,7 @@ function ScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Subject Name
+            {t("schedule.form.fields.subject")}
             </label>
             <select
               name="subjectName"
@@ -152,7 +152,7 @@ function ScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-                Select subject
+              {t("schedule.form.placeholders.selectSubject")}
               </option>
               {subjects?.map((subject) => (
                 <option key={subject._id} value={subject.subjectName}>
@@ -164,7 +164,7 @@ function ScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Teacher Name
+            {t("schedule.form.fields.teacher")}
             </label>
             <select
               name="teacherName"
@@ -174,7 +174,8 @@ function ScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-                Select teacher
+              {t("schedule.form.placeholders.selectTeacher")}
+
               </option>
               {(() => {
                 const selectedSubject = subjects.find(
@@ -199,7 +200,7 @@ function ScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Grade
+            {t("schedule.form.fields.grade")}
             </label>
             <select
               name="grade"
@@ -209,7 +210,7 @@ function ScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-                Select grade
+              {t("schedule.form.placeholders.selectGrade")}
               </option>
               {grades?.map((grade) => (
                 <option key={grade._id} value={grade.gradeName}>
@@ -221,7 +222,7 @@ function ScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Class
+            {t("schedule.form.fields.class")}
             </label>
             <select
               name="className"
@@ -231,7 +232,7 @@ function ScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-                Select class
+              {t("schedule.form.placeholders.selectClass")}
               </option>
               {(() => {
                 const selectedGrade = grades.find(
@@ -252,7 +253,7 @@ function ScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Day
+            {t("schedule.form.fields.day")}
             </label>
             <select
               name="day"
@@ -262,19 +263,19 @@ function ScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-                Select day
+              {t("schedule.form.placeholders.selectDay")}
               </option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
+              <option value="Monday">{t("schedule.form.days.monday")}</option>
+              <option value="Tuesday">{t("schedule.form.days.tuesday")}</option>
+              <option value="Wednesday">{t("schedule.form.days.wednesday")}</option>
+              <option value="Thursday">{t("schedule.form.days.thursday")}</option>
+              <option value="Friday">{t("schedule.form.days.friday")}</option>
             </select>
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              From
+            {t("schedule.form.fields.from")}
             </label>
             <input
               type="time"
@@ -288,7 +289,7 @@ function ScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              To
+            {t("schedule.form.fields.to")}
             </label>
             <input
               type="time"
@@ -305,7 +306,7 @@ function ScheduleForm() {
               type="submit"
               className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Add Schedule
+                {t("schedule.form.submit.add")}
             </button>
           </div>
         </form>

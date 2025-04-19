@@ -6,8 +6,9 @@ import { faEdit, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import TermHeader from "./termHeader";
 import Pagination from "../Pagination";
 import { useNavigate } from "react-router-dom";
-
+import { useTranslation } from 'react-i18next';
 const TermList = () => {
+  const { t } = useTranslation();
   const { terms = [] } = useSelector((state) => state.terms || {});
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const TermList = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this term?")) {
+    if (window.confirm(t('termList.deleteConfirmation'))) {
       await dispatch(removeTerm(id));
     }
   };
@@ -46,6 +47,14 @@ const TermList = () => {
 
   const handleEdit = (term) => {
     navigate(`/admin/edit-term/${term._id}`, { state: { term } });
+  };
+  const translateSemesterName = (name) => {
+    const translations = {
+      "Semester 1": t('termList.semesterNames.Semester 1'),
+      "Semester 2": t('termList.semesterNames.Semester 2')
+
+    };
+    return translations[name] || name;
   };
 
   if (loading) {
@@ -79,16 +88,22 @@ const TermList = () => {
                     <p className="m-0 font-poppins text-sm text-gray-500 dark:text-white">
                       {term.academicYear_id
                         ? `${term.academicYear_id.startYear} - ${term.academicYear_id.endYear}`
-                        : "No Academic Year Available"}
+                        : t('termList.noAcademicYear')}
                     </p>
 
-                    <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600 dark:text-white">
+                    {/* <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600 dark:text-white">
                       {term.semesterName &&
                       typeof term.semesterName === "string" &&
                       term.semesterName.trim() !== ""
                         ? term.semesterName
-                        : "No Semester Available"}
+                        :  t('termList.noSemester')}
+                    </h3> */}
+                    <h3 className="m-0 font-poppins text-lg font-semibold text-gray-600 dark:text-white">
+                      {term.semesterName ?
+                        translateSemesterName(term.semesterName) :
+                        t('termList.noSemester')}
                     </h3>
+
                   </div>
                 </div>
 
@@ -118,11 +133,10 @@ const TermList = () => {
                 className="mb-4 text-6xl text-gray-400"
               />
               <p className="mb-2 text-xl font-semibold text-gray-600">
-                No Terms Found
+                {t('termList.emptyState.title')}
               </p>
               <p className="mb-4 max-w-xl text-center text-gray-500">
-                It seems like there are no Terms available at the moment. Please
-                check back later or add new terms.
+                {t('termList.emptyState.description')}
               </p>
             </div>
           )}

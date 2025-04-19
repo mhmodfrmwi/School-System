@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { postGrade } from "../AdminRedux/gradeSlice";
 import GradeToggle from "./SelectPage";
-
+import { useTranslation } from 'react-i18next';
 function GradeForm() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     gradeName: "",
@@ -31,7 +32,7 @@ function GradeForm() {
       <GradeToggle />
       <div className="mx-auto my-10 w-[80%] font-poppins">
         <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-          Add Grade
+        {t("grade.form.addTitle")}
         </h1>
         <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
         <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -42,7 +43,7 @@ function GradeForm() {
             {/* Grade Name */}
             <div className="mb-4 sm:col-span-2">
               <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                Enter Grade Name
+              {t("grade.form.fields.enterName")}
               </label>
               <input
                 type="text"
@@ -50,7 +51,7 @@ function GradeForm() {
                 value={formData.gradeName}
                 onChange={handleChange}
                 className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-                placeholder="Enter grade name"
+                placeholder={t("grade.form.placeholders.enterName")}
                 required
               />
             </div>
@@ -61,7 +62,7 @@ function GradeForm() {
                 type="submit"
                 className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
               >
-                Add Grade
+                 {t("grade.form.buttons.add")}
               </button>
             </div>
           </form>

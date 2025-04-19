@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { postSubject } from "../AdminRedux/subjectSlice";
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 function AddSubject() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [subjectName, setSubjectName] = useState("");
 
@@ -17,7 +18,7 @@ function AddSubject() {
     dispatch(postSubject(newSubject))
       .unwrap()
       .then(() => {
-        toast.success("Subject added successfully!");
+        toast.success(t('addSubject.messages.success'));
         setSubjectName("");
       })
       .catch((error) => {});
@@ -26,7 +27,7 @@ function AddSubject() {
   return (
     <div className="mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Add Subject
+      {t('addSubject.title')}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -37,14 +38,14 @@ function AddSubject() {
           {/* Subject Name */}
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Enter Subject Name
+            {t('addSubject.labels.subjectName')}
             </label>
             <input
               type="text"
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-              placeholder="Enter subject name"
+              placeholder={t('addSubject.placeholders.subjectName')}
             />
           </div>
 
@@ -54,7 +55,7 @@ function AddSubject() {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-              Add Subject
+                  {t('addSubject.buttons.submit')}
             </button>
           </div>
         </form>

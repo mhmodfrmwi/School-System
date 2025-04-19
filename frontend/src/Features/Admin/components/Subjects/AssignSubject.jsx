@@ -5,8 +5,9 @@ import { assignSubject } from "../AdminRedux/AssignSubjectSlice";
 import { fetchGrades } from "../AdminRedux/gradeSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchSemesters } from "../AdminRedux/AssignSubjectSlice";
-
+import { useTranslation } from 'react-i18next';
 function AssignSubject() {
+  const { t } = useTranslation();
   const [gradeName, setGradeName] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [academicYear, setAcademicYear] = useState("");
@@ -27,7 +28,7 @@ function AssignSubject() {
     e.preventDefault();
 
     if (!gradeName || !subjectName || !academicYear || !semesterName) {
-      toast.error("Please fill in all fields");
+      toast.error(t('assignSubject.errors.requiredFields'));
       return;
     }
 
@@ -61,7 +62,7 @@ function AssignSubject() {
   return (
     <div className="mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-        Assign Subject
+      {t('assignSubject.title')}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -72,14 +73,14 @@ function AssignSubject() {
           {/* Subject Dropdown */}
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-poppins font-medium text-gray-700 dark:text-white">
-              Select Subject
+            {t('assignSubject.labels.subject')}
             </label>
             <select
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">-- Select Subject --</option>
+              <option value="">{t('assignSubject.placeholders.subject')}</option>
               {subjects.map((subject, index) => (
                 <option key={index} value={subject.subjectName}>
                   {subject.subjectName}
@@ -91,14 +92,14 @@ function AssignSubject() {
           {/* Grade Dropdown */}
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Select Grade
+            {t('assignSubject.labels.grade')}
             </label>
             <select
               value={gradeName}
               onChange={(e) => setGradeName(e.target.value)}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">-- Select Grade --</option>
+              <option value="">{t('assignSubject.placeholders.grade')}</option>
               {grades?.map((grade, index) => (
                 <option key={index} value={grade.gradeName}>
                   {grade.gradeName}
@@ -110,14 +111,14 @@ function AssignSubject() {
           {/* Semester Dropdown */}
           <div className="mb-4 sm:col-span-2">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              Select Semester
+            {t('assignSubject.labels.semester')}
             </label>
             <select
               value={`${semesterName}, ${academicYear}`}
               onChange={handleSemesterChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">-- Select Semester --</option>
+              <option value="">{t('assignSubject.placeholders.semester')}</option>
               {semesters.map((semester, index) => (
                 <option
                   key={index}
@@ -137,7 +138,7 @@ function AssignSubject() {
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
               disabled={loading}
             >
-              {loading ? "Loading..." : "Assign Subject"}
+              {loading ? t('assignSubject.buttons.loading') : t('assignSubject.buttons.submit')}
             </button>
           </div>
         </form>

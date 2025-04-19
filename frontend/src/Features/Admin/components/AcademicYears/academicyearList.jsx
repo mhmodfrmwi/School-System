@@ -9,8 +9,9 @@ import {
   removeAcademicYear,
 } from "../AdminRedux/academicYearSlice";
 import Pagination from "../Pagination";
-
+import { useTranslation } from 'react-i18next';
 const AcademicYearList = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const academicYears = useSelector(
@@ -28,7 +29,7 @@ const AcademicYearList = () => {
 
   const handleDeleteClick = (id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this academic year?",
+      t('academicYear.list.deleteConfirmation'),
     );
     if (confirmDelete) {
       try {
@@ -118,11 +119,10 @@ const AcademicYearList = () => {
                 className="mb-4 text-6xl text-gray-400"
               />
               <p className="mb-2 text-xl font-semibold text-gray-600">
-                No Acadmic Years Found
+              {t('academicYear.list.emptyState.title')}
               </p>
               <p className="mb-4 max-w-xl text-center text-gray-500">
-                It seems like there are no academic years available at the
-                moment. Please check back later or add new academic years.
+              {t('academicYear.list.emptyState.description')}
               </p>
             </div>
           )}

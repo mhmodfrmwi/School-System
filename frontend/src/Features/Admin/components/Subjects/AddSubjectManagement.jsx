@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import AddSubjectName from "./AddSubjectName";
 import AssignSubject from "./AssignSubject";
-
+import { useTranslation } from 'react-i18next';
 function SubjectManagementPage() {
+  const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState("add");
 
   return (
@@ -18,9 +19,9 @@ function SubjectManagementPage() {
           } rounded-full`}
         >
           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
-            1
+          {t('subjectManagement.tabs.add.number')}
           </span>
-          Add Subject
+          {t('subjectManagement.tabs.add.title')}
         </button>
         <button
           onClick={() => setSelectedTab("assign")}
@@ -31,9 +32,9 @@ function SubjectManagementPage() {
           } rounded-full`}
         >
           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#117C90] bg-white text-[#117C90] dark:border-[#043B44] dark:text-[#043B44]">
-            2
+          {t('subjectManagement.tabs.assign.number')}
           </span>
-          Assign Subject
+          {t('subjectManagement.tabs.assign.title')}
         </button>
       </div>
 

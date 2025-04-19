@@ -42,7 +42,7 @@ i18n
                     GradeManagements: "Grade Managements",
                     Activities: "Activities",
                     Library: "Library",
-                    SearchMangerPage:"Search Manger Page",
+                    SearchMangerPage: "Search Manger Page",
                     //Footer
                     LearnGrawSuccess: "Learn,Graw,Success",
                     EmpowerGrowth: "Empower Growth",
@@ -911,7 +911,7 @@ i18n
                         CustomLibraries: "Custom Libraries",
                         AcademicCalendar: "Academic Calendar",
                         Welcome: "Welcome",
-                        mainCategories:"mainCategories",
+                        mainCategories: "mainCategories",
                         notify: "NOTIFICATIONS CENTER",
                         VirtualClassrooms: "Virtual Classrooms",
                         contentvr: "You don’t have any new virtual classrooms today.",
@@ -1086,69 +1086,69 @@ i18n
 
                     },
                     //////////////////////////////////////////manager/////////////////////////////////////
-                    dashboardm:{
-                        AbsenceStatistics:"Absence Statistics ",
-                        GradesStatistics:"Grades Statistics ",
-                        GradesAbsenceStatistics:"Grades And Absence Statistics  ",
-                        Ranks:"Ranks",
-                        TopStudents:"Top Students ",
-                        TopTeachers:"Top Teachers ",
-                        Subject:"Subject",
-                        Badge:"Badge",
-                        TotalPoints:" Total Points",
-                        Grade:"Grade",
-                        AcademicNumber:"Academic Number ",
-                        Name:"Name",
-                        Rank:"Rank",
+                    dashboardm: {
+                        AbsenceStatistics: "Absence Statistics ",
+                        GradesStatistics: "Grades Statistics ",
+                        GradesAbsenceStatistics: "Grades And Absence Statistics  ",
+                        Ranks: "Ranks",
+                        TopStudents: "Top Students ",
+                        TopTeachers: "Top Teachers ",
+                        Subject: "Subject",
+                        Badge: "Badge",
+                        TotalPoints: " Total Points",
+                        Grade: "Grade",
+                        AcademicNumber: "Academic Number ",
+                        Name: "Name",
+                        Rank: "Rank",
 
                     },
-                    schoolhubs:{
-                        AddSchoolHubs:"Add School Hubs ",
-                        Class:"Class",
-                        Grade:"Grade",
-                        Email:"Email",
-                        Phone:"Phone",
-                        AddPrize:"Add Prize",
-                        EditSchoolHub:"Edit School Hub"
+                    schoolhubs: {
+                        AddSchoolHubs: "Add School Hubs ",
+                        Class: "Class",
+                        Grade: "Grade",
+                        Email: "Email",
+                        Phone: "Phone",
+                        AddPrize: "Add Prize",
+                        EditSchoolHub: "Edit School Hub"
                     },
-                    attendanse:{
-                        Classes:"Classes",
-                        Search:"Search by class or grade...",
-                        ClassData:"Class Data",
-                        Noattendance:"No attendance records found",
+                    attendanse: {
+                        Classes: "Classes",
+                        Search: "Search by class or grade...",
+                        ClassData: "Class Data",
+                        Noattendance: "No attendance records found",
                     },
-                    scheduleة:{
-                        Time:"Time",
-                        Addothersubjects:"Add other subjects",
-                        EndTime:"End Time",
-                        StartTime:"Start Time",
-                        ExamDate:"Exam Date",
-                        Subject:"Subject",
-                        Grade:"Grade",
-                        Semester:"Semester",
-                        AcademicYear:"Academic Year",
-                        AddExamSchedule:"Add Exam Schedule",
-                        Edit:"Edit Exam Schedule",
-                        ExamScheduleDetails:"   Exam Schedule Details ",
-                        DeleteSchedule:" Delete Schedule  ",
-                        ExamSchedule:" Exam Schedules",
+                    scheduleة: {
+                        Time: "Time",
+                        Addothersubjects: "Add other subjects",
+                        EndTime: "End Time",
+                        StartTime: "Start Time",
+                        ExamDate: "Exam Date",
+                        Subject: "Subject",
+                        Grade: "Grade",
+                        Semester: "Semester",
+                        AcademicYear: "Academic Year",
+                        AddExamSchedule: "Add Exam Schedule",
+                        Edit: "Edit Exam Schedule",
+                        ExamScheduleDetails: "   Exam Schedule Details ",
+                        DeleteSchedule: " Delete Schedule  ",
+                        ExamSchedule: " Exam Schedules",
                     },
-                    gradesm:{
-                        TotalDegree:"Total Degree",
-                        FinalDegree:"Final Degree",
-                        MidtermDegree:"Midterm Degree",
-                        AcademicNumber:"Academic Number",
-                        StudentName:"Student Name",
-                        ExporttoCSV:"Export to CSV",
-                        Nodatafound:"No data found for the given criteria.",
-                        NoResultsFound:"No Results Found",
-                        Search:"Search",
-                        Subject:"Subject",
-                        Class:"Class",
-                        Grade:"Grade",
-                        SearchResults:"Search for Results",
-                        Grades:"Grades",
-                        Resultsfor:"Results for"
+                    gradesm: {
+                        TotalDegree: "Total Degree",
+                        FinalDegree: "Final Degree",
+                        MidtermDegree: "Midterm Degree",
+                        AcademicNumber: "Academic Number",
+                        StudentName: "Student Name",
+                        ExporttoCSV: "Export to CSV",
+                        Nodatafound: "No data found for the given criteria.",
+                        NoResultsFound: "No Results Found",
+                        Search: "Search",
+                        Subject: "Subject",
+                        Class: "Class",
+                        Grade: "Grade",
+                        SearchResults: "Search for Results",
+                        Grades: "Grades",
+                        Resultsfor: "Results for"
                     },
 
                     ////////////////////////////////Admin//////////////////////////////////////////////////////////
@@ -1206,11 +1206,11 @@ i18n
                         "filterOptions": {
                             "name": "Name",
                             "gender": "Gender",
-                            "email":"Email",
-                            "subject":"Subject",
-                            "Class":"Class",
-                            "Teacher":"Teacher",
-                            "AcademicYear":"Academic Year ",
+                            "email": "Email",
+                            "subject": "Subject",
+                            "Class": "Class",
+                            "Teacher": "Teacher",
+                            "AcademicYear": "Academic Year ",
                         },
                     },
                     "studentHeader": {
@@ -1220,7 +1220,7 @@ i18n
                     "teacherHeader": {
                         "add": "Add Teacher",
                         "searchPlaceholder": "Search for a teacher by name , email , gender or subject ",
-                        "searchPlaceholder1":"Search for a class teacher by class, subject, teacher, or academic year"
+                        "searchPlaceholder1": "Search for a class teacher by class, subject, teacher, or academic year"
                     },
                     "parentHeader": {
                         "add": "Add Parent",
@@ -1241,55 +1241,55 @@ i18n
                         "gender": "Gender",
                         "phone": "Phone",
                         "actions": "Actions",
-                        "Class":"Class",
-                        "StudentID":"Student ID",
-                        "AcademicNumber":"Academic Number",
-                         "subject":"Subject",
-                         "teacher":"Teacher",
-                        "AcademicYear":"Academic Year "
-                      },
+                        "Class": "Class",
+                        "StudentID": "Student ID",
+                        "AcademicNumber": "Academic Number",
+                        "subject": "Subject",
+                        "teacher": "Teacher",
+                        "AcademicYear": "Academic Year "
+                    },
                     "adminTable": {
                         "deleteConfirmation": "Are you sure you want to delete this admin?",
                         "noAdminsFound": {
-                          "title": "No Admin Found",
-                          "description": "It seems like there are no admins in the database at the moment."
+                            "title": "No Admin Found",
+                            "description": "It seems like there are no admins in the database at the moment."
                         }
-                      },
-                      "parentTable": {
+                    },
+                    "parentTable": {
                         "deleteConfirmation": "Are you sure you want to delete this parent?",
                         "noParentsFound": {
-                          "title": "No Parent Found",
-                          "description": "It seems like there are no parentS in the database at the moment."
+                            "title": "No Parent Found",
+                            "description": "It seems like there are no parentS in the database at the moment."
                         }
-                      },
-                      "managerTable": {
+                    },
+                    "managerTable": {
                         "deleteConfirmation": "Are you sure you want to delete this manager?",
                         "noManagersFound": {
-                          "title": "No Manager Found",
-                          "description": "It seems like there are no managers in the database at the moment."
+                            "title": "No Manager Found",
+                            "description": "It seems like there are no managers in the database at the moment."
                         }
-                      },
-                      "studentTable": {
+                    },
+                    "studentTable": {
                         "deleteConfirmation": "Are you sure you want to delete this student?",
                         "noStudentsFound": {
-                          "title": "No Student Found",
-                          "description": "It seems like there are no students in the database at the moment."
+                            "title": "No Student Found",
+                            "description": "It seems like there are no students in the database at the moment."
                         }
-                      },
-                      "teacherTable": {
+                    },
+                    "teacherTable": {
                         "deleteConfirmation": "Are you sure you want to delete this teacher?",
                         "deleteConfirmation1": "Are you sure you want to delete this Class teacher?",
                         "noTeachersFound": {
-                          "title": "No Teacher Found",
-                          "description": "It seems like there are no teachers in the database at the moment.",
-                           "title1": "No Class Teacher Found",
-                          "description1": "It seems like there are no class teachers in the database at the moment."
+                            "title": "No Teacher Found",
+                            "description": "It seems like there are no teachers in the database at the moment.",
+                            "title1": "No Class Teacher Found",
+                            "description1": "It seems like there are no class teachers in the database at the moment."
                         }
-                      },
-                      "formLabels": {
+                    },
+                    "formLabels": {
                         "fullName": "Full Name",
                         "email": "Email Address",
-                        "emailAddress":"Email Address",
+                        "emailAddress": "Email Address",
                         "gender": "Gender",
                         "password": "Password",
                         "phoneNumber": "Phone Number",
@@ -1298,81 +1298,439 @@ i18n
                         "dateOfBirth": "Date of Birth",
                         "grade": "Grade",
                         "address": "Address",
-                        "StudentName":" Student Name",
-                        "SelectStudentID":"Select StudentID",
-                        "UploadStudents":" Upload Students ",
-                        "UploadExcelFile":" Upload Excel File "
-                      },
-                      "placeholders": {
+                        "StudentName": " Student Name",
+                        "SelectStudentID": "Select StudentID",
+                        "UploadStudents": " Upload Students ",
+                        "UploadExcelFile": " Upload Excel File "
+                    },
+                    "placeholders": {
                         "fullName": "Enter full name",
                         "email": "Enter email address",
                         "password": "Enter password",
                         "password1": "Enter new password (leave blank to keep current password)",
                         "phoneNumber": "Enter phone number",
-                         "enter": "Enter",
-                         "SaveChanges": "Save Changes",
-                         "Updating": "Updating...",
-                      },
-                      "genderOptions": {
+                        "enter": "Enter",
+                        "SaveChanges": "Save Changes",
+                        "Updating": "Updating...",
+                    },
+                    "genderOptions": {
                         "select": "Select Gender",
                         "male": "Male",
                         "female": "Female",
-                      },
-                      "gradeOptions": {
+                    },
+                    "gradeOptions": {
                         "select": "Select Grade"
-                      },
-                      "subjectOptions": {
+                    },
+                    "subjectOptions": {
                         "select": "Select Subject",
-                        "loading":"Loading subjects..."
-                      },
-                      "validation": {
+                        "loading": "Loading subjects..."
+                    },
+                    "validation": {
                         "requiredFields": "Please fill in all the fields.",
                         "phoneValidation": "Phone number must be exactly 11 digits.",
                         "errorMessage": "Something went wrong. Please try again.",
-                        "emailValidation":"Email already exists. Please use another email.",
-                        "addsuccessstudent":"Student added successfully!",
-                        "nodata":"No data found in the uploaded file",
-                        "addsuccessstudents":"students added successfully!",
-                        "addsuccessstudents1":"students added successfully. Waiting for",
-                        "addsuccessstudents2":" students to be added.",
-                        "addfailstudents":"Failed to add the following students",
-                      },
-                      "datatype":{
-                        "AcademicData":"Academic Data",
-                        "PersonalData":"Personal Data"
-                      },
-                      "teacherdata":{
-                        "Teacher":"Teacher",
-                        "SelectTeacher":"Select Teacher",
-                        "Class":"Class",
-                        "SelectClass":"Select Class",
-                        "SubmitAcademicData":"Submit Academic Data",
-                        "AssignTeacherInfo":" Assign Teacher Info",
-                        "AssignTeacher":"Assign Teacher",
-                        "Addanother":"Add another",
-                        "SelectGrade":"Select Grade",
-                        "grade":"grade",
-                        "Subject":"Subject",
-                        "Selectsubject":" Select subject",
-                        "NoTeacherAssigned":"No Teacher Assigned",
-                        "NoGrade":"No Grade",
-                        "Classnotfound":"Class not found",
-                        "ClassAcademicYear":"Class-Academic Year",
-                        "SelectTeacherSubject":"Select Teacher-Subject",
-                        "SelectClassAcademicYear":"Select Class-Academic Year",
-                        "TeacherSubject":" Teacher-Subject",
-                      },
-                      "edit":{
-                        "admin":"Edit Admin",
-                        "manager":"Edit Manager",
-                        "parent":"Edit Parent",
-                        "student":"Edit Student",
-                        "teacher":"Edit Teacher",
-                        "classteacher":"Edit Class Teacher",
-                        "UpdateStudent":"Update Student"
-                      }
+                        "emailValidation": "Email already exists. Please use another email.",
+                        "addsuccessstudent": "Student added successfully!",
+                        "nodata": "No data found in the uploaded file",
+                        "addsuccessstudents": "students added successfully!",
+                        "addsuccessstudents1": "students added successfully. Waiting for",
+                        "addsuccessstudents2": " students to be added.",
+                        "addfailstudents": "Failed to add the following students",
+                    },
+                    "datatype": {
+                        "AcademicData": "Academic Data",
+                        "PersonalData": "Personal Data"
+                    },
+                    "teacherdata": {
+                        "Teacher": "Teacher",
+                        "SelectTeacher": "Select Teacher",
+                        "Class": "Class",
+                        "SelectClass": "Select Class",
+                        "SubmitAcademicData": "Submit Academic Data",
+                        "AssignTeacherInfo": " Assign Teacher Info",
+                        "AssignTeacher": "Assign Teacher",
+                        "Addanother": "Add another",
+                        "SelectGrade": "Select Grade",
+                        "grade": "grade",
+                        "Subject": "Subject",
+                        "Selectsubject": " Select subject",
+                        "NoTeacherAssigned": "No Teacher Assigned",
+                        "NoGrade": "No Grade",
+                        "Classnotfound": "Class not found",
+                        "ClassAcademicYear": "Class-Academic Year",
+                        "SelectTeacherSubject": "Select Teacher-Subject",
+                        "SelectClassAcademicYear": "Select Class-Academic Year",
+                        "TeacherSubject": " Teacher-Subject",
+                    },
+                    "edit": {
+                        "admin": "Edit Admin",
+                        "manager": "Edit Manager",
+                        "parent": "Edit Parent",
+                        "student": "Edit Student",
+                        "teacher": "Edit Teacher",
+                        "classteacher": "Edit Class Teacher",
+                        "UpdateStudent": "Update Student"
+                    },
+                    //term
+                    "termHeader": {
+                        "title": "Terms",
+                        "addButton": "Add Term"
+                    },
+                    "termList": {
+                        "noAcademicYear": "No Academic Year Available",
+                        "noSemester": "No Semester Available",
+                        "deleteConfirmation": "Are you sure you want to delete this term?",
+                        "semesterNames": {
+                            "Semester 1": "Semester 1",
+                            "Semester 2": "Semester 2",
+                        },
+                        "emptyState": {
+                            "title": "No Terms Found",
+                            "description": "It seems like there are no Terms available at the moment. Please check back later or add new terms."
+                        }
+                    },
+                    "termForm": {
+                        "title": "Add Term",
+                        "labels": {
+                            "termName": "Term Name",
+                            "academicYear": "Academic Year"
+                        },
+                        "placeholders": {
+                            "selectTerm": "Select Term",
+                            "selectYear": "Select Year",
+                            "noYearsAvailable": "No academic years available"
+                        },
+                        "options": {
+                            "semester1": "Semester 1",
+                            "semester2": "Semester 2"
+                        },
+                        "submitButton": "Add Term",
+                        "errorMessage": "An error occurred. Please try again."
+                    },
+                    "editTermForm": {
+                        "title": "Edit Term",
+                        "labels": {
+                            "selectTerm": "Select Term",
+                            "selectAcademicYear": "Select Academic Year"
+                        },
+                        "placeholders": {
+                            "selectTerm": "-- Select Term --",
+                            "selectAcademicYear": "-- Select Academic Year --"
+                        },
+                        "options": {
+                            "semester1": "Semester 1",
+                            "semester2": "Semester 2"
+                        },
+                        "submitButton": "Update Term",
+                        "errorMessages": {
+                            "requiredFields": "Please fill in all fields",
+                            "updateFailed": "Failed to update term"
+                        }
+                    },
+                    //subjects
+                    "subjectsList": {
+                        "deleteConfirmation": "Are you sure you want to delete this subject?",
+                        "deleteSuccess": "Subject deleted successfully!",
+                        "emptyState": {
+                            "title": "No Subjects Found",
+                            "description": "It seems like there are no subjects available at the moment. Please check back later or add new subjects."
+                        },
+                        "subjectNames": {
+                            "Arabic": "Arabic",
+                            "English": "English",
+                            "Math": "Math",
+                            "Science": "Science",
+                            "History": "History"
+                        }
+                    },
+                    "subjectsHeader": {
+                        "title": "Subjects",
+                        "addButton": "Add Subject"
+                    },
+                    "addSubject": {
+                        "title": "Add Subject",
+                        "labels": {
+                            "subjectName": "Enter Subject Name"
+                        },
+                        "placeholders": {
+                            "subjectName": "Enter subject name"
+                        },
+                        "buttons": {
+                            "submit": "Add Subject"
+                        },
+                        "messages": {
+                            "success": "Subject added successfully!"
+                        }
+                    }, "subjectManagement": {
+                        "tabs": {
+                            "add": {
+                                "title": "Add Subject",
+                                "number": "1"
+                            },
+                            "assign": {
+                                "title": "Assign Subject",
+                                "number": "2"
+                            }
+                        }
+                    },
+                    "subjectHeader": {
+                        "title": "Subjects",
+                        "buttons": {
+                            "export": "Export CSV",
+                            "add": "Add Subject"
+                        },
+                        "filters": {
+                            "default": "Select Filter",
+                            "term": "Term",
+                            "grade": "Grade"
+                        },
+                        "search": {
+                            "placeholder": "Search by term or grade"
+                        }
+                    },
+                    "assignSubject": {
+                        "title": "Assign Subject",
+                        "labels": {
+                            "subject": "Select Subject",
+                            "grade": "Select Grade",
+                            "semester": "Select Semester"
+                        },
+                        "placeholders": {
+                            "subject": "-- Select Subject --",
+                            "grade": "-- Select Grade --",
+                            "semester": "-- Select Semester --"
+                        },
+                        "buttons": {
+                            "submit": "Assign Subject",
+                            "loading": "Loading..."
+                        },
+                        "errors": {
+                            "requiredFields": "Please fill in all fields"
+                        }
+                    },
+                    "assignedSubjects": {
+                        "tableHeaders": {
+                            "subject": "Subject",
+                            "grade": "Grade",
+                            "term": "Term",
+                            "actions": "Actions"
+                        },
+                        "emptyState": {
+                            "title": "No Subjects Found",
+                            "description": "It seems like there are no subjects in the database at the moment."
+                        },
+                        "deleteConfirmation": "Are you sure you want to delete this subject?",
+                        "unknownGrade": "Unknown"
+                    },
+                    "editAssignedSubject": {
+                        "title": "Edit Assigned Subject",
+                        "labels": {
+                            "subject": "Select Subject",
+                            "grade": "Select Grade",
+                            "semester": "Select Semester"
+                        },
+                        "placeholders": {
+                            "subject": "-- Select Subject --",
+                            "grade": "-- Select Grade --",
+                            "semester": "-- Select Semester --"
+                        },
+                        "buttons": {
+                            "submit": "Update Subject"
+                        },
+                        "messages": {
+                            "requiredFields": "Please fill in all fields",
+                            "success": "Subject updated successfully",
+                            "error": "Failed to update subject"
+                        }
+                    },
+                    "editSubject": {
+                        "title": "Edit Subject",
+                        "labels": {
+                            "subjectName": "Enter Subject Name"
+                        },
+                        "placeholders": {
+                            "subjectName": "Enter subject name"
+                        },
+                        "buttons": {
+                            "submit": "Save Changes"
+                        },
+                        "messages": {
+                            "success": "Subject updated successfully",
+                            "error": "Failed to update subject"
+                        }
+                    },
+                    //academic year
+                    "academicYear": {
+                        "form": {
+                            "title": "Add Academic Year",
+                            "labels": {
+                                "startYear": "Start Year",
+                                "endYear": "End Year"
+                            },
+                            "placeholders": {
+                                "startYear": "Start Year (e.g., 2023)",
+                                "endYear": "End Year (e.g., 2024)"
+                            },
+                            "buttons": {
+                                "add": "Add Year",
+                                "update": "Update Year"
+                            }
+                        },
+                        "editForm": {
+                            "title": "Edit Year"
+                        },
+                        "list": {
+                            "title": "All Years",
+                            "addButton": "Add Year",
+                            "deleteConfirmation": "Are you sure you want to delete this academic year?",
+                            "emptyState": {
+                                "title": "No Academic Years Found",
+                                "description": "It seems like there are no academic years available at the moment. Please check back later or add new academic years."
+                            }
+                        }
+                    },
+                    //schedule
+                    "schedule": {
+                        "header": {
+                            "title": "Schedule",
+                            "export": "Export CSV",
+                            "add": "Add Schedule",
+                            "filter": {
+                                "select": "Select Filter",
+                                "subject": "Subject",
+                                "day": "Day",
+                                "time": "Time"
+                            },
+                            "search": "Search for a schedule by subject, day, or time"
+                        },
+                        "table": {
+                            "columns": {
+                                "subject": "Subject Name",
+                                "teacher": "Teacher",
+                                "grade": "Grade",
+                                "day": "Day",
+                                "from": "From",
+                                "to": "To",
+                                "actions": "Actions"
+                            },
+                            "noData": {
+                                "title": "No Schedules Found",
+                                "message": "It seems like there are no schedules in the database at the moment."
+                            },
+                            "deleteConfirm": "Are you sure you want to delete this schedule?"
+                        },
+                        "form": {
+                            "addTitle": "Add Schedule",
+                            "editTitle": "Update Schedule",
+                            "fields": {
+                                "academicYear": "Academic Year",
+                                "semester": "Semester Name",
+                                "subject": "Subject Name",
+                                "teacher": "Teacher Name",
+                                "grade": "Grade",
+                                "class": "Class",
+                                "day": "Day",
+                                "from": "From",
+                                "to": "To"
+                            },
+                            "placeholders": {
+                                "selectAcademicYear": "Select Academic Year",
+                                "selectSemester": "Select semester",
+                                "selectSubject": "Select subject",
+                                "selectTeacher": "Select teacher",
+                                "selectGrade": "Select grade",
+                                "selectClass": "Select class",
+                                "selectDay": "Select day"
+                            },
+                            "days": {
+                                "monday": "Monday",
+                                "tuesday": "Tuesday",
+                                "wednesday": "Wednesday",
+                                "thursday": "Thursday",
+                                "friday": "Friday"
+                            },
+                            "submit": {
+                                "add": "Add Schedule",
+                                "update": "Update Schedule"
+                            },
+                            "messages": {
+                                "successAdd": "Schedule added successfully!",
+                                "successUpdate": "Schedule updated successfully!",
+                                "noChanges": "No changes detected.",
+                                "error": "An error occurred"
+                            }
+                        }
+                    },
+                    //grade
+                    "grade": {
+                        "gradeNames": {
+                            "Grade 1": "Grade 1",
+                            "Grade 2": "Grade 2",
+                            "Grade 3": "Grade 3",
+                            "Grade 4": "Grade 4",
+                            "Grade 5": "Grade 5",
+                            "Grade 6": "Grade 6",
+                            "Grade 7": "Grade 7",
+                            "Grade 8": "Grade 8",
+                            "Grade 9": "Grade 9",
+                            "Grade 10": "Grade 10",
+                            "Grade 11": "Grade 11",
+                            "Grade 12": "Grade 12"
+                          },
+                        "header": {
+                            "title": "Grades",
+                            "add": "Add Grade"
+                        },
+                        "toggle": {
+                            "add": "Add Grade",
+                            "assign": "Assign Grade"
+                        },
+                        "form": {
+                            "addTitle": "Add Grade",
+                            "editTitle": "Edit Grade",
+                            "assignTitle": "Assign Grade",
+                            "editAssignTitle": "Edit Assigned Grade",
+                            "fields": {
+                                "gradeName": "Grade Name",
+                                "selectGrade": "Select Grade",
+                                "academicYear": "Academic Year",
+                                "enterName": "Enter Grade Name"
+                            },
+                            "placeholders": {
+                                "enterName": "Enter grade name",
+                                "selectGrade": "-- Select Grade --",
+                                "selectYear": "-- Select Academic Year --"
+                            },
+                            "buttons": {
+                                "add": "Add Grade",
+                                "save": "Save Changes",
+                                "assign": "Assign Grade",
+                                "update": "Update Grade"
+                            },
+                            "messages": {
+                                "successAdd": "Grade added successfully!",
+                                "successUpdate": "Grade updated successfully",
+                                "successAssign": "Grade assigned successfully",
+                                "error": "Please fill in all fields",
+                                "deleteConfirm": "Are you sure you want to delete this grade?",
+                                "noGrades": "No Grades Found",
+                                "noGradesMessage": "It seems like there are no grades available at the moment. Please check back later or add new grades."
+                            }
+                        },
+                        "table": {
+                            "columns": {
+                                "grade": "Grade",
+                                "academicYear": "Academic Year",
+                                "actions": "Actions"
+                            },
+                            "unknown": "Unknown",
+                            "loading": "Loading...",
+                            "error": "Error loading data"
+                        }
+                    },
 
-                 
+
+
 
 
                 }
@@ -1412,7 +1770,7 @@ i18n
                     GradeManagements: "الدرجات",
                     Activities: "الأنشطة",
                     Library: "المكتبة",
-                    SearchMangerPage:"بحث فى صفح المدير",
+                    SearchMangerPage: "بحث فى صفح المدير",
                     //Footer
                     LearnGrawSuccess: "تعلّم، نمُ، نجاح",
                     EmpowerGrowth: "تمكين النمو",
@@ -2280,7 +2638,7 @@ i18n
                     dashboardteacher: {
                         Mailbox: "صندوق البريد",
                         DiscussionRooms: "غرف النقاش",
-                        mainCategories:"العناصر الرئيسية",
+                        mainCategories: "العناصر الرئيسية",
                         CustomLibraries: "المكتبات المخصصة",
                         AcademicCalendar: "التقويم الأكاديمي",
                         Welcome: "اهلا",
@@ -2459,70 +2817,70 @@ i18n
                     },
 
                     //////////////////////////////////////////manager/////////////////////////////////////
-                    dashboardm:{
-                        AbsenceStatistics:"إحصائيات الغياب",
-                        GradesStatistics:"إحصائيات الدرجات",
-                        GradesAbsenceStatistics:"إحصائيات الدرجات والغياب",
-                        Ranks:"الترتيب",
-                        TopStudents:"أفضل الطلاب",
-                        TopTeachers:"أفضل المعلمين",
-                        Subject:"المادة",
-                        Badge:"الشارة",
-                        TotalPoints:"إجمالي النقاط",
-                        Grade:"الصف",
-                        AcademicNumber:"الرقم الأكاديمي",
-                        Name:"الاسم",
-                        Rank:"الترتيب",
+                    dashboardm: {
+                        AbsenceStatistics: "إحصائيات الغياب",
+                        GradesStatistics: "إحصائيات الدرجات",
+                        GradesAbsenceStatistics: "إحصائيات الدرجات والغياب",
+                        Ranks: "الترتيب",
+                        TopStudents: "أفضل الطلاب",
+                        TopTeachers: "أفضل المعلمين",
+                        Subject: "المادة",
+                        Badge: "الشارة",
+                        TotalPoints: "إجمالي النقاط",
+                        Grade: "الصف",
+                        AcademicNumber: "الرقم الأكاديمي",
+                        Name: "الاسم",
+                        Rank: "الترتيب",
 
                     },
-                    schoolhubs:{
-                        AddSchoolHubs:"اضافة مركز مدرسي" ,
-                        Class:"الفصل",
-                        Grade:"الصف",
-                        Email:"الايميل",
-                        Phone:"رقم التليفون",
-                        AddPrize:"اضافة جائزة اخرى",
-                        EditSchoolHub:"تحرير المركز المدرسي",
-                        
+                    schoolhubs: {
+                        AddSchoolHubs: "اضافة مركز مدرسي",
+                        Class: "الفصل",
+                        Grade: "الصف",
+                        Email: "الايميل",
+                        Phone: "رقم التليفون",
+                        AddPrize: "اضافة جائزة اخرى",
+                        EditSchoolHub: "تحرير المركز المدرسي",
+
                     },
-                    attendanse:{
-                        Classes:"الفصول",
-                        Search:"ابحث بواسطة الفصل او الصف ...",
-                        ClassData:"بيانات الفصل",
-                        Noattendance:"لا يوجد غياب مسجل على هذا التاريخ",
+                    attendanse: {
+                        Classes: "الفصول",
+                        Search: "ابحث بواسطة الفصل او الصف ...",
+                        ClassData: "بيانات الفصل",
+                        Noattendance: "لا يوجد غياب مسجل على هذا التاريخ",
                     },
-                    schedulem:{
-                        Time:"الوقت",
-                        Addothersubjects:"اضافة مادة اخرى",
-                        EndTime:" وقت الانتهاء",
-                        StartTime:"وقت البدأ",
-                        ExamDate:"تاريخ الامتحان",
-                        Subject:"المادة",
-                        Grade:"الصف",
-                        Semester:"الترم",
-                        AcademicYear:"السنة الدراسية",
-                        AddExamSchedule:"اضافة جدول الامتحان",
-                        Edit:"تحرير جدول الامتحان",
-                        ExamScheduleDetails:" تفاصيل جدول الامتحان ",
-                        DeleteSchedule:"حذف جدول الامتحان ",
-                        ExamSchedule:" جدول الامتحانات",
+                    schedulem: {
+                        Time: "الوقت",
+                        Addothersubjects: "اضافة مادة اخرى",
+                        EndTime: " وقت الانتهاء",
+                        StartTime: "وقت البدأ",
+                        ExamDate: "تاريخ الامتحان",
+                        Subject: "المادة",
+                        Grade: "الصف",
+                        Semester: "الترم",
+                        AcademicYear: "السنة الدراسية",
+                        AddExamSchedule: "اضافة جدول الامتحان",
+                        Edit: "تحرير جدول الامتحان",
+                        ExamScheduleDetails: " تفاصيل جدول الامتحان ",
+                        DeleteSchedule: "حذف جدول الامتحان ",
+                        ExamSchedule: " جدول الامتحانات",
                     },
-                    gradesm:{
-                        TotalDegree:"الدرجة الكلية",
-                        FinalDegree:"الدرجة النهائية",
-                        MidtermDegree:"درجة منتصف الفصل الدراسي",
-                        AcademicNumber:"الرقم الأكاديمي",
-                        StudentName:"اسم الطالب",
-                        ExporttoCSV:"تصدير إلى CSV",
-                        Nodatafound:"لم يتم العثور على بيانات للمعايير المحددة.",
-                        NoResultsFound:"لم يتم العثور على نتائج",
-                        Search:"بحث",
-                        Subject:"المادة",
-                        Class:"الفصل",
-                        Grade:"الصف",
-                        SearchResults:"نتائج البحث",
-                        Grades:"الدرجات",
-                        Resultsfor:"نتيجة"
+                    gradesm: {
+                        TotalDegree: "الدرجة الكلية",
+                        FinalDegree: "الدرجة النهائية",
+                        MidtermDegree: "درجة منتصف الفصل الدراسي",
+                        AcademicNumber: "الرقم الأكاديمي",
+                        StudentName: "اسم الطالب",
+                        ExporttoCSV: "تصدير إلى CSV",
+                        Nodatafound: "لم يتم العثور على بيانات للمعايير المحددة.",
+                        NoResultsFound: "لم يتم العثور على نتائج",
+                        Search: "بحث",
+                        Subject: "المادة",
+                        Class: "الفصل",
+                        Grade: "الصف",
+                        SearchResults: "نتائج البحث",
+                        Grades: "الدرجات",
+                        Resultsfor: "نتيجة"
                     },
                     ///////////////////////////////////////////////////Admin///////////////////////////////////////////
 
@@ -2578,92 +2936,92 @@ i18n
                         "exportCSV": "تصدير CSV",
                         "selectFilter": "اختر تصفية",
                         "filterOptions": {
-                          "name": "الاسم",
-                          "gender": "النوع",
-                          "email":"الايميل",
-                          "subject":"الماده",
-                          "Class":"الفصل",
-                          "Teacher":"المدرس",
-                          "AcademicYear":"الرقم ألاكاديمي",
+                            "name": "الاسم",
+                            "gender": "النوع",
+                            "email": "الايميل",
+                            "subject": "الماده",
+                            "Class": "الفصل",
+                            "Teacher": "المدرس",
+                            "AcademicYear": "الرقم ألاكاديمي",
                         },
-                      },
-                      "studentHeader":{
+                    },
+                    "studentHeader": {
                         "add": "إضافة طالب",
                         "searchPlaceholder": "ابحث عن طالب بالاسم أو النوع"
-                      },
-                      "teacherHeader":{
+                    },
+                    "teacherHeader": {
                         "add": "إضافة مدرس",
                         "searchPlaceholder": "ابحث عن مدرس بالاسم أو البريد الإلكتروني او النوع او الماده",
-                        "searchPlaceholder1":"ابحث عن معلم صف حسب الفصل أو المادة أو المعلم أو السنة الدراسية"
-                      },
-                      "parentHeader":{
+                        "searchPlaceholder1": "ابحث عن معلم صف حسب الفصل أو المادة أو المعلم أو السنة الدراسية"
+                    },
+                    "parentHeader": {
                         "add": "إضافة ولي أمر",
                         "searchPlaceholder": " ابحث عن ولي أمر بالاسم أو البريد الإلكتروني او النوع"
-                      },
-                      "managerHeader":{
+                    },
+                    "managerHeader": {
                         "add": "إضافة مدير",
                         "searchPlaceholder": " ابحث عن مدير بالاسم أو البريد الإلكتروني او النوع"
-                      },
-                      "adminHeader":{
+                    },
+                    "adminHeader": {
                         "add": "إضافة مشرف",
                         "searchPlaceholder": " ابحث عن مشرف بالاسم أو البريد الإلكتروني او النوع"
-                      },
-                      //table
-                      "tableHeaders": {
+                    },
+                    //table
+                    "tableHeaders": {
                         "name": "الاسم",
                         "email": "البريد الإلكتروني",
                         "gender": "النوع",
                         "phone": "الهاتف",
                         "actions": "الإجراءات",
-                        "Class":"الصف",
-                        "StudentID":"معرف الطالب",
-                        "AcademicNumber":"الرقم الاكاديمي ",
-                        "subject":"الماده",
-                        "teacher":"المدرس",
-                        "AcademicYear":"السنه الاكاديميه"
-                      },
-                      "adminTable": {
+                        "Class": "الصف",
+                        "StudentID": "معرف الطالب",
+                        "AcademicNumber": "الرقم الاكاديمي ",
+                        "subject": "الماده",
+                        "teacher": "المدرس",
+                        "AcademicYear": "السنه الاكاديميه"
+                    },
+                    "adminTable": {
                         "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المشرف؟",
                         "noAdminsFound": {
-                          "title": "لا يوجد مشرفون",
-                          "description": "يبدو أنه لا يوجد مشرفون في قاعدة البيانات حالياً."
+                            "title": "لا يوجد مشرفون",
+                            "description": "يبدو أنه لا يوجد مشرفون في قاعدة البيانات حالياً."
                         }
-                      },
-                      "parentTable": {
+                    },
+                    "parentTable": {
                         "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا الولي ألامر",
                         "noParentsFound": {
-                          "title": "لا يوجد أولياء امور",
-                          "description": "يبدو أنه لا يوجد أولياء أمور في قاعدة البيانات حالياً."
+                            "title": "لا يوجد أولياء امور",
+                            "description": "يبدو أنه لا يوجد أولياء أمور في قاعدة البيانات حالياً."
                         }
-                      },
-                      "managerTable": {
+                    },
+                    "managerTable": {
                         "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المدير",
                         "noManagersFound": {
-                          "title": "لا يوجد مديرين",
-                          "description": "يبدو أنه لا يوجد مديرين في قاعدة البيانات حالياً."
+                            "title": "لا يوجد مديرين",
+                            "description": "يبدو أنه لا يوجد مديرين في قاعدة البيانات حالياً."
                         }
-                      },
-                      "studentTable": {
+                    },
+                    "studentTable": {
                         "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا الطالب",
                         "noStudentsFound": {
-                          "title": "لا يوجد طلبه",
-                          "description": "يبدو أنه لا يوجد طلبه في قاعدة البيانات حالياً."
+                            "title": "لا يوجد طلبه",
+                            "description": "يبدو أنه لا يوجد طلبه في قاعدة البيانات حالياً."
                         }
-                      },
-                      "teacherTable": {
+                    },
+                    "teacherTable": {
                         "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المدرس",
                         "deleteConfirmation1": "هل أنت متأكد أنك تريد حذف هذا المعلم صف",
                         "noTeachersFound": {
-                          "title": "لا يوجد مدرسون",
-                          "description": "يبدو أنه لا يوجد مدرسون في قاعدة البيانات حالياً.",
+                            "title": "لا يوجد مدرسون",
+                            "description": "يبدو أنه لا يوجد مدرسون في قاعدة البيانات حالياً.",
                             "title1": " لا يوجد مدرسون صف",
-                          "description1": "يبدو أنه لا يوجد مدرسون صف  في قاعدة البيانات حالياً."
+                            "description1": "يبدو أنه لا يوجد مدرسون صف  في قاعدة البيانات حالياً."
                         }
-                      },
-                      "formLabels": {
+                    },
+                    "formLabels": {
                         "fullName": "الاسم الكامل",
                         "email": "البريد الإلكتروني",
-                        "emailAddress":"البريد الإلكتروني",
+                        "emailAddress": "البريد الإلكتروني",
                         "gender": "النوع",
                         "password": "كلمة المرور",
                         "phoneNumber": "رقم الهاتف",
@@ -2672,79 +3030,438 @@ i18n
                         "dateOfBirth": "تاريخ الميلاد",
                         "grade": "الصف",
                         "address": "العنوان",
-                        "StudentName":" اسم الطالب",
-                        "SelectStudentID":"اختر معرف الطالب",
-                        "UploadStudents":"تحميل الطلاب",
-                        "UploadExcelFile":"تحميل ملف اكسل"
-                      },
-                      "placeholders": {
+                        "StudentName": " اسم الطالب",
+                        "SelectStudentID": "اختر معرف الطالب",
+                        "UploadStudents": "تحميل الطلاب",
+                        "UploadExcelFile": "تحميل ملف اكسل"
+                    },
+                    "placeholders": {
                         "fullName": "أدخل الاسم الكامل",
                         "email": "أدخل البريد الإلكتروني",
                         "password": "أدخل كلمة المرور",
                         "password1": "أدخل كلمة المرور الجديدة (اتركها فارغة للاحتفاظ بكلمة المرور الحالية)",
                         "phoneNumber": "أدخل رقم الهاتف",
-                          "enter": "أدخل",
-                          "SaveChanges": "حفظ التغيرات",
-                          "Updating": "جارٍ التحديث...",
-                      },
-                      "genderOptions": {
+                        "enter": "أدخل",
+                        "SaveChanges": "حفظ التغيرات",
+                        "Updating": "جارٍ التحديث...",
+                    },
+                    "genderOptions": {
                         "select": "اختر النوع",
                         "male": "ذكر",
                         "female": "أنثى"
-                      },
-                      "gradeOptions": {
+                    },
+                    "gradeOptions": {
                         "select": "اختر الصف"
-                      },
-                      "subjectOptions": {
+                    },
+                    "subjectOptions": {
                         "select": "اختر الماده",
-                        "loading":"تحميل المواد ...."
-                      },
-                      "validation": {
+                        "loading": "تحميل المواد ...."
+                    },
+                    "validation": {
                         "requiredFields": "يرجى ملء جميع الحقول.",
                         "phoneValidation": "يجب أن يتكون رقم الهاتف من 11 رقمًا.",
                         "errorMessage": "حدث خطأ. يرجى المحاولة مرة أخرى.",
-                        "emailValidation":"البريد الإلكتروني موجود بالفعل. يُرجى استخدام بريد إلكتروني آخر.",
-                        "addsuccessstudent":"تم إضافة الطالب بنجاح !",
-                        "nodata":"لم يتم العثور على أي بيانات في الملف الذي تم تحميله",
-                        "addsuccessstudents":"تمت إضافة الطلاب بنجاح.  ",
-                        "addsuccessstudents1":"تمت إضافة الطلاب بنجاح. في انتظار",
-                        "addsuccessstudents2":" الطلاب المراد إضافتهم.",
-                        "addfailstudents":"فشل في إضافة الطلاب التاليين",
-                      },
-                      "datatype":{
-                        "AcademicData":"البيانات الأكاديميه",
-                        "PersonalData":"البيانات الشخصيه"
-                      },
-                      "teacherdata":{
-                        "Teacher":"المدرس",
-                        "SelectTeacher":"اختر المدرس",
-                        "Class":"الفصل",
-                        "SelectClass":"اختر الفصل",
-                        "SubmitAcademicData":"أرسل البيانات ألاكاديميه",
-                        "AssignTeacherInfo":"تعيين معلومات المعلم",
-                        "AssignTeacher":"تعيين المعلم",
-                        "Addanother":"أضف آخر",
-                        "SelectGrade":"اختر الصف",
-                        "grade":"الصف",
-                        "Subject":"الماده",
-                        "Selectsubject":"اختر الماده",
-                        "NoTeacherAssigned":"لم يتم تعيين معلم",
-                        "NoGrade":"لا صف",
-                        "Classnotfound":"لم يتم العثور على الفصل",
-                        "ClassAcademicYear":"الفصل - السنه الدراسيه",
-                        "SelectTeacherSubject":"اختر المدرس - الماده",
-                        "SelectClassAcademicYear":"اختر الفصل - السنه الدراسيه",
-                        "TeacherSubject":"المدرس - الماده",
-                      },
-                      "edit":{
-                        "admin":"تعديل المشرف",
-                        "manager":"تعديل المدير",
-                        "parent":" تعديل ولي ألامر",
-                        "student":" تعديل الطالب",
-                        "teacher":" تعديل المدرس",
-                        "classteacher":" تعديل صف المدرس",
-                        "UpdateStudent":"تحديث الطالب"
-                      }
+                        "emailValidation": "البريد الإلكتروني موجود بالفعل. يُرجى استخدام بريد إلكتروني آخر.",
+                        "addsuccessstudent": "تم إضافة الطالب بنجاح !",
+                        "nodata": "لم يتم العثور على أي بيانات في الملف الذي تم تحميله",
+                        "addsuccessstudents": "تمت إضافة الطلاب بنجاح.  ",
+                        "addsuccessstudents1": "تمت إضافة الطلاب بنجاح. في انتظار",
+                        "addsuccessstudents2": " الطلاب المراد إضافتهم.",
+                        "addfailstudents": "فشل في إضافة الطلاب التاليين",
+                    },
+                    "datatype": {
+                        "AcademicData": "البيانات الأكاديميه",
+                        "PersonalData": "البيانات الشخصيه"
+                    },
+                    "teacherdata": {
+                        "Teacher": "المدرس",
+                        "SelectTeacher": "اختر المدرس",
+                        "Class": "الفصل",
+                        "SelectClass": "اختر الفصل",
+                        "SubmitAcademicData": "أرسل البيانات ألاكاديميه",
+                        "AssignTeacherInfo": "تعيين معلومات المعلم",
+                        "AssignTeacher": "تعيين المعلم",
+                        "Addanother": "أضف آخر",
+                        "SelectGrade": "اختر الصف",
+                        "grade": "الصف",
+                        "Subject": "الماده",
+                        "Selectsubject": "اختر الماده",
+                        "NoTeacherAssigned": "لم يتم تعيين معلم",
+                        "NoGrade": "لا صف",
+                        "Classnotfound": "لم يتم العثور على الفصل",
+                        "ClassAcademicYear": "الفصل - السنه الدراسيه",
+                        "SelectTeacherSubject": "اختر المدرس - الماده",
+                        "SelectClassAcademicYear": "اختر الفصل - السنه الدراسيه",
+                        "TeacherSubject": "المدرس - الماده",
+                    },
+                    "edit": {
+                        "admin": "تعديل المشرف",
+                        "manager": "تعديل المدير",
+                        "parent": " تعديل ولي ألامر",
+                        "student": " تعديل الطالب",
+                        "teacher": " تعديل المدرس",
+                        "classteacher": " تعديل صف المدرس",
+                        "UpdateStudent": "تحديث الطالب"
+                    },
+                    //term
+                    "termHeader": {
+                        "title": "الفصل الدراسي",
+                        "addButton": "إضافة فصل دراسي"
+                    },
+                    "termList": {
+                        "noAcademicYear": "لا يوجد سنة أكاديمية متاحة",
+                        "noSemester": "لا يوجد فصل دراسي متاح",
+                        "semesterNames": {
+                            "Semester 1": "الفصل الدراسي الأول",
+                            "Semester 2": "الفصل الدراسي الثاني",
+                        },
+                        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا الفصل الدراسي؟",
+                        "emptyState": {
+                            "title": "لا توجد فصول دراسية",
+                            "description": "يبدو أنه لا توجد فصول دراسية متاحة حالياً. يرجى التحقق لاحقاً أو إضافة فصول جديدة."
+                        }
+                    },
+                    "termForm": {
+                        "title": "إضافة فصل دراسي",
+                        "labels": {
+                            "termName": "اسم الفصل الدراسي",
+                            "academicYear": "السنة الأكاديمية"
+                        },
+                        "placeholders": {
+                            "selectTerm": "اختر الفصل الدراسي",
+                            "selectYear": "اختر السنة",
+                            "noYearsAvailable": "لا توجد سنوات أكاديمية متاحة"
+                        },
+                        "options": {
+                            "semester1": "الفصل الدراسي الأول",
+                            "semester2": "الفصل الدراسي الثاني"
+                        },
+                        "submitButton": "إضافة فصل دراسي",
+                        "errorMessage": "حدث خطأ. يرجى المحاولة مرة أخرى."
+                    },
+                    "editTermForm": {
+                        "title": "تعديل الفصل الدراسي",
+                        "labels": {
+                            "selectTerm": "اختر الفصل الدراسي",
+                            "selectAcademicYear": "اختر السنة الأكاديمية"
+                        },
+                        "placeholders": {
+                            "selectTerm": "-- اختر الفصل الدراسي --",
+                            "selectAcademicYear": "-- اختر السنة الأكاديمية --"
+                        },
+                        "options": {
+                            "semester1": "الفصل الدراسي الأول",
+                            "semester2": "الفصل الدراسي الثاني"
+                        },
+                        "submitButton": "تحديث الفصل الدراسي",
+                        "errorMessages": {
+                            "requiredFields": "يرجى ملء جميع الحقول",
+                            "updateFailed": "فشل تحديث الفصل الدراسي"
+                        }
+                    },
+                    //subjects
+                    "subjectsList": {
+                        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المقرر؟",
+                        "deleteSuccess": "تم حذف المقرر بنجاح!",
+                        "emptyState": {
+                            "title": "لا توجد مقررات دراسية",
+                            "description": "يبدو أنه لا توجد مقررات دراسية متاحة حالياً. يرجى التحقق لاحقاً أو إضافة مقررات جديدة."
+                        },
+                        "subjectNames": {
+                            "Arabic": "اللغة العربية",
+                            "English": "اللغة الإنجليزية",
+                            "Math": "الرياضيات",
+                            "Science": "العلوم",
+                            "History": "التاريخ"
+                        }
+                    },
+                    "subjectsHeader": {
+                        "title": "المواد الدراسية",
+                        "addButton": "إضافة مادة"
+                    },
+                    "addSubject": {
+                        "title": "إضافة مادة دراسية",
+                        "labels": {
+                            "subjectName": "أدخل اسم المادة"
+                        },
+                        "placeholders": {
+                            "subjectName": "أدخل اسم المادة"
+                        },
+                        "buttons": {
+                            "submit": "إضافة المادة"
+                        },
+                        "messages": {
+                            "success": "تم إضافة المادة بنجاح!"
+                        }
+                    },
+                    "subjectManagement": {
+                        "tabs": {
+                            "add": {
+                                "title": "إضافة مادة",
+                                "number": "١"
+                            },
+                            "assign": {
+                                "title": "تعيين مادة",
+                                "number": "٢"
+                            }
+                        }
+                    },
+                    "subjectHeader": {
+                        "title": "المواد الدراسية",
+                        "buttons": {
+                            "export": "تصدير CSV",
+                            "add": "إضافة مادة"
+                        },
+                        "filters": {
+                            "default": "اختر فلتر",
+                            "term": "الفصل الدراسي",
+                            "grade": "الصف"
+                        },
+                        "search": {
+                            "placeholder": "ابحث حسب الفصل أو الصف"
+                        }
+                    },
+                    "assignSubject": {
+                        "title": "تعيين مادة دراسية",
+                        "labels": {
+                            "subject": "اختر المادة",
+                            "grade": "اختر الصف",
+                            "semester": "اختر الفصل الدراسي"
+                        },
+                        "placeholders": {
+                            "subject": "-- اختر المادة --",
+                            "grade": "-- اختر الصف --",
+                            "semester": "-- اختر الفصل --"
+                        },
+                        "buttons": {
+                            "submit": "تعيين المادة",
+                            "loading": "جاري التحميل..."
+                        },
+                        "errors": {
+                            "requiredFields": "يرجى ملء جميع الحقول"
+                        }
+                    },
+                    "assignedSubjects": {
+                        "tableHeaders": {
+                            "subject": "المادة",
+                            "grade": "الصف",
+                            "term": "الفصل الدراسي",
+                            "actions": "الإجراءات"
+                        },
+                        "emptyState": {
+                            "title": "لا توجد مواد",
+                            "description": "يبدو أنه لا توجد مواد في قاعدة البيانات حالياً."
+                        },
+                        "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذه المادة؟",
+                        "unknownGrade": "غير معروف"
+                    },
+                    "editAssignedSubject": {
+                        "title": "تعديل المادة المخصصة",
+                        "labels": {
+                            "subject": "اختر المادة",
+                            "grade": "اختر الصف",
+                            "semester": "اختر الفصل الدراسي"
+                        },
+                        "placeholders": {
+                            "subject": "-- اختر المادة --",
+                            "grade": "-- اختر الصف --",
+                            "semester": "-- اختر الفصل --"
+                        },
+                        "buttons": {
+                            "submit": "تحديث المادة"
+                        },
+                        "messages": {
+                            "requiredFields": "يرجى ملء جميع الحقول",
+                            "success": "تم تحديث المادة بنجاح",
+                            "error": "فشل تحديث المادة"
+                        }
+                    },
+                    "editSubject": {
+                        "title": "تعديل المادة",
+                        "labels": {
+                            "subjectName": "أدخل اسم المادة"
+                        },
+                        "placeholders": {
+                            "subjectName": "أدخل اسم المادة"
+                        },
+                        "buttons": {
+                            "submit": "حفظ التغييرات"
+                        },
+                        "messages": {
+                            "success": "تم تحديث المادة بنجاح",
+                            "error": "فشل تحديث المادة"
+                        }
+                    },
+                    //academic year
+                    "academicYear": {
+                        "form": {
+                            "title": "إضافة سنة أكاديمية",
+                            "labels": {
+                                "startYear": "سنة البدء",
+                                "endYear": "سنة الانتهاء"
+                            },
+                            "placeholders": {
+                                "startYear": "سنة البدء (مثال: 2023)",
+                                "endYear": "سنة الانتهاء (مثال: 2024)"
+                            },
+                            "buttons": {
+                                "add": "إضافة سنة",
+                                "update": "تحديث السنة"
+                            }
+                        },
+                        "editForm": {
+                            "title": "تعديل السنة"
+                        },
+                        "list": {
+                            "title": "جميع السنوات",
+                            "addButton": "إضافة سنة",
+                            "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذه السنة الأكاديمية؟",
+                            "emptyState": {
+                                "title": "لا توجد سنوات أكاديمية",
+                                "description": "يبدو أنه لا توجد سنوات أكاديمية متاحة حالياً. يرجى التحقق لاحقاً أو إضافة سنوات جديدة."
+                            }
+                        }
+                    },
+                    //schedule
+                    "schedule": {
+                        "header": {
+                            "title": "الجدول",
+                            "export": "تصدير CSV",
+                            "add": "إضافة جدول",
+                            "filter": {
+                                "select": "اختر عامل التصفية",
+                                "subject": "المادة",
+                                "day": "اليوم",
+                                "time": "الوقت"
+                            },
+                            "search": "ابحث عن جدول بالمادة، اليوم أو الوقت"
+                        },
+                        "table": {
+                            "columns": {
+                                "subject": "اسم المادة",
+                                "teacher": "المعلم",
+                                "grade": "الصف",
+                                "day": "اليوم",
+                                "from": "من",
+                                "to": "إلى",
+                                "actions": "الإجراءات"
+                            },
+                            "noData": {
+                                "title": "لا توجد جداول",
+                                "message": "يبدو أنه لا توجد جداول في قاعدة البيانات حالياً."
+                            },
+                            "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذا الجدول؟"
+                        },
+                        "form": {
+                            "addTitle": "إضافة جدول",
+                            "editTitle": "تحديث الجدول",
+                            "fields": {
+                                "academicYear": "السنة الأكاديمية",
+                                "semester": "اسم الفصل الدراسي",
+                                "subject": "اسم المادة",
+                                "teacher": "اسم المعلم",
+                                "grade": "الصف",
+                                "class": "الفصل",
+                                "day": "اليوم",
+                                "from": "من",
+                                "to": "إلى"
+                            },
+                            "placeholders": {
+                                "selectAcademicYear": "اختر السنة الأكاديمية",
+                                "selectSemester": "اختر الفصل الدراسي",
+                                "selectSubject": "اختر المادة",
+                                "selectTeacher": "اختر المعلم",
+                                "selectGrade": "اختر الصف",
+                                "selectClass": "اختر الفصل",
+                                "selectDay": "اختر اليوم"
+                            },
+                            "days": {
+                                "monday": "الإثنين",
+                                "tuesday": "الثلاثاء",
+                                "wednesday": "الأربعاء",
+                                "thursday": "الخميس",
+                                "friday": "الجمعة"
+                            },
+                            "submit": {
+                                "add": "إضافة جدول",
+                                "update": "تحديث الجدول"
+                            },
+                            "messages": {
+                                "successAdd": "تم إضافة الجدول بنجاح!",
+                                "successUpdate": "تم تحديث الجدول بنجاح!",
+                                "noChanges": "لم يتم اكتشاف أي تغييرات.",
+                                "error": "حدث خطأ"
+                            }
+                        }
+                    }
+                    ,
+                    //grade
+                    "grade": {
+                        "gradeNames": {
+                            "Grade 1": "الصف الأول",
+                            "Grade 2": "الصف الثاني",
+                            "Grade 3": "الصف الثالث",
+                            "Grade 4": "الصف الرابع",
+                            "Grade 5": "الصف الخامس",
+                            "Grade 6": "الصف السادس",
+                            "Grade 7": "الصف السابع",
+                            "Grade 8": "الصف الثامن",
+                            "Grade 9": "الصف التاسع",
+                            "Grade 10": "الصف العاشر",
+                            "Grade 11": "الصف الحادي عشر",
+                            "Grade 12": "الصف الثاني عشر"
+                          },
+                        "header": {
+                            "title": "الصفوف",
+                            "add": "إضافة صف"
+                        },
+                        "toggle": {
+                            "add": "إضافة صف",
+                            "assign": "تعيين صف"
+                        },
+                        "form": {
+                            "addTitle": "إضافة صف",
+                            "editTitle": "تعديل الصف",
+                            "assignTitle": "تعيين صف",
+                            "editAssignTitle": "تعديل الصف المعين",
+                            "fields": {
+                                "gradeName": "اسم الصف",
+                                "selectGrade": "اختر الصف",
+                                "academicYear": "السنة الأكاديمية",
+                                "enterName": "أدخل اسم الصف"
+                            },
+                            "placeholders": {
+                                "enterName": "أدخل اسم الصف",
+                                "selectGrade": "-- اختر الصف --",
+                                "selectYear": "-- اختر السنة الأكاديمية --"
+                            },
+                            "buttons": {
+                                "add": "إضافة صف",
+                                "save": "حفظ التغييرات",
+                                "assign": "تعيين الصف",
+                                "update": "تحديث الصف"
+                            },
+                            "messages": {
+                                "successAdd": "تم إضافة الصف بنجاح!",
+                                "successUpdate": "تم تحديث الصف بنجاح",
+                                "successAssign": "تم تعيين الصف بنجاح",
+                                "error": "يرجى ملء جميع الحقول",
+                                "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذا الصف؟",
+                                "noGrades": "لا توجد صفوف",
+                                "noGradesMessage": "يبدو أنه لا توجد صفوف متاحة في الوقت الحالي. يرجى التحقق لاحقًا أو إضافة صفوف جديدة."
+                            }
+                        },
+                        "table": {
+                            "columns": {
+                                "grade": "الصف",
+                                "academicYear": "السنة الأكاديمية",
+                                "actions": "الإجراءات"
+                            },
+                            "unknown": "غير معروف",
+                            "loading": "جاري التحميل...",
+                            "error": "خطأ في تحميل البيانات"
+                        }
+                    },
 
 
 
