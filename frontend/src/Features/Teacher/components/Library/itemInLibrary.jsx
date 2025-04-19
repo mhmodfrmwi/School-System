@@ -32,10 +32,10 @@ const ItemInLibrary = () => {
   }
 
   return (
-    <div className="mx-auto mt-10 max-w-4xl font-poppins rounded-lg bg-white p-6 shadow-lg">
+    <div className="mx-auto mt-10 max-w-4xl font-poppins rounded-lg bg-white dark:bg-DarkManager2 p-6 shadow-lg">
       {generalLibrary ? (
         <div>
-          <h1 className="mb-4 text-3xl font-semibold text-[#117C90]">
+          <h1 className="mb-4 text-3xl font-semibold text-[#117C90] dark:text-white">
             {generalLibrary.title}
           </h1>
           <p className="mb-2 text-xl">
@@ -56,7 +56,7 @@ const ItemInLibrary = () => {
               href={generalLibrary.item_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block rounded-md bg-[#117C90] px-4 py-2 font-semibold text-white transition duration-300 hover:bg-[#0e6a7a]"
+              className="inline-block rounded-md bg-[#117C90] dark:bg-DarkManager px-4 py-2 font-semibold text-white transition duration-300 hover:bg-[#0e6a7a]"
             >
               View Item
             </a>

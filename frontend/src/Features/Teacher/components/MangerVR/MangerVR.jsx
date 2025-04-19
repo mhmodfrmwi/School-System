@@ -78,14 +78,14 @@ const VirtualRoomsManger = () => {
       <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-3 mb-20">
         {/* Main Content */}
         <div className="flex-1 w-full md:w-3/4 p-4 mt-6">
-          <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">{t('virtualRooms.main.title')}</h1>
+          <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 dark:text-DarkManager">{t('virtualRooms.main.title')}</h1>
   
           {/* Filter Buttons */}
           <div className="flex flex-wrap gap-3 mb-6">
             <Button
               variant={activeTab === "all" ? "outline" : "solid"}
               className={`${activeTab === "all"
-                ? "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] text-white"
+                ? "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] text-white dark:bg-gradient-to-r dark:from-DarkManager dark:via-DarkManager dark:to-DarkManager dark:text-white"
                 : "border border-gray-500 text-gray-800"
                 } px-4 md:px-6 py-2 rounded-full`}
               onClick={() => setActiveTab("all")}
@@ -96,7 +96,7 @@ const VirtualRoomsManger = () => {
             <Button
               variant={activeTab === "completed" ? "outline" : "solid"}
               className={`${activeTab === "completed"
-                ? "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] text-white"
+                ? "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:via-DarkManager dark:to-DarkManager text-white"
                 : "border border-gray-500 text-gray-800"
                 } px-4 md:px-6 py-2 rounded-full`}
               onClick={() => setActiveTab("completed")}
@@ -107,7 +107,7 @@ const VirtualRoomsManger = () => {
             <Button
               variant={activeTab === "missed" ? "outline" : "solid"}
               className={`${activeTab === "missed"
-                ? "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] text-white"
+                ? "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:via-DarkManager dark:to-DarkManager text-white"
                 : "border border-gray-500 text-gray-800"
                 } px-4 md:px-6 py-2 rounded-full`}
               onClick={() => setActiveTab("missed")}
@@ -127,7 +127,7 @@ const VirtualRoomsManger = () => {
           {/* No Virtual Rooms Message */}
           {!initialLoading && !loading && displayedRooms.length === 0 && (
             <Card className="border border-gray-200 rounded-xl shadow-sm mb-6 h-[200px] flex items-center justify-center">
-              <CardContent className="text-center p-4 text-gray-600">
+              <CardContent className="text-center p-4 text-gray-600 dark:text-DarkManager">
                 {t('virtualRooms.main.noRooms')}
               </CardContent>
             </Card>
@@ -138,9 +138,9 @@ const VirtualRoomsManger = () => {
             <div className="space-y-4">
               {paginatedRooms.map((room, index) => (
                 <Card key={room._id} className="border border-gray-200 rounded-xl shadow-sm">
-                  <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100">
+                  <CardContent className="flex flex-wrap justify-between items-center p-4 bg-gray-100 ">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 flex items-center justify-center bg-[#cacaca] rounded-full text-[#117C90] font-bold">
+                      <div className="w-10 h-10 flex items-center justify-center bg-[#cacaca] rounded-full text-[#117C90] font-bold dark:bg-DarkManager dark:text-white">
                         {index + 1 + (currentPage - 1) * itemsPerPage}
                       </div>
                       <div>
@@ -155,8 +155,8 @@ const VirtualRoomsManger = () => {
                         variant="solid"
                         className={`text-white px-3 py-2 rounded-lg ${
                           room.status === "completed" || room.studentAttendanceStatus === "attended" || room.studentAttendanceStatus === "missed"
-                            ? "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] cursor-not-allowed"
-                            : "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90]"
+                            ? "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:via-DarkManager dark:to-DarkManager cursor-not-allowed"
+                            : "bg-gradient-to-r from-[#117C90] via-[#117C90] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:via-DarkManager dark:to-DarkManager"
                         }`}
                         disabled={room.status === "completed" || room.studentAttendanceStatus === "attended" || room.studentAttendanceStatus === "missed"}
                         onClick={() => {

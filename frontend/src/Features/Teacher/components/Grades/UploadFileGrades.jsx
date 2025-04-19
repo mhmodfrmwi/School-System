@@ -60,15 +60,15 @@ const UploadFileGrades = () => {
     <div className="mx-auto w-[90%] max-w-4xl font-poppins rounded-lg bg-white p-6 shadow-lg">
       {/* Title Section */}
       <div className="mb-8">
-        <h1 className="font-poppins text-2xl font-bold text-[#117C90]">
+        <h1 className="font-poppins text-2xl font-bold text-[#117C90] dark:text-DarkManager">
           {t('gradest.Gradestudents')}
         </h1>
-        <div className="mt-2 h-1 w-24 rounded-full bg-[#117C90]"></div>
+        <div className="mt-2 h-1 w-24 rounded-full bg-[#117C90] dark:bg-DarkManager"></div>
       </div>
 
       {/* File Upload Section */}
       <div className="mb-8 rounded-lg border border-gray-200 bg-gray-50 p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold text-gray-600">
+        <h2 className="mb-4 text-xl font-semibold text-gray-600 dark:text-DarkManager">
         {t('gradest.UploadGradesFile')}
         </h2>
         <label
@@ -97,7 +97,7 @@ const UploadFileGrades = () => {
         </label>
         <button
           onClick={handleUpload}
-          className="mt-4 w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins font-semibold text-white transition hover:opacity-90"
+          className="mt-4 w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:to-DarkManager px-4 py-2 font-poppins font-semibold text-white transition hover:opacity-90"
         >
         {t('tablesheader.Upload')}
 
@@ -106,14 +106,14 @@ const UploadFileGrades = () => {
 
       {/* Get Students Grades Section */}
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold text-gray-600">
+        <h2 className="mb-4 text-xl font-semibold text-gray-600 dark:text-DarkManager">
           {t('gradest.GetStudentsGrades')}
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <select
             value={examType}
             onChange={(e) => setExamType(e.target.value)}
-            className="w-full rounded-lg border border-[#117C90] p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+            className="w-full rounded-lg border border-[#117C90] p-2 font-poppins focus:outline-none focus:ring-2 focus:ring-[#117C90]  dark:text-DarkManager dark:focus:ring-DarkManager"
           >
             <option value="">{t('gradest.Selectexamtype')}</option>
             <option value="midterm">Midterm</option>
@@ -121,7 +121,7 @@ const UploadFileGrades = () => {
           </select>
           <button
             onClick={handleGetStudentsGrades}
-            className="w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins font-semibold text-white transition hover:opacity-90"
+            className="w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:to-DarkManager px-4 py-2 font-poppins font-semibold text-white transition hover:opacity-90"
           >
           {t('gradest.GetStudentsGrades')}
           </button>

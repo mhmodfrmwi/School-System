@@ -30,8 +30,8 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
         onClick={handlePrevPage}
         className={`px-3 py-2 text-center rounded-lg ${
           currentPage === 1
-            ? "text-[#117C90] cursor-not-allowed"
-            : "bg-[#90AEAE] text-white hover:bg-[#117C90]"
+            ? "text-[#117C90] cursor-not-allowed dark:text-[#043B44]"
+            : "bg-[#90AEAE] text-white hover:bg-[#117C90] dark:bg-[#90AEAE] dark:hover:bg-[#043B44]"
         }`}
         disabled={currentPage === 1}
       >
@@ -43,8 +43,8 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
           onClick={() => onPageChange(page)}
           className={`px-3 py-2 text-center rounded-lg mx-0 text-sm ${
             currentPage === page
-              ? "bg-[#117C90] text-white"
-              : "bg-transparent text-[#117C90] hover:bg-[#117C90] hover:text-white"
+              ? "bg-[#117C90] text-white dark:bg-[#043B44]"
+              : "bg-transparent text-[#117C90] hover:bg-[#117C90] hover:text-white dark:text-[#043B44] dark:hover:bg-[#043B44] dark:hover:text-white"
           }`}
         >
           {page}
@@ -54,8 +54,8 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
         onClick={handleNextPage}
         className={`px-3 py-2 text-center rounded-lg ${
           currentPage === totalPages
-            ? "text-[#117C90] cursor-not-allowed"
-            : "bg-[#90AEAE] text-white hover:bg-[#117C90]"
+            ? "text-[#117C90] cursor-not-allowed dark:text-[#043B44]"
+            : "bg-[#90AEAE] text-white hover:bg-[#117C90] dark:bg-[#90AEAE] dark:hover:bg-[#043B44]"
         }`}
         disabled={currentPage === totalPages}
       >

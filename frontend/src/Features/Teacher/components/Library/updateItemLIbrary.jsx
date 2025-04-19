@@ -43,91 +43,94 @@ const UpdateItemLibrary = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await dispatch(updateLibraryItemById({ id, updatedData: formData }));
-
-      toast.success("Updated library");
+      toast.success(t('libraryItem.updateSuccess') || "Updated library");
     } catch (error) {
-      toast.error(error);
+      toast.error(error?.message || t('libraryItem.updateFailed'));
     }
   };
 
   return (
-    <>
-      <div className="mx-auto flex w-[80%] flex-col px-4 md:px-6 lg:px-0">
-        <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-          {t('libraryt.EditMaterial')}
-        </h1>
-
-        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[190px]"></div>
-      </div>
-      <div className="mx-auto w-[80%] rounded-xl bg-gray-100 p-6 shadow-md">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block font-poppins font-medium">
-            {t('libraryItem.title')} <span className="text-red-500">*</span>
+    <div className="mx-auto mb-10 w-[80%] font-poppins">
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856] dark:text-DarkManager">
+        {t('libraryt.EditMaterial')}
+      </h1>
+      <div className="ml-3 mt-1 h-[4px] w-[150px] rounded-t-md bg-[#244856] dark:bg-DarkManager"></div>
+      <div className="rounded-3xl bg-[#F5F5F5] dark:bg-DarkManager2 p-6 shadow-md">
+        <form onSubmit={handleSubmit} className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              {t('libraryItem.title')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 dark:border-DarkManager bg-white dark:bg-white px-4 py-2 text-gray-900 dark:text-DarkManager focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-DarkManager"
               required
             />
           </div>
-          <div>
-            <label className="block font-poppins font-medium">
-            {t('libraryItem.author')} <span className="text-red-500">*</span>
+
+          <div className="mb-4">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              {t('libraryItem.author')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="author"
               value={formData.author}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 dark:border-DarkManager bg-white dark:bg-white px-4 py-2 text-gray-900 dark:text-DarkManager focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-DarkManager"
               required
             />
           </div>
-          <div>
-            <label className="block font-poppins font-medium">
-            {t('tablesheader.FileUrl')}
-            <span className="text-red-500">*</span>
+
+          <div className="mb-4 sm:col-span-2">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              {t('tablesheader.FileUrl')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="libraryUrl"
               value={formData.libraryUrl}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 dark:border-DarkManager bg-white dark:bg-white px-4 py-2 text-gray-900 dark:text-DarkManager focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-DarkManager"
               required
             />
           </div>
-          <div>
-            <label className="block font-poppins font-medium">{t('libraryItem.type')}</label>
+
+          <div className="mb-4 sm:col-span-2">
+            <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
+              {t('libraryItem.type')}
+            </label>
             <select
               name="type"
               value={formData.type}
               onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90]"
+              className="w-full rounded-2xl border border-gray-300 dark:border-DarkManager bg-white dark:bg-white px-4 py-2 text-gray-900 dark:text-DarkManager focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:focus:ring-DarkManager"
             >
               <option value="PDF">PDF</option>
               <option value="Video">Video</option>
             </select>
           </div>
 
-          <button
-            type="submit"
-            className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-poppins font-medium text-white transition hover:bg-[#0f6b7c]"
-          >
-          {t('tablesheader.Update')}
-          </button>
+          <div className="col-span-1 mt-4 sm:col-span-2">
+            <button
+              type="submit"
+              className="text-md mx-auto block rounded-md bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:from-DarkManager dark:to-DarkManager px-6 py-2 font-medium text-white transition hover:opacity-90"
+            >
+              {t('tablesheader.Update')}
+            </button>
+          </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

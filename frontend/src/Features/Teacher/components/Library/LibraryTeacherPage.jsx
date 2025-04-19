@@ -92,7 +92,7 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
             onClick={() => onPageChange(pageNumber)}
             className={`mx-1 px-4 py-2 ${
               currentPage === pageNumber
-                ? "bg-[#117C90] text-white"
+                ? "bg-[#117C90] text-white dark:bg-DarkManager"
                 : "bg-gray-200"
             } rounded`}
           >
@@ -214,7 +214,7 @@ const LibraryTeacherPage = () => {
     <>
       <div className="m-auto mb-6 grid w-[90%] grid-cols-1 gap-2 rounded-3xl font-poppins bg-gray-100 md:grid-cols-3">
         <button
-          className="flex cursor-pointer items-center justify-center rounded-t-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none md:rounded-3xl"
+          className="flex cursor-pointer items-center justify-center rounded-t-3xl bg-[#117C90] dark:bg-DarkManager py-2 font-medium text-white focus:outline-none md:rounded-3xl"
           onClick={() => navigate("/teacher/teacher-library")}
         >
           <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-white text-[#117C90]">
@@ -224,19 +224,19 @@ const LibraryTeacherPage = () => {
           </button>
 
         <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF]  py-2 font-medium text-[#117C90] dark:text-DarkManager focus:outline-none"
           onClick={() => navigate("/teacher/all-subjects-library")}
         >
-          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] dark:bg-DarkManager text-white">
             2
           </span>
           {t('libraryt.TeacherLibrary')}
           </button>
         <button
-          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] focus:outline-none"
+          className="flex cursor-pointer items-center justify-center rounded-3xl bg-[##EFEFEF] py-2 font-medium text-[#117C90] dark:text-DarkManager focus:outline-none"
           onClick={() => navigate("/teacher/items-in-library")}
         >
-          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] text-white">
+          <span className="mr-2 flex w-6 items-center justify-center rounded-full bg-[#117C90] dark:bg-DarkManager text-white">
             3
           </span>
           {t('libraryt.GeneralLibrary')}
@@ -254,16 +254,16 @@ const LibraryTeacherPage = () => {
 
         {/* Sidebar */}
         <div
-          className={`fixed z-40 mt-[-185px] h-fit min-h-[75vh] w-64 transform border bg-gray-100 p-6 shadow transition-transform duration-300 md:relative md:mt-[0px] ${
+          className={`fixed z-40 mt-[-185px] h-fit min-h-[75vh] w-64 transform border bg-gray-100  p-6 shadow transition-transform duration-300 md:relative md:mt-[0px] ${
             isSidebarOpen ? "translate-x-0" : "ms-[-40px] -translate-x-full"
           } md:translate-x-0`}
         >
-          <h2 className="mb-4 text-xl font-bold text-[#117C90]">
+          <h2 className="mb-4 text-xl font-bold text-[#117C90] dark:text-DarkManager">
           {t('libraryVideos.subjectsTitle')}
           </h2>
           <ul>
             <li
-              className="flex cursor-pointer items-center rounded p-2 hover:bg-gray-200"
+              className="flex cursor-pointer items-center rounded p-2 hover:bg-gray-200 dark:text-DarkManager"
               onClick={() => {
                 setSelectedSubject("all");
                 setCurrentPageAll(1); // Reset pagination for "All" tab
@@ -275,9 +275,9 @@ const LibraryTeacherPage = () => {
                 name="subject"
                 checked={selectedSubject === "all"}
                 onChange={() => setSelectedSubject("all")}
-                className="form-radio h-4 w-4 border-[#117C90] text-[#117C90] focus:ring-[#117C90]"
+                className="form-radio h-4 w-4 border-[#117C90] text-[#117C90] focus:ring-[#117C90] dark:text-DarkManager dark:focus:ring-DarkManager" 
               />
-              <span className="ml-2 text-xl text-[#117C90]">
+              <span className="ml-2 text-xl text-[#117C90] dark:text-DarkManager">
               {t('libraryVideos.all')}
               </span>
             </li>
@@ -294,9 +294,9 @@ const LibraryTeacherPage = () => {
                 name="subject"
                 checked={selectedSubject === "public"}
                 onChange={() => setSelectedSubject("public")}
-                className="form-radio h-4 w-4 border-[#117C90] text-[#117C90] focus:ring-[#117C90]"
+                className="form-radio h-4 w-4 border-[#117C90] text-[#117C90] focus:ring-[#117C90] dark:text-DarkManager dark:focus:ring-DarkManager"
               />
-              <span className="ml-2 text-xl text-[#117C90]">
+              <span className="ml-2 text-xl text-[#117C90] dark:text-DarkManager">
               {t('libraryVideos.public')}
               </span>
             </li>
@@ -315,9 +315,9 @@ const LibraryTeacherPage = () => {
                   name="subject"
                   checked={selectedSubject === subject}
                   onChange={() => setSelectedSubject(subject)}
-                  className="form-radio h-4 w-4 border-[#117C90] text-[#117C90] focus:ring-[#117C90]"
+                  className="form-radio h-4 w-4 border-[#117C90] text-[#117C90] focus:ring-[#117C90] dark:text-DarkManager dark:focus:ring-DarkManager"
                 />
-                <span className="ml-2 text-xl text-[#117C90]">
+                <span className="ml-2 text-xl text-[#117C90] dark:text-DarkManager">
                   {subject.subject}
                 </span>
               </li>
@@ -344,9 +344,9 @@ const LibraryTeacherPage = () => {
               {selectedSubject === "all" && (
                 <div>
                   <div className="flex items-center justify-center md:items-start md:justify-start">
-                    <h2 className="relative mb-8 text-3xl font-bold text-[#117C90]">
+                    <h2 className="relative mb-8 text-3xl font-bold text-[#117C90] dark:text-DarkManager">
                       Library
-                      <span className="absolute bottom-[-9px] left-0 h-[4px] w-[85px] rounded-t-full bg-[#117C90]"></span>
+                      <span className="absolute bottom-[-9px] left-0 h-[4px] w-[85px] rounded-t-full bg-[#117C90] dark:bg-DarkManager"></span>
                     </h2>
                   </div>
                   {allGeneralMaterialVideoPdf.length === 0 ? (
@@ -427,11 +427,11 @@ const LibraryTeacherPage = () => {
                                 </div>
                               </div>
                               <div className="mt-3 flex items-center justify-center gap-4">
-                                <h2 className="text-sm font-semibold">
+                                <h2 className="text-sm font-semibold dark:text-DarkManager">
                                 {item.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "General"}
                                 </h2>
 
-  <span className="inline-flex items-center rounded-full bg-[#117C90] px-2.5 py-0.5 text-xs font-medium text-white">
+  <span className="inline-flex items-center rounded-full bg-[#117C90] dark:bg-DarkManager px-2.5 py-0.5 text-xs font-medium text-white">
     👁️ {item.views} Views
   </span>
 </div>
@@ -456,9 +456,9 @@ const LibraryTeacherPage = () => {
               {selectedSubject === "public" && (
                 <div>
                   <div className="flex items-center justify-center md:items-start md:justify-start">
-                    <h2 className="relative mb-8 text-3xl font-bold text-[#117C90]">
+                    <h2 className="relative mb-8 text-3xl font-bold text-[#117C90] dark:text-DarkManager">
                       Public Library
-                      <span className="absolute bottom-[-9px] left-0 h-[4px] w-[85px] rounded-t-full bg-[#117C90]"></span>
+                      <span className="absolute bottom-[-9px] left-0 h-[4px] w-[85px] rounded-t-full bg-[#117C90] dark:bg-DarkManager"></span>
                     </h2>
                   </div>
                   {teacherGeneralItems.length === 0 ? (
@@ -535,7 +535,7 @@ const LibraryTeacherPage = () => {
                                   </h3>
                                 </div>
                               </div>
-                              <h2 className="mx-auto mt-3 w-40 text-center font-semibold">
+                              <h2 className="mx-auto mt-3 w-40 text-center font-semibold dark:text-DarkManager">
                                 General
                               </h2>
                             </div>
@@ -557,15 +557,15 @@ const LibraryTeacherPage = () => {
                 <div>
                   <div className="mb-8 flex flex-col items-center justify-between md:flex-row">
                     <div className="flex items-center justify-center md:items-start md:justify-start">
-                      <h2 className="relative text-2xl font-bold text-[#117C90] md:text-3xl">
+                      <h2 className="relative text-2xl font-bold text-[#117C90] md:text-3xl dark:text-DarkManager">
                         {selectedSubject.subject} Materials
-                        <span className="absolute bottom-[-9px] left-0 h-[4px] w-[85px] rounded-t-full bg-[#117C90] md:w-[155px]"></span>
+                        <span className="absolute bottom-[-9px] left-0 h-[4px] w-[85px] rounded-t-full bg-[#117C90] dark:bg-DarkManager md:w-[155px]"></span>
                       </h2>
                     </div>
                     <div className="mt-4 flex flex-row gap-4 sm:mt-0">
                       {/* Grades Select */}
                       <select
-                        className="rounded border p-2"
+                        className="rounded border p-2 dark:text-DarkManager"
                         value={selectedGrade}
                         onChange={(e) => setSelectedGrade(e.target.value)}
                       >
@@ -579,7 +579,7 @@ const LibraryTeacherPage = () => {
 
                       {/* Semesters Select */}
                       <select
-                        className="rounded border p-2"
+                        className="rounded border p-2 dark:text-DarkManager"
                         value={selectedSemester}
                         onChange={(e) => setSelectedSemester(e.target.value)}
                       >
@@ -667,7 +667,7 @@ const LibraryTeacherPage = () => {
                                   </h3>
                                 </div>
                               </div>
-                              <h2 className="mx-auto mt-3 w-40 text-center font-semibold">
+                              <h2 className="mx-auto mt-3 w-40 text-center font-semibold dark:text-DarkManager">
                                 {
                                   item.grade_subject_semester_id
                                     ?.grade_subject_id?.subjectId?.subjectName

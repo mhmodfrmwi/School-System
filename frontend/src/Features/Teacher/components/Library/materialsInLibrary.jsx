@@ -44,14 +44,14 @@ const MaterialsInLibrary = () => {
         <div className="mx-auto w-[400px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
           <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
             <div className="">
-              <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
+              <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl dark:text-DarkManager">
                 {t('libraryt.AllMaterialsLibrary')}
               </h1>
-              <p className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></p>
+              <p className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px] dark:bg-DarkManager"></p>
             </div>
 
             <div
-              className="flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] py-2 font-medium text-white focus:outline-none sm:ml-auto"
+              className="flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] dark:bg-DarkManager py-2 font-medium text-white focus:outline-none sm:ml-auto"
               onClick={() => navigate("/teacher/library-form")}
             >
               {t('libraryt.AddItem')}
@@ -59,8 +59,8 @@ const MaterialsInLibrary = () => {
           </div>
           <div className="mt-7">
             <div className="overflow-x-auto">
-              <table className="min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
-                <thead className="bg-[#117C90] text-white">
+              <table className="min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] dark:border-DarkManager shadow-md shadow-[#117C90]">
+                <thead className="bg-[#117C90] dark:bg-DarkManager text-white">
                   <tr>
                     <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
                     {t('libraryItem.title')}
@@ -87,26 +87,26 @@ const MaterialsInLibrary = () => {
                     teacherLibrary.map((material, index) => (
                       <tr
                         key={material._id}
-                        className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                        className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70 dark:hover:bg-DarkManager/70`}
                       >
-                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base dark:text-DarkManager">
                           {material.title}
                         </td>
-                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base dark:text-DarkManager">
                           {material.description}
                         </td>
-                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base dark:text-DarkManager">
                           {material.type}
                         </td>
-                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base dark:text-DarkManager">
                           {material.grade_subject_semester_id?.grade_subject_id
                             ?.gradeId?.gradeName || "N/A"}
                         </td>
-                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
+                        <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base  dark:text-DarkManager">
                           {material.grade_subject_semester_id?.grade_subject_id
                             ?.subjectId?.subjectName || "N/A"}
                         </td>
-                        <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
+                        <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base dark:text-DarkManager">
                           <a
                             href={material.item_url}
                             target="_blank"

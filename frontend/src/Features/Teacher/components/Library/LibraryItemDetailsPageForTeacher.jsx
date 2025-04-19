@@ -82,12 +82,12 @@ const LibraryItemDetailsPage = () => {
   return (
     <div className="flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-16 mb-20">
       <div className="w-full flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-[#117C90]">
+        <h1 className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-[#117C90] dark:bg-DarkManager">
           {details?.title || "Item Details"}
         </h1>
         <Button
           variant="solid"
-          className="bg-[#117C90] text-white"
+          className="bg-[#117C90] text-white  dark:bg-DarkManager"
           onClick={() => navigate(-1)}
         >
           Back
@@ -96,39 +96,39 @@ const LibraryItemDetailsPage = () => {
 
       <div className="w-full flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-1/3">
-          <Card className="border border-gray-200 rounded-xl shadow-sm">
+          <Card className="border border-gray-200 dark:border-gray-700 dark:bg-DarkManager2 rounded-xl shadow-sm">
             <CardContent className="p-4">
               <table className="w-full table-auto">
                 <tbody>
                     {type === "material" && (
                        <tr>
-                       <td className="py-2 font-semibold text-gray-700">{t('libraryItem.description')}</td>
-                       <td className="py-2 text-gray-600">{details?.description || "N/A"}</td>
+                       <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.description')}</td>
+                       <td className="py-2 text-gray-600 dark:text-gray-200">{details?.description || "N/A"}</td>
                      </tr> 
                     )}
                     {type === "general" && (
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.author')}</td>
-                        <td className="py-2 text-gray-600">{details?.author|| "N/A"}</td>
+                        <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.author')}</td>
+                        <td className="py-2 text-gray-600 dark:text-gray-200">{details?.author|| "N/A"}</td>
                       </tr>
                     )}
                     {type === "material" && (
                     <>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.grade')}</td>
-                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName || "N/A"}</td>
+                        <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.grade')}</td>
+                        <td className="py-2 text-gray-600 dark:text-gray-200">{details?.grade_subject_semester_id?.grade_subject_id?.gradeId?.gradeName || "N/A"}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.subject')}</td>
-                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "N/A"}</td>
+                        <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.subject')}</td>
+                        <td className="py-2 text-gray-600 dark:text-gray-200">{details?.grade_subject_semester_id?.grade_subject_id?.subjectId?.subjectName || "N/A"}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.semester')}</td>
-                        <td className="py-2 text-gray-600">{details?.grade_subject_semester_id?.semester_id?.semesterName || "N/A"}</td>
+                        <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.semester')}</td>
+                        <td className="py-2 text-gray-600 dark:text-gray-200">{details?.grade_subject_semester_id?.semester_id?.semesterName || "N/A"}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 font-semibold text-gray-700">{t('libraryItem.academicYear')}</td>
-                        <td className="py-2 text-gray-600">
+                        <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.academicYear')}</td>
+                        <td className="py-2 text-gray-600 dark:text-gray-200">
                           {`${details?.grade_subject_semester_id?.semester_id?.academicYear_id?.startYear} - ${details?.grade_subject_semester_id?.semester_id?.academicYear_id?.endYear}` || "N/A"}
                         </td>
                       </tr>
@@ -136,17 +136,17 @@ const LibraryItemDetailsPage = () => {
                   )}
                   
                   <tr>
-                    <td className="py-2 font-semibold text-gray-700">{t('libraryItem.type')}</td>
-                    <td className="py-2 text-gray-600">{details?.type || "N/A"}</td>
+                    <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.type')}</td>
+                    <td className="py-2 text-gray-600 dark:text-gray-200">{details?.type || "N/A"}</td>
                   </tr>
                   <tr>
-                    <td className="py-2 font-semibold text-gray-700">{t('libraryItem.uploadedBy')}</td>
-                    <td className="py-2 text-gray-600">{details?.uploaded_by?.fullName || "Unknown"}</td>
+                    <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.uploadedBy')}</td>
+                    <td className="py-2 text-gray-600 dark:text-gray-200">{details?.uploaded_by?.fullName || "Unknown"}</td>
                   </tr>
                   
                   {fileUrl && (
   <tr>
-    <td className="py-2 font-semibold text-gray-700">{t('libraryItem.download')}</td>
+    <td className="py-2 font-semibold text-gray-700 dark:text-white">{t('libraryItem.download')}</td>
     <td className="py-2">
       <a href={fileUrl} download target="_blank" rel="noopener noreferrer">
         <Button
@@ -178,7 +178,7 @@ const LibraryItemDetailsPage = () => {
 
         <div className="w-full md:w-2/3">
           {fileUrl && (
-            <Card className="border border-gray-200 rounded-xl shadow-sm">
+            <Card className="border border-gray-200 rounded-xl dark:border-gray-700 dark:bg-DarkManager2 shadow-sm">
               <CardContent className="p-4">
                 {isYouTube ? (
                   <iframe src={getYouTubeEmbedUrl(fileUrl)} width="100%" height="400px" title="YouTube Video" allowFullScreen className="border rounded"></iframe>

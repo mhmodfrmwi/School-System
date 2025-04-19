@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 const DashboardTeacher = () => {
   const dispatch = useDispatch();
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   
   const { classTeachers = [] } = useSelector(
     (state) => state.classTeachers || {},
@@ -56,11 +56,11 @@ const DashboardTeacher = () => {
     <div className="min-h-screen p-4 font-sans md:p-6">
       {/* Top Section */}
       <div className="mb-10 grid grid-cols-1 gap-10 font-poppins sm:grid-cols-2">
-        <div className="grid h-48 grid-cols-2 rounded-md bg-[#117C90] p-4">
+        <div className="grid h-48 grid-cols-2 rounded-md bg-[#117C90] p-4 dark:bg-DarkManager">
           <div className="ml-2 grid grid-cols-1 gap-2 text-left">
             <div className="flex items-center gap-2">
-              <FaCalendarAlt className="text-lg text-gray-200" />
-              <span className="text-sm text-gray-200">{currentTime}</span>
+              <FaCalendarAlt className="text-lg text-gray-200 dark:text-white" />
+              <span className="text-sm text-gray-200 dark:text-white">{currentTime}</span>
             </div>
             <div className="flex flex-col items-start">
               <div className="ml-2 grid grid-cols-1 gap-1 text-center">
@@ -74,18 +74,18 @@ const DashboardTeacher = () => {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <span className="text-sm text-white md:text-lg">{t('dashboard.yourScore')}
-            </span>
+            <span className="text-sm text-white md:text-lg">{t('dashboard.yourScore')}</span>
             <div className="relative flex items-center justify-center">
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-full border-4 ${teacherPointsForTerm.badge === "Green"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border-4 ${
+                  teacherPointsForTerm.badge === "Green"
                     ? "border-green-500 bg-green-500"
                     : teacherPointsForTerm.badge === "Diamond"
                       ? "border-[#6a6969] bg-[#6a6969]"
                       : teacherPointsForTerm.badge === "Gold"
                         ? "border-yellow-500 bg-yellow-500"
                         : "border-gray-300 bg-gray-300"
-                  } p-7 md:h-14 md:w-14`}
+                } p-7 md:h-14 md:w-14`}
               >
                 <span className="text-lg font-bold text-white md:text-2xl">
                   {teacherPointsForTerm.totalPoints}
@@ -95,25 +95,25 @@ const DashboardTeacher = () => {
           </div>
         </div>
 
-        <div className="grid h-48 rounded-md bg-[#117C90] p-4">
+        <div className="grid h-48 rounded-md bg-[#117C90] p-4 dark:bg-DarkManager">
           <span className="ml-4 block text-start text-sm font-semibold text-white md:text-lg">
-          {t('dashboardteacher.notify')}
+            {t('dashboardteacher.notify')}
           </span>
           <div className="flex h-14 w-full justify-center gap-4">
-            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1">
+            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1 dark:bg-DarkManager2">
               <FaBullhorn className="text-2xl text-[#c9cc29]" />
-              <span className="ml-2 text-2xl font-bold text-[#117C90]">0</span>
+              <span className="ml-2 text-2xl font-bold text-[#117C90] dark:text-white">0</span>
             </div>
-            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1">
+            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1 dark:bg-DarkManager2">
               <FontAwesomeIcon
                 icon={faEnvelope}
                 className="text-2xl text-[#cf502a]"
               />
-              <span className="ml-2 text-2xl font-bold text-[#117C90]">0</span>
+              <span className="ml-2 text-2xl font-bold text-[#117C90] dark:text-white">0</span>
             </div>
-            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1">
+            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1 dark:bg-DarkManager2">
               <FaBell className="text-2xl text-[#31961d]" />
-              <span className="ml-2 text-2xl font-bold text-[#117C90]">2</span>
+              <span className="ml-2 text-2xl font-bold text-[#117C90] dark:text-white">2</span>
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@ const DashboardTeacher = () => {
         <section className="mb-4 rounded-lg p-4 md:mb-6 md:p-6">
           <div className="ml-0">
             <div className="flex flex-col">
-              <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-3xl">
+              <h1 className="font-poppins text-lg font-bold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-3xl">
                 {t('Courses')}
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[125px]"></div>
@@ -136,43 +136,41 @@ const DashboardTeacher = () => {
                 classTeachers.map((classteacher, index) => (
                   <div
                     key={classteacher?.classId || index}
-                    className="relative flex w-56 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
+                    className="relative flex w-56 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200 dark:bg-DarkManager2 dark:hover:bg-DarkManager"
                   >
-                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600">
                       <img src={bag} alt="bag" className="h-7 w-7" />
                     </div>
-                    <p className="font-poppins text-lg font-semibold">
+                    <p className="font-poppins text-lg font-semibold dark:text-white">
                       {classteacher?.subjectName || "N/A"}
                     </p>
                     <div className="flex justify-start gap-4">
-                      <p className="font-poppins font-semibold text-[#197080]">
+                      <p className="font-poppins font-semibold text-[#197080] dark:text-white">
                         {classteacher.gradeName || "N/A"}
                       </p>
-                      <p className="font-poppins font-semibold text-[#197080]">
+                      <p className="font-poppins font-semibold text-[#197080] dark:text-white">
                         {classteacher.className || "N/A"}
                       </p>
                     </div>
-                    <p className="font-poppins text-[#197080]">
+                    <p className="font-poppins text-[#197080] dark:text-white">
                       {classteacher.semesterName || "N/A"}
                     </p>
                   </div>
                 ))
               ) : (
-                <>
-                  <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
-                    <FontAwesomeIcon
-                      icon={faCalendar}
-                      className="mb-4 text-6xl text-gray-400"
-                    />
-                    <p className="mb-2 font-poppins text-xl font-semibold text-gray-600">
-                      No Teacher Classes Found
-                    </p>
-                    <p className="mb-4 max-w-xl text-center font-poppins text-gray-500">
-                      It seems like there are no teacher classes available at
-                      the moment.
-                    </p>
-                  </div>
-                </>
+                <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
+                  <FontAwesomeIcon
+                    icon={faCalendar}
+                    className="mb-4 text-6xl text-gray-400 dark:text-white"
+                  />
+                  <p className="mb-2 font-poppins text-xl font-semibold text-gray-600 dark:text-white">
+                    No Teacher Classes Found
+                  </p>
+                  <p className="mb-4 max-w-xl text-center font-poppins text-gray-500 dark:text-white">
+                    It seems like there are no teacher classes available at
+                    the moment.
+                  </p>
+                </div>
               )}
             </div>
           </div>
@@ -181,8 +179,8 @@ const DashboardTeacher = () => {
         <section className="mb-4 rounded-lg p-4 font-poppins md:mb-6 md:p-6">
           <div className="ml-0">
             <div className="mb-7 flex flex-col">
-              <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-2xl">
-              {t('dashboardteacher.mainCategories')}
+              <h1 className="font-poppins text-lg font-bold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-2xl">
+                {t('dashboardteacher.mainCategories')}
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[205px]"></div>
             </div>
@@ -190,12 +188,12 @@ const DashboardTeacher = () => {
               {categories.map((category, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-1 gap-4 rounded-lg bg-slate-100 p-4 transition-shadow hover:shadow-md"
+                  className="grid grid-cols-1 gap-4 rounded-lg bg-slate-100 p-4 transition-shadow hover:shadow-md dark:bg-DarkManager2"
                 >
                   <div className="flex items-center justify-center rounded-full">
                     {getIconComponent(category.icon)}
                   </div>
-                  <span className="ml-2 text-center text-sm font-medium text-[#105E6A] md:ml-3 md:text-lg">
+                  <span className="ml-2 text-center text-sm font-medium text-[#105E6A] dark:text-white md:ml-3 md:text-lg">
                     {category.name}
                   </span>
                 </div>
@@ -208,16 +206,16 @@ const DashboardTeacher = () => {
         <section className="rounded-lg p-4 font-poppins md:p-6">
           <div className="ml-0">
             <div className="mb-6 flex flex-col">
-              <h1 className="font-poppins text-lg font-bold text-[#244856] sm:text-xl lg:text-2xl">
-              {t('dashboardteacher.VirtualClassrooms')}
+              <h1 className="font-poppins text-lg font-bold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-2xl">
+                {t('dashboardteacher.VirtualClassrooms')}
               </h1>
               <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[235px]"></div>
             </div>
             {virtualClassrooms.length > 0 ? (
               <div>{/* Render virtual classrooms here */}</div>
             ) : (
-              <p className="w-[70%] bg-slate-100 p-10 text-lg font-medium text-gray-600 md:text-2xl">
-              {t('dashboardteacher.contentvr')}
+              <p className="w-[70%] bg-slate-100 p-10 text-lg font-medium text-gray-600 dark:bg-DarkManager2 dark:text-white md:text-2xl">
+                {t('dashboardteacher.contentvr')}
               </p>
             )}
           </div>
@@ -230,13 +228,13 @@ const DashboardTeacher = () => {
 const getIconComponent = (iconName) => {
   switch (iconName) {
     case "mail":
-      return <Mail className="text-[#105E6A] md:h-12 md:w-12" />;
+      return <Mail className="text-[#105E6A] dark:text-white md:h-12 md:w-12" />;
     case "message-circle":
-      return <MessageCircle className="text-[#105E6A] md:h-12 md:w-12" />;
+      return <MessageCircle className="text-[#105E6A] dark:text-white md:h-12 md:w-12" />;
     case "book-open":
-      return <BookOpen className="text-[#105E6A] md:h-12 md:w-12" />;
+      return <BookOpen className="text-[#105E6A] dark:text-white md:h-12 md:w-12" />;
     case "calendar":
-      return <Calendar className="text-[#105E6A] md:h-12 md:w-12" />;
+      return <Calendar className="text-[#105E6A] dark:text-white md:h-12 md:w-12" />;
     default:
       return null;
   }

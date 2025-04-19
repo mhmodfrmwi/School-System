@@ -78,10 +78,10 @@ const GetStudentsForGrades = () => {
   return (
     <div className="mx-auto font-poppins w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
       <div className="flex flex-col">
-        <h1 className="font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
+        <h1 className="font-poppins text-lg font-semibold text-[#117C90] dark:text-DarkManager sm:text-xl lg:text-2xl">
           {t('gradest.ExamScores')}
         </h1>
-        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#117C90] lg:h-[4px] lg:w-[140px]"></div>
+        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#117C90] dark:bg-DarkManager lg:h-[4px] lg:w-[140px]"></div>
       </div>
 
       {loading && (
@@ -89,7 +89,7 @@ const GetStudentsForGrades = () => {
           <Loader />
         </p>
       )}
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500 dark:text-red-400">{error}</p>}
 
       {scores?.data?.students?.length > 0 ? (
         <>
@@ -110,44 +110,47 @@ const GetStudentsForGrades = () => {
           <div className="mb-6 flex justify-between">
             <button
               onClick={handleExportCSV}
-              className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+              className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90 dark:bg-DarkManager dark:hover:bg-[#2A2A2A]"
             >
-            {t('gradest.ExportCSV')}
+              {t('gradest.ExportCSV')}
             </button>
 
             <button
               onClick={handleGoToUploadPage}
-              className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+              className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90 dark:bg-DarkManager dark:hover:bg-[#2A2A2A]"
             >
-            {t('gradest.UploadFile')}
+              {t('gradest.UploadFile')}
             </button>
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-[#117C90] shadow-lg">
+          <div className="overflow-x-auto rounded-lg border border-[#117C90] dark:border-DarkManager shadow-lg">
             <table className="min-w-full">
               <thead>
-                
-                <tr className="bg-[#117C90] text-white">
-                 <th className="px-4 py-3 text-left font-poppins font-semibold">#</th>
+                <tr className="bg-[#117C90] text-white dark:bg-DarkManager">
+                  <th className="px-4 py-3 text-left font-poppins font-semibold">#</th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
-                  {t('attendans.AcademicNumber')} 
+                    {t('attendans.AcademicNumber')}
                   </th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
-                  {t('assignmentt.StudentName')}
+                    {t('assignmentt.StudentName')}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {currentStudents.map((student,index) => (
+                {currentStudents.map((student, index) => (
                   <tr
                     key={student.academic_number}
-                    className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}
+                    className={`${
+                      index % 2 === 0 ? "bg-[#F5FAFF] " : "bg-white "
+                    } hover:bg-[#117C90]/70 dark:hover:bg-DarkManager/70`}
                   >
-                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">{index + 1}</td>
-                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
+                    <td className="border-b border-[#117C90] dark:border-DarkManager px-4 py-3 font-poppins text-base dark:text-DarkManager ">
+                      {index + 1}
+                    </td>
+                    <td className="border-b border-[#117C90] dark:border-DarkManager px-4 py-3 font-poppins text-base dark:text-DarkManager">
                       {student.academic_number}
                     </td>
-                    <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
+                    <td className="border-b border-[#117C90] dark:border-DarkManager px-4 py-3 font-poppins text-base dark:text-DarkManager">
                       {student.fullName}
                     </td>
                   </tr>
@@ -163,10 +166,9 @@ const GetStudentsForGrades = () => {
               onPageChange={handlePageChange}
             />
           </div>
-
         </>
       ) : (
-        <p className="font-poppins text-lg text-gray-600">No students found.</p>
+        <p className="font-poppins text-lg text-gray-600 ">No students found.</p>
       )}
     </div>
   );

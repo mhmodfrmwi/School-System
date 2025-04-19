@@ -13,10 +13,9 @@ import languageE from "../../../assets/icons/languageET.svg";
 import languageA from "../../../assets/icons/languageAT.svg";
 import Vector from "../../../assets/icons/Vector.svg";
 import logout from "../../../assets/icons/logout.svg";
-// import languageE from "../../../assets/icons/languageS.svg";
-// import languageA from "../../../assets/icons/languageA.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useTranslation } from 'react-i18next';
+
 const NavTeacher = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
@@ -86,11 +85,13 @@ const NavTeacher = () => {
       }
     }
   };
+
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(newLang);
     localStorage.setItem('i18nextLng', newLang);
   };
+
   const url = window.location.pathname;
   const teacherName = url.split("/teacher/").pop();
   const match = url.match(/\/teacher\/([^/]+)/);
@@ -115,8 +116,8 @@ const NavTeacher = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
   useEffect(() => {
-    // document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
@@ -126,11 +127,11 @@ const NavTeacher = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={handleBack}
-            className="hidden rounded-lg bg-dashboard-bg p-2 text-white lg:flex"
+            className="hidden rounded-lg bg-dashboard-bg p-2 text-white dark:bg-DarkManager lg:flex"
           >
             <FaArrowLeft className="text-lg" />
           </button>
-          <p className="hidden font-inter text-lg font-semibold text-dashboard-header lg:flex">
+          <p className="hidden font-inter text-lg font-semibold text-dashboard-bg dark:text-DarkManager lg:flex">
             {teacherName === "/teacher" ? "dashboard" : `${name}`}
           </p>
         </div>
@@ -151,7 +152,7 @@ const NavTeacher = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none md:text-left md:text-base"
+              className="w-full rounded-full border bg-search-bg py-2 pl-12 pr-12 text-center font-poppins text-sm focus:outline-none dark:border-gray-200 dark:text-black md:text-left md:text-base"
             />
 
             {isDropdownOpen && (
@@ -161,10 +162,10 @@ const NavTeacher = () => {
                     <li
                       key={route.path}
                       onClick={() => handleSelect(route.path)}
-                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] hover:bg-blue-100"
+                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] dark:text-DarkManager hover:bg-blue-100"
                     >
                       {route.path}
-                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#117C90]"></p>
+                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#117C90] dark:border-DarkManager"></p>
                     </li>
                   ))
                 ) : (
@@ -203,8 +204,8 @@ const NavTeacher = () => {
               alt="User"
               className="h-8 w-8 rounded-full md:h-10 md:w-10"
             />
-            <span className="hidden font-poppins text-sm font-semibold text-dashboard-header md:text-base lg:flex">
-            {fullName}
+            <span className="hidden font-poppins text-sm font-semibold text-dashboard-bg dark:text-DarkManager md:text-base lg:flex">
+              {fullName}
             </span>
           </div>
           <button
@@ -217,7 +218,7 @@ const NavTeacher = () => {
           {settingToggle && (
             <div
               ref={settingsRef}
-              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90]"
+              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90] dark:to-DarkManager"
             >
               <div>
                 <div
@@ -225,7 +226,7 @@ const NavTeacher = () => {
                   onClick={() => navigate("edit-teacher-profile")}
                 >
                   <button className="p-2 text-gray-500">
-                    <ReactSVG src={Vector} className="r h-auto w-auto" />
+                    <ReactSVG src={Vector} className="h-auto w-auto" />
                   </button>
                   <h2 className="font-semibold text-white">{t("EditProfile")}</h2>
                 </div>
@@ -236,9 +237,14 @@ const NavTeacher = () => {
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
-              <button className="mx-auto ms-6 p-2 text-[#C459D9]"
-                onClick={toggleLanguage}>
-                <ReactSVG src={i18n.language === 'en' ? languageA : languageE} className="r h-auto w-auto" />
+              <button
+                className="mx-auto ms-6 p-2 text-[#C459D9]"
+                onClick={toggleLanguage}
+              >
+                <ReactSVG
+                  src={i18n.language === 'en' ? languageA : languageE}
+                  className="h-auto w-auto"
+                />
               </button>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
 
@@ -247,7 +253,7 @@ const NavTeacher = () => {
                 onClick={() => navigate("/login")}
               >
                 <button className="p-2 text-gray-500">
-                  <ReactSVG src={logout} className="r h-auto w-auto" />
+                  <ReactSVG src={logout} className="h-auto w-auto" />
                 </button>
                 <h2
                   className="cursor-pointer font-semibold text-white"
@@ -263,4 +269,5 @@ const NavTeacher = () => {
     </div>
   );
 };
+
 export default NavTeacher;

@@ -76,29 +76,29 @@ const WeeklySchedule = () => {
                         <div className="mx-auto w-full max-w-7xl px-4">
                             <div className="flex justify-between items-center my-2">
                                 <div>
-                                    <div className="text-lg sm:text-2xl font-poppins cursor-text text-[#105E6A] ms-4 py-1 font-bold">
+                                    <div className="text-lg sm:text-2xl font-poppins cursor-text text-[#105E6A] ms-4 py-1 font-bold dark:text-DarkManager">
                                          {semesterName} ({startYear}-{endYear})
                                     </div>
-                                    <p className="w-24 rounded-xl mb-4 border-t-4 border-[#117C90] ms-4"></p>
+                                    <p className="w-24 rounded-xl mb-4 border-t-4 border-[#117C90] ms-4 dark:border-DarkManager"></p>
                                 </div>
-                                <button className="bg-gradient-to-r from-[#105E6A] to-[#117C90] font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white">
+                                <button className="bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:to-DarkManager font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white">
                                 {t('schaduel.ExportPDF')}
                                 </button>
                             </div>
                             <div className="overflow-x-auto p-4">
-                                <table className="min-w-[800px] w-full border-collapse border border-gray-300 text-sm sm:text-base">
+                                <table className="min-w-[800px] w-full border-collapse border border-gray-300 text-sm sm:text-base dark:border-DarkManager">
                                     <thead>
-                                        <tr className="bg-[#105E6A] text-white">
-                                            <th className="border border-gray-300 p-2 font-poppins">{t('schedulem.Time')}</th>
+                                        <tr className="bg-[#105E6A] text-white dark:bg-DarkManager">
+                                            <th className="border border-gray-300 p-2 font-poppins dark:border-DarkManager">{t('schedulem.Time')}</th>
                                             {days.map(day => (
-                                                <th key={day} className="border border-gray-300 p-2 font-poppins">{day}</th>
+                                                <th key={day} className="border border-gray-300 p-2 font-poppins dark:border-DarkManager">{day}</th>
                                             ))}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {timeslots.map(time => (
                                             <tr key={time} className="bg-gray-100 even:bg-white">
-                                                <td className="border border-gray-300 p-2 text-center font-poppins font-bold">{time}</td>
+                                                <td className="border border-gray-300 p-2 text-center font-poppins font-bold dark:border-DarkManager dark:text-DarkManager">{time}</td>
                                                 {days.map(day => {
                                                     const scheduleItem = teacherSchedule.find(item =>
                                                         item.day_of_week === day &&
@@ -106,7 +106,7 @@ const WeeklySchedule = () => {
                                                     );
 
                                                     return (
-                                                        <td key={`${day}-${time}`} className="border border-gray-300 p-2 text-center">
+                                                        <td key={`${day}-${time}`} className="border border-gray-300 p-2 text-center dark:border-DarkManager">
                                                             <div className="p-2 bg-white shadow-md rounded-lg font-poppins">
                                                                 {scheduleItem ? (
                                                                     <>

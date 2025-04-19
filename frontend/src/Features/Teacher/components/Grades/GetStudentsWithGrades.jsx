@@ -134,7 +134,7 @@ function GetStudentsWithGrades() {
   if (!studentResult?.data?.type) {
     return (
       <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-[90%]">
-        <h1 className="mb-4 text-2xl font-semibold text-[#117C90]">
+        <h1 className="mb-4 text-2xl font-semibold text-[#117C90] dark:text-DarkManager">
           Student Exam Results
         </h1>
         <div>No student results found.</div>
@@ -144,7 +144,7 @@ function GetStudentsWithGrades() {
 
   return (
     <div className="mx-auto font-poppins w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-[90%]">
-      <h1 className=" text-2xl font-semibold text-[#117C90]">
+      <h1 className=" text-2xl font-semibold text-[#117C90] dark:text-DarkManager">
         {t('gradest.StudentExamResults')}
       </h1>
 
@@ -153,20 +153,20 @@ function GetStudentsWithGrades() {
           {/* Display type and finalDegree above the table */}
           <div className="mb-4 flex flex-col gap-2 py-4">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-black">{t('tablesheader.Type')}:</span>
-              <span>{studentResult?.data?.type}</span>
+              <span className="font-semibold text-black ">{t('tablesheader.Type')}:</span>
+              <span className="dark:text-black">{studentResult?.data?.type}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="font-semibold text-black">{t('gradest.FinalDegree')}:</span>
-              <span >
+              <span className="dark:text-black">
                 {studentResult?.data?.finalDegree}
               </span>
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-[#117C90] shadow-lg">
+          <div className="overflow-x-auto rounded-lg border border-[#117C90] dark:border-DarkManager shadow-lg">
             <table className="min-w-full">
-              <thead className="bg-[#117C90] text-white">
+              <thead className="bg-[#117C90] text-white dark:bg-DarkManager">
                 <tr>
                 <th className="px-4 py-3 text-left font-poppins font-semibold">#</th>
                   <th className="px-4 py-3 text-left font-poppins font-semibold">
@@ -192,15 +192,15 @@ function GetStudentsWithGrades() {
                     },
                     index,
                   ) => (
-                    <tr key={index} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70`}>
-                        <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">{index + 1}</td>
-                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
+                    <tr key={index} className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"} hover:bg-[#117C90]/70 dark:hover:bg-DarkManager/70`}>
+                        <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base dark:text-DarkManager">{index + 1}</td>
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base dark:text-DarkManager">
                         {academic_number}
                       </td>
-                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base dark:text-DarkManager">
                         {fullName}
                       </td>
-                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base">
+                      <td className="border-b border-[#117C90] px-4 py-3 font-poppins text-base dark:text-DarkManager">
                         {examGrade}
                       </td>
                     </tr>
@@ -228,7 +228,7 @@ function GetStudentsWithGrades() {
                 </label>
                 <button
                   onClick={handleUpload}
-                  className="w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+                  className="w-full rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:to-DarkManager px-4 py-2 font-poppins text-white transition hover:opacity-90"
                 >
                  {t('gradest.UploadUpdate')} 
                 </button>
@@ -237,14 +237,14 @@ function GetStudentsWithGrades() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <button
                   onClick={handleExport}
-                  className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+                  className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:to-DarkManager px-4 py-2 font-poppins text-white transition hover:opacity-90"
                 >
                  {t('gradest.ExportData')} 
   
                 </button>
                 <button
                   onClick={handleDeleteAll}
-                  className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90"
+                  className="rounded-lg bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:to-DarkManager px-4 py-2 font-poppins text-white transition hover:opacity-90"
                 >
                 {t('gradest.DeleteAllData')} 
                 </button>

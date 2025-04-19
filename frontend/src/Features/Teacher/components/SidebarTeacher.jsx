@@ -9,7 +9,6 @@ import AwardIconH from "../../../assets/TeacherIcon/Awards.png";
 import ActivityIconH from "../../../assets/TeacherIcon/Activites.png";
 import VirtualIconH from "../../../assets/TeacherIcon/Virtual.png";
 import ScheduleIconH from "../../../assets/TeacherIcon/Schedule.png";
-// import QuestionsIconH from "../../../assets/TeacherIcon/Questions.png";
 import LibraryIconH from "../../../assets/TeacherIcon/Library.png";
 import CourseIconH from "../../../assets/TeacherIcon/Course.png";
 import AbsenceIconH from "../../../assets/TeacherIcon/Absence.png";
@@ -19,11 +18,11 @@ import AwardIcon from "../../../assets/StudentIcon/Awards.png";
 import ActivityIcon from "../../../assets/StudentIcon/Activites.png";
 import VirtualIcon from "../../../assets/StudentIcon/Virtual.png";
 import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
-// import QuestionsIcon from "../../../assets/StudentIcon/Questions.png";
 import LibraryIcon from "../../../assets/StudentIcon/Library.png";
 import CourseIcon from "../../../assets/StudentIcon/Course.png";
 import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
 import { useTranslation } from 'react-i18next';
+
 const SidebarTeacher = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -75,13 +74,7 @@ const SidebarTeacher = () => {
       hoverIcon: LibraryIconH,
       href: "/teacher/teacher-library",
     },
-    // {
-    //   label: "Question Bank",
-    //   icon: QuestionsIcon,
-    //   hoverIcon: QuestionsIconH,
-    //   href: "#",
-    // },
-  {
+    {
       label: t('sidebart.GeneralVirtualRooms'),
       icon: VirtualIcon,
       hoverIcon: VirtualIconH,
@@ -92,7 +85,7 @@ const SidebarTeacher = () => {
   return (
     <div className="relative">
       <button
-        className="fixed left-5 top-8 z-50 h-10 w-9 rounded-lg bg-dashboard-bg p-2 text-white shadow-md lg:hidden"
+        className="fixed left-5 top-8 z-50 h-10 w-9 rounded-lg bg-dashboard-bg p-2 text-white shadow-md lg:hidden dark:bg-DarkManager"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         aria-label="Toggle Sidebar"
       >
@@ -105,19 +98,20 @@ const SidebarTeacher = () => {
           onClick={() => setIsSidebarOpen(false)}
           aria-hidden="true"
         >
-          <div className="custom-scrollbar absolute left-0 top-0 flex h-full w-64 flex-col bg-dashboard-bg p-4 text-white transition-transform duration-300">
+          <div className="custom-scrollbar absolute left-0 top-0 flex h-full w-64 flex-col bg-dashboard-bg p-4 text-white transition-transform duration-300 dark:bg-DarkManager">
             <SidebarContent
               menuItems={menuItems}
               hoveredIndex={hoveredIndex}
               setHoveredIndex={setHoveredIndex}
               currentPath={currentPath}
               navigate={navigate}
+              t={t}
             />
           </div>
         </div>
       )}
 
-      <div className="custom-scrollbar hidden h-screen w-64 flex-col bg-dashboard-bg p-4 text-white lg:flex">
+      <div className="custom-scrollbar hidden h-screen w-64 flex-col bg-dashboard-bg p-4 text-white lg:flex dark:bg-DarkManager">
         <SidebarContent
           menuItems={menuItems}
           hoveredIndex={hoveredIndex}
@@ -144,7 +138,7 @@ const SidebarContent = ({
       <div className="mb-8 flex flex-col items-center justify-center">
         <img src={logo} alt="Logo" className="mb-2 h-12 w-12" />
         <h1 className="text-xl font-bold">LEARNOVA</h1>
-        <p className="font-poppins text-xs"> {t('KhatabSchool')}</p>
+        <p className="font-poppins text-xs">{t('KhatabSchool')}</p>
       </div>
 
       <nav className="flex w-64 flex-col gap-2">
@@ -154,11 +148,11 @@ const SidebarContent = ({
             href={item.href}
             className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${
               currentPath === item.href
-                ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg"
+                ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg dark:text-DarkManager"
                 : "text-white"
             } ${
               hoveredIndex === index && currentPath !== item.href
-                ? "bg-white text-dashboard-bg"
+                ? "bg-white text-dashboard-bg dark:text-DarkManager"
                 : ""
             }`}
             onMouseEnter={() => setHoveredIndex(index)}
@@ -178,11 +172,11 @@ const SidebarContent = ({
             ) : (
               <FontAwesomeIcon
                 icon={item.icon}
-                className="mr-3 text-lg transition-colors group-hover:text-dashboard-bg"
+                className="mr-3 text-lg transition-colors group-hover:text-dashboard-bg dark:group-hover:text-DarkManager"
               />
             )}
 
-            <span className="font-poppins text-sm transition-colors group-hover:font-semibold group-hover:text-dashboard-bg">
+            <span className="font-poppins text-sm transition-colors group-hover:font-semibold group-hover:text-dashboard-bg dark:group-hover:text-DarkManager">
               {item.label}
             </span>
             {currentPath === item.href && (
@@ -196,11 +190,11 @@ const SidebarContent = ({
       </nav>
 
       <div className="mt-10 flex flex-col items-center">
-        <div className="mb-4 rounded-md bg-white px-4 py-1 font-poppins text-xs text-dashboard-bg">
+        <div className="mb-4 rounded-md bg-white px-4 py-1 font-poppins text-xs text-dashboard-bg dark:text-DarkManager">
           Term: 2023-2024
         </div>
         <button
-          className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300"
+          className="rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300 dark:text-DarkManager"
           onClick={() => navigate("/role")}
         >
           {t('Logout')}
