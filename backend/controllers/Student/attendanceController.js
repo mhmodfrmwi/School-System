@@ -5,6 +5,7 @@ const moment = require("moment");
 const attendanceValidationSchema = require("../../validations/attendanceValidation");
 const Student = require("../../DB/student");
 const Attendance = require("../../DB/attendenceModel");
+const { getAttendance } = require("../../services/attendaceService");
 const createStudentAttendance = expressAsyncHandler(async (req, res) => {
   const { error } = attendanceValidationSchema.validate(req.body);
   if (error) {
@@ -92,15 +93,12 @@ const getStudentAttendanceUsingStudentId = expressAsyncHandler(
         message: "Invalid Student ID",
       });
     }
-    const studentAttendance = await Attendance.find({ student_id: studentId });
+    const studentAttendance = await getAttendance(studentId);
     res.status(200).json({
       status: 200,
       studentAttendance,
     });
   }
-);
-const getAttendanceForClassInSpecificDate = expressAsyncHandler(
-  async (req, res) => {}
 );
 
 module.exports = {
@@ -108,5 +106,4 @@ module.exports = {
   updateStudentAttendance,
   deleteStudentAttendance,
   getStudentAttendanceUsingStudentId,
-  getAttendanceForClassInSpecificDate,
 };

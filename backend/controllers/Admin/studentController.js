@@ -8,6 +8,7 @@ const Class = require("../../DB/classModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const hashPassword = require("../../utils/hashPassword");
 const Attendance = require("../../DB/attendenceModel");
+const { getStudentById } = require("../../services/studentService");
 
 const generateAcademicNumber = async () => {
   const currentYear = moment().year().toString().slice(-2);
@@ -337,17 +338,7 @@ const getStudent = expressAsyncHandler(async (req, res) => {
       });
     }
 
-    const student = await Student.findById(id)
-      .populate("gradeId", "gradeName")
-      .populate("classId", "className")
-      .populate("academicYear_id", "startYear");
-
-    if (!student) {
-      return res.status(404).json({
-        status: 404,
-        message: "Student not found",
-      });
-    }
+    const student = await getStudentById(id);
 
     res.status(200).json({
       status: 200,

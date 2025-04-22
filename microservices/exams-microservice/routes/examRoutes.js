@@ -11,6 +11,7 @@ const {
   getAllStudentResults,
   getMissedExamsForStudent,
   getCompletedExamsForStudent,
+  getCompletedExamsForSubjects,
 } = require("../controllers/examController");
 const validateJwt = require("../../../backend/middlewares/validateJWT");
 const { getAnswersOfStudent } = require("../controllers/answerController");
@@ -21,6 +22,7 @@ router.get("/teacher-exams", validateJwt, getExamsForTeacher);
 router.get("/student-results", validateJwt, getAllStudentResults);
 router.get("/student/missed", validateJwt, getMissedExamsForStudent);
 router.get("/student/completed", validateJwt, getCompletedExamsForStudent);
+router.get("/student/completed/all", validateJwt, getCompletedExamsForSubjects);
 router.get("/student/exam/:exam_id", validateJwt, getAnswersOfStudent);
 router
   .route("/:id")

@@ -302,6 +302,48 @@ const getCompletedExams = async (
   }
 };
 
+const getCompletedExamsForAllSubjects = async (student_id) => {
+  try {
+    const examsResults = await ExamResult.find({ student_id }).populate({
+      path: "exam_id",
+      populate: {
+        path: "subject_id",
+        select: "subjectName",
+      },
+    });
+
+    const result = {};
+
+    examsResults.forEach((examResult) => {
+      const exam = examResult.exam_id;
+      const subjectId = exam.subject_id._id;
+      const subjectName = exam.subject_id.subjectName;
+
+      if (!result[subjectId]) {
+        result[subjectId] = {
+          subjectName: subjectName,
+          exams: [],
+        };
+      }
+
+      result[subjectId].exams.push({
+        examTitle: exam.title,
+        examDescription: exam.description,
+        examType: exam.type,
+        examTotalMarks: exam.total_marks,
+        studentScore: examResult.total_marks,
+        percentage: examResult.percentage,
+        status: examResult.status,
+        examDate: exam.start_time,
+      });
+    });
+
+    return Object.values(result);
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   addExam,
   fetchExams,
@@ -315,4 +357,5 @@ module.exports = {
   getStudentResults,
   getMissedExams,
   getCompletedExams,
+  getCompletedExamsForAllSubjects,
 };

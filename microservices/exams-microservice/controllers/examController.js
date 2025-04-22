@@ -13,6 +13,7 @@ const {
   getMissedExams,
   getCompletedExams,
   fetchExamsByTeacherIdAndSubjectAttributes,
+  getCompletedExamsForAllSubjects,
 } = require("../services/examService");
 const { getExamResultsByExamId } = require("../services/resultsService");
 
@@ -371,6 +372,19 @@ const getCompletedExamsForStudent = async (req, res) => {
     });
   }
 };
+const getCompletedExamsForSubjects = async (req, res) => {
+  try {
+    const student_id = req.user.id;
+    const exams = await getCompletedExamsForAllSubjects(student_id);
+    res.status(200).json(exams);
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to get completed exams for student",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createExam,
   getExams,
@@ -382,4 +396,5 @@ module.exports = {
   getAllStudentResults,
   getMissedExamsForStudent,
   getCompletedExamsForStudent,
+  getCompletedExamsForSubjects,
 };

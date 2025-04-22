@@ -13,6 +13,7 @@ const teacherRoutes = require("./routes/teacherRoutes");
 const managerRoutes = require("./routes/managerRoutes");
 const parentRoutes = require("./routes/parentRoutes");
 const generalRoutes = require("./routes/generalRoutes");
+const MLRoutes = require("./routes/ML-Routes");
 const exposeModelsRoutes = require("./routes/exposeModelsRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 connectToDB();
@@ -39,6 +40,7 @@ app.use(`${routNode}/manager`, managerRoutes);
 app.use(`${routNode}/parent`, parentRoutes);
 app.use(`${routNode}/general`, generalRoutes);
 app.use(`${routNode}/expose-models`, exposeModelsRoutes);
+app.use(`${routNode}/ML`, MLRoutes);
 app.use(errorHandler);
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
