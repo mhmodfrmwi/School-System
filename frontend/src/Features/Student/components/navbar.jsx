@@ -172,7 +172,8 @@ const Navbar = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
               className={`w-full rounded-full border bg-gray-100 dark:bg-gray-700 py-2 ${i18n.language === 'ar' ? 'pr-12 pl-12' : 'pl-12 pr-12'} text-center font-poppins text-sm text-gray-800 dark:text-gray-200 focus:outline-none md:text-left md:text-base`}
-            />
+              />
+  
 
             {isDropdownOpen && (
               <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-y-scroll rounded-lg border bg-white dark:bg-gray-800 shadow-md dark:border-gray-600">
@@ -204,7 +205,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 md:space-x-6 rtl:space-x-reverse">
+        <div className="flex items-center space-x-2 md:space-x-6">
           <button className="relative p-2 text-gray-500 dark:text-gray-300">
             <FaBell className="text-xl" />
             <span className="absolute right-2 top-1 block h-3.5 w-3.5 rounded-full bg-red-500"></span>
@@ -217,7 +218,7 @@ const Navbar = () => {
           </button>
           <ThemeSwitcher />
 
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <div className="flex items-center space-x-2">
             <img
               src={userImage}
               alt="User"

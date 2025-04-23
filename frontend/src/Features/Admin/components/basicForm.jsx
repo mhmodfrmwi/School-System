@@ -57,7 +57,7 @@ function BasicForm() {
     // Show toast only once for network error
     if (hasNetworkError && !networkErrorShownRef.current) {
       toast.error(
-        t("dashboard.errors.network")
+        t("dashboardadmin.errors.network")
       );
       networkErrorShownRef.current = true; // Mark network error toast as shown
     }
@@ -90,7 +90,7 @@ function BasicForm() {
                 <img src={img1} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-              {t("dashboard.users.students")}
+              {t("dashboardadmin.users.students")}
               </h3>
             </div>
             <p className="border-t-2 border-[#3CB878]"></p>
@@ -109,7 +109,7 @@ function BasicForm() {
                 <img src={img2} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-              {t("dashboard.users.teachers")}
+              {t("dashboardadmin.users.teachers")}
               </h3>
             </div>
             <p className="border-t-2 border-[#7CA6FD]"></p>
@@ -128,7 +128,7 @@ function BasicForm() {
                 <img src={img3} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-              {t("dashboard.users.manager")}
+              {t("dashboardadmin.users.manager")}
               </h3>
             </div>
             <p className="border-t-2 border-[#F61414]"></p>
@@ -147,7 +147,7 @@ function BasicForm() {
                 <img src={img4} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-              {t("dashboard.users.parents")}
+              {t("dashboardadmin.users.parents")}
               </h3>
             </div>
             <p className="border-t-2 border-[#F48301]"></p>
@@ -166,7 +166,7 @@ function BasicForm() {
                 <img src={img5} alt="notfoundimage" />
               </div>
               <h3 className="font-poppins text-xl text-[#A3A3A3] dark:text-white">
-             { t("dashboard.users.admin")}
+             { t("dashboardadmin.users.admin")}
               </h3>
             </div>
             <p className="border-t-2 border-[#30F587]"></p>

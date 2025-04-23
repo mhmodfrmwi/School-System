@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from 'react-i18next';
 
 const SubjectsList = () => {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const dispatch = useDispatch();
   const { subjects = [] } = useSelector((state) => state.subject);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -88,13 +88,13 @@ const SubjectsList = () => {
                 <div className="flex">
                   <Link
                     to={`/admin/allsubjects/${subject._id}`}
-                    className="mr-2 text-[#3C8D99] hover:text-[#2C6E79] dark:text-white"
+                    className={`${i18n.language === 'ar' ? 'ml-2' : 'mr-2'} text-[#3C8D99] hover:text-[#2C6E79] dark:text-white`}
                   >
                     <FontAwesomeIcon icon={faEye} className="text-lg" />
                   </Link>
                   <Link
                     to={`/admin/edit-subject/${subject._id}`}
-                    className="mr-2 text-[#117C90] hover:text-[#0B5964] dark:text-white"
+                    className={`${i18n.language === 'ar' ? 'ml-2' : 'mr-2'} text-[#117C90] hover:text-[#0B5964] dark:text-white`}
                   >
                     <FontAwesomeIcon icon={faEdit} className="text-lg" />
                   </Link>

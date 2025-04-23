@@ -21,7 +21,7 @@ const StudentHeader = ({ onSearchChange, onFilterChange, onExportCSV }) => {
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
           <h1 className="text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-         { t("dashboard.users.students")}
+         { t("dashboardadmin.users.students")}
           </h1>
           <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[120px]"></div>
         </div>

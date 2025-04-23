@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 const GradeList = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const navigate = useNavigate();
   const colors = ["#68D391", "#63B3ED", "#F6AD55", "#FC8181"];
   const getColor = (index) => {
@@ -91,12 +91,12 @@ const GradeList = () => {
                 <div className="flex">
                   <Link
                     to={`/admin/allgrades/${grade._id}`}
-                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-white"
+                    className={`${i18n.language === 'ar' ? 'ml-2' : 'mr-2'} text-[#3C8D99] hover:text-[#2C6E79] dark:text-white`}
                   >
                     <FontAwesomeIcon icon={faEye} className="h-5 w-5" />
                   </Link>
                   <button
-                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-white"
+                    className={`${i18n.language === 'ar' ? 'ml-2' : 'mr-2'} text-[#117C90] hover:text-[#0B5964] dark:text-white`}
                     onClick={() => handleEditClick(grade._id)}
                   >
                     <FontAwesomeIcon icon={faEdit} className="text-lg" />

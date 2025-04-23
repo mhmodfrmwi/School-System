@@ -21,7 +21,7 @@ const ParentHeader = ({ onSearchChange, onFilterChange }) => {
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
           <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-          {t("dashboard.users.parents")}
+          {t("dashboardadmin.users.parents")}
           </h1>
           <div className="mt-1 h-[3px] w-[80px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[95px]"></div>
         </div>
