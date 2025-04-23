@@ -12,6 +12,7 @@ const EditExam = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { exams, status, error } = useSelector((state) => state.exam);
+  const [gradeSubjectSemesterId, setGradeSubjectSemesterId] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -24,9 +25,11 @@ const EditExam = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchExamsForTeacher());
-  }, [dispatch]);
-
+    if (gradeSubjectSemesterId) {
+      dispatch(fetchExamsForTeacher(gradeSubjectSemesterId));
+    }
+  }, [dispatch, gradeSubjectSemesterId]);
+  
   useEffect(() => {
     if (exams && exams.length > 0) {
       const examToEdit = exams.find((exam) => exam._id === examId);

@@ -15,7 +15,7 @@ import about2 from "../../../../assets/about2.png";
 import { useTranslation } from 'react-i18next';
 
 const Motivation = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const dispatch = useDispatch();
   const {
     teacherReward,
@@ -23,7 +23,7 @@ const Motivation = () => {
     teacherDailyReward,
     allTeachersReward,
   } = useSelector((state) => state.motivationTeacher);
-
+  const isRTL = i18n.language === 'ar';
   console.log(allTeachersReward);
   useEffect(() => {
     dispatch(getAllTeacherReward());
@@ -277,19 +277,19 @@ const Motivation = () => {
             <table className="min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-DarkManager">
               <thead className="bg-[#117C90] text-white dark:bg-DarkManager">
                 <tr>
-                  <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
+                  <th className={`border border-[#117C90] px-4 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs sm:text-base md:text-lg`}>
                     {t('table.fullName')}
                   </th>
-                  <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
+                  <th className={`border border-[#117C90] px-4 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs sm:text-base md:text-lg`}>
                     {t('table.academicNumber')}
                   </th>
-                  <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
+                  <th className={`border border-[#117C90] px-4 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs sm:text-base md:text-lg`}>
                     {t('table.totalPoints')}
                   </th>
-                  <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
+                  <th className={`border border-[#117C90] px-4 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs sm:text-base md:text-lg`}>
                     {t('table.badge')}
                   </th>
-                  <th className="border border-[#117C90] px-4 py-2 text-left font-poppins text-xs sm:text-base md:text-lg">
+                  <th className={`border border-[#117C90] px-4 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs sm:text-base md:text-lg`}>
                     {t('motivationteacher.Subject')}
                   </th>
                 </tr>

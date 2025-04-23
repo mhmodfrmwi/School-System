@@ -28,11 +28,11 @@ const AssignmentSubmissions = () => {
   const { assignmentId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const { submissions, status } = useSelector(
     (state) => state.assignmentsTeacher,
   );
-
+  const isRTL = i18n.language === 'ar';
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
 
@@ -76,22 +76,22 @@ const AssignmentSubmissions = () => {
         <table className="min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90] dark:shadow-DarkManager">
           <thead className="bg-[#117C90] text-white dark:bg-DarkManager">
             <tr>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 #
               </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("assignmentt.StudentName")}
               </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("assignmentt.SubmissionDate")}
               </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("assignmentt.Status")}
               </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("assignmentt.Marks")}
               </th>
-              <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tablesheader.Actions")}
               </th>
             </tr>
@@ -118,7 +118,7 @@ const AssignmentSubmissions = () => {
                   <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                     {submission.grade}
                   </td>
-                  <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
+                  <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                     <button
                       aria-label="View Submission Details"
                       className="text-[#117C90] transition-colors duration-300 hover:text-[#244856] dark:text-DarkManager"

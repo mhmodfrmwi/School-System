@@ -106,7 +106,7 @@ export const fetchExamsForTeacher = createAsyncThunk(
 
       const data = await response.json();
       console.log("Fetched exams:", data);
-      return data;
+      return data.exams ||data;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch exams");
     }

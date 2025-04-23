@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/NavTeacher";
 import Sidebar from "../components/SidebarTeacher";
+import { useTranslation } from "react-i18next";
 function Teacher() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { i18n } = useTranslation();
+    const [isRTL, setIsRTL] = useState(false);
+  
+    useEffect(() => {
+      setIsRTL(i18n.language === "ar");
+  
+      document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
+    }, [i18n.language]);
+  
+  
   return (
-    <div className="dark:bg-DarkManager flex min-h-screen bg-[#117C90]">
+    <div className={`dark:bg-DarkManager flex min-h-screen bg-[#117C90]  ${isRTL ? "rtl" : "ltr"}`}>
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        isRTL={isRTL} 
       />
 
-      <div className="my-5 ml-0 mr-5 flex flex-1 flex-col rounded-lg bg-white shadow-lg">
+      <div className={`my-5 ${isRTL ? "mr-0 ml-5" : "ml-0 mr-5"} flex flex-1 flex-col rounded-lg bg-white shadow-lg`}>
         <Navbar setIsSidebarOpen={setIsSidebarOpen} />
         <div className="flex-1 p-8">
           <Outlet />

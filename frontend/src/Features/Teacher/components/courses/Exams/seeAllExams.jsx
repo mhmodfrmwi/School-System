@@ -28,7 +28,7 @@ const ExamCard = ({ exam, onView, onEdit, onDelete, onViewResults }) => {
   const isRTL = i18n.language === "ar";
   const direction = isRTL ? "rtl" : "ltr";
   const textAlign = isRTL ? "text-right" : "text-left";
-  const marginDirection = isRTL ? "mr" : "ml";
+
 
   const typeColor = exam.type === "Online" ? "text-green-600" : "text-red-600";
 
@@ -89,7 +89,7 @@ const ExamCard = ({ exam, onView, onEdit, onDelete, onViewResults }) => {
       </div>
 
       <div
-        className={`flex ${isRTL ? "justify-start" : "justify-end"} mt-4 space-x-4`}
+        className={`mt-4 flex ${isRTL ? "justify-start" : "justify-end"} ${isRTL ? "space-x-reverse" : ""} space-x-4`}
       >
         <button
           aria-label={t("actions.View")}
@@ -132,7 +132,6 @@ const SeeMyExams = () => {
   const isRTL = i18n.language === "ar";
   const direction = isRTL ? "rtl" : "ltr";
   const textAlign = isRTL ? "text-right" : "text-left";
-  const marginDirection = isRTL ? "mr" : "ml";
 
   const { exams, loading, error } = useSelector((state) => state.exam);
 
@@ -192,14 +191,14 @@ const SeeMyExams = () => {
 
   return (
     <div className="space-y-6 p-6" dir={direction}>
-      <div className={`flex flex-col ${isRTL ? "items-end" : "items-start"}`}>
+      <div className={`flex flex-col`}>
         <h1
           className={`font-poppins text-3xl font-bold text-[#244856] ${textAlign}`}
         >
           {t("examst.MyExams")}
         </h1>
         <div
-          className={`mt-1 h-[3px] rounded-t-md bg-[#244856] ${isRTL ? "mr-0" : "ml-0"} w-[100px] lg:h-[4px] lg:w-[160px]`}
+          className={`mt-1 h-[3px] rounded-t-md bg-[#244856] w-[100px] lg:h-[4px] lg:w-[160px]`}
         ></div>
       </div>
 

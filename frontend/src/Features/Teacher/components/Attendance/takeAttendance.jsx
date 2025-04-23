@@ -15,8 +15,8 @@ function TakeAttendance() {
     (state) => state.attendanceTeacher,
   );
   const isActive = (path) => location.pathname === path;
-  const { t } = useTranslation();
-
+  const { t ,i18n} = useTranslation();
+  const isRTL = i18n.language === "ar";
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -110,13 +110,13 @@ function TakeAttendance() {
 
       <div className="overflow-x-auto">
         <table className="mx-auto w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90] dark:shadow-DarkManager">
-          <thead className="bg-[#117C90] text-left text-white dark:bg-DarkManager">
+          <thead className={`bg-[#117C90] text-${isRTL ? 'right' : 'left'} text-white dark:bg-DarkManager`}>
             <tr>
               <th className="px-3 py-2">#</th>
               <th className="px-3 py-2">{t("assignmentt.StudentName")}</th>
-              <th className="px-3 py-2">{t("attendans.AcademicNumber")}</th>
+              <th className="px-3 py-2">{t("attendans.AcademicNumberr")}</th>
               <th className="px-3 py-2">{t("examst.Grade")}</th>
-              <th className="px-3 py-2">{t("attendans.Class")}</th>
+              <th className="px-3 py-2">{t("attendans.Classs")}</th>
               <th className="px-3 py-2 text-center">
                 {t("assignmentt.Status")}
               </th>

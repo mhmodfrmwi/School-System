@@ -15,13 +15,13 @@ const MaterialsInLibrary = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const {
     teacherLibrary = [],
     loading,
     error,
   } = useSelector((state) => state.teacherLibrary || {});
-
+  const isRTL = i18n.language === "ar";
   useEffect(() => {
     dispatch(fetchMaterialsInLibrary(id));
   }, [dispatch, id]);
@@ -51,7 +51,7 @@ const MaterialsInLibrary = () => {
             </div>
 
             <div
-              className="flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] dark:bg-DarkManager py-2 font-medium text-white focus:outline-none sm:ml-auto"
+              className={`flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] dark:bg-DarkManager py-2 font-medium text-white focus:outline-none ${isRTL ? 'sm:mr-auto' : 'sm:ml-auto'}`}
               onClick={() => navigate("/teacher/library-form")}
             >
               {t('libraryt.AddItem')}
@@ -62,22 +62,22 @@ const MaterialsInLibrary = () => {
               <table className="min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] dark:border-DarkManager shadow-md shadow-[#117C90]">
                 <thead className="bg-[#117C90] dark:bg-DarkManager text-white">
                   <tr>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('libraryItem.title')}
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('libraryItem.description')}
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('libraryItem.type')}
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('examst.Grade')}
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('libraryItem.subject')}
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('tablesheader.Actions')}
                     </th>
                   </tr>
@@ -106,7 +106,7 @@ const MaterialsInLibrary = () => {
                           {material.grade_subject_semester_id?.grade_subject_id
                             ?.subjectId?.subjectName || "N/A"}
                         </td>
-                        <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base dark:text-DarkManager">
+                        <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2 dark:text-DarkManager`}>
                           <a
                             href={material.item_url}
                             target="_blank"

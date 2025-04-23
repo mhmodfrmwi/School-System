@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect  } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/NavManager";
 import Sidebar from "../components/SidebarManager";
@@ -16,8 +16,7 @@ function Manager() {
 
 
   return (
-    <div className={`dark:bg-DarkManager flex min-h-screen bg-[#117C90] ${isRTL ? "rtl" : "ltr"}`}
-    dir={isRTL ? "rtl" : "ltr"}>
+    <div className={`dark:bg-DarkManager flex min-h-screen bg-[#117C90] ${isRTL ? "rtl" : "ltr"}`}>
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
@@ -25,9 +24,7 @@ function Manager() {
       />
 
       <div className={`my-5 ${isRTL ? "mr-0 ml-5" : "ml-0 mr-5"} flex flex-1 flex-col rounded-lg bg-white shadow-lg`}>
-        <Navbar 
-        setIsSidebarOpen={setIsSidebarOpen}
-        isRTL={isRTL}  />
+        <Navbar setIsSidebarOpen={setIsSidebarOpen}  isRTL={isRTL}  />
         <div className="flex-1 p-8">
           <Outlet />
         </div>
