@@ -1105,7 +1105,12 @@ i18n
                         Email: "Email",
                         Phone: "Phone",
                         AddPrize: "Add Prize",
-                        EditSchoolHub: "Edit School Hub"
+                        EditSchoolHub: "Edit School Hub",
+                        "phdetails":"Enter school hub details",
+                        "phlocation":"Enter school hub location",
+                        "phtitle":"Enter school hub title",
+                        "level":"Level",
+                        "prize":"Prize"
                     },
                     attendanse: {
                         Classes: "Classes",
@@ -1113,7 +1118,7 @@ i18n
                         ClassData: "Class Data",
                         Noattendance: "No attendance records found",
                     },
-                    scheduleة: {
+                    schedulem: {
                         Time: "Time",
                         Addothersubjects: "Add other subjects",
                         EndTime: "End Time",
@@ -2831,7 +2836,12 @@ i18n
                         Email: "الايميل",
                         Phone: "رقم التليفون",
                         AddPrize: "اضافة جائزة اخرى",
-                        EditSchoolHub: "تحرير المركز المدرسي",
+                        EditSchoolHub: "تعديل المركز المدرسي",
+                        "phdetails":"أدخل تفاصيل مركز المدرسة",
+                        "phlocation":"أدخل موقع مركز المدرسة",
+                        "phtitle":"أدخل عنوان مركز المدرسة",
+                        "level":"المستوي",
+                        "prize":"جائزه"
 
                     },
                     attendanse: {

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 function GradeManager() {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const {
     gradeResults,
     classNames,
@@ -25,7 +25,7 @@ function GradeManager() {
     subjectName: "",
   });
   const [hasSearched, setHasSearched] = useState(false);
-
+  const isRTL = i18n.language === 'ar';
   useEffect(() => {
     dispatch(getClassGradeSubjectNames());
   }, [dispatch]);
@@ -97,7 +97,7 @@ function GradeManager() {
                 onChange={handleInputChange}
                 className="dark:focus:ring-DarkManager dark:focus:border-DarkManager mt-1 block w-full rounded-lg border border-[#BDC3C7] p-3 shadow-sm transition-all focus:border-[#117C90] focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               >
-                <option value="">Select Grade</option>
+                <option value="">{t('scheduleAdmin.form.placeholders.selectGrade')}</option>
                 {gradeNames.map((grade, index) => (
                   <option key={index} value={grade}>
                     {grade}
@@ -115,7 +115,7 @@ function GradeManager() {
                 onChange={handleInputChange}
                 className="dark:focus:ring-DarkManager dark:focus:border-DarkManager mt-1 block w-full rounded-lg border border-[#BDC3C7] p-3 shadow-sm transition-all focus:border-[#117C90] focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               >
-                <option value="">Select Class</option>
+                <option value="">{t('scheduleAdmin.form.placeholders.selectClass')}</option>
                 {classNames.map((className, index) => (
                   <option key={index} value={className}>
                     {className}
@@ -133,7 +133,7 @@ function GradeManager() {
                 onChange={handleInputChange}
                 className="dark:focus:ring-DarkManager dark:focus:border-DarkManager mt-1 block w-full rounded-lg border border-[#BDC3C7] p-3 shadow-sm transition-all focus:border-[#117C90] focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
               >
-                <option value="">Select Subject</option>
+                <option value="">{t('scheduleAdmin.form.placeholders.selectSubject')}</option>
                 {subjectNames.map((subject, index) => (
                   <option key={index} value={subject}>
                     {subject}
@@ -186,19 +186,19 @@ function GradeManager() {
                       <table className="min-w-full bg-white">
                         <thead className="dark:bg-DarkManager bg-[#117C90] text-white">
                           <tr>
-                            <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
+                            <th className={`px-6 py-4 text-${isRTL ? 'right' : 'left'} font-poppins text-sm font-semibold uppercase`}>
                             {t('gradesm.StudentName')}
                             </th>
-                            <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
+                            <th className={`px-6 py-4 text-${isRTL ? 'right' : 'left'} font-poppins text-sm font-semibold uppercase`}>
                             {t('gradesm.AcademicNumber')}
                             </th>
-                            <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
+                            <th className={`px-6 py-4 text-${isRTL ? 'right' : 'left'} font-poppins text-sm font-semibold uppercase`}>
                             {t('gradesm.MidtermDegree')}
                             </th>
-                            <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
+                            <th className={`px-6 py-4 text-${isRTL ? 'right' : 'left'} font-poppins text-sm font-semibold uppercase`}>
                             {t('gradesm.FinalDegree')}
                             </th>
-                            <th className="px-6 py-4 text-left font-poppins text-sm font-semibold uppercase">
+                            <th className={`px-6 py-4 text-${isRTL ? 'right' : 'left'} font-poppins text-sm font-semibold uppercase`}>
                             {t('gradesm.TotalDegree')}
                             </th>
                           </tr>

@@ -85,7 +85,7 @@ const CreateExamSchedule = () => {
                   {...field}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">Select Academic Year</option>
+                  <option value="">{t('scheduleAdmin.form.placeholders.selectAcademicYear')}</option>
                   {academicYears.map((year) => (
                     <option key={year._id} value={year._id}>
                       {year.startYear} - {year.endYear}
@@ -115,7 +115,7 @@ const CreateExamSchedule = () => {
                   {...field}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">Select Semester</option>
+                  <option value="">{t('scheduleAdmin.form.placeholders.selectSemester')}</option>
                   {terms.map((term) => (
                     <option key={term._id} value={term._id}>
                       {term.semesterName}
@@ -145,7 +145,7 @@ const CreateExamSchedule = () => {
                   {...field}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">Select Grade</option>
+                  <option value="">{t('scheduleAdmin.form.placeholders.selectGrade')}</option>
                   {grades.map((grade) => (
                     <option key={grade._id} value={grade._id}>
                       {grade.gradeName}
@@ -183,7 +183,7 @@ const CreateExamSchedule = () => {
                       {...field}
                       className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                     >
-                      <option value="">Select Subject</option>
+                      <option value="">{t('scheduleAdmin.form.placeholders.selectSubject')}</option>
                       {subjects.map((subject) => (
                         <option key={subject._id} value={subject._id}>
                           {subject.subjectName}

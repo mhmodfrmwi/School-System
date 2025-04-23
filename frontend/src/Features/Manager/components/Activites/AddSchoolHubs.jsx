@@ -73,7 +73,7 @@ function AddSchoolHubForm() {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              placeholder="Enter school hub title"
+              placeholder={t('schoolhubs.phtitle')}
               className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
               required
             />
@@ -128,7 +128,7 @@ function AddSchoolHubForm() {
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                placeholder="Enter school hub location"
+                placeholder={t('schoolhubs.phlocation')}
                 className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
                 required
               />
@@ -145,7 +145,7 @@ function AddSchoolHubForm() {
                 type="text"
                 value={prize}
                 onChange={(e) => handleChange(e, index, "prizes")}
-                placeholder={`Level ${index + 1} Prize`}
+                placeholder={`${t('schoolhubs.level')} ${index + 1} ${t('schoolhubs.prize')}`}
                 className="dark:bg-DarkManager2 mb-2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
               />
             ))}
@@ -167,7 +167,7 @@ function AddSchoolHubForm() {
               onChange={(e) =>
                 setFormData({ ...formData, details: e.target.value })
               }
-              placeholder="Enter school hub details"
+              placeholder={t('schoolhubs.phdetails')}
               className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
               rows="3"
             />

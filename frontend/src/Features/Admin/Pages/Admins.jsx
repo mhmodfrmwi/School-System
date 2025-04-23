@@ -10,10 +10,8 @@ const Admins = () => {
   const [isRTL, setIsRTL] = useState(false);
 
   useEffect(() => {
-    // تحقق من اتجاه اللغة الحالية عند التحميل وعند تغيير اللغة
     setIsRTL(i18n.language === "ar");
     
-    // تغيير اتجاه الصفحة في وسم HTML
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
   }, [i18n.language]);
 
