@@ -8,7 +8,7 @@ export default {
   theme: {
     fontFamily: {
       sans: "Roboto Mono, monospace",
-      poppins: ["Poppins", "sans-serif"],
+      poppins: ["Poppins", "Tajawal", "sans-serif"],
       inter: ["Inter", "sans-serif"],
     },
     extend: {

@@ -23,6 +23,7 @@ import GetAllScheduleClasses from "./Features/Manager/components/Schedule/GetAll
 import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/WeekScheduleForManager";
 import ParentKids from "./Features/Parent/ParentKids";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import './fonts.css'; 
 
 /* /////////////////auth imports//////////////////// */
 
