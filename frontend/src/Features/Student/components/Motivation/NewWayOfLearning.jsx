@@ -6,7 +6,7 @@ import img7 from "../../../../assets/img7.png";
 import { useTranslation } from "react-i18next";
 
 const NewWayOfLearning = () => {
-  const { t } = useTranslation();
+  const { t ,i18n } = useTranslation();
   const cards = [
     {
       title: t("motivation.activitiesTitle"),
@@ -31,16 +31,20 @@ const NewWayOfLearning = () => {
   ];
 
   return (
-    <>
+    <div dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header Section */}
       <div className="p-6 mt-6 grid grid-cols-1 pb-0 gap-6 items-center">
         <div>
           <button className="relative text-2xl font-poppins cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-bold text-transparent dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
             {t("motivation.newWayTitle")}
-            <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+            <span className={`absolute bottom-[-9px] h-[4px] w-[85px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] ${
+                i18n.language === 'ar' ? 'right-0' : 'left-0'
+              }`}></span>
         
           </button>
-          <p className="font-poppins text-lg font-medium md:text-left px-4 md:px-4 text-gray-700 dark:text-gray-300 mt-8">
+          <p className={`mt-8 px-4 font-poppins text-lg font-medium text-gray-700 dark:text-gray-300 md:px-4 ${
+  i18n.language === 'ar' ? 'md:text-right' : 'md:text-left'
+}`}>
             {t("motivation.scoreFactors")}
           </p>
         </div>
@@ -70,14 +74,16 @@ const NewWayOfLearning = () => {
 
             {/* Card Description */}
             <div className="p-4 bg-white dark:bg-transparent">
-              <p className="text-gray-600 dark:text-gray-300 font-poppins mt-4 text-sm text-center">
+              <p className={`mt-4 text-center font-poppins text-sm text-gray-600 dark:text-gray-300 ${
+                i18n.language === 'ar' ? 'text-right' : 'text-left'
+              }`}>
                 {card.description}
               </p>
             </div>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -25,7 +25,7 @@ const AllCourses = () => {
 
   useEffect(() => {
     dispatch(fetchSubjects());
-  }, [dispatch]);
+  }, [dispatch , i18n.language]);
 
   const buttons = [
     { label: t('courses.allSubjects'), key: "all" },
@@ -38,6 +38,11 @@ const AllCourses = () => {
   const filteredSubjects = activeButton === t('courses.allSubjects')
     ? subjects
     : subjects.filter((subject) => subject.subjectName === activeButton);
+
+
+    useEffect(() => {
+      setActiveButton(t('courses.allSubjects'));
+    }, [i18n.language, t]);
 
   const handleStartClick = (subjectId) => {
     dispatch(fetchMaterials(subjectId));
@@ -209,4 +214,4 @@ const AllCourses = () => {
   );
 };
 
-export default AllCourses;
+export default  React.memo(AllCourses);

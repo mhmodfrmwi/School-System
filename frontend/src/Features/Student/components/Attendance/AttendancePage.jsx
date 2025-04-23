@@ -8,7 +8,7 @@ import backgroundStars from "@/assets/StudentIcon/bg-color1.png";
 import { useTranslation } from "react-i18next";
 
 const AttendancePage = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const { studentAttendance, loading } = useSelector(
     (state) => state.studentAttendance
   );
@@ -88,7 +88,7 @@ const AttendancePage = () => {
     );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#13082F] p-8 relative font-poppins">
+    <div dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen bg-white dark:bg-[#13082F] p-8 relative font-poppins">
       <div
         className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
         style={{
@@ -106,23 +106,24 @@ const AttendancePage = () => {
           <div className="mb-8">
             <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-3xl font-semibold text-transparent">
               {t("attendance.title")}
-              <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></span>
+              <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${i18n.language === 'ar' ? 'right-0' : 'left-0'
+                  }`}></span>
             </h1>
 
-            <div className="flex flex-col space-y-4 sm:ml-8 sm:flex-row sm:items-center sm:space-x-8 sm:space-y-0">
-              <span className="flex items-center p-4 text-lg font-medium text-green-600 dark:text-green-400">
-                <span className="mr-2 h-4 w-4 rounded-full bg-green-600 dark:bg-green-400"></span>
+            <div className={`flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 ${i18n.language === 'ar' ? 'sm:mr-8 sm:space-x-reverse sm:space-x-8' : 'sm:ml-8 sm:space-x-8'}`}>
+              <span className={`flex items-center p-4 text-lg font-medium text-green-600 dark:text-green-400 ${i18n.language === 'ar' ? 'space-x-reverse' : ''}`}>
+                <span className={`h-4 w-4 rounded-full bg-green-600 dark:bg-green-400 ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}></span>
                 {t("attendance.present")}:{" "}
                 {attendanceStats.reduce((sum, day) => sum + day.presentCount, 0)}
               </span>
-              <span className="flex items-center p-4 text-lg font-medium text-red-600 dark:text-[#FF6B6B]">
-                <span className="mr-2 h-4 w-4 rounded-full bg-red-600 dark:bg-[#FF6B6B]"></span>
+              <span className={`flex items-center p-4 text-lg font-medium text-red-600 dark:text-[#FF6B6B] ${i18n.language === 'ar' ? 'space-x-reverse' : ''}`}>
+                <span className={`h-4 w-4 rounded-full bg-red-600 dark:bg-[#FF6B6B] ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}></span>
                 {t("attendance.absent")}:{" "}
                 {attendanceStats.reduce((sum, day) => sum + day.absentCount, 0)}
               </span>
             </div>
 
-            <div className="relative mt-5 w-full max-w-[500px] sm:ml-8 sm:pl-8">
+            <div className={`relative mt-5 w-full max-w-[500px] ${i18n.language === 'ar' ? 'sm:mr-8 sm:pr-8' : 'sm:ml-8 sm:pl-8'}`}>
               <div className="h-5 rounded-full bg-gray-200 dark:bg-[#281459]">
                 <div
                   className="relative h-5 rounded-full bg-gradient-to-r from-green-500 to-green-300 dark:from-green-400 dark:to-green-600"

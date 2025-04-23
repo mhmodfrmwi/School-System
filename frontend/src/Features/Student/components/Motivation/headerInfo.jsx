@@ -9,7 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 function HeaderInfo() {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const dispatch = useDispatch();
   const { reward, semesterReward } = useSelector((state) => state.motivation);
 
@@ -22,7 +22,7 @@ function HeaderInfo() {
     <div className="flex justify-center">
       <div className="mt-4 flex w-[97%] items-center justify-between rounded-2xl bg-gradient-to-r from-Color1OnBoarding via-Color2OnBoarding to-Color4OnBoarding dark:bg-[#312A5E] p-6 shadow-lg dark:shadow-gray-900">
         {/* Profile image and details on the left */}
-        <div className="flex items-center space-x-4">
+        <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
           <img
             src={Frame}
             className="h-24 w-24 md:h-32 md:w-32"
@@ -42,15 +42,17 @@ function HeaderInfo() {
             >
               {semesterReward.badge ? semesterReward.badge : t("badges.green")}
             </h1>
+            <div className={`flex items-center ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
             <img
               src={ScheduleIcon}
               className="h-6 w-6"
               alt={t("motivation.scheduleIcon")}
             />
-            <p className="mt-1 text-3xl text-white dark:text-white">
+            <p className={`mt-1 text-3xl text-white dark:text-white ${i18n.language === 'ar' ? 'mr-2' : 'ml-2'}`}>
               {semesterReward.totalSemesterPoints}
             </p>
           </div>
+        </div>
         </div>
 
         {/* Circular content on the most right */}

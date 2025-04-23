@@ -735,10 +735,6 @@ i18n
                         },
                         "prizeLevel": "Level ",
                         "notFound": "No activity found"
-                    },
-                    "errors": {
-                        "title": "Error",
-                        "default": "An error occurred"
                     }
                     ,
                     "contests": {
@@ -1156,7 +1152,7 @@ i18n
                     //Nav
                     SearchAdminPage: "Search Admin Page",
                     //Dashboard
-                    "dashboard": {
+                    "dashboardadmin": {
                         "overview": "Overview",
                         "statistics": "Statistics of users",
                         "calendar": "Calendar",
@@ -1590,7 +1586,7 @@ i18n
                         }
                     },
                     //schedule
-                    "schedule": {
+                    "scheduleAdmin": {
                         "header": {
                             "title": "Schedule",
                             "export": "Export CSV",
@@ -2466,11 +2462,6 @@ i18n
                         "prizeLevel": "المستوى ",
                         "notFound": "لم يتم العثور على نشاط"
                     },
-                    "errors": {
-                        "title": "خطأ",
-                        "default": "حدث خطأ ما"
-                    }
-                    ,
 
                     "contests": {
                         "title": "الأنشطة",
@@ -2887,7 +2878,7 @@ i18n
                     //Nav
                     SearchAdminPage: "البحث في صفحة المشرف",
                     //Dashboard
-                    "dashboard": {
+                    "dashboardadmin": {
                         "overview": "نظرة عامة",
                         "statistics": "إحصائيات المستخدمين",
                         "calendar": "التقويم",
@@ -3323,7 +3314,7 @@ i18n
                         }
                     },
                     //schedule
-                    "schedule": {
+                    "scheduleAdmin": {
                         "header": {
                             "title": "الجدول",
                             "export": "تصدير CSV",

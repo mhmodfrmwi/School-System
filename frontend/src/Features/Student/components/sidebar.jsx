@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
 
 const Sidebar = ({ closeSidebar }) => {
-  const { t } = useTranslation();
+  const { t , i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { fullName } = useSelector((state) => state.login);
@@ -47,18 +47,21 @@ const Sidebar = ({ closeSidebar }) => {
   ];
 
   return (
-    <div className="fixed left-0 top-0 z-50 h-full w-72 transform bg-white dark:bg-[#281459] shadow-lg dark:shadow-gray-900 transition-transform duration-300 ease-in-out">
+    <div className={`fixed top-0 z-50 h-full w-72 transform bg-white dark:bg-[#281459] shadow-lg dark:shadow-gray-900 transition-transform duration-300 ease-in-out
+      ${i18n.language === 'ar' ? 'right-0' : 'left-0'}`}>
       <div className="relative bg-[#EEE8F6] dark:bg-[#2D0C77] p-6 text-[#043B44] dark:text-white">
         <button
           onClick={closeSidebar}
-          className="absolute right-1 top-2 text-2xl text-[#043B44] dark:text-white hover:text-gray-600 dark:hover:text-gray-300"
+          className={`absolute top-2 text-2xl text-[#043B44] dark:text-white hover:text-gray-600 dark:hover:text-gray-300
+            ${i18n.language === 'ar' ? 'left-1' : 'right-1'}`}
         >
-          <div className="mr-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#c0cce6] dark:bg-[#5A4A7B] font-poppins">
+          <div className={`flex h-7 w-7 items-center justify-center rounded-full bg-[#c0cce6] dark:bg-[#5A4A7B] font-poppins
+            ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}>
             <FontAwesomeIcon icon={faTimes} className="mx-4 h-4 w-4" />
           </div>
         </button>
         <div className="flex items-center justify-between">
-          <div>
+          <div className={`${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}>
             <h2 className="font-poppins text-lg font-bold">{t('KhatabSchool')}</h2>
             <p className="font-poppins text-sm text-gray-400 dark:text-gray-300">
               Term1 2025-2026
@@ -68,16 +71,16 @@ const Sidebar = ({ closeSidebar }) => {
         </div>
       </div>
 
-      <div className="flex items-center p-4">
+      <div className={`flex items-center p-4`}>
         <img src={userImage} alt="User" className="h-10 w-10 rounded-full" />
-        <div className="ml-2">
+        <div className={i18n.language === 'ar' ? 'mr-2 text-right' : 'ml-2 text-left'}>
           <p className="font-poppins font-semibold text-[#043B44] dark:text-white">{fullName}</p>
           <p className="font-poppins text-sm text-gray-400 dark:text-gray-300">G/3 Student</p>
         </div>
       </div>
 
       <nav className="mt-4 h-[calc(100vh-200px)] overflow-y-auto">
-        <ul>
+        <ul className={`${i18n.language === 'ar' ? 'pr-2' : 'pl-2'}`}>
           {menuItems.map((item, index) => (
             <li
               key={index}
@@ -89,14 +92,20 @@ const Sidebar = ({ closeSidebar }) => {
                   closeSidebar();
                 }
               }}
-              className="flex cursor-pointer items-center p-2 font-poppins text-[#043B44] dark:text-white transition-transform duration-200 hover:bg-gray-100 dark:hover:bg-[#5A4A7B] hover:shadow-sm"
+              className={`flex cursor-pointer items-center p-2 font-poppins text-[#043B44] dark:text-white 
+                transition-transform duration-200 hover:bg-gray-100 dark:hover:bg-[#5A4A7B] hover:shadow-sm
+                ${i18n.language === 'ar' ? 'justify-start' : 'justify-start'}`}
             >
+             <div className={`flex items-center`}>
               <img
                 src={item.icon}
                 alt={`${item.label} icon`}
-                className="mr-2 h-6 w-6"
+                className="h-6 w-6"
               />
-              {item.label}
+             <span className={`${i18n.language === 'ar' ? 'mr-2' : 'ml-2'}`}>
+                {item.label}
+              </span>
+              </div>
             </li>
           ))}
         </ul>

@@ -12,7 +12,7 @@ import backgroundWaves from "@/assets/StudentIcon/bg-color2.png";
 import backgroundStars from "@/assets/StudentIcon/bg-color1.png";
 
 const Contests = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const navigate = useNavigate();
   const role = sessionStorage.getItem("role");
   const { contests, loading } = useSelector((state) => state.studentContests);
@@ -24,7 +24,7 @@ const Contests = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#13082F]">
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#13082F]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
         <Loader role={role} />
       </div>
     );
@@ -49,7 +49,7 @@ const Contests = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#13082F] p-8 relative font-poppins">
+    <div className="min-h-screen bg-white dark:bg-[#13082F] p-8 relative font-poppins" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
       <div
         className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
         style={{
@@ -66,7 +66,7 @@ const Contests = () => {
       
 
       {/* Floating Image */}
-      <div className="absolute right-0 top-[70px] transform -translate-y-1/2 z-10 hidden md:block">
+      <div className={`absolute ${i18n.language === 'ar' ? 'left-0' : 'right-0'} top-[70px] transform -translate-y-1/2 z-10 hidden md:block`}>
         <img src={activityImage} className="h-30 w-30" alt="Schedule Icon" />
       </div>
 
@@ -75,7 +75,9 @@ const Contests = () => {
         <div className="mb-1">
           <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-3xl font-semibold text-transparent">
             {t("contests.title")}
-            <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></span>
+            <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${
+              i18n.language === 'ar' ? 'right-0' : 'left-0'
+            }`}></span>
           </h1>
 
           {/* Updated Buttons Section */}

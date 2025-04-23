@@ -12,7 +12,7 @@ import Loader from "@/ui/Loader";
 import { useTranslation } from 'react-i18next';
 
 function Grades() {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { allDegrees, loading } = useSelector((state) => state.studentGrades);
@@ -23,7 +23,7 @@ function Grades() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#13082F]">
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#13082F]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
         <Loader role="student" />
       </div>
     );
@@ -43,7 +43,7 @@ function Grades() {
   });
 
   return (
-    <div className="font-poppins min-h-screen bg-white dark:bg-[#13082F] relative">
+    <div className="font-poppins min-h-screen bg-white dark:bg-[#13082F] relative" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
       {/* Background Images for Dark Mode */}
       <div
         className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
@@ -66,12 +66,12 @@ function Grades() {
             style={{ objectFit: "cover" }}
             className="relative h-96 w-full md:h-[530px]"
           />
-          <div className="z-100 absolute inset-0 left-20 top-40 sm:top-48 lg:top-60">
+          <div className={`z-100 absolute inset-0 ${i18n.language === 'ar' ? 'right-20' : 'left-20'} top-40 sm:top-48 lg:top-60`}>
             <h2 className="font-semibold text-lg text-white dark:text-gray-300">
               {t("grades.header.title")}
             </h2>
             <p
-              className="my-24 w-52 rounded-xl cursor-pointer bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] p-3 font-semibold text-white text-center"
+              className={`my-24 w-52 rounded-xl cursor-pointer bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] p-3 font-semibold text-white text-center`}
             >
               {t("grades.header.subtitle")}
             </p>
@@ -82,7 +82,7 @@ function Grades() {
       {/* Grades Section */}
       <div className="container mx-auto px-4 py-8  w-[90%] relative z-10">
         <div className="flex items-center py-4">
-          <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
+          <p className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
             {t("grades.title")}
           </button>
@@ -148,7 +148,7 @@ function Grades() {
         {/* Performance Evolution Over Semesters Section */}
         <div className="mt-12 mb-10">
           <div className="flex items-center py-4 mb-4">
-            <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
+            <p className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}></p>
             <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
               {t("grades.performance.title")}
             </button>

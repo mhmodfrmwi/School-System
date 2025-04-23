@@ -87,6 +87,7 @@ const Navbar = () => {
     const newLang = i18n.language === "en" ? "ar" : "en";
     i18n.changeLanguage(newLang);
     localStorage.setItem("i18nextLng", newLang);
+    document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
   };
 
   const url = window.location.pathname;
@@ -116,12 +117,13 @@ const Navbar = () => {
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
+    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
   }, [i18n.language]);
 
   return (
     <div className="relative z-50">
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white dark:bg-[#13082F] px-4 shadow-md dark:shadow-[0_4px_15px_rgba(224,170,238,0.3)]">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 rtl:space-x-reverse">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="flex rounded-lg p-2"
@@ -154,11 +156,11 @@ const Navbar = () => {
         </div>
 
         <div
-          className="relative ml-auto hidden max-w-sm sm:flex"
+          className="relative ml-auto hidden max-w-sm sm:flex rtl:mr-auto rtl:ml-0"
           ref={searchRef}
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
-          <div className="absolute left-14 top-1/2 z-10 -translate-y-1/2 transform lg:left-6">
+          <div className={`absolute ${i18n.language === 'ar' ? 'right-14 lg:right-6' : 'left-14 lg:left-6'} top-1/2 z-10 -translate-y-1/2 transform`}>
             <FaSearch className="text-lg text-gray-400 dark:text-gray-300" />
           </div>
 
@@ -169,7 +171,7 @@ const Navbar = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-full border bg-gray-100 dark:bg-gray-700 py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 dark:text-gray-200 focus:outline-none md:text-left md:text-base"
+              className={`w-full rounded-full border bg-gray-100 dark:bg-gray-700 py-2 ${i18n.language === 'ar' ? 'pr-12 pl-12' : 'pl-12 pr-12'} text-center font-poppins text-sm text-gray-800 dark:text-gray-200 focus:outline-none md:text-left md:text-base`}
             />
 
             {isDropdownOpen && (
@@ -194,7 +196,7 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="absolute right-14 top-1/2 -translate-y-1/2 transform lg:right-7">
+          <div className={`absolute ${i18n.language === 'ar' ? 'left-14 lg:left-6' : 'right-14 lg:right-7'} top-1/2 -translate-y-1/2 transform`}>
             <FontAwesomeIcon
               icon={faSliders}
               className="text-lg text-gray-400 dark:text-gray-300"
@@ -202,7 +204,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 md:space-x-6">
+        <div className="flex items-center space-x-2 md:space-x-6 rtl:space-x-reverse">
           <button className="relative p-2 text-gray-500 dark:text-gray-300">
             <FaBell className="text-xl" />
             <span className="absolute right-2 top-1 block h-3.5 w-3.5 rounded-full bg-red-500"></span>
@@ -215,7 +217,7 @@ const Navbar = () => {
           </button>
           <ThemeSwitcher />
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 rtl:space-x-reverse">
             <img
               src={userImage}
               alt="User"
@@ -235,7 +237,7 @@ const Navbar = () => {
           {settingToggle && (
             <div
               ref={settingsRef}
-              className="absolute right-5 top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#D1B5FF] to-[#AB92ED] dark:from-[#4B3D6B] dark:to-[#2D1E4A]"
+              className={`absolute ${i18n.language === 'ar' ? 'left-5' : 'right-5'} top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#D1B5FF] to-[#AB92ED] dark:from-[#4B3D6B] dark:to-[#2D1E4A]`}
             >
               <div>
                 <div

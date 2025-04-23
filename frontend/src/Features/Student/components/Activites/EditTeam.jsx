@@ -12,7 +12,7 @@ import backgroundWaves from "@/assets/StudentIcon/bg-color2.png";
 import backgroundStars from "@/assets/StudentIcon/bg-color1.png";
 
 const EditTeam = () => {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const { teamId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -158,7 +158,9 @@ const EditTeam = () => {
       <div className="w-2/3 flex justify-between items-center mb-6 mx-auto relative z-10">
         <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
           {t('editTeam.title')}
-          <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
+          <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${
+              i18n.language === 'ar' ? 'right-0' : 'left-0'
+            }`}></span>
         </h1>
         <Button
           variant="solid"

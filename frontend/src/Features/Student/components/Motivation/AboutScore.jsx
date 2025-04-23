@@ -2,13 +2,15 @@ import aboutScore from "../../../../assets/aboutScore.png";
 import { useTranslation } from "react-i18next";
 
 const AboutScore = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   return (
-    <div className=" p-6 mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center ">
-      <div>
+    <div dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} className=" p-6 mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center ">
+      <div className={i18n.language === 'ar' ? 'text-right' : 'text-left'}>
         <button className="relative text-2xl font-poppins cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-bold text-transparent dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
           {t("motivation.aboutScore")}
-          <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+          <span className={`absolute bottom-[-9px] h-[4px] w-[85px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] ${
+            i18n.language === 'ar' ? 'right-0' : 'left-0'
+          }`}></span>
         </button>
         <h3 className="text-xl font-poppins font-semibold mb-2 text-gray-800 dark:text-white mt-8 ml-4">
           {t("motivation.newWayTitle")}

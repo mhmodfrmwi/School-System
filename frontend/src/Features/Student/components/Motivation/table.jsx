@@ -4,7 +4,7 @@ import { getStudentWithFriendsReward } from "../StudentRedux/motivationSlice";
 import { useTranslation } from "react-i18next";
 
 function Table() {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const dispatch = useDispatch();
   const { studentWithFriendsReward: friends } = useSelector(
     (state) => state.motivation
@@ -45,19 +45,23 @@ function Table() {
   );
 
   return (
-    <>
+    <div dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
       <section>
         <div className="mx-auto p-6 ">
-          <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
+          <div className={`mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6 ${
+            i18n.language === 'ar' ? 'text-right' : 'text-left'
+          }`}>
             <div className="ms-[-20px] flex flex-col p-6">
               <h1 className=" relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-lg font-bold text-[#244856] text-transparent  sm:text-xl lg:text-2xl dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
                 {t("table.weightsLimits")}
-                <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+                <span className={`absolute bottom-[-9px] h-[4px] w-[85px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] ${
+                  i18n.language === 'ar' ? 'right-0' : 'left-0'
+                }`}></span>
         
               </h1>
             </div>
           </div>
-          <div className="overflow-x-auto w-[70%] ml-10">
+          <div className={`overflow-x-auto ${i18n.language === 'ar' ? 'mr-10' : 'ml-10'} w-[70%]`}>
             <table className="min-w-full border-collapse rounded-2xl border-2 border-pink-300 dark:border-[#A3BFFA] shadow-lg">
               <thead>
                 <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:bg-[#C459D9] text-white">
@@ -98,14 +102,18 @@ function Table() {
         </div>
 
         <div className="mx-auto p-6 mb-12">
-          <div className="ms-[-20px] flex flex-col p-6">
+          <div className={`flex flex-col p-6 ${
+            i18n.language === 'ar' ? 'text-right' : 'text-left'
+          }`}>
           <h1 className=" relative cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-lg font-bold text-[#244856] text-transparent  sm:text-xl lg:text-2xl dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
           {t("table.topStudents")}
-          <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] rounded-t-full"></span>
+          <span className={`absolute bottom-[-9px] h-[4px] w-[85px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] ${
+                i18n.language === 'ar' ? 'right-0' : 'left-0'
+              }`}></span>
         
             </h1>
           </div>
-          <div className="overflow-x-auto w-[70%] ml-10">
+          <div className={`overflow-x-auto ${i18n.language === 'ar' ? 'mr-10' : 'ml-10'} w-[70%]`}>
             <div className="max-h-[400px] overflow-y-auto mt-10">
               <table className="min-w-full border-collapse rounded-2xl border-2 border-pink-300 dark:border-[#A3BFFA] shadow-lg dark:shadow-[#A3BFFA]">
                 <thead>
@@ -147,7 +155,7 @@ function Table() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 
