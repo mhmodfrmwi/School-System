@@ -114,7 +114,7 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
 const LibraryTeacherPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
 
   const {
     allGeneralMaterialVideoPdf,
@@ -256,8 +256,9 @@ const LibraryTeacherPage = () => {
         <div
           className={`fixed z-40 mt-[-185px] h-fit min-h-[75vh] w-64 transform border bg-gray-100  p-6 shadow transition-transform duration-300 md:relative md:mt-[0px] ${
             isSidebarOpen ? "translate-x-0" : "ms-[-40px] -translate-x-full"
-          } md:translate-x-0`}
+          } md:translate-x-0 ${i18n.language === 'ar' ? 'md:ml-8' : ''}`}
         >
+          
           <h2 className="mb-4 text-xl font-bold text-[#117C90] dark:text-DarkManager">
           {t('libraryVideos.subjectsTitle')}
           </h2>

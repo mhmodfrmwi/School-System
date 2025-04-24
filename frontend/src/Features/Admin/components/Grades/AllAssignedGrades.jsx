@@ -12,11 +12,11 @@ import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
 import { useTranslation } from 'react-i18next';
 const AllAssignedGrades = () => {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const dispatch = useDispatch();
   const { assignedGrades, loading } = useSelector((state) => state.assignGrade);
   const { id } = useParams();
-
+  const isRTL = i18n.language === 'ar';
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -67,13 +67,13 @@ const AllAssignedGrades = () => {
         <table className="w-full table-auto border-collapse overflow-hidden rounded-lg bg-[#FBE9D1] shadow-md">
           <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
             <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-4 py-2 text-${isRTL ? 'right' : 'left'} text-xs font-medium sm:text-sm md:text-base`}>
               {t("grade.table.columns.grade")}
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-4 py-2 text-${isRTL ? 'right' : 'left'} text-xs font-medium sm:text-sm md:text-base`}>
               {t("grade.table.columns.academicYear")}
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium sm:text-sm md:text-base">
+              <th className={`px-4 py-2 text-${isRTL ? 'right' : 'left'} text-xs font-medium sm:text-sm md:text-base`}>
               {t("grade.table.columns.actions")}
               </th>
             </tr>

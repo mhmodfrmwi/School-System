@@ -17,7 +17,7 @@ import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
 import { useTranslation } from "react-i18next";
 
 const StudentExamPage = () => {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const { examId, gradeSubjectSemesterId } = useParams();
@@ -313,6 +313,7 @@ const StudentExamPage = () => {
           style={{
             backgroundImage: `url(${backgroundStars})`,
           }}
+          dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
         ></div>
         <div
           className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
@@ -364,7 +365,8 @@ const StudentExamPage = () => {
         <div className="mb-8 flex w-full items-center justify-between">
           <h1 className="relative bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-2xl font-semibold text-transparent md:text-3xl">
             {currentExam.exam.title}
-            <span className="absolute bottom-[-9px] left-0 h-[4px] w-[50%] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></span>
+            <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${i18n.language === 'ar' ? 'right-0' : 'left-0'
+                  }`}></span>
           </h1>
           <Button
             variant="solid"

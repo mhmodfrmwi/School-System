@@ -155,26 +155,26 @@ function DashboardManager() {
       {/* Search Section */}
       <section>
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-        {t("dashboard.overview")}
+        {t("dashboardadmin.overview")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856]"></div>
 
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[
             {
-              label:  t("dashboard.users.students"),
+              label:  t("dashboardadmin.users.students"),
               value: students,
               icon: "/src/assets/students 1.png",
               bgColor: "#D1F3E0",
             },
             {
-              label: t("dashboard.users.teachers"),
+              label: t("dashboardadmin.users.teachers"),
               value: teachers,
               icon: "/src/assets/Group.png",
               bgColor: "#E1F1FF",
             },
             {
-              label: t("dashboard.users.parents"),
+              label: t("dashboardadmin.users.parents"),
               value: parents,
               icon: "/src/assets/vector.png",
               bgColor: "#FFF2D8",
@@ -218,7 +218,7 @@ function DashboardManager() {
       {/* Statistics Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-        {t("dashboard.statistics")}
+        {t("dashboardadmin.statistics")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[200px] rounded-t-md bg-[#244856]"></div>
 
@@ -226,7 +226,7 @@ function DashboardManager() {
           {/* Students Chart */}
           <div className="dark:bg-DarkManager2 rounded-lg bg-white p-6 shadow-md">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-            {t("dashboard.charts.students")}
+            {t("dashboardadmin.charts.students")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {students > 0 ? (
@@ -234,11 +234,11 @@ function DashboardManager() {
                   <Pie
                     data={[
                       {
-                        name: t("dashboard.charts.female"),
+                        name: t("dashboardadmin.charts.female"),
                         value: femaleStudents,
                         color: "#4CAF50",
                       },
-                      { name: t("dashboard.charts.male"), value: maleStudents, color: "#2196F3" },
+                      { name: t("dashboardadmin.charts.male"), value: maleStudents, color: "#2196F3" },
                     ]}
                     dataKey="value"
                     cx="50%"
@@ -260,7 +260,7 @@ function DashboardManager() {
           {/* Teachers Chart */}
           <div className="dark:bg-DarkManager2 rounded-lg bg-white p-6 shadow-md dark:text-white">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-            {t("dashboard.charts.teachers")}
+            {t("dashboardadmin.charts.teachers")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {teachers > 0 ? (
@@ -268,11 +268,11 @@ function DashboardManager() {
                   <Pie
                     data={[
                       {
-                        name: t("dashboard.charts.female"),
+                        name: t("dashboardadmin.charts.female"),
                         value: femaleTeachers,
                         color: "#4CAF50",
                       },
-                      { name: t("dashboard.charts.male"), value: maleTeachers, color: "#2196F3" },
+                      { name: t("dashboardadmin.charts.male"), value: maleTeachers, color: "#2196F3" },
                     ]}
                     dataKey="value"
                     cx="50%"
@@ -294,7 +294,7 @@ function DashboardManager() {
           {/* Pie Chart */}
           <div className="dark:bg-DarkManager2 col-span-1 rounded-lg bg-white p-6 shadow-md dark:text-white sm:col-span-2 lg:col-span-1">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-            {t("dashboard.charts.percentage")}
+            {t("dashboardadmin.charts.percentage")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {pieData[0].value > 0 ||
@@ -477,7 +477,7 @@ function DashboardManager() {
       {/* Calendar Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-        {t("dashboard.calendar")}
+        {t("dashboardadmin.calendar")}
         </h2>
         <div className="mb-6 mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856]"></div>
         <div className="max-w-[400px] rounded-lg bg-white p-6 shadow-md dark:bg-[#117C90]">

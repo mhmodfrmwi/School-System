@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useLocation } from "react-router-dom";
 import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
 import Loader from "@/ui/Loader";
-
+import { useTranslation } from 'react-i18next';
 function StudentAttendanceDetails() {
   const { id } = useParams();
+  const { t } = useTranslation();
   const location = useLocation();
   const student = location.state?.student;
 
@@ -62,21 +63,21 @@ function StudentAttendanceDetails() {
   return (
     <div className="mx-auto w-full max-w-2xl p-6 font-poppins">
       <h2 className="mb-6 text-center text-2xl font-bold text-[#117C90] dark:text-DarkManager">
-        Attendance Details for {student?.fullName || "Unknown"}
+      {t("attendans.AttendanceDetails")} {student?.fullName || "Unknown"}
       </h2>
 
       <div className="rounded-lg border bg-white p-4 shadow-md dark:text-black">
         <p className="mb-2">
-          <strong>Academic Number:</strong> {student?.academicNumber || "N/A"}
+          <strong>{t("attendans.AcademicNumber")}:</strong> {student?.academicNumber || "N/A"}
         </p>
         <p className="mb-2">
-          <strong>Class:</strong> {student?.className || "Unknown"}
+          <strong>{t("attendans.Class")}:</strong> {student?.className || "Unknown"}
         </p>
         <p className="mb-2">
-          <strong>Total Absences:</strong> {totalAbsences}
+          <strong>{t("attendans.TotalAbsences")}:</strong> {totalAbsences}
         </p>
         <p className="mb-2">
-          <strong>Total Attendances:</strong> {totalAttendances}
+          <strong>{t("attendans.TotalAttendances")}:</strong> {totalAttendances}
         </p>
       </div>
 
@@ -85,8 +86,8 @@ function StudentAttendanceDetails() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-[#117C90] text-white dark:bg-DarkManager">
-                <th className="border p-2">Date</th>
-                <th className="border p-2">Status</th>
+                <th className="border p-2">{t("attendans.Date")}</th>
+                <th className="border p-2"> {t("attendans.Status")}</th>
               </tr>
             </thead>
             <tbody>

@@ -9,13 +9,13 @@ import { useTranslation } from 'react-i18next';
 const TeacherTable = () => {
   const { teachers = [] } = useSelector((state) => state.teachers || {});
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [searchText, setSearchText] = useState("");
   const [filterOption, setFilterOption] = useState("");
   const [loading, setLoading] = useState(true); // Added loading state
-
+  const isRTL = i18n.language === 'ar';
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchTeachers());
@@ -66,7 +66,7 @@ const TeacherTable = () => {
   }
 
   return (
-    <div className="relative w-full px-4 sm:w-full lg:px-0">
+    <div className="relative w-full px-4 sm:w-full lg:px-0" dir={isRTL ? 'rtl' : 'ltr'}>
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -77,22 +77,22 @@ const TeacherTable = () => {
           <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.name")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.subject")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.email")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.AcademicNumber")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.gender")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.actions")}
                 </th>
               </tr>
@@ -108,7 +108,7 @@ const TeacherTable = () => {
                       <img
                         src={teacher.profileImage}
                         alt="Profile"
-                        className="mr-2 h-8 rounded-full"
+                        className={`${isRTL ? 'ml-2' : 'mr-2'} h-8 w-8 rounded-full sm:h-10 sm:w-10`}
                       />
                       <span className="truncate font-poppins">
                         {teacher.fullName}
@@ -121,7 +121,7 @@ const TeacherTable = () => {
                     <td className="px-3 py-2">{teacher.academicNumber}</td>
                     <td className="px-3 py-2">{teacher.gender}</td>
                     <td className="px-3 py-2">
-                      <div className="inline-flex space-x-2">
+                      <div className={`inline-flex ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
                         <Link
                           to={`/admin/allteachers/${teacher._id}`}
                           className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-[#043B44]"

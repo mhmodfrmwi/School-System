@@ -11,7 +11,7 @@ import backgroundWaves from "@/assets/StudentIcon/bg-color2.png";
 import backgroundStars from "@/assets/StudentIcon/bg-color1.png";
 
 const DetailesActivity = () => {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -74,7 +74,9 @@ const DetailesActivity = () => {
         <div className="mb-1">
           <h1 className="relative mb-8 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-3xl font-semibold text-transparent">
             {t("activityDetails.title")}
-            <span className="absolute bottom-[-9px] left-0 h-[4px] w-[100px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></span>
+            <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${
+              i18n.language === 'ar' ? 'right-0' : 'left-0'
+            }`}></span>
           </h1>
 
           {/* Updated Buttons Section */}

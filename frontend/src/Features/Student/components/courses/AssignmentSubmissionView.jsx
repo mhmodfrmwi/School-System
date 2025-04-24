@@ -11,7 +11,7 @@ import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
 import { useTranslation } from "react-i18next";
 
 const SubmissionView = () => {
-  const { t } = useTranslation(); // Removed unused i18n
+  const { t,i18n } = useTranslation(); // Removed unused i18n
   const role = sessionStorage.getItem("role");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -66,7 +66,8 @@ const SubmissionView = () => {
         <div className="w-full flex justify-between items-center mb-6">
           <h1 className="relative text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
             {submission ? submission.assignment_id?.title : t("submission.view.title")}
-            <span className="absolute left-0 bottom-[-9px] w-[90px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
+            <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${i18n.language === 'ar' ? 'right-0' : 'left-0'
+                  }`}></span>
           </h1>
           <Button
             variant="solid"

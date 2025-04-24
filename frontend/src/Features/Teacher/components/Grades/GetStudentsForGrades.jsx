@@ -10,10 +10,10 @@ import { useTranslation } from 'react-i18next';
 const GetStudentsForGrades = () => {
   const { classId, gradeSubjectSemesterId } = useParams();
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const { scores, loading, error } = useSelector((state) => state.examScores);
   const navigate = useNavigate();
-
+  const isRTL = i18n.language === "ar";
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
 
@@ -127,11 +127,11 @@ const GetStudentsForGrades = () => {
             <table className="min-w-full">
               <thead>
                 <tr className="bg-[#117C90] text-white dark:bg-DarkManager">
-                  <th className="px-4 py-3 text-left font-poppins font-semibold">#</th>
-                  <th className="px-4 py-3 text-left font-poppins font-semibold">
+                  <th className={`px-4 py-3 text-${isRTL ? 'right' : 'left'} font-poppins font-semibold`}>#</th>
+                  <th className={`px-4 py-3 text-${isRTL ? 'right' : 'left'} font-poppins font-semibold`}>
                     {t('attendans.AcademicNumber')}
                   </th>
-                  <th className="px-4 py-3 text-left font-poppins font-semibold">
+                  <th className={`px-4 py-3 text-${isRTL ? 'right' : 'left'} font-poppins font-semibold`}>
                     {t('assignmentt.StudentName')}
                   </th>
                 </tr>

@@ -8,7 +8,7 @@ import Pagination from "../Pagination";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 const TermList = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const { terms = [] } = useSelector((state) => state.terms || {});
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -109,7 +109,7 @@ const TermList = () => {
 
                 <div className="flex">
                   <button
-                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-white"
+                    className={`${i18n.language === 'ar' ? 'ml-2' : 'mr-2'} cursor-pointer border-none bg-none text-[#117C90] dark:text-white`}
                     onClick={() => handleEdit(term)}
                   >
                     <FontAwesomeIcon icon={faEdit} className="text-lg" />

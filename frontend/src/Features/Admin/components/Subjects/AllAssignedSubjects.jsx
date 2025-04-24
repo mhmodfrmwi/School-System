@@ -11,7 +11,7 @@ import SubjectsHeader from "./AssignSubjectHeader";
 import Pagination from "../Pagination";
 import { useTranslation } from 'react-i18next';
 const AssignedSubjects = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const dispatch = useDispatch();
   const { assignedSubjects, loading: loadingSubjects } = useSelector(
     (state) => state.assignSubject,
@@ -20,7 +20,7 @@ const AssignedSubjects = () => {
     (state) => state.grades,
   );
   const { id } = useParams();
-
+  const isRTL = i18n.language === 'ar';
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [searchText, setSearchText] = useState("");
@@ -111,16 +111,16 @@ const AssignedSubjects = () => {
                 <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
                   <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
                     <tr>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('assignedSubjects.tableHeaders.subject')}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('assignedSubjects.tableHeaders.grade')}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('assignedSubjects.tableHeaders.term')}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('assignedSubjects.tableHeaders.actions')}
                       </th>
                     </tr>
@@ -143,7 +143,7 @@ const AssignedSubjects = () => {
                           <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                             {subject.term}
                           </td>
-                          <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
+                          <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                             <Link
                               to={`/admin/edit-assigned-subject/${subject._id}`}
                               className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-[#043B44]"

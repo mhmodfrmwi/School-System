@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 
 const SchoolHubsParticipant = () => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
-
+  const { t ,i18n} = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const { schoolHubId } = useParams();
   const { participants, loading, error } = useSelector(
     (state) => state.participant,
@@ -35,22 +35,22 @@ const SchoolHubsParticipant = () => {
               <table className="dark:border-DarkManager min-w-full border-collapse rounded-2xl border-2 border-[#117C90] shadow-lg">
                 <thead>
                   <tr className="dark:bg-DarkManager bg-[#105E6A] font-poppins text-xs text-white sm:text-sm md:text-base">
-                    <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                    <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                       {t('dashboardm.AcademicNumber')}
                     </th>
-                    <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                    <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                        {t('dashboardm.Name')}
                     </th>
-                    <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                    <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                     {t('schoolhubs.Phone')}
                     </th>
-                    <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                    <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                     {t('schoolhubs.Email')}
                     </th>
-                    <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                    <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                     {t('schoolhubs.Grade')}
                     </th>
-                    <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                    <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                       {t('schoolhubs.Class')}
                     </th>
                   </tr>

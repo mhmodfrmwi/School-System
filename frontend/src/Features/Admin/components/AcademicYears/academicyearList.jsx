@@ -11,7 +11,7 @@ import {
 import Pagination from "../Pagination";
 import { useTranslation } from 'react-i18next';
 const AcademicYearList = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const academicYears = useSelector(
@@ -95,7 +95,7 @@ const AcademicYearList = () => {
                 {/* Actions */}
                 <div className="flex">
                   <button
-                    className="mr-2 cursor-pointer border-none bg-none text-[#117C90] dark:text-white"
+                    className={`${i18n.language === 'ar' ? 'ml-2' : 'mr-2'} cursor-pointer border-none bg-none text-[#117C90] dark:text-white`}
                     onClick={() => handleEditClick(year._id)}
                   >
                     <FontAwesomeIcon icon={faEdit} className="text-lg" />

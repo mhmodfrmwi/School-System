@@ -10,7 +10,7 @@ import Header from "../Parents/parentHeader";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 const ParentTable = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const navigate = useNavigate();
   const {
     parents = [],
@@ -18,6 +18,7 @@ const ParentTable = () => {
     loading,
   } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
+  const isRTL = i18n.language === 'ar';
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -78,7 +79,7 @@ const ParentTable = () => {
     return <div className="h-full w-full"></div>; // Empty div during loading
   }
   return (
-    <div className="relative lg:px-0">
+    <div className="relative lg:px-0" dir={isRTL ? 'rtl' : 'ltr'}>
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -89,18 +90,18 @@ const ParentTable = () => {
           <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.name")}
                 </th>
 
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.email")}
                 </th>
 
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.gender")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.actions")}
                 </th>
               </tr>
@@ -116,7 +117,7 @@ const ParentTable = () => {
                       <img
                         src={parent.profileImage}
                         alt="Profile"
-                        className="mr-2 h-8 rounded-full sm:h-10 md:h-12 md:w-12"
+                        className={`${isRTL ? 'ml-2' : 'mr-2'} h-8 w-8 rounded-full sm:h-10 sm:w-10`}
                       />
                       <span className="truncate font-poppins dark:text-black">
                         {parent.fullName}
@@ -130,7 +131,7 @@ const ParentTable = () => {
                     <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                       {parent.gender}
                     </td>
-                    <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
+                    <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                       <button
                         aria-label="Edit parent"
                         onClick={() => handleEditClick(parent._id)}

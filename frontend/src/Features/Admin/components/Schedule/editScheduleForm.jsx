@@ -80,14 +80,14 @@ function EditScheduleForm() {
 
     // If data hasn't changed, do not send the request
     if (originalData === updatedData) {
-      toast.info(t("schedule.form.messages.noChanges"));
+      toast.info(t("scheduleAdmin.form.messages.noChanges"));
       return;
     }
 
     dispatch(editSchedualAsync({ id, updatedSchedual: formData }))
       .unwrap()
       .then(() => {
-        toast.success(t("schedule.form.messages.successUpdate"));
+        toast.success(t("scheduleAdmin.form.messages.successUpdate"));
         navigate("/admin/allschedules");
       })
       .catch((error) => {
@@ -108,7 +108,7 @@ function EditScheduleForm() {
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-      {t("schedule.form.editTitle")}
+      {t("scheduleAdmin.form.editTitle")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -118,7 +118,7 @@ function EditScheduleForm() {
         >
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.academicYear")}
+            {t("scheduleAdmin.form.fields.academicYear")}
             </label>
             <select
               name="academicYear"
@@ -128,7 +128,7 @@ function EditScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-              {t("schedule.form.placeholders.selectAcademicYear")}
+              {t("scheduleAdmin.form.placeholders.selectAcademicYear")}
               </option>
               {academicYears?.map((year) => (
                 <option
@@ -143,7 +143,7 @@ function EditScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.semester")}
+            {t("scheduleAdmin.form.fields.semester")}
             </label>
             <select
               name="semesterName"
@@ -153,7 +153,7 @@ function EditScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-              {t("schedule.form.placeholders.selectSemester")}
+              {t("scheduleAdmin.form.placeholders.selectSemester")}
               </option>
               {terms
                 .filter((term) => {
@@ -170,7 +170,7 @@ function EditScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.subject")}
+            {t("scheduleAdmin.form.fields.subject")}
             </label>
             <select
               name="subjectName"
@@ -180,7 +180,7 @@ function EditScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-              {t("schedule.form.placeholders.selectSubject")}
+              {t("scheduleAdmin.form.placeholders.selectSubject")}
               </option>
               {subjects?.map((subject) => (
                 <option key={subject._id} value={subject.subjectName}>
@@ -192,7 +192,7 @@ function EditScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.teacher")}
+            {t("scheduleAdmin.form.fields.teacher")}
             </label>
             <select
               name="teacherName"
@@ -202,7 +202,7 @@ function EditScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-              {t("schedule.form.placeholders.selectTeacher")}
+              {t("scheduleAdmin.form.placeholders.selectTeacher")}
               </option>
               {(() => {
                 const selectedSubject = subjects.find(
@@ -227,7 +227,7 @@ function EditScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.grade")}
+            {t("scheduleAdmin.form.fields.grade")}
             </label>
             <select
               name="grade"
@@ -237,7 +237,7 @@ function EditScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-              {t("schedule.form.placeholders.selectGrade")}
+              {t("scheduleAdmin.form.placeholders.selectGrade")}
               </option>
               {grades?.map((grade) => (
                 <option key={grade._id} value={grade.gradeName}>
@@ -249,7 +249,7 @@ function EditScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.class")}
+            {t("scheduleAdmin.form.fields.class")}
             </label>
             <select
               name="className"
@@ -259,7 +259,7 @@ function EditScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-              {t("schedule.form.placeholders.selectClass")}
+              {t("scheduleAdmin.form.placeholders.selectClass")}
               </option>
               {(() => {
                 const selectedGrade = grades.find(
@@ -280,7 +280,7 @@ function EditScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.day")}
+            {t("scheduleAdmin.form.fields.day")}
             </label>
             <select
               name="day"
@@ -290,19 +290,19 @@ function EditScheduleForm() {
               required
             >
               <option value="" className="dark:text-white" disabled>
-              {t("schedule.form.placeholders.selectDay")}
+              {t("scheduleAdmin.form.placeholders.selectDay")}
               </option>
-              <option value="Monday">{t("schedule.form.days.monday")}</option>
-              <option value="Tuesday">{t("schedule.form.days.tuesday")}</option>
-              <option value="Wednesday">{t("schedule.form.days.wednesday")}</option>
-              <option value="Thursday">{t("schedule.form.days.thursday")}</option>
-              <option value="Friday">{t("schedule.form.days.friday")}</option>
+              <option value="Monday">{t("scheduleAdmin.form.days.monday")}</option>
+              <option value="Tuesday">{t("scheduleAdmin.form.days.tuesday")}</option>
+              <option value="Wednesday">{t("scheduleAdmin.form.days.wednesday")}</option>
+              <option value="Thursday">{t("scheduleAdmin.form.days.thursday")}</option>
+              <option value="Friday">{t("scheduleAdmin.form.days.friday")}</option>
             </select>
           </div>
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.from")}
+            {t("scheduleAdmin.form.fields.from")}
             </label>
             <input
               type="time"
@@ -316,7 +316,7 @@ function EditScheduleForm() {
 
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("schedule.form.fields.to")}
+            {t("scheduleAdmin.form.fields.to")}
             </label>
             <input
               type="time"
@@ -333,7 +333,7 @@ function EditScheduleForm() {
               type="submit"
               className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-               {t("schedule.form.submit.update")}
+               {t("scheduleAdmin.form.submit.update")}
             </button>
           </div>
         </form>

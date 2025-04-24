@@ -11,7 +11,7 @@ import Header from "./scheduleHeader";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 const SchedualTable = () => {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -20,7 +20,7 @@ const SchedualTable = () => {
     loading,
   } = useSelector((state) => state.schedules || {});
   const { teachers = [] } = useSelector((state) => state.teachers || {});
-
+  const isRTL = i18n.language === 'ar';
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const [searchText, setSearchText] = useState("");
@@ -99,7 +99,7 @@ const SchedualTable = () => {
 
   const getTeacherName = (teacherId) => {
     const teacher = teachers.find((t) => t._id === teacherId);
-    return teacher ? teacher.fullName : t("schedule.table.unknownTeacher");
+    return teacher ? teacher.fullName : t("scheduleAdmin.table.unknownTeacher");
   };
 
   const handleEdit = (scheduleId) => {
@@ -121,26 +121,26 @@ const SchedualTable = () => {
           <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                {t("schedule.table.columns.subject")}
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                {t("scheduleAdmin.table.columns.subject")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                {t("schedule.table.columns.teacher")}
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                {t("scheduleAdmin.table.columns.teacher")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                {t("schedule.table.columns.grade")}
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                {t("scheduleAdmin.table.columns.grade")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                {t("schedule.table.columns.day")}
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                {t("scheduleAdmin.table.columns.day")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                {t("schedule.table.columns.from")}
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                {t("scheduleAdmin.table.columns.from")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                {t("schedule.table.columns.to")}
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                {t("scheduleAdmin.table.columns.to")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
-                {t("schedule.table.columns.actions")}
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                {t("scheduleAdmin.table.columns.actions")}
                 </th>
               </tr>
             </thead>
@@ -159,30 +159,30 @@ const SchedualTable = () => {
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
                       {schedule?.teacher_id
                         ? getTeacherName(schedule.teacher_id._id)
-                        : t("schedule.table.unknownTeacher")}
+                        : t("scheduleAdmin.table.unknownTeacher")}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.grade_id?.gradeName ||t("schedule.table.noGrade")}
+                      {schedule?.grade_id?.gradeName ||t("scheduleAdmin.table.noGrade")}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.day_of_week ||  t("schedule.table.noDay")}
+                      {schedule?.day_of_week ||  t("scheduleAdmin.table.noDay")}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.start_time ||  t("schedule.table.noStartTime")}
+                      {schedule?.start_time ||  t("scheduleAdmin.table.noStartTime")}
                     </td>
                     <td className="px-3 py-2 font-poppins text-xs sm:text-sm md:text-base">
-                      {schedule?.end_time ||  t("schedule.table.noEndTime")}
+                      {schedule?.end_time ||  t("scheduleAdmin.table.noEndTime")}
                     </td>
-                    <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
+                    <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                       <button
-                        aria-label={t("schedule.table.editAriaLabel")}
+                        aria-label={t("sscheduleAdminchedule.table.editAriaLabel")}
                         onClick={() => handleEdit(schedule?._id)}
                         className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-[#043B44]"
                       >
                         <i className="far fa-edit text-lg" />
                       </button>
                       <button
-                        aria-label={t("schedule.table.deleteAriaLabel")}
+                        aria-label={t("scheduleAdmin.table.deleteAriaLabel")}
                         onClick={() => handleDelete(schedule?._id)}
                         className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                       >
@@ -198,10 +198,10 @@ const SchedualTable = () => {
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                    {t("schedule.table.noData.title")}
+                    {t("scheduleAdmin.table.noData.title")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                    {t("schedule.table.noData.message")}
+                    {t("scheduleAdmin.table.noData.message")}
                     </p>
                   </td>
                 </tr>

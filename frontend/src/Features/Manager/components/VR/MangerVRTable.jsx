@@ -11,8 +11,8 @@ import { useTranslation } from 'react-i18next';
 
 const ManagerVRTable = () => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
-
+  const { t ,i18n} = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const navigate = useNavigate();
   const { virtualRooms, status, error } = useSelector(
     (state) => state.virtualRooms,
@@ -98,19 +98,19 @@ const ManagerVRTable = () => {
                 <table className="dark:shadow-DarkManager min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] shadow-md shadow-[#117C90]">
                   <thead className="dark:bg-DarkManager bg-[#117C90] text-white">
                     <tr>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('tablesheader.Title')}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('tablesheader.StartTime')}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('tablesheader.Duration')}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                       {t('tablesheader.Link')}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t('tablesheader.Actions')}
                       </th>
                     </tr>
@@ -140,7 +140,7 @@ const ManagerVRTable = () => {
                             {t('tablesheader.ViewFile')}
                             </a>
                           </td>
-                          <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
+                          <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                             <button
                               onClick={() => handleEdit(room._id)}
                               className="dark:text-DarkManager text-[#117C90] hover:text-[#244856]"

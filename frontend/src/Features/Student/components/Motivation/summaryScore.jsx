@@ -3,16 +3,18 @@ import about2 from "../../../../assets/about2.png";
 import { useTranslation } from "react-i18next";
 
 function SummaryScore() {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6 p-6">
+    <div dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6 p-6">
  
-      <div className="p-4">
+      <div className={`p-4 ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}>
         <div className="relative">
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-xl font-bold text-transparent dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] sm:text-2xl">
             {t("motivation.summaryTitle")}
           </button>
-          <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
+          <span className={`absolute bottom-[-9px] h-[4px] w-[85px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${
+            i18n.language === 'ar' ? 'right-0' : 'left-0'
+          }`}></span>
         </div>
         <p className="mb-4 mt-8 font-poppins text-sm font-medium text-gray-700 dark:text-gray-300 sm:text-base ml-4">
           {t("motivation.summaryDesc")}

@@ -20,7 +20,7 @@ import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
 import { useTranslation } from 'react-i18next';
 
 const VideoSection = () => {
-  const { t} = useTranslation();
+  const { t , i18n} = useTranslation();
   const role = sessionStorage.getItem("role");
   const [currentPageAll, setCurrentPageAll] = useState(1);
   const [currentPageBookmarks, setCurrentPageBookmarks] = useState(1);
@@ -136,6 +136,7 @@ const VideoSection = () => {
       style={{
         backgroundImage: "var(--background-image)",
       }}
+      dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
     >
       <div
         className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
@@ -153,10 +154,14 @@ const VideoSection = () => {
 
       <div className="relative z-10 flex flex-wrap font-poppins gap-6 w-[95%] mx-auto mt-12 mb-20">
         {/* Sidebar */}
-        <div className="w-full md:w-1/4 bg-white dark:bg-[#13082F] md:border-r border-gray-300 dark:border-[#E0AAEE] p-6 mt-2 md:h-[550px]">
+        <div className={`w-full md:w-1/4 bg-white dark:bg-[#13082F] ${
+          i18n.language === 'ar' ? 'md:border-l' : 'md:border-r'
+        } border-gray-300 dark:border-[#E0AAEE] p-6 mt-2 md:h-[550px]`}>
           <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] relative">
             {subjectName}
-            <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
+            <span className={`absolute bottom-[-9px] h-[4px] w-[85px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${
+              i18n.language === 'ar' ? 'right-0' : 'left-0'
+            }`}></span>
           </h2>
           <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
             <li>
@@ -247,7 +252,9 @@ const VideoSection = () => {
 
           {/* Secondary Loading State (for actions after initial load) */}
           {loading && !initialLoading && (
-            <div className="flex items-center justify-center text-center text-gray-500 dark:text-gray-300 mt-10">
+            <div className={`flex items-center justify-center text-center text-gray-500 dark:text-gray-300 mt-10 ${
+              i18n.language === 'ar' ? 'flex-row-reverse' : ''
+            }`}>
               <FaSpinner className="animate-spin text-4xl text-blue-500 dark:text-[#C459D9] mb-4 mr-5" />
               <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold"> {t('videoSection.main.loading')}</p>
             </div>

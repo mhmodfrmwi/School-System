@@ -14,7 +14,8 @@ const Contests = () => {
   const navigate = useNavigate();
   const { contests, message, loading } = useSelector((state) => state.contests);
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
+  const isRTL = i18n.language === "ar";
   useEffect(() => {
     dispatch(fetchContests());
   }, [dispatch]);
@@ -77,28 +78,28 @@ const Contests = () => {
                 <table className="min-w-full border-collapse rounded-2xl border-2 border-[#117C90] shadow-lg dark:border-DarkManager">
                   <thead>
                     <tr className="bg-[#105E6A] font-poppins text-xs text-white dark:bg-DarkManager sm:text-sm md:text-base">
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.title")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.teacher")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.subject")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.startDate")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.endDate")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.teamMembers")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.requirements")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.action")}
                       </th>
                     </tr>
@@ -139,7 +140,7 @@ const Contests = () => {
                           <td className="border border-[#117C90] px-2 py-2 dark:border-DarkManager sm:px-4">
                             {contest.requirements}
                           </td>
-                          <td className="space-x-2 border border-[#117C90] px-2 py-2 text-center dark:border-DarkManager sm:px-4">
+                          <td className={`border border-[#117C90] px-2 py-2 text-center dark:border-DarkManager sm:px-4 ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
                             <button
                               aria-label="Edit contest"
                               onClick={() => handleEdit(contest._id)}

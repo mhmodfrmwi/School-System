@@ -10,8 +10,9 @@ import { useTranslation } from "react-i18next";
 const StudentResults = () => {
   const dispatch = useDispatch();
   const { examId } = useParams();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const { examResults, loading, error } = useSelector((state) => state.exam);
+  const isRTL = i18n.language === 'ar';
   useEffect(() => {
     if (examId) {
       dispatch(fetchExamResults(examId));
@@ -44,16 +45,16 @@ const StudentResults = () => {
                 <table className="border-re min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-DarkManager">
                   <thead className="bg-[#117C90] text-white dark:bg-DarkManager">
                     <tr>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t("assignmentt.StudentName")}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t("assignmentt.Marks")}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t("examst.Percentage")}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t("assignmentt.Status")}
                       </th>
                     </tr>

@@ -11,14 +11,14 @@ import Header from "./classTeacherHeader";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 const ClassTeacherTable = () => {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const { classTeachers = [], loading } = useSelector(
     (state) => state.classTeacher || {},
   );
   const { classes = [] } = useSelector((state) => state.classes || {});
   const { teachers = [] } = useSelector((state) => state.teachers || {}); // Fetch teachers from the store
   const dispatch = useDispatch();
-
+  const isRTL = i18n.language === 'ar';
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [searchText, setSearchText] = useState("");
@@ -143,7 +143,7 @@ const ClassTeacherTable = () => {
     return <div className="h-full w-full"></div>; // Empty div during loading
   }
   return (
-    <div className="relative w-full px-4 sm:w-full lg:px-0">
+    <div className="relative w-full px-4 sm:w-full lg:px-0" dir={isRTL ? 'rtl' : 'ltr'}>
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -154,19 +154,19 @@ const ClassTeacherTable = () => {
           <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.Class")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.subject")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.teacher")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className= {`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.AcademicYear")}
                 </th>
-                <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                 {t("tableHeaders.actions")}
                 </th>
               </tr>
@@ -193,7 +193,7 @@ const ClassTeacherTable = () => {
                       {classTeacher.academicYear_id?.endYear}
                     </td>
                     <td className="px-3 py-2">
-                      <div className="inline-flex space-x-2">
+                      <div className={`inline-flex ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
                         <Link
                           to={`/admin/edit-class-teacher/${classTeacher._id}`}
                           className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-[#043B44]"

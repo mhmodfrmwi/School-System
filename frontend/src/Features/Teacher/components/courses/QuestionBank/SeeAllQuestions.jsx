@@ -12,11 +12,11 @@ import QuestionsToggle from "./SelectQuestions";
 import { useTranslation } from "react-i18next";
 
 const SeeAllQuestion = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { gradeSubjectSemesterId } = useParams();
-
+  const isRTL = i18n.language === 'ar';
   if (!gradeSubjectSemesterId) {
     console.error("Error: grade_subject_semester_id is undefined or null!");
   }
@@ -63,19 +63,19 @@ const SeeAllQuestion = () => {
                 <table className="border-re min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-DarkManager">
                   <thead className="bg-[#117C90] text-white dark:bg-DarkManager">
                     <tr>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         #
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t("tablesheader.Question")}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t("tablesheader.Type")}{" "}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t("tablesheader.Answer")}
                       </th>
-                      <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                      <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                         {t("tablesheader.Actions")}
                       </th>
                     </tr>
@@ -100,7 +100,7 @@ const SeeAllQuestion = () => {
                           <td className="px-3 py-2 text-xs sm:text-sm md:text-base">
                             {question.answer}
                           </td>
-                          <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base">
+                          <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                             <button
                               onClick={() => handleEditQuestion(question._id)}
                               className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-DarkManager"

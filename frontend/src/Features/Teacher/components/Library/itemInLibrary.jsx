@@ -8,7 +8,7 @@ const ItemInLibrary = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const { generalLibrary, loading, error } = useSelector(
     (state) => state.generalLibrary || {},
   );
@@ -51,7 +51,7 @@ const ItemInLibrary = () => {
             {generalLibrary.uploaded_by?.fullName}
           </p>
 
-          <div className="flex space-x-4">
+          <div className={`flex ${i18n.language === 'ar' ? 'space-x-reverse' : ''} space-x-4`}>
             <a
               href={generalLibrary.item_url}
               target="_blank"

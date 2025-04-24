@@ -13,7 +13,8 @@ import { useTranslation } from 'react-i18next';
 const ItemsInLibrary = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
   const { generalLibrary = [] } = useSelector(
     (state) => state.generalLibrary || {},
   );
@@ -74,7 +75,7 @@ const ItemsInLibrary = () => {
             </div>
 
             <div
-              className="flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] dark:bg-DarkManager py-2 font-medium text-white focus:outline-none sm:ml-auto"
+              className={`flex w-52 cursor-pointer items-center justify-center rounded-3xl bg-[#117C90] dark:bg-DarkManager py-2 font-medium text-white focus:outline-none ${isRTL ? 'sm:mr-auto' : 'sm:ml-auto'}`}
               onClick={() => navigate("/teacher/library-item-form")}
             >
               {t('libraryt.AddItem')}
@@ -85,20 +86,20 @@ const ItemsInLibrary = () => {
               <table className="min-w-full table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] dark:border-DarkManager bg-[#FBE9D1] shadow-md shadow-[#117C90]">
                 <thead className="bg-[#117C90] text-white dark:bg-DarkManager">
                   <tr>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('libraryVideos.subjectsTitle')}
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('libraryItem.author')}
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('libraryItem.type')}
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('tablesheader.FileUrl')}
 
                     </th>
-                    <th className="px-3 py-2 text-left font-poppins text-xs font-medium sm:text-sm md:text-base">
+                    <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
                     {t('tablesheader.Actions')}
                     </th>
                   </tr>
@@ -131,7 +132,7 @@ const ItemsInLibrary = () => {
                             continued
                           </a>
                         </td>
-                        <td className="space-x-2 px-3 py-2 text-xs sm:text-sm md:text-base dark:text-DarkManager">
+                        <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2 dark:text-DarkManager`}>
                           <button
                             onClick={() =>
                               navigate(`/teacher/item-in-library/${item._id}`)

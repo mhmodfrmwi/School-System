@@ -91,7 +91,7 @@ const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
 };
 
 const LibraryBooksPage = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -253,7 +253,7 @@ const LibraryBooksPage = () => {
       <div
         className={`fixed md:relative z-40 w-64 bg-gray-100 dark:bg-[#281459] p-6 border border-gray-200 dark:border-[#E0AAEE] h-fit min-h-[75vh] shadow transform transition-transform duration-300 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0`}
+        } md:translate-x-0 ${i18n.language === 'ar' ? 'md:ml-8' : ''}`}
       >
         <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-transparent">
           {t('libraryBooks.subjectsTitle')}
@@ -362,7 +362,9 @@ const LibraryBooksPage = () => {
                 <div className="flex justify-center items-center md:items-start md:justify-start">
                   <h2 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] relative">
                     {t('libraryBooks.libraryTitle')}
-                    <span className="absolute left-0 bottom-[-9px] w-[85px] h-[4px] bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] rounded-t-full"></span>
+                    <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${
+              i18n.language === 'ar' ? 'right-0' : 'left-0'
+            }`}></span>
                   </h2>
                 </div>
                 {!loading && !initialLoading && generalPDFs.length === 0 ? (

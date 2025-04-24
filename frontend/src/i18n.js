@@ -735,10 +735,6 @@ i18n
                         },
                         "prizeLevel": "Level ",
                         "notFound": "No activity found"
-                    },
-                    "errors": {
-                        "title": "Error",
-                        "default": "An error occurred"
                     }
                     ,
                     "contests": {
@@ -1039,6 +1035,13 @@ i18n
                         AttendanceReport: "Attendance Report",
                         AttendanceSummary: " Attendance Summary",
                         GenerateReport: " Generate Report",
+                        "AttendanceDetails":" Attendance Details for",
+                        "AcademicNumberr":"Academic Number",
+                        "Classs":"Class",
+                        "TotalAbsences":"Total Absences",
+                        "TotalAttendances":"Total Attendances",
+                        "Date":"Date",
+                        "Status":"Status",
                     },
                     schaduel: {
                         Saturday: "Saturday",
@@ -1109,7 +1112,12 @@ i18n
                         Email: "Email",
                         Phone: "Phone",
                         AddPrize: "Add Prize",
-                        EditSchoolHub: "Edit School Hub"
+                        EditSchoolHub: "Edit School Hub",
+                        "phdetails":"Enter school hub details",
+                        "phlocation":"Enter school hub location",
+                        "phtitle":"Enter school hub title",
+                        "level":"Level",
+                        "prize":"Prize"
                     },
                     attendanse: {
                         Classes: "Classes",
@@ -1117,7 +1125,7 @@ i18n
                         ClassData: "Class Data",
                         Noattendance: "No attendance records found",
                     },
-                    scheduleة: {
+                    schedulem: {
                         Time: "Time",
                         Addothersubjects: "Add other subjects",
                         EndTime: "End Time",
@@ -1156,7 +1164,7 @@ i18n
                     //Nav
                     SearchAdminPage: "Search Admin Page",
                     //Dashboard
-                    "dashboard": {
+                    "dashboardadmin": {
                         "overview": "Overview",
                         "statistics": "Statistics of users",
                         "calendar": "Calendar",
@@ -1590,7 +1598,7 @@ i18n
                         }
                     },
                     //schedule
-                    "schedule": {
+                    "scheduleAdmin": {
                         "header": {
                             "title": "Schedule",
                             "export": "Export CSV",
@@ -2466,11 +2474,6 @@ i18n
                         "prizeLevel": "المستوى ",
                         "notFound": "لم يتم العثور على نشاط"
                     },
-                    "errors": {
-                        "title": "خطأ",
-                        "default": "حدث خطأ ما"
-                    }
-                    ,
 
                     "contests": {
                         "title": "الأنشطة",
@@ -2770,6 +2773,13 @@ i18n
                         AttendanceReport: "تقرير الحضور",
                         AttendanceSummary: " ملخص الحضور",
                         GenerateReport: "انشاء التقرير",
+                        "AttendanceDetails":" تفاصيل الحضور ل",
+                        "AcademicNumberr":"الرقم الاكاديمي",
+                        "Classs":"الفصل",
+                        "TotalAbsences":"إجمالي الغيابات",
+                        "TotalAttendances":"إجمالي الحضور",
+                        "Date":"التاريخ",
+                        "Status":"الحاله",
                     },
                     schaduel: {
                         Saturday: "السبت",
@@ -2840,7 +2850,12 @@ i18n
                         Email: "الايميل",
                         Phone: "رقم التليفون",
                         AddPrize: "اضافة جائزة اخرى",
-                        EditSchoolHub: "تحرير المركز المدرسي",
+                        EditSchoolHub: "تعديل المركز المدرسي",
+                        "phdetails":"أدخل تفاصيل مركز المدرسة",
+                        "phlocation":"أدخل موقع مركز المدرسة",
+                        "phtitle":"أدخل عنوان مركز المدرسة",
+                        "level":"المستوي",
+                        "prize":"جائزه"
 
                     },
                     attendanse: {
@@ -2887,7 +2902,7 @@ i18n
                     //Nav
                     SearchAdminPage: "البحث في صفحة المشرف",
                     //Dashboard
-                    "dashboard": {
+                    "dashboardadmin": {
                         "overview": "نظرة عامة",
                         "statistics": "إحصائيات المستخدمين",
                         "calendar": "التقويم",
@@ -3323,7 +3338,7 @@ i18n
                         }
                     },
                     //schedule
-                    "schedule": {
+                    "scheduleAdmin": {
                         "header": {
                             "title": "الجدول",
                             "export": "تصدير CSV",

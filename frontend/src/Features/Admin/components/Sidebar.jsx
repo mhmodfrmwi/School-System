@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 const Sidebar = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const location = useLocation();
@@ -25,6 +25,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { terms, status, error } = useSelector((state) => state.terms);
+  const isRTL = i18n.language === 'ar';
 
   useEffect(() => {
     if (status === "idle" || terms.length === 0) {
@@ -41,7 +42,7 @@ const Sidebar = () => {
     { label: t("sidebar.termManagement"), icon: faCalendar, href: "/admin/allTerms" },
     { label: t("sidebar.courseManagement"), icon: faPen, href: "/admin/allsubjects" },
     {
-      label:  t("sidebar.academicYear"),
+      label: t("sidebar.academicYear"),
       icon: "fluent:number-row-24-regular",
       href: "/admin/allacademicyears",
     },
@@ -58,9 +59,9 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
       <button
-        className="fixed left-5 top-8 z-50 h-10 w-9 rounded-lg bg-dashboard-bg p-2 text-white shadow-md dark:bg-[#043B44] lg:hidden"
+        className={`fixed ${i18n.language === 'ar' ? 'right-5' : 'left-5'} top-8 z-50 h-10 w-9 rounded-lg bg-dashboard-bg p-2 text-white shadow-md dark:bg-[#043B44] lg:hidden`}
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         aria-label="Toggle Sidebar"
       >
@@ -73,7 +74,7 @@ const Sidebar = () => {
           onClick={() => setIsSidebarOpen(false)}
           aria-hidden="true"
         >
-          <div className="custom-scrollbar absolute left-0 top-0 flex h-full w-64 flex-col bg-dashboard-bg p-4 text-white transition-transform duration-300 dark:bg-[#043B44]">
+          <div className={`custom-scrollbar absolute ${i18n.language === 'ar' ? 'right-0' : 'left-0'} top-0 flex h-full w-64 flex-col bg-dashboard-bg p-4 text-white transition-transform duration-300 dark:bg-[#043B44]`}>
             <SidebarContent
               menuItems={menuItems}
               hoveredIndex={hoveredIndex}
@@ -86,7 +87,7 @@ const Sidebar = () => {
         </div>
       )}
 
-      <div className="custom-scrollbar hidden h-screen w-64 flex-col bg-dashboard-bg p-4 text-white dark:bg-[#043B44] lg:flex">
+      <div className={`custom-scrollbar hidden h-screen w-64 flex-col bg-dashboard-bg p-4 text-white dark:bg-[#043B44] lg:flex`}>
         <SidebarContent
           menuItems={menuItems}
           hoveredIndex={hoveredIndex}
@@ -95,6 +96,8 @@ const Sidebar = () => {
           terms={terms}
           navigate={navigate}
           t={t}
+          i18n={i18n}
+          isRTL={isRTL}
         />
       </div>
     </div>
@@ -108,7 +111,8 @@ const SidebarContent = ({
   currentPath,
   terms,
   navigate,
-  t
+  t, i18n,
+  isRTL
 }) => {
   return (
     <>
@@ -123,36 +127,32 @@ const SidebarContent = ({
           <a
             key={index}
             href={item.href}
-            className={`group relative flex items-center rounded-l-[30px] px-4 py-3 transition-all ${
-              currentPath === item.href
-                ? "rounded-l-[30px] bg-white font-semibold text-dashboard-bg dark:text-[#043B44]"
+            className={`group relative flex items-center ${isRTL ? 'rounded-r-[30px] pr-4' : 'rounded-l-[30px] pl-4'} py-3 transition-all ${currentPath === item.href
+                ? `${isRTL ? 'rounded-r-[30px]' : 'rounded-l-[30px]'} bg-white font-semibold text-dashboard-bg dark:text-[#043B44]`
                 : "text-white"
-            } ${
-              hoveredIndex === index && currentPath !== item.href
+              } ${hoveredIndex === index && currentPath !== item.href
                 ? "bg-white text-dashboard-bg dark:text-[#043B44]"
                 : ""
-            }`}
+              }`}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {typeof item.icon === "string" ? (
               <Icon
                 icon={item.icon}
-                className={`mr-3 transition-colors group-hover:text-dashboard-bg dark:group-hover:text-[#043B44] ${
-                  currentPath === item.href
+                className={`${isRTL ? 'ml-3' : 'mr-3'} transition-colors group-hover:text-dashboard-bg dark:group-hover:text-[#043B44] ${currentPath === item.href
                     ? "text-dashboard-bg dark:text-[#043B44]"
                     : "text-white"
-                } text-xl`}
+                  } text-xl`}
                 style={{ fontSize: "1.5rem" }}
               />
             ) : (
               <FontAwesomeIcon
                 icon={item.icon}
-                className={`mr-3 transition-colors group-hover:text-dashboard-bg dark:group-hover:text-[#043B44] ${
-                  currentPath === item.href
+                className={`${isRTL ? 'ml-3' : 'mr-3'} transition-colors group-hover:text-dashboard-bg dark:group-hover:text-[#043B44] ${currentPath === item.href
                     ? "text-dashboard-bg dark:text-[#043B44]"
                     : "text-white"
-                }`}
+                  }`}
               />
             )}
 
@@ -161,8 +161,10 @@ const SidebarContent = ({
             </span>
             {currentPath === item.href && (
               <>
-                <div className="pointer-events-none absolute right-4 top-[-48px] h-12 w-12 bg-transparent shadow-[34px_34px_0_9px_white] lg:rounded-full"></div>
-                <div className="pointer-events-none absolute bottom-[-48px] right-4 h-12 w-12 bg-transparent shadow-[34px_-34px_0_9px_white] lg:rounded-full"></div>
+                <div className={`pointer-events-none absolute ${isRTL ? 'left-4' : 'right-4'} top-[-48px] h-12 w-12 bg-transparent ${isRTL ? 'shadow-[-34px_34px_0_9px_white]' : 'shadow-[34px_34px_0_9px_white]'
+                  } lg:rounded-full`}></div>
+                <div className={`pointer-events-none absolute ${isRTL ? 'left-4' : 'right-4'} bottom-[-48px] h-12 w-12 bg-transparent ${isRTL ? 'shadow-[-34px_-34px_0_9px_white]' : 'shadow-[34px_-34px_0_9px_white]'
+                  } lg:rounded-full`}></div>
               </>
             )}
           </a>

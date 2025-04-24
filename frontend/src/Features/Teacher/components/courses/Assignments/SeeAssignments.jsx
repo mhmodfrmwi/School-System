@@ -27,7 +27,7 @@ const SeeAssignments = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const { gradeSubjectSemesterId } = useParams();
   const { assignment, status, error } = useSelector(
     (state) => state.assignmentsTeacher,
@@ -93,7 +93,7 @@ const SeeAssignments = () => {
               <p className="mt-1 text-sm text-gray-700 dark:text-white">
                 {t("assignmentt.Marks")}: {item.total_marks}
               </p>
-              <div className="mt-4 flex justify-end space-x-3 dark:text-white">
+              <div className={`mt-4 flex justify-end ${i18n.language === 'ar' ? 'space-x-reverse' : ''} space-x-4`}>
                 <button
                   aria-label="View Results"
                   className="text-[#117C90] transition-colors duration-300 hover:text-[#244856] dark:text-white"

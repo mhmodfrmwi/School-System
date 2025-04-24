@@ -6,10 +6,10 @@ import { useTranslation } from "react-i18next";
 
 const Participants = () => {
   const { contestId } = useParams();
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const dispatch = useDispatch();
   const { teams, loading, error } = useSelector((state) => state.participants);
-
+  const isRTL = i18n.language === "ar";
   useEffect(() => {
     if (!contestId) {
       console.error("Contest ID is undefined");
@@ -45,13 +45,13 @@ const Participants = () => {
                 <table className="min-w-full border-collapse rounded-2xl border-2 border-[#117C90] shadow-lg dark:border-DarkManager">
                   <thead>
                     <tr className="bg-[#105E6A] font-poppins text-xs text-white dark:bg-DarkManager sm:text-sm md:text-base">
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("teamDetails.teamName")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("teamDetails.leader")}
                       </th>
-                      <th className="border border-[#117C90] px-2 py-2 text-left sm:px-4">
+                      <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("teamDetails.teammates")}
                       </th>
                     </tr>

@@ -21,7 +21,7 @@ const AdminHeader = ({ onSearchChange, onFilterChange }) => {
       <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
         <div className="flex flex-col">
           <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
-         { t("dashboard.users.admin")}
+         { t("dashboardadmin.users.admin")}
           </h1>
           <div className="mt-1 h-[4px] w-[90px] rounded-t-md bg-[#244856]"></div>
         </div>

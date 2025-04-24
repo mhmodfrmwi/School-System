@@ -97,13 +97,13 @@ const Dashboard = () => {
     // Show toast only once for network error
     if (hasNetworkError && !networkErrorShownRef.current) {
       toast.error(
-        t("dashboard.errors.network")
+        t("dashboardadmin.errors.network")
       );
       networkErrorShownRef.current = true; // Mark network error toast as shown
     }
     // Show toast only once for token error
     if (hasTokenError && !tokenErrorShownRef.current) {
-      toast.error(t("dashboard.errors.token"));
+      toast.error(t("dashboardadmin.errors.token"));
       tokenErrorShownRef.current = true;
     }
   }, [
@@ -129,27 +129,27 @@ const Dashboard = () => {
 
   const pieData = [
     {
-      name: t("dashboard.users.students"),
+      name: t("dashboardadmin.users.students"),
       value: loadingStudents ? 0 : students?.length || 0,
       color: "#4CAF50",
     },
     {
-      name: t("dashboard.users.parents"),
+      name: t("dashboardadmin.users.parents"),
       value: loadingParents ? 0 : parents?.length || 0,
       color: "#FF9800",
     },
     {
-      name: t("dashboard.users.teachers"),
+      name: t("dashboardadmin.users.teachers"),
       value: loadingTeachers ? 0 : teachers?.length || 0,
       color: "#2196F3",
     },
     {
-      name: t("dashboard.users.manager"),
+      name: t("dashboardadmin.users.manager"),
       value: loadingManagers ? 0 : managers?.length || 0,
       color: "#F44336",
     },
     {
-      name: t("dashboard.users.admin"),
+      name: t("dashboardadmin.users.admin"),
       value: loadingAdmins ? 0 : admins?.length || 0,
       color: "#9C27B0",
     },
@@ -178,56 +178,56 @@ const Dashboard = () => {
       {/* Overview Section */}
       <section>
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-        {t("dashboard.overview")}
+        {t("dashboardadmin.overview")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856]"></div>
 
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[
             {
-              label:  t("dashboard.users.students"),
+              label:  t("dashboardadmin.users.students"),
               value: loadingStudents ? 0 : students.length,
               icon: "/src/assets/students 1.png",
               bgColor: "#D1F3E0",
             },
             {
-              label: t("dashboard.users.teachers"),
+              label: t("dashboardadmin.users.teachers"),
               value: loadingTeachers ? 0 : teachers.length,
               icon: "/src/assets/Group.png",
               bgColor: "#E1F1FF",
             },
             {
-              label: t("dashboard.users.parents"),
+              label: t("dashboardadmin.users.parents"),
               value: loadingParents ? 0 : parents.length,
               icon: "/src/assets/vector.png",
               bgColor: "#FFF2D8",
             },
             {
-              label:t("dashboard.users.manager"),
+              label:t("dashboardadmin.users.manager"),
               value: loadingManagers ? 0 : managers.length,
               icon: "/src/assets/people.png",
               bgColor: "#FFEAEA",
             },
             {
-              label:  t("dashboard.users.admin"),
+              label:  t("dashboardadmin.users.admin"),
               value: loadingAdmins ? 0 : admins.length,
               icon: "/src/assets/Group1.png",
               bgColor: "#D1F3E0",
             },
             {
-              label: t("dashboard.users.terms"),
+              label: t("dashboardadmin.users.terms"),
               value: loadingTerms ? 0 : terms.length,
               icon: "/src/assets/Term.png",
               bgColor: "#E1F1FF",
             },
             {
-              label: t("dashboard.users.courses"),
+              label: t("dashboardadmin.users.courses"),
               value: loadingSubjects ? 0 : subjects.length,
               icon: "/src/assets/Course.png",
               bgColor: "#FFF2D8",
             },
             {
-              label: t("dashboard.users.schedule"),
+              label: t("dashboardadmin.users.schedule"),
               value: loadingSchedules ? 0 : schedules ? schedules.length : 0,
               icon: "/src/assets/Schedule.png",
               bgColor: "#FFEAEA",
@@ -265,7 +265,7 @@ const Dashboard = () => {
       {/* Statistics Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-        {t("dashboard.statistics")}
+        {t("dashboardadmin.statistics")}
         </h2>
         <div className="mb-4 mt-1 h-[4px] w-[200px] rounded-t-md bg-[#244856]"></div>
 
@@ -273,7 +273,7 @@ const Dashboard = () => {
           {/* Students Chart */}
           <div className="rounded-lg bg-white p-6 shadow-md dark:bg-[#117C90]">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-            {t("dashboard.charts.students")}
+            {t("dashboardadmin.charts.students")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {students.length > 0 ? (
@@ -281,11 +281,11 @@ const Dashboard = () => {
                   <Pie
                     data={[
                       {
-                        name: t("dashboard.charts.female"),
+                        name: t("dashboardadmin.charts.female"),
                         value: femaleStudents,
                         color: "#4CAF50",
                       },
-                      { name: t("dashboard.charts.male"), value: maleStudents, color: "#2196F3" },
+                      { name: t("dashboardadmin.charts.male"), value: maleStudents, color: "#2196F3" },
                     ]}
                     dataKey="value"
                     cx="50%"
@@ -307,7 +307,7 @@ const Dashboard = () => {
           {/* Teachers Chart */}
           <div className="rounded-lg bg-white p-6 shadow-md dark:bg-[#117C90]">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-            {t("dashboard.charts.teachers")}
+            {t("dashboardadmin.charts.teachers")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {teachers.length > 0 ? (
@@ -315,11 +315,11 @@ const Dashboard = () => {
                   <Pie
                     data={[
                       {
-                        name:t("dashboard.charts.female"),
+                        name:t("dashboardadmin.charts.female"),
                         value: femaleTeachers,
                         color: "#4CAF50",
                       },
-                      { name:  t("dashboard.charts.male"), value: maleTeachers, color: "#2196F3" },
+                      { name:  t("dashboardadmin.charts.male"), value: maleTeachers, color: "#2196F3" },
                     ]}
                     dataKey="value"
                     cx="50%"
@@ -341,7 +341,7 @@ const Dashboard = () => {
           {/* Pie Chart */}
           <div className="col-span-1 rounded-lg bg-white p-6 shadow-md dark:bg-[#117C90] sm:col-span-2 lg:col-span-1">
             <h3 className="mb-4 text-center font-poppins text-lg font-medium text-gray-600 dark:text-white">
-            {t("dashboard.charts.percentage")}
+            {t("dashboardadmin.charts.percentage")}
             </h3>
             <ResponsiveContainer width="100%" height={250}>
               {pieData[0].value > 0 ||
@@ -375,7 +375,7 @@ const Dashboard = () => {
       {/* Calendar Section */}
       <section className="mt-12">
         <h2 className="mb-2 font-poppins text-2xl font-semibold text-gray-700">
-        {t("dashboard.calendar")}
+        {t("dashboardadmin.calendar")}
         </h2>
         <div className="mb-6 mt-1 h-[4px] w-[100px] rounded-t-md bg-[#244856]"></div>
 

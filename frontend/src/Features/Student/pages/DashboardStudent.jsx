@@ -35,7 +35,7 @@ import { useNavigate } from "react-router-dom";
 import { getSemesterReward } from "../components/StudentRedux/motivationSlice";
 import { useTranslation } from 'react-i18next';
 function DashboardStudent() {
-  const { t } = useTranslation();
+  const { t , i18n } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { semesterReward } = useSelector((state) => state.motivation);
@@ -83,12 +83,12 @@ function DashboardStudent() {
   ];
 
   return (
-    <>
+    <div dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
       {/*Header */}
 
       <div className="flex items-center justify-between bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-6 shadow-md">
         {/*User */}
-        <div className="flex items-center space-x-6 pl-10">
+        <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-6 pr-10' : 'space-x-6 pl-10'}`}>
           <img
             src={userImage}
             alt={t('dashboard.profileImageAlt')}
@@ -98,7 +98,7 @@ function DashboardStudent() {
             <h2 className="font-poppins text-2xl font-bold text-[#62413A]">
               {fullName}
             </h2>
-            <div className="flex items-center space-x-2">
+            <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
               <img src={trueIcon} alt={t('dashboard.presentIconAlt')} className="h-6 w-6" />
               <p className="font-poppins font-medium text-[#62413A]">
                 {t('dashboard.presentToday')}
@@ -107,16 +107,16 @@ function DashboardStudent() {
           </div>
         </div>
         {/*Cards */}
-        <div className="hidden flex-wrap space-x-8 pr-10 lg:flex">
+        <div className={`hidden flex-wrap ${i18n.language === 'ar' ? 'space-x-reverse space-x-8 pl-10' : 'space-x-8 pr-10'} lg:flex`}>
           <div className="flex flex-col items-center space-y-2">
             <div className="flex flex-col space-y-4 rounded-lg bg-white p-4 shadow-md">
-              <div className="flex items-center space-x-2">
+              <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                 <FaCalendarAlt className="h-4 w-4 text-gray-600" />
                 <p className="text-sm font-semibold text-gray-600">
                   {new Date().toLocaleDateString()} | {new Date().toLocaleTimeString()}
                 </p>
               </div>
-              <div className="flex items-center space-x-8">
+              <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
                 <p
                   className={`font-poppins text-lg font-semibold ${semesterReward.badge === "Green"
                       ? "text-green-600"
@@ -143,7 +143,7 @@ function DashboardStudent() {
               <p className="font-poppins text-xs font-medium text-gray-500">
                 {t('dashboard.learningStreak')}
               </p>
-              <div className="mt-2 flex space-x-1">
+              <div className={`mt-2 flex ${i18n.language === 'ar' ? 'space-x-reverse' : ''} space-x-1`}>
                 {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
                   <div
                     key={index}
@@ -283,7 +283,7 @@ function DashboardStudent() {
       {/* Quick Menu */}
       <div className="mx-auto w-[95%] rounded-lg bg-white px-4 py-8">
         <div className="flex items-center py-4">
-          <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
+          <p className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
             {t('dashboard.quickMenu')}
           </button>
@@ -319,7 +319,7 @@ function DashboardStudent() {
       {/* Main Categories */}
       <div className="mx-auto mt-8 w-[95%] rounded-lg bg-white p-4">
         <div className="flex items-center">
-          <p className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB]"></p>
+          <p className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
             {t('dashboard.mainCategories')}
           </button>
@@ -437,7 +437,7 @@ function DashboardStudent() {
           </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
