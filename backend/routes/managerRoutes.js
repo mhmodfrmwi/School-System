@@ -1,4 +1,6 @@
 const express = require("express");
+const uploadImage = require("../utils/uploadProfileImages");
+
 const {
   createSchoolHub,
   getAllSchoolHubs,
@@ -8,7 +10,8 @@ const {
 } = require("../controllers/manager/SHController");
 const validateJwt = require("../middlewares/validateJWT");
 const validateManager = require("../middlewares/validateManager");
-const { login } = require("../controllers/auth/authManagerController");
+const { login ,updateManagerProfile } = require("../controllers/auth/authManagerController");
+
 const {
   getStatistics,
   getGradeStatistics,
@@ -49,6 +52,21 @@ const {
 const router = express.Router();
 
 router.post("/login", login);
+router.patch(
+  "/manager-profile",
+  validateJwt, 
+  validateManager,
+  uploadImage.single("profileImage"),
+  (err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: err.message });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  },
+  updateManagerProfile
+);
 router
   .route("/schoolhub")
   .post(validateJwt, validateManager, createSchoolHub)

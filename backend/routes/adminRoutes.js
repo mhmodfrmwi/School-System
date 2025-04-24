@@ -1,6 +1,7 @@
 const express = require("express");
 const validateAdmin = require("../middlewares/validateAdmin");
 const validateJwt = require("../middlewares/validateJWT");
+const uploadImage = require("../utils/uploadProfileImages");
 
 const {
   createAcademicYear,
@@ -113,10 +114,19 @@ const {
 const {
   seedRewards,
 } = require("../controllers/General/rewardCatalogDataController");
-const { login } = require("../controllers/auth/authAdminController");
+const { login ,updateAdminProfile} = require("../controllers/auth/authAdminController");
 
 const router = express.Router();
 router.post("/login", login);
+
+router.patch(
+  "/admin-profile",
+  validateJwt,
+  validateAdmin,
+  uploadImage.single("profileImage"),
+  updateAdminProfile
+);
+
 //academic year routes
 router.post(
   "/academicYear/createAcademicYear",

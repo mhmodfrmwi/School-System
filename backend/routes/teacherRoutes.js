@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require('multer');
 const validateJwt = require("../middlewares/validateJWT");
 const validateTeacher = require("../middlewares/validateTeacher");
+const uploadImage = require("../utils/uploadProfileImages");
 
 const {
   createMateriel,
@@ -36,7 +37,7 @@ const {
 const {
   createStudentAttendance,
 } = require("../controllers/Student/attendanceController");
-const login = require("../controllers/auth/authTeacherController");
+const {login,updateTeacherProfile} = require("../controllers/auth/authTeacherController");
 const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teacher/getStudentsForSpecificSubjectUsingClassId");
 const {
   getAttendanceForClassInPeriod,
@@ -81,6 +82,23 @@ const router = express.Router();
 const upload = multer({ dest: 'uploads/' }); 
 
 router.post("/login", login);
+
+
+router.patch(
+  "/teacher-profile",
+  validateJwt, 
+  validateTeacher,
+  uploadImage.single("profileImage"),
+  (err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: err.message });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  },
+  updateTeacherProfile
+);
 
 router
   .route("/material/:id")

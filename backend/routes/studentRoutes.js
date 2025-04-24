@@ -1,5 +1,6 @@
 const express = require("express");
-const { login } = require("../controllers/auth/authStudentController");
+const uploadImage =require ("../utils/uploadProfileImages")
+const { login,updateStudentProfile } = require("../controllers/auth/authStudentController");
 const validateJwt = require("../middlewares/validateJWT");
 
 const validateStudent = require("../middlewares/validateStudent");
@@ -88,6 +89,22 @@ const router = express.Router();
 
 //login route
 router.route("/login").post(login);
+
+router.patch(
+  "/student-profile",
+  validateJwt,
+  validateStudent,
+  uploadImage.single("profileImage"),
+  (err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: err.message });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  },
+  updateStudentProfile
+);
 
 //features routes
 router.get(
