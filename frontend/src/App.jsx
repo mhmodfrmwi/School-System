@@ -23,6 +23,7 @@ import GetAllScheduleClasses from "./Features/Manager/components/Schedule/GetAll
 import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/WeekScheduleForManager";
 import ParentKids from "./Features/Parent/ParentKids";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ChatBot from "./Features/chatbot/ChatBot";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -1023,7 +1024,7 @@ function App() {
                 element={<WeeklyScheduleForManager />}
               />
             </Route>
-
+            <Route path="chat" element={<ChatBot />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
