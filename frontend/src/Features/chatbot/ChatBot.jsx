@@ -129,7 +129,7 @@ export const ChatBot = () => {
     return (
       <button
         onClick={() => setIsChatOpen(true)}
-        className={`fixed bottom-6 right-10 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 ${headerColor} ${
+        className={`fixed bottom-6 right-10 z-[1000] flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 ${headerColor} ${
           role === "student" || role === "parent"
             ? "focus:ring-purple-500"
             : "focus:ring-blue-500"
