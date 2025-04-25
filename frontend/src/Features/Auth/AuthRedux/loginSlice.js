@@ -29,11 +29,15 @@ export const loginUser = createAsyncThunk(
 
       sessionStorage.setItem("token", data.token);
       sessionStorage.setItem("fullName", data[role]?.fullName || "Unknown");
+      sessionStorage.setItem("role", role || "Unknown");
+      sessionStorage.setItem("_id", data[role]?._id || "Unknown");
 
       return {
         email,
         token: data.token,
         fullName: data[role]?.fullName || "Unknown",
+        role: role || "Unknown",
+        _id: data[role]?._id || "Unknown",
       };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -47,6 +51,8 @@ const loginSlice = createSlice({
     email: "",
     fullName: sessionStorage.getItem("fullName") || "Unknown",
     token: sessionStorage.getItem("token") || null,
+    role: sessionStorage.getItem("role") || "Unknown",
+    _id: sessionStorage.getItem("_id") || "Unknown",
     loading: false,
     error: null,
   },
@@ -54,7 +60,10 @@ const loginSlice = createSlice({
     logout: (state) => {
       state.email = "";
       state.fullName = "Unknown";
+      state.role = "Unknown";
+      state._id = "Unknown";
       state.token = null;
+
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("fullName");
       toast.info("Logged out successfully!");
@@ -71,6 +80,8 @@ const loginSlice = createSlice({
         state.email = action.payload.email;
         state.token = action.payload.token;
         state.fullName = action.payload.fullName;
+        state.role = action.payload.role;
+        state._id = action.payload._id;
 
         toast.success(`Welcome, ${action.payload.fullName}`);
       })

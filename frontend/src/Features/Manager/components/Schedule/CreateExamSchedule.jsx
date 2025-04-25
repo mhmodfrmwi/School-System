@@ -6,8 +6,8 @@ import { fetchGrades } from "../../../Admin/components/AdminRedux/gradeSlice";
 import { fetchTerms } from "../../../Admin/components/AdminRedux/termSlice";
 import { fetchSubjects } from "../../../Admin/components/AdminRedux/subjectSlice";
 import Loader from "../../../../ui/Loader";
-import { useCreateExamSchedule } from "../services/apiSchedule";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { useCreateExamSchedule } from "../hooks/schedule";
 
 const CreateExamSchedule = () => {
   const dispatch = useDispatch();
@@ -63,10 +63,10 @@ const CreateExamSchedule = () => {
   return (
     <div className="relative mx-auto my-10 w-[90%] font-poppins md:w-[80%]">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-       {t('schedulem.AddExamSchedule')} 
+        {t("schedulem.AddExamSchedule")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
-      <div className="dark:bg-DarkManager2 rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-DarkManager2">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
@@ -74,7 +74,7 @@ const CreateExamSchedule = () => {
           {/* Academic Year ID */}
           <div className="col-span-2 mb-4 sm:col-span-1">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t('schedulem.AcademicYear')} 
+              {t("schedulem.AcademicYear")}
             </label>
             <Controller
               name="academic_year_id"
@@ -85,7 +85,9 @@ const CreateExamSchedule = () => {
                   {...field}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">{t('scheduleAdmin.form.placeholders.selectAcademicYear')}</option>
+                  <option value="">
+                    {t("scheduleAdmin.form.placeholders.selectAcademicYear")}
+                  </option>
                   {academicYears.map((year) => (
                     <option key={year._id} value={year._id}>
                       {year.startYear} - {year.endYear}
@@ -104,7 +106,7 @@ const CreateExamSchedule = () => {
           {/* Semester ID */}
           <div className="col-span-2 mb-4 sm:col-span-1">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              {t('schedulem.Semester')} 
+              {t("schedulem.Semester")}
             </label>
             <Controller
               name="semester_id"
@@ -115,7 +117,9 @@ const CreateExamSchedule = () => {
                   {...field}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">{t('scheduleAdmin.form.placeholders.selectSemester')}</option>
+                  <option value="">
+                    {t("scheduleAdmin.form.placeholders.selectSemester")}
+                  </option>
                   {terms.map((term) => (
                     <option key={term._id} value={term._id}>
                       {term.semesterName}
@@ -134,7 +138,7 @@ const CreateExamSchedule = () => {
           {/* Grade ID */}
           <div className="col-span-2 mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-              {t('schedulem.Grade')} 
+              {t("schedulem.Grade")}
             </label>
             <Controller
               name="grade_id"
@@ -145,7 +149,9 @@ const CreateExamSchedule = () => {
                   {...field}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                 >
-                  <option value="">{t('scheduleAdmin.form.placeholders.selectGrade')}</option>
+                  <option value="">
+                    {t("scheduleAdmin.form.placeholders.selectGrade")}
+                  </option>
                   {grades.map((grade) => (
                     <option key={grade._id} value={grade._id}>
                       {grade.gradeName}
@@ -172,7 +178,7 @@ const CreateExamSchedule = () => {
               {/* Subject ID */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  {t('schedulem.Subject')} 
+                  {t("schedulem.Subject")}
                 </label>
                 <Controller
                   name={`subjects[${index}].subject_id`}
@@ -183,7 +189,9 @@ const CreateExamSchedule = () => {
                       {...field}
                       className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                     >
-                      <option value="">{t('scheduleAdmin.form.placeholders.selectSubject')}</option>
+                      <option value="">
+                        {t("scheduleAdmin.form.placeholders.selectSubject")}
+                      </option>
                       {subjects.map((subject) => (
                         <option key={subject._id} value={subject._id}>
                           {subject.subjectName}
@@ -202,7 +210,7 @@ const CreateExamSchedule = () => {
               {/* Exam Date */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  {t('schedulem.ExamDate')} 
+                  {t("schedulem.ExamDate")}
                 </label>
                 <Controller
                   name={`subjects[${index}].exam_date`}
@@ -226,7 +234,7 @@ const CreateExamSchedule = () => {
               {/* Start Time */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  {t('schedulem.StartTime')} 
+                  {t("schedulem.StartTime")}
                 </label>
                 <Controller
                   name={`subjects[${index}].start_time`}
@@ -250,7 +258,7 @@ const CreateExamSchedule = () => {
               {/* End Time */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  {t('schedulem.EndTime')} 
+                  {t("schedulem.EndTime")}
                 </label>
                 <Controller
                   name={`subjects[${index}].end_time`}
@@ -287,7 +295,7 @@ const CreateExamSchedule = () => {
               }
               className="ms-4 rounded-md bg-[#117C90] px-4 py-2 text-white dark:bg-white dark:text-black dark:placeholder-white"
             >
-              {t('schedulem.Addothersubjects')} 
+              {t("schedulem.Addothersubjects")}
             </button>
           </div>
 
@@ -297,8 +305,7 @@ const CreateExamSchedule = () => {
               type="submit"
               className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-           {t('tablesheader.Upload')}
-
+              {t("tablesheader.Upload")}
             </button>
           </div>
         </form>

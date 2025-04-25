@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import Loader from "../../../../ui/Loader";
-import { useEditExamSchedule, useExamSchedule } from "../services/apiSchedule";
+
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSubjects } from "../../../Admin/components/AdminRedux/subjectSlice";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { useEditExamSchedule, useExamSchedule } from "../hooks/schedule";
 
 const UpdateExamSchedule = () => {
   const { id } = useParams();
@@ -73,9 +74,10 @@ const UpdateExamSchedule = () => {
   return (
     <div className="relative mx-auto my-10 w-[90%] font-poppins md:w-[80%]">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-      {t('schedulem.Edit')}       </h1>
+        {t("schedulem.Edit")}{" "}
+      </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
-      <div className="dark:bg-DarkManager2 rounded-3xl bg-[#F5F5F5] p-6 shadow-md">
+      <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-DarkManager2">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
@@ -91,7 +93,7 @@ const UpdateExamSchedule = () => {
               {/* Subject ID */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                {t('schedulem.Subject')} 
+                  {t("schedulem.Subject")}
                 </label>
                 <Controller
                   name={`subjects[${index}].subject_id`}
@@ -100,7 +102,7 @@ const UpdateExamSchedule = () => {
                   render={({ field }) => (
                     <select
                       {...field}
-                      className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
+                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:placeholder-white"
                     >
                       <option value="">Select Subject</option>
                       {subjects.map((subject) => (
@@ -121,7 +123,7 @@ const UpdateExamSchedule = () => {
               {/* Exam Date */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  {t('schedulem.ExamDate')} 
+                  {t("schedulem.ExamDate")}
                 </label>
                 <Controller
                   name={`subjects[${index}].exam_date`}
@@ -131,7 +133,7 @@ const UpdateExamSchedule = () => {
                     <input
                       type="date"
                       {...field}
-                      className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
+                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:placeholder-white"
                     />
                   )}
                 />
@@ -145,7 +147,7 @@ const UpdateExamSchedule = () => {
               {/* Start Time */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  {t('schedulem.StartTime')} 
+                  {t("schedulem.StartTime")}
                 </label>
                 <Controller
                   name={`subjects[${index}].start_time`}
@@ -155,7 +157,7 @@ const UpdateExamSchedule = () => {
                     <input
                       type="time"
                       {...field}
-                      className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
+                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:placeholder-white"
                     />
                   )}
                 />
@@ -169,7 +171,7 @@ const UpdateExamSchedule = () => {
               {/* End Time */}
               <div className="mb-4">
                 <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-                  {t('schedulem.EndTime')} 
+                  {t("schedulem.EndTime")}
                 </label>
                 <Controller
                   name={`subjects[${index}].end_time`}
@@ -179,7 +181,7 @@ const UpdateExamSchedule = () => {
                     <input
                       type="time"
                       {...field}
-                      className="dark:bg-DarkManager2 w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:placeholder-white"
+                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:placeholder-white"
                     />
                   )}
                 />
@@ -206,7 +208,7 @@ const UpdateExamSchedule = () => {
               }
               className="ms-4 rounded-md bg-[#117C90] px-4 py-2 text-white dark:bg-white dark:text-black dark:placeholder-white"
             >
-            {t('schedulem.Addothersubjects')} 
+              {t("schedulem.Addothersubjects")}
             </button>
           </div>
 
@@ -216,7 +218,7 @@ const UpdateExamSchedule = () => {
               type="submit"
               className="mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-            {t('tablesheader.Update')}
+              {t("tablesheader.Update")}
             </button>
           </div>
         </form>

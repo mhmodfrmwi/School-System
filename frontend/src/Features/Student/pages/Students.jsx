@@ -1,26 +1,19 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-// function Students() {
-//   return (
-//     <div>
-//       <Navbar />
-//       <Outlet />
-//       <Footer />
-//     </div>
-//   );
-// }
-
-// export default Students;
+import StudentPerformanceModal from "./studentModal";
+import ChatBot from "@/Features/Chatbot/Chatbot";
 
 function Students() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
       <div className="flex-grow">
         <Outlet />
       </div>
+      <StudentPerformanceModal />
       <Footer />
+      <ChatBot />
     </div>
   );
 }

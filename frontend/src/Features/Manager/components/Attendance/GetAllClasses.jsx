@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useClasses } from "../services/apiAttendance";
 import { useNavigate } from "react-router-dom";
 import bag from "../../../../assets/bag.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import Loader from "@/ui/Loader";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { useClasses } from "../hooks/attendance";
 
 const GetAllClasses = () => {
   const { managerclasses, isLoading } = useClasses();
@@ -20,7 +20,7 @@ const GetAllClasses = () => {
   if (isLoading) return <Loader />;
   if (!managerclasses || managerclasses.length === 0) {
     return (
-      <div className="dark:bg-DarkManager2 mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg">
+      <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
         <FontAwesomeIcon
           icon={faCalendar}
           className="mb-4 text-6xl text-gray-400 dark:text-white"
@@ -45,15 +45,15 @@ const GetAllClasses = () => {
     <div className="lg:px-0] mx-auto w-[90%] px-4 md:px-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="dark:text-DarkManager font-poppins text-lg font-semibold text-[#117C90] sm:text-xl lg:text-2xl">
-            {t('attendanse.Classes')}
+          <h1 className="font-poppins text-lg font-semibold text-[#117C90] dark:text-DarkManager sm:text-xl lg:text-2xl">
+            {t("attendanse.Classes")}
           </h1>
-          <div className="dark:bg-DarkManager mt-1 h-[3px] w-[70px] rounded-t-md bg-[#117C90] lg:h-[4px] xl:w-[100px]"></div>
+          <div className="mt-1 h-[3px] w-[70px] rounded-t-md bg-[#117C90] dark:bg-DarkManager lg:h-[4px] xl:w-[100px]"></div>
         </div>
         <input
           type="text"
-          placeholder={t('attendanse.Search')}
-          className="dark:focus:ring-DarkManager font-poppins w-44 rounded-md border-2 border-gray-300 bg-[#FCFAFA] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:text-black sm:w-64"
+          placeholder={t("attendanse.Search")}
+          className="w-44 rounded-md border-2 border-gray-300 bg-[#FCFAFA] px-3 py-2 font-poppins text-sm focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:text-black dark:focus:ring-DarkManager sm:w-64"
           value={searchText}
           onChange={handleSearchChange}
         />
@@ -64,7 +64,7 @@ const GetAllClasses = () => {
           <div
             key={cls._id}
             onClick={() => navigate(`/manager/get-attendance-class/${cls._id}`)}
-            className="dark:bg-DarkManager2 dark:border-DarkManager2 relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200"
+            className="relative flex w-64 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200 dark:border-DarkManager2 dark:bg-DarkManager2"
           >
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
               <img src={bag} alt="bag" className="h-7 w-7" />

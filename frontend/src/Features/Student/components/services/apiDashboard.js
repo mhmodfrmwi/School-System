@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const API_URLToGet = "http://localhost:3000/exam-schedule/schedules/upcoming";
+const API_URLToGet = "http://localhost:4000/api/v1/ML/modelData";
 //fetch data
-export const fetchExamSchedules = async () => {
+export const fetchModelData = async () => {
   const token = sessionStorage.getItem("token");
   if (!token) {
     throw new Error("Authentication required. Please log in.");
@@ -22,7 +22,7 @@ export const fetchExamSchedules = async () => {
     } else if (error.response?.status === 404) {
       throw new Error("Exam schedules not found.");
     } else {
-      throw new Error("An error occurred while fetching exam schedules.");
+      throw new Error("An error occurred while fetching model data.");
     }
   }
 };

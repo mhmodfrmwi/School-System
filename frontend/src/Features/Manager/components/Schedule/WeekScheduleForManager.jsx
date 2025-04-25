@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
-import { useManagerSchedule } from "../services/apiSchedule";
 import Loader from "@/ui/Loader";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { useManagerSchedule } from "../hooks/schedule";
 
 const WeeklyScheduleForManager = () => {
   const { id } = useParams();
@@ -13,8 +13,14 @@ const WeeklyScheduleForManager = () => {
   console.log("API Response:", managerSchedule);
 
   const days = [
-    t('schaduel.Sunday'), t('schaduel.Monday'), t('schaduel.Tuesday'), t('schaduel.Wednesday'), t('schaduel.Thursday'),t('schaduel.Friday'), t('schaduel.Saturday')
-];
+    t("schaduel.Sunday"),
+    t("schaduel.Monday"),
+    t("schaduel.Tuesday"),
+    t("schaduel.Wednesday"),
+    t("schaduel.Thursday"),
+    t("schaduel.Friday"),
+    t("schaduel.Saturday"),
+  ];
   const timeslots = [
     "08:00",
     "09:00",
@@ -58,7 +64,7 @@ const WeeklyScheduleForManager = () => {
   if (schedules.length === 0) {
     return (
       <>
-        <div className="dark:bg-DarkManager2 mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:text-white">
+        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2 dark:text-white">
           <FontAwesomeIcon
             icon={faCalendar}
             className="mb-4 text-6xl text-gray-400 dark:text-white"
@@ -83,21 +89,21 @@ const WeeklyScheduleForManager = () => {
             <div className="mx-auto w-full max-w-7xl px-4">
               <div className="my-2 flex items-center justify-between">
                 <div>
-                  <div className="dark:text-DarkManager ms-4 cursor-text py-1 font-poppins text-lg font-bold text-dashboard-bg sm:text-2xl">
+                  <div className="ms-4 cursor-text py-1 font-poppins text-lg font-bold text-dashboard-bg dark:text-DarkManager sm:text-2xl">
                     {semesterName} ({startYear}-{endYear})
                   </div>
-                  <p className="dark:border-DarkManager mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90]"></p>
+                  <p className="mb-4 ms-4 w-24 rounded-xl border-t-4 border-[#117C90] dark:border-DarkManager"></p>
                 </div>
-                <button className="dark:to-DarkManager rounded-2xl bg-gradient-to-r from-[#105E6A] to-[#117C90] px-3 py-1 font-poppins text-xs text-white sm:px-4 sm:py-2 sm:text-sm">
-                  {t('schaduel.ExportPDF')}
+                <button className="rounded-2xl bg-gradient-to-r from-[#105E6A] to-[#117C90] px-3 py-1 font-poppins text-xs text-white dark:to-DarkManager sm:px-4 sm:py-2 sm:text-sm">
+                  {t("schaduel.ExportPDF")}
                 </button>
               </div>
               <div className="overflow-x-auto p-4">
                 <table className="w-full min-w-[800px] border-collapse border border-gray-300 text-sm sm:text-base">
                   <thead>
-                    <tr className="dark:bg-DarkManager bg-dashboard-bg text-white">
+                    <tr className="bg-dashboard-bg text-white dark:bg-DarkManager">
                       <th className="border border-gray-300 p-2 font-poppins">
-                        {t('schedulem.Time')}
+                        {t("schedulem.Time")}
                       </th>
                       {days.map((day) => (
                         <th

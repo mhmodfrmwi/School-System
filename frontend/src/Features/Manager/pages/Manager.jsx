@@ -1,8 +1,9 @@
-import React, { useState,useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/NavManager";
 import Sidebar from "../components/SidebarManager";
 import { useTranslation } from "react-i18next";
+import ChatBot from "@/Features/Chatbot/Chatbot";
 function Manager() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { i18n } = useTranslation();
@@ -14,21 +15,25 @@ function Manager() {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
   }, [i18n.language]);
 
-
   return (
-    <div className={`dark:bg-DarkManager flex min-h-screen bg-[#117C90] ${isRTL ? "rtl" : "ltr"}`}>
+    <div
+      className={`flex min-h-screen bg-[#117C90] dark:bg-DarkManager ${isRTL ? "rtl" : "ltr"}`}
+    >
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        isRTL={isRTL} 
+        isRTL={isRTL}
       />
 
-      <div className={`my-5 ${isRTL ? "mr-0 ml-5" : "ml-0 mr-5"} flex flex-1 flex-col rounded-lg bg-white shadow-lg`}>
-        <Navbar setIsSidebarOpen={setIsSidebarOpen}  isRTL={isRTL}  />
+      <div
+        className={`my-5 ${isRTL ? "ml-5 mr-0" : "ml-0 mr-5"} flex flex-1 flex-col rounded-lg bg-white shadow-lg`}
+      >
+        <Navbar setIsSidebarOpen={setIsSidebarOpen} isRTL={isRTL} />
         <div className="flex-1 p-8">
           <Outlet />
         </div>
       </div>
+      <ChatBot />
     </div>
   );
 }
