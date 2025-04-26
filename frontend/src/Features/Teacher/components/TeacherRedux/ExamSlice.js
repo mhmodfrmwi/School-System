@@ -113,41 +113,6 @@ export const fetchExamsForTeacher = createAsyncThunk(
   }
 );
 
-
-export const updateExam = createAsyncThunk(
-  'exam/updateExam',
-  async ({ examId, examData }, { rejectWithValue }) => {
-    try {
-      const token = getToken();
-      if (!token) {
-        return rejectWithValue('Authentication required. Please log in.');
-      }
-
-      const url = `http://localhost:3000/exams/${examId}`;
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await fetch(url, {
-        method: 'PATCH',
-        headers,
-        body: JSON.stringify(examData),
-      });
-
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(errorResponse.message || 'Failed to update exam');
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message || 'Server Error');
-    }
-  }
-);
-
 export const deleteExam = createAsyncThunk(
   'exam/deleteExam',
   async (examId, { rejectWithValue }) => {
@@ -202,6 +167,40 @@ export const fetchExamResults = createAsyncThunk(
 
       const data = await response.json();
       return { examId, results: data };
+    } catch (error) {
+      return rejectWithValue(error.message || 'Server Error');
+    }
+  }
+);
+
+export const updateExam = createAsyncThunk(
+  'exam/updateExam',
+  async ({ examId, examData }, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) {
+        return rejectWithValue('Authentication required. Please log in.');
+      }
+
+      const url = `http://localhost:3000/exams/${examId}`;
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify(examData),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to update exam');
+      }
+
+      const data = await response.json();
+      return data;
     } catch (error) {
       return rejectWithValue(error.message || 'Server Error');
     }
