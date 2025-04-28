@@ -5,7 +5,7 @@ const cacheManager = require("../utils/cacheManager");
  * Fetch student attendance from the school API
  * @param {string} userId - Student ID
  * @param {string} authToken - Authentication token
- * @returns {Array|null} - Grades data or null if error
+ * @returns {Array|null} - Attendance data or null if error
  */
 
 const fetchStudentAttendance = async (userId, authToken) => {
@@ -21,7 +21,7 @@ const fetchStudentAttendance = async (userId, authToken) => {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-        timeout: 5000,
+        timeout: 8000,
       }
     );
     if (response.status !== 200) {

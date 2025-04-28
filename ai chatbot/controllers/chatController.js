@@ -4,6 +4,8 @@ const aiService = require("../services/aiService");
 const schedulePrompt = require("../utils/schedulePrompt");
 const gradesPrompt = require("../utils/gradesPrompt");
 const attendancePrompt = require("../utils/attendancePrompt");
+const subjectsPrompt = require("../utils/subjectsPrompt");
+const materialPrompt = require("../utils/materialPrompt");
 /**
  * Process chat message and return AI response
  * @route POST /api/chat
@@ -25,6 +27,32 @@ const processMessage = asyncHandler(async (req, res) => {
   const lowerCaseMessage = message.toLowerCase();
   let systemPrompt = aiService.createSystemPrompt(lowerCaseMessage);
 
+  // 1. First check for material-specific keywords
+  const materialKeywords = [
+    "material",
+    "resources",
+    "ملفات",
+    "مراجع",
+    "دروس",
+    "فيديو",
+    "كتاب",
+    "كتب",
+    "مرفقات",
+    "resources",
+  ];
+
+  const isMaterialRequest = materialKeywords.some((keyword) =>
+    lowerCaseMessage.includes(keyword)
+  );
+
+  // 2. Then check for subject-specific keywords
+  const subjectKeywords = ["subject", "مادة", "مواد", "كورس", "مقرر"];
+
+  const isSubjectRequest = subjectKeywords.some(
+    (keyword) => lowerCaseMessage.includes(keyword) && !isMaterialRequest // Exclude if already matched as material
+  );
+
+  // Handle requests in order of priority
   if (
     lowerCaseMessage.includes("schedule") ||
     lowerCaseMessage.includes("جدول")
@@ -42,7 +70,14 @@ const processMessage = asyncHandler(async (req, res) => {
     lowerCaseMessage.includes("absence")
   ) {
     systemPrompt = await attendancePrompt(lowerCaseMessage, authToken, userId);
+  } else if (isMaterialRequest) {
+    // Handle material requests first
+    systemPrompt = await materialPrompt(lowerCaseMessage, authToken, userId);
+  } else if (isSubjectRequest) {
+    // Then handle subject requests
+    systemPrompt = await subjectsPrompt(lowerCaseMessage, authToken, userId);
   }
+
   const aiResponse = await aiService.getAIResponse(
     lowerCaseMessage,
     systemPrompt

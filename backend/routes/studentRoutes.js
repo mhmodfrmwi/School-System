@@ -10,6 +10,7 @@ const validateStudent = require("../middlewares/validateStudent");
 const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Student/subjectsController");
 const {
   getMaterialForSpecificSubject,
+  getMaterialForSpecificGrade,
 } = require("../controllers/Student/materialController");
 const {
   getQuestionsBySubjectForStudent,
@@ -128,6 +129,12 @@ router.get(
   validateJwt,
   validateStudent,
   getMaterialForSpecificSubject
+);
+router.get(
+  "/material/grade",
+  validateJwt,
+  validateStudent,
+  getMaterialForSpecificGrade
 );
 router.get("/materiel/:subjectId/:materialId", validateJwt, getMaterielById);
 

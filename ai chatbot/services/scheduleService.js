@@ -25,7 +25,7 @@ const fetchStudentSchedule = async (userId, authToken) => {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-        timeout: 5000,
+        timeout: 8000,
       }
     );
 
