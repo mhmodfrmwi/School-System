@@ -1,34 +1,90 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { updateTeacherProfile } from '../components/TeacherRedux/TeacherEditProfileSlice';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
+import { updateTeacherProfile, fetchTeacherData } from '../components/TeacherRedux/TeacherEditProfileSlice';
+import { FaEye,FaPen, FaEyeSlash, FaCamera } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const EditProfile = () => {
     const dispatch = useDispatch();
+    const fileInputRef = useRef(null);
+    const { t } = useTranslation();
 
-    // Safely access userInfo with fallback values
-    const userInfo = useSelector((state) => state.auth?.userInfo || {});
-    const { error, success } = useSelector((state) => state.teacher || {});
+    const {
+        profile: teacherData,
+        fetchStatus,
+        fetchError,
+        error,
+        success
+    } = useSelector((state) => state.teacherProfile || {});
 
     const [profile, setProfile] = useState({
-        firstName: userInfo?.firstName || "",
-        lastName: userInfo?.lastName || "",
-        gender: userInfo?.gender || "Male",
-        phoneNumber: userInfo?.phone || "",
-        email: userInfo?.email || "",
-        role: userInfo?.role || "Teacher",
+        firstName: "",
+        lastName: "",
+        gender: "",
+        phone: "",
+        email: "",
+        role: "",
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
     });
 
+    const [profileImage, setProfileImage] = useState("../src/assets/user1.jpg");
+    const [selectedImage, setSelectedImage] = useState(null);
     const [isEditingPassword, setIsEditingPassword] = useState(false);
     const [showPasswords, setShowPasswords] = useState({
         current: false,
         new: false,
         confirm: false
     });
+
+    useEffect(() => {
+        dispatch(fetchTeacherData());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (teacherData && teacherData.data) {
+            const teacher = teacherData.data;
+            setProfile({
+                firstName: teacher.fullName?.split(' ')[0] || "",
+                lastName: teacher.fullName?.split(' ').slice(1).join(' ') || "",
+                gender: teacher.gender === "M" ? "Male" : teacher.gender === "F" ? "Female" : "Other",
+                phone: teacher.phone || "",
+                email: teacher.email || "",
+                role: "Teacher",
+                currentPassword: "",
+                newPassword: "",
+                confirmPassword: "",
+            });
+
+            if (teacher.profileImage) {
+                if (teacher.profileImage.startsWith('http')) {
+                    setProfileImage(teacher.profileImage);
+                } else {
+                    const normalizedPath = teacher.profileImage.replace(/\\/g, '/');
+                    const imgUrl = `http://localhost:4000/${normalizedPath.split('uploads/').pop()}`;
+                    setProfileImage(imgUrl);
+                }
+            }
+        }
+    }, [teacherData]);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedImage(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current.click();
+    };
 
     const togglePasswordVisibility = (field) => {
         setShowPasswords(prev => ({
@@ -39,7 +95,6 @@ const EditProfile = () => {
 
     useEffect(() => {
         if (success) {
-            toast.success("Profile updated successfully");
             if (isEditingPassword) {
                 setProfile(prev => ({
                     ...prev,
@@ -56,153 +111,172 @@ const EditProfile = () => {
         }
     }, [success, error, isEditingPassword]);
 
-    const handleEditPicture = () => {
-        console.log("Edit picture button clicked");
-    };
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setProfile({ ...profile, [name]: value });
     };
 
     const handleSave = () => {
-        const profileData = {
-            phone: profile.phoneNumber,
-        };
+        const formData = new FormData();
+        formData.append('phone', profile.phone);
 
         if (isEditingPassword) {
             if (profile.newPassword !== profile.confirmPassword) {
-                toast.error("New passwords don't match");
+                toast.error(" New password does not match ");
                 return;
             }
-            profileData.currentPassword = profile.currentPassword;
-            profileData.newPassword = profile.newPassword;
+            formData.append('currentPassword', profile.currentPassword);
+            formData.append('newPassword', profile.newPassword);
         }
 
-        dispatch(updateTeacherProfile(profileData));
+        if (selectedImage) {
+            formData.append('profileImage', selectedImage);
+        }
+
+        dispatch(updateTeacherProfile(formData)).then(() => {
+            setSelectedImage(null);
+        });
     };
+    if (fetchStatus === 'loading') {
+        return <div className="text-center py-10">Loading profile data...</div>;
+    }
 
-
-
+    if (fetchStatus === 'failed') {
+        return <div className="text-center py-10 text-red-500">{fetchError || 'Failed to load profile data'}</div>;
+    }
 
     return (
         <div className="w-[80%] mx-auto my-10 font-poppins">
             <h1 className="text-2xl font-semibold text-[#244856] dark:text-DarkManager pl-5">
-                Edit Profile
+            {t('editProfile.title')}
             </h1>
             <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
             <div className="p-6 bg-white rounded-lg shadow-lg">
                 <div className="relative inline-block mb-6">
                     <img
-                        src="../src/assets/user1.jpg"
+                        src={profileImage || "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"}
                         alt="Profile Avatar"
-                        className="w-24 h-24 rounded-full mr-4"
+                        className="w-24 h-24 rounded-full mr-4 object-cover"
+                        onError={(e) => {
+                            e.target.src = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg";
+                        }}
                     />
                     <button
-                        className="absolute bottom-2 right-2 bg-dashboard-bg text-white p-1 rounded-full cursor-pointer flex items-center justify-center dark:bg-DarkManager"
-                    onClick={handleEditPicture}
+                        className="absolute bottom-2 right-2 bg-dashboard-bg text-white p-2 rounded-full cursor-pointer flex items-center justify-center dark:bg-DarkManager"
+                        onClick={triggerFileInput}
                     >
-                        <i className="fas fa-pencil-alt"></i>
+                        <FaCamera size={14} />
                     </button>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleImageChange}
+                        className="hidden"
+                        accept="image/*"
+                    />
                 </div>
+
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                            First Name
+                        {t('editProfile.firstName')}
                         </label>
                         <input
                             type="text"
                             name="firstName"
                             value={profile.firstName}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2 dark:placeholder-white"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2"
                             disabled
                         />
                     </div>
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                            Last Name
+                        {t('editProfile.lastName')}
                         </label>
                         <input
                             type="text"
                             name="lastName"
                             value={profile.lastName}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2 dark:placeholder-white"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2"
                             disabled
                         />
                     </div>
+
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                            Gender
+                        {t('editProfile.gender')}
                         </label>
                         <select
                             name="gender"
                             value={profile.gender}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2 dark:placeholder-white"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2"
                             disabled
                         >
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
+
                     <div>
-                        <label className="block text-sm font-medium dark:text-black">
-                            Phone Number
+                        <label className=" text-sm font-medium dark:text-black flex items-center gap-1">
+                            {t('editProfile.phoneNumber')}
+                            <FaPen className="text-xs text-blue-500" />
                         </label>
                         <input
                             type="text"
-                            name="phoneNumber"
-                            value={profile.phoneNumber}
+                            name="phone"
+                            value={profile.phone}
                             onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2 dark:placeholder-white"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2"
                         />
                     </div>
+
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                            Email
+                        {t('editProfile.email')}
                         </label>
                         <input
                             type="email"
                             name="email"
                             value={profile.email}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2 dark:placeholder-white"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2"
                             disabled
                         />
                     </div>
+
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                            Role
+                        {t('editProfile.role')}
                         </label>
                         <input
                             type="text"
                             name="role"
                             value={profile.role}
-                            readOnly
-                            className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-100 dark:bg-DarkManager2 dark:placeholder-white"
+                            className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-100 dark:bg-DarkManager2"
+                            disabled
                         />
                     </div>
                 </div>
+
 
                 <button
                     onClick={() => setIsEditingPassword(!isEditingPassword)}
                     className="px-6 py-2 bg-gray-500 text-white rounded-md font-medium hover:bg-gray-600 transition mx-auto block dark:bg-DarkManager mb-4"
                 >
-                    {isEditingPassword ? "Cancel Password Change" : "Change Password"}
+                    {isEditingPassword ? t('assignmentt.Cancel')  : t('editProfile.changePasswordButton')}
                 </button>
 
                 {isEditingPassword && (
                     <>
                         <h2 className="text-xl font-semibold mt-8 mb-4 dark:text-DarkManager">
-                            Edit Password
+                        {t('editProfile.changePasswordButton')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                    Current Password
+                                {t('editProfile.currentPassword')}
                                 </label>
                                 <div className="relative">
                                     <input
@@ -223,7 +297,7 @@ const EditProfile = () => {
                             </div>
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                    New Password
+                                {t('editProfile.newPassword')}
                                 </label>
                                 <div className="relative">
                                     <input
@@ -244,7 +318,7 @@ const EditProfile = () => {
                             </div>
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                    Re-enter New Password
+                                {t('editProfile.confirmPassword')}
                                 </label>
                                 <div className="relative">
                                     <input
@@ -271,7 +345,7 @@ const EditProfile = () => {
                     onClick={handleSave}
                     className="mt-4 px-6 py-2 bg-[#117C90] text-white rounded-md font-medium hover:bg-[#0f6b7c] transition mx-auto block dark:bg-DarkManager"
                 >
-                    Save Changes
+                    {t('editProfile.saveButton')}
                 </button>
             </div>
         </div>

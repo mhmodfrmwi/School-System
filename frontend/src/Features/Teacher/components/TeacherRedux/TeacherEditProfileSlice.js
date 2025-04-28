@@ -3,7 +3,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 const getToken = () => sessionStorage.getItem('token');
 
-// Async thunk for updating teacher profile
 export const updateTeacherProfile = createAsyncThunk(
   'teacher/updateProfile',
   async (profileData, { rejectWithValue }) => {
@@ -15,14 +14,13 @@ export const updateTeacherProfile = createAsyncThunk(
 
       const url = 'http://localhost:4000/api/v1/teacher/teacher-profile';
       const headers = {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       };
 
       const response = await fetch(url, {
         method: 'PATCH',
         headers,
-        body: JSON.stringify(profileData),
+        body: profileData,
       });
 
       if (!response.ok) {
@@ -38,14 +36,47 @@ export const updateTeacherProfile = createAsyncThunk(
   }
 );
 
-// Slice definition
+export const fetchTeacherData = createAsyncThunk(
+  'teacher/fetchData',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) {
+        return rejectWithValue('Authentication required. Please log in.');
+      }
+
+      const url = 'http://localhost:4000/api/v1/teacher/teacher-data';
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers,
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to fetch teacher data');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Server Error');
+    }
+  }
+);
 const teacherProfileSlice = createSlice({
   name: 'teacherProfile',
   initialState: {
     profile: null,
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: 'idle',
     error: null,
     loading: false,
+    fetchStatus: 'idle', 
+    fetchError: null,
   },
   reducers: {
     resetProfileState: (state) => {
@@ -59,6 +90,19 @@ const teacherProfileSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+    .addCase(fetchTeacherData.pending, (state) => {
+      state.fetchStatus = 'loading';
+      state.fetchError = null;
+    })
+    .addCase(fetchTeacherData.fulfilled, (state, action) => {
+      state.fetchStatus = 'succeeded';
+      state.profile = action.payload;
+    })
+    .addCase(fetchTeacherData.rejected, (state, action) => {
+      console.error('Fetch Error:', action.payload);
+      state.fetchStatus = 'failed';
+      state.fetchError = action.payload;
+    })
       .addCase(updateTeacherProfile.pending, (state) => {
         state.status = 'loading';
         state.loading = true;
@@ -66,9 +110,8 @@ const teacherProfileSlice = createSlice({
       })
       .addCase(updateTeacherProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.loading = false;
-        state.profile = action.payload.teacher;
-        toast.success("Profile updated successfully");
+        state.profile = action.payload; 
+        
       })
       .addCase(updateTeacherProfile.rejected, (state, action) => {
         state.status = 'failed';
