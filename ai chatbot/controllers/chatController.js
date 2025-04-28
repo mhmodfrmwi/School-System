@@ -1,15 +1,16 @@
 const asyncHandler = require("express-async-handler");
 const { isArabic } = require("../utils/languageDetector");
-const scheduleService = require("../services/scheduleService");
 const aiService = require("../services/aiService");
-
+const schedulePrompt = require("../utils/schedulePrompt");
+const gradesPrompt = require("../utils/gradesPrompt");
+const attendancePrompt = require("../utils/attendancePrompt");
 /**
  * Process chat message and return AI response
  * @route POST /api/chat
  * @access Private
  */
 const processMessage = asyncHandler(async (req, res) => {
-  const { message, userId } = req.body;
+  let { message, userId } = req.body;
   const authToken = req.authToken;
 
   if (!message || !userId) {
@@ -21,19 +22,31 @@ const processMessage = asyncHandler(async (req, res) => {
     );
   }
 
-  const schedules = await scheduleService.fetchStudentSchedule(
-    userId,
-    authToken
+  const lowerCaseMessage = message.toLowerCase();
+  let systemPrompt = aiService.createSystemPrompt(lowerCaseMessage);
+
+  if (
+    lowerCaseMessage.includes("schedule") ||
+    lowerCaseMessage.includes("جدول")
+  ) {
+    systemPrompt = await schedulePrompt(lowerCaseMessage, authToken, userId);
+  } else if (
+    lowerCaseMessage.includes("grades") ||
+    lowerCaseMessage.includes("درجات")
+  ) {
+    systemPrompt = await gradesPrompt(lowerCaseMessage, authToken, userId);
+  } else if (
+    lowerCaseMessage.includes("attendance") ||
+    lowerCaseMessage.includes("حضور") ||
+    lowerCaseMessage.includes("غياب") ||
+    lowerCaseMessage.includes("absence")
+  ) {
+    systemPrompt = await attendancePrompt(lowerCaseMessage, authToken, userId);
+  }
+  const aiResponse = await aiService.getAIResponse(
+    lowerCaseMessage,
+    systemPrompt
   );
-
-  const scheduleData = {
-    schedule: scheduleService.organizeScheduleByDay(schedules),
-    academicInfo: scheduleService.getAcademicInfo(schedules),
-  };
-
-  const systemPrompt = aiService.createSystemPrompt(message, scheduleData);
-
-  const aiResponse = await aiService.getAIResponse(message, systemPrompt);
 
   res.status(200).json({
     success: true,

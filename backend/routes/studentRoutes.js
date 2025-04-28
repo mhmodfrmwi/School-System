@@ -1,6 +1,9 @@
 const express = require("express");
-const uploadImage =require ("../utils/uploadProfileImages")
-const { login,updateStudentProfile } = require("../controllers/auth/authStudentController");
+const uploadImage = require("../utils/uploadProfileImages");
+const {
+  login,
+  updateStudentProfile,
+} = require("../controllers/auth/authStudentController");
 const validateJwt = require("../middlewares/validateJWT");
 
 const validateStudent = require("../middlewares/validateStudent");
@@ -38,6 +41,7 @@ const {
 } = require("../controllers/Student/virtualRoomController");
 const {
   getStudentAttendanceUsingStudentId,
+  getStudentAttendanceWithStudentId,
 } = require("../controllers/Student/attendanceController");
 const {
   getScheduleForSpecificStudent,
@@ -83,11 +87,11 @@ const {
 const {
   getStudentGrades,
   getStudentSemesterGrades,
-  getAllSemesterGrades
+  getAllSemesterGrades,
 } = require("../controllers/Student/getStudentGrade");
 
 const {
-  getLoggedInStudentData
+  getLoggedInStudentData,
 } = require("../controllers/Student/studentData");
 
 const router = express.Router();
@@ -208,6 +212,12 @@ router.get(
   getStudentAttendanceUsingStudentId
 );
 router.get(
+  "/getAttendanceForChatbot",
+  validateJwt,
+  validateStudent,
+  getStudentAttendanceWithStudentId
+);
+router.get(
   "/get-schedule",
   validateJwt,
   validateStudent,
@@ -284,24 +294,9 @@ router.get(
   getLibraryMaterialViewsForStudent
 );
 
-router.get(
-  "/daily-reward",
-  validateJwt,
-  validateStudent,
-  getDailyPoints
-);
-router.get(
-  "/reward",
-  validateJwt,
-  validateStudent,
-  getAllPoints
-);
-router.get(
-  "/semester-reward",
-  validateJwt,
-  validateStudent,
-  getSemesterPoints
-);
+router.get("/daily-reward", validateJwt, validateStudent, getDailyPoints);
+router.get("/reward", validateJwt, validateStudent, getAllPoints);
+router.get("/semester-reward", validateJwt, validateStudent, getSemesterPoints);
 router.get(
   "/student-with-friends-reward",
   validateJwt,
