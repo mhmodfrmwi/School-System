@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Img2 from "../../assets/loginImg2.png";
 import logo from "../../assets/logologin.png";
+import SpinnerMini from "@/ui/SpinnerMini";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -94,7 +95,7 @@ function Login() {
             className="w-full rounded-lg bg-[#F25019] px-4 py-2 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-500"
             disabled={loading}
           >
-            {loading ? "Logging in..." : "Sign In"}
+            {loading ? <SpinnerMini /> : "Sign In"}
           </button>
         </form>
 

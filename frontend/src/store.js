@@ -52,6 +52,10 @@ import managerdashboardReducer from "./Features/Manager/pages/ManagerSlices/dash
 import gradeManagerReducer from "./Features/Manager//components/ManagerRedux/gradeSlice";
 import virtualRoomsReducer from "./Features/Manager//components/ManagerRedux/VRMangerSlice";
 import virtualRoomsmangerReducer from "./Features/Teacher/components/TeacherRedux/VirtualRoomsMangerSlice";
+import teacherProfileReducer from "./Features/Teacher/components/TeacherRedux/TeacherEditProfileSlice";
+import studentProfileReducer from "./Features/Student/components/StudentRedux/StudentEditProfileSlice";
+import managerProfileReducer from "./Features/Manager/components/ManagerRedux/ManagerEditProfileSlice";
+import adminProfileReducer from "./Features/Admin/components/AdminRedux/AdminEditProfileSlice";
 
 
 const store = configureStore({
@@ -109,6 +113,10 @@ const store = configureStore({
     gradeManager: gradeManagerReducer,
     virtualRooms: virtualRoomsReducer,
     virtualRoomsmanger:virtualRoomsmangerReducer,
+    teacherProfile:teacherProfileReducer,
+    studentProfile:studentProfileReducer,
+    managerProfile:managerProfileReducer,
+    adminProfile:adminProfileReducer,
   },
 });
 

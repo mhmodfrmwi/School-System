@@ -1,21 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { updateStudentProfile } from '../components/StudentRedux/StudentEditProfileSlice';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
 import { useTranslation } from 'react-i18next';
 
 const EditProfile = () => {
+    const dispatch = useDispatch();
     const { t } = useTranslation();
+    // Safely access userInfo with fallback values
+    const userInfo = useSelector((state) => state.auth?.userInfo || {});
+    const { error, success } = useSelector((state) => state.teacher || {});
+
     const [profile, setProfile] = useState({
-        firstName: "Omar",
-        lastName: "Ahmed",
-        gender: "Male",
-        phoneNumber: "+096624685879",
-        email: "omarahmed@gmail.com",
-        role: "Admin",
+        firstName: userInfo?.firstName || "",
+        lastName: userInfo?.lastName || "",
+        gender: userInfo?.gender || "Male",
+        phoneNumber: userInfo?.phone || "",
+        email: userInfo?.email || "",
+        role: userInfo?.role || "Student",
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
-        otpCode: "",
     });
 
+    const [isEditingPassword, setIsEditingPassword] = useState(false);
+    const [showPasswords, setShowPasswords] = useState({
+        current: false,
+        new: false,
+        confirm: false
+    });
+
+    const togglePasswordVisibility = (field) => {
+        setShowPasswords(prev => ({
+            ...prev,
+            [field]: !prev[field]
+        }));
+    };
+
+    useEffect(() => {
+        if (success) {
+            toast.success("Profile updated successfully");
+            if (isEditingPassword) {
+                setProfile(prev => ({
+                    ...prev,
+                    currentPassword: "",
+                    newPassword: "",
+                    confirmPassword: "",
+                }));
+                setIsEditingPassword(false);
+            }
+        }
+
+        if (error) {
+            toast.error(error);
+        }
+    }, [success, error, isEditingPassword]);
 
     const handleEditPicture = () => {
         console.log("Edit picture button clicked");
@@ -27,17 +67,20 @@ const EditProfile = () => {
     };
 
     const handleSave = () => {
-        // Handle save logic here
-        console.log("Profile saved:", profile);
-    };
+        const profileData = {
+            phone: profile.phoneNumber,
+        };
 
-    const handlePasswordChange = () => {
-        // Handle password change logic here
-        console.log("Password updated:", {
-            currentPassword: profile.currentPassword,
-            newPassword: profile.newPassword,
-            otpCode: profile.otpCode,
-        });
+        if (isEditingPassword) {
+            if (profile.newPassword !== profile.confirmPassword) {
+                toast.error("New passwords don't match");
+                return;
+            }
+            profileData.currentPassword = profile.currentPassword;
+            profileData.newPassword = profile.newPassword;
+        }
+
+        dispatch(updateStudentProfile(profileData));
     };
 
     return (
@@ -129,62 +172,90 @@ const EditProfile = () => {
 
 
                 <button
-                    onClick={handleSave}
-                    className="px-6 py-2 bg-[#849ED7] text-white rounded-md font-medium hover:bg-[#7393d6] transition mx-auto block"
+                    onClick={() => setIsEditingPassword(!isEditingPassword)}
+                    className="px-6 py-2 bg-gray-500 text-white rounded-md font-medium hover:bg-gray-600 transition mx-auto block dark:bg-DarkManager mb-4"
                 >
-                    {t('editProfile.saveButton')}
+                    {isEditingPassword ? "Cancel Password Change" : t('editProfile.changePasswordButton')   }
                 </button>
 
-
-                <h2 className="text-xl font-semibold mt-8 mb-4">{t('editProfile.changePasswordTitle')}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium">{t('editProfile.currentPassword')}</label>
-                        <input
-                            type="password"
-                            name="currentPassword"
-                            value={profile.currentPassword}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded text-[#718EBF]"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">{t('editProfile.newPassword')}</label>
-                        <input
-                            type="password"
-                            name="newPassword"
-                            value={profile.newPassword}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded text-[#718EBF]"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">{t('editProfile.confirmPassword')}</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            value={profile.confirmPassword}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded text-[#718EBF]"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">{t('editProfile.otpCode')}</label>
-                        <input
-                            type="text"
-                            name="otpCode"
-                            value={profile.otpCode}
-                            onChange={handleInputChange}
-                            className="w-full mt-1 p-2 border border-gray-300 rounded text-[#718EBF]"
-                        />
-                    </div>
-                </div>
+                {isEditingPassword && (
+                    <>
+                        <h2 className="text-xl font-semibold mt-8 mb-4 dark:text-DarkManager">
+                        {t('editProfile.changePasswordButton')}
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="relative">
+                                <label className="block text-sm font-medium dark:text-black">
+                                {t('editProfile.currentPassword')}
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type={showPasswords.current ? "text" : "password"}
+                                        name="currentPassword"
+                                        value={profile.currentPassword}
+                                        onChange={handleInputChange}
+                                        className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2 dark:placeholder-white pr-10"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        onClick={() => togglePasswordVisibility('current')}
+                                    >
+                                        {showPasswords.current ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="relative">
+                                <label className="block text-sm font-medium dark:text-black">
+                                {t('editProfile.newPassword')}
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type={showPasswords.new ? "text" : "password"}
+                                        name="newPassword"
+                                        value={profile.newPassword}
+                                        onChange={handleInputChange}
+                                        className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2 dark:placeholder-white pr-10"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        onClick={() => togglePasswordVisibility('new')}
+                                    >
+                                        {showPasswords.new ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="relative">
+                                <label className="block text-sm font-medium dark:text-black">
+                                {t('editProfile.confirmPassword')}
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type={showPasswords.confirm ? "text" : "password"}
+                                        name="confirmPassword"
+                                        value={profile.confirmPassword}
+                                        onChange={handleInputChange}
+                                        className="w-full mt-1 p-2 border border-gray-300 rounded dark:bg-DarkManager2 dark:placeholder-white pr-10"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        onClick={() => togglePasswordVisibility('confirm')}
+                                    >
+                                        {showPasswords.confirm ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
 
                 <button
-                    onClick={handlePasswordChange}
+                onClick={handleSave}
                     className="mt-4 px-6 py-2 bg-[#849ED7] text-white rounded-md font-medium hover:bg-[#7393d6] transition mx-auto block"
                 >
-                    {t('editProfile.changePasswordButton')}
+                    {t('editProfile.saveButton')}
                 </button>
             </div>
         </div>

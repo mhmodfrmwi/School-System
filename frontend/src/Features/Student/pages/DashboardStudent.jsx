@@ -33,9 +33,10 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getSemesterReward } from "../components/StudentRedux/motivationSlice";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+
 function DashboardStudent() {
-  const { t , i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { semesterReward } = useSelector((state) => state.motivation);
@@ -46,125 +47,160 @@ function DashboardStudent() {
   }, [dispatch]);
 
   const mainCategories = [
-    { label: t('dashboard.onlineAssignments'), icon: editI, progress: "100%" },
-    { label: t('dashboard.exams'), icon: learningI, progress: "90%" },
-    { label: t('dashboard.courseMaterials'), icon: CourseI, progress: "80%" },
-    { label: t('dashboard.reportCards'), icon: VectorI, progress: "60%" },
-    { label: t('dashboard.mailbox'), icon: EmailI, progress: "50%" },
-    { label: t('dashboard.assessments'), icon: AbsenceI, progress: "70%" },
-    { label: t('dashboard.activities'), icon: ActivitesI, progress: "20%" },
-    { label: t('dashboard.virtualClassroom'), icon: VirtualI, progress: "10%" },
-    { label: t('dashboard.announcements'), icon: annonI, progress: "40%" },
-    { label: t('dashboard.videoLectures'), icon: GroupI, progress: "100%" },
+    { label: t("dashboard.onlineAssignments"), icon: editI, progress: "100%" },
+    { label: t("dashboard.exams"), icon: learningI, progress: "90%" },
+    { label: t("dashboard.courseMaterials"), icon: CourseI, progress: "80%" },
+    { label: t("dashboard.reportCards"), icon: VectorI, progress: "60%" },
+    { label: t("dashboard.mailbox"), icon: EmailI, progress: "50%" },
+    { label: t("dashboard.assessments"), icon: AbsenceI, progress: "70%" },
+    { label: t("dashboard.activities"), icon: ActivitesI, progress: "20%" },
+    { label: t("dashboard.virtualClassroom"), icon: VirtualI, progress: "10%" },
+    { label: t("dashboard.announcements"), icon: annonI, progress: "40%" },
+    { label: t("dashboard.videoLectures"), icon: GroupI, progress: "100%" },
   ];
 
   const readingList = [
     {
-      title: t('subjects.english'),
+      title: t("subjects.english"),
       description: "Spelling - Learn How To Spell Letters",
       link: book1,
     },
     {
-      title: t('subjects.arabic'),
+      title: t("subjects.arabic"),
       description: "Lesson 1 - How to Grow and Take Care of Your Farm",
       link: book2,
     },
     {
-      title: t('subjects.science'),
+      title: t("subjects.science"),
       description: "Adaptation - About Bears Life",
       link: book3,
     },
   ];
 
   const recommendedList = [
-    { title: t('dashboard.atomVideo'), type: t('subjects.science'), link: video1 },
-    { title: t('dashboard.spellingVideo'), type: t('subjects.english'), link: video2 },
-    { title: t('dashboard.atomVideo'), type: t('subjects.science'), link: video1 },
+    {
+      title: t("dashboard.atomVideo"),
+      type: t("subjects.science"),
+      link: video1,
+    },
+    {
+      title: t("dashboard.spellingVideo"),
+      type: t("subjects.english"),
+      link: video2,
+    },
+    {
+      title: t("dashboard.atomVideo"),
+      type: t("subjects.science"),
+      link: video1,
+    },
   ];
 
   return (
-    <div dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+    <div dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       {/*Header */}
 
       <div className="flex items-center justify-between bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-6 shadow-md">
         {/*User */}
-        <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-6 pr-10' : 'space-x-6 pl-10'}`}>
+        <div
+          className={`flex items-center ${i18n.language === "ar" ? "space-x-6 space-x-reverse pr-10" : "space-x-6 pl-10"}`}
+        >
           <img
             src={userImage}
-            alt={t('dashboard.profileImageAlt')}
+            alt={t("dashboard.profileImageAlt")}
             className="h-40 w-40 rounded-full border-4 border-white bg-[#CA9C9C] shadow-lg"
           />
           <div className="space-y-2">
             <h2 className="font-poppins text-2xl font-bold text-[#62413A]">
               {fullName}
             </h2>
-            <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
-              <img src={trueIcon} alt={t('dashboard.presentIconAlt')} className="h-6 w-6" />
+            <div
+              className={`flex items-center ${i18n.language === "ar" ? "space-x-2 space-x-reverse" : "space-x-2"}`}
+            >
+              <img
+                src={trueIcon}
+                alt={t("dashboard.presentIconAlt")}
+                className="h-6 w-6"
+              />
               <p className="font-poppins font-medium text-[#62413A]">
-                {t('dashboard.presentToday')}
+                {t("dashboard.presentToday")}
               </p>
             </div>
           </div>
         </div>
         {/*Cards */}
-        <div className={`hidden flex-wrap ${i18n.language === 'ar' ? 'space-x-reverse space-x-8 pl-10' : 'space-x-8 pr-10'} lg:flex`}>
+        <div
+          className={`hidden flex-wrap ${i18n.language === "ar" ? "space-x-8 space-x-reverse pl-10" : "space-x-8 pr-10"} lg:flex`}
+        >
           <div className="flex flex-col items-center space-y-2">
             <div className="flex flex-col space-y-4 rounded-lg bg-white p-4 shadow-md">
-              <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
+              <div
+                className={`flex items-center ${i18n.language === "ar" ? "space-x-2 space-x-reverse" : "space-x-2"}`}
+              >
                 <FaCalendarAlt className="h-4 w-4 text-gray-600" />
                 <p className="text-sm font-semibold text-gray-600">
-                  {new Date().toLocaleDateString()} | {new Date().toLocaleTimeString()}
+                  {new Date().toLocaleDateString()} |{" "}
+                  {new Date().toLocaleTimeString()}
                 </p>
               </div>
-              <div className={`flex items-center ${i18n.language === 'ar' ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
+              <div
+                className={`flex items-center ${i18n.language === "ar" ? "space-x-8 space-x-reverse" : "space-x-8"}`}
+              >
                 <p
-                  className={`font-poppins text-lg font-semibold ${semesterReward.badge === "Green"
+                  className={`font-poppins text-lg font-semibold ${
+                    semesterReward.badge === "Green"
                       ? "text-green-600"
                       : semesterReward.badge === "Diamond"
                         ? "text-gray-500"
                         : semesterReward.badge === "Gold"
                           ? "text-yellow-500"
                           : "text-green-700"
-                    }`}
+                  }`}
                 >
                   {semesterReward.badge === "Green"
-                    ? t('dashboard.greenLevel')
+                    ? t("dashboard.greenLevel")
                     : semesterReward.badge === "Diamond"
-                      ? t('dashboard.diamondLevel')
+                      ? t("dashboard.diamondLevel")
                       : semesterReward.badge === "Gold"
-                        ? t('dashboard.goldLevel')
-                        : t('dashboard.greenLevel')}
+                        ? t("dashboard.goldLevel")
+                        : t("dashboard.greenLevel")}
                 </p>
-                <img src={awardIcon} alt={t('dashboard.awardIconAlt')} className="h-10 w-10" />
+                <img
+                  src={awardIcon}
+                  alt={t("dashboard.awardIconAlt")}
+                  className="h-10 w-10"
+                />
               </div>
             </div>
 
             <div className="flex flex-col items-center rounded-lg bg-white p-4 shadow-md">
               <p className="font-poppins text-xs font-medium text-gray-500">
-                {t('dashboard.learningStreak')}
+                {t("dashboard.learningStreak")}
               </p>
-              <div className={`mt-2 flex ${i18n.language === 'ar' ? 'space-x-reverse' : ''} space-x-1`}>
+              <div
+                className={`mt-2 flex ${i18n.language === "ar" ? "space-x-reverse" : ""} space-x-1`}
+              >
                 {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
                   <div
                     key={index}
-                    className={`h-6 w-6 rounded-full border text-center font-bold ${index < 3
+                    className={`h-6 w-6 rounded-full border text-center font-bold ${
+                      index < 3
                         ? "bg-[#FD813D] text-white"
                         : "bg-gray-200 text-gray-400"
-                      }`}
+                    }`}
                   >
                     {day}
                   </div>
                 ))}
               </div>
               <p className="mt-1 font-poppins text-sm font-medium text-gray-600">
-                3{t('dashboard.days')} 🔥
+                3{t("dashboard.days")} 🔥
               </p>
             </div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-lg bg-white p-6 shadow-md">
             <p className="font-poppins text-lg font-semibold text-gray-600">
-              {t('dashboard.yourScore')}
+              {t("dashboard.yourScore")}
             </p>
 
             <div className="relative flex h-24 w-24 items-center justify-center">
@@ -264,14 +300,15 @@ function DashboardStudent() {
                 </defs>
               </svg>
               <p
-                className={`text-xl font-bold ${semesterReward.badge === "Green"
+                className={`text-xl font-bold ${
+                  semesterReward.badge === "Green"
                     ? "text-green-600"
                     : semesterReward.badge === "Diamond"
                       ? "text-gray-500"
                       : semesterReward.badge === "Gold"
                         ? "text-yellow-500"
                         : "text-green-700"
-                  }`}
+                }`}
               >
                 {semesterReward.totalSemesterPoints}
               </p>
@@ -283,21 +320,51 @@ function DashboardStudent() {
       {/* Quick Menu */}
       <div className="mx-auto w-[95%] rounded-lg bg-white px-4 py-8">
         <div className="flex items-center py-4">
-          <p className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}></p>
+          <p
+            className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === "ar" ? "ml-2" : "mr-2"}`}
+          ></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
-            {t('dashboard.quickMenu')}
+            {t("dashboard.quickMenu")}
           </button>
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
           {[
-            { label: t('menu.motivation'), icon: AwardIcon, path: "/student/motivation" },
-            { label: t('menu.courses'), icon: CourseIcon, path: "/student/allcourses" },
-            { label: t('menu.absence'), icon: AbsenceIcon, path: "/student/attendance" },
-            { label: t('menu.schedule'), icon: ScheduleIcon, path: "/student/schedule" },
-            { label: t('menu.grades'), icon: GradeIcon, path: "/student/grades" },
-            { label: t('menu.activities'), icon: ActivityIcon, path: "/student/activities" },
-            { label: t('menu.library'), icon: LibraryIcon, path: "/student/library" },
+            {
+              label: t("menu.motivation"),
+              icon: AwardIcon,
+              path: "/student/motivation",
+            },
+            {
+              label: t("menu.courses"),
+              icon: CourseIcon,
+              path: "/student/allcourses",
+            },
+            {
+              label: t("menu.absence"),
+              icon: AbsenceIcon,
+              path: "/student/attendance",
+            },
+            {
+              label: t("menu.schedule"),
+              icon: ScheduleIcon,
+              path: "/student/schedule",
+            },
+            {
+              label: t("menu.grades"),
+              icon: GradeIcon,
+              path: "/student/grades",
+            },
+            {
+              label: t("menu.activities"),
+              icon: ActivityIcon,
+              path: "/student/activities",
+            },
+            {
+              label: t("menu.library"),
+              icon: LibraryIcon,
+              path: "/student/library",
+            },
             // { label: "Question Bank", icon: QuestionsIcon },
             // { label: "Virtual Rooms", icon: VirtualIcon },
             // { label: "Chats", icon: ChatIcon },
@@ -319,9 +386,11 @@ function DashboardStudent() {
       {/* Main Categories */}
       <div className="mx-auto mt-8 w-[95%] rounded-lg bg-white p-4">
         <div className="flex items-center">
-          <p className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === 'ar' ? 'ml-2' : 'mr-2'}`}></p>
+          <p
+            className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === "ar" ? "ml-2" : "mr-2"}`}
+          ></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
-            {t('dashboard.mainCategories')}
+            {t("dashboard.mainCategories")}
           </button>
         </div>
 
@@ -370,7 +439,7 @@ function DashboardStudent() {
           }}
         >
           <h2 className="mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-2xl font-bold text-transparent">
-            {t('dashboard.continueReading')}
+            {t("dashboard.continueReading")}
           </h2>
           <ul className="space-y-6">
             {readingList.map((item, index) => (
@@ -391,7 +460,7 @@ function DashboardStudent() {
                     href="https://placehold.co/600x400"
                     className="mt-2 block font-poppins font-semibold text-purple-500"
                   >
-                    {t('dashboard.continueButton')}
+                    {t("dashboard.continueButton")}
                   </a>
                 </div>
               </li>
@@ -408,7 +477,7 @@ function DashboardStudent() {
           }}
         >
           <h2 className="mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-2xl font-bold text-transparent">
-            {t('dashboard.recommendedToWatch')}
+            {t("dashboard.recommendedToWatch")}
           </h2>
           <ul className="space-y-6">
             {recommendedList.map((item, index) => (
@@ -423,13 +492,13 @@ function DashboardStudent() {
                     {item.title}
                   </p>
                   <p className="font-poppins text-gray-600">
-                    {t('dashboard.type')}: {item.type}
+                    {t("dashboard.type")}: {item.type}
                   </p>
                   <a
                     href="https://placehold.co/600x400"
                     className="mt-2 block font-poppins font-semibold text-purple-500"
                   >
-                    {t('dashboard.watchNow')}
+                    {t("dashboard.watchNow")}
                   </a>
                 </div>
               </li>
