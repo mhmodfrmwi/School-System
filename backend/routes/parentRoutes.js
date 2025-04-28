@@ -8,6 +8,7 @@ const {
 } = require("../controllers/Parent/parentController");
 const validateJwt = require("../middlewares/validateJWT");
 const validateParent = require("../middlewares/validateParent");
+const { getLoggedInParentData }= require("../controllers/Parent/parentData");
 const router = express.Router();
 router.post("/login", login);
 router.patch(
@@ -27,7 +28,9 @@ router.patch(
 
 router.get("/kids", validateJwt, validateParent, showKids);
 router.post("/chooseKid", validateJwt, validateParent, chooseKid);
+router.get("/parent-data", validateJwt, validateParent, getLoggedInParentData);
+
 module.exports = router;
 
 
-module.exports = router;
+//module.exports = router;

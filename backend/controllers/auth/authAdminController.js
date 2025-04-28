@@ -34,7 +34,17 @@ const updateAdminProfile = async (req, res) => {
     const adminId = req.user.id;
     const { currentPassword, newPassword, phone } = req.body;
     const profileImage = req.file?.path;
-
+    if (!newPassword && !phone && !profileImage) {
+      if (req.file?.path) fs.unlinkSync(req.file.path);
+      return res.status(400).json({ 
+        message: "Please provide fields to update (newPassword, phone, or profileImage)",
+        details: {
+          note: "For password change, include both currentPassword and newPassword",
+          note2: "For profile image, use form-data with 'profileImage' field"
+        }
+      });
+    }
+        
     const admin = await Admin.findById(adminId);
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
@@ -61,19 +71,19 @@ const updateAdminProfile = async (req, res) => {
     }
 
     if (profileImage) {
-
-      if (
-        admin.profileImage &&
-        !admin.profileImage.startsWith("http") &&
-        fs.existsSync(admin.profileImage)
-      ) {
-        fs.unlinkSync(admin.profileImage);
+      if (admin.profileImage) {
+        try {
+          if (!admin.profileImage.startsWith("http")) {
+            const fullPath = path.join(__dirname, '../../', admin.profileImage);
+            if (fs.existsSync(fullPath)) {
+              fs.unlinkSync(fullPath);
+            }
+          }
+        } catch (err) {
+          console.error("Error deleting old profile image:", err);
+        }
       }
       updateData.profileImage = profileImage;
-    }
-
-    if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({ message: "No valid fields to update" });
     }
 
     const updatedAdmin = await Admin.findByIdAndUpdate(
@@ -90,7 +100,7 @@ const updateAdminProfile = async (req, res) => {
   } catch (error) {
     console.error("Error updating admin profile:", error);
 
-    if (req.file?.path) {
+    if (req.file && req.file.path) {
       fs.unlinkSync(req.file.path);
     }
 

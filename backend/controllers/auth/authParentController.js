@@ -37,6 +37,17 @@ const updateParentProfile = async (req, res) => {
     const { currentPassword, newPassword, phone } = req.body;
     const profileImage = req.file?.path;
 
+    if (!newPassword && !phone && !profileImage) {
+      if (req.file?.path) fs.unlinkSync(req.file.path);
+      return res.status(400).json({ 
+        message: "Please provide fields to update (newPassword, phone, or profileImage)",
+        details: {
+          note: "For password change, include both currentPassword and newPassword",
+          note2: "For profile image, use form-data with 'profileImage' field"
+        }
+      });
+    }
+        
     const parent = await Parent.findById(parentId);
     if (!parent) {
       return res.status(404).json({ message: "Parent not found" });
@@ -64,20 +75,21 @@ const updateParentProfile = async (req, res) => {
     if (phone) {
       updateData.phone = phone;
     }
-
+    
     if (profileImage) {
-      if (
-        parent.profileImage &&
-        !parent.profileImage.startsWith("http") &&
-        fs.existsSync(parent.profileImage)
-      ) {
-        fs.unlinkSync(parent.profileImage);
+      if (parent.profileImage) {
+        try {
+          if (!parent.profileImage.startsWith("http")) {
+            const fullPath = path.join(__dirname, '../../', parent.profileImage);
+            if (fs.existsSync(fullPath)) {
+              fs.unlinkSync(fullPath);
+            }
+          }
+        } catch (err) {
+          console.error("Error deleting old profile image:", err);
+        }
       }
       updateData.profileImage = profileImage;
-    }
-
-    if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({ message: "No fields to update" });
     }
 
     const updatedParent = await Parent.findByIdAndUpdate(

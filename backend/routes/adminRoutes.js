@@ -115,6 +115,7 @@ const {
   seedRewards,
 } = require("../controllers/General/rewardCatalogDataController");
 const { login ,updateAdminProfile} = require("../controllers/auth/authAdminController");
+const { getLoggedInAdminData} = require("../controllers/Admin/adminData");
 
 const router = express.Router();
 router.post("/login", login);
@@ -124,6 +125,14 @@ router.patch(
   validateJwt,
   validateAdmin,
   uploadImage.single("profileImage"),
+  (err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: err.message });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  },
   updateAdminProfile
 );
 
@@ -357,4 +366,7 @@ router
   .delete(validateJwt, validateAdmin, deleteSchedule);
 router.get("/schedule", validateJwt, validateAdmin, getAllSchedule);
 router.post("/reward", validateJwt, validateAdmin, seedRewards);
+router.get(
+  "/admin-data",validateJwt, validateAdmin,getLoggedInAdminData
+);
 module.exports = router;

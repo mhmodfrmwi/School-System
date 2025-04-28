@@ -76,6 +76,9 @@ const {
   getCompletedVirtualRooms,
   getMissedVirtualRooms
 } = require("../controllers/Teacher/gettingManagerVirtualRooms");
+const {
+  getLoggedInTeacherData
+} = require("../controllers/Teacher/teacherData");
 
 const router = express.Router();
 
@@ -90,6 +93,7 @@ router.patch(
   validateTeacher,
   uploadImage.single("profileImage"),
   (err, req, res, next) => {
+    console.log(req.file)
     if (err instanceof multer.MulterError) {
       return res.status(400).json({ error: err.message });
     } else if (err) {
@@ -270,5 +274,11 @@ router
     validateJwt,
     validateTeacher,
     handleVrLinkClick
+  );
+  router.get(
+    "/teacher-data",
+    validateJwt,
+    validateTeacher,
+    getLoggedInTeacherData
   );
 module.exports = router;

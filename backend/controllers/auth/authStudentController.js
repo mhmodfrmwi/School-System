@@ -50,7 +50,18 @@ const updateStudentProfile = expressAsyncHandler(async (req, res) => {
     const studentId = req.user.id;
     const { currentPassword, newPassword, phone } = req.body;
     let profileImage = req.file ? req.file.path : undefined;
-
+    
+    if (!newPassword && !phone && !profileImage) {
+      if (req.file?.path) fs.unlinkSync(req.file.path);
+      return res.status(400).json({ 
+        message: "Please provide fields to update (newPassword, phone, or profileImage)",
+        details: {
+          note: "For password change, include both currentPassword and newPassword",
+          note2: "For profile image, use form-data with 'profileImage' field"
+        }
+      });
+    }
+    
     const student = await Student.findById(studentId);
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
@@ -77,17 +88,20 @@ const updateStudentProfile = expressAsyncHandler(async (req, res) => {
     }
 
     if (profileImage) {
-      if (student.profileImage && 
-          !student.profileImage.includes("default-image-url") && 
-          fs.existsSync(student.profileImage)) {
-        fs.unlinkSync(student.profileImage);
-      }
-      updateData.profileImage = profileImage;
-    }
-
-    if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({ message: "No valid fields to update" });
-    }
+          if (student.profileImage) {
+            try {
+              if (!student.profileImage.startsWith("http")) {
+                const fullPath = path.join(__dirname, '../../', student.profileImage);
+                if (fs.existsSync(fullPath)) {
+                  fs.unlinkSync(fullPath);
+                }
+              }
+            } catch (err) {
+              console.error("Error deleting old profile image:", err);
+            }
+          }
+          updateData.profileImage = profileImage;
+        }
 
     const updatedStudent = await Student.findByIdAndUpdate(
       studentId,
@@ -101,7 +115,6 @@ const updateStudentProfile = expressAsyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating student profile:", error);
-
     if (req.file && req.file.path) {
       fs.unlinkSync(req.file.path);
     }

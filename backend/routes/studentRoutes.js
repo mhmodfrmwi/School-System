@@ -85,6 +85,11 @@ const {
   getStudentSemesterGrades,
   getAllSemesterGrades
 } = require("../controllers/Student/getStudentGrade");
+
+const {
+  getLoggedInStudentData
+} = require("../controllers/Student/studentData");
+
 const router = express.Router();
 
 //login route
@@ -320,5 +325,11 @@ router.get(
   validateJwt,
   validateStudent,
   getAllSemesterGrades
+);
+router.get(
+  "/student-data",
+  validateJwt,
+  validateStudent,
+  getLoggedInStudentData
 );
 module.exports = router;
