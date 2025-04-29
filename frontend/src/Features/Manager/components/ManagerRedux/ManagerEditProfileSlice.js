@@ -1,12 +1,10 @@
-// teacherProfileSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 const getToken = () => sessionStorage.getItem('token');
 
-// Async thunk for updating teacher profile
 export const updateManagerProfile = createAsyncThunk(
   'manager/updateProfile',
-  async (profileData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => { 
     try {
       const token = getToken();
       if (!token) {
@@ -14,20 +12,49 @@ export const updateManagerProfile = createAsyncThunk(
       }
 
       const url = 'http://localhost:4000/api/v1/manager/manager-profile';
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData 
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to update profile');
+      }
+
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message || 'Server Error');
+    }
+  }
+);
+
+export const fetchManagerData = createAsyncThunk(
+  'manager/fetchData',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) {
+        return rejectWithValue('Authentication required. Please log in.');
+      }
+
+      const url = 'http://localhost:4000/api/v1/manager/manager-data';
       const headers = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       };
 
       const response = await fetch(url, {
-        method: 'PATCH',
+        method: 'GET',
         headers,
-        body: JSON.stringify(profileData),
       });
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        throw new Error(errorResponse.message || 'Failed to update profile');
+        throw new Error(errorResponse.message || 'Failed to fetch manager data');
       }
 
       const data = await response.json();
@@ -38,14 +65,15 @@ export const updateManagerProfile = createAsyncThunk(
   }
 );
 
-// Slice definition
 const managerProfileSlice = createSlice({
   name: 'managerProfile',
   initialState: {
     profile: null,
-    status: 'idle', 
+    status: 'idle',
     error: null,
     loading: false,
+    fetchStatus: 'idle',
+    fetchError: null,
   },
   reducers: {
     resetProfileState: (state) => {
@@ -59,6 +87,19 @@ const managerProfileSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchManagerData.pending, (state) => {
+        state.fetchStatus = 'loading';
+        state.fetchError = null;
+      })
+      .addCase(fetchManagerData.fulfilled, (state, action) => {
+        state.fetchStatus = 'succeeded';
+        state.profile = action.payload;
+      })
+      .addCase(fetchManagerData.rejected, (state, action) => {
+        console.error('Fetch Error:', action.payload);
+        state.fetchStatus = 'failed';
+        state.fetchError = action.payload;
+      })
       .addCase(updateManagerProfile.pending, (state) => {
         state.status = 'loading';
         state.loading = true;
@@ -67,7 +108,7 @@ const managerProfileSlice = createSlice({
       .addCase(updateManagerProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.loading = false;
-        state.profile = action.payload.teacher;
+        state.profile = action.payload;
         toast.success("Profile updated successfully");
       })
       .addCase(updateManagerProfile.rejected, (state, action) => {
@@ -79,6 +120,5 @@ const managerProfileSlice = createSlice({
   },
 });
 
-// Export actions and reducer
 export const { resetProfileState, setProfileData } = managerProfileSlice.actions;
 export default managerProfileSlice.reducer;
