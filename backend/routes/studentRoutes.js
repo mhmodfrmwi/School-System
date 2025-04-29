@@ -84,6 +84,7 @@ const {
   getAllPoints,
   getSemesterPoints,
   getStudentWithFriendsPoints,
+  getAllStudentRewardsData,
 } = require("../controllers/Student/studentRewardsController");
 const {
   getStudentGrades,
@@ -309,6 +310,12 @@ router.get(
   validateJwt,
   validateStudent,
   getStudentWithFriendsPoints
+);
+router.get(
+  "/all-reward",
+  validateJwt,
+  validateStudent,
+  getAllStudentRewardsData
 );
 router.get(
   "/subject-degree/:subjectId",

@@ -6,6 +6,7 @@ const gradesPrompt = require("../utils/gradesPrompt");
 const attendancePrompt = require("../utils/attendancePrompt");
 const subjectsPrompt = require("../utils/subjectsPrompt");
 const materialPrompt = require("../utils/materialPrompt");
+const rewardsPrompt = require("../utils/rewardsPrompt");
 /**
  * Process chat message and return AI response
  * @route POST /api/chat
@@ -71,11 +72,19 @@ const processMessage = asyncHandler(async (req, res) => {
   ) {
     systemPrompt = await attendancePrompt(lowerCaseMessage, authToken, userId);
   } else if (isMaterialRequest) {
-    // Handle material requests first
     systemPrompt = await materialPrompt(lowerCaseMessage, authToken, userId);
   } else if (isSubjectRequest) {
-    // Then handle subject requests
     systemPrompt = await subjectsPrompt(lowerCaseMessage, authToken, userId);
+  } else if (
+    lowerCaseMessage.includes("points") ||
+    lowerCaseMessage.includes("reward") ||
+    lowerCaseMessage.includes("مكافأة") ||
+    lowerCaseMessage.includes("مكافآت") ||
+    lowerCaseMessage.includes("نقاط") ||
+    lowerCaseMessage.includes("مكافأت") ||
+    lowerCaseMessage.includes("جوائز")
+  ) {
+    systemPrompt = await rewardsPrompt(lowerCaseMessage, authToken, userId);
   }
 
   const aiResponse = await aiService.getAIResponse(
