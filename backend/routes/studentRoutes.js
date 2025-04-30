@@ -1,12 +1,16 @@
 const express = require("express");
-const uploadImage =require ("../utils/uploadProfileImages")
-const { login,updateStudentProfile } = require("../controllers/auth/authStudentController");
+const uploadImage = require("../utils/uploadProfileImages");
+const {
+  login,
+  updateStudentProfile,
+} = require("../controllers/auth/authStudentController");
 const validateJwt = require("../middlewares/validateJWT");
 
 const validateStudent = require("../middlewares/validateStudent");
 const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Student/subjectsController");
 const {
   getMaterialForSpecificSubject,
+  getMaterialForSpecificGrade,
 } = require("../controllers/Student/materialController");
 const {
   getQuestionsBySubjectForStudent,
@@ -38,6 +42,7 @@ const {
 } = require("../controllers/Student/virtualRoomController");
 const {
   getStudentAttendanceUsingStudentId,
+  getStudentAttendanceWithStudentId,
 } = require("../controllers/Student/attendanceController");
 const {
   getScheduleForSpecificStudent,
@@ -79,12 +84,18 @@ const {
   getAllPoints,
   getSemesterPoints,
   getStudentWithFriendsPoints,
+  getAllStudentRewardsData,
 } = require("../controllers/Student/studentRewardsController");
 const {
   getStudentGrades,
   getStudentSemesterGrades,
-  getAllSemesterGrades
+  getAllSemesterGrades,
 } = require("../controllers/Student/getStudentGrade");
+
+const {
+  getLoggedInStudentData,
+} = require("../controllers/Student/studentData");
+
 const router = express.Router();
 
 //login route
@@ -119,6 +130,12 @@ router.get(
   validateJwt,
   validateStudent,
   getMaterialForSpecificSubject
+);
+router.get(
+  "/material/grade",
+  validateJwt,
+  validateStudent,
+  getMaterialForSpecificGrade
 );
 router.get("/materiel/:subjectId/:materialId", validateJwt, getMaterielById);
 
@@ -203,6 +220,12 @@ router.get(
   getStudentAttendanceUsingStudentId
 );
 router.get(
+  "/getAttendanceForChatbot",
+  validateJwt,
+  validateStudent,
+  getStudentAttendanceWithStudentId
+);
+router.get(
   "/get-schedule",
   validateJwt,
   validateStudent,
@@ -279,29 +302,20 @@ router.get(
   getLibraryMaterialViewsForStudent
 );
 
-router.get(
-  "/daily-reward",
-  validateJwt,
-  validateStudent,
-  getDailyPoints
-);
-router.get(
-  "/reward",
-  validateJwt,
-  validateStudent,
-  getAllPoints
-);
-router.get(
-  "/semester-reward",
-  validateJwt,
-  validateStudent,
-  getSemesterPoints
-);
+router.get("/daily-reward", validateJwt, validateStudent, getDailyPoints);
+router.get("/reward", validateJwt, validateStudent, getAllPoints);
+router.get("/semester-reward", validateJwt, validateStudent, getSemesterPoints);
 router.get(
   "/student-with-friends-reward",
   validateJwt,
   validateStudent,
   getStudentWithFriendsPoints
+);
+router.get(
+  "/all-reward",
+  validateJwt,
+  validateStudent,
+  getAllStudentRewardsData
 );
 router.get(
   "/subject-degree/:subjectId",
@@ -320,5 +334,11 @@ router.get(
   validateJwt,
   validateStudent,
   getAllSemesterGrades
+);
+router.get(
+  "/student-data",
+  validateJwt,
+  validateStudent,
+  getLoggedInStudentData
 );
 module.exports = router;

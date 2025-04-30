@@ -49,6 +49,10 @@ const {
   getScheduleByClassId,
 } = require("../controllers/Admin/scheduleController");
 
+const {
+  getLoggedInManagerData,
+} = require("../controllers/manager/managerData");
+
 const router = express.Router();
 
 router.post("/login", login);
@@ -138,5 +142,11 @@ router.get(
   validateJwt,
   validateManager,
   getScheduleByClassId
+);
+router.get(
+  "/manager-data",
+  validateJwt,
+  validateManager,
+  getLoggedInManagerData,
 );
 module.exports = router;

@@ -38,17 +38,30 @@ const updateTeacherProfile = async (req, res) => {
     const { currentPassword, newPassword, phone } = req.body;
     const profileImage = req.file?.path;
 
-    const teacher = await Teacher.findById(teacherId);
-    if (!teacher) {
-      return res.status(404).json({ message: "Teacher not found" });
+    if (!newPassword && !phone && !profileImage) {
+      if (req.file?.path) fs.unlinkSync(req.file.path);
+      return res.status(400).json({ 
+        message: "Please provide fields to update (newPassword, phone, or profileImage)",
+        details: {
+          note: "For password change, include both currentPassword and newPassword",
+          note2: "For profile image, use form-data with 'profileImage' field"
+        }
+      });
     }
 
+    const teacher = await Teacher.findById(teacherId);
+    if (!teacher) {
+      if (req.file?.path) fs.unlinkSync(req.file.path);
+      return res.status(404).json({ message: "Teacher not found" });
+    }
 
     const updateData = {};
 
     if (newPassword) {
       if (!currentPassword) {
-        return res.status(400).json({ message: "Current password is required" });
+        return res.status(400).json({ 
+          message: "Current password is required when changing password" 
+        });
       }
 
       const isMatch = await teacher.comparePasswordInDb(
@@ -68,18 +81,19 @@ const updateTeacherProfile = async (req, res) => {
     }
 
     if (profileImage) {
-      if (
-        teacher.profileImage &&
-        !teacher.profileImage.startsWith("http") &&
-        fs.existsSync(teacher.profileImage)
-      ) {
-        fs.unlinkSync(teacher.profileImage);
+      if (teacher.profileImage) {
+        try {
+          if (!teacher.profileImage.startsWith("http")) {
+            const fullPath = path.join(__dirname, '../../', teacher.profileImage);
+            if (fs.existsSync(fullPath)) {
+              fs.unlinkSync(fullPath);
+            }
+          }
+        } catch (err) {
+          console.error("Error deleting old profile image:", err);
+        }
       }
       updateData.profileImage = profileImage;
-    }
-
-    if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({ message: "No fields to update" });
     }
 
     const updatedTeacher = await Teacher.findByIdAndUpdate(
@@ -97,7 +111,11 @@ const updateTeacherProfile = async (req, res) => {
     console.error("Error updating teacher profile:", error);
 
     if (req.file?.path) {
-      fs.unlinkSync(req.file.path);
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (err) {
+        console.error("Error deleting uploaded file:", err);
+      }
     }
 
     if (error.name === "ValidationError") {
