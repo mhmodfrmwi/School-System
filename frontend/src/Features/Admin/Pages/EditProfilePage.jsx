@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { updateAdminProfile, fetchAdminData } from '../components/AdminRedux/AdminEditProfileSlice';
-import { FaEye,FaPen, FaEyeSlash, FaCamera } from 'react-icons/fa';
+import { FaEye, FaPen, FaEyeSlash, FaCamera } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
 const EditProfile = () => {
@@ -65,21 +65,19 @@ const EditProfile = () => {
             });
 
             if (admin.profileImage) {
+                let imgUrl;
                 if (admin.profileImage.startsWith('http')) {
-                    setProfileImage(admin.profileImage);
+                    imgUrl = admin.profileImage;
                 } else {
-                    const normalizedPath = admin.profileImage.replace(/\\/g, '/');
-                    const imgUrl = `http://localhost:4000/${normalizedPath.split('uploads/').pop()}`;
-                    setProfileImage(imgUrl);
+                    const fileName = admin.profileImage.split('\\').pop();
+                    imgUrl = `http://localhost:4000/uploads/${fileName}`;
                 }
+                setProfileImage(`${imgUrl}?${Date.now()}`);
+            } else {
+                setProfileImage("../src/assets/user.jpg");
             }
         }
     }, [adminData]);
-    useEffect(() => {
-        console.log('admin Data from API:', adminData);
-        console.log('Fetch Status:', fetchStatus);
-        console.log('Fetch Error:', fetchError);
-    }, [adminData, fetchStatus, fetchError]);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -160,7 +158,7 @@ const EditProfile = () => {
     return (
         <div className="w-[80%] mx-auto my-10 font-poppins">
             <h1 className="text-2xl font-semibold text-[#244856] dark:text-DarkManager pl-5">
-            {t('editProfile.title')}
+                {t('editProfile.title')}
             </h1>
             <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
             <div className="p-6 bg-white rounded-lg shadow-lg">
@@ -191,7 +189,7 @@ const EditProfile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                        {t('editProfile.firstName')}
+                            {t('editProfile.firstName')}
                         </label>
                         <input
                             type="text"
@@ -203,7 +201,7 @@ const EditProfile = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                        {t('editProfile.lastName')}
+                            {t('editProfile.lastName')}
                         </label>
                         <input
                             type="text"
@@ -215,7 +213,7 @@ const EditProfile = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                        {t('editProfile.gender')}
+                            {t('editProfile.gender')}
                         </label>
                         <select
                             name="gender"
@@ -243,7 +241,7 @@ const EditProfile = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                        {t('editProfile.email')}
+                            {t('editProfile.email')}
                         </label>
                         <input
                             type="email"
@@ -255,7 +253,7 @@ const EditProfile = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium dark:text-black">
-                        {t('editProfile.role')}
+                            {t('editProfile.role')}
                         </label>
                         <input
                             type="text"
@@ -271,18 +269,18 @@ const EditProfile = () => {
                     onClick={() => setIsEditingPassword(!isEditingPassword)}
                     className="px-6 py-2 bg-gray-500 text-white rounded-md font-medium hover:bg-gray-600 transition mx-auto block dark:bg-DarkManager mb-4"
                 >
-                    {isEditingPassword ?  t('assignmentt.Cancel') : t('editProfile.changePasswordButton')}
+                    {isEditingPassword ? t('assignmentt.Cancel') : t('editProfile.changePasswordButton')}
                 </button>
 
                 {isEditingPassword && (
                     <>
                         <h2 className="text-xl font-semibold mt-8 mb-4 dark:text-DarkManager">
-                        {t('editProfile.changePasswordButton')}
+                            {t('editProfile.changePasswordButton')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                {t('editProfile.currentPassword')}
+                                    {t('editProfile.currentPassword')}
                                 </label>
                                 <div className="relative">
                                     <input
@@ -303,7 +301,7 @@ const EditProfile = () => {
                             </div>
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                {t('editProfile.newPassword')}
+                                    {t('editProfile.newPassword')}
                                 </label>
                                 <div className="relative">
                                     <input
@@ -324,7 +322,7 @@ const EditProfile = () => {
                             </div>
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                {t('editProfile.confirmPassword')}
+                                    {t('editProfile.confirmPassword')}
                                 </label>
                                 <div className="relative">
                                     <input

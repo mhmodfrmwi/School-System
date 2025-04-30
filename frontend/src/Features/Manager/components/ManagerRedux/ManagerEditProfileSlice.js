@@ -1,4 +1,3 @@
-// teacherProfileSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 const getToken = () => sessionStorage.getItem('token');
@@ -109,7 +108,7 @@ const managerProfileSlice = createSlice({
       .addCase(updateManagerProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.loading = false;
-        state.profile = action.payload.teacher;
+        state.profile = action.payload;
         toast.success("Profile updated successfully");
       })
       .addCase(updateManagerProfile.rejected, (state, action) => {
@@ -121,6 +120,5 @@ const managerProfileSlice = createSlice({
   },
 });
 
-// Export actions and reducer
 export const { resetProfileState, setProfileData } = managerProfileSlice.actions;
 export default managerProfileSlice.reducer;

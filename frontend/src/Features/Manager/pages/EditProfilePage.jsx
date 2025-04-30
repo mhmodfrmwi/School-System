@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { updateManagerProfile, fetchManagerData } from '../components/ManagerRedux/ManagerEditProfileSlice';
-import { FaEye, FaEyeSlash, FaCamera,FaPen } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaCamera, FaPen } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
 const EditProfile = () => {
@@ -11,7 +11,7 @@ const EditProfile = () => {
     const { t } = useTranslation();
 
     const {
-        profile: managerData,
+        profile: teacherData,
         fetchStatus,
         fetchError,
         error,
@@ -44,31 +44,31 @@ const EditProfile = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (managerData && managerData.data) {
-            const manager = managerData.data;
+        if (teacherData && teacherData.data) {
+            const teacher = teacherData.data;
             setProfile({
-                firstName: manager.fullName?.split(' ')[0] || "",
-                lastName: manager.fullName?.split(' ').slice(1).join(' ') || "",
-                gender: manager.gender === "M" ? "Male" : manager.gender === "F" ? "Female" : "Other",
-                phone: manager.phone || "",
-                email: manager.email || "",
-                role: "Manager",
+                firstName: teacher.fullName?.split(' ')[0] || "",
+                lastName: teacher.fullName?.split(' ').slice(1).join(' ') || "",
+                gender: teacher.gender === "M" ? "Male" : teacher.gender === "F" ? "Female" : "Other",
+                phone: teacher.phone || "",
+                email: teacher.email || "",
+                role: "Teacher",
                 currentPassword: "",
                 newPassword: "",
                 confirmPassword: "",
             });
 
-            if (manager.profileImage) {
-                if (manager.profileImage.startsWith('http')) {
-                    setProfileImage(manager.profileImage);
+            if (teacher.profileImage) {
+                if (teacher.profileImage.startsWith('http')) {
+                    setProfileImage(teacher.profileImage);
                 } else {
-                    const normalizedPath = manager.profileImage.replace(/\\/g, '/');
+                    const normalizedPath = teacher.profileImage.replace(/\\/g, '/');
                     const imgUrl = `http://localhost:4000/${normalizedPath.split('uploads/').pop()}`;
                     setProfileImage(imgUrl);
                 }
             }
         }
-    }, [managerData]);
+    }, [teacherData]);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -148,7 +148,7 @@ const EditProfile = () => {
     return (
         <div className="w-[80%] mx-auto my-10 font-poppins">
             <h1 className="text-2xl font-semibold text-[#244856] dark:text-DarkManager pl-5">
-            {t('editProfile.title')}
+                {t('editProfile.title')}
             </h1>
             <div className="mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856] ml-3"></div>
             <div className="p-6 bg-white rounded-lg shadow-lg">
@@ -263,18 +263,18 @@ const EditProfile = () => {
                     onClick={() => setIsEditingPassword(!isEditingPassword)}
                     className="px-6 py-2 bg-gray-500 text-white rounded-md font-medium hover:bg-gray-600 transition mx-auto block dark:bg-DarkManager mb-4"
                 >
-                    {isEditingPassword ? t('assignmentt.Cancel')  : t('editProfile.changePasswordButton')}
+                    {isEditingPassword ? t('assignmentt.Cancel') : t('editProfile.changePasswordButton')}
                 </button>
 
                 {isEditingPassword && (
                     <>
                         <h2 className="text-xl font-semibold mt-8 mb-4 dark:text-DarkManager">
-                        {t('editProfile.changePasswordButton')}
+                            {t('editProfile.changePasswordButton')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                {t('editProfile.currentPassword')}
+                                    {t('editProfile.currentPassword')}
                                 </label>
                                 <div className="relative">
                                     <input
@@ -295,7 +295,7 @@ const EditProfile = () => {
                             </div>
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                {t('editProfile.newPassword')}
+                                    {t('editProfile.newPassword')}
                                 </label>
                                 <div className="relative">
                                     <input
@@ -316,7 +316,7 @@ const EditProfile = () => {
                             </div>
                             <div className="relative">
                                 <label className="block text-sm font-medium dark:text-black">
-                                {t('editProfile.confirmPassword')}
+                                    {t('editProfile.confirmPassword')}
                                 </label>
                                 <div className="relative">
                                     <input

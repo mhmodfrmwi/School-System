@@ -15,7 +15,9 @@ const GetExamSchedule = () => {
   const { isDeleting, deleteExamScheduleMutation } = useDeleteExamSchedule();
 
   const handleDelete = () => {
-    deleteExamScheduleMutation(id);
+    if (window.confirm("Are you sure you want to delete this exam schedule?")) {
+      deleteExamScheduleMutation(id);
+    }
   };
 
   const handleUpdate = () => {

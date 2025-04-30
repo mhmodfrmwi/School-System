@@ -20,7 +20,13 @@ export const useCreateExamSchedule = () => {
       queryClient.invalidateQueries({ queryKey: ["managerExamSchedules"] });
     },
     onError: (err) => {
-      toast.error("Failed to create exam schedule", err.message);
+      if (err.response?.status === 409) {
+        toast.error(
+          "Conflict: This exam schedule already exists or is in an invalid state.",
+        );
+      } else {
+        toast.error(err.message || "An unexpected error occurred.");
+      }
     },
   });
 

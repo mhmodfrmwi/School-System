@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useLocation } from "react-router-dom";
 import { fetchClassAttendance } from "../TeacherRedux/takeAttendanceSlice";
 import Loader from "@/ui/Loader";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 function StudentAttendanceDetails() {
   const { id } = useParams();
   const { t } = useTranslation();
@@ -61,17 +61,19 @@ function StudentAttendanceDetails() {
   ).length;
 
   return (
-    <div className="mx-auto w-full max-w-2xl p-6 font-poppins">
+    <div className="mx-auto w-full max-w-4xl p-6 font-poppins">
       <h2 className="mb-6 text-center text-2xl font-bold text-[#117C90] dark:text-DarkManager">
-      {t("attendans.AttendanceDetails")} {student?.fullName || "Unknown"}
+        {t("attendans.AttendanceDetails")} {student?.fullName || "Unknown"}
       </h2>
 
       <div className="rounded-lg border bg-white p-4 shadow-md dark:text-black">
         <p className="mb-2">
-          <strong>{t("attendans.AcademicNumber")}:</strong> {student?.academicNumber || "N/A"}
+          <strong>{t("attendans.AcademicNumber")}:</strong>{" "}
+          {student?.academicNumber || "N/A"}
         </p>
         <p className="mb-2">
-          <strong>{t("attendans.Class")}:</strong> {student?.className || "Unknown"}
+          <strong>{t("attendans.Class")}:</strong>{" "}
+          {student?.className || "Unknown"}
         </p>
         <p className="mb-2">
           <strong>{t("attendans.TotalAbsences")}:</strong> {totalAbsences}

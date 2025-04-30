@@ -108,7 +108,7 @@ const studentProfileSlice = createSlice({
       .addCase(updateStudentProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.loading = false;
-        state.profile = action.payload.teacher;
+        state.profile = action.payload;
         toast.success("Profile updated successfully");
       })
       .addCase(updateStudentProfile.rejected, (state, action) => {

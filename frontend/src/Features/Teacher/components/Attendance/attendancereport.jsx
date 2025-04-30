@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 
 function Attendancereport() {
   const dispatch = useDispatch();
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isActive = (path) => location.pathname === path;
   const navigate = useNavigate();
   const { id } = useParams();
@@ -42,7 +42,7 @@ function Attendancereport() {
     if (classTeachers.length > 0 && !filters.classId) {
       setFilters((prev) => ({
         ...prev,
-        classId: classTeachers[0]?.classId?._id || "",
+        classId: classTeachers?.classId?._id || "",
       }));
     }
   }, [classTeachers, filters.classId]);
@@ -232,19 +232,29 @@ function Attendancereport() {
           <table className="mx-auto mt-7 w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90] dark:shadow-DarkManager">
             <thead className="bg-[#117C90] text-left text-white dark:bg-DarkManager">
               <tr className="bg-[#117C90] text-white dark:bg-DarkManager">
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
                   #
                 </th>
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
                   {t("attendans.AcademicNumber")}
                 </th>
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
                   {t("assignmentt.StudentName")}
                 </th>
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
                   {t("attendans.Class")}
                 </th>
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
                   {t("assignmentt.Status")}
                 </th>
               </tr>

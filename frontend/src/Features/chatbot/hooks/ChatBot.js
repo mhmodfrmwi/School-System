@@ -62,9 +62,7 @@ export const useChat = (userId) => {
   });
 
   const localizedText = {
-    placeholder: isArabicPreferred
-      ? "اسأل عن جدولك الدراسي..."
-      : "Ask about your schedule...",
+    placeholder: isArabicPreferred ? "اسألني أي شيء..." : "Ask anything...",
     buttonText: isArabicPreferred ? "إرسال" : "Send",
     thinkingText: isArabicPreferred ? "جاري التفكير..." : "Thinking...",
     chatButton: isArabicPreferred ? "محادثة" : "Chat",

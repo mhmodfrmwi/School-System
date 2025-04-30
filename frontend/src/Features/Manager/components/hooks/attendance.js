@@ -21,8 +21,16 @@ export const useCreateClassData = () => {
     isLoading: isCreating,
   } = useMutation({
     mutationFn: CreateClassData,
-    onSuccess: () => {
-      toast.success("Class data posted successfully!");
+    onSuccess: (data) => {
+      if (Array.isArray(data) && data.length) {
+        toast.success(
+          `Class data posted successfully! ${data.length} students added.`,
+        );
+      } else {
+        toast.success(
+          "Class data posted successfully, but no students were added.",
+        );
+      }
     },
     onError: (err) => {
       toast.error(`Error creating class data: ${err.message}`);
