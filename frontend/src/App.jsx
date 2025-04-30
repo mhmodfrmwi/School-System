@@ -24,7 +24,7 @@ import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/Wee
 import ParentKids from "./Features/Parent/ParentKids";
 
 import "./fonts.css";
-import ChatBot from "./Features/Chatbot/Chatbot";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -530,6 +530,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <TitleUpdater />
         <ToastContainer
@@ -615,7 +616,6 @@ function App() {
               />
               <Route path="edit-admin-profile" element={<EditProfilePage />} />
               <Route path="editparentform/:id" element={<EditParentForm />} />
-              <Route element={<ChatBot />} />
             </Route>
             {/* /////////////////studentpage//////////////////// */}
             <Route
@@ -726,7 +726,6 @@ function App() {
                 path="get-exam-schedule"
                 element={<GetExamScheduleForStudent />}
               />
-              <Route element={<ChatBot />} />
             </Route>
             {/* /////////////////parentpage//////////////////// */}
 
@@ -737,7 +736,6 @@ function App() {
               }
             >
               <Route path="parent-kids" element={<ParentKids />} />
-              <Route element={<ChatBot />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route
@@ -954,7 +952,6 @@ function App() {
                 path="exam-results/:classId/:gradeSubjectSemesterId/:type"
                 element={<GetStudentsWithGrades />}
               />
-              <Route element={<ChatBot />} />
             </Route>
 
             {/* ///////////////manager pages//////////////////// */}
@@ -1027,7 +1024,6 @@ function App() {
                 path="get-weekly-schedule/:id"
                 element={<WeeklyScheduleForManager />}
               />
-              <Route element={<ChatBot />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>
