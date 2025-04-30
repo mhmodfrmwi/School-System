@@ -8,6 +8,7 @@ const assignmentRoutes = require("./routes/assignmentRoutes");
 const examScheduleRoutes = require("./routes/examScheduleRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const fetchAndRegisterModel = require("./utils/fetchAndRegisterModel");
+const parentRoutes =require("../exams-microservice/routes/parentRoutes")
 
 connectDB();
 
@@ -33,12 +34,13 @@ app.use("/exams", examRoutes);
 app.use("/sessions", sessionRoutes);
 app.use("/assignments", assignmentRoutes);
 app.use("/exam-schedule", examScheduleRoutes);
+app.use("/parent", parentRoutes);
 
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Exams microservice running on port ${PORT}`);
+  console.log(`Exams microservice running on port ${PORT}`);//
 });
 
 /*

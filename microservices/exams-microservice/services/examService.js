@@ -175,7 +175,7 @@ const deleteExam = async (id) => {
     throw new Error(error.message);
   }
 };
-
+//
 const getExamsByTeacherId = async (teacher_id) => {
   try {
     const exams = await Exam.find({ created_by: teacher_id })
