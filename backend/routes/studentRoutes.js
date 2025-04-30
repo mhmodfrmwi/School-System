@@ -14,6 +14,7 @@ const {
 } = require("../controllers/Student/materialController");
 const {
   getQuestionsBySubjectForStudent,
+  getAllQuestionsForAllSubjects,
 } = require("../controllers/Student/questionBankController");
 const {
   addQuestionToBookmarks,
@@ -139,6 +140,11 @@ router.get(
 );
 router.get("/materiel/:subjectId/:materialId", validateJwt, getMaterielById);
 
+router.get(
+  "/questionBank/getAllBankQuestions",
+  validateJwt,
+  getAllQuestionsForAllSubjects
+);
 router.get(
   "/questionBank/:gradeSubjectSemesterId",
   validateJwt,
