@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { updateUserData } from '../../../Auth/AuthRedux/loginSlice'; // استيراد الـ action
+
 const getToken = () => sessionStorage.getItem('token');
 
 export const updateManagerProfile = createAsyncThunk(
   'manager/updateProfile',
-  async (formData, { rejectWithValue }) => { 
+  async (formData, { rejectWithValue , dispatch }) => { 
     try {
       const token = getToken();
       if (!token) {
@@ -25,7 +27,27 @@ export const updateManagerProfile = createAsyncThunk(
         throw new Error(errorResponse.message || 'Failed to update profile');
       }
 
-      return await response.json();
+      const data = await response.json();
+
+      // تحديث sessionStorage بالبيانات الجديدة
+      if (data.manager?.fullName) {
+        sessionStorage.setItem('fullName', data.manager.fullName);
+      }
+      if (data.manager?.profileImage) {
+        sessionStorage.setItem('profileImage', data.manager.profileImage);
+      }
+      if (data.manager?._id) {
+        sessionStorage.setItem('_id', data.manager._id);
+      }
+
+      // عمل dispatch لتحديث الـ state بتاع loginSlice
+      dispatch(updateUserData({
+        fullName: data.manager?.fullName,
+        profileImage: data.manager?.profileImage,
+        _id: data.manager?._id,
+      }));
+
+      return data;
     } catch (error) {
       return rejectWithValue(error.message || 'Server Error');
     }

@@ -60,6 +60,8 @@ const EditProfile = () => {
     
             if (student.profileImage) {
                 setProfileImage(student.profileImage);
+            }else {
+                setProfileImage("../src/assets/user.jpg");
             }
         }
     }, [studentData]);

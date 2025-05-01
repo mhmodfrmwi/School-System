@@ -6,12 +6,18 @@ import { FaEye, FaEyeSlash, FaCamera, FaPen } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
 const EditProfile = () => {
-    const dispatch = useDispatch();
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Edit Profile component for Manager
+ *
+ * @returns {JSX.Element} - A form to edit manager profile information
+
+/*******  d9c2a483-c7b2-444c-8648-accccd477087  *******/    const dispatch = useDispatch();
     const fileInputRef = useRef(null);
     const { t } = useTranslation();
 
     const {
-        profile: teacherData,
+        profile: managerData,
         fetchStatus,
         fetchError,
         error,
@@ -44,31 +50,29 @@ const EditProfile = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (teacherData && teacherData.data) {
-            const teacher = teacherData.data;
+        if (managerData && managerData.data) {
+            const manager = managerData.data;
             setProfile({
-                firstName: teacher.fullName?.split(' ')[0] || "",
-                lastName: teacher.fullName?.split(' ').slice(1).join(' ') || "",
-                gender: teacher.gender === "M" ? "Male" : teacher.gender === "F" ? "Female" : "Other",
-                phone: teacher.phone || "",
-                email: teacher.email || "",
-                role: "Teacher",
+                firstName: manager.fullName?.split(' ')[0] || "",
+                lastName: manager.fullName?.split(' ').slice(1).join(' ') || "",
+                gender: manager.gender === "M" ? "Male" : manager.gender === "F" ? "Female" : "Other",
+                phone: manager.phone || "",
+                email: manager.email || "",
+                role: "manager",
                 currentPassword: "",
                 newPassword: "",
                 confirmPassword: "",
             });
 
-            if (teacher.profileImage) {
-                if (teacher.profileImage.startsWith('http')) {
-                    setProfileImage(teacher.profileImage);
-                } else {
-                    const normalizedPath = teacher.profileImage.replace(/\\/g, '/');
-                    const imgUrl = `http://localhost:4000/${normalizedPath.split('uploads/').pop()}`;
-                    setProfileImage(imgUrl);
+            if (manager.profileImage) {
+                if (manager.profileImage.startsWith('http')) {
+                    setProfileImage(manager.profileImage);
+                }else {
+                    setProfileImage("../src/assets/user.jpg");
                 }
             }
         }
-    }, [teacherData]);
+    }, [managerData]);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];

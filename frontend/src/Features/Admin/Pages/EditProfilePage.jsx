@@ -65,14 +65,7 @@ const EditProfile = () => {
             });
 
             if (admin.profileImage) {
-                let imgUrl;
-                if (admin.profileImage.startsWith('http')) {
-                    imgUrl = admin.profileImage;
-                } else {
-                    const fileName = admin.profileImage.split('\\').pop();
-                    imgUrl = `http://localhost:4000/uploads/${fileName}`;
-                }
-                setProfileImage(`${imgUrl}?${Date.now()}`);
+                setProfileImage(admin.profileImage);
             } else {
                 setProfileImage("../src/assets/user.jpg");
             }

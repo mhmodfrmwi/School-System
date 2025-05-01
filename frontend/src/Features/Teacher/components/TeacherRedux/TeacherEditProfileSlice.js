@@ -1,11 +1,13 @@
 // teacherProfileSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { updateUserData } from '../../../Auth/AuthRedux/loginSlice'; // استيراد الـ action
+
 const getToken = () => sessionStorage.getItem('token');
 
 export const updateTeacherProfile = createAsyncThunk(
   'teacher/updateProfile',
-  async (profileData, { rejectWithValue }) => {
+  async (profileData, { rejectWithValue , dispatch }) => {
     try {
       const token = getToken();
       if (!token) {
@@ -29,6 +31,25 @@ export const updateTeacherProfile = createAsyncThunk(
       }
 
       const data = await response.json();
+
+      // تحديث sessionStorage بالبيانات الجديدة
+      if (data.teacher?.fullName) {
+        sessionStorage.setItem('fullName', data.teacher.fullName);
+      }
+      if (data.teacher?.profileImage) {
+        sessionStorage.setItem('profileImage', data.teacher.profileImage);
+      }
+      if (data.teacher?._id) {
+        sessionStorage.setItem('_id', data.teacher._id);
+      }
+
+      // عمل dispatch لتحديث الـ state بتاع loginSlice
+      dispatch(updateUserData({
+        fullName: data.teacher?.fullName,
+        profileImage: data.teacher?.profileImage,
+        _id: data.teacher?._id,
+      }));
+
       return data;
     } catch (error) {
       return rejectWithValue(error.message || 'Server Error');
