@@ -24,7 +24,6 @@ import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/Wee
 import ParentKids from "./Features/Parent/ParentKids";
 
 import "./fonts.css";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -530,7 +529,6 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <TitleUpdater />
         <ToastContainer
