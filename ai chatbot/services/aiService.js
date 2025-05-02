@@ -283,7 +283,6 @@ const getAIResponse = async (
   }
 };
 
-
 module.exports = {
   createSystemPrompt,
   getAIResponse,

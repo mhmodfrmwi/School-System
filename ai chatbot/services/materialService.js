@@ -20,7 +20,7 @@ const fetchSubjectsMaterials = async (userId, authToken) => {
       `${SCHOOL_API_BASE}/api/v1/student/material/grade`,
       {
         headers: { Authorization: `Bearer ${authToken}` },
-        timeout: 10000,
+        timeout: 20000,
       }
     );
 

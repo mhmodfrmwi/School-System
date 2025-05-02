@@ -8,6 +8,7 @@ const subjectsPrompt = require("../utils/subjectsPrompt");
 const materialPrompt = require("../utils/materialPrompt");
 const rewardsPrompt = require("../utils/rewardsPrompt");
 const questionBankPrompt = require("../utils/questionBankPrompt");
+const performancePrompt = require("../utils/performancePrompt");
 /**
  * Process chat message and return AI response
  * @route POST /api/chat
@@ -99,6 +100,11 @@ const processMessage = asyncHandler(async (req, res) => {
       authToken,
       userId
     );
+  } else if (
+    lowerCaseMessage.includes("performance") ||
+    lowerCaseMessage.includes("أداء")
+  ) {
+    systemPrompt = await performancePrompt(lowerCaseMessage, authToken, userId);
   }
 
   const aiResponse = await aiService.getAIResponse(

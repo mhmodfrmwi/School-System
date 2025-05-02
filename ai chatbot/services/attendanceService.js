@@ -16,18 +16,17 @@ const fetchStudentAttendance = async (userId, authToken) => {
       return cachedAttendance;
     }
     const response = await axios.get(
-      `${SCHOOL_API_BASE}/api/v1/student//getAttendanceForChatbot`,
+      `${SCHOOL_API_BASE}/api/v1/student/getAttendanceForChatbot`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-        timeout: 8000,
+        timeout: 20000,
       }
     );
     if (response.status !== 200) {
       throw new Error("Failed to fetch attendance");
     }
-    console.log(response.data);
 
     const attendance = response.data;
     cacheManager.set(cacheKey, attendance);

@@ -28,7 +28,7 @@ const fetchStudentSubjects = async (userId, authToken, filters = {}) => {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-        timeout: 8000,
+        timeout: 20000,
       }
     );
 

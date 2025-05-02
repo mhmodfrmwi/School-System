@@ -18,7 +18,7 @@ export const sendMessage = async ({ message, userId }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        timeout: 10000,
+        timeout: 50000,
       },
     );
 

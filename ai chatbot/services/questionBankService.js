@@ -8,7 +8,6 @@ const cacheManager = require("../utils/cacheManager");
  * @returns {Array|null} - question bank data or null if error
  */
 const fetchQuestionBank = async (userId, authToken) => {
-  console.log("Fetching question bank for user:", userId);
 
   try {
     const cacheKey = `question-bank-${userId}-${authToken.substring(0, 10)}`;
@@ -25,7 +24,6 @@ const fetchQuestionBank = async (userId, authToken) => {
         timeout: 20000,
       }
     );
-    console.log("Question bank response:", response.data);
 
     const questionBank = response.data.questions;
     cacheManager.set(cacheKey, questionBank);
