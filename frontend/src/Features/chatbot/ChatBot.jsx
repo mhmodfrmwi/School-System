@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useChat } from "./hooks/ChatBot";
 
@@ -21,15 +22,15 @@ const Message = ({ sender, text, role }) => {
 
   return (
     <div className={`mb-3 ${sender === "user" ? "text-right" : "text-left"}`}>
-      <span
-        className={`inline-block max-w-xs rounded-lg px-4 py-2 text-sm ${
+      <div
+        className={`inline-block max-w-[280px] whitespace-pre-wrap break-words rounded-lg px-4 py-2 text-sm ${
           sender === "user"
             ? `${roleColors.user} rounded-br-none`
             : `${roleColors.bot} rounded-bl-none`
         }`}
       >
         {text}
-      </span>
+      </div>
     </div>
   );
 };
@@ -45,11 +46,11 @@ const LoadingIndicator = ({ text, role }) => {
 
   return (
     <div className="mb-3 flex justify-start">
-      <span
-        className={`inline-block rounded-lg rounded-bl-none px-4 py-2 text-sm text-white ${bgColor}`}
+      <div
+        className={`inline-block max-w-[280px] rounded-lg rounded-bl-none px-4 py-2 text-sm text-white ${bgColor} whitespace-pre-wrap break-words`}
       >
         {text}
-      </span>
+      </div>
     </div>
   );
 };
@@ -63,42 +64,93 @@ const ChatInput = ({
   buttonText,
   role,
 }) => {
+  const [showInputTooltip, setShowInputTooltip] = useState(false);
+  const [showButtonTooltip, setShowButtonTooltip] = useState(false);
+  const isEmpty = !input.trim();
+
   const colors = {
     student: {
       button: "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]",
       focus: "focus:ring-purple-500",
+      hover: "from-[#FD813D]/90 via-[#CF72C0]/90 to-[#BC6FFB]/90",
     },
     parent: {
       button: "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]",
       focus: "focus:ring-purple-500",
+      hover: "from-[#FD813D]/90 via-[#CF72C0]/90 to-[#BC6FFB]/90",
     },
     default: {
       button: "bg-gradient-to-r from-[#117C90] to-[#0D5665]",
       focus: "focus:ring-blue-500",
+      hover: "from-[#117C90]/90 to-[#0D5665]/90",
     },
   };
 
   const roleStyles = colors[role] || colors.default;
+  const isDisabled = isLoading || isEmpty;
+
+  const handleSendMessage = () => {
+    if (!isEmpty) {
+      sendMessage({ message: input });
+      setInput("");
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   return (
-    <div className="mt-2 flex gap-2">
-      <input
-        className={`flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${roleStyles.focus}`}
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) =>
-          e.key === "Enter" && !e.shiftKey && sendMessage({ message: input })
-        }
-        placeholder={placeholder}
-        disabled={isLoading}
-      />
-      <button
-        className={`rounded-lg px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 ${roleStyles.button} ${roleStyles.focus}`}
-        onClick={() => sendMessage({ message: input })}
-        disabled={isLoading}
+    <div className="relative mt-2 flex gap-2">
+      <div
+        className="relative flex-1"
+        onMouseEnter={() => setShowInputTooltip(true)}
+        onMouseLeave={() => setShowInputTooltip(false)}
       >
-        {buttonText}
-      </button>
+        <input
+          className={`w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${
+            roleStyles.focus
+          } ${isDisabled ? "opacity-70" : ""}`}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          disabled={isLoading}
+        />
+        {showInputTooltip && isEmpty && (
+          <div className="absolute -top-8 left-0 z-10 rounded bg-gray-800 px-2 py-1 text-xs text-white shadow-lg dark:bg-gray-600">
+            Please enter a message
+          </div>
+        )}
+      </div>
+
+      <div
+        className="relative"
+        onMouseEnter={() => setShowButtonTooltip(true)}
+        onMouseLeave={() => setShowButtonTooltip(false)}
+      >
+        <button
+          className={`relative rounded-lg px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            roleStyles.button
+          } ${
+            isDisabled
+              ? "cursor-not-allowed opacity-50"
+              : `hover:opacity-90 ${roleStyles.hover}`
+          } ${roleStyles.focus}`}
+          onClick={handleSendMessage}
+          disabled={isDisabled}
+        >
+          {buttonText}
+        </button>
+        {showButtonTooltip && isEmpty && (
+          <div className="absolute -top-12 right-0 z-10 rounded bg-gray-800 px-2 py-1 text-xs text-white shadow-lg dark:bg-gray-600">
+            Input is empty
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -124,6 +176,12 @@ export const ChatBot = () => {
   };
 
   const headerColor = headerColors[role] || headerColors.default;
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isLoading, messagesEndRef]);
 
   if (!isChatOpen) {
     return (
@@ -160,7 +218,7 @@ export const ChatBot = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-[1000] w-80 rounded-xl bg-white shadow-xl dark:bg-gray-800">
+    <div className="fixed bottom-6 right-6 z-[1000] w-80 rounded-xl border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800">
       <div
         className={`flex items-center justify-between rounded-t-xl px-4 py-3 text-white ${headerColor}`}
       >
@@ -183,7 +241,7 @@ export const ChatBot = () => {
           </svg>
         </button>
       </div>
-      <div className="h-64 overflow-y-auto p-4 dark:bg-gray-700">
+      <div className="h-64 overflow-y-auto bg-gray-50 p-4 dark:bg-gray-700">
         {messages.length === 0 && !isLoading ? (
           <Message sender="bot" text="How can I help you today?" role={role} />
         ) : (
@@ -196,7 +254,7 @@ export const ChatBot = () => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="border-t p-3 dark:border-gray-600 dark:bg-gray-800">
+      <div className="border-t border-gray-200 bg-white p-3 dark:border-gray-600 dark:bg-gray-800">
         <ChatInput
           input={input}
           setInput={setInput}

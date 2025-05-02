@@ -9,7 +9,7 @@ import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { ReactSVG } from "react-svg";
 import { Link } from "react-router-dom";
 import InfoIcon from "../../../assets/icons/InfoS.svg";
-import userImage from "../../../assets/user.jpeg";
+import userImage from "../../../assets/user.jpeg"; // الصورة الافتراضية
 import languageE from "../../../assets/icons/languageS.svg";
 import languageA from "../../../assets/icons/languageA.svg";
 import Vector from "../../../assets/icons/Vector.svg";
@@ -31,7 +31,7 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { fullName } = useSelector((state) => state.login);
+  const { fullName, profileImage } = useSelector((state) => state.login); // جيبنا profileImage
 
   const handleUserLogout = () => {
     dispatch(logout());
@@ -172,8 +172,7 @@ const Navbar = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
               className={`w-full rounded-full border bg-gray-100 dark:bg-gray-700 py-2 ${i18n.language === 'ar' ? 'pr-12 pl-12' : 'pl-12 pr-12'} text-center font-poppins text-sm text-gray-800 dark:text-gray-200 focus:outline-none md:text-left md:text-base`}
-              />
-  
+            />
 
             {isDropdownOpen && (
               <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-y-scroll rounded-lg border bg-white dark:bg-gray-800 shadow-md dark:border-gray-600">
@@ -220,9 +219,12 @@ const Navbar = () => {
 
           <div className="flex items-center space-x-2">
             <img
-              src={userImage}
+              src={profileImage && profileImage !== "Unknown" ? profileImage : userImage}
               alt="User"
               className="h-8 w-8 rounded-full md:h-10 md:w-10"
+              onError={(e) => {
+                e.target.src = userImage; // لو الصورة ماتحملتش، نرجع للصورة الافتراضية
+              }}
             />
             <span className="hidden font-poppins text-sm font-semibold text-[#3D52A1] dark:text-[#A3BFFA] md:text-base lg:flex">
               {fullName}

@@ -33,7 +33,7 @@ const updateAdminProfile = async (req, res) => {
   try {
     const adminId = req.user.id;
     const { currentPassword, newPassword, phone } = req.body;
-    const profileImage = req.file?.path;
+    const profileImage = req.file? `http://localhost:4000/profileImages/${req.file.filename}` : undefined;
     if (!newPassword && !phone && !profileImage) {
       if (req.file?.path) fs.unlinkSync(req.file.path);
       return res.status(400).json({ 

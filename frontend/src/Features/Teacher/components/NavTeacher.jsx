@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,19 +12,28 @@ import userImage from "../../../assets/user.jpeg";
 import languageE from "../../../assets/icons/languageET.svg";
 import languageA from "../../../assets/icons/languageAT.svg";
 import Vector from "../../../assets/icons/Vector.svg";
-import logout from "../../../assets/icons/logout.svg";
+import logout2 from "../../../assets/icons/logout.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useTranslation } from 'react-i18next';
+import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
 
 const NavTeacher = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const settingsRef = useRef(null);
   const searchRef = useRef(null);
+  const dispatch = useDispatch();
+  
   const [settingToggle, setSettingToggle] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const { fullName } = useSelector((state) => state.login);
+  const { fullName, profileImage } = useSelector((state) => state.login);
+
+  const handleUserLogout = () => {
+    dispatch(logout());
+    sessionStorage.removeItem("role");
+    navigate("/role");
+  };
 
   const routes = [
     { path: "edit-teacher-profile" },
@@ -202,9 +211,12 @@ const NavTeacher = () => {
 
           <div className="flex items-center space-x-2">
             <img
-              src={userImage}
+              src={profileImage && profileImage !== "Unknown" ? profileImage : userImage}
               alt="User"
               className="h-8 w-8 rounded-full md:h-10 md:w-10"
+              onError={(e) => {
+                e.target.src = userImage;
+              }}
             />
             <span className="hidden font-poppins text-sm font-semibold text-dashboard-bg dark:text-DarkManager md:text-base lg:flex">
               {fullName}
@@ -251,16 +263,13 @@ const NavTeacher = () => {
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
 
               <div
-                className="mx-auto ms-12 mt-5 flex flex-row items-center"
-                onClick={() => navigate("/login")}
+                className="mx-auto ms-12 mt-5 flex flex-row items-center cursor-pointer"
+                onClick={handleUserLogout}
               >
                 <button className="p-2 text-gray-500">
-                  <ReactSVG src={logout} className="h-auto w-auto" />
+                  <ReactSVG src={logout2} className="h-auto w-auto" />
                 </button>
-                <h2
-                  className="cursor-pointer font-semibold text-white"
-                  onClick={() => navigate("/role")}
-                >
+                <h2 className="font-semibold text-white">
                   {t("Logout")}
                 </h2>
               </div>

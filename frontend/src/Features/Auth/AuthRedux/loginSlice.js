@@ -18,7 +18,7 @@ export const loginUser = createAsyncThunk(
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email, password }),
-        },
+        }
       );
 
       const data = await response.json();
@@ -29,6 +29,7 @@ export const loginUser = createAsyncThunk(
 
       sessionStorage.setItem("token", data.token);
       sessionStorage.setItem("fullName", data[role]?.fullName || "Unknown");
+      sessionStorage.setItem("profileImage", data[role]?.profileImage || "Unknown");
       sessionStorage.setItem("role", role || "Unknown");
       sessionStorage.setItem("_id", data[role]?._id || "Unknown");
 
@@ -36,13 +37,14 @@ export const loginUser = createAsyncThunk(
         email,
         token: data.token,
         fullName: data[role]?.fullName || "Unknown",
+        profileImage: data[role]?.profileImage || "Unknown",
         role: role || "Unknown",
         _id: data[role]?._id || "Unknown",
       };
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  },
+  }
 );
 
 const loginSlice = createSlice({
@@ -50,6 +52,7 @@ const loginSlice = createSlice({
   initialState: {
     email: "",
     fullName: sessionStorage.getItem("fullName") || "Unknown",
+    profileImage: sessionStorage.getItem("profileImage") || "Unknown",
     token: sessionStorage.getItem("token") || null,
     role: sessionStorage.getItem("role") || "Unknown",
     _id: sessionStorage.getItem("_id") || "Unknown",
@@ -60,13 +63,21 @@ const loginSlice = createSlice({
     logout: (state) => {
       state.email = "";
       state.fullName = "Unknown";
+      state.profileImage = "Unknown";
       state.role = "Unknown";
       state._id = "Unknown";
       state.token = null;
 
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("fullName");
+      sessionStorage.removeItem("profileImage");
+      sessionStorage.removeItem("_id");
       toast.info("Logged out successfully!");
+    },
+    updateUserData: (state, action) => {
+      state.fullName = action.payload.fullName || state.fullName;
+      state.profileImage = action.payload.profileImage || state.profileImage;
+      state._id = action.payload._id || state._id;
     },
   },
   extraReducers: (builder) => {
@@ -80,6 +91,7 @@ const loginSlice = createSlice({
         state.email = action.payload.email;
         state.token = action.payload.token;
         state.fullName = action.payload.fullName;
+        state.profileImage = action.payload.profileImage;
         state.role = action.payload.role;
         state._id = action.payload._id;
 
@@ -93,5 +105,5 @@ const loginSlice = createSlice({
   },
 });
 
-export const { logout } = loginSlice.actions;
+export const { logout, updateUserData } = loginSlice.actions;
 export default loginSlice.reducer;

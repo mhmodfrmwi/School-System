@@ -59,12 +59,10 @@ const EditProfile = () => {
             });
 
             if (teacher.profileImage) {
-                if (teacher.profileImage.startsWith('http')) {
+                if (teacher.profileImage) {
                     setProfileImage(teacher.profileImage);
-                } else {
-                    const normalizedPath = teacher.profileImage.replace(/\\/g, '/');
-                    const imgUrl = `http://localhost:4000/${normalizedPath.split('uploads/').pop()}`;
-                    setProfileImage(imgUrl);
+                }else {
+                    setProfileImage("../src/assets/user.jpg");
                 }
             }
         }

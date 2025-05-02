@@ -57,15 +57,11 @@ const EditProfile = () => {
                 newPassword: "",
                 confirmPassword: "",
             });
-
+    
             if (student.profileImage) {
-                if (student.profileImage.startsWith('http')) {
-                    setProfileImage(student.profileImage);
-                } else {
-                    const normalizedPath = student.profileImage.replace(/\\/g, '/');
-                    const imgUrl = `http://localhost:4000/${normalizedPath.split('uploads/').pop()}`;
-                    setProfileImage(imgUrl);
-                }
+                setProfileImage(student.profileImage);
+            }else {
+                setProfileImage("../src/assets/user.jpg");
             }
         }
     }, [studentData]);

@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
@@ -19,6 +20,8 @@ const errorHandler = require("./middlewares/errorHandler");
 connectToDB();
 const app = express(xss());
 const routNode = "/api/v1";
+// Image uploads
+app.use('/profileImages', express.static(path.join(__dirname, 'Uploads/profileImages')));
 app.use(cors({ origin: "*" }));
 app.use(helmet());
 app.use(hpp());
