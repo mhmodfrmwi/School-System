@@ -1035,13 +1035,13 @@ i18n
                         AttendanceReport: "Attendance Report",
                         AttendanceSummary: " Attendance Summary",
                         GenerateReport: " Generate Report",
-                        "AttendanceDetails":" Attendance Details for",
-                        "AcademicNumberr":"Academic Number",
-                        "Classs":"Class",
-                        "TotalAbsences":"Total Absences",
-                        "TotalAttendances":"Total Attendances",
-                        "Date":"Date",
-                        "Status":"Status",
+                        "AttendanceDetails": " Attendance Details for",
+                        "AcademicNumberr": "Academic Number",
+                        "Classs": "Class",
+                        "TotalAbsences": "Total Absences",
+                        "TotalAttendances": "Total Attendances",
+                        "Date": "Date",
+                        "Status": "Status",
                     },
                     schaduel: {
                         Saturday: "Saturday",
@@ -1113,11 +1113,11 @@ i18n
                         Phone: "Phone",
                         AddPrize: "Add Prize",
                         EditSchoolHub: "Edit School Hub",
-                        "phdetails":"Enter school hub details",
-                        "phlocation":"Enter school hub location",
-                        "phtitle":"Enter school hub title",
-                        "level":"Level",
-                        "prize":"Prize"
+                        "phdetails": "Enter school hub details",
+                        "phlocation": "Enter school hub location",
+                        "phtitle": "Enter school hub title",
+                        "level": "Level",
+                        "prize": "Prize"
                     },
                     attendanse: {
                         Classes: "Classes",
@@ -1684,7 +1684,7 @@ i18n
                             "Grade 10": "Grade 10",
                             "Grade 11": "Grade 11",
                             "Grade 12": "Grade 12"
-                          },
+                        },
                         "header": {
                             "title": "Grades",
                             "add": "Add Grade"
@@ -1736,6 +1736,50 @@ i18n
                             "error": "Error loading data"
                         }
                     },
+                    ///////////////////////////////////////////////////////////////parent//////////////////////////////////////
+
+                    "parent": {
+                        "role": "Parent",
+                        "selectChild": "Select Child",
+                        "selectChildDesc": "Choose which child's dashboard to view",
+                        "myInfo": "My Information",
+                        "name": "Name",
+                        "email": "Email",
+                        "editProfile": "Edit Profile",
+                        "editProfileDesc": "Update your personal information",
+                        "dashboard": "Parent Dashboard",
+                        "studentInfo": "Student Information",
+                        "studentData": "Student Data",
+                        "studentProgress": "Student Progress",
+                        "studentSummary": "Student Summary",
+                        "personalInfo": "Personal Information",
+                        "academicInfo": "Academic Information",
+                        "class": "Class",
+                        "academicNumber": "Academic Number",
+                        "gender": "Gender"
+                    },
+                    "menuparent": {
+                        "grades": "Grades",
+                        "attendance": "Attendance",
+                        "schedule": "Schedule",
+                        "courses": "Courses",
+                        "activities": "Activities"
+                    },
+                    "dashboardparent": {
+                        "grades": "Grades",
+                        "attendance": "Attendance",
+                        "schedule": "Schedule",
+                        "courses": "Courses",
+                        "activities": "Activities",
+                        "classInfo": "Class Information",
+                        "profileImageAlt": "Profile Image",
+                        "presentIconAlt": "Present Icon"
+                    },
+                    "generalparent": {
+                        "back": "Back",
+                        "male": "Male",
+                        "female": "Female"
+                    }
 
 
 
@@ -2773,13 +2817,13 @@ i18n
                         AttendanceReport: "تقرير الحضور",
                         AttendanceSummary: " ملخص الحضور",
                         GenerateReport: "انشاء التقرير",
-                        "AttendanceDetails":" تفاصيل الحضور ل",
-                        "AcademicNumberr":"الرقم الاكاديمي",
-                        "Classs":"الفصل",
-                        "TotalAbsences":"إجمالي الغيابات",
-                        "TotalAttendances":"إجمالي الحضور",
-                        "Date":"التاريخ",
-                        "Status":"الحاله",
+                        "AttendanceDetails": " تفاصيل الحضور ل",
+                        "AcademicNumberr": "الرقم الاكاديمي",
+                        "Classs": "الفصل",
+                        "TotalAbsences": "إجمالي الغيابات",
+                        "TotalAttendances": "إجمالي الحضور",
+                        "Date": "التاريخ",
+                        "Status": "الحاله",
                     },
                     schaduel: {
                         Saturday: "السبت",
@@ -2851,11 +2895,11 @@ i18n
                         Phone: "رقم التليفون",
                         AddPrize: "اضافة جائزة اخرى",
                         EditSchoolHub: "تعديل المركز المدرسي",
-                        "phdetails":"أدخل تفاصيل مركز المدرسة",
-                        "phlocation":"أدخل موقع مركز المدرسة",
-                        "phtitle":"أدخل عنوان مركز المدرسة",
-                        "level":"المستوي",
-                        "prize":"جائزه"
+                        "phdetails": "أدخل تفاصيل مركز المدرسة",
+                        "phlocation": "أدخل موقع مركز المدرسة",
+                        "phtitle": "أدخل عنوان مركز المدرسة",
+                        "level": "المستوي",
+                        "prize": "جائزه"
 
                     },
                     attendanse: {
@@ -3425,7 +3469,7 @@ i18n
                             "Grade 10": "الصف العاشر",
                             "Grade 11": "الصف الحادي عشر",
                             "Grade 12": "الصف الثاني عشر"
-                          },
+                        },
                         "header": {
                             "title": "الصفوف",
                             "add": "إضافة صف"
@@ -3477,7 +3521,49 @@ i18n
                             "error": "خطأ في تحميل البيانات"
                         }
                     },
-
+                    ///////////////////////////////////////////////////////////parent//////////////////////////////
+                    "parent": {
+                        "role": "ولي الأمر",
+                        "selectChild": "اختيار طفل",
+                        "selectChildDesc": "اختر لوحة التحكم الخاصة بالطفل الذي تريد عرضها",
+                        "myInfo": "معلوماتي",
+                        "name": "الاسم",
+                        "email": "البريد الإلكتروني",
+                        "editProfile": "تعديل الملف الشخصي",
+                        "editProfileDesc": "تحديث المعلومات الشخصية الخاصة بك",
+                        "dashboard": "لوحة تحكم ولي الأمر",
+                        "studentInfo": "معلومات الطالب",
+                        "studentData": "بيانات الطالب",
+                        "studentProgress": "تقدم الطالب",
+                        "studentSummary": "ملخص الطالب",
+                        "personalInfo": "المعلومات الشخصية",
+                        "academicInfo": "المعلومات الأكاديمية",
+                        "class": "الفصل",
+                        "academicNumber": "الرقم الأكاديمي",
+                        "gender": "النوع"
+                    },
+                    "menuparent": {
+                        "grades": "الدرجات",
+                        "attendance": "الحضور",
+                        "schedule": "الجدول",
+                        "courses": "المقررات",
+                        "activities": "الأنشطة"
+                    },
+                    "dashboardparent": {
+                        "grades": "الدرجات",
+                        "attendance": "الحضور",
+                        "schedule": "الجدول",
+                        "courses": "المقررات",
+                        "activities": "الأنشطة",
+                        "classInfo": "معلومات الفصل",
+                        "profileImageAlt": "صورة الملف الشخصي",
+                        "presentIconAlt": "أيقونة الحضور"
+                    },
+                    "generalparent": {
+                        "back": "رجوع",
+                        "male": "ذكر",
+                        "female": "أنثى"
+                    }
 
 
                 }
