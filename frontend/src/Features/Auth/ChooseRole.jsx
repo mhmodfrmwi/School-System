@@ -22,13 +22,13 @@ const ChooseRole = () => {
 
   const roles = useMemo(
     () => [
-      { label: "Admin", icon: "⚙️", api: "admin" },
-      { label: "Manager", icon: "👔", api: "manager" },
-      { label: "Teacher", icon: "👩‍🏫", api: "teacher" },
-      { label: "Parent", icon: "👨‍👩‍👧", api: "parent" },
-      { label: "Student", icon: "🎓", api: "student" },
+      { label: t("dashboardadmin.users.admin"), icon: "⚙️", api: "admin" },
+      { label: t("dashboardadmin.users.manager"), icon: "👔", api: "manager" },
+      { label:  t("dashboardadmin.users.teacher"), icon: "👩‍🏫", api: "teacher" },
+      { label: t("dashboardadmin.users.parent"), icon: "👨‍👩‍👧", api: "parent" },
+      { label:  t("dashboardadmin.users.student"), icon: "🎓", api: "student" },
     ],
-    [],
+    [t],
   );
 
   return (
