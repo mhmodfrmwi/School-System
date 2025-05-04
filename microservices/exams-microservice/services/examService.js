@@ -344,6 +344,34 @@ const getCompletedExamsForAllSubjects = async (student_id) => {
     throw new Error(error.message);
   }
 };
+
+const missedExamsForAllSubjects = async (student_id) => {
+  try {
+    const exams = await Exam.find({})
+      .populate("subject_id grade_id class_id academic_year_id semester_id")
+      .select("-__v -createdAt -updatedAt");
+
+    const missedExams = [];
+
+    for (const exam of exams) {
+      if (exam.exam_status === "Expired") {
+        const session = await Session.findOne({
+          student_id,
+          exam_id: exam._id,
+        });
+        if (!session) {
+          missedExams.push(exam);
+        }
+      }
+    }
+
+    return missedExams;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   addExam,
   fetchExams,
@@ -358,4 +386,5 @@ module.exports = {
   getMissedExams,
   getCompletedExams,
   getCompletedExamsForAllSubjects,
+  missedExamsForAllSubjects,
 };

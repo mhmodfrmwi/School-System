@@ -7,7 +7,7 @@ const Grade = require("../../DB/gradeModel");
 const Class = require("../../DB/classModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const hashPassword = require("../../utils/hashPassword");
-const Attendance = require("../../DB/attendenceModel");
+const Attendance = require("../../DB/attendanceModel");
 const { getStudentById } = require("../../services/studentService");
 
 const generateAcademicNumber = async () => {

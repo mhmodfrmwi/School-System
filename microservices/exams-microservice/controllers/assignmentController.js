@@ -204,6 +204,7 @@ const getAssignmentsForTeacher = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   createAssignment,
   updateAssignmentById,

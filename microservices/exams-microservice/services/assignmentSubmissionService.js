@@ -1,4 +1,7 @@
 const AssignmentSubmission = require("../models/AssignmentSubmission");
+const {
+  fetchAssignmentsForAllSubjectsByAttributes,
+} = require("./assignmentService");
 
 const addAssignmentSubmission = async (assignmentSubmissionData) => {
   try {
@@ -144,10 +147,43 @@ const getAssignmentsSubmissionsByStudentId = async (student_id) => {
     throw new Error(`Failed to fetch submissions: ${error.message}`);
   }
 };
+
+const getMissedAssignments = async (
+  student_id,
+  semester_id,
+  grade_id,
+  academic_year_id,
+  class_id
+) => {
+  try {
+    const assignments = await fetchAssignmentsForAllSubjectsByAttributes(
+      class_id,
+      semester_id,
+      grade_id,
+      academic_year_id
+    );
+    const missedAssignments = [];
+
+    for (const assignment of assignments) {
+      const submission = await AssignmentSubmission.findOne({
+        assignment_id: assignment._id,
+        student_id: student_id,
+      });
+      if (!submission) {
+        missedAssignments.push(assignment);
+      }
+    }
+    return missedAssignments;
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Failed to fetch missed assignments: ${error.message}`);
+  }
+};
 module.exports = {
   addAssignmentSubmission,
   getSubmissionsForAssignment,
   updateAssignmentSubmission,
   getSubmissionById,
   getAssignmentsSubmissionsByStudentId,
+  getMissedAssignments,
 };

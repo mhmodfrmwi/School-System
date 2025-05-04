@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
-const Attendance = require("../../DB/attendenceModel");
+const Attendance = require("../../DB/attendanceModel");
 const Class = require("../../DB/classModel");
 
 const getAttendanceForClassInPeriod = expressAsyncHandler(async (req, res) => {

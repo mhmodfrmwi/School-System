@@ -6,6 +6,7 @@ const {
   updateAssignmentSubmission,
   getSubmissionById,
   getAssignmentsSubmissionsByStudentId,
+  getMissedAssignments,
 } = require("../services/assignmentSubmissionService");
 
 const submitAssignment = async (req, res) => {
@@ -99,6 +100,32 @@ const getStudentSubmissions = async (req, res) => {
     });
   }
 };
+
+const getMissedAssignmentsForStudent = async (req, res) => {
+  try {
+    const student_id = req.body.student_id || req.user.id;
+    const { class_id, semester_id, academic_year_id, grade_id } = req.body;
+
+    if (!class_id || !semester_id || !academic_year_id || !grade_id) {
+      return res.status(400).json({
+        message: "Please provide all required fields",
+      });
+    }
+    const missedAssignments = await getMissedAssignments(
+      student_id,
+      semester_id,
+      grade_id,
+      academic_year_id,
+      class_id
+    );
+    res.status(200).json(missedAssignments);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch missed assignments",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   submitAssignment,
   deleteSubmission,
@@ -106,4 +133,5 @@ module.exports = {
   gradeAssignment,
   displaySubmission,
   getStudentSubmissions,
+  getMissedAssignmentsForStudent,
 };

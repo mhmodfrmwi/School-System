@@ -1,5 +1,5 @@
 const Class = require("../../DB/classModel");
-const Attendance = require("../../DB/attendenceModel");
+const Attendance = require("../../DB/attendanceModel");
 const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
 const FetchClasses = async (req, res) => {

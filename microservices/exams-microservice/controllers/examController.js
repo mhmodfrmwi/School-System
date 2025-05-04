@@ -14,6 +14,7 @@ const {
   getCompletedExams,
   fetchExamsByTeacherIdAndSubjectAttributes,
   getCompletedExamsForAllSubjects,
+  missedExamsForAllSubjects,
 } = require("../services/examService");
 const { getExamResultsByExamId } = require("../services/resultsService");
 
@@ -374,13 +375,29 @@ const getCompletedExamsForStudent = async (req, res) => {
 };
 const getCompletedExamsForSubjects = async (req, res) => {
   try {
-    const student_id = req.user.id;
+    console.log(req.body.student_id);
+    console.log(req.user.id);
+    const student_id = req.body.student_id || req.user.id;
+
     const exams = await getCompletedExamsForAllSubjects(student_id);
     res.status(200).json(exams);
   } catch (error) {
     res.status(500).json({
       status: 500,
       message: "Failed to get completed exams for student",
+      error: error.message,
+    });
+  }
+};
+const getMissedExamsForSubjects = async (req, res) => {
+  try {
+    const student_id = req.body.student_id || req.user.id;
+    const exams = await missedExamsForAllSubjects(student_id);
+    res.status(200).json(exams);
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to get missed exams for student",
       error: error.message,
     });
   }
@@ -397,4 +414,5 @@ module.exports = {
   getMissedExamsForStudent,
   getCompletedExamsForStudent,
   getCompletedExamsForSubjects,
+  getMissedExamsForSubjects,
 };

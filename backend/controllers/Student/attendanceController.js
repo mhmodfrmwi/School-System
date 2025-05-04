@@ -4,7 +4,7 @@ const moment = require("moment");
 
 const attendanceValidationSchema = require("../../validations/attendanceValidation");
 const Student = require("../../DB/student");
-const Attendance = require("../../DB/attendenceModel");
+const Attendance = require("../../DB/attendanceModel");
 const {
   getAttendance,
   getAbsences,

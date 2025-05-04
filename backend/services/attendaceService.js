@@ -1,4 +1,4 @@
-const Attendance = require("../DB/attendenceModel");
+const Attendance = require("../DB/attendanceModel");
 
 const getAttendance = async (student_id) => {
   try {
