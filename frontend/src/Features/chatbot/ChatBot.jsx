@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useChat } from "./hooks/ChatBot";
+import { useTranslation } from "react-i18next";
 
 const Message = ({ sender, text, role }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+
   const colors = {
     student: {
       user: "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white",
@@ -23,11 +27,17 @@ const Message = ({ sender, text, role }) => {
   return (
     <div className={`mb-4 ${sender === "user" ? "text-right" : "text-left"}`}>
       <div
+        className={`text-xs font-medium text-gray-500 dark:text-gray-400 ${isRTL ? "text-right" : "text-left"}`}
+      >
+        {sender === "user" ? t("chatbot.sender.user") : t("chatbot.sender.bot")}
+      </div>
+      <div
         className={`inline-block max-w-[80%] whitespace-pre-wrap break-words rounded-xl px-5 py-3 text-base ${
           sender === "user"
-            ? `${roleColors.user} rounded-br-none`
-            : `${roleColors.bot} rounded-bl-none`
+            ? `${roleColors.user} ${isRTL ? "rounded-bl-none" : "rounded-br-none"}`
+            : `${roleColors.bot} ${isRTL ? "rounded-br-none" : "rounded-bl-none"}`
         }`}
+        dir={isRTL ? "rtl" : "ltr"}
       >
         {text}
       </div>
@@ -36,6 +46,9 @@ const Message = ({ sender, text, role }) => {
 };
 
 const LoadingIndicator = ({ text, role }) => {
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+
   const colors = {
     student: "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]",
     parent: "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]",
@@ -47,7 +60,10 @@ const LoadingIndicator = ({ text, role }) => {
   return (
     <div className="mb-4 flex justify-start">
       <div
-        className={`inline-block max-w-[80%] rounded-xl rounded-bl-none px-5 py-3 text-base text-white ${bgColor} whitespace-pre-wrap break-words`}
+        className={`inline-block max-w-[80%] rounded-xl ${
+          isRTL ? "rounded-br-none" : "rounded-bl-none"
+        } px-5 py-3 text-base text-white ${bgColor} whitespace-pre-wrap break-words`}
+        dir="rtl"
       >
         {text}
       </div>
@@ -64,6 +80,8 @@ const ChatInput = ({
   buttonText,
   role,
 }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
   const [showInputTooltip, setShowInputTooltip] = useState(false);
   const [showButtonTooltip, setShowButtonTooltip] = useState(false);
   const isEmpty = !input.trim();
@@ -119,10 +137,13 @@ const ChatInput = ({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={isLoading}
+          dir={isRTL ? "rtl" : "ltr"}
         />
         {showInputTooltip && isEmpty && (
-          <div className="absolute -top-14 left-0 z-10 rounded bg-gray-800 px-3 py-2 text-sm text-white shadow-lg dark:bg-gray-600">
-            Please enter a message
+          <div
+            className={`absolute ${isRTL ? "right-0" : "left-0"} -top-14 z-10 rounded bg-gray-800 px-3 py-2 text-sm text-white shadow-lg dark:bg-gray-600`}
+          >
+            {t("chatbot.inputTooltip")}
           </div>
         )}
       </div>
@@ -146,8 +167,10 @@ const ChatInput = ({
           {buttonText}
         </button>
         {showButtonTooltip && isEmpty && (
-          <div className="absolute -top-20 right-0 z-10 rounded bg-gray-800 px-3 py-2 text-sm text-white shadow-lg dark:bg-gray-600">
-            Input is empty
+          <div
+            className={`absolute ${isRTL ? "left-0" : "right-0"} -top-20 z-10 rounded bg-gray-800 px-3 py-2 text-sm text-white shadow-lg dark:bg-gray-600`}
+          >
+            {t("chatbot.buttonTooltip")}
           </div>
         )}
       </div>
@@ -168,6 +191,8 @@ export const ChatBot = () => {
     localizedText,
     sendMessage,
   } = useChat(userId);
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
 
   const headerColors = {
     student: "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB]",
@@ -187,11 +212,7 @@ export const ChatBot = () => {
     return (
       <button
         onClick={() => setIsChatOpen(true)}
-        className={`fixed bottom-6 right-10 z-[1000] flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 ${headerColor} ${
-          role === "student" || role === "parent"
-            ? "focus:ring-purple-500"
-            : "focus:ring-[#117C90]"
-        }`}
+        className={`fixed bottom-6 ${isRTL ? "left-10" : "right-10"} z-[1000] flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 ${headerColor}`}
       >
         <div className="relative h-10 w-10">
           <div className={`absolute inset-0 rounded-full ${headerColor}`}></div>
@@ -226,11 +247,7 @@ export const ChatBot = () => {
 
       <button
         onClick={() => setIsChatOpen(false)}
-        className={`fixed bottom-6 right-10 z-[1001] flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 ${headerColor} ${
-          role === "student" || role === "parent"
-            ? "focus:ring-purple-500"
-            : "focus:ring-[#117C90]"
-        }`}
+        className={`fixed bottom-6 ${isRTL ? "left-10" : "right-10"} z-[1001] flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 ${headerColor}`}
       >
         <div className="relative h-10 w-10">
           <div className={`absolute inset-0 rounded-full ${headerColor}`}></div>
@@ -254,7 +271,10 @@ export const ChatBot = () => {
         </div>
       </button>
 
-      <div className="fixed left-1/2 top-1/2 z-[1001] h-[80vh] w-[80vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800">
+      <div
+        className="fixed left-1/2 top-1/2 z-[1001] h-[80vh] w-[80vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800"
+        dir={isRTL ? "rtl" : "ltr"}
+      >
         <div
           className={`flex items-center justify-between rounded-t-xl px-6 py-4 text-white ${headerColor}`}
         >
@@ -281,7 +301,7 @@ export const ChatBot = () => {
           {messages.length === 0 && !isLoading ? (
             <Message
               sender="bot"
-              text="How can I help you today?"
+              text={localizedText.welcomeMessage}
               role={role}
             />
           ) : (

@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { sendMessage } from "../services/apiChatBot";
+import { useTranslation } from "react-i18next";
 
 export const useChat = (userId) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const messagesEndRef = useRef(null);
-
-  const isArabicPreferred = /ar/.test(navigator.language);
+  const { t } = useTranslation();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -19,9 +19,7 @@ export const useChat = (userId) => {
     try {
       return JSON.stringify(content);
     } catch {
-      return isArabicPreferred
-        ? "رسالة غير قابلة للعرض"
-        : "Unrenderable message";
+      return t("chatbot.unrenderableMessage");
     }
   };
 
@@ -51,22 +49,18 @@ export const useChat = (userId) => {
         ...prev,
         {
           sender: "bot",
-          text:
-            error.message ||
-            (isArabicPreferred
-              ? "حدث خطأ. الرجاء المحاولة لاحقًا"
-              : "An error occurred. Please try again"),
+          text: error.message || t("chatbot.errorMessage"),
         },
       ]);
     },
   });
 
   const localizedText = {
-    placeholder: isArabicPreferred ? "اسألني أي شيء..." : "Ask anything...",
-    buttonText: isArabicPreferred ? "إرسال" : "Send",
-    thinkingText: isArabicPreferred ? "جاري التفكير..." : "Thinking...",
-    chatButton: isArabicPreferred ? "محادثة" : "Chat",
-    title: isArabicPreferred ? "المساعد الدراسي" : "Study Assistant",
+    placeholder: t("chatbot.placeholder"),
+    buttonText: t("chatbot.buttonText"),
+    thinkingText: t("chatbot.thinkingText"),
+    title: t("chatbot.title"),
+    welcomeMessage: t("chatbot.welcomeMessage"),
   };
 
   return {

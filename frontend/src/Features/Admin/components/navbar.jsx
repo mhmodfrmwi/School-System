@@ -218,7 +218,9 @@ const Navbar = () => {
           <button className="p-2 text-gray-500">
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
           </button>
-          <ThemeSwitcher />
+          <div dir="ltr">
+            <ThemeSwitcher />
+          </div>
 
           {/* تعديل جزء صورة المستخدم */}
           <div className="flex items-center space-x-2">
@@ -229,7 +231,7 @@ const Navbar = () => {
                   : userImage
               }
               alt="User"
-              className="h-8 w-8 rounded-full md:h-10 md:w-10"
+              className="me-5 h-8 w-8 rounded-full md:h-10 md:w-10"
               onError={(e) => {
                 e.target.src = userImage;
               }}
@@ -265,7 +267,7 @@ const Navbar = () => {
                 <p className="mx-auto my-2 w-40 border-b-2 border-white"></p>
               </div>
 
-              <div className="ms-20">
+              <div dir="ltr" className="ms-20">
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>

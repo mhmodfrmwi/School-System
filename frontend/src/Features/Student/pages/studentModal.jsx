@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useModelData } from "../components/hooks/dashboard";
+import { useTranslation } from "react-i18next";
 
 const StudentPerformanceModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { studentModalData } = useModelData();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -14,7 +17,7 @@ const StudentPerformanceModal = () => {
       <div className="relative">
         <button
           onClick={toggleModal}
-          className="fixed bottom-6 right-6 z-40 rounded-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-4 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+          className={`fixed bottom-6 ${!isRTL ? "left-6" : "right-6"} z-40 rounded-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-4 shadow-lg transition-all hover:scale-105 hover:shadow-xl`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,16 +42,14 @@ const StudentPerformanceModal = () => {
     studentModalData;
   const scienceData = subjects?.science;
 
-  // Check if we have any meaningful data to display
   const hasBasicData = attendance || avg_score || overall_status;
   const hasScienceData = scienceData && !error;
 
   return (
     <div className="relative">
-      {/* Trigger Button */}
       <button
         onClick={toggleModal}
-        className="fixed bottom-6 left-6 z-40 rounded-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-4 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+        className={`fixed bottom-6 ${!isRTL ? "left-6" : "right-6"} z-40 rounded-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] p-4 shadow-lg transition-all hover:scale-105 hover:shadow-xl`}
       >
         {isModalOpen ? (
           <svg
@@ -83,19 +84,20 @@ const StudentPerformanceModal = () => {
         )}
       </button>
 
-      {/* Modal Overlay */}
       {isModalOpen && (
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-10">
           <div
-            className="relative mx-auto w-full max-w-4xl overflow-y-auto rounded-lg bg-white shadow-xl dark:bg-[#13082F]"
+            className={`relative mx-auto w-full max-w-4xl overflow-y-auto rounded-lg bg-white shadow-xl dark:bg-[#13082F] ${isRTL ? "text-right" : "text-left"}`}
             style={{ maxHeight: "80vh" }}
+            dir={isRTL ? "rtl" : "ltr"}
           >
-            {/* Modal Header */}
             <div className="sticky top-0 flex items-center justify-between border-b-2 border-gray-100 bg-white p-4 dark:border-[#3B1E77] dark:bg-[#13082F]">
               <div className="flex items-center">
-                <div className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></div>
+                <div
+                  className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${isRTL ? "ml-2" : "mr-2"}`}
+                ></div>
                 <h2 className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-2xl font-bold text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
-                  Student Performance Analysis
+                  {t("studentPerformance.title")}
                 </h2>
               </div>
               <button
@@ -119,29 +121,29 @@ const StudentPerformanceModal = () => {
               </button>
             </div>
 
-            {/* Modal Content */}
             <div className="p-4">
               {hasBasicData ? (
                 <>
-                  {/* Overview Section */}
                   <div className="rounded-xl bg-[#F5F5F5] p-4 dark:bg-[#281459]">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                       {overall_status && (
                         <div>
                           <h3 className="font-poppins text-lg font-semibold text-gray-700 dark:text-[#E0AAEE]">
-                            Overall Status
+                            {t("studentPerformance.overallStatus")}
                           </h3>
                           <p
                             className={`font-poppins text-xl font-bold ${overall_status === "Pass" ? "text-green-500" : "text-red-500"}`}
                           >
-                            {overall_status}
+                            {t(
+                              `studentPerformance.status.${overall_status.toLowerCase()}`,
+                            )}
                           </p>
                         </div>
                       )}
                       {avg_score && (
                         <div>
                           <h3 className="font-poppins text-lg font-semibold text-gray-700 dark:text-[#E0AAEE]">
-                            Average Score
+                            {t("studentPerformance.averageScore")}
                           </h3>
                           <div className="flex items-center">
                             <div className="h-3 w-20 rounded-full bg-gray-200 dark:bg-[#3B1E77]">
@@ -150,7 +152,9 @@ const StudentPerformanceModal = () => {
                                 style={{ width: `${avg_score}%` }}
                               ></div>
                             </div>
-                            <span className="ml-2 font-poppins font-bold text-gray-700 dark:text-[#D1D5DB]">
+                            <span
+                              className={`font-poppins font-bold text-gray-700 dark:text-[#D1D5DB] ${isRTL ? "mr-2" : "ml-2"}`}
+                            >
                               {avg_score}%
                             </span>
                           </div>
@@ -158,7 +162,6 @@ const StudentPerformanceModal = () => {
                       )}
                     </div>
 
-                    {/* Attendance Info */}
                     {attendance && (
                       <div
                         className="mt-4 rounded-lg border-4 border-transparent bg-white p-4 dark:bg-[#3B1E77]"
@@ -168,12 +171,12 @@ const StudentPerformanceModal = () => {
                         }}
                       >
                         <h4 className="mb-2 font-poppins text-lg font-semibold text-gray-700 dark:text-[#E0AAEE]">
-                          Attendance
+                          {t("studentPerformance.attendance")}
                         </h4>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <p className="font-poppins text-gray-600 dark:text-[#D1D5DB]">
-                              Absent Days
+                              {t("studentPerformance.absentDays")}
                             </p>
                             <p className="font-poppins font-bold text-gray-700 dark:text-[#D1D5DB]">
                               {attendance.absent_days}
@@ -183,7 +186,7 @@ const StudentPerformanceModal = () => {
                             <>
                               <div>
                                 <p className="font-poppins text-gray-600 dark:text-[#D1D5DB]">
-                                  Status
+                                  {t("studentPerformance.statusLabel")}
                                 </p>
                                 <p
                                   className={`font-poppins font-bold ${
@@ -193,12 +196,14 @@ const StudentPerformanceModal = () => {
                                       : "text-green-500"
                                   }`}
                                 >
-                                  {attendance.evaluation.status}
+                                  {t(
+                                    `studentPerformance.attendanceStatus.${attendance.evaluation.status.toLowerCase()}`,
+                                  )}
                                 </p>
                               </div>
                               <div className="col-span-2">
                                 <p className="font-poppins text-gray-600 dark:text-[#D1D5DB]">
-                                  Recommendation
+                                  {t("studentPerformance.recommendation")}
                                 </p>
                                 <p className="font-poppins text-gray-700 dark:text-[#D1D5DB]">
                                   {attendance.evaluation.recommendation}
@@ -211,19 +216,18 @@ const StudentPerformanceModal = () => {
                     )}
                   </div>
 
-                  {/* Subject Performance Section */}
                   {hasScienceData ? (
                     <div className="mt-6">
                       <div className="flex items-center">
-                        <div className="mr-2 h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></div>
+                        <div
+                          className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${isRTL ? "ml-2" : "mr-2"}`}
+                        ></div>
                         <h3 className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-xl font-bold text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
-                          Science Performance
+                          {t("studentPerformance.sciencePerformance")}
                         </h3>
                       </div>
 
-                      {/* Current and Future Performance */}
                       <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
-                        {/* Current Evaluation */}
                         {scienceData.current_evaluation && (
                           <div
                             className="rounded-xl border-4 border-transparent bg-[#F5F5F5] p-4 dark:bg-[#281459]"
@@ -233,13 +237,13 @@ const StudentPerformanceModal = () => {
                             }}
                           >
                             <h4 className="mb-3 font-poppins text-lg font-semibold text-gray-700 dark:text-[#E0AAEE]">
-                              Current Evaluation
+                              {t("studentPerformance.currentEvaluation")}
                             </h4>
                             <div className="space-y-2">
                               {scienceData.current_evaluation.score && (
                                 <p className="font-poppins text-gray-700 dark:text-[#D1D5DB]">
                                   <span className="text-gray-600 dark:text-[#D1D5DB]">
-                                    Score:
+                                    {t("studentPerformance.score")}:
                                   </span>{" "}
                                   <span className="font-bold">
                                     {scienceData.current_evaluation.score}
@@ -250,7 +254,7 @@ const StudentPerformanceModal = () => {
                                 .performance_level && (
                                 <p className="font-poppins text-gray-700 dark:text-[#D1D5DB]">
                                   <span className="text-gray-600 dark:text-[#D1D5DB]">
-                                    Performance:
+                                    {t("studentPerformance.performance")}:
                                   </span>{" "}
                                   <span className="font-bold">
                                     {
@@ -263,7 +267,7 @@ const StudentPerformanceModal = () => {
                               {scienceData.current_evaluation.status && (
                                 <p className="font-poppins text-gray-700 dark:text-[#D1D5DB]">
                                   <span className="text-gray-600 dark:text-[#D1D5DB]">
-                                    Status:
+                                    {t("studentPerformance.statusLabel")}:
                                   </span>{" "}
                                   <span
                                     className={`font-bold ${
@@ -273,7 +277,9 @@ const StudentPerformanceModal = () => {
                                         : "text-red-500"
                                     }`}
                                   >
-                                    {scienceData.current_evaluation.status}
+                                    {t(
+                                      `studentPerformance.status.${scienceData.current_evaluation.status.toLowerCase()}`,
+                                    )}
                                   </span>
                                 </p>
                               )}
@@ -281,7 +287,6 @@ const StudentPerformanceModal = () => {
                           </div>
                         )}
 
-                        {/* Future Prediction */}
                         {scienceData.future_prediction && (
                           <div
                             className="rounded-xl border-4 border-transparent bg-[#F5F5F5] p-4 dark:bg-[#281459]"
@@ -291,14 +296,14 @@ const StudentPerformanceModal = () => {
                             }}
                           >
                             <h4 className="mb-3 font-poppins text-lg font-semibold text-gray-700 dark:text-[#E0AAEE]">
-                              Future Prediction
+                              {t("studentPerformance.futurePrediction")}
                             </h4>
                             <div className="space-y-2">
                               {scienceData.future_prediction
                                 .predicted_score && (
                                 <p className="font-poppins text-gray-700 dark:text-[#D1D5DB]">
                                   <span className="text-gray-600 dark:text-[#D1D5DB]">
-                                    Predicted Score:
+                                    {t("studentPerformance.predictedScore")}:
                                   </span>{" "}
                                   <span className="font-bold">
                                     {
@@ -312,7 +317,7 @@ const StudentPerformanceModal = () => {
                                 .predicted_grade && (
                                 <p className="font-poppins text-gray-700 dark:text-[#D1D5DB]">
                                   <span className="text-gray-600 dark:text-[#D1D5DB]">
-                                    Predicted Grade:
+                                    {t("studentPerformance.predictedGrade")}:
                                   </span>{" "}
                                   <span className="font-bold">
                                     {
@@ -326,7 +331,10 @@ const StudentPerformanceModal = () => {
                                 .potential_improvement && (
                                 <p className="font-poppins text-gray-700 dark:text-[#D1D5DB]">
                                   <span className="text-gray-600 dark:text-[#D1D5DB]">
-                                    Improvement Potential:
+                                    {t(
+                                      "studentPerformance.improvementPotential",
+                                    )}
+                                    :
                                   </span>{" "}
                                   <span className="font-bold text-green-500">
                                     +
@@ -334,7 +342,7 @@ const StudentPerformanceModal = () => {
                                       scienceData.future_prediction
                                         .potential_improvement
                                     }{" "}
-                                    points
+                                    {t("studentPerformance.points")}
                                   </span>
                                 </p>
                               )}
@@ -342,13 +350,12 @@ const StudentPerformanceModal = () => {
                                 .prediction_confidence && (
                                 <p className="font-poppins text-gray-700 dark:text-[#D1D5DB]">
                                   <span className="text-gray-600 dark:text-[#D1D5DB]">
-                                    Confidence:
+                                    {t("studentPerformance.confidence")}:
                                   </span>{" "}
                                   <span className="font-bold capitalize">
-                                    {
-                                      scienceData.future_prediction
-                                        .prediction_confidence
-                                    }
+                                    {t(
+                                      `studentPerformance.confidenceLevel.${scienceData.future_prediction.prediction_confidence.toLowerCase()}`,
+                                    )}
                                   </span>
                                 </p>
                               )}
@@ -357,15 +364,16 @@ const StudentPerformanceModal = () => {
                         )}
                       </div>
 
-                      {/* Improvement Plan */}
                       {scienceData.improvement_plan && (
                         <div className="mt-6">
                           <h4 className="mb-3 font-poppins text-lg font-semibold text-gray-700 dark:text-[#E0AAEE]">
-                            Improvement Plan{" "}
+                            {t("studentPerformance.improvementPlan")}{" "}
                             {scienceData.improvement_plan
                               .improvement_priority && (
-                              <span className="ml-2 rounded-full bg-[#BC6FFB] px-3 py-1 text-xs font-bold text-white dark:bg-[#AE45FB]">
-                                Priority:{" "}
+                              <span
+                                className={`rounded-full bg-[#BC6FFB] px-3 py-1 text-xs font-bold text-white dark:bg-[#AE45FB] ${isRTL ? "mr-2" : "ml-2"}`}
+                              >
+                                {t("studentPerformance.priority")}:{" "}
                                 {
                                   scienceData.improvement_plan
                                     .improvement_priority
@@ -374,12 +382,11 @@ const StudentPerformanceModal = () => {
                             )}
                           </h4>
 
-                          {/* Standard Suggestions */}
                           {scienceData.improvement_plan.standard_suggestions
                             ?.length > 0 && (
                             <div className="mb-6">
                               <h5 className="mb-2 font-poppins font-semibold text-gray-600 dark:text-[#D1D5DB]">
-                                Standard Suggestions
+                                {t("studentPerformance.standardSuggestions")}
                               </h5>
                               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 {scienceData.improvement_plan.standard_suggestions.map(
@@ -393,7 +400,9 @@ const StudentPerformanceModal = () => {
                                       }}
                                     >
                                       <div className="flex items-start">
-                                        <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#BC6FFB] text-white dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:to-[#AE45FB]">
+                                        <div
+                                          className={`flex h-8 w-8 items-center justify-center rounded-full bg-[#BC6FFB] text-white dark:bg-gradient-to-r dark:from-[#CE4EA0] dark:to-[#AE45FB] ${isRTL ? "ml-3" : "mr-3"}`}
+                                        >
                                           {index + 1}
                                         </div>
                                         <div>
@@ -410,7 +419,7 @@ const StudentPerformanceModal = () => {
                                                 {
                                                   suggestion.expected_points_improvement
                                                 }{" "}
-                                                points
+                                                {t("studentPerformance.points")}
                                               </span>
                                             )}
                                             {suggestion.timeframe && (
@@ -428,12 +437,11 @@ const StudentPerformanceModal = () => {
                             </div>
                           )}
 
-                          {/* Advanced Suggestions */}
                           {scienceData.improvement_plan
                             .beyond_potential_suggestions?.length > 0 && (
                             <div>
                               <h5 className="mb-2 font-poppins font-semibold text-gray-600 dark:text-[#D1D5DB]">
-                                Advanced Suggestions
+                                {t("studentPerformance.advancedSuggestions")}
                               </h5>
                               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 {scienceData.improvement_plan.beyond_potential_suggestions.map(
@@ -447,7 +455,9 @@ const StudentPerformanceModal = () => {
                                       }}
                                     >
                                       <div className="flex items-start">
-                                        <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-[#FD813D] to-[#BC6FFB] text-white dark:from-[#CE4EA0] dark:to-[#AE45FB]">
+                                        <div
+                                          className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-[#FD813D] to-[#BC6FFB] text-white dark:from-[#CE4EA0] dark:to-[#AE45FB] ${isRTL ? "ml-3" : "mr-3"}`}
+                                        >
                                           {index + 1}
                                         </div>
                                         <div>
@@ -464,7 +474,7 @@ const StudentPerformanceModal = () => {
                                                 {
                                                   suggestion.expected_points_improvement
                                                 }{" "}
-                                                points
+                                                {t("studentPerformance.points")}
                                               </span>
                                             )}
                                             {suggestion.timeframe && (
@@ -488,11 +498,11 @@ const StudentPerformanceModal = () => {
                     <div className="mt-6 p-6 text-center">
                       <div className="rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20">
                         <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-300">
-                          Subject Performance Data Not Available
+                          {t("studentPerformance.noSubjectData")}
                         </h3>
                         <p className="mt-2 text-blue-600 dark:text-blue-200">
                           {error ||
-                            "We couldn't find performance data for this subject. This might be because the student hasn't completed enough assessments yet."}
+                            t("studentPerformance.noSubjectDataMessage")}
                         </p>
                       </div>
                     </div>
@@ -502,12 +512,10 @@ const StudentPerformanceModal = () => {
                 <div className="p-6 text-center">
                   <div className="rounded-xl bg-gray-50 p-4 dark:bg-gray-800">
                     <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                      No Performance Data Available
+                      {t("studentPerformance.noData")}
                     </h3>
                     <p className="mt-2 text-gray-600 dark:text-gray-300">
-                      We couldn't find any performance data for this student.
-                      This might be because the student is new or data hasn't
-                      been collected yet.
+                      {t("studentPerformance.noDataMessage")}
                     </p>
                   </div>
                 </div>
