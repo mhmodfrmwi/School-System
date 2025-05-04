@@ -23,6 +23,7 @@ import GetAllScheduleClasses from "./Features/Manager/components/Schedule/GetAll
 import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/WeekScheduleForManager";
 import ParentKids from "./Features/Parent/pages/ParentKids";
 import DashboardParent from "./Features/Parent/pages/ParentKidDashboard";
+import EditParentProfile from "./Features/Parent/pages/EditProfilePage";
 
 import "./fonts.css";
 
@@ -737,6 +738,7 @@ function App() {
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<DashboardParent />} />
               <Route path="parent-kids" element={<ParentKids />} />
+              <Route path="edit-parent-profile" element={<EditParentProfile/>} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route

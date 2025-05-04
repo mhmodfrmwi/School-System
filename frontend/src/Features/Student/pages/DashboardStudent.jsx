@@ -23,12 +23,6 @@ import CourseI from "../../../assets/StudentIcon/CourseIcon.png";
 import annonI from "../../../assets/StudentIcon/annon.png";
 import ActivitesI from "../../../assets/StudentIcon/ActivitesIcon.png";
 import AbsenceI from "../../../assets/StudentIcon/AbsenceIcon.png";
-
-import video1 from "../../../assets/StudentIcon/video11.png";
-import video2 from "../../../assets/StudentIcon/video21.png";
-import book1 from "../../../assets/StudentIcon/book11.png";
-import book2 from "../../../assets/StudentIcon/book21.png";
-import book3 from "../../../assets/StudentIcon/book31.png";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -59,41 +53,6 @@ function DashboardStudent() {
     { label: t("dashboard.videoLectures"), icon: GroupI, progress: "100%" },
   ];
 
-  const readingList = [
-    {
-      title: t("subjects.english"),
-      description: "Spelling - Learn How To Spell Letters",
-      link: book1,
-    },
-    {
-      title: t("subjects.arabic"),
-      description: "Lesson 1 - How to Grow and Take Care of Your Farm",
-      link: book2,
-    },
-    {
-      title: t("subjects.science"),
-      description: "Adaptation - About Bears Life",
-      link: book3,
-    },
-  ];
-
-  const recommendedList = [
-    {
-      title: t("dashboard.atomVideo"),
-      type: t("subjects.science"),
-      link: video1,
-    },
-    {
-      title: t("dashboard.spellingVideo"),
-      type: t("subjects.english"),
-      link: video2,
-    },
-    {
-      title: t("dashboard.atomVideo"),
-      type: t("subjects.science"),
-      link: video1,
-    },
-  ];
 
   return (
     <div dir={i18n.language === "ar" ? "rtl" : "ltr"}>
@@ -424,86 +383,6 @@ function DashboardStudent() {
               </p>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Diffrent Categories */}
-
-      <div className="mx-auto mt-8 grid w-[95%] grid-cols-1 gap-6 px-8 md:grid-cols-2">
-        {/* Continue Reading Section */}
-        <div
-          className="rounded-lg border-4 border-transparent p-4 shadow-md"
-          style={{
-            borderImage:
-              "linear-gradient(to right, #FD813D, #CF72C0, #BC6FFB) 1",
-          }}
-        >
-          <h2 className="mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-2xl font-bold text-transparent">
-            {t("dashboard.continueReading")}
-          </h2>
-          <ul className="space-y-6">
-            {readingList.map((item, index) => (
-              <li key={index} className="mb-6 flex h-60 items-center space-x-4">
-                <img
-                  src={item.link}
-                  alt={item.title}
-                  className="h-50 w-40 rounded-lg object-cover shadow-md"
-                />
-                <div>
-                  <p className="font-poppins text-lg font-semibold">
-                    {item.title}
-                  </p>
-                  <p className="font-poppins text-gray-600">
-                    {item.description}
-                  </p>
-                  <a
-                    href="https://placehold.co/600x400"
-                    className="mt-2 block font-poppins font-semibold text-purple-500"
-                  >
-                    {t("dashboard.continueButton")}
-                  </a>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Recommended to Watch Section */}
-        <div
-          className="rounded-lg border-4 border-transparent p-4 shadow-md"
-          style={{
-            borderImage:
-              "linear-gradient(to right, #FD813D, #CF72C0, #BC6FFB) 1",
-          }}
-        >
-          <h2 className="mb-4 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-2xl font-bold text-transparent">
-            {t("dashboard.recommendedToWatch")}
-          </h2>
-          <ul className="space-y-6">
-            {recommendedList.map((item, index) => (
-              <li key={index} className="flex flex-col items-center space-y-4">
-                <img
-                  src={item.link}
-                  alt={item.title}
-                  className="h-28 w-full rounded-lg object-cover shadow-md"
-                />
-                <div className="text-center">
-                  <p className="font-poppins text-lg font-semibold">
-                    {item.title}
-                  </p>
-                  <p className="font-poppins text-gray-600">
-                    {t("dashboard.type")}: {item.type}
-                  </p>
-                  <a
-                    href="https://placehold.co/600x400"
-                    className="mt-2 block font-poppins font-semibold text-purple-500"
-                  >
-                    {t("dashboard.watchNow")}
-                  </a>
-                </div>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </div>
