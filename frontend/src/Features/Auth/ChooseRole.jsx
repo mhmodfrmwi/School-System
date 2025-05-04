@@ -1,44 +1,63 @@
+import React, { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setRole } from "../../Features/Auth/AuthRedux/roleSlice";
+import { useTranslation } from "react-i18next";
+import Toggles from "./Toggles";
 import logo from "../../assets/logoorangee 1.png";
-import React from "react";
 
 const ChooseRole = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
-  const handleRoleSelect = (role) => {
-    dispatch(setRole(role));
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
+  const handleRoleSelect = useCallback(
+    (role) => {
+      dispatch(setRole(role));
+      localStorage.removeItem("token");
+      navigate("/login");
+    },
+    [dispatch, navigate],
+  );
+
+  const roles = useMemo(
+    () => [
+      { label: "Admin", icon: "⚙️", api: "admin" },
+      { label: "Manager", icon: "👔", api: "manager" },
+      { label: "Teacher", icon: "👩‍🏫", api: "teacher" },
+      { label: "Parent", icon: "👨‍👩‍👧", api: "parent" },
+      { label: "Student", icon: "🎓", api: "student" },
+    ],
+    [],
+  );
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center overflow-y-scroll bg-[#FEDDC6] font-poppins">
-      <div className="justify-space flex h-full w-full flex-col items-center rounded-lg">
+    <div className="flex h-screen items-center justify-center overflow-y-scroll bg-[#FEDDC6] font-poppins dark:bg-[#13082F]">
+      <div className="absolute right-5 top-5">
+        <Toggles />
+      </div>
+
+      <div className="flex h-full w-full flex-col items-center rounded-lg">
         <div>
-          <img src={logo} alt="notfound" className="mx-auto" />
-          <p className="mb-16 mt-6 px-2 text-center text-4xl font-semibold text-white md:px-28 md:text-5xl">
-            Experience digital education like never before.
+          <img src={logo} alt="Logo" className="mx-auto" />
+          <p className="mb-16 mt-6 px-2 text-center text-4xl font-semibold text-orange-500 dark:text-[#E0AAEE] md:px-28 md:text-5xl">
+            {t("chooseRole.title")}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-10 p-2 pb-16 md:grid-cols-5">
-          {[
-            { label: "Admin", icon: "⚙️", api: "admin" },
-            { label: "Manager", icon: "👔", api: "manager" },
-            { label: "Teacher", icon: "👩‍🏫", api: "teacher" },
-            { label: "Parent", icon: "👨‍👩‍👧", api: "parent" },
-            { label: "Student", icon: "🎓", api: "student" },
-          ].map((item, index) => (
+        <div
+          dir="ltr"
+          className="grid grid-cols-2 gap-10 p-2 pb-16 md:grid-cols-5"
+        >
+          {roles.map((role, index) => (
             <button
               key={index}
-              className="flex flex-col items-center rounded-lg border-2 border-orange-500 bg-white p-12 text-center text-orange-500 transition-colors hover:bg-[#f3ceb4] hover:text-white"
-              onClick={() => handleRoleSelect(item.api)}
+              aria-label={`Select ${role.label}`}
+              className="flex flex-col items-center rounded-lg border-2 border-orange-500 bg-white p-8 text-center text-orange-500 transition-colors hover:bg-[#f3ceb4] hover:text-white dark:border-[#AE45FB] dark:bg-[#281459] dark:text-[#E0AAEE] dark:hover:bg-[#3A1D7A] md:p-12"
+              onClick={() => handleRoleSelect(role.api)}
             >
-              <span className="mb-2 text-3xl">{item.icon}</span>
-              <span className="font-semibold">{item.label}</span>
+              <span className="mb-2 text-3xl">{role.icon}</span>
+              <span className="font-semibold">{role.label}</span>
             </button>
           ))}
         </div>

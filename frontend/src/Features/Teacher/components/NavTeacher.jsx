@@ -14,7 +14,7 @@ import languageA from "../../../assets/icons/languageAT.svg";
 import Vector from "../../../assets/icons/Vector.svg";
 import logout2 from "../../../assets/icons/logout.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
 
 const NavTeacher = () => {
@@ -23,7 +23,7 @@ const NavTeacher = () => {
   const settingsRef = useRef(null);
   const searchRef = useRef(null);
   const dispatch = useDispatch();
-  
+
   const [settingToggle, setSettingToggle] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -67,7 +67,9 @@ const NavTeacher = () => {
   ];
 
   const filteredRoutes = routes.filter((route) => {
-    const englishMatch = route.path.toLowerCase().includes(searchTerm.toLowerCase());
+    const englishMatch = route.path
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const arabicMatch = t(`routes.${route.key}`).includes(searchTerm);
     return englishMatch || arabicMatch;
   });
@@ -96,9 +98,9 @@ const NavTeacher = () => {
   };
 
   const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    const newLang = i18n.language === "en" ? "ar" : "en";
     i18n.changeLanguage(newLang);
-    localStorage.setItem('i18nextLng', newLang);
+    localStorage.setItem("i18nextLng", newLang);
     document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
   };
 
@@ -135,7 +137,7 @@ const NavTeacher = () => {
   return (
     <div className="relative">
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md">
-        <div className="flex items-center space-x-3  rtl:space-x-reverse">
+        <div className="flex items-center space-x-3 rtl:space-x-reverse">
           <button
             onClick={handleBack}
             className="hidden rounded-lg bg-dashboard-bg p-2 text-white dark:bg-DarkManager lg:flex"
@@ -152,7 +154,9 @@ const NavTeacher = () => {
           ref={searchRef}
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
-          <div className={`absolute ${i18n.language === 'ar' ? 'right-14 lg:right-6' : 'left-14 lg:left-6'} top-1/2 z-10 -translate-y-1/2 transform`}>
+          <div
+            className={`absolute ${i18n.language === "ar" ? "right-14 lg:right-6" : "left-14 lg:left-6"} top-1/2 z-10 -translate-y-1/2 transform`}
+          >
             <FaSearch className="text-lg text-gray-400" />
           </div>
 
@@ -163,7 +167,7 @@ const NavTeacher = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
-              className={`w-full rounded-full border bg-gray-100 dark:bg-gray-700 py-2 ${i18n.language === 'ar' ? 'pr-12 pl-12' : 'pl-12 pr-12'} text-center font-poppins text-sm text-gray-800 dark:text-gray-200 focus:outline-none md:text-left md:text-base`}
+              className={`w-full rounded-full border bg-gray-100 py-2 dark:bg-gray-700 ${i18n.language === "ar" ? "pl-12 pr-12" : "pl-12 pr-12"} text-center font-poppins text-sm text-gray-800 focus:outline-none dark:text-gray-200 md:text-left md:text-base`}
             />
 
             {isDropdownOpen && (
@@ -173,22 +177,22 @@ const NavTeacher = () => {
                     <li
                       key={route.path}
                       onClick={() => handleSelect(route.path)}
-                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] dark:text-DarkManager hover:bg-blue-100"
+                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] hover:bg-blue-100 dark:text-DarkManager"
                     >
                       {route.path}
                       <p className="mx-auto my-2 w-[98%] border-b-2 border-[#117C90] dark:border-DarkManager"></p>
                     </li>
                   ))
                 ) : (
-                  <li className="px-4 py-2 text-red-900">
-                    {t('NoMatches')}
-                  </li>
+                  <li className="px-4 py-2 text-red-900">{t("NoMatches")}</li>
                 )}
               </ul>
             )}
           </div>
 
-          <div className={`absolute ${i18n.language === 'ar' ? 'left-14 lg:left-6' : 'right-14 lg:right-7'} top-1/2 -translate-y-1/2 transform`}>
+          <div
+            className={`absolute ${i18n.language === "ar" ? "left-14 lg:left-6" : "right-14 lg:right-7"} top-1/2 -translate-y-1/2 transform`}
+          >
             <FontAwesomeIcon
               icon={faSliders}
               className="text-lg text-gray-400"
@@ -207,13 +211,19 @@ const NavTeacher = () => {
           <button className="p-2 text-gray-500">
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
           </button>
-          <ThemeSwitcher />
+          <div dir="ltr">
+            <ThemeSwitcher />
+          </div>
 
           <div className="flex items-center space-x-2">
             <img
-              src={profileImage && profileImage !== "Unknown" ? profileImage : userImage}
+              src={
+                profileImage && profileImage !== "Unknown"
+                  ? profileImage
+                  : userImage
+              }
               alt="User"
-              className="h-8 w-8 rounded-full md:h-10 md:w-10"
+              className="me-5 h-8 w-8 rounded-full md:h-10 md:w-10"
               onError={(e) => {
                 e.target.src = userImage;
               }}
@@ -232,7 +242,7 @@ const NavTeacher = () => {
           {settingToggle && (
             <div
               ref={settingsRef}
-              className={`absolute ${i18n.language === 'ar' ? 'left-5' : 'right-5'}  top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90] dark:to-[#043B44]`}
+              className={`absolute ${i18n.language === "ar" ? "left-5" : "right-5"} top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90] dark:to-[#043B44]`}
             >
               <div>
                 <div
@@ -242,12 +252,14 @@ const NavTeacher = () => {
                   <button className="p-2 text-gray-500">
                     <ReactSVG src={Vector} className="h-auto w-auto" />
                   </button>
-                  <h2 className="font-semibold text-white">{t("EditProfile")}</h2>
+                  <h2 className="font-semibold text-white">
+                    {t("EditProfile")}
+                  </h2>
                 </div>
                 <p className="mx-auto my-2 w-40 border-b-2 border-white"></p>
               </div>
 
-              <div className="ms-20">
+              <div dir="ltr" className="ms-20">
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
@@ -256,22 +268,20 @@ const NavTeacher = () => {
                 onClick={toggleLanguage}
               >
                 <ReactSVG
-                  src={i18n.language === 'en' ? languageA : languageE}
+                  src={i18n.language === "en" ? languageA : languageE}
                   className="h-auto w-auto"
                 />
               </button>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
 
               <div
-                className="mx-auto ms-12 mt-5 flex flex-row items-center cursor-pointer"
+                className="mx-auto ms-12 mt-5 flex cursor-pointer flex-row items-center"
                 onClick={handleUserLogout}
               >
                 <button className="p-2 text-gray-500">
                   <ReactSVG src={logout2} className="h-auto w-auto" />
                 </button>
-                <h2 className="font-semibold text-white">
-                  {t("Logout")}
-                </h2>
+                <h2 className="font-semibold text-white">{t("Logout")}</h2>
               </div>
             </div>
           )}

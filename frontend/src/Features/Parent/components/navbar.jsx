@@ -9,7 +9,7 @@ import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { ReactSVG } from "react-svg";
 import { Link } from "react-router-dom";
 import InfoIcon from "../../../assets/icons/InfoS.svg";
-import userImage from "../../../assets/user.jpeg"; // الصورة الافتراضية
+import userImage from "../../../assets/user.jpeg";
 import languageE from "../../../assets/icons/languageS.svg";
 import languageA from "../../../assets/icons/languageA.svg";
 import Vector from "../../../assets/icons/Vector.svg";
@@ -31,7 +31,8 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { fullName, profileImage } = useSelector((state) => state.login); // جيبنا profileImage
+  const { fullName, profileImage } = useSelector((state) => state.login);
+  const [selectedKid, setSelectedKid] = useState(null);
 
   const handleUserLogout = () => {
     dispatch(logout());
@@ -78,7 +79,7 @@ const Navbar = () => {
       setSearchTerm("");
       setIsDropdownOpen(false);
       if (route) {
-        navigate(`/student/${searchTerm}`);
+        navigate(`/parent/${route.path}`);
       } else {
         alert("No matches found.");
       }
@@ -93,8 +94,8 @@ const Navbar = () => {
   };
 
   const url = window.location.pathname;
-  const studentName = url.split("/student/").pop();
-  const match = url.match(/\/student\/([^/]+)/);
+  const parentName = url.split("/parent/").pop();
+  const match = url.match(/\/parent\/([^/]+)/);
   const name = match ? match[1] : "";
 
   const handleBack = () => {
@@ -138,7 +139,7 @@ const Navbar = () => {
           >
             <FaArrowLeft className="text-lg" />
           </button>
-          <Link to="/student">
+          <Link to="/parent">
             <img
               src={Logo}
               alt="Logo"
@@ -148,12 +149,12 @@ const Navbar = () => {
           <p
             className="hidden font-inter text-lg font-semibold text-[#3D52A1] dark:text-[#A3BFFA] lg:flex"
             onClick={() => {
-              if (name !== "/student") {
-                navigate(`/student/${name}`);
+              if (name !== "/parent") {
+                navigate(`/parent/${name}`);
               }
             }}
           >
-            {studentName === "/student" ? "student" : `${name}`}
+            {parentName === "/parent" ? "parent" : `${name}`}
           </p>
         </div>
 
@@ -171,7 +172,7 @@ const Navbar = () => {
           <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
             <input
               type="text"
-              placeholder={t("SearchStudentPage")}
+              placeholder={t("SearchParentPage")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -225,7 +226,7 @@ const Navbar = () => {
             <ThemeSwitcher />
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
             <img
               src={
                 profileImage && profileImage !== "Unknown"
@@ -235,7 +236,7 @@ const Navbar = () => {
               alt="User"
               className="me-5 h-8 w-8 rounded-full md:h-10 md:w-10"
               onError={(e) => {
-                e.target.src = userImage; // لو الصورة ماتحملتش، نرجع للصورة الافتراضية
+                e.target.src = userImage;
               }}
             />
             <span className="hidden font-poppins text-sm font-semibold text-[#3D52A1] dark:text-[#A3BFFA] md:text-base lg:flex">
@@ -269,7 +270,7 @@ const Navbar = () => {
                 <p className="mx-auto my-2 w-40 border-b-2 border-white dark:border-gray-500"></p>
               </div>
 
-              <div className="ms-20" dir="ltr">
+              <div dir="ltr" className="ms-20">
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white dark:border-gray-500"></p>
@@ -305,7 +306,12 @@ const Navbar = () => {
             className="fixed inset-0 z-10 bg-black bg-opacity-30 backdrop-blur-sm dark:bg-gray-900 dark:bg-opacity-50"
             onClick={() => setIsSidebarOpen(false)}
           ></div>
-          <Sidebar closeSidebar={() => setIsSidebarOpen(false)} />
+          {/* <Sidebar closeSidebar={() => setIsSidebarOpen(false)}  /> */}
+          <Sidebar
+            kid={selectedKid}
+            closeSidebar={() => setIsSidebarOpen(false)}
+            setSelectedKid={setSelectedKid}
+          />
         </>
       )}
     </div>

@@ -15,7 +15,7 @@ import logout2 from "../../../assets/icons/logout.svg";
 import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { logout } from "../../../Features/Auth/AuthRedux/loginSlice"; 
+import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -157,11 +157,13 @@ const Navbar = () => {
         </div>
 
         <div
-          className="relative ml-auto hidden max-w-sm sm:flex rtl:mr-auto rtl:ml-0"
+          className="relative ml-auto hidden max-w-sm sm:flex rtl:ml-0 rtl:mr-auto"
           ref={searchRef}
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
-          <div className={`absolute ${i18n.language === 'ar' ? 'right-14 lg:right-6' : 'left-14 lg:left-6'} top-1/2 z-10 -translate-y-1/2 transform`}>
+          <div
+            className={`absolute ${i18n.language === "ar" ? "right-14 lg:right-6" : "left-14 lg:left-6"} top-1/2 z-10 -translate-y-1/2 transform`}
+          >
             <FaSearch className="text-lg text-gray-400" />
           </div>
 
@@ -172,7 +174,7 @@ const Navbar = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
-              className={`w-full rounded-full border bg-gray-100 dark:bg-gray-700 py-2 ${i18n.language === 'ar' ? 'pr-12 pl-12' : 'pl-12 pr-12'} text-center font-poppins text-sm text-gray-800 dark:text-gray-200 focus:outline-none md:text-left md:text-base`}
+              className={`w-full rounded-full border bg-gray-100 py-2 dark:bg-gray-700 ${i18n.language === "ar" ? "pl-12 pr-12" : "pl-12 pr-12"} text-center font-poppins text-sm text-gray-800 focus:outline-none dark:text-gray-200 md:text-left md:text-base`}
             />
 
             {isDropdownOpen && (
@@ -195,7 +197,9 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className={`absolute ${i18n.language === 'ar' ? 'left-14 lg:left-6' : 'right-14 lg:right-7'} top-1/2 -translate-y-1/2 transform`}>
+          <div
+            className={`absolute ${i18n.language === "ar" ? "left-14 lg:left-6" : "right-14 lg:right-7"} top-1/2 -translate-y-1/2 transform`}
+          >
             <FontAwesomeIcon
               icon={faSliders}
               className="text-lg text-gray-400"
@@ -214,14 +218,20 @@ const Navbar = () => {
           <button className="p-2 text-gray-500">
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
           </button>
-          <ThemeSwitcher />
+          <div dir="ltr">
+            <ThemeSwitcher />
+          </div>
 
           {/* تعديل جزء صورة المستخدم */}
           <div className="flex items-center space-x-2">
             <img
-              src={profileImage && profileImage !== "Unknown" ? profileImage : userImage}
+              src={
+                profileImage && profileImage !== "Unknown"
+                  ? profileImage
+                  : userImage
+              }
               alt="User"
-              className="h-8 w-8 rounded-full md:h-10 md:w-10"
+              className="me-5 h-8 w-8 rounded-full md:h-10 md:w-10"
               onError={(e) => {
                 e.target.src = userImage;
               }}
@@ -240,7 +250,7 @@ const Navbar = () => {
           {settingToggle && (
             <div
               ref={settingsRef}
-              className={`absolute ${i18n.language === 'ar' ? 'left-5' : 'right-5'}  top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90] dark:to-[#043B44]`}
+              className={`absolute ${i18n.language === "ar" ? "left-5" : "right-5"} top-20 z-20 h-72 w-56 rounded-xl bg-gradient-to-b from-[#99C7CF] to-[#117C90] dark:to-[#043B44]`}
             >
               <div>
                 <div
@@ -257,7 +267,7 @@ const Navbar = () => {
                 <p className="mx-auto my-2 w-40 border-b-2 border-white"></p>
               </div>
 
-              <div className="ms-20">
+              <div dir="ltr" className="ms-20">
                 <ThemeSwitcher />
               </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
@@ -274,15 +284,13 @@ const Navbar = () => {
 
               {/* تعديل جزء تسجيل الخروج */}
               <div
-                className="mx-auto ms-12 mt-5 flex flex-row items-center cursor-pointer"
+                className="mx-auto ms-12 mt-5 flex cursor-pointer flex-row items-center"
                 onClick={handleUserLogout}
               >
                 <button className="p-2 text-gray-500">
                   <ReactSVG src={logout2} className="r h-auto w-auto" />
                 </button>
-                <h2 className="font-semibold text-white">
-                  {t("Logout")}
-                </h2>
+                <h2 className="font-semibold text-white">{t("Logout")}</h2>
               </div>
             </div>
           )}

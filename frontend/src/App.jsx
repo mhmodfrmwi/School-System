@@ -21,7 +21,8 @@ import EditVRManger from "./Features/Manager/components/VR/EditVRManger";
 import VirtualRoomsManger from "./Features/Teacher/components/MangerVR/MangerVR";
 import GetAllScheduleClasses from "./Features/Manager/components/Schedule/GetAllScheduleClasses";
 import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/WeekScheduleForManager";
-import ParentKids from "./Features/Parent/ParentKids";
+import ParentKids from "./Features/Parent/pages/ParentKids";
+import DashboardParent from "./Features/Parent/pages/ParentKidDashboard";
 
 import "./fonts.css";
 
@@ -251,7 +252,7 @@ const MaterialDetails = lazy(
 
 /* /////////////////parent imports//////////////////// */
 
-const Parents = lazy(() => import("./Features/Parent/Parents"));
+const Parents = lazy(() => import("./Features/Parent/pages/Parents"));
 
 /* /////////////////teacher imports//////////////////// */
 
@@ -733,6 +734,8 @@ function App() {
                 <ProtectedRoute element={<Parents />} requiredRole="parent" />
               }
             >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<DashboardParent />} />
               <Route path="parent-kids" element={<ParentKids />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}

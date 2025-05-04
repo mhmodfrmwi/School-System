@@ -4,7 +4,6 @@
 export default {
   darkMode: ["class"],
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: ["class"],
   theme: {
     fontFamily: {
       sans: "Roboto Mono, monospace",
