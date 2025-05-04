@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-
 import Loader from "@/ui/Loader";
 // import { useCreateKid } from "./hooks/useCreateKid";
 import { FiUser, FiMail, FiBook, FiUsers } from "react-icons/fi";
@@ -8,13 +7,15 @@ import { useState } from "react";
 import ParentKidDashboard from "./ParentKidDashboard";
 import { useNavigate } from "react-router-dom";
 import { useParentKids } from "../components/hooks/useParentKids";
+import { useTranslation } from "react-i18next";
 function ParentKids() {
   const navigate = useNavigate();
   const { parentKids, isLoading } = useParentKids();
-
   const [selectedKid, setSelectedKid] = useState(null);
+  const { t } = useTranslation();
 
   if (isLoading) return <Loader role="parent" />;
+
   const handleSelectKid = (kid) => {
     localStorage.setItem("isInParentDashboard", "false");
     navigate("/parent/dashboard", { state: { selectedKid: kid } });
@@ -33,7 +34,7 @@ function ParentKids() {
         <div className="relative inline-block">
           <h1 className="flex items-center gap-3 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text font-poppins text-3xl font-bold text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
             <FaChild className="text-[#BC6FFB] dark:text-[#AE45FB]" />
-            My Children
+            {t("parentKids.title")}
           </h1>
           <span className="absolute bottom-[-9px] left-0 h-1 w-20 rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></span>
         </div>
@@ -61,22 +62,22 @@ function ParentKids() {
                 <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
                   <th className="border border-[#FFA4A4] px-6 py-4 text-left font-poppins text-sm font-semibold dark:border-[#A3BFFA] md:text-base">
                     <div className="flex items-center gap-2">
-                      <FiUser /> Full Name
+                      <FiUser /> {t("parentKids.tableHeaders.fullName")}
                     </div>
                   </th>
                   <th className="border border-[#FFA4A4] px-6 py-4 text-left font-poppins text-sm font-semibold dark:border-[#A3BFFA] md:text-base">
                     <div className="flex items-center gap-2">
-                      <FiBook /> Academic Number
+                      <FiBook /> {t("parentKids.tableHeaders.academicNumber")}
                     </div>
                   </th>
                   <th className="border border-[#FFA4A4] px-6 py-4 text-left font-poppins text-sm font-semibold dark:border-[#A3BFFA] md:text-base">
                     <div className="flex items-center gap-2">
-                      <FiMail /> Email
+                      <FiMail /> {t("parentKids.tableHeaders.email")}
                     </div>
                   </th>
                   <th className="border border-[#FFA4A4] px-6 py-4 text-left font-poppins text-sm font-semibold dark:border-[#A3BFFA] md:text-base">
                     <div className="flex items-center gap-2">
-                      <FiUsers /> Gender
+                      <FiUsers /> {t("parentKids.tableHeaders.gender")}
                     </div>
                   </th>
                 </tr>
@@ -119,7 +120,7 @@ function ParentKids() {
                                 : "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
                             }`}
                           >
-                            {kid.gender === "M" ? "Male" : "Female"}
+                            {kid.gender === "M" ? t("parentKids.gender.male") :  t("parentKids.gender.female")}
                           </span>
                         </td>
                       </motion.tr>
@@ -133,7 +134,7 @@ function ParentKids() {
                     >
                       <div className="flex flex-col items-center justify-center gap-2">
                         <FiUsers className="h-12 w-12 text-gray-300 dark:text-gray-600" />
-                        <p className="text-lg">No children found</p>
+                        <p className="text-lg">{t("parentKids.noChildren")}</p>
                       </div>
                     </td>
                   </tr>

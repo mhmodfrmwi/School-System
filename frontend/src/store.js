@@ -56,6 +56,7 @@ import teacherProfileReducer from "./Features/Teacher/components/TeacherRedux/Te
 import studentProfileReducer from "./Features/Student/components/StudentRedux/StudentEditProfileSlice";
 import managerProfileReducer from "./Features/Manager/components/ManagerRedux/ManagerEditProfileSlice";
 import adminProfileReducer from "./Features/Admin/components/AdminRedux/AdminEditProfileSlice";
+import parentProfileReducer from "./Features/Parent/components/ParentRedux/ParentEditProfileSlice";
 
 
 const store = configureStore({
@@ -117,6 +118,7 @@ const store = configureStore({
     studentProfile:studentProfileReducer,
     managerProfile:managerProfileReducer,
     adminProfile:adminProfileReducer,
+    parentProfile:parentProfileReducer,
   },
 });
 

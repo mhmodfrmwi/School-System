@@ -41,7 +41,7 @@ const Sidebar = ({ kid = null, closeSidebar, setSelectedKid  }) => {
       };
     const menuItems = [
         { label: t('Home'), icon: Icon1,  onClick: handleHomeClick},
-        { label: t('MyChildren'), icon: Icon2, path: "/parent/parent-kids" },
+        { label: t("parentKids.title"), icon: Icon2, path: "/parent/parent-kids" },
         { label: t('Motivation'), icon: Icon2, path: "/parent/motivation" },
         { label: t('Courses'), icon: Icon3, path: "/parent/allcourses" },
         { label: t('Absence'), icon: Icon4, path: "/parent/attendance" },

@@ -233,7 +233,7 @@ function DashboardParent() {
         <div className="flex items-center py-4">
           <p className={`h-8 w-2 rounded-lg border-l-8 border-[#BC6FFB] ${i18n.language === "ar" ? "ml-2" : "mr-2"}`}></p>
           <button className="cursor-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text py-2 font-poppins text-2xl font-bold text-transparent">
-            Parent Dashboard
+          {t("dashboardparent.title")}
           </button>
         </div>
 
@@ -274,7 +274,7 @@ function DashboardParent() {
 
           {/* 2. Edit Profile Card */}
           <div
-            onClick={() => navigate("/parent/edit-profile")}
+            onClick={() => navigate("/parent/edit-parent-profile")}
             className="flex h-48 transform flex-col items-center justify-center rounded-xl bg-[#F3F4F6] p-6 font-poppins font-semibold text-gray-700 transition-all duration-300 ease-in-out hover:scale-105 hover:cursor-pointer hover:shadow-md"
           >
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#BC6FFB] transition-all duration-300 ease-in-out">

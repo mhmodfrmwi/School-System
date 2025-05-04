@@ -1171,6 +1171,9 @@ i18n.use(initReactI18next).init({
             students: "Students",
             teachers: "Teachers",
             parents: "Parents",
+            student: "Student",
+            teacher: "Teacher",
+            parent: "Parent",
             manager: "Manager",
             admin: "Admin",
             terms: "Terms",
@@ -1786,6 +1789,7 @@ i18n.use(initReactI18next).init({
           activities: "Activities",
         },
         dashboardparent: {
+          title:"Parent Dashboard",
           grades: "Grades",
           attendance: "Attendance",
           schedule: "Schedule",
@@ -1799,6 +1803,20 @@ i18n.use(initReactI18next).init({
           back: "Back",
           male: "Male",
           female: "Female",
+        },
+        "parentKids": {
+          "title": "My Children",
+          "tableHeaders": {
+            "fullName": "Full Name",
+            "academicNumber": "Academic Number",
+            "email": "Email",
+            "gender": "Gender"
+          },
+          "gender": {
+            "male": "Male",
+            "female": "Female"
+          },
+          "noChildren": "No children found"
         },
         ////////////////////////////////auth////////////////////////
 
@@ -3074,6 +3092,9 @@ i18n.use(initReactI18next).init({
             students: "الطلاب",
             teachers: "المعلمين",
             parents: "أولياء الأمور",
+            student: "الطالب",
+            teacher: "المعلم",
+            parent: "ولي أمر",
             manager: "المدير",
             admin: "المشرف",
             terms: "الفصول",
@@ -3685,6 +3706,7 @@ i18n.use(initReactI18next).init({
           activities: "الأنشطة",
         },
         dashboardparent: {
+          title:"لوحه تحكم ولي الأمر",
           grades: "الدرجات",
           attendance: "الحضور",
           schedule: "الجدول",
@@ -3698,6 +3720,20 @@ i18n.use(initReactI18next).init({
           back: "رجوع",
           male: "ذكر",
           female: "أنثى",
+        },
+        "parentKids": {
+          "title": "أولادي",
+          "tableHeaders": {
+            "fullName": "الاسم الكامل",
+            "academicNumber": "الرقم الأكاديمي",
+            "email": "البريد الإلكتروني",
+            "gender": "النوع"
+          },
+          "gender": {
+            "male": "ذكر",
+            "female": "أنثى"
+          },
+          "noChildren": "لا يوجد أطفال"
         },
         ////////////////////////////////auth/////////////////////////////
 

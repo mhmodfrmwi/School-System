@@ -258,7 +258,7 @@ const Navbar = () => {
               <div>
                 <div
                   className="mx-auto ms-7 mt-3 flex cursor-pointer flex-row items-center"
-                  onClick={() => navigate("edit-student-profile")}
+                  onClick={() => navigate("edit-parent-profile")}
                 >
                   <button className="p-2 text-gray-500 dark:text-gray-300">
                     <ReactSVG src={Vector} className="h-auto w-auto" />
