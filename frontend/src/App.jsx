@@ -254,6 +254,8 @@ const MaterialDetails = lazy(
 /* /////////////////parent imports//////////////////// */
 
 const Parents = lazy(() => import("./Features/Parent/pages/Parents"));
+const ParentActivities = lazy(() => import("./Features/Parent/components/Activites/Activites"));
+const ParentContests = lazy(() => import("./Features/Parent/components/Activites/Contests"));
 
 /* /////////////////teacher imports//////////////////// */
 
@@ -738,7 +740,13 @@ function App() {
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<DashboardParent />} />
               <Route path="parent-kids" element={<ParentKids />} />
-              <Route path="edit-parent-profile" element={<EditParentProfile/>} />
+              <Route path="edit-parent-profile" element={<EditParentProfile />} />
+              <Route path="activities" element={<ProtectedRoute
+                element={<ParentActivities />}
+                requiredRole="parent"
+                requiresKid={true}
+              />} />
+              <Route path="activities/contests" element={<ParentContests />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route
