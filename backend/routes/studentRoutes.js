@@ -96,6 +96,7 @@ const {
 const {
   getLoggedInStudentData,
 } = require("../controllers/Student/studentData");
+const { getDashboardData } = require("../controllers/Parent/studentDashboard");
 
 const router = express.Router();
 
@@ -347,4 +348,6 @@ router.get(
   validateStudent,
   getLoggedInStudentData
 );
+router.get("/dashboard", validateJwt, getDashboardData);
+
 module.exports = router;

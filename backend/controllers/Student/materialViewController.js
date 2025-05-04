@@ -14,10 +14,17 @@ const updateMaterialView = expressAsyncHandler(async (req, res) => {
   const student_id = req.user.id;
 
   try {
-    let materialView = await MaterialView.findOne({ material_id: id, student_id });
+    let materialView = await MaterialView.findOne({
+      material_id: id,
+      student_id,
+    });
 
     if (!materialView || !materialView.is_viewed) {
-      await addRewardClaimAndUpdatePoints(student_id, "Student", "View Material");
+      await addRewardClaimAndUpdatePoints(
+        student_id,
+        "Student",
+        "View Material"
+      );
     }
     materialView = await MaterialView.findOneAndUpdate(
       { material_id: id, student_id },
