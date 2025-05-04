@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useChat } from "./hooks/ChatBot";
 
@@ -21,9 +21,9 @@ const Message = ({ sender, text, role }) => {
   const roleColors = colors[role] || colors.default;
 
   return (
-    <div className={`mb-3 ${sender === "user" ? "text-right" : "text-left"}`}>
+    <div className={`mb-4 ${sender === "user" ? "text-right" : "text-left"}`}>
       <div
-        className={`inline-block max-w-[280px] whitespace-pre-wrap break-words rounded-lg px-4 py-2 text-sm ${
+        className={`inline-block max-w-[80%] whitespace-pre-wrap break-words rounded-xl px-5 py-3 text-base ${
           sender === "user"
             ? `${roleColors.user} rounded-br-none`
             : `${roleColors.bot} rounded-bl-none`
@@ -45,9 +45,9 @@ const LoadingIndicator = ({ text, role }) => {
   const bgColor = colors[role] || colors.default;
 
   return (
-    <div className="mb-3 flex justify-start">
+    <div className="mb-4 flex justify-start">
       <div
-        className={`inline-block max-w-[280px] rounded-lg rounded-bl-none px-4 py-2 text-sm text-white ${bgColor} whitespace-pre-wrap break-words`}
+        className={`inline-block max-w-[80%] rounded-xl rounded-bl-none px-5 py-3 text-base text-white ${bgColor} whitespace-pre-wrap break-words`}
       >
         {text}
       </div>
@@ -104,14 +104,14 @@ const ChatInput = ({
   };
 
   return (
-    <div className="relative mt-2 flex gap-2">
+    <div className="relative mt-4 flex gap-3">
       <div
         className="relative flex-1"
         onMouseEnter={() => setShowInputTooltip(true)}
         onMouseLeave={() => setShowInputTooltip(false)}
       >
         <input
-          className={`w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${
+          className={`w-full rounded-xl border border-gray-300 bg-white px-5 py-3 text-base text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${
             roleStyles.focus
           } ${isDisabled ? "opacity-70" : ""}`}
           value={input}
@@ -121,7 +121,7 @@ const ChatInput = ({
           disabled={isLoading}
         />
         {showInputTooltip && isEmpty && (
-          <div className="absolute -top-8 left-0 z-10 rounded bg-gray-800 px-2 py-1 text-xs text-white shadow-lg dark:bg-gray-600">
+          <div className="absolute -top-14 left-0 z-10 rounded bg-gray-800 px-3 py-2 text-sm text-white shadow-lg dark:bg-gray-600">
             Please enter a message
           </div>
         )}
@@ -133,7 +133,7 @@ const ChatInput = ({
         onMouseLeave={() => setShowButtonTooltip(false)}
       >
         <button
-          className={`relative rounded-lg px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+          className={`relative rounded-xl px-5 py-3 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
             roleStyles.button
           } ${
             isDisabled
@@ -146,7 +146,7 @@ const ChatInput = ({
           {buttonText}
         </button>
         {showButtonTooltip && isEmpty && (
-          <div className="absolute -top-12 right-0 z-10 rounded bg-gray-800 px-2 py-1 text-xs text-white shadow-lg dark:bg-gray-600">
+          <div className="absolute -top-20 right-0 z-10 rounded bg-gray-800 px-3 py-2 text-sm text-white shadow-lg dark:bg-gray-600">
             Input is empty
           </div>
         )}
@@ -190,7 +190,7 @@ export const ChatBot = () => {
         className={`fixed bottom-6 right-10 z-[1000] flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 ${headerColor} ${
           role === "student" || role === "parent"
             ? "focus:ring-purple-500"
-            : "focus:ring-blue-500"
+            : "focus:ring-[#117C90]"
         }`}
       >
         <div className="relative h-10 w-10">
@@ -218,54 +218,100 @@ export const ChatBot = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-[1000] w-80 rounded-xl border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800">
+    <>
       <div
-        className={`flex items-center justify-between rounded-t-xl px-4 py-3 text-white ${headerColor}`}
+        className="dark fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm dark:bg-white/70"
+        onClick={() => setIsChatOpen(false)}
+      ></div>
+
+      <button
+        onClick={() => setIsChatOpen(false)}
+        className={`fixed bottom-6 right-10 z-[1001] flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 ${headerColor} ${
+          role === "student" || role === "parent"
+            ? "focus:ring-purple-500"
+            : "focus:ring-[#117C90]"
+        }`}
       >
-        <h3 className="text-sm font-medium">{localizedText.title}</h3>
-        <button
-          onClick={() => setIsChatOpen(false)}
-          className="rounded-full p-1 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
-        >
+        <div className="relative h-10 w-10">
+          <div className={`absolute inset-0 rounded-full ${headerColor}`}></div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+            className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 transform"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
             <path
-              fillRule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clipRule="evenodd"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
             />
           </svg>
-        </button>
+          <div
+            className={`absolute inset-0 animate-ping rounded-full opacity-75 ${headerColor}`}
+          ></div>
+        </div>
+      </button>
+
+      <div className="fixed left-1/2 top-1/2 z-[1001] h-[80vh] w-[80vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800">
+        <div
+          className={`flex items-center justify-between rounded-t-xl px-6 py-4 text-white ${headerColor}`}
+        >
+          <h3 className="text-lg font-medium">{localizedText.title}</h3>
+          <button
+            onClick={() => setIsChatOpen(false)}
+            className="rounded-full p-1 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="h-[calc(100%-120px)] overflow-y-auto bg-gray-50 p-6 dark:bg-gray-700">
+          {messages.length === 0 && !isLoading ? (
+            <Message
+              sender="bot"
+              text="How can I help you today?"
+              role={role}
+            />
+          ) : (
+            messages.map((msg, i) => (
+              <Message
+                key={i}
+                sender={msg.sender}
+                text={msg.text}
+                role={role}
+              />
+            ))
+          )}
+          {isLoading && (
+            <LoadingIndicator text={localizedText.thinkingText} role={role} />
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+        <div className="border-t border-gray-200 bg-white p-4 dark:border-gray-600 dark:bg-gray-800">
+          <ChatInput
+            input={input}
+            setInput={setInput}
+            sendMessage={sendMessage}
+            isLoading={isLoading}
+            placeholder={localizedText.placeholder}
+            buttonText={localizedText.buttonText}
+            role={role}
+          />
+        </div>
       </div>
-      <div className="h-64 overflow-y-auto bg-gray-50 p-4 dark:bg-gray-700">
-        {messages.length === 0 && !isLoading ? (
-          <Message sender="bot" text="How can I help you today?" role={role} />
-        ) : (
-          messages.map((msg, i) => (
-            <Message key={i} sender={msg.sender} text={msg.text} role={role} />
-          ))
-        )}
-        {isLoading && (
-          <LoadingIndicator text={localizedText.thinkingText} role={role} />
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-      <div className="border-t border-gray-200 bg-white p-3 dark:border-gray-600 dark:bg-gray-800">
-        <ChatInput
-          input={input}
-          setInput={setInput}
-          sendMessage={sendMessage}
-          isLoading={isLoading}
-          placeholder={localizedText.placeholder}
-          buttonText={localizedText.buttonText}
-          role={role}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

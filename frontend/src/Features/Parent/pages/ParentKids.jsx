@@ -1,25 +1,25 @@
 import { motion } from "framer-motion";
-import { useParentKids } from "../hooks/useParentKids";
+
 import Loader from "@/ui/Loader";
 // import { useCreateKid } from "./hooks/useCreateKid";
 import { FiUser, FiMail, FiBook, FiUsers } from "react-icons/fi";
 import { FaChild } from "react-icons/fa";
 import { useState } from "react";
-import ParentKidDashboard from "./ParentKidDashboard"; 
+import ParentKidDashboard from "./ParentKidDashboard";
 import { useNavigate } from "react-router-dom";
+import { useParentKids } from "../components/hooks/useParentKids";
 function ParentKids() {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const { parentKids, isLoading } = useParentKids();
 
   const [selectedKid, setSelectedKid] = useState(null);
 
-
   if (isLoading) return <Loader role="parent" />;
   const handleSelectKid = (kid) => {
-    localStorage.setItem('isInParentDashboard', 'false'); 
+    localStorage.setItem("isInParentDashboard", "false");
     navigate("/parent/dashboard", { state: { selectedKid: kid } });
   };
-  
+
   // if (selectedKid) {
   //   return <ParentKidDashboard kid={selectedKid} onBack={() => setSelectedKid(null)} />;
   // }

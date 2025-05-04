@@ -8,9 +8,10 @@ import {
 import Pagination from "../Pagination";
 import Header from "../Parents/parentHeader";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+
 const ParentTable = () => {
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const {
     parents = [],
@@ -18,8 +19,9 @@ const ParentTable = () => {
     loading,
   } = useSelector((state) => state.parents || {});
   const dispatch = useDispatch();
-  const isRTL = i18n.language === 'ar';
+  const isRTL = i18n.language === "ar";
 
+  console.log(parents);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -75,11 +77,13 @@ const ParentTable = () => {
   const handleEditClick = (id) => {
     navigate(`/admin/editparentform/${id}`);
   };
+
   if (loading) {
-    return <div className="h-full w-full"></div>; // Empty div during loading
+    return <div className="h-full w-full"></div>;
   }
+
   return (
-    <div className="relative lg:px-0" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="relative lg:px-0" dir={isRTL ? "rtl" : "ltr"}>
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
@@ -90,19 +94,30 @@ const ParentTable = () => {
           <table className="w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:shadow-[#043B44]">
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
-                {t("tableHeaders.name")}
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
+                  {t("tableHeaders.name")}
                 </th>
-
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
-                {t("tableHeaders.email")}
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
+                  {t("tableHeaders.email")}
                 </th>
-
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
-                {t("tableHeaders.gender")}
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
+                  {t("tableHeaders.gender")}
                 </th>
-                <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
-                {t("tableHeaders.actions")}
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
+                  {t("tableHeaders.children")}
+                </th>
+                <th
+                  className={`px-3 py-2 text-${isRTL ? "right" : "left"} font-poppins text-xs font-medium sm:text-sm md:text-base`}
+                >
+                  {t("tableHeaders.actions")}
                 </th>
               </tr>
             </thead>
@@ -117,7 +132,7 @@ const ParentTable = () => {
                       <img
                         src={parent.profileImage}
                         alt="Profile"
-                        className={`${isRTL ? 'ml-2' : 'mr-2'} h-8 w-8 rounded-full sm:h-10 sm:w-10`}
+                        className={`${isRTL ? "ml-2" : "mr-2"} h-8 w-8 rounded-full sm:h-10 sm:w-10`}
                       />
                       <span className="truncate font-poppins dark:text-black">
                         {parent.fullName}
@@ -129,13 +144,38 @@ const ParentTable = () => {
                     </td>
 
                     <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
-                      {parent.gender}
+                      {parent.gender === "M"
+                        ? t("genderOptions.male")
+                        : t("genderOptions.female")}
                     </td>
-                    <td className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
+
+                    <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
+                      {parent.parentStudents &&
+                      parent.parentStudents.length > 0 ? (
+                        <div className="space-y-1">
+                          {parent.parentStudents.map((student, i) => (
+                            <div key={i} className="flex items-center">
+                              <span className="truncate">
+                                {student.student_id?.fullName} (
+                                {student.student_id?.academic_number})
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-gray-500">
+                          {t("parentTable.noChildren")}
+                        </span>
+                      )}
+                    </td>
+
+                    <td
+                      className={`px-3 py-2 text-xs sm:text-sm md:text-base ${isRTL ? "space-x-reverse" : ""} space-x-2`}
+                    >
                       <button
                         aria-label="Edit parent"
                         onClick={() => handleEditClick(parent._id)}
-                        className="text-[#117C90] dark:text-[#043B44] transition duration-300 hover:text-[#244856]"
+                        className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-[#043B44]"
                       >
                         <i className="far fa-edit text-lg" />
                       </button>
@@ -152,14 +192,14 @@ const ParentTable = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan="4"
+                    colSpan="5"
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                    {t("parentTable.noParentsFound.title")}
+                      {t("parentTable.noParentsFound.title")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                    {t("parentTable.noParentsFound.description")}
+                      {t("parentTable.noParentsFound.description")}
                     </p>
                   </td>
                 </tr>
