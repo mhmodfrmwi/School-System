@@ -122,7 +122,6 @@ router.get(
   validateParent,
   getCompletedExamsForStudent
 );
-router.get("/student/dashboard", validateJwt, validateParent, getDashboardData);
 router.get(
   "/student/completed/all",
   validateJwt,

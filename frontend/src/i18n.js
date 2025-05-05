@@ -1780,6 +1780,45 @@ i18n.use(initReactI18next).init({
           class: "Class",
           academicNumber: "Academic Number",
           gender: "Gender",
+          "activities": {
+            "title": "Student Activities",
+            "noKidSelected": "No child selected",
+            "selectKid": "Select a child",
+            "tabs": {
+              "schoolHubs": "School Clubs",
+              "contests": "Contests"
+            },
+            "registration": "Registration Period",
+            "contests": "Contests",
+            "contestTitle": "Contest Title",
+            "contestDate": "Contest Date",
+            "status": "Status",
+            "active": "Active",
+            "ended": "Ended"
+          },
+          "contests": {
+            "title": "Student Contests",
+            "noKidSelected": "No child selected",
+            "selectKid": "Select a child",
+            "tabs": {
+              "schoolHubs": "School Clubs",
+              "contests": "Contests"
+            },
+            "table": {
+              "headers": {
+                "title": "Title",
+                "teacher": "Teacher",
+                "startDate": "Start Date",
+                "endDate": "End Date",
+                "status": "Status"
+              },
+              "status": {
+                "active": "Active",
+                "ended": "Ended"
+              },
+              "noData": "No contests available"
+            }
+          },
         },
         menuparent: {
           grades: "Grades",
@@ -3709,6 +3748,45 @@ i18n.use(initReactI18next).init({
           class: "الفصل",
           academicNumber: "الرقم الأكاديمي",
           gender: "النوع",
+          "activities": {
+            "title": "أنشطة الطالب",
+            "noKidSelected": "لم يتم اختيار طفل",
+            "selectKid": "اختر طفلاً",
+            "tabs": {
+              "schoolHubs": "النوادي المدرسية",
+              "contests": "المسابقات"
+            },
+            "registration": "فترة التسجيل",
+            "contests": "المسابقات",
+            "contestTitle": "عنوان المسابقة",
+            "contestDate": "تاريخ المسابقة",
+            "status": "الحالة",
+            "active": "نشطة",
+            "ended": "منتهية"
+          },
+          "contests": {
+            "title": "مسابقات الطالب",
+            "noKidSelected": "لم يتم اختيار طفل",
+            "selectKid": "اختر طفلاً",
+            "tabs": {
+              "schoolHubs": "النوادي المدرسية",
+              "contests": "المسابقات"
+            },
+            "table": {
+              "headers": {
+                "title": "العنوان",
+                "teacher": "المعلم",
+                "startDate": "تاريخ البدء",
+                "endDate": "تاريخ الانتهاء",
+                "status": "الحالة"
+              },
+              "status": {
+                "active": "نشطة",
+                "ended": "منتهية"
+              },
+              "noData": "لا توجد مسابقات متاحة"
+            }
+          },
         },
         menuparent: {
           grades: "الدرجات",

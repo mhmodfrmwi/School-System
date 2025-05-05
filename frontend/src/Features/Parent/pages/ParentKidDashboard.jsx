@@ -18,8 +18,15 @@ function DashboardParent() {
   const navigate = useNavigate();
   const location = useLocation();
   const { fullName, profileImage } = useSelector((state) => state.login);
+  // const [selectedKid, setSelectedKid] = useState(location.state?.selectedKid || null);
 
-  const [selectedKid, setSelectedKid] = useState(location.state?.selectedKid || null);
+  const [selectedKid, setSelectedKid] = useState(() => {
+    return location.state?.selectedKid || 
+           JSON.parse(localStorage.getItem('selectedKid')) || 
+           null;
+  });
+
+
 
   const mainCategories = [
     { label: t("dashboardparent.grades"), icon: GradeIcon, progress: "100%" },

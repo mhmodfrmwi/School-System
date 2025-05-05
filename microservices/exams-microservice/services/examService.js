@@ -304,13 +304,15 @@ const getCompletedExams = async (
 
 const getCompletedExamsForAllSubjects = async (student_id) => {
   try {
-    const examsResults = await ExamResult.find({ student_id }).populate({
-      path: "exam_id",
-      populate: {
-        path: "subject_id",
-        select: "subjectName",
-      },
-    });
+    const examsResults = await ExamResult.find({ student_id })
+      .populate({
+        path: "exam_id",
+        populate: {
+          path: "subject_id",
+          select: "subjectName",
+        },
+      })
+      .select("-__v -createdAt -updatedAt");
 
     const result = {};
 

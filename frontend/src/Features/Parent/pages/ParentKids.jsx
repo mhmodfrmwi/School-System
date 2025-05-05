@@ -4,10 +4,10 @@ import Loader from "@/ui/Loader";
 import { FiUser, FiMail, FiBook, FiUsers } from "react-icons/fi";
 import { FaChild } from "react-icons/fa";
 import { useState } from "react";
-import ParentKidDashboard from "./ParentKidDashboard";
 import { useNavigate } from "react-router-dom";
 import { useParentKids } from "../components/hooks/useParentKids";
 import { useTranslation } from "react-i18next";
+
 function ParentKids() {
   const navigate = useNavigate();
   const { parentKids, isLoading } = useParentKids();
@@ -17,16 +17,16 @@ function ParentKids() {
   if (isLoading) return <Loader role="parent" />;
 
   const handleSelectKid = (kid) => {
-    localStorage.setItem("isInParentDashboard", "false");
-    navigate("/parent/dashboard", { state: { selectedKid: kid } });
+    localStorage.setItem('selectedKid', JSON.stringify(kid));
+    navigate("/parent/dashboard");
   };
 
-  // if (selectedKid) {
-  //   return <ParentKidDashboard kid={selectedKid} onBack={() => setSelectedKid(null)} />;
-  // }
   // const handleSelectKid = (kid) => {
-  //   setSelectedKid(kid);
+  //   localStorage.setItem("isInParentDashboard", "false");
+  //   navigate("/parent/dashboard", { state: { selectedKid: kid } });
   // };
+
+
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
