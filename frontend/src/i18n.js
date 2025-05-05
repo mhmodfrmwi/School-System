@@ -1789,7 +1789,7 @@ i18n.use(initReactI18next).init({
           activities: "Activities",
         },
         dashboardparent: {
-          title:"Parent Dashboard",
+          title: "Parent Dashboard",
           grades: "Grades",
           attendance: "Attendance",
           schedule: "Schedule",
@@ -1804,19 +1804,19 @@ i18n.use(initReactI18next).init({
           male: "Male",
           female: "Female",
         },
-        "parentKids": {
-          "title": "My Children",
-          "tableHeaders": {
-            "fullName": "Full Name",
-            "academicNumber": "Academic Number",
-            "email": "Email",
-            "gender": "Gender"
+        parentKids: {
+          title: "My Children",
+          tableHeaders: {
+            fullName: "Full Name",
+            academicNumber: "Academic Number",
+            email: "Email",
+            gender: "Gender",
           },
-          "gender": {
-            "male": "Male",
-            "female": "Female"
+          gender: {
+            male: "Male",
+            female: "Female",
           },
-          "noChildren": "No children found"
+          noChildren: "No children found",
         },
         ////////////////////////////////auth////////////////////////
 
@@ -1872,7 +1872,7 @@ i18n.use(initReactI18next).init({
           title: "Study Assistant",
           placeholder: "Ask anything...",
           buttonText: "Send",
-          thinkingText: "Thinking...",
+          thinkingText: "...Thinking",
           welcomeMessage: "How can I help you today?",
           errorMessage: "An error occurred. Please try again",
           unrenderableMessage: "Unrenderable message",
@@ -1926,6 +1926,18 @@ i18n.use(initReactI18next).init({
             medium: "Medium",
             low: "Low",
           },
+        },
+        ///////////////////////////forgot password/////////////////////////
+        forgotPassword: {
+          backToLogin: "Back to login",
+          title: "Reset your password",
+          subtitle:
+            "Enter your email and we'll send you a link to reset your password.",
+          emailLabel: "Email address",
+          emailPlaceholder: "your@email.com",
+          submitButton: "Send reset link",
+          successMessage: "Password reset link sent to your email",
+          errorMessage: "Failed to send reset link",
         },
       },
     },
@@ -3706,7 +3718,7 @@ i18n.use(initReactI18next).init({
           activities: "الأنشطة",
         },
         dashboardparent: {
-          title:"لوحه تحكم ولي الأمر",
+          title: "لوحه تحكم ولي الأمر",
           grades: "الدرجات",
           attendance: "الحضور",
           schedule: "الجدول",
@@ -3721,19 +3733,19 @@ i18n.use(initReactI18next).init({
           male: "ذكر",
           female: "أنثى",
         },
-        "parentKids": {
-          "title": "أولادي",
-          "tableHeaders": {
-            "fullName": "الاسم الكامل",
-            "academicNumber": "الرقم الأكاديمي",
-            "email": "البريد الإلكتروني",
-            "gender": "النوع"
+        parentKids: {
+          title: "أولادي",
+          tableHeaders: {
+            fullName: "الاسم الكامل",
+            academicNumber: "الرقم الأكاديمي",
+            email: "البريد الإلكتروني",
+            gender: "النوع",
           },
-          "gender": {
-            "male": "ذكر",
-            "female": "أنثى"
+          gender: {
+            male: "ذكر",
+            female: "أنثى",
           },
-          "noChildren": "لا يوجد أطفال"
+          noChildren: "لا يوجد أطفال",
         },
         ////////////////////////////////auth/////////////////////////////
 
@@ -3843,6 +3855,19 @@ i18n.use(initReactI18next).init({
             medium: "متوسط",
             low: "منخفض",
           },
+        },
+        /////////////////////////////////forgot password///////////////////
+        forgotPassword: {
+          backToLogin: "العودة إلى تسجيل الدخول",
+          title: "إعادة تعيين كلمة المرور",
+          subtitle:
+            "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور الخاصة بك.",
+          emailLabel: "عنوان البريد الإلكتروني",
+          emailPlaceholder: "بريدك@الإلكتروني",
+          submitButton: "إرسال رابط التعيين",
+          successMessage:
+            "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
+          errorMessage: "فشل إرسال رابط التعيين",
         },
       },
     },

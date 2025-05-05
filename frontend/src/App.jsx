@@ -24,8 +24,8 @@ import WeeklyScheduleForManager from "./Features/Manager/components/Schedule/Wee
 import ParentKids from "./Features/Parent/pages/ParentKids";
 import DashboardParent from "./Features/Parent/pages/ParentKidDashboard";
 import EditParentProfile from "./Features/Parent/pages/EditProfilePage";
-
 import "./fonts.css";
+import ForgotPassword from "./Features/Auth/ForgotPassword";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -553,6 +553,7 @@ function App() {
               path="/login"
               element={role ? <Login /> : <Navigate to="/role" />}
             />
+            <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="role" element={<ChooseRole />} />
             {/* /////////////////adminpage//////////////////// */}
             <Route
@@ -738,7 +739,10 @@ function App() {
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<DashboardParent />} />
               <Route path="parent-kids" element={<ParentKids />} />
-              <Route path="edit-parent-profile" element={<EditParentProfile/>} />
+              <Route
+                path="edit-parent-profile"
+                element={<EditParentProfile />}
+              />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route

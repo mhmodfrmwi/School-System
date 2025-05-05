@@ -8,10 +8,12 @@ import Img2 from "../../assets/loginImg2.png";
 import SpinnerMini from "@/ui/SpinnerMini";
 import { useTranslation } from "react-i18next";
 import Toggles from "./Toggles";
+import { FaEye, FaEyeSlash, FaEnvelope } from "react-icons/fa";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
@@ -64,25 +66,37 @@ function Login() {
             </h1>
 
             <form onSubmit={handleSubmit} className="w-full space-y-6">
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="email"
                   className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   {t("login.email")}
                 </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t("login.emailPlaceholder")}
-                  className="w-full rounded-lg border border-orange-300 bg-white p-3 text-gray-700 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 dark:border-[#AE45FB] dark:bg-[#281459] dark:text-[#E0AAEE] dark:focus:border-[#E0AAEE] dark:focus:ring-[#3A1D7A]"
-                  required
-                />
+                <div className="relative">
+                  <div
+                    className={`pointer-events-none absolute inset-y-0 flex items-center ${
+                      i18n.language === "ar" ? "right-3" : "left-3"
+                    }`}
+                    style={{ top: "50%", transform: "translateY(-50%)" }}
+                  >
+                    <FaEnvelope className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={t("login.emailPlaceholder")}
+                    className={`w-full rounded-lg border border-orange-300 bg-white p-3 text-gray-700 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 dark:border-[#AE45FB] dark:bg-[#281459] dark:text-[#E0AAEE] dark:focus:border-[#E0AAEE] dark:focus:ring-[#3A1D7A] ${
+                      i18n.language === "ar" ? "pr-10" : "pl-10"
+                    }`}
+                    required
+                  />
+                </div>
               </div>
 
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="password"
                   className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -90,7 +104,7 @@ function Login() {
                   {t("login.password")}
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -98,17 +112,30 @@ function Login() {
                   className="w-full rounded-lg border border-orange-300 bg-white p-3 text-gray-700 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 dark:border-[#AE45FB] dark:bg-[#281459] dark:text-[#E0AAEE] dark:focus:border-[#E0AAEE] dark:focus:ring-[#3A1D7A]"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={`absolute top-[38px] text-gray-500 focus:outline-none dark:text-gray-400 ${
+                    i18n.language === "ar" ? "left-3" : "right-3"
+                  }`}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="h-5 w-5" />
+                  ) : (
+                    <FaEye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
 
               <div
                 className={i18n.language === "ar" ? "text-left" : "text-right"}
               >
-                <a
-                  href="/"
+                <span
+                  onClick={() => navigate("/forgot-password")}
                   className="text-sm text-orange-500 hover:underline dark:text-[#E0AAEE]"
                 >
                   {t("login.forgotPassword")}
-                </a>
+                </span>
               </div>
 
               <button
