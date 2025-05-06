@@ -19,6 +19,12 @@ const login = expressAsyncHandler(async (req, res) => {
       message: "Incorrect email or password",
     });
   }
+  if (admin.isVerified === false) {
+    return res.status(401).json({
+      status: 401,
+      message: "We sent you a verification email, please verify your account",
+    });
+  }
   const token = signToken(admin._id, admin.email, "admin");
   res.status(200).json({
     status: 200,

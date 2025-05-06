@@ -3,6 +3,7 @@ const validateObjectId = require("../../utils/validateObjectId");
 const managerValidationSchema = require("../../validations/managerValidation");
 const Manager = require("../../DB/managerModel");
 const hashPassword = require("../../utils/hashPassword");
+const { createVerificationToken } = require("../../utils/verificationToken");
 
 const createManager = expressAsyncHandler(async (req, res) => {
   const { error } = managerValidationSchema.validate(req.body);
@@ -32,10 +33,10 @@ const createManager = expressAsyncHandler(async (req, res) => {
   });
 
   await manager.save();
-
+  const message = await createVerificationToken(manager._id);
   res.status(201).json({
     status: 201,
-    message: "Manager created successfully",
+    message,
     manager,
   });
 });

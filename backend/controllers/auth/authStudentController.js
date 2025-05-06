@@ -27,7 +27,12 @@ const login = expressAsyncHandler(async (req, res) => {
       message: "Incorrect email or password",
     });
   }
-
+  if (student.isVerified === false) {
+    return res.status(401).json({
+      status: 401,
+      message: "We sent you a verification email, please verify your account",
+    });
+  }
   // If everything ok, send token to client
   const token = signToken(
     student._id,
@@ -73,11 +78,9 @@ const updateStudentProfile = expressAsyncHandler(async (req, res) => {
 
     if (newPassword) {
       if (!currentPassword) {
-        return res
-          .status(400)
-          .json({
-            message: "Current password is required to set a new password",
-          });
+        return res.status(400).json({
+          message: "Current password is required to set a new password",
+        });
       }
 
       const isMatch = await student.comparePasswordInDb(

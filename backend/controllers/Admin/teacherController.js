@@ -7,6 +7,7 @@ const generateAcademicNumber = require("../../utils/generateAcademicNumberForTea
 const hashPassword = require("../../utils/hashPassword");
 const ClassTeacher = require("../../DB/classTeacherModel");
 const Schedule = require("../../DB/ScheduleModel");
+const { createVerificationToken } = require("../../utils/verificationToken");
 
 const createTeacher = expressAsyncHandler(async (req, res) => {
   const { error } = teacherValidationSchema.validate(req.body);
@@ -49,10 +50,10 @@ const createTeacher = expressAsyncHandler(async (req, res) => {
   });
 
   await teacher.save();
+  const message = await createVerificationToken(teacher._id);
   res.status(201).json({
     status: 201,
-    message: "Teacher created successfully",
-    teacher,
+    message,
   });
 });
 

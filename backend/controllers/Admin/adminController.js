@@ -3,6 +3,7 @@ const validateObjectId = require("../../utils/validateObjectId");
 const adminValidationSchema = require("../../validations/adminValidation");
 const Admin = require("../../DB/AdminModel");
 const hashPassword = require("../../utils/hashPassword");
+const createVerificationToken = require("../../utils/verificationToken");
 
 const sanitizeAdmin = (admin) => {
   const obj = admin.toObject();
@@ -11,21 +12,27 @@ const sanitizeAdmin = (admin) => {
 };
 
 const createAdmin = expressAsyncHandler(async (req, res) => {
-  const { error } = adminValidationSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  try {
+    const { error } = adminValidationSchema.validate(req.body);
+    if (error)
+      return res.status(400).json({ message: error.details[0].message });
 
-  const existingAdmin = await Admin.findOne({
-    $or: [{ email: req.body.email }, { phone: req.body.phone }],
-  });
-  if (existingAdmin)
-    return res.status(409).json({ message: "Admin already exists" });
+    const existingAdmin = await Admin.findOne({
+      $or: [{ email: req.body.email }, { phone: req.body.phone }],
+    });
+    if (existingAdmin)
+      return res.status(409).json({ message: "Admin already exists" });
 
-  const admin = await Admin.create({
-    ...req.body,
-    password: await hashPassword(req.body.password),
-  });
-
-  res.status(201).json(sanitizeAdmin(admin));
+    const admin = await Admin.create({
+      ...req.body,
+      password: await hashPassword(req.body.password),
+    });
+    const message = await createVerificationToken(admin._id);
+    res.status(201).json(message);
+  } catch (error) {
+    console.error("Error creating admin:", error);
+    res.status(500).json({ message: "Failed to create admin" });
+  }
 });
 
 const updateAdmin = expressAsyncHandler(async (req, res) => {

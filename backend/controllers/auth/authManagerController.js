@@ -22,6 +22,12 @@ const login = expressAsyncHandler(async (req, res) => {
       message: "Incorrect email or password",
     });
   }
+  if (manager.isVerified === false) {
+    return res.status(401).json({
+      status: 401,
+      message: "We sent you a verification email, please verify your account",
+    });
+  }
   const token = signToken(manager._id, manager.email, "manager");
   res.status(200).json({
     status: 200,
@@ -35,19 +41,22 @@ const updateManagerProfile = async (req, res) => {
   try {
     const managerId = req.user.id;
     const { currentPassword, newPassword, phone } = req.body;
-    const profileImage = req.file? `http://localhost:4000/profileImages/${req.file.filename}` : undefined;
+    const profileImage = req.file
+      ? `http://localhost:4000/profileImages/${req.file.filename}`
+      : undefined;
 
     if (!newPassword && !phone && !profileImage) {
       if (req.file?.path) fs.unlinkSync(req.file.path);
-      return res.status(400).json({ 
-        message: "Please provide fields to update (newPassword, phone, or profileImage)",
+      return res.status(400).json({
+        message:
+          "Please provide fields to update (newPassword, phone, or profileImage)",
         details: {
           note: "For password change, include both currentPassword and newPassword",
-          note2: "For profile image, use form-data with 'profileImage' field"
-        }
+          note2: "For profile image, use form-data with 'profileImage' field",
+        },
       });
     }
-    
+
     const manager = await Manager.findById(managerId);
     if (!manager) {
       return res.status(404).json({ message: "Manager not found" });
@@ -57,7 +66,9 @@ const updateManagerProfile = async (req, res) => {
 
     if (newPassword) {
       if (!currentPassword) {
-        return res.status(400).json({ message: "Current password is required" });
+        return res
+          .status(400)
+          .json({ message: "Current password is required" });
       }
 
       const isMatch = await manager.comparePasswordInDb(
@@ -65,7 +76,9 @@ const updateManagerProfile = async (req, res) => {
         manager.password
       );
       if (!isMatch) {
-        return res.status(401).json({ message: "Current password is incorrect" });
+        return res
+          .status(401)
+          .json({ message: "Current password is incorrect" });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -80,7 +93,11 @@ const updateManagerProfile = async (req, res) => {
       if (manager.profileImage) {
         try {
           if (!manager.profileImage.startsWith("http")) {
-            const fullPath = path.join(__dirname, '../../', manager.profileImage);
+            const fullPath = path.join(
+              __dirname,
+              "../../",
+              manager.profileImage
+            );
             if (fs.existsSync(fullPath)) {
               fs.unlinkSync(fullPath);
             }
@@ -101,7 +118,6 @@ const updateManagerProfile = async (req, res) => {
       message: "Profile updated successfully",
       manager: updatedManager,
     });
-
   } catch (error) {
     console.error("Error updating manager profile:", error);
 
@@ -116,8 +132,7 @@ const updateManagerProfile = async (req, res) => {
   }
 };
 
-
-module.exports = { 
+module.exports = {
   login,
-  updateManagerProfile 
+  updateManagerProfile,
 };

@@ -5,6 +5,7 @@ const Parent = require("../../DB/ParentModel");
 const hashPassword = require("../../utils/hashPassword");
 const { createParentStudent } = require("./parentStudentController");
 const ParentStudent = require("../../DB/ParentStudentModel");
+const { createVerificationToken } = require("../../utils/verificationToken");
 
 const createParent = expressAsyncHandler(async (req, res) => {
   const { error } = parentValidationSchema.validate(req.body);
@@ -55,10 +56,10 @@ const createParent = expressAsyncHandler(async (req, res) => {
         return await createParentStudent(parent._id, studentAcademicNumber);
       })
     );
-
+    const message = await createVerificationToken(parent._id);
     res.status(201).json({
       status: 201,
-      message: "Parent created successfully",
+      message,
       parent,
       parentStudents,
     });

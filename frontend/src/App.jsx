@@ -26,6 +26,8 @@ import DashboardParent from "./Features/Parent/pages/ParentKidDashboard";
 import EditParentProfile from "./Features/Parent/pages/EditProfilePage";
 import "./fonts.css";
 import ForgotPassword from "./Features/Auth/ForgotPassword";
+import VerifyEmail from "./Features/Auth/VerifyEmail";
+import ResendVerification from "./Features/Auth/ResendVerification";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -1049,6 +1051,14 @@ function App() {
                 element={<WeeklyScheduleForManager />}
               />
             </Route>
+            <Route
+              path="/users/:userId/verify/:token"
+              element={<VerifyEmail />}
+            />
+            <Route
+              path="/resend-verification"
+              element={<ResendVerification />}
+            />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>

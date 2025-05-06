@@ -15,13 +15,17 @@ const managerRoutes = require("./routes/managerRoutes");
 const parentRoutes = require("./routes/parentRoutes");
 const generalRoutes = require("./routes/generalRoutes");
 const MLRoutes = require("./routes/ML-Routes");
+const notificationRoutes = require("./routes/notificationRoutes");
 const exposeModelsRoutes = require("./routes/exposeModelsRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 connectToDB();
 const app = express(xss());
 const routNode = "/api/v1";
 // Image uploads
-app.use('/profileImages', express.static(path.join(__dirname, 'Uploads/profileImages')));
+app.use(
+  "/profileImages",
+  express.static(path.join(__dirname, "Uploads/profileImages"))
+);
 app.use(cors({ origin: "*" }));
 app.use(helmet());
 app.use(hpp());
@@ -44,7 +48,9 @@ app.use(`${routNode}/parent`, parentRoutes);
 app.use(`${routNode}/general`, generalRoutes);
 app.use(`${routNode}/expose-models`, exposeModelsRoutes);
 app.use(`${routNode}/ML`, MLRoutes);
+app.use(`${routNode}/notifications`, notificationRoutes);
 app.use(errorHandler);
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);

@@ -9,6 +9,7 @@ const AcademicYear = require("../../DB/academicYearModel");
 const hashPassword = require("../../utils/hashPassword");
 const Attendance = require("../../DB/attendanceModel");
 const { getStudentById } = require("../../services/studentService");
+const { createVerificationToken } = require("../../utils/verificationToken");
 
 const generateAcademicNumber = async () => {
   const currentYear = moment().year().toString().slice(-2);
@@ -169,11 +170,14 @@ const createStudent = expressAsyncHandler(async (req, res) => {
   await newStudent.save();
 
   await Class.findByIdAndUpdate(classId, { $inc: { student_count: 1 } });
-
+  const message = await createVerificationToken(
+    newStudent._id,
+    "Student",
+    newStudent.email
+  );
   res.status(201).json({
     status: 201,
-    message: "Student created successfully",
-    newStudent,
+    message,
   });
 });
 

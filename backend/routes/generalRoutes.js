@@ -23,6 +23,10 @@ const {
   fetchAllGeneralAndMaterialPdf,
   getAllGeneralAndMaterialTypeVideoAndPdf,
 } = require("../controllers/Teacher/MatrialForLibrary");
+const {
+  verifyUser,
+  createVerification,
+} = require("../controllers/auth/verificationController");
 const router = express.Router();
 
 router.post("/create-library-item", validateJwt, createLibraryItem);
@@ -109,4 +113,6 @@ router.get(
   validateJwt,
   getAllGeneralAndMaterialTypeVideoAndPdf
 );
+router.post("/resend-verification", createVerification);
+router.get("/:userId/verify/:token", verifyUser);
 module.exports = router;
