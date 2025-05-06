@@ -2,13 +2,13 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const gradeSubjectSemesterValidationSchema = require("../../validations/gradeSubjectSemesterValidation");
 const gradeSubjectValidationSchema = require("../../validations/gradeSubjectValidation");
-const GradeSubject = require("../../DB/gradeSubject");
+const GradeSubject = require("../../DB/GradeSubjectModel");
 const Semester = require("../../DB/semesterModel");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
 const Grade = require("../../DB/gradeModel");
 const Subject = require("../../DB/subjectModel");
 const AcademicYear = require("../../DB/academicYearModel");
-const LibraryItemsForGrade = require("../../DB/LibraryItemsForGrades");
+const LibraryItemsForGrade = require("../../DB/LibraryItemsForGradesModel");
 
 async function createGradeSubject(gradeId, subjectId, academicYearId) {
   const existingGradeSubject = await GradeSubject.findOne({

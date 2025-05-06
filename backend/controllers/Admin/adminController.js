@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const adminValidationSchema = require("../../validations/adminValidation");
-const Admin = require("../../DB/Admin");
+const Admin = require("../../DB/AdminModel");
 const hashPassword = require("../../utils/hashPassword");
 
 const sanitizeAdmin = (admin) => {

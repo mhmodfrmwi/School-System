@@ -4,12 +4,12 @@ const moment = require("moment");
 const xlsx = require("xlsx");
 const fs = require("fs");
 const Grade = require("../../DB/gradeModel");
-const Student = require("../../DB/student");
+const Student = require("../../DB/StudentModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const Class = require("../../DB/classModel");
 const Subject = require("../../DB/subjectModel");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
-const Semester = require("../../DB/semesterModel")
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
+const Semester = require("../../DB/semesterModel");
 const Score = require("../../DB/scoreModel");
 const SubjectScore = require("../../DB/subjectScoreModel");
 
@@ -62,9 +62,7 @@ const getGradeData = expressAsyncHandler(async (req, res) => {
   let subject = null;
 
   if (classId) {
-    const classInfo = await Class.findById(classId)
-      .populate('gradeId')
-      .lean();
+    const classInfo = await Class.findById(classId).populate("gradeId").lean();
     if (!classInfo) {
       return res.status(404).json({
         status: 404,
@@ -464,10 +462,7 @@ const getExamResults = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
   const { classId, gradeSubjectSemesterId, type } = req.params;
 
-  if (
-    !validateObjectId(classId) ||
-    !validateObjectId(gradeSubjectSemesterId)
-  ) {
+  if (!validateObjectId(classId) || !validateObjectId(gradeSubjectSemesterId)) {
     return res.status(400).json({
       status: 400,
       message: "Invalid classId or gradeSubjectSemesterId format",
@@ -587,10 +582,7 @@ const getExamResults = expressAsyncHandler(async (req, res) => {
 const deleteExamResults = expressAsyncHandler(async (req, res) => {
   const { classId, gradeSubjectSemesterId, type } = req.params;
 
-  if (
-    !validateObjectId(classId) ||
-    !validateObjectId(gradeSubjectSemesterId)
-  ) {
+  if (!validateObjectId(classId) || !validateObjectId(gradeSubjectSemesterId)) {
     return res.status(400).json({
       status: 400,
       message: "Invalid classId or gradeSubjectSemesterId format",

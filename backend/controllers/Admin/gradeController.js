@@ -2,11 +2,11 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const gradeValidationSchema = require("../../validations/gradeValidation");
 const Grade = require("../../DB/gradeModel");
-const GradeSubject = require("../../DB/gradeSubject");
+const GradeSubject = require("../../DB/GradeSubjectModel");
 const GradeYear = require("../../DB/gradeYearModel");
-const Schedule = require("../../DB/schedule");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
-const Student = require("../../DB/student"); // Fixed casing
+const Schedule = require("../../DB/ScheduleModel");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
+const Student = require("../../DB/StudentModel"); // Fixed casing
 
 const createGrade = expressAsyncHandler(async (req, res) => {
   const { error } = gradeValidationSchema.validate(req.body);

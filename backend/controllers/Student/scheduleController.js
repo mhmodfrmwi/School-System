@@ -2,9 +2,9 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
 
-const student = require("../../DB/student");
+const student = require("../../DB/StudentModel");
 const Semester = require("../../DB/semesterModel");
-const Schedule = require("../../DB/schedule");
+const Schedule = require("../../DB/ScheduleModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const getScheduleForSpecificStudent = expressAsyncHandler(async (req, res) => {
   const student_id = req.user.id;

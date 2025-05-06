@@ -1,5 +1,5 @@
 const Attendance = require("../../DB/attendanceModel");
-const student = require("../../DB/student");
+const student = require("../../DB/StudentModel");
 const axios = require("axios");
 const { getNumberOfAbsentDays } = require("../../services/attendaceService");
 const nowSemesterId = require("../../utils/nowSemester");

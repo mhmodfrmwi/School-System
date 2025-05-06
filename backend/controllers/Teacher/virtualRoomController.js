@@ -3,8 +3,8 @@ const validateObjectId = require("../../utils/validateObjectId");
 const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const virtualRoomValidationSchema = require("../../validations/virtualRoomValidation");
 const VirtualRoom = require("../../DB/virtualRoomModel");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
-const GradeSubject = require("../../DB/gradeSubject");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
+const GradeSubject = require("../../DB/GradeSubjectModel");
 const Class = require("../../DB/classModel");
 
 const createVirtualRoom = expressAsyncHandler(async (req, res) => {
@@ -35,10 +35,12 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(
+    gradeSubjectSemesterId
+  )
     .populate("grade_subject_id")
     .populate("semester_id");
-  
+
   if (!gradeSubjectSemester) {
     return res.status(404).json({
       status: 404,
@@ -76,8 +78,8 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
   });
 
   await newVirtualRoom.save();
-  
-  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding VR");
+
+  addRewardClaimAndUpdatePoints(teacherId, "Teacher", "Adding VR");
   res.status(201).json({
     status: 201,
     message: "Virtual room created successfully",
@@ -86,7 +88,7 @@ const createVirtualRoom = expressAsyncHandler(async (req, res) => {
 });
 
 const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
-  const { id} = req.params;
+  const { id } = req.params;
 
   if (!validateObjectId(id)) {
     return res.status(400).json({
@@ -113,7 +115,11 @@ const updateVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const duplicateVirtualRoom = await VirtualRoom.findOne({ _id: { $ne: id }, title, startTime });
+  const duplicateVirtualRoom = await VirtualRoom.findOne({
+    _id: { $ne: id },
+    title,
+    startTime,
+  });
   if (duplicateVirtualRoom) {
     return res.status(400).json({
       status: 400,
@@ -157,7 +163,7 @@ const deleteVirtualRoom = expressAsyncHandler(async (req, res) => {
       message: "Virtual room not found",
     });
   }
-  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding VR","subtract");
+  addRewardClaimAndUpdatePoints(teacherId, "Teacher", "Adding VR", "subtract");
   res.status(200).json({
     status: 200,
     message: "Virtual room deleted successfully",
@@ -174,7 +180,10 @@ const getVirtualRoom = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const virtualRoom = await VirtualRoom.findById(id).populate("teacherId","fullName");
+  const virtualRoom = await VirtualRoom.findById(id).populate(
+    "teacherId",
+    "fullName"
+  );
   if (!virtualRoom) {
     return res.status(404).json({
       status: 404,
@@ -189,7 +198,10 @@ const getVirtualRoom = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllVirtualRooms = expressAsyncHandler(async (req, res) => {
-  const virtualRooms = await VirtualRoom.find().populate("teacherId","fullName");
+  const virtualRooms = await VirtualRoom.find().populate(
+    "teacherId",
+    "fullName"
+  );
   res.status(200).json({
     status: 200,
     virtualRooms,
@@ -262,5 +274,5 @@ module.exports = {
   deleteVirtualRoom,
   getVirtualRoom,
   getAllVirtualRooms,
-  getTeacherVirtualRooms
+  getTeacherVirtualRooms,
 };

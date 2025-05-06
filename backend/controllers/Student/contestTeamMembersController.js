@@ -5,7 +5,7 @@ const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const moment = require("moment");
 const teamValidationSchema = require("../../validations/contestTeamValidationSchema");
 const Contest = require("../../DB/contestModel");
-const Student = require("../../DB/student");
+const Student = require("../../DB/StudentModel");
 const Semester = require("../../DB/semesterModel");
 const ContestTeam = require("../../DB/contestTeamModel");
 

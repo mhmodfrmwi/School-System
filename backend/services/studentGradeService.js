@@ -2,11 +2,11 @@
 const moment = require("moment");
 const Score = require("../DB/scoreModel");
 const SubjectScore = require("../DB/subjectScoreModel");
-const Student = require("../DB/student");
+const Student = require("../DB/StudentModel");
 const AcademicYear = require("../DB/academicYearModel");
 const Semester = require("../DB/semesterModel");
-const GradeSubject = require("../DB/gradeSubject");
-const GradeSubjectSemester = require("../DB/gradeSubjectSemester");
+const GradeSubject = require("../DB/GradeSubjectModel");
+const GradeSubjectSemester = require("../DB/GradeSubjectSemesterModel");
 const Subject = require("../DB/subjectModel");
 
 /**

@@ -1,8 +1,8 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
 const Class = require("../../DB/classModel");
-const student = require("../../DB/student");
+const student = require("../../DB/StudentModel");
 const getStudentsForSpecificSubjectUsingClassId = expressAsyncHandler(
   async (req, res) => {
     const gradeSubjectSemesterId = req.params.gradeSubjectSemesterId;

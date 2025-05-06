@@ -2,7 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const schoolHubValidationSchema = require("../../validations/schoolHubValidation");
 const SchoolHub = require("../../DB/schoolHubModel");
-const Student = require("../../DB/student");
+const Student = require("../../DB/StudentModel");
 const Participation = require("../../DB/schoolHubParticipationModel");
 
 const createSchoolHub = expressAsyncHandler(async (req, res) => {

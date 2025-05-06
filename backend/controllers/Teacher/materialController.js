@@ -4,7 +4,7 @@ const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const Material = require("../../DB/materielModel");
 
 const materialValidationSchema = require("../../validations/materialValidation");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
 const BookMarkForMaterial = require("../../DB/bookMarkForMaterialModel");
 const createMateriel = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
@@ -48,7 +48,7 @@ const createMateriel = expressAsyncHandler(async (req, res) => {
     class_id,
   });
   await materiel.save();
-  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Material Item");
+  addRewardClaimAndUpdatePoints(teacherId, "Teacher", "Adding Material Item");
   res.status(201).json(materiel);
 });
 const getMaterielById = expressAsyncHandler(async (req, res) => {
@@ -58,15 +58,17 @@ const getMaterielById = expressAsyncHandler(async (req, res) => {
   if (validateObjectId(materielId) === false) {
     return res.status(400).json({ status: 400, message: "Invalid ID" });
   }
-  const materiel = await Material.findById(materielId).populate({
-    path: "grade_subject_semester_id",
-    populate: [
-      {
-        path: "grade_subject_id",
-        populate: [{ path: "subjectId" }, { path: "gradeId" }],
-      },
-    ],
-  }).populate("uploaded_by","fullName");
+  const materiel = await Material.findById(materielId)
+    .populate({
+      path: "grade_subject_semester_id",
+      populate: [
+        {
+          path: "grade_subject_id",
+          populate: [{ path: "subjectId" }, { path: "gradeId" }],
+        },
+      ],
+    })
+    .populate("uploaded_by", "fullName");
   if (!materiel) {
     return res.status(404).json({ status: 404, message: "Materiel not found" });
   }
@@ -123,7 +125,12 @@ const deleteMateriel = expressAsyncHandler(async (req, res) => {
   if (!materiel) {
     return res.status(404).json({ status: 404, message: "Materiel not found" });
   }
-  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Material Item","subtract");
+  addRewardClaimAndUpdatePoints(
+    teacherId,
+    "Teacher",
+    "Adding Material Item",
+    "subtract"
+  );
   res
     .status(200)
     .json({ status: 200, message: "Materiel deleted successfully" });

@@ -1,7 +1,7 @@
 const Material = require("../DB/materielModel");
-const GradeSubjectSemester = require("../DB/gradeSubjectSemester");
-const MaterialView = require("../DB/MaterialView");
-const student = require("../DB/student");
+const GradeSubjectSemester = require("../DB/GradeSubjectSemesterModel");
+const MaterialView = require("../DB/MaterialViewModel");
+const student = require("../DB/StudentModel");
 const BookMarkForMaterial = require("../DB/bookMarkForMaterialModel");
 const getMaterialsForSubject = async (gradeSubjectSemesterId, userId) => {
   try {

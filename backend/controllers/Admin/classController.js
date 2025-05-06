@@ -4,7 +4,7 @@ const classValidationSchema = require("../../validations/classValidation");
 const Class = require("../../DB/classModel");
 const Grade = require("../../DB/gradeModel");
 const AcademicYear = require("../../DB/academicYearModel");
-const Student = require("../../DB/student");
+const Student = require("../../DB/StudentModel");
 const ClassTeacher = require("../../DB/classTeacherModel");
 
 const populateClass = (query) =>

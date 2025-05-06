@@ -3,7 +3,7 @@ const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
 
 const attendanceValidationSchema = require("../../validations/attendanceValidation");
-const Student = require("../../DB/student");
+const Student = require("../../DB/StudentModel");
 const Attendance = require("../../DB/attendanceModel");
 const {
   getAttendance,

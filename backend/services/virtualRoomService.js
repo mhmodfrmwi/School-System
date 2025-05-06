@@ -1,8 +1,8 @@
 const moment = require("moment");
 const VirtualRoom = require("../DB/virtualRoomModel");
-const GradeSubjectSemester = require("../DB/gradeSubjectSemester");
+const GradeSubjectSemester = require("../DB/GradeSubjectSemesterModel");
 const AcademicYear = require("../DB/academicYearModel");
-const Student = require("../DB/student");
+const Student = require("../DB/StudentModel");
 const VirtualRoomAttendance = require("../DB/virtualRoomAttendanceModel");
 const addRewardClaimAndUpdatePoints = require("../utils/updatingRewards");
 

@@ -1,13 +1,13 @@
-const expressAsyncHandler = require('express-async-handler');
-const Score = require('../../DB/scoreModel');
-const SubjectScore = require('../../DB/subjectScoreModel');
-const Student = require('../../DB/student');
-const AcademicYear = require('../../DB/academicYearModel');
-const Semester = require('../../DB/semesterModel');
-const GradeSubject = require('../../DB/gradeSubject');
-const GradeSubjectSemester = require('../../DB/gradeSubjectSemester');
-const Subject = require('../../DB/subjectModel');
-const moment = require('moment');
+const expressAsyncHandler = require("express-async-handler");
+const Score = require("../../DB/scoreModel");
+const SubjectScore = require("../../DB/subjectScoreModel");
+const Student = require("../../DB/StudentModel");
+const AcademicYear = require("../../DB/academicYearModel");
+const Semester = require("../../DB/semesterModel");
+const GradeSubject = require("../../DB/GradeSubjectModel");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
+const Subject = require("../../DB/subjectModel");
+const moment = require("moment");
 
 const getStudentGrades = expressAsyncHandler(async (req, res) => {
   const { subjectId } = req.params;
@@ -16,7 +16,7 @@ const getStudentGrades = expressAsyncHandler(async (req, res) => {
   try {
     const student = await Student.findById(studentId);
     if (!student) {
-      return res.status(404).json({ message: 'Student not found.' });
+      return res.status(404).json({ message: "Student not found." });
     }
 
     const gradeId = student.gradeId;
@@ -44,7 +44,7 @@ const getStudentGrades = expressAsyncHandler(async (req, res) => {
     const academic_year = await AcademicYear.findOne({ startYear, endYear });
     if (!academic_year) {
       return res.status(404).json({
-        message: 'Academic year not found.',
+        message: "Academic year not found.",
       });
     }
     const academicYearId = academic_year._id;
@@ -55,7 +55,7 @@ const getStudentGrades = expressAsyncHandler(async (req, res) => {
     });
     if (!semester) {
       return res.status(404).json({
-        message: 'Semester not found in the given academic year.',
+        message: "Semester not found in the given academic year.",
       });
     }
     const semesterId = semester._id;
@@ -68,7 +68,8 @@ const getStudentGrades = expressAsyncHandler(async (req, res) => {
 
     if (!subjectScores.length) {
       return res.status(404).json({
-        message: 'No subject scores found for the given subject, grade, and semester.',
+        message:
+          "No subject scores found for the given subject, grade, and semester.",
       });
     }
 
@@ -81,14 +82,15 @@ const getStudentGrades = expressAsyncHandler(async (req, res) => {
 
         return {
           type: subjectScore.type,
-          examGrade: studentGrades.length > 0 ? studentGrades[0].examGrade : null,
+          examGrade:
+            studentGrades.length > 0 ? studentGrades[0].examGrade : null,
           finalDegree: subjectScore.finalDegree,
         };
       })
     );
 
-    const midtermData = grades.find((grade) => grade.type === 'midterm');
-    const finalData = grades.find((grade) => grade.type === 'final');
+    const midtermData = grades.find((grade) => grade.type === "midterm");
+    const finalData = grades.find((grade) => grade.type === "final");
 
     const response = {
       subjectId,
@@ -100,8 +102,11 @@ const getStudentGrades = expressAsyncHandler(async (req, res) => {
 
     res.status(200).json(response);
   } catch (error) {
-    console.error('Error fetching student grades:', error);
-    res.status(500).json({ message: 'Error fetching student grades.', error: error.message });
+    console.error("Error fetching student grades:", error);
+    res.status(500).json({
+      message: "Error fetching student grades.",
+      error: error.message,
+    });
   }
 });
 
@@ -111,7 +116,7 @@ const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
   try {
     const student = await Student.findById(studentId);
     if (!student) {
-      return res.status(404).json({ message: 'Student not found.' });
+      return res.status(404).json({ message: "Student not found." });
     }
 
     const gradeId = student.gradeId;
@@ -139,7 +144,7 @@ const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
     const academic_year = await AcademicYear.findOne({ startYear, endYear });
     if (!academic_year) {
       return res.status(404).json({
-        message: 'Academic year not found.',
+        message: "Academic year not found.",
       });
     }
     const academicYearId = academic_year._id;
@@ -150,7 +155,7 @@ const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
     });
     if (!semester) {
       return res.status(404).json({
-        message: 'Semester not found in the given academic year.',
+        message: "Semester not found in the given academic year.",
       });
     }
     const semesterId = semester._id;
@@ -161,7 +166,7 @@ const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
     }).populate("subjectId");
     if (!gradeSubjects.length) {
       return res.status(404).json({
-        message: 'No subjects found for the given grade and academic year.',
+        message: "No subjects found for the given grade and academic year.",
       });
     }
 
@@ -171,20 +176,22 @@ const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
     });
     if (!gradeSubjectSemesters.length) {
       return res.status(404).json({
-        message: 'No subjects found for the current semester.',
+        message: "No subjects found for the current semester.",
       });
     }
 
-    const subjectIds = gradeSubjectSemesters.map((gss) =>
-      gradeSubjects.find((gs) => gs._id.equals(gss.grade_subject_id)).subjectId
+    const subjectIds = gradeSubjectSemesters.map(
+      (gss) =>
+        gradeSubjects.find((gs) => gs._id.equals(gss.grade_subject_id))
+          .subjectId
     );
     const subjects = await Subject.find({ _id: { $in: subjectIds } });
     if (!subjects.length) {
       return res.status(404).json({
-        message: 'No subjects found for the given grade and semester.',
+        message: "No subjects found for the given grade and semester.",
       });
     }
-    
+
     const grades = await Promise.all(
       subjects.map(async (subject) => {
         const subjectScores = await SubjectScore.find({
@@ -202,14 +209,17 @@ const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
 
             return {
               type: subjectScore.type,
-              examGrade: studentGrades.length > 0 ? studentGrades[0].examGrade : null,
+              examGrade:
+                studentGrades.length > 0 ? studentGrades[0].examGrade : null,
               finalDegree: subjectScore.finalDegree,
             };
           })
         );
 
-        const midtermData = subjectGrades.find((grade) => grade.type === 'midterm');
-        const finalData = subjectGrades.find((grade) => grade.type === 'final');
+        const midtermData = subjectGrades.find(
+          (grade) => grade.type === "midterm"
+        );
+        const finalData = subjectGrades.find((grade) => grade.type === "final");
 
         return {
           subjectId: subject._id,
@@ -222,8 +232,11 @@ const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
 
     res.status(200).json(grades);
   } catch (error) {
-    console.error('Error fetching student grades:', error);
-    res.status(500).json({ message: 'Error fetching student grades.', error: error.message });
+    console.error("Error fetching student grades:", error);
+    res.status(500).json({
+      message: "Error fetching student grades.",
+      error: error.message,
+    });
   }
 });
 
@@ -233,14 +246,14 @@ const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
   try {
     const student = await Student.findById(studentId);
     if (!student) {
-      return res.status(404).json({ message: 'Student not found.' });
+      return res.status(404).json({ message: "Student not found." });
     }
 
     const gradeId = student.gradeId;
 
     const academicYears = await AcademicYear.find().sort({ startYear: 1 });
     if (!academicYears.length) {
-      return res.status(404).json({ message: 'No academic years found.' });
+      return res.status(404).json({ message: "No academic years found." });
     }
 
     const semesters = await Semester.find({
@@ -248,14 +261,15 @@ const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
     }).sort({ semesterName: 1 });
 
     if (!semesters.length) {
-      return res.status(404).json({ message: 'No semesters found.' });
+      return res.status(404).json({ message: "No semesters found." });
     }
 
-    const gradeSubjects = await GradeSubject.find({ gradeId })
-    .populate("subjectId");
+    const gradeSubjects = await GradeSubject.find({ gradeId }).populate(
+      "subjectId"
+    );
     if (!gradeSubjects.length) {
       return res.status(404).json({
-        message: 'No subjects found for the given grade.',
+        message: "No subjects found for the given grade.",
       });
     }
 
@@ -265,17 +279,19 @@ const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
     });
     if (!gradeSubjectSemesters.length) {
       return res.status(404).json({
-        message: 'No subjects found for the given semesters.',
+        message: "No subjects found for the given semesters.",
       });
     }
 
-    const subjectIds = gradeSubjectSemesters.map((gss) =>
-      gradeSubjects.find((gs) => gs._id.equals(gss.grade_subject_id)).subjectId
+    const subjectIds = gradeSubjectSemesters.map(
+      (gss) =>
+        gradeSubjects.find((gs) => gs._id.equals(gss.grade_subject_id))
+          .subjectId
     );
     const subjects = await Subject.find({ _id: { $in: subjectIds } });
     if (!subjects.length) {
       return res.status(404).json({
-        message: 'No subjects found for the given grade and semesters.',
+        message: "No subjects found for the given grade and semesters.",
       });
     }
 
@@ -302,7 +318,8 @@ const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
               subjectId: subjectScore.subjectId,
               subjectName: subjectScore.subjectId.subjectName,
               type: subjectScore.type,
-              examGrade: studentGrades.length > 0 ? studentGrades[0].examGrade : null,
+              examGrade:
+                studentGrades.length > 0 ? studentGrades[0].examGrade : null,
               finalDegree: subjectScore.finalDegree,
             };
           })
@@ -318,12 +335,12 @@ const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
             };
           }
 
-          if (grade.type === 'midterm') {
+          if (grade.type === "midterm") {
             acc[grade.subjectId].midterm = {
               examGrade: grade.examGrade,
               finalDegree: grade.finalDegree,
             };
-          } else if (grade.type === 'final') {
+          } else if (grade.type === "final") {
             acc[grade.subjectId].final = {
               examGrade: grade.examGrade,
               finalDegree: grade.finalDegree,
@@ -336,8 +353,7 @@ const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
         return {
           academicYear: academicYears.find((ay) =>
             ay._id.equals(semester.academicYear_id)
-          )
-          ,
+          ),
           semester: semester.semesterName,
           grades: Object.values(groupedGrades),
         };
@@ -346,13 +362,16 @@ const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
 
     res.status(200).json(results);
   } catch (error) {
-    console.error('Error fetching all semester grades:', error);
-    res.status(500).json({ message: 'Error fetching all semester grades.', error: error.message });
+    console.error("Error fetching all semester grades:", error);
+    res.status(500).json({
+      message: "Error fetching all semester grades.",
+      error: error.message,
+    });
   }
 });
 
-module.exports = { 
+module.exports = {
   getStudentGrades,
   getStudentSemesterGrades,
-  getAllSemesterGrades
- };
+  getAllSemesterGrades,
+};

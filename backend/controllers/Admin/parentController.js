@@ -1,10 +1,10 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const parentValidationSchema = require("../../validations/parentValidation");
-const Parent = require("../../DB/Parent");
+const Parent = require("../../DB/ParentModel");
 const hashPassword = require("../../utils/hashPassword");
 const { createParentStudent } = require("./parentStudentController");
-const ParentStudent = require("../../DB/parentStudent");
+const ParentStudent = require("../../DB/ParentStudentModel");
 
 const createParent = expressAsyncHandler(async (req, res) => {
   const { error } = parentValidationSchema.validate(req.body);

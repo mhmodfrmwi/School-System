@@ -1,6 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const Teacher = require("../../DB/teacher");
+const Teacher = require("../../DB/TeacherModel");
 
 const getLoggedInTeacherData = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
@@ -26,7 +26,6 @@ const getLoggedInTeacherData = expressAsyncHandler(async (req, res) => {
       message: "Teacher data retrieved successfully",
       data: teacher,
     });
-
   } catch (error) {
     console.error("Error fetching teacher data:", error);
     return res.status(500).json({
@@ -37,5 +36,5 @@ const getLoggedInTeacherData = expressAsyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getLoggedInTeacherData
+  getLoggedInTeacherData,
 };

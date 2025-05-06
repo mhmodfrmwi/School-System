@@ -4,9 +4,9 @@ const Grade = require("../../DB/gradeModel");
 const Class = require("../../DB/classModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const Semester = require("../../DB/semesterModel");
-const Teacher = require("../../DB/teacher");
-const Student = require("../../DB/student");
-const GradeSubject = require("../../DB/gradeSubject");
+const Teacher = require("../../DB/TeacherModel");
+const Student = require("../../DB/StudentModel");
+const GradeSubject = require("../../DB/GradeSubjectModel");
 const Question = require("../../DB/questionBankModel");
 const exposeModels = expressAsyncHandler(async (req, res) => {
   const { modelName } = req.params;

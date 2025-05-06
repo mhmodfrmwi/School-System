@@ -1,8 +1,8 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const student = require("../../DB/student");
+const student = require("../../DB/StudentModel");
 const Question = require("../../DB/questionBankModel");
-const BookMarkForQuestion = require("../../DB/bookMarkForQuestion");
+const BookMarkForQuestion = require("../../DB/BookMarkForQuestionModel");
 
 const addQuestionToBookmarks = expressAsyncHandler(async (req, res) => {
   const studentId = req.user.id;

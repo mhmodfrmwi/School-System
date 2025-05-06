@@ -1,10 +1,10 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const Teacher = require("../../DB/teacher");
+const Teacher = require("../../DB/TeacherModel");
 const Class = require("../../DB/classModel");
 const ClassTeacher = require("../../DB/classTeacherModel");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
-const GradeSubject = require("../../DB/gradeSubject");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
+const GradeSubject = require("../../DB/GradeSubjectModel");
 const Grade = require("../../DB/gradeModel");
 
 const getTeacherClassesForCurrentSemester = expressAsyncHandler(

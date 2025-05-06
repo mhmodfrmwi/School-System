@@ -1,4 +1,4 @@
-const Teacher = require("../DB/teacher");
+const Teacher = require("../DB/TeacherModel");
 
 const generateAcademicNumber = async (departmentCode) => {
   const lastTeacher = await Teacher.findOne().sort({ academicNumber: -1 });

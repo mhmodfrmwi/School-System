@@ -3,11 +3,11 @@ const validateObjectId = require("../../utils/validateObjectId");
 const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const moment = require("moment");
 const libraryItemForGradeValidationSchema = require("../../validations/libraryItemForGradeValidation");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
-const LibraryItemsForGrade = require("../../DB/LibraryItemsForGrades");
-const LibraryItem = require("../../DB/LibraryItem");
-const StudentLibraryItem = require("../../DB/Student-LibraryItem");
-const LibraryMaterialView = require("../../DB/libraryMaterialView");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
+const LibraryItemsForGrade = require("../../DB/LibraryItemsForGradesModel");
+const LibraryItem = require("../../DB/LibraryItemModel");
+const StudentLibraryItem = require("../../DB/Student-LibraryItemModel");
+const LibraryMaterialView = require("../../DB/LibraryMaterialViewModel");
 
 const defaultFieldsToExclude = "-__v -createdAt -updatedAt";
 

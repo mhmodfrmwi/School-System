@@ -1,12 +1,12 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const teacherValidationSchema = require("../../validations/teacherValidation");
-const Teacher = require("../../DB/teacher");
+const Teacher = require("../../DB/TeacherModel");
 const Subject = require("../../DB/subjectModel");
 const generateAcademicNumber = require("../../utils/generateAcademicNumberForTeacher");
 const hashPassword = require("../../utils/hashPassword");
 const ClassTeacher = require("../../DB/classTeacherModel");
-const Schedule = require("../../DB/schedule");
+const Schedule = require("../../DB/ScheduleModel");
 
 const createTeacher = expressAsyncHandler(async (req, res) => {
   const { error } = teacherValidationSchema.validate(req.body);

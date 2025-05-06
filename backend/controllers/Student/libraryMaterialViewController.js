@@ -1,10 +1,10 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
-const MaterialView = require("../../DB/MaterialView");
+const MaterialView = require("../../DB/MaterialViewModel");
 const moment = require("moment");
-const LibraryMaterialView = require("../../DB/libraryMaterialView");
-const LibraryItemsForGrade = require("../../DB/LibraryItemsForGrades");
+const LibraryMaterialView = require("../../DB/LibraryMaterialViewModel");
+const LibraryItemsForGrade = require("../../DB/LibraryItemsForGradesModel");
 
 const defaultFieldsToExclude = "-__v -createdAt -updatedAt";
 
@@ -24,7 +24,11 @@ const updateLibraryMaterialView = expressAsyncHandler(async (req, res) => {
     });
 
     if (!materialView || !materialView.is_viewed) {
-      await addRewardClaimAndUpdatePoints(student_id, "Student", "View Library Item");
+      await addRewardClaimAndUpdatePoints(
+        student_id,
+        "Student",
+        "View Library Item"
+      );
     }
     materialView = await LibraryMaterialView.findOneAndUpdate(
       { library_material_id: id, student_id },

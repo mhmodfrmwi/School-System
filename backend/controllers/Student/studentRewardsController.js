@@ -4,7 +4,7 @@ const moment = require("moment");
 const RewardClaim = require("../../DB/rewardClaimModel");
 const UserPoint = require("../../DB/userPointModel");
 const RewardCatalog = require("../../DB/rewardCatalogModel");
-const Student = require("../../DB/student");
+const Student = require("../../DB/StudentModel");
 
 const getSemesterDates = () => {
   const currentMonth = moment().month() + 1;

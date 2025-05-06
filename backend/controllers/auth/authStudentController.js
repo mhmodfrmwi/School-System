@@ -1,5 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
-const Student = require("../../DB/student");
+const Student = require("../../DB/StudentModel");
 const signToken = require("../../utils/signToken");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
@@ -44,21 +44,23 @@ const login = expressAsyncHandler(async (req, res) => {
   });
 });
 
-
 const updateStudentProfile = expressAsyncHandler(async (req, res) => {
   try {
     const studentId = req.user.id;
     const { currentPassword, newPassword, phone } = req.body;
-    let profileImage = req.file ? `http://localhost:4000/profileImages/${req.file.filename}` : undefined;
+    let profileImage = req.file
+      ? `http://localhost:4000/profileImages/${req.file.filename}`
+      : undefined;
 
     if (!newPassword && !phone && !profileImage) {
       if (req.file?.path) fs.unlinkSync(req.file.path);
       return res.status(400).json({
-        message: "Please provide fields to update (newPassword, phone, or profileImage)",
+        message:
+          "Please provide fields to update (newPassword, phone, or profileImage)",
         details: {
           note: "For password change, include both currentPassword and newPassword",
-          note2: "For profile image, use form-data with 'profileImage' field"
-        }
+          note2: "For profile image, use form-data with 'profileImage' field",
+        },
       });
     }
 
@@ -71,12 +73,21 @@ const updateStudentProfile = expressAsyncHandler(async (req, res) => {
 
     if (newPassword) {
       if (!currentPassword) {
-        return res.status(400).json({ message: "Current password is required to set a new password" });
+        return res
+          .status(400)
+          .json({
+            message: "Current password is required to set a new password",
+          });
       }
 
-      const isMatch = await student.comparePasswordInDb(currentPassword, student.password);
+      const isMatch = await student.comparePasswordInDb(
+        currentPassword,
+        student.password
+      );
       if (!isMatch) {
-        return res.status(401).json({ message: "Current password is incorrect" });
+        return res
+          .status(401)
+          .json({ message: "Current password is incorrect" });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -91,7 +102,11 @@ const updateStudentProfile = expressAsyncHandler(async (req, res) => {
       if (student.profileImage) {
         try {
           if (!student.profileImage.startsWith("http")) {
-            const fullPath = path.join(__dirname, '../../', student.profileImage);
+            const fullPath = path.join(
+              __dirname,
+              "../../",
+              student.profileImage
+            );
             if (fs.existsSync(fullPath)) {
               fs.unlinkSync(fullPath);
             }

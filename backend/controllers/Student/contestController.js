@@ -2,7 +2,7 @@ const contestValidationSchema = require("../../validations/contestValidation");
 const expressAsyncHandler = require("express-async-handler");
 const moment = require("moment");
 const Contest = require("../../DB/contestModel");
-const Student = require("../../DB/student");
+const Student = require("../../DB/StudentModel");
 const Subject = require("../../DB/subjectModel");
 const Semester = require("../../DB/semesterModel");
 

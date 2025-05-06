@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
-const MaterialView = require("../../DB/MaterialView");
+const MaterialView = require("../../DB/MaterialViewModel");
 const moment = require("moment");
 const updateMaterialView = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;

@@ -2,12 +2,12 @@ const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
 
-const student = require("../../DB/student");
+const student = require("../../DB/StudentModel");
 const Semester = require("../../DB/semesterModel");
-const Schedule = require("../../DB/schedule");
+const Schedule = require("../../DB/ScheduleModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const getScheduleForSpecificStudent = expressAsyncHandler(async (req, res) => {
-    const {studentId} = req.body;
+  const { studentId } = req.body;
 
   if (!validateObjectId(studentId)) {
     return res.status(400).json({ status: 400, message: "Invalid ID" });

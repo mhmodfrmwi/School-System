@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const LibraryItem = require("../../DB/LibraryItem");
-const StudentLibraryItem = require("../../DB/Student-LibraryItem");
+const LibraryItem = require("../../DB/LibraryItemModel");
+const StudentLibraryItem = require("../../DB/Student-LibraryItemModel");
 const moment = require("moment");
 const updateLastUserViewForLibraryItem = expressAsyncHandler(
   async (req, res) => {

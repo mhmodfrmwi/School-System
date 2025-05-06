@@ -1,5 +1,5 @@
 const { get } = require("mongoose");
-const student = require("../../DB/student");
+const student = require("../../DB/StudentModel");
 const { getNumberOfAbsentDays } = require("../../services/attendaceService");
 
 const modelData = async (req, res) => {

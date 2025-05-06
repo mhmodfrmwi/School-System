@@ -3,7 +3,7 @@ const validateObjectId = require("../../utils/validateObjectId");
 const semesterValidationSchema = require("../../validations/semesterValidation");
 const AcademicYear = require("../../DB/academicYearModel");
 const Semester = require("../../DB/semesterModel");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
 
 const createSemester = expressAsyncHandler(async (req, res) => {
   const { error } = semesterValidationSchema.validate(req.body);

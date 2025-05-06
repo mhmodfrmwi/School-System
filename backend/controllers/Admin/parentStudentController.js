@@ -1,8 +1,8 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const Parent = require("../../DB/Parent");
-const ParentStudent = require("../../DB/parentStudent");
-const student = require("../../DB/student");
+const Parent = require("../../DB/ParentModel");
+const ParentStudent = require("../../DB/ParentStudentModel");
+const student = require("../../DB/StudentModel");
 const createParentStudent = async (parentId, studentAcademicNumber) => {
   const parent = await Parent.findById(parentId);
   if (!parent) {

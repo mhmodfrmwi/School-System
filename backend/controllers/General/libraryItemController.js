@@ -1,10 +1,10 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
 const libraryItemValidationSchema = require("../../validations/libraryItemValidation");
-const LibraryItem = require("../../DB/LibraryItem");
+const LibraryItem = require("../../DB/LibraryItemModel");
 const joi = require("joi");
-const MaterialView = require("../../DB/MaterialView");
-const StudentLibraryItem = require("../../DB/Student-LibraryItem");
+const MaterialView = require("../../DB/MaterialViewModel");
+const StudentLibraryItem = require("../../DB/Student-LibraryItemModel");
 const createLibraryItem = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
   if (!validateObjectId(teacherId)) {

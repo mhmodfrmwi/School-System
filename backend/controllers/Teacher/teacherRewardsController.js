@@ -4,7 +4,7 @@ const moment = require("moment");
 const RewardClaim = require("../../DB/rewardClaimModel");
 const UserPoint = require("../../DB/userPointModel");
 const RewardCatalog = require("../../DB/rewardCatalogModel");
-const Teacher = require("../../DB/teacher");
+const Teacher = require("../../DB/TeacherModel");
 
 const getSemesterDates = () => {
   const currentYear = moment().year();
@@ -22,19 +22,20 @@ const getSemesterDates = () => {
 };
 
 const getTeachersWithPointsAndBadges = expressAsyncHandler(async (req, res) => {
-
   const { semesterStart, semesterEnd } = getSemesterDates();
 
   try {
-    const teachers = await Teacher.find({})
-    .populate("subjectId");
+    const teachers = await Teacher.find({}).populate("subjectId");
 
     const teachersWithPointsAndBadges = await Promise.all(
       teachers.map(async (teacher) => {
         const rewards = await RewardClaim.find({
           userId: teacher._id,
           userType: "Teacher",
-          claimDate: { $gte: semesterStart.toDate(), $lte: semesterEnd.toDate() },
+          claimDate: {
+            $gte: semesterStart.toDate(),
+            $lte: semesterEnd.toDate(),
+          },
         }).populate("rewardId");
 
         let totalPoints = 0;
@@ -216,7 +217,7 @@ const getDailyPoints = expressAsyncHandler(async (req, res) => {
       userId: teacherId,
       userType: "Teacher",
     });
-    
+
     let badge = "Green";
     if (userPoint) {
       badge = userPoint.badges;
@@ -257,12 +258,14 @@ const getAllPoints = expressAsyncHandler(async (req, res) => {
     userId: teacherId,
     userType: "Teacher",
   });
-  const badges = userPoint?.badges? userPoint.badges : "green";
+  const badges = userPoint?.badges ? userPoint.badges : "green";
 
   res.status(200).json({
     success: true,
     status: 200,
-    message: userPoint ? "Teacher points fetched successfully" : "No points found for this Teacher yet",
+    message: userPoint
+      ? "Teacher points fetched successfully"
+      : "No points found for this Teacher yet",
     data: {
       totalPoints: userPoint ? userPoint.totalPoints : 0,
       badges: badges,
@@ -273,5 +276,5 @@ module.exports = {
   getDailyPoints,
   getAllPoints,
   getTeachersWithPointsAndBadges,
-  getTeacherWithPointsAndBadges
+  getTeacherWithPointsAndBadges,
 };

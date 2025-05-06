@@ -3,13 +3,13 @@ const validateObjectId = require("../../utils/validateObjectId");
 const moment = require("moment");
 const classTeacherValidationSchema = require("../../validations/classTeacherValidation");
 const Subject = require("../../DB/subjectModel");
-const Teacher = require("../../DB/teacher");
+const Teacher = require("../../DB/TeacherModel");
 const AcademicYear = require("../../DB/academicYearModel");
 const ClassTeacher = require("../../DB/classTeacherModel");
 const Class = require("../../DB/classModel");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
 const Semester = require("../../DB/semesterModel");
-const GradeSubject = require("../../DB/gradeSubject");
+const GradeSubject = require("../../DB/GradeSubjectModel");
 
 // Common population configuration
 const populateClassTeacher = (query) =>

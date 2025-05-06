@@ -6,16 +6,16 @@ const Question = require("../../DB/questionBankModel");
 const Subject = require("../../DB/subjectModel");
 const Grade = require("../../DB/gradeModel");
 const Semester = require("../../DB/semesterModel");
-const Teacher = require("../../DB/teacher");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
+const Teacher = require("../../DB/TeacherModel");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
 
 const createQuestion = expressAsyncHandler(async (req, res) => {
   const teacherId = req.user.id;
 
   if (!validateObjectId(teacherId)) {
     return res.status(400).json({
-    status: 400,
-    message: "Invalid teacher ID.",
+      status: 400,
+      message: "Invalid teacher ID.",
     });
   }
 
@@ -38,8 +38,9 @@ const createQuestion = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
-    .populate("grade_subject_id");
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(
+    gradeSubjectSemesterId
+  ).populate("grade_subject_id");
 
   if (!gradeSubjectSemester) {
     return res.status(404).json({
@@ -78,8 +79,8 @@ const createQuestion = expressAsyncHandler(async (req, res) => {
   });
 
   await newQuestion.save();
-  
-  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Question");
+
+  addRewardClaimAndUpdatePoints(teacherId, "Teacher", "Adding Question");
   res.status(201).json({
     status: 201,
     message: "Question created successfully",
@@ -99,8 +100,8 @@ const updateQuestion = expressAsyncHandler(async (req, res) => {
   }
   if (!validateObjectId(teacherId)) {
     return res.status(400).json({
-    status: 400,
-    message: "Invalid teacher ID.",
+      status: 400,
+      message: "Invalid teacher ID.",
     });
   }
 
@@ -176,8 +177,8 @@ const deleteQuestion = expressAsyncHandler(async (req, res) => {
   }
   if (!validateObjectId(teacherId)) {
     return res.status(400).json({
-    status: 400,
-    message: "Invalid teacher ID.",
+      status: 400,
+      message: "Invalid teacher ID.",
     });
   }
 
@@ -198,8 +199,13 @@ const deleteQuestion = expressAsyncHandler(async (req, res) => {
   }
 
   await Question.deleteOne({ _id: questionId });
-  
-  addRewardClaimAndUpdatePoints(teacherId,"Teacher","Adding Question","subtract");
+
+  addRewardClaimAndUpdatePoints(
+    teacherId,
+    "Teacher",
+    "Adding Question",
+    "subtract"
+  );
   res.status(200).json({
     status: 200,
     message: "Question deleted successfully",
@@ -241,8 +247,8 @@ const getTeacherQuestions = expressAsyncHandler(async (req, res) => {
 
   if (!validateObjectId(teacherId)) {
     return res.status(400).json({
-    status: 400,
-    message: "Invalid teacher ID.",
+      status: 400,
+      message: "Invalid teacher ID.",
     });
   }
 
@@ -255,8 +261,9 @@ const getTeacherQuestions = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
-    .populate("grade_subject_id");
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(
+    gradeSubjectSemesterId
+  ).populate("grade_subject_id");
 
   if (!gradeSubjectSemester) {
     return res.status(404).json({
@@ -275,10 +282,10 @@ const getTeacherQuestions = expressAsyncHandler(async (req, res) => {
     gradeId,
     semesterId,
   })
-  .populate("subjectId", "subjectName")
-  .populate("gradeId", "gradeName")
-  .populate("semesterId", "semesterName")
-  .populate("teacherId", "fullName");;
+    .populate("subjectId", "subjectName")
+    .populate("gradeId", "gradeName")
+    .populate("semesterId", "semesterName")
+    .populate("teacherId", "fullName");
 
   res.status(200).json({
     status: 200,
@@ -297,8 +304,9 @@ const getSubjestSemesterQuestions = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
-    .populate("grade_subject_id");
+  const gradeSubjectSemester = await GradeSubjectSemester.findById(
+    gradeSubjectSemesterId
+  ).populate("grade_subject_id");
 
   if (!gradeSubjectSemester) {
     return res.status(404).json({
@@ -316,10 +324,10 @@ const getSubjestSemesterQuestions = expressAsyncHandler(async (req, res) => {
     gradeId,
     semesterId,
   })
-  .populate("subjectId", "subjectName")
-  .populate("gradeId", "gradeName")
-  .populate("semesterId", "semesterName")
-  .populate("teacherId", "fullName");;
+    .populate("subjectId", "subjectName")
+    .populate("gradeId", "gradeName")
+    .populate("semesterId", "semesterName")
+    .populate("teacherId", "fullName");
 
   res.status(200).json({
     status: 200,
@@ -334,5 +342,5 @@ module.exports = {
   deleteQuestion,
   getQuestion,
   getTeacherQuestions,
-  getSubjestSemesterQuestions
+  getSubjestSemesterQuestions,
 };

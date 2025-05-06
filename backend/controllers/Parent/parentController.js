@@ -1,4 +1,4 @@
-const ParentStudent = require("../../DB/parentStudent");
+const ParentStudent = require("../../DB/ParentStudentModel");
 const signToken = require("../../utils/signToken");
 
 const showKids = async (req, res) => {

@@ -3,12 +3,12 @@ const validateObjectId = require("../../utils/validateObjectId");
 const academicYearValidationSchema = require("../../validations/academicYearValidation");
 const AcademicYear = require("../../DB/academicYearModel");
 const ClassTeacher = require("../../DB/classTeacherModel");
-const GradeSubject = require("../../DB/gradeSubject");
+const GradeSubject = require("../../DB/GradeSubjectModel");
 const GradeYear = require("../../DB/gradeYearModel");
-const Schedule = require("../../DB/schedule");
+const Schedule = require("../../DB/ScheduleModel");
 const Semester = require("../../DB/semesterModel");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
-const Student = require("../../DB/student");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
+const Student = require("../../DB/StudentModel");
 
 const validateAcademicYear = expressAsyncHandler(async (req, res, next) => {
   const { error } = academicYearValidationSchema.validate(req.body);

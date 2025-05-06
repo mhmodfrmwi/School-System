@@ -1,9 +1,9 @@
 const expressAsyncHandler = require("express-async-handler");
 const moment = require("moment");
 
-const student = require("../../DB/student");
-const GradeSubjectSemester = require("../../DB/gradeSubjectSemester");
-const GradeSubject = require("../../DB/gradeSubject");
+const student = require("../../DB/StudentModel");
+const GradeSubjectSemester = require("../../DB/GradeSubjectSemesterModel");
+const GradeSubject = require("../../DB/GradeSubjectModel");
 const Semester = require("../../DB/semesterModel");
 const AcademicYear = require("../../DB/academicYearModel");
 

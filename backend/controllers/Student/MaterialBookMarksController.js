@@ -1,6 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateObjectId = require("../../utils/validateObjectId");
-const student = require("../../DB/student");
+const student = require("../../DB/StudentModel");
 const Material = require("../../DB/materielModel");
 const BookMarkForMaterial = require("../../DB/bookMarkForMaterialModel");
 const addMaterialForBookMarks = expressAsyncHandler(async (req, res) => {

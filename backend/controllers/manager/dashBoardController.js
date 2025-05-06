@@ -1,9 +1,9 @@
 const expressAsyncHandler = require("express-async-handler");
 const moment = require("moment");
-const Teacher = require("../../DB/teacher");
-const Student = require("../../DB/student");
-const Parent = require("../../DB/Parent");
-const Admin = require("../../DB/Admin");
+const Teacher = require("../../DB/TeacherModel");
+const Student = require("../../DB/StudentModel");
+const Parent = require("../../DB/ParentModel");
+const Admin = require("../../DB/AdminModel");
 const Manager = require("../../DB/managerModel");
 const Score = require("../../DB/scoreModel");
 const SubjectScore = require("../../DB/subjectScoreModel");
@@ -13,7 +13,7 @@ const Grade = require("../../DB/gradeModel");
 const Attendance = require("../../DB/attendanceModel");
 const RewardClaim = require("../../DB/rewardClaimModel");
 const UserPoint = require("../../DB/userPointModel");
-const Sehedule = require("../../DB/schedule");
+const Sehedule = require("../../DB/ScheduleModel");
 
 const getStatistics = expressAsyncHandler(async (req, res) => {
   try {
