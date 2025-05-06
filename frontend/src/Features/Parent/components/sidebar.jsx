@@ -17,12 +17,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from 'react-i18next';
 import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
 
-const Sidebar = ({ kid = null, closeSidebar, setSelectedKid  }) => {
+const Sidebar = ({ kid = null, closeSidebar, setSelectedKid }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { fullName, profileImage } = useSelector((state) => state.login);
-
+    const selectedKid = JSON.parse(localStorage.getItem('selectedKid'));
     const handleLogout = () => {
         dispatch(logout());
         sessionStorage.removeItem("role");
@@ -32,15 +32,15 @@ const Sidebar = ({ kid = null, closeSidebar, setSelectedKid  }) => {
 
     const handleHomeClick = () => {
         if (kid) {
-          navigate("/parent/dashboard", { state: { selectedKid: kid } });
+            navigate("/parent/dashboard", { state: { selectedKid: kid } });
         } else {
-        
-          navigate("/parent");
+
+            navigate("/parent");
         }
         closeSidebar();
-      };
+    };
     const menuItems = [
-        { label: t('Home'), icon: Icon1,  onClick: handleHomeClick},
+        { label: t('Home'), icon: Icon1, onClick: handleHomeClick },
         { label: t("parentKids.title"), icon: Icon2, path: "/parent/parent-kids" },
         { label: t('Motivation'), icon: Icon2, path: "/parent/motivation" },
         { label: t('Courses'), icon: Icon3, path: "/parent/allcourses" },
@@ -56,7 +56,7 @@ const Sidebar = ({ kid = null, closeSidebar, setSelectedKid  }) => {
         },
     ];
 
-   
+
 
     return (
         <div className={`fixed top-0 z-50 h-full w-72 transform bg-white dark:bg-[#281459] shadow-lg dark:shadow-gray-900 transition-transform duration-300 ease-in-out
@@ -93,8 +93,24 @@ const Sidebar = ({ kid = null, closeSidebar, setSelectedKid  }) => {
                     }}
                 />
                 <div className={i18n.language === 'ar' ? 'mr-2 text-right' : 'ml-2 text-left'}>
-                    <p className="font-poppins font-semibold text-[#043B44] dark:text-white">{fullName}</p>
-                    <p className="font-poppins text-sm text-gray-400 dark:text-gray-300"> {t('Parent')}</p>
+                    <p className="font-poppins font-semibold text-[#043B44] dark:text-white">
+                        {fullName}
+                    </p>
+                    <p className="font-poppins text-sm text-gray-400 dark:text-gray-300">
+                        {t('Parent')}
+                    </p>
+
+
+                    {/* {selectedKid && (
+                        <>
+                            <p className="font-poppins font-semibold text-[#043B44] dark:text-white mt-1">
+                                {selectedKid.fullName}
+                            </p>
+                            <p className="font-poppins text-xs text-gray-400 dark:text-gray-300">
+                                {t('Selected Child')}
+                            </p>
+                        </>
+                    )} */}
                 </div>
             </div>
 

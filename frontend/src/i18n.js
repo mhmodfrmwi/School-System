@@ -103,6 +103,19 @@ i18n.use(initReactI18next).init({
           adaptationLesson: "Adaptation - About Bears Life",
           atomVideo: "What is an atom?",
           spellingVideo: "Let's improve our Spelling!",
+          attendance: "Attendance",
+          examPassRate: "Exam Pass Rate",
+          chartsInsights: "Performance Analysis",
+          academicStanding: "Academic Standing",
+          performanceTrends: "Performance Trends",
+          gradeStatistics: "Grade Statistics",
+          averageScore: "Average Score",
+          standingScore: "Standing Score",
+          monthlyPerformance: "Monthly Performance",
+          grades: "Grades",
+          averageGrade: "Average Grade",
+          highestGrade: "Highest Grade",
+          lowestGrade: "Lowest Grade"
         },
         menu: {
           motivation: "Motivation",
@@ -1780,6 +1793,45 @@ i18n.use(initReactI18next).init({
           class: "Class",
           academicNumber: "Academic Number",
           gender: "Gender",
+          "activities": {
+            "title": "Student Activities",
+            "noKidSelected": "No child selected",
+            "selectKid": "Select a child",
+            "tabs": {
+              "schoolHubs": "School Clubs",
+              "contests": "Contests"
+            },
+            "registration": "Registration Period",
+            "contests": "Contests",
+            "contestTitle": "Contest Title",
+            "contestDate": "Contest Date",
+            "status": "Status",
+            "active": "Active",
+            "ended": "Ended"
+          },
+          "contests": {
+            "title": "Student Contests",
+            "noKidSelected": "No child selected",
+            "selectKid": "Select a child",
+            "tabs": {
+              "schoolHubs": "School Clubs",
+              "contests": "Contests"
+            },
+            "table": {
+              "headers": {
+                "title": "Title",
+                "teacher": "Teacher",
+                "startDate": "Start Date",
+                "endDate": "End Date",
+                "status": "Status"
+              },
+              "status": {
+                "active": "Active",
+                "ended": "Ended"
+              },
+              "noData": "No contests available"
+            }
+          },
         },
         menuparent: {
           grades: "Grades",
@@ -1789,7 +1841,7 @@ i18n.use(initReactI18next).init({
           activities: "Activities",
         },
         dashboardparent: {
-          title:"Parent Dashboard",
+          title: "Parent Dashboard",
           grades: "Grades",
           attendance: "Attendance",
           schedule: "Schedule",
@@ -1804,19 +1856,19 @@ i18n.use(initReactI18next).init({
           male: "Male",
           female: "Female",
         },
-        "parentKids": {
-          "title": "My Children",
-          "tableHeaders": {
-            "fullName": "Full Name",
-            "academicNumber": "Academic Number",
-            "email": "Email",
-            "gender": "Gender"
+        parentKids: {
+          title: "My Children",
+          tableHeaders: {
+            fullName: "Full Name",
+            academicNumber: "Academic Number",
+            email: "Email",
+            gender: "Gender",
           },
-          "gender": {
-            "male": "Male",
-            "female": "Female"
+          gender: {
+            male: "Male",
+            female: "Female",
           },
-          "noChildren": "No children found"
+          noChildren: "No children found",
         },
         ////////////////////////////////auth////////////////////////
 
@@ -1872,7 +1924,7 @@ i18n.use(initReactI18next).init({
           title: "Study Assistant",
           placeholder: "Ask anything...",
           buttonText: "Send",
-          thinkingText: "Thinking...",
+          thinkingText: "...Thinking",
           welcomeMessage: "How can I help you today?",
           errorMessage: "An error occurred. Please try again",
           unrenderableMessage: "Unrenderable message",
@@ -1926,6 +1978,18 @@ i18n.use(initReactI18next).init({
             medium: "Medium",
             low: "Low",
           },
+        },
+        ///////////////////////////forgot password/////////////////////////
+        forgotPassword: {
+          backToLogin: "Back to login",
+          title: "Reset your password",
+          subtitle:
+            "Enter your email and we'll send you a link to reset your password.",
+          emailLabel: "Email address",
+          emailPlaceholder: "your@email.com",
+          submitButton: "Send reset link",
+          successMessage: "Password reset link sent to your email",
+          errorMessage: "Failed to send reset link",
         },
       },
     },
@@ -2029,6 +2093,19 @@ i18n.use(initReactI18next).init({
           adaptationLesson: "التكيف - عن حياة الدببة",
           atomVideo: "ما هو الذرة؟",
           spellingVideo: "لنحسن تهجئتنا!",
+          attendance: "الحضور",
+          examPassRate: "نسبة نجاح الامتحان",
+          chartsInsights: "تحليلات الأداء",
+          academicStanding: "الوضع الأكاديمي",
+          performanceTrends: "اتجاهات الأداء",
+          gradeStatistics: "إحصائيات الدرجات",
+          averageScore: "المتوسط",
+          standingScore: "الدرجة الأكاديمية",
+          monthlyPerformance: "الأداء الشهري",
+          grades: "الدرجات",
+          averageGrade: "الدرجة المتوسطة",
+          highestGrade: "أعلى درجة",
+          lowestGrade: "أدنى درجة"
         },
         menu: {
           motivation: "التحفيز",
@@ -3697,6 +3774,45 @@ i18n.use(initReactI18next).init({
           class: "الفصل",
           academicNumber: "الرقم الأكاديمي",
           gender: "النوع",
+          "activities": {
+            "title": "أنشطة الطالب",
+            "noKidSelected": "لم يتم اختيار طفل",
+            "selectKid": "اختر طفلاً",
+            "tabs": {
+              "schoolHubs": "النوادي المدرسية",
+              "contests": "المسابقات"
+            },
+            "registration": "فترة التسجيل",
+            "contests": "المسابقات",
+            "contestTitle": "عنوان المسابقة",
+            "contestDate": "تاريخ المسابقة",
+            "status": "الحالة",
+            "active": "نشطة",
+            "ended": "منتهية"
+          },
+          "contests": {
+            "title": "مسابقات الطالب",
+            "noKidSelected": "لم يتم اختيار طفل",
+            "selectKid": "اختر طفلاً",
+            "tabs": {
+              "schoolHubs": "النوادي المدرسية",
+              "contests": "المسابقات"
+            },
+            "table": {
+              "headers": {
+                "title": "العنوان",
+                "teacher": "المعلم",
+                "startDate": "تاريخ البدء",
+                "endDate": "تاريخ الانتهاء",
+                "status": "الحالة"
+              },
+              "status": {
+                "active": "نشطة",
+                "ended": "منتهية"
+              },
+              "noData": "لا توجد مسابقات متاحة"
+            }
+          },
         },
         menuparent: {
           grades: "الدرجات",
@@ -3706,7 +3822,7 @@ i18n.use(initReactI18next).init({
           activities: "الأنشطة",
         },
         dashboardparent: {
-          title:"لوحه تحكم ولي الأمر",
+          title: "لوحه تحكم ولي الأمر",
           grades: "الدرجات",
           attendance: "الحضور",
           schedule: "الجدول",
@@ -3721,19 +3837,19 @@ i18n.use(initReactI18next).init({
           male: "ذكر",
           female: "أنثى",
         },
-        "parentKids": {
-          "title": "أولادي",
-          "tableHeaders": {
-            "fullName": "الاسم الكامل",
-            "academicNumber": "الرقم الأكاديمي",
-            "email": "البريد الإلكتروني",
-            "gender": "النوع"
+        parentKids: {
+          title: "أولادي",
+          tableHeaders: {
+            fullName: "الاسم الكامل",
+            academicNumber: "الرقم الأكاديمي",
+            email: "البريد الإلكتروني",
+            gender: "النوع",
           },
-          "gender": {
-            "male": "ذكر",
-            "female": "أنثى"
+          gender: {
+            male: "ذكر",
+            female: "أنثى",
           },
-          "noChildren": "لا يوجد أطفال"
+          noChildren: "لا يوجد أطفال",
         },
         ////////////////////////////////auth/////////////////////////////
 
@@ -3843,6 +3959,19 @@ i18n.use(initReactI18next).init({
             medium: "متوسط",
             low: "منخفض",
           },
+        },
+        /////////////////////////////////forgot password///////////////////
+        forgotPassword: {
+          backToLogin: "العودة إلى تسجيل الدخول",
+          title: "إعادة تعيين كلمة المرور",
+          subtitle:
+            "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور الخاصة بك.",
+          emailLabel: "عنوان البريد الإلكتروني",
+          emailPlaceholder: "بريدك@الإلكتروني",
+          submitButton: "إرسال رابط التعيين",
+          successMessage:
+            "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
+          errorMessage: "فشل إرسال رابط التعيين",
         },
       },
     },

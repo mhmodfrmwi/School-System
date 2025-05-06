@@ -57,7 +57,9 @@ import studentProfileReducer from "./Features/Student/components/StudentRedux/St
 import managerProfileReducer from "./Features/Manager/components/ManagerRedux/ManagerEditProfileSlice";
 import adminProfileReducer from "./Features/Admin/components/AdminRedux/AdminEditProfileSlice";
 import parentProfileReducer from "./Features/Parent/components/ParentRedux/ParentEditProfileSlice";
-
+import parentActivityReducer from "./Features/Parent/components/ParentRedux/ActivitySlice";
+import parentKidsReducer from './Features/Parent/components/ParentRedux/ParentSlice';
+import dashboardStudentReducer from "./Features/Student/components/StudentRedux/dashboardSlice";
 
 const store = configureStore({
   reducer: {
@@ -119,6 +121,9 @@ const store = configureStore({
     managerProfile:managerProfileReducer,
     adminProfile:adminProfileReducer,
     parentProfile:parentProfileReducer,
+    parentActivity: parentActivityReducer,
+    parentKids: parentKidsReducer, 
+    dashboardStudent: dashboardStudentReducer,
   },
 });
 

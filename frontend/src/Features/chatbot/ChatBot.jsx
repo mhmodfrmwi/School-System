@@ -58,7 +58,7 @@ const LoadingIndicator = ({ text, role }) => {
   const bgColor = colors[role] || colors.default;
 
   return (
-    <div className="mb-4 flex justify-start">
+    <div className={`mb-4 flex ${isRTL ? "justify-end" : "justify-start"}`}>
       <div
         className={`inline-block max-w-[80%] rounded-xl ${
           isRTL ? "rounded-br-none" : "rounded-bl-none"
@@ -241,7 +241,7 @@ export const ChatBot = () => {
   return (
     <>
       <div
-        className="dark fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm dark:bg-white/70"
+        className="dark fixed inset-0 z-[1000] bg-black/70 backdrop-blur-sm dark:bg-white/70"
         onClick={() => setIsChatOpen(false)}
       ></div>
 
@@ -272,7 +272,7 @@ export const ChatBot = () => {
       </button>
 
       <div
-        className="fixed left-1/2 top-1/2 z-[1001] h-[80vh] w-[80vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800"
+        className="fixed left-1/2 top-1/2 z-[1000] mt-[-25px] h-[80vh] w-[80vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800"
         dir={isRTL ? "rtl" : "ltr"}
       >
         <div
