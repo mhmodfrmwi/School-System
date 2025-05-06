@@ -115,7 +115,17 @@ i18n.use(initReactI18next).init({
           grades: "Grades",
           averageGrade: "Average Grade",
           highestGrade: "Highest Grade",
-          lowestGrade: "Lowest Grade"
+          lowestGrade: "Lowest Grade",
+          errors: {
+            title: "Error",
+            confirmButton:"OK",
+            noData: {
+              title: "No Data Available",
+              message:"We couldn't find any dashboard data. Please try again later or contact support.",
+              backButton:"Back to Onboarding",
+            "refreshButton": "Refresh Page"            },
+  
+          },
         },
         menu: {
           motivation: "Motivation",
@@ -131,6 +141,7 @@ i18n.use(initReactI18next).init({
           arabic: "Arabic",
           science: "Science",
         },
+     
         //Motivation
 
         motivation: {
@@ -2105,7 +2116,17 @@ i18n.use(initReactI18next).init({
           grades: "الدرجات",
           averageGrade: "الدرجة المتوسطة",
           highestGrade: "أعلى درجة",
-          lowestGrade: "أدنى درجة"
+          lowestGrade: "أدنى درجة",
+          errors: {
+            title: "خطأ",
+            confirmButton:"حسنا",
+            noData: {
+              title: "لا توجد بيانات متاحة",
+              message:"لم نتمكن من العثور على أي بيانات للوحة التحكم. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالدعم.",
+              backButton:"العودة إلى الصفحة الرئيسية",     
+            "refreshButton": "تحديث الصفحة"       },
+  
+          },
         },
         menu: {
           motivation: "التحفيز",
