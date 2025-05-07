@@ -28,6 +28,7 @@ import "./fonts.css";
 import ForgotPassword from "./Features/Auth/ForgotPassword";
 import VerifyEmail from "./Features/Auth/VerifyEmail";
 import ResendVerification from "./Features/Auth/ResendVerification";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -539,6 +540,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <TitleUpdater />
         <ToastContainer

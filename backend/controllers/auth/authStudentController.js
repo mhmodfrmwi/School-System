@@ -54,7 +54,7 @@ const updateStudentProfile = expressAsyncHandler(async (req, res) => {
     const studentId = req.user.id;
     const { currentPassword, newPassword, phone } = req.body;
     let profileImage = req.file
-      ? `http://localhost:4000/profileImages/${req.file.filename}`
+      ? `${process.env.IMAGE_URL}/profileImages/${req.file.filename}`
       : undefined;
 
     if (!newPassword && !phone && !profileImage) {

@@ -85,10 +85,9 @@ const StudentPerformanceModal = () => {
       </button>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-10">
+        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-10 dark:bg-white/70">
           <div
-            className={`relative mx-auto w-full max-w-4xl overflow-y-auto rounded-lg bg-white shadow-xl dark:bg-[#13082F] ${isRTL ? "text-right" : "text-left"}`}
-            style={{ maxHeight: "80vh" }}
+            className={`relative mx-auto mt-[-45px] h-[75vh] w-full max-w-4xl overflow-y-auto rounded-lg bg-white shadow-xl dark:bg-[#13082F] ${isRTL ? "text-right" : "text-left"}`}
             dir={isRTL ? "rtl" : "ltr"}
           >
             <div className="sticky top-0 flex items-center justify-between border-b-2 border-gray-100 bg-white p-4 dark:border-[#3B1E77] dark:bg-[#13082F]">

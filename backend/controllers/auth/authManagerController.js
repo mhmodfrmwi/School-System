@@ -42,7 +42,7 @@ const updateManagerProfile = async (req, res) => {
     const managerId = req.user.id;
     const { currentPassword, newPassword, phone } = req.body;
     const profileImage = req.file
-      ? `http://localhost:4000/profileImages/${req.file.filename}`
+      ? `${process.env.IMAGE_URL}/profileImages/${req.file.filename}`
       : undefined;
 
     if (!newPassword && !phone && !profileImage) {

@@ -9,7 +9,7 @@ const studentGradeService = require("../../services/studentGradeService");
  */
 const getStudentGrades = expressAsyncHandler(async (req, res) => {
   const { subjectId } = req.params;
-  const { studentId } = req.body;
+  const { studentId } = req.params;
 
   try {
     const grades = await studentGradeService.getStudentSubjectGrades(
@@ -31,7 +31,7 @@ const getStudentGrades = expressAsyncHandler(async (req, res) => {
  * @access Private
  */
 const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
-  const { studentId } = req.body;
+  const { studentId } = req.params;
 
   try {
     const grades = await studentGradeService.getStudentCurrentSemesterGrades(
@@ -52,7 +52,7 @@ const getStudentSemesterGrades = expressAsyncHandler(async (req, res) => {
  * @access Private
  */
 const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
-  const { studentId } = req.body;
+  const { studentId } = req.params;
 
   try {
     const grades = await studentGradeService.getAllSemestersGrades(studentId);
@@ -71,7 +71,7 @@ const getAllSemesterGrades = expressAsyncHandler(async (req, res) => {
  * @access Private
  */
 const getStudentGradesReport = expressAsyncHandler(async (req, res) => {
-  const { studentId } = req.body;
+  const { studentId } = req.params;
 
   try {
     const gradesReport = await studentGradeService.getStudentGradesReport(

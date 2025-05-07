@@ -5,7 +5,7 @@ const addRewardClaimAndUpdatePoints = require("../../utils/updatingRewards");
 const Participation = require("../../DB/schoolHubParticipationModel");
 
 const getAllSchoolHubs = expressAsyncHandler(async (req, res) => {
-    const {studentId} = req.body;
+    const {studentId} = req.params;
 
     if (!validateObjectId(studentId)) {
         return res.status(400).json({

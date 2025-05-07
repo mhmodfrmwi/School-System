@@ -8,7 +8,7 @@ const Semester = require("../../DB/semesterModel");
 
 const getAllContestsForStudent = expressAsyncHandler(async (req, res) => {
   try {
-    const { studentId } = req.body;
+    const { studentId } = req.params;
 
     const student = await Student.findById(studentId)
       .populate("gradeId")

@@ -5,8 +5,8 @@ import { FiUser, FiMail, FiBook, FiUsers } from "react-icons/fi";
 import { FaChild } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useParentKids } from "../components/hooks/useParentKids";
 import { useTranslation } from "react-i18next";
+import { useParentKids } from "../components/hooks/selectKid";
 
 function ParentKids() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function ParentKids() {
   if (isLoading) return <Loader role="parent" />;
 
   const handleSelectKid = (kid) => {
-    localStorage.setItem('selectedKid', JSON.stringify(kid));
+    localStorage.setItem("selectedKid", JSON.stringify(kid));
     navigate("/parent/dashboard");
   };
 
@@ -25,8 +25,6 @@ function ParentKids() {
   //   localStorage.setItem("isInParentDashboard", "false");
   //   navigate("/parent/dashboard", { state: { selectedKid: kid } });
   // };
-
-
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
@@ -120,7 +118,9 @@ function ParentKids() {
                                 : "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
                             }`}
                           >
-                            {kid.gender === "M" ? t("parentKids.gender.male") :  t("parentKids.gender.female")}
+                            {kid.gender === "M"
+                              ? t("parentKids.gender.male")
+                              : t("parentKids.gender.female")}
                           </span>
                         </td>
                       </motion.tr>

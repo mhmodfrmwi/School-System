@@ -17,6 +17,7 @@ const {
   getStudentGrades,
   getStudentSemesterGrades,
   getAllSemesterGrades,
+  getStudentGradesReport
 } = require("../controllers/Parent/studentgrades");
 
 const {
@@ -64,45 +65,52 @@ router.get("/parent-data", validateJwt, validateParent, getLoggedInParentData);
 
 ///$$$$$$$$//
 router.get(
-  "/subject-degree/:subjectId",
+  "/subject-degree/:subjectId/:studentId",
   validateJwt,
   validateParent,
   getStudentGrades
 );
 router.get(
-  "/semester-subject-degree",
+  "/semester-subject-degree/:studentId",
   validateJwt,
   validateParent,
   getStudentSemesterGrades
 );
 router.get(
-  "/all-subjects-degrees",
+  "/all-subjects-degrees/:studentId",
   validateJwt,
   validateParent,
   getAllSemesterGrades
 );
 
 router.get(
-  "/get-attendance",
+  "/grade-report/:studentId",
+  validateJwt,
+  validateParent,
+  getStudentGradesReport
+);
+
+router.get(
+  "/get-attendance/:studentId",
   validateJwt,
   validateParent,
   getStudentAttendanceUsingStudentId
 );
 
 router.get(
-  "/get-schedule",
+  "/get-schedule/:studentId",
   validateJwt,
   validateParent,
   getScheduleForSpecificStudent
 );
 router.get(
-  "/get-contests",
+  "/get-contests/:studentId",
   validateJwt,
   validateParent,
   getAllContestsForStudent
 );
 
-router.get("/school-hub", validateJwt, validateParent, getAllSchoolHubs);
+router.get("/school-hub/:studentId", validateJwt, validateParent, getAllSchoolHubs);
 
 router.get(
   "/student-results",

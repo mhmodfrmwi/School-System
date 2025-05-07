@@ -132,14 +132,14 @@ function DashboardStudent() {
         popup: "dark:bg-[#281459] dark:text-gray-300",
       },
     });
-    return null; 
+  
   }
 
   if (!dashboardData) {
     return (
       <div
         dir={i18n.language === "ar" ? "rtl" : "ltr"}
-        className="flex flex-col lg:flex-row items-center justify-center text-center mt-16 min-h-[60vh] w-[95%] mb-20 mx-auto font-poppins gap-8 bg-white dark:bg-[#13082F]"
+        className="min-h-screen bg-white dark:bg-[#13082F] relative"
       >
         <div
           className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
@@ -149,30 +149,61 @@ function DashboardStudent() {
           className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
           style={{ backgroundImage: `url(${backgroundWaves})` }}
         ></div>
-        <div
-          className={`relative z-10 flex flex-col lg:flex-row items-center justify-center w-full gap-8 ${
-            i18n.language === "ar" ? "flex-row-reverse" : ""
-          }`}
-        >
-          <div className="flex items-center justify-center w-full lg:w-1/2">
-            <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-sm w-full max-w-md bg-white/90 dark:bg-[#281459]/90 backdrop-blur-sm">
-              <CardContent className="text-center p-8">
-                <div className="text-4xl mb-4">📊</div>
-                <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-300 mb-2">
-                  {t("dashboard.errors.noData.title")}
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  {t("dashboard.errors.noData.message")}
-                </p>
-                <Button
-                  variant="solid"
-                  className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white hover:shadow-lg transition-shadow duration-300"
-                  onClick={() => navigate("/")}
-                >
-                  {t("dashboard.errors.noData.backButton")}
-                </Button>
-              </CardContent>
-            </Card>
+        
+        <div className="relative z-10 pt-16">
+          {/* Header Placeholder */}
+        {/*  <div className="h-24 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></div>*/}
+          
+          {/* Main Content */}
+          <div className="mx-auto w-[95%] py-12">
+            <div className="flex flex-col items-center justify-center min-h-[50vh]">
+              <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-lg w-full max-w-2xl bg-white/90 dark:bg-[#281459]/90 backdrop-blur-sm">
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-6">
+                    <div className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] p-4 rounded-full w-20 h-20 flex items-center justify-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-10 w-10 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text text-transparent mb-4">
+                    {t("dashboard.errors.noData.title")}
+                  </h2>
+                  
+                  <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+                    {t("dashboard.errors.noData.message")}
+                  </p>
+                  
+                  <div className="flex justify-center gap-4">
+                    <Button
+                      onClick={() => window.location.reload()}
+                      className="px-6 py-3 bg-gray-100 dark:bg-[#4B3B7A] text-gray-800 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-[#5A4A8A] transition-colors"
+                    >
+                      {t("dashboard.errors.noData.refreshButton")}
+                    </Button>
+                    
+                    <Button
+                      onClick={() => navigate("/")}
+                      className="px-6 py-3 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white rounded-lg font-medium hover:shadow-lg transition-all"
+                    >
+                      {t("dashboard.errors.noData.backButton")}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>

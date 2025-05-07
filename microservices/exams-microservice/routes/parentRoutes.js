@@ -10,10 +10,10 @@ const validateJwt = require("../../../backend/middlewares/validateJWT");
 const validateParent = require("../../../backend/middlewares/validateParent");
 const router = express.Router();
 
-router.get("/student-results", validateJwt, validateParent,getAllStudentResults);
-router.get("/student/missed/:gradeSubjectSemesterId", validateJwt, validateParent, getMissedExamsForStudent);
-router.get("/student/completed-exams/:gradeSubjectSemesterId", validateJwt, validateParent,getCompletedExamsForStudent);
-router.get("/student/completed/all", validateJwt, validateParent, getCompletedExamsForSubjects);
+router.get("/student-results/:student_id", validateJwt, validateParent,getAllStudentResults);
+router.get("/student/missed/:gradeSubjectSemesterId/:student_id", validateJwt, validateParent, getMissedExamsForStudent);
+router.get("/student/completed-exams/:gradeSubjectSemesterId/:student_id", validateJwt, validateParent,getCompletedExamsForStudent);
+router.get("/student/completed/all/:student_id", validateJwt, validateParent, getCompletedExamsForSubjects);
 
 ///$$$$$$$$//
 

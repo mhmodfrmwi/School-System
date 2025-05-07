@@ -203,7 +203,8 @@ const getMissedVirtualRooms = async (studentId, gradeSubjectSemesterId) => {
   });
 
   const missedVirtualRoomsWithDetails = missedVirtualRooms.map((room) => ({
-    ...room.toObject(),
+    ...(room.toObject ? room.toObject() : room),
+    //...room.toObject(),
     studentAttendanceStatus: "missed",
   }));
 
@@ -269,7 +270,8 @@ const getAllMissedVirtualRoomsForAllSubjects = async (studentId) => {
   });
 
   const missedVirtualRoomsWithDetails = missedVirtualRooms.map((room) => ({
-    ...room.toObject(),
+    ...(room.toObject ? room.toObject() : room),
+    //...room.toObject(),
     studentAttendanceStatus: "missed",
   }));
 

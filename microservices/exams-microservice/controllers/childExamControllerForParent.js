@@ -11,7 +11,7 @@ const {
 
 const getAllStudentResults = async (req, res) => {
   try {
-    const {student_id} = req.body;
+    const {student_id} = req.params;
     const exams = await getStudentResults(student_id);//
     res.status(200).json(exams);
   } catch (error) {
@@ -25,7 +25,7 @@ const getAllStudentResults = async (req, res) => {
 
 const getMissedExamsForStudent = async (req, res) => {
   try {
-    const {student_id} = req.body;
+    const {student_id} = req.params;
     const student = await Student.findById(student_id)
 
     const grade_subject_semester_id = req.params.gradeSubjectSemesterId;
@@ -71,7 +71,7 @@ const getMissedExamsForStudent = async (req, res) => {
 
 const getCompletedExamsForStudent = async (req, res) => {
   try {
-    const {student_id} = req.body;
+    const {student_id} = req.params;
     const student = await Student.findById(student_id)
 
     const grade_subject_semester_id = req.params.gradeSubjectSemesterId;
@@ -116,7 +116,7 @@ const getCompletedExamsForStudent = async (req, res) => {
 };
 const getCompletedExamsForSubjects = async (req, res) => {
   try {
-    const {student_id} = req.body;
+    const {student_id} = req.params;
     const exams = await getCompletedExamsForAllSubjects(student_id);
     res.status(200).json(exams);
   } catch (error) {
