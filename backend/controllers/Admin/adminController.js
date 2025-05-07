@@ -27,7 +27,11 @@ const createAdmin = expressAsyncHandler(async (req, res) => {
       ...req.body,
       password: await hashPassword(req.body.password),
     });
-    const message = await createVerificationToken(admin._id);
+    const message = await createVerificationToken(
+      admin._id,
+      "Admin",
+      admin.email
+    );
     res.status(201).json(message);
   } catch (error) {
     console.error("Error creating admin:", error);

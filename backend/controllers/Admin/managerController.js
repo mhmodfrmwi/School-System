@@ -33,7 +33,11 @@ const createManager = expressAsyncHandler(async (req, res) => {
   });
 
   await manager.save();
-  const message = await createVerificationToken(manager._id);
+  const message = await createVerificationToken(
+    manager._id,
+    "Manager",
+    manager.email
+  );
   res.status(201).json({
     status: 201,
     message,

@@ -50,7 +50,11 @@ const createTeacher = expressAsyncHandler(async (req, res) => {
   });
 
   await teacher.save();
-  const message = await createVerificationToken(teacher._id);
+  const message = await createVerificationToken(
+    teacher._id,
+    "Teacher",
+    teacher.email
+  );
   res.status(201).json({
     status: 201,
     message,

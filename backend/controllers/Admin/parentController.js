@@ -56,7 +56,11 @@ const createParent = expressAsyncHandler(async (req, res) => {
         return await createParentStudent(parent._id, studentAcademicNumber);
       })
     );
-    const message = await createVerificationToken(parent._id);
+    const message = await createVerificationToken(
+      parent._id,
+      "Parent",
+      parent.email
+    );
     res.status(201).json({
       status: 201,
       message,
@@ -101,14 +105,7 @@ const updateParent = expressAsyncHandler(async (req, res) => {
         message: "Email or phone number already exists",
       });
     }
-  } catch (error) {
-    return res.status(500).json({
-      status: 400,
-      message: error.message,
-    });
-  }
 
-  try {
     const updatedFields = {
       fullName: req.body.fullName,
       phone: req.body.phone,
@@ -131,10 +128,22 @@ const updateParent = expressAsyncHandler(async (req, res) => {
       });
     }
 
-    const studentsAcademicNumbers = req.body.studentsAcademicNumbers;
-    if (studentsAcademicNumbers && Array.isArray(studentsAcademicNumbers)) {
+    const studentsAcademicNumbers = req.body.students || [];
+
+    if (!Array.isArray(studentsAcademicNumbers)) {
+      return res.status(400).json({
+        status: 400,
+        message: "students must be an array",
+      });
+    }
+
+    await ParentStudent.deleteMany({ parent_id: parent._id });
+
+    let parentStudents = [];
+
+    if (studentsAcademicNumbers.length > 0) {
       try {
-        const parentStudents = await Promise.all(
+        parentStudents = await Promise.all(
           studentsAcademicNumbers.map(async (studentAcademicNumber) => {
             return await createParentStudent(parent._id, studentAcademicNumber);
           })
@@ -142,7 +151,7 @@ const updateParent = expressAsyncHandler(async (req, res) => {
 
         return res.status(200).json({
           status: 200,
-          message: "Parent updated successfully with students",
+          message: "Parent updated successfully with new student associations",
           parent,
           parentStudents,
         });
@@ -156,12 +165,14 @@ const updateParent = expressAsyncHandler(async (req, res) => {
 
     res.status(200).json({
       status: 200,
-      message: "Parent updated successfully",
+      message:
+        "Parent updated successfully with all student associations removed",
       parent,
+      parentStudents,
     });
   } catch (error) {
-    return res.status(400).json({
-      status: 400,
+    return res.status(500).json({
+      status: 500,
       message: error.message,
     });
   }
@@ -238,7 +249,7 @@ const getParent = expressAsyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.log(`Failed ${error.message}`);
-    res.json({ message: `Failed ${error.message}` });
+    res.status(500).json({ message: `Failed ${error.message}` });
   }
 });
 
@@ -273,7 +284,7 @@ const getAllParent = expressAsyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.log(`Failed ${error.message}`);
-    res.json({ message: `Failed ${error.message}` });
+    res.status(500).json({ message: `Failed ${error.message}` });
   }
 });
 
