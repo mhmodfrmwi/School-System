@@ -264,6 +264,16 @@ const ParentContests = lazy(
   () => import("./Features/Parent/components/Activites/Contests"),
 );
 
+const GradesForSemesterForChild = lazy(
+  () => import("./Features/Parent/components/Grades/GradesForSemester"),
+);
+const GradesForAllSemestersForChild = lazy(
+  () => import("./Features/Parent/components/Grades/GradesForAllSemesters"),
+);
+const GradesForChild = lazy(
+  () => import("./Features/Parent/components/Grades/GradesForChild"),
+);
+
 /* /////////////////teacher imports//////////////////// */
 
 const SeeVR = lazy(
@@ -764,6 +774,15 @@ function App() {
                 }
               />
               <Route path="activities/contests" element={<ParentContests />} />
+              <Route path="grades-for-child" element={<GradesForChild />} />
+              <Route
+                path="grades-for-semester"
+                element={<GradesForSemesterForChild />}
+              />
+              <Route
+                path="grades-for-all-semesters"
+                element={<GradesForAllSemestersForChild />}
+              />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route

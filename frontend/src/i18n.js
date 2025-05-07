@@ -118,13 +118,14 @@ i18n.use(initReactI18next).init({
           lowestGrade: "Lowest Grade",
           errors: {
             title: "Error",
-            confirmButton:"OK",
+            confirmButton: "OK",
             noData: {
               title: "No Data Available",
-              message:"We couldn't find any dashboard data. Please try again later or contact support.",
-              backButton:"Back to Onboarding",
-            "refreshButton": "Refresh Page"            },
-  
+              message:
+                "We couldn't find any dashboard data. Please try again later or contact support.",
+              backButton: "Back to Onboarding",
+              refreshButton: "Refresh Page",
+            },
           },
         },
         menu: {
@@ -141,7 +142,7 @@ i18n.use(initReactI18next).init({
           arabic: "Arabic",
           science: "Science",
         },
-     
+
         //Motivation
 
         motivation: {
@@ -1804,44 +1805,44 @@ i18n.use(initReactI18next).init({
           class: "Class",
           academicNumber: "Academic Number",
           gender: "Gender",
-          "activities": {
-            "title": "Student Activities",
-            "noKidSelected": "No child selected",
-            "selectKid": "Select a child",
-            "tabs": {
-              "schoolHubs": "School Clubs",
-              "contests": "Contests"
+          activities: {
+            title: "Student Activities",
+            noKidSelected: "No child selected",
+            selectKid: "Select a child",
+            tabs: {
+              schoolHubs: "School Clubs",
+              contests: "Contests",
             },
-            "registration": "Registration Period",
-            "contests": "Contests",
-            "contestTitle": "Contest Title",
-            "contestDate": "Contest Date",
-            "status": "Status",
-            "active": "Active",
-            "ended": "Ended"
+            registration: "Registration Period",
+            contests: "Contests",
+            contestTitle: "Contest Title",
+            contestDate: "Contest Date",
+            status: "Status",
+            active: "Active",
+            ended: "Ended",
           },
-          "contests": {
-            "title": "Student Contests",
-            "noKidSelected": "No child selected",
-            "selectKid": "Select a child",
-            "tabs": {
-              "schoolHubs": "School Clubs",
-              "contests": "Contests"
+          contests: {
+            title: "Student Contests",
+            noKidSelected: "No child selected",
+            selectKid: "Select a child",
+            tabs: {
+              schoolHubs: "School Clubs",
+              contests: "Contests",
             },
-            "table": {
-              "headers": {
-                "title": "Title",
-                "teacher": "Teacher",
-                "startDate": "Start Date",
-                "endDate": "End Date",
-                "status": "Status"
+            table: {
+              headers: {
+                title: "Title",
+                teacher: "Teacher",
+                startDate: "Start Date",
+                endDate: "End Date",
+                status: "Status",
               },
-              "status": {
-                "active": "Active",
-                "ended": "Ended"
+              status: {
+                active: "Active",
+                ended: "Ended",
               },
-              "noData": "No contests available"
-            }
+              noData: "No contests available",
+            },
           },
         },
         menuparent: {
@@ -1881,6 +1882,61 @@ i18n.use(initReactI18next).init({
           },
           noChildren: "No children found",
         },
+
+        gradesSemesterForChild: {
+          title: "Semester Grades",
+          academicNumber: "Academic Number",
+          back: "Back",
+          noDegrees: "No grades available for this semester",
+          total: "Total",
+          headers: {
+            subjectName: "Subject Name",
+            midtermGrade: "Midterm Grade",
+            midtermTotal: "Midterm Total",
+            finalGrade: "Final Grade",
+            finalTotal: "Final Total",
+            totalScore: "Total Score",
+            percentage: "Percentage",
+          },
+        },
+
+        gradesAllSemesters: {
+          title: "All Semesters Grades",
+          back: "Back",
+          academicYear: "Academic Year",
+          total: "Total",
+          noDegrees: "No grades available for this semester",
+          noSemesters: "No semesters data available",
+          headers: {
+            subjectName: "Subject Name",
+            midtermGrade: "Midterm Grade",
+            midtermTotal: "Midterm Total",
+            finalGrade: "Final Grade",
+            finalTotal: "Final Total",
+            totalScore: "Total Score",
+            percentage: "Percentage",
+          },
+        },
+
+        gradesForChild: {
+          header: {
+            viewGradesOf: "View grades of",
+            here: " here",
+            subtitle: "Great Achievements",
+          },
+          title: "Grades Dashboard",
+          cards: {
+            currentSemester: "Current Semester",
+            allYears: "All Academic Years",
+            viewGrades: "View Grades",
+          },
+          performance: {
+            title: "Performance Evolution",
+            totalScore: "Total Score",
+            noData: "No performance data available",
+          },
+        },
+
         ////////////////////////////////auth////////////////////////
 
         onboarding: {
@@ -2119,13 +2175,14 @@ i18n.use(initReactI18next).init({
           lowestGrade: "أدنى درجة",
           errors: {
             title: "خطأ",
-            confirmButton:"حسنا",
+            confirmButton: "حسنا",
             noData: {
               title: "لا توجد بيانات متاحة",
-              message:"لم نتمكن من العثور على أي بيانات للوحة التحكم. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالدعم.",
-              backButton:"العودة إلى الصفحة الرئيسية",     
-            "refreshButton": "تحديث الصفحة"       },
-  
+              message:
+                "لم نتمكن من العثور على أي بيانات للوحة التحكم. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالدعم.",
+              backButton: "العودة إلى الصفحة الرئيسية",
+              refreshButton: "تحديث الصفحة",
+            },
           },
         },
         menu: {
@@ -3795,44 +3852,44 @@ i18n.use(initReactI18next).init({
           class: "الفصل",
           academicNumber: "الرقم الأكاديمي",
           gender: "النوع",
-          "activities": {
-            "title": "أنشطة الطالب",
-            "noKidSelected": "لم يتم اختيار طفل",
-            "selectKid": "اختر طفلاً",
-            "tabs": {
-              "schoolHubs": "النوادي المدرسية",
-              "contests": "المسابقات"
+          activities: {
+            title: "أنشطة الطالب",
+            noKidSelected: "لم يتم اختيار طفل",
+            selectKid: "اختر طفلاً",
+            tabs: {
+              schoolHubs: "النوادي المدرسية",
+              contests: "المسابقات",
             },
-            "registration": "فترة التسجيل",
-            "contests": "المسابقات",
-            "contestTitle": "عنوان المسابقة",
-            "contestDate": "تاريخ المسابقة",
-            "status": "الحالة",
-            "active": "نشطة",
-            "ended": "منتهية"
+            registration: "فترة التسجيل",
+            contests: "المسابقات",
+            contestTitle: "عنوان المسابقة",
+            contestDate: "تاريخ المسابقة",
+            status: "الحالة",
+            active: "نشطة",
+            ended: "منتهية",
           },
-          "contests": {
-            "title": "مسابقات الطالب",
-            "noKidSelected": "لم يتم اختيار طفل",
-            "selectKid": "اختر طفلاً",
-            "tabs": {
-              "schoolHubs": "النوادي المدرسية",
-              "contests": "المسابقات"
+          contests: {
+            title: "مسابقات الطالب",
+            noKidSelected: "لم يتم اختيار طفل",
+            selectKid: "اختر طفلاً",
+            tabs: {
+              schoolHubs: "النوادي المدرسية",
+              contests: "المسابقات",
             },
-            "table": {
-              "headers": {
-                "title": "العنوان",
-                "teacher": "المعلم",
-                "startDate": "تاريخ البدء",
-                "endDate": "تاريخ الانتهاء",
-                "status": "الحالة"
+            table: {
+              headers: {
+                title: "العنوان",
+                teacher: "المعلم",
+                startDate: "تاريخ البدء",
+                endDate: "تاريخ الانتهاء",
+                status: "الحالة",
               },
-              "status": {
-                "active": "نشطة",
-                "ended": "منتهية"
+              status: {
+                active: "نشطة",
+                ended: "منتهية",
               },
-              "noData": "لا توجد مسابقات متاحة"
-            }
+              noData: "لا توجد مسابقات متاحة",
+            },
           },
         },
         menuparent: {
@@ -3872,6 +3929,61 @@ i18n.use(initReactI18next).init({
           },
           noChildren: "لا يوجد أطفال",
         },
+
+        gradesSemesterForChild: {
+          title: "درجات الفصل الدراسي",
+          academicNumber: "الرقم الأكاديمي",
+          back: "رجوع",
+          noDegrees: "لا توجد درجات متاحة لهذا الفصل الدراسي",
+          total: "المجموع",
+          headers: {
+            subjectName: "اسم المادة",
+            midtermGrade: "درجة منتصف الفصل",
+            midtermTotal: "الدرجة الكاملة لمنتصف الفصل",
+            finalGrade: "درجة نهاية الفصل",
+            finalTotal: "الدرجة الكاملة لنهاية الفصل",
+            totalScore: "المجموع الكلي",
+            percentage: "النسبة المئوية",
+          },
+        },
+
+        gradesAllSemesters: {
+          title: "درجات جميع الفصول",
+          back: "رجوع",
+          academicYear: "السنة الأكاديمية",
+          total: "المجموع",
+          noDegrees: "لا توجد درجات متاحة لهذا الفصل",
+          noSemesters: "لا توجد بيانات للفصول الدراسية",
+          headers: {
+            subjectName: "اسم المادة",
+            midtermGrade: "درجة منتصف الفصل",
+            midtermTotal: "الدرجة الكاملة لمنتصف الفصل",
+            finalGrade: "درجة نهاية الفصل",
+            finalTotal: "الدرجة الكاملة لنهاية الفصل",
+            totalScore: "المجموع الكلي",
+            percentage: "النسبة المئوية",
+          },
+        },
+
+        gradesForChild: {
+          header: {
+            subtitle: "إنجازات رائعة",
+            viewGradesOf: "انظر إلى درجات",
+            here: " هنا",
+          },
+          title: "لوحة الدرجات",
+          cards: {
+            currentSemester: "الفصل الحالي",
+            allYears: "جميع السنوات الأكاديمية",
+            viewGrades: "عرض الدرجات",
+          },
+          performance: {
+            title: "تطور الأداء",
+            totalScore: "المجموع الكلي",
+            noData: "لا توجد بيانات أداء متاحة",
+          },
+        },
+
         ////////////////////////////////auth/////////////////////////////
 
         onboarding: {

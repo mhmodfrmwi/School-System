@@ -11,7 +11,7 @@ import { useParentKids } from "../components/hooks/selectKid";
 function ParentKids() {
   const navigate = useNavigate();
   const { parentKids, isLoading } = useParentKids();
-  const [selectedKid, setSelectedKid] = useState(null);
+  const [selectedKid] = useState(null);
   const { t } = useTranslation();
 
   if (isLoading) return <Loader role="parent" />;
