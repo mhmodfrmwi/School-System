@@ -272,7 +272,7 @@ export const ChatBot = () => {
       </button>
 
       <div
-        className="fixed left-1/2 top-1/2 z-[1000] mt-[-25px] h-[80vh] w-[80vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800"
+        className="fixed left-1/2 top-1/2 z-[1000] mt-[-38px] h-[75vh] w-[80vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800"
         dir={isRTL ? "rtl" : "ltr"}
       >
         <div
