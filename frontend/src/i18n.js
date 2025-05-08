@@ -1813,6 +1813,22 @@ i18n.use(initReactI18next).init({
               schoolHubs: "School Clubs",
               contests: "Contests",
             },
+            hubCard: {
+              registrationStart: "Contest Registration Start:",
+              registrationEnd: "Contest Ends:",
+              contestDate: "Contest Date:",
+              details: "Details",
+              prizes: "Prizes",
+              join: "Join",
+              disjoin: "Disjoin",
+              noHubs: "No school hubs available",
+              noHubsMessage:
+                "It seems like there are no school hubs available at the moment. Please check back later.",
+            },
+            errors: {
+              title: "Error",
+              default: "An error occurred",
+            },
             registration: "Registration Period",
             contests: "Contests",
             contestTitle: "Contest Title",
@@ -1843,6 +1859,32 @@ i18n.use(initReactI18next).init({
               },
               noData: "No contests available",
             },
+          },
+       
+          activityDetails: {
+            title: "Activities",
+            tabs: {
+              details: "Details",
+              prizes: "Prizes",
+            },
+
+              location: "Location",
+              details: "Details",
+            
+            notFound: "No activity found",
+          },
+          errors: {
+            title: "Error",
+            default: "An error occurred",
+          },
+          activityPrizes: {
+            title: "Activities",
+            tabs: {
+              details: "Details",
+              prizes: "Prizes",
+            },
+            prizeLevel: "Level ",
+            notFound: "No activity found",
           },
         },
         menuparent: {
@@ -3853,44 +3895,82 @@ i18n.use(initReactI18next).init({
           class: "الفصل",
           academicNumber: "الرقم الأكاديمي",
           gender: "النوع",
-          activities: {
-            title: "أنشطة الطالب",
-            noKidSelected: "لم يتم اختيار طفل",
-            selectKid: "اختر طفلاً",
-            tabs: {
-              schoolHubs: "النوادي المدرسية",
-              contests: "المسابقات",
+          "activities": {
+            "title": "أنشطة الطالب",
+            "noKidSelected": "لم يتم اختيار طفل",
+            "selectKid": "اختر طفلاً",
+            "tabs": {
+              "schoolHubs": "الأندية المدرسية",
+              "contests": "المسابقات"
             },
-            registration: "فترة التسجيل",
-            contests: "المسابقات",
-            contestTitle: "عنوان المسابقة",
-            contestDate: "تاريخ المسابقة",
-            status: "الحالة",
-            active: "نشطة",
-            ended: "منتهية",
+            "hubCard": {
+              "registrationStart": "بداية تسجيل المسابقة:",
+              "registrationEnd": "نهاية التسجيل:",
+              "contestDate": "تاريخ المسابقة:",
+              "details": "التفاصيل",
+              "prizes": "الجوائز",
+              "join": "انضم",
+              "disjoin": "انسحب",
+              "noHubs": "لا توجد أندية مدرسية متاحة",
+              "noHubsMessage": "يبدو أنه لا توجد أندية مدرسية متاحة حالياً. يرجى التحقق لاحقاً."
+            },
+            "errors": {
+              "title": "خطأ",
+              "default": "حدث خطأ ما"
+            },
+            "registration": "فترة التسجيل",
+            "contests": "المسابقات",
+            "contestTitle": "عنوان المسابقة",
+            "contestDate": "تاريخ المسابقة",
+            "status": "الحالة",
+            "active": "نشط",
+            "ended": "منتهي"
           },
-          contests: {
-            title: "مسابقات الطالب",
-            noKidSelected: "لم يتم اختيار طفل",
-            selectKid: "اختر طفلاً",
-            tabs: {
-              schoolHubs: "النوادي المدرسية",
-              contests: "المسابقات",
+          "contests": {
+            "title": "مسابقات الطالب",
+            "noKidSelected": "لم يتم اختيار طفل",
+            "selectKid": "اختر طفلاً",
+            "tabs": {
+              "schoolHubs": "الأندية المدرسية",
+              "contests": "المسابقات"
             },
-            table: {
-              headers: {
-                title: "العنوان",
-                teacher: "المعلم",
-                startDate: "تاريخ البدء",
-                endDate: "تاريخ الانتهاء",
-                status: "الحالة",
+            "table": {
+              "headers": {
+                "title": "العنوان",
+                "teacher": "المعلم",
+                "startDate": "تاريخ البدء",
+                "endDate": "تاريخ الانتهاء",
+                "status": "الحالة"
               },
-              status: {
-                active: "نشطة",
-                ended: "منتهية",
+              "status": {
+                "active": "نشط",
+                "ended": "منتهي"
               },
-              noData: "لا توجد مسابقات متاحة",
+              "noData": "لا توجد مسابقات متاحة"
+            }
+          },
+          "activityDetails": {
+            "title": "الأنشطة",
+            "tabs": {
+              "details": "التفاصيل",
+              "prizes": "الجوائز"
             },
+            "location": "الموقع",
+            "details": "التفاصيل",
+            "notFound": "لم يتم العثور على نشاط"
+          },
+          "errors": {
+            "title": "خطأ",
+            "default": "حدث خطأ ما"
+          },
+          "activityPrizes": {
+            "title": "الأنشطة",
+            "tabs": {
+              "details": "التفاصيل",
+              "prizes": "الجوائز"
+            },
+            "prizeLevel": "المستوى ",
+            "notFound": "لم يتم العثور على نشاط"
           },
         },
         menuparent: {

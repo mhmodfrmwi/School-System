@@ -263,7 +263,12 @@ const ParentActivities = lazy(
 const ParentContests = lazy(
   () => import("./Features/Parent/components/Activites/Contests"),
 );
-
+const DetailesParentActivity = lazy(
+  () => import("./Features/Parent/components/Activites/DetailesActivity"),
+);
+const PrizesParentActivity = lazy(
+  () => import("./Features/Parent/components/Activites/PrizesActivity"),
+);
 const GradesForSemesterForChild = lazy(
   () => import("./Features/Parent/components/Grades/GradesForSemester"),
 );
@@ -763,15 +768,14 @@ function App() {
                 path="edit-parent-profile"
                 element={<EditParentProfile />}
               />
+              <Route path="activities" element={ <ProtectedRoute  element={<ParentActivities />} requiredRole="parent" requiresKid={true}  /> } />
               <Route
-                path="activities"
-                element={
-                  <ProtectedRoute
-                    element={<ParentActivities />}
-                    requiredRole="parent"
-                    requiresKid={true}
-                  />
-                }
+                path="activities/detailes/:id"
+                element={<DetailesParentActivity />}
+              />
+              <Route
+                path="activities/prizes/:id"
+                element={<PrizesParentActivity />}
               />
               <Route path="activities/contests" element={<ParentContests />} />
               <Route path="grades-for-child" element={<GradesForChild />} />

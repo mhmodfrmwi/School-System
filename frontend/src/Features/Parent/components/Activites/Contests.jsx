@@ -28,10 +28,12 @@ const ParentContests = () => {
 
   useEffect(() => {
     if (selectedKid) {
+      console.log("Fetching contests for kid ID:", selectedKid._id);
       dispatch(fetchParentContests(selectedKid._id));
     }
   }, [dispatch, selectedKid]);
 
+  
   if (!selectedKid) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#13082F]">
@@ -100,11 +102,14 @@ const ParentContests = () => {
             <table className="min-w-full border-collapse rounded-2xl border-2 border-pink-300 dark:border-[#E0AAEE] shadow-lg">
               <thead>
                 <tr className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white font-poppins">
-                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left">{t("parent.contests.table.headers.title")}</th>
-                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left">{t("parent.contests.table.headers.teacher")}</th>
-                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left">{t("parent.contests.table.headers.startDate")}</th>
-                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left">{t("parent.contests.table.headers.endDate")}</th>
-                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left">{t("parent.contests.table.headers.status")}</th>
+                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left  text-xs sm:text-base md:text-lg">{t("parent.contests.table.headers.title")}</th>
+                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left  text-xs sm:text-base md:text-lg">{t("contests.table.headers.subject")}</th>
+                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left  text-xs sm:text-base md:text-lg">{t("parent.contests.table.headers.teacher")}</th>
+                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left  text-xs sm:text-base md:text-lg">{t("parent.contests.table.headers.startDate")}</th>
+                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left  text-xs sm:text-base md:text-lg">{t("parent.contests.table.headers.endDate")}</th>
+                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.teamMembers")}</th>
+                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left text-xs sm:text-base md:text-lg">{t("contests.table.headers.requirements")}</th>
+                  <th className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-left  text-xs sm:text-base md:text-lg">{t("parent.contests.table.headers.status")}</th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-[#281459]">
@@ -112,6 +117,7 @@ const ParentContests = () => {
                   contests.map((contest) => (
                     <tr key={contest._id || uuidv4()} className="hover:bg-gray-100 dark:hover:bg-[#4B3B7A] font-poppins">
                       <td className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2">{contest.title}</td>
+                      <td className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2">{contest.subjectId?.subjectName || "N/A"}</td>
                       <td className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2">{contest.teacherId?.fullName || "N/A"}</td>
                       <td className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2">
                         {contest.startDate ? new Date(contest.startDate).toLocaleDateString() : "N/A"}
@@ -119,6 +125,8 @@ const ParentContests = () => {
                       <td className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2">
                         {contest.endDate ? new Date(contest.endDate).toLocaleDateString() : "N/A"}
                       </td>
+                      <td className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-xs sm:text-sm md:text-sm text-[#5e5b63] dark:text-[#D1D5DB]">{contest.numberOfTeamMembers}</td>
+                      <td className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2 text-xs sm:text-sm md:text-sm text-[#5e5b63] dark:text-[#D1D5DB]">{contest.requirements}</td>
                       <td className="border border-[#FFA4A4] dark:border-[#E0AAEE] px-4 py-2">
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           new Date(contest.endDate) > new Date() 
@@ -130,6 +138,7 @@ const ParentContests = () => {
                             : t("parent.contests.table.status.ended")}
                         </span>
                       </td>
+                      
                     </tr>
                   ))
                 ) : (
