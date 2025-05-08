@@ -34,10 +34,13 @@ const getDashboardData = async (req, res) => {
       });
     }
 
-    // Get base data
     const numberOfAbsentDays = await getNumberOfAbsentDays(studentId);
     const completedExams = await getCompletedExams(studentId, authToken);
     const missedExams = await getMissedExams(studentId, authToken);
+    const completedAssignments = await getCompletedAssignments(
+      studentId,
+      authToken
+    );
     const missedAssignments = await getMissedAssignments(studentId, authToken);
     const grades = await getStudentGradesReport(studentId);
     const materialsStates = (await getMaterialsForGrade(studentId))
@@ -45,13 +48,16 @@ const getDashboardData = async (req, res) => {
     const virtualRoomsStates = await getAllCompletedVirtualRoomsForAllSubjects(
       studentId
     );
-    // ENHANCED: Calculate additional metrics
+
     const attendanceMetrics = await calculateAttendanceMetrics(
       studentId,
       numberOfAbsentDays
     );
     const examMetrics = calculateExamMetrics(completedExams, missedExams);
-    const assignmentMetrics = calculateAssignmentMetrics(missedAssignments);
+    const assignmentMetrics = calculateAssignmentMetrics(
+      completedAssignments,
+      missedAssignments
+    );
     const enhancedGradeMetrics = calculateEnhancedGradeMetrics(grades);
     const performanceTrends = calculatePerformanceTrends(
       grades,
@@ -71,6 +77,7 @@ const getDashboardData = async (req, res) => {
         numberOfAbsentDays,
         completedExams,
         missedExams,
+        completedAssignments,
         missedAssignments,
         grades,
         virtualRoomsStates,
@@ -98,19 +105,15 @@ const getDashboardData = async (req, res) => {
  */
 const calculateAttendanceMetrics = async (studentId, absentDays) => {
   try {
-    // You would need to add a function or query to get total school days
-    // For this example, I'll estimate based on typical school days
     const currentDate = new Date();
-    const startDate = new Date(currentDate.getFullYear(), 8, 1); // Sept 1
+    const startDate = new Date(currentDate.getFullYear(), 8, 1);
 
-    // Calculate school days (approx 20 days per month since start of semester)
     const monthsDiff =
       currentDate.getMonth() -
       startDate.getMonth() +
       12 * (currentDate.getFullYear() - startDate.getFullYear());
     const totalSchoolDays = monthsDiff * 20;
 
-    // If school hasn't started yet or invalid calculation, use a reasonable default
     const effectiveSchoolDays = totalSchoolDays > 0 ? totalSchoolDays : 100;
 
     return {
@@ -138,9 +141,6 @@ const calculateAttendanceMetrics = async (studentId, absentDays) => {
   }
 };
 
-/**
- * Determine attendance status based on absence rate
- */
 const determineAttendanceStatus = (absentDays, totalDays) => {
   const absenceRate = (absentDays / totalDays) * 100;
 
@@ -151,12 +151,8 @@ const determineAttendanceStatus = (absentDays, totalDays) => {
   return "Poor";
 };
 
-/**
- * Calculate detailed exam metrics
- */
 const calculateExamMetrics = (completedExams, missedExams) => {
   try {
-    // Initialize counters
     let totalExamsTaken = 0;
     let totalExamsMissed = missedExams.length;
     let totalExamsPassed = 0;
@@ -169,7 +165,6 @@ const calculateExamMetrics = (completedExams, missedExams) => {
       Offline: { taken: 0, passed: 0, totalScore: 0, totalPossible: 0 },
     };
 
-    // Process completed exams
     completedExams.forEach((subjectExams) => {
       const subject = subjectExams.subjectName;
 
@@ -213,7 +208,6 @@ const calculateExamMetrics = (completedExams, missedExams) => {
         }
       });
 
-      // Calculate average score for subject
       if (examsBySubject[subject].taken > 0) {
         examsBySubject[subject].averageScore = (
           (examsBySubject[subject].totalScore /
@@ -223,7 +217,6 @@ const calculateExamMetrics = (completedExams, missedExams) => {
       }
     });
 
-    // Process missed exams to add to subject statistics
     missedExams.forEach((exam) => {
       const subject = exam.subject_id?.subjectName;
       if (subject) {
@@ -242,7 +235,6 @@ const calculateExamMetrics = (completedExams, missedExams) => {
       }
     });
 
-    // Calculate overall percentages
     const totalExams = totalExamsTaken + totalExamsMissed;
     const examCompletionRate =
       totalExams > 0 ? ((totalExamsTaken / totalExams) * 100).toFixed(2) : 0;
@@ -255,7 +247,6 @@ const calculateExamMetrics = (completedExams, missedExams) => {
         ? ((totalScoreSum / totalMaxScore) * 100).toFixed(2)
         : 0;
 
-    // Calculate performance by exam type
     Object.keys(examPerformanceByType).forEach((type) => {
       const typeData = examPerformanceByType[type];
       typeData.passRate =
@@ -299,37 +290,105 @@ const calculateExamMetrics = (completedExams, missedExams) => {
   }
 };
 
-/**
- * Calculate assignment metrics
- */
-const calculateAssignmentMetrics = (missedAssignments) => {
+const calculateAssignmentMetrics = (
+  completedAssignments,
+  missedAssignments
+) => {
   try {
-    const totalMissed = missedAssignments.length;
+    const totalCompleted = completedAssignments.length || 0;
+    const totalMissed = missedAssignments.length || 0;
+    const totalAssignments = totalCompleted + totalMissed;
 
-    // Group by subject
+    const completionRate =
+      totalAssignments > 0
+        ? ((totalCompleted / totalAssignments) * 100).toFixed(2)
+        : 0;
+
+    let totalScore = 0;
+    let totalPossibleScore = 0;
+    let highestScore = 0;
+    let lowestScore = 100;
+
     const bySubject = {};
-    missedAssignments.forEach((assignment) => {
+
+    completedAssignments.forEach((assignment) => {
       const subject = assignment.subject_id?.subjectName;
-      if (!subject) return;
+      const score = assignment.score || 0;
+      const totalMarks = assignment.total_marks || 100;
+      const scorePercentage = (score / totalMarks) * 100;
 
-      if (!bySubject[subject]) {
-        bySubject[subject] = {
-          missed: 0,
-          totalMarks: 0,
-        };
+      totalScore += score;
+      totalPossibleScore += totalMarks;
+
+      highestScore = Math.max(highestScore, scorePercentage);
+      lowestScore = Math.min(lowestScore, scorePercentage);
+
+      if (subject) {
+        if (!bySubject[subject]) {
+          bySubject[subject] = {
+            completed: 0,
+            missed: 0,
+            totalScore: 0,
+            totalPossible: 0,
+            averageScore: 0,
+            completionRate: 0,
+          };
+        }
+
+        bySubject[subject].completed++;
+        bySubject[subject].totalScore += score;
+        bySubject[subject].totalPossible += totalMarks;
       }
-
-      bySubject[subject].missed++;
-      bySubject[subject].totalMarks += assignment.total_marks || 0;
     });
 
-    // Calculate urgency - assignments by due date proximity
+    missedAssignments.forEach((assignment) => {
+      const subject = assignment.subject_id?.subjectName;
+      const totalMarks = assignment.total_marks || 0;
+
+      if (subject) {
+        if (!bySubject[subject]) {
+          bySubject[subject] = {
+            completed: 0,
+            missed: 0,
+            totalScore: 0,
+            totalPossible: 0,
+            averageScore: 0,
+            completionRate: 0,
+          };
+        }
+
+        bySubject[subject].missed++;
+        bySubject[subject].totalPossible += totalMarks;
+      }
+    });
+
+    Object.keys(bySubject).forEach((subject) => {
+      const subjectData = bySubject[subject];
+      const total = subjectData.completed + subjectData.missed;
+
+      subjectData.averageScore =
+        subjectData.totalPossible > 0
+          ? (
+              (subjectData.totalScore / subjectData.totalPossible) *
+              100
+            ).toFixed(2)
+          : 0;
+
+      subjectData.completionRate =
+        total > 0 ? ((subjectData.completed / total) * 100).toFixed(2) : 0;
+    });
+
+    const averageScore =
+      totalPossibleScore > 0
+        ? ((totalScore / totalPossibleScore) * 100).toFixed(2)
+        : 0;
+
     const now = new Date();
     const urgencyCategories = {
-      past: 0, // Already past due
-      urgent: 0, // Due within 2 days
-      upcoming: 0, // Due within 7 days
-      planned: 0, // Due beyond 7 days
+      past: 0,
+      urgent: 0,
+      upcoming: 0,
+      planned: 0,
     };
 
     missedAssignments.forEach((assignment) => {
@@ -347,27 +406,113 @@ const calculateAssignmentMetrics = (missedAssignments) => {
       }
     });
 
+    const assignmentTypes = {
+      homework: 0,
+      project: 0,
+      quiz: 0,
+      other: 0,
+    };
+
+    [...completedAssignments, ...missedAssignments].forEach((assignment) => {
+      const type = assignment.assignment_type?.toLowerCase() || "other";
+
+      if (type.includes("homework")) {
+        assignmentTypes.homework++;
+      } else if (type.includes("project")) {
+        assignmentTypes.project++;
+      } else if (type.includes("quiz")) {
+        assignmentTypes.quiz++;
+      } else {
+        assignmentTypes.other++;
+      }
+    });
+
+    const submissionTimings = {
+      early: 0,
+      onTime: 0,
+      late: 0,
+    };
+
+    completedAssignments.forEach((assignment) => {
+      if (assignment.submission_date && assignment.due_date) {
+        const submitted = new Date(assignment.submission_date);
+        const due = new Date(assignment.due_date);
+        const daysDifference = Math.floor(
+          (due - submitted) / (1000 * 60 * 60 * 24)
+        );
+
+        if (daysDifference > 1) {
+          submissionTimings.early++;
+        } else if (daysDifference >= 0) {
+          submissionTimings.onTime++;
+        } else {
+          submissionTimings.late++;
+        }
+      }
+    });
+
+    const impactLevel =
+      totalMissed > 5 ? "High" : totalMissed > 2 ? "Medium" : "Low";
+
+    const potentialPointsLost = missedAssignments.reduce(
+      (sum, assignment) => sum + (assignment.total_marks || 0),
+      0
+    );
+
+    const recentAssignments = completedAssignments
+      .sort((a, b) => new Date(b.submission_date) - new Date(a.submission_date))
+      .slice(0, 5)
+      .map((assignment) => ({
+        title: assignment.title || "Unnamed Assignment",
+        subject: assignment.subject_id?.subjectName || "Unknown Subject",
+        score: assignment.score || 0,
+        totalMarks: assignment.total_marks || 100,
+        percentage: ((assignment.score / assignment.total_marks) * 100).toFixed(
+          2
+        ),
+      }));
+
     return {
-      totalMissed,
+      summary: {
+        totalAssignments,
+        totalCompleted,
+        totalMissed,
+        completionRate,
+        averageScore,
+        highestScore: highestScore.toFixed(2),
+        lowestScore: lowestScore === 100 ? "N/A" : lowestScore.toFixed(2),
+        potentialPointsLost,
+      },
       bySubject,
       urgency: urgencyCategories,
-      impactOnGrades:
-        totalMissed > 5 ? "High" : totalMissed > 2 ? "Medium" : "Low",
+      submissionTimings,
+      assignmentTypes,
+      impactOnGrades: {
+        level: impactLevel,
+        potentialPointsLost,
+      },
+      recentPerformance: recentAssignments,
     };
   } catch (error) {
     console.error("Error calculating assignment metrics:", error);
     return {
-      totalMissed: missedAssignments.length,
+      summary: {
+        totalAssignments: 0,
+        totalCompleted: 0,
+        totalMissed: 0,
+        completionRate: 0,
+        averageScore: 0,
+      },
       bySubject: {},
       urgency: { past: 0, urgent: 0, upcoming: 0, planned: 0 },
-      impactOnGrades: "Unknown",
+      submissionTimings: { early: 0, onTime: 0, late: 0 },
+      assignmentTypes: { homework: 0, project: 0, quiz: 0, other: 0 },
+      impactOnGrades: { level: "Unknown", potentialPointsLost: 0 },
+      recentPerformance: [],
     };
   }
 };
 
-/**
- * Calculate enhanced grade metrics
- */
 const calculateEnhancedGradeMetrics = (grades) => {
   try {
     if (!grades || !grades.semesterGrades) {
@@ -379,7 +524,6 @@ const calculateEnhancedGradeMetrics = (grades) => {
       };
     }
 
-    // Extract all grades
     const allGrades = [];
     const gradesBySubject = {};
     const gradeDistribution = {
@@ -392,7 +536,6 @@ const calculateEnhancedGradeMetrics = (grades) => {
 
     grades.semesterGrades.forEach((semester) => {
       semester.grades.forEach((subject) => {
-        // Process midterm grades
         if (subject.midterm && subject.midterm.examGrade !== null) {
           const grade = subject.midterm.examGrade;
           const maxGrade = subject.midterm.finalDegree || 100;
@@ -414,11 +557,9 @@ const calculateEnhancedGradeMetrics = (grades) => {
             grade: percentage,
           });
 
-          // Update grade distribution
           updateGradeDistribution(gradeDistribution, percentage);
         }
 
-        // Process final grades
         if (subject.final && subject.final.examGrade !== null) {
           const grade = subject.final.examGrade;
           const maxGrade = subject.final.finalDegree || 100;
@@ -440,13 +581,11 @@ const calculateEnhancedGradeMetrics = (grades) => {
             grade: percentage,
           });
 
-          // Update grade distribution
           updateGradeDistribution(gradeDistribution, percentage);
         }
       });
     });
 
-    // Identify subjects needing improvement (below 70%)
     const improvementAreas = [];
     Object.entries(gradesBySubject).forEach(([subject, grades]) => {
       const latestGrade = grades[grades.length - 1];
@@ -462,10 +601,8 @@ const calculateEnhancedGradeMetrics = (grades) => {
       }
     });
 
-    // Calculate predicted final grade based on current performance
     const predictedFinalGrade = calculatePredictedGrade(allGrades);
 
-    // Calculate approximate GPA (4.0 scale)
     const gpa = calculateApproximateGPA(allGrades);
 
     return {
@@ -485,9 +622,6 @@ const calculateEnhancedGradeMetrics = (grades) => {
   }
 };
 
-/**
- * Update grade distribution counters
- */
 const updateGradeDistribution = (distribution, grade) => {
   if (grade >= 90) {
     distribution["90-100"]++;
@@ -502,15 +636,11 @@ const updateGradeDistribution = (distribution, grade) => {
   }
 };
 
-/**
- * Calculate predicted final grade
- */
 const calculatePredictedGrade = (grades) => {
   if (!grades || grades.length === 0) return "N/A";
 
-  // Weight recent grades more heavily
   const weightedTotal = grades.reduce((sum, grade, index) => {
-    const weight = index + 1; // Gives more weight to later grades
+    const weight = index + 1;
     return sum + grade.grade * weight;
   }, 0);
 
@@ -520,9 +650,6 @@ const calculatePredictedGrade = (grades) => {
   return predictedGrade.toFixed(2);
 };
 
-/**
- * Calculate approximate GPA on a 4.0 scale
- */
 const calculateApproximateGPA = (grades) => {
   if (!grades || grades.length === 0) return "N/A";
 
@@ -539,18 +666,12 @@ const calculateApproximateGPA = (grades) => {
   return (gpaSum / gpaPoints.length).toFixed(2);
 };
 
-/**
- * Calculate performance trends
- */
 const calculatePerformanceTrends = (grades, completedExams) => {
   try {
-    // Extract chronological exam performance data
     const examData = [];
 
-    // Process completed exams
     completedExams.forEach((subjectExams) => {
       subjectExams.exams.forEach((exam) => {
-        // Create timestamp for sorting
         const examDate = new Date(exam.examDate);
         examData.push({
           subject: subjectExams.subjectName,
@@ -563,7 +684,6 @@ const calculatePerformanceTrends = (grades, completedExams) => {
       });
     });
 
-    // Process grade data
     grades.semesterGrades.forEach((semester) => {
       semester.grades.forEach((subject) => {
         if (subject.midterm && subject.midterm.examGrade !== null) {
@@ -573,8 +693,8 @@ const calculatePerformanceTrends = (grades, completedExams) => {
           examData.push({
             subject: subject.subjectName,
             title: `${semester.semester} Midterm`,
-            date: null, // We don't have exact dates for these
-            timestamp: 0, // Will sort these first
+            date: null,
+            timestamp: 0,
             percentage,
             type: "midterm",
           });
@@ -588,7 +708,7 @@ const calculatePerformanceTrends = (grades, completedExams) => {
             subject: subject.subjectName,
             title: `${semester.semester} Final`,
             date: null,
-            timestamp: 1, // Will sort these after midterms
+            timestamp: 1,
             percentage,
             type: "final",
           });
@@ -596,13 +716,10 @@ const calculatePerformanceTrends = (grades, completedExams) => {
       });
     });
 
-    // Sort data chronologically
     examData.sort((a, b) => a.timestamp - b.timestamp);
 
-    // Calculate trend line (simple linear regression)
     const trend = calculateTrendLine(examData);
 
-    // Calculate performance by month if we have dated exams
     const monthlyPerformance = {};
     const datedExams = examData.filter((item) => item.date);
 
@@ -659,9 +776,6 @@ const calculatePerformanceTrends = (grades, completedExams) => {
   }
 };
 
-/**
- * Calculate trend line using simple linear regression
- */
 const calculateTrendLine = (data) => {
   if (!data || data.length < 2) {
     return { slope: 0, intercept: 0 };
@@ -673,7 +787,6 @@ const calculateTrendLine = (data) => {
   let sumXY = 0;
   let sumXX = 0;
 
-  // X is the index (time), Y is the score percentage
   data.forEach((item, index) => {
     const x = index;
     const y = item.percentage;
@@ -684,19 +797,14 @@ const calculateTrendLine = (data) => {
     sumXX += x * x;
   });
 
-  // Calculate slope and intercept
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
   const intercept = (sumY - slope * sumX) / n;
 
   return { slope, intercept };
 };
 
-/**
- * Calculate academic standing
- */
 const calculateAcademicStanding = (gradeMetrics, examMetrics) => {
   try {
-    // Define score thresholds
     const thresholds = {
       excellent: 85,
       good: 75,
@@ -705,16 +813,13 @@ const calculateAcademicStanding = (gradeMetrics, examMetrics) => {
       poor: 0,
     };
 
-    // Get average grades
     const predictedGrade = parseFloat(gradeMetrics.predictedFinalGrade) || 0;
     const examPassRate = parseFloat(examMetrics.summary.examPassRate) || 0;
     const overallScore = parseFloat(examMetrics.summary.overallScore) || 0;
 
-    // Calculate weighted score (you can adjust weights as needed)
     const weightedScore =
       predictedGrade * 0.5 + examPassRate * 0.3 + overallScore * 0.2;
 
-    // Determine standing based on weighted score
     let standing;
     if (weightedScore >= thresholds.excellent) {
       standing = "Excellent";
@@ -728,7 +833,6 @@ const calculateAcademicStanding = (gradeMetrics, examMetrics) => {
       standing = "Needs Improvement";
     }
 
-    // Generate recommendations based on standing and improvement areas
     const recommendations = generateRecommendations(
       standing,
       gradeMetrics.improvementAreas
@@ -749,13 +853,9 @@ const calculateAcademicStanding = (gradeMetrics, examMetrics) => {
   }
 };
 
-/**
- * Generate recommendations based on academic standing
- */
 const generateRecommendations = (standing, improvementAreas) => {
   const recommendations = [];
 
-  // Generic recommendations based on standing
   if (standing === "Excellent") {
     recommendations.push("Continue with current study habits");
     recommendations.push("Consider advanced learning opportunities");
@@ -775,7 +875,6 @@ const generateRecommendations = (standing, improvementAreas) => {
     );
   }
 
-  // Add specific recommendations based on improvement areas
   if (improvementAreas && improvementAreas.length > 0) {
     improvementAreas.forEach((area) => {
       recommendations.push(
@@ -882,7 +981,41 @@ const getMissedAssignments = async (student_id, authToken) => {
     }
   }
 };
+const getCompletedAssignments = async (student_id, authToken) => {
+  try {
+    const studentData = await student.findById(student_id);
+    if (!studentData) {
+      throw new Error("Student not found");
+    }
 
+    const semester_id = await nowSemesterId(studentData.academicYear_id);
+    if (!semester_id) {
+      throw new Error("Could not determine current semester");
+    }
+
+    const response = await axios.post(
+      `${process.env.EXAMS_SERVICE_URL}/assignments/completedAssignments`,
+      {
+        student_id: student_id,
+        class_id: studentData.classId,
+        semester_id,
+        academic_year_id: studentData.academicYear_id,
+        grade_id: studentData.gradeId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching completed assignments:", error.message);
+    throw new Error("Failed to fetch completed assignments");
+  }
+};
 module.exports = {
   getDashboardData,
 };

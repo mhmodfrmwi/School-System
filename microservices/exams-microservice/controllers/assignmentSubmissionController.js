@@ -7,6 +7,7 @@ const {
   getSubmissionById,
   getAssignmentsSubmissionsByStudentId,
   getMissedAssignments,
+  getCompletedAssignments,
 } = require("../services/assignmentSubmissionService");
 
 const submitAssignment = async (req, res) => {
@@ -126,6 +127,31 @@ const getMissedAssignmentsForStudent = async (req, res) => {
     });
   }
 };
+
+const getCompletedAssignmentsForStudent = async (req, res) => {
+  try {
+    const student_id = req.body.student_id || req.user.id;
+    const { class_id, semester_id, academic_year_id, grade_id } = req.body;
+    if (!class_id || !semester_id || !academic_year_id || !grade_id) {
+      return res.status(400).json({
+        message: "Please provide all required fields",
+      });
+    }
+    const completedAssignments = await getCompletedAssignments(
+      student_id,
+      semester_id,
+      grade_id,
+      academic_year_id,
+      class_id
+    );
+    res.status(200).json(completedAssignments);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch completed assignments",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   submitAssignment,
   deleteSubmission,
@@ -134,4 +160,5 @@ module.exports = {
   displaySubmission,
   getStudentSubmissions,
   getMissedAssignmentsForStudent,
+  getCompletedAssignmentsForStudent,
 };

@@ -179,6 +179,37 @@ const getMissedAssignments = async (
     throw new Error(`Failed to fetch missed assignments: ${error.message}`);
   }
 };
+const getCompletedAssignments = async (
+  student_id,
+  semester_id,
+  grade_id,
+  academic_year_id,
+  class_id
+) => {
+  try {
+    const assignments = await fetchAssignmentsForAllSubjectsByAttributes(
+      class_id,
+      semester_id,
+      grade_id,
+      academic_year_id
+    );
+    const completedAssignments = [];
+
+    for (const assignment of assignments) {
+      const submission = await AssignmentSubmission.findOne({
+        assignment_id: assignment._id,
+        student_id: student_id,
+      });
+      if (submission) {
+        completedAssignments.push(assignment);
+      }
+    }
+    return completedAssignments;
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Failed to fetch completed assignments: ${error.message}`);
+  }
+};
 module.exports = {
   addAssignmentSubmission,
   getSubmissionsForAssignment,
@@ -186,4 +217,5 @@ module.exports = {
   getSubmissionById,
   getAssignmentsSubmissionsByStudentId,
   getMissedAssignments,
+  getCompletedAssignments,
 };
