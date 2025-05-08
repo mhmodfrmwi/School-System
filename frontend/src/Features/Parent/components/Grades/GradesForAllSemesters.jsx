@@ -46,15 +46,23 @@ export default function GradesForAllSemesters() {
   const calculateTotals = (grades) => {
     let totalScore = 0;
     let totalMaxScore = 0;
+    let degreeSubjectsCount = 0;
 
     grades?.forEach((item) => {
-      totalScore +=
-        (item.midterm?.examGrade || 0) + (item.final?.examGrade || 0);
-      totalMaxScore +=
-        (item.midterm?.finalDegree || 0) + (item.final?.finalDegree || 0);
+      const midtermGrade = item.midterm?.examGrade || 0;
+      const finalGrade = item.final?.examGrade || 0;
+      const midtermMax = item.midterm?.finalDegree || 0;
+      const finalMax = item.final?.finalDegree || 0;
+
+      if (midtermGrade > 0 || finalGrade > 0) {
+        degreeSubjectsCount++;
+      }
+
+      totalScore += midtermGrade + finalGrade;
+      totalMaxScore += midtermMax + finalMax;
     });
 
-    return { totalScore, totalMaxScore };
+    return { totalScore, totalMaxScore, degreeSubjectsCount };
   };
 
   return (
@@ -96,18 +104,17 @@ export default function GradesForAllSemesters() {
         <div className="relative z-10 mx-auto mb-20 space-y-12">
           {allSemestersDegrees?.length > 0 ? (
             allSemestersDegrees.map((semesterData) => {
-              const { totalScore, totalMaxScore } = calculateTotals(
-                semesterData.grades,
-              );
+              const { totalScore, totalMaxScore, degreeSubjectsCount } =
+                calculateTotals(semesterData.grades);
 
               return (
                 <div
                   key={`${semesterData.academicYear._id}-${semesterData.semester}`}
-                  className="rounded-xl border border-gray-200 shadow-md dark:border-[#E0AAEE]"
+                  className="rounded-xl border border-[#E0AAEE] shadow-md"
                 >
                   <div className="relative mb-4 ml-4 mt-4 inline-flex items-center rounded-lg bg-gray-100 px-6 py-2 dark:bg-[#281459]">
                     <div className="absolute bottom-0 left-0 top-0 w-2 rounded-l-lg bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></div>
-                    <h2 className="text-lg font-semibold text-[#5e5b63] dark:text-[#E0AAEE]">
+                    <h2 className="text-sm font-semibold text-[#5e5b63] dark:text-[#E0AAEE] md:text-lg">
                       {t("gradesAllSemesters.academicYear")}{" "}
                       {semesterData.academicYear.startYear}-
                       {semesterData.academicYear.endYear} -{" "}
@@ -116,135 +123,103 @@ export default function GradesForAllSemesters() {
                   </div>
 
                   <div className="overflow-x-auto p-4">
-                    <table className="min-w-full table-auto bg-white dark:bg-[#281459]">
+                    <table className="mx-auto w-[350px] bg-white dark:bg-[#281459] sm:w-[550px] md:w-[900px] lg:px-0 xl:w-full">
                       <thead>
                         <tr>
-                          <th className="border-b border-l border-gray-200 bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:border-[#E0AAEE] dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
-                            {t("gradesAllSemesters.headers.subjectName")}
+                          <th className="border-b border-l border-[#E0AAEE] bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
+                            {t("gradesAllSemesters.subjectName")}
                           </th>
-                          <th className="border-b border-gray-200 bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:border-[#E0AAEE] dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
-                            {t("gradesAllSemesters.headers.midtermGrade")}
+                          <th className="border-b border-[#E0AAEE] bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
+                            {t("gradesAllSemesters.midtermGrade")}
                           </th>
-                          <th className="border-b border-gray-200 bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:border-[#E0AAEE] dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
-                            {t("gradesAllSemesters.headers.midtermTotal")}
+                          <th className="border-b border-[#E0AAEE] bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
+                            {t("gradesAllSemesters.maxMidterm")}
                           </th>
-                          <th className="border-b border-gray-200 bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:border-[#E0AAEE] dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
-                            {t("gradesAllSemesters.headers.finalGrade")}
+                          <th className="border-b border-[#E0AAEE] bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
+                            {t("gradesAllSemesters.finalGrade")}
                           </th>
-                          <th className="border-b border-gray-200 bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:border-[#E0AAEE] dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
-                            {t("gradesAllSemesters.headers.finalTotal")}
+                          <th className="border-b border-[#E0AAEE] bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
+                            {t("gradesAllSemesters.maxFinal")}
                           </th>
-                          <th className="border-b border-gray-200 bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:border-[#E0AAEE] dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
-                            {t("gradesAllSemesters.headers.totalScore")}
+                          <th className="border-b border-[#E0AAEE] bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
+                            {t("gradesAllSemesters.subjectScore")}
                           </th>
-                          <th className="border-b border-r border-gray-200 bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:border-[#E0AAEE] dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
-                            {t("gradesAllSemesters.headers.percentage")}
+                          <th className="border-b border-[#E0AAEE] bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
+                            {t("gradesAllSemesters.maxSubjectScore")}
+                          </th>
+                          <th className="border-b border-r border-[#E0AAEE] bg-[#D6A3E1] px-4 py-4 text-center text-gray-700 dark:bg-[#3B1E77] dark:text-[#E0AAEE]">
+                            {t("gradesAllSemesters.percentage")}
                           </th>
                         </tr>
                       </thead>
 
                       <tbody>
                         {semesterData.grades?.length > 0 ? (
-                          <>
-                            {semesterData.grades.map((item, index) => {
-                              const midtermGrade =
-                                item.midterm?.examGrade ?? "-";
-                              const midtermTotal =
-                                item.midterm?.finalDegree ?? "-";
-                              const finalGrade = item.final?.examGrade ?? "-";
-                              const finalTotal = item.final?.finalDegree ?? "-";
+                          semesterData.grades.map((item, index) => {
+                            const midtermGrade = item.midterm?.examGrade ?? "-";
+                            const midtermMax = item.midterm?.finalDegree ?? "-";
+                            const finalGrade = item.final?.examGrade ?? "-";
+                            const finalMax = item.final?.finalDegree ?? "-";
 
-                              const scoreSubject =
-                                (typeof midtermGrade === "number"
-                                  ? midtermGrade
-                                  : 0) +
-                                (typeof finalGrade === "number"
-                                  ? finalGrade
-                                  : 0);
-                              const maxScoreSubject =
-                                (typeof midtermTotal === "number"
-                                  ? midtermTotal
-                                  : 0) +
-                                (typeof finalTotal === "number"
-                                  ? finalTotal
-                                  : 0);
+                            const subjectScore =
+                              (typeof midtermGrade === "number"
+                                ? midtermGrade
+                                : 0) +
+                              (typeof finalGrade === "number" ? finalGrade : 0);
+                            const maxSubjectScore =
+                              (typeof midtermMax === "number"
+                                ? midtermMax
+                                : 0) +
+                              (typeof finalMax === "number" ? finalMax : 0);
 
-                              const percentage =
-                                maxScoreSubject > 0
-                                  ? (
-                                      (scoreSubject / maxScoreSubject) *
-                                      100
-                                    ).toFixed(2)
-                                  : "-";
+                            const percentage =
+                              maxSubjectScore > 0
+                                ? (
+                                    (subjectScore / maxSubjectScore) *
+                                    100
+                                  ).toFixed(2)
+                                : "-";
 
-                              return (
-                                <tr
-                                  key={item.subjectId}
-                                  className={`border-b border-gray-200 transition duration-200 hover:bg-[#F3E5F5] dark:border-[#E0AAEE] dark:hover:bg-[#4B3B7A] ${
-                                    index % 2 === 0
-                                      ? "bg-white dark:bg-[#281459]"
-                                      : "bg-[#F9F9F9] dark:bg-[#3B1E77]"
-                                  }`}
-                                >
-                                  <td className="border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                    {item.subjectName}
-                                  </td>
-                                  <td className="border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                    {midtermGrade}
-                                  </td>
-                                  <td className="border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                    {midtermTotal}
-                                  </td>
-                                  <td className="border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                    {finalGrade}
-                                  </td>
-                                  <td className="border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                    {finalTotal}
-                                  </td>
-                                  <td className="border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                    {scoreSubject}
-                                  </td>
-                                  <td className="border-r border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                    {percentage}
-                                    {typeof percentage === "string" ? "" : "%"}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-
-                            <tr className="bg-[#F3E5F5] font-semibold dark:bg-[#4B3B7A]">
-                              <td className="border-b border-l border-gray-200 px-4 py-4 text-center font-poppins text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                {t("gradesAllSemesters.total")}
-                              </td>
-                              <td className="border-b border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                -
-                              </td>
-                              <td className="border-b border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                -
-                              </td>
-                              <td className="border-b border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                -
-                              </td>
-                              <td className="border-b border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                -
-                              </td>
-                              <td className="border-b border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                {totalScore}
-                              </td>
-                              <td className="border-b border-r border-gray-200 px-4 py-4 text-center text-[#5e5b63] dark:border-[#E0AAEE] dark:text-[#D1D5DB]">
-                                {totalMaxScore > 0
-                                  ? (
-                                      (totalScore / totalMaxScore) *
-                                      100
-                                    ).toFixed(2) + "%"
-                                  : "-"}
-                              </td>
-                            </tr>
-                          </>
+                            return (
+                              <tr
+                                key={item.subjectId}
+                                className={`border-b border-[#E0AAEE] transition duration-200 hover:bg-[#F3E5F5] dark:hover:bg-[#4B3B7A] ${
+                                  index % 2 === 0
+                                    ? "bg-white dark:bg-[#281459]"
+                                    : "bg-[#F9F9F9] dark:bg-[#3B1E77]"
+                                }`}
+                              >
+                                <td className="border-l border-[#E0AAEE] px-4 py-4 text-center font-poppins text-[#5e5b63] dark:text-[#D1D5DB]">
+                                  {item.subjectName}
+                                </td>
+                                <td className="border-[#E0AAEE] px-4 py-4 text-center text-[#5e5b63] dark:text-[#D1D5DB]">
+                                  {midtermGrade}
+                                </td>
+                                <td className="border-[#E0AAEE] px-4 py-4 text-center text-[#5e5b63] dark:text-[#D1D5DB]">
+                                  {midtermMax}
+                                </td>
+                                <td className="border-[#E0AAEE] px-4 py-4 text-center text-[#5e5b63] dark:text-[#D1D5DB]">
+                                  {finalGrade}
+                                </td>
+                                <td className="border-[#E0AAEE] px-4 py-4 text-center text-[#5e5b63] dark:text-[#D1D5DB]">
+                                  {finalMax}
+                                </td>
+                                <td className="border-[#E0AAEE] px-4 py-4 text-center text-[#5e5b63] dark:text-[#D1D5DB]">
+                                  {subjectScore}
+                                </td>
+                                <td className="border-[#E0AAEE] px-4 py-4 text-center text-[#5e5b63] dark:text-[#D1D5DB]">
+                                  {maxSubjectScore}
+                                </td>
+                                <td className="border-r border-[#E0AAEE] px-4 py-4 text-center text-[#5e5b63] dark:text-[#D1D5DB]">
+                                  {percentage} %
+                                </td>
+                              </tr>
+                            );
+                          })
                         ) : (
                           <tr>
                             <td
-                              colSpan="7"
+                              colSpan="8"
                               className="px-4 py-12 text-center text-lg text-gray-500 dark:text-[#D1D5DB]"
                             >
                               <p className="py-16">
@@ -256,11 +231,44 @@ export default function GradesForAllSemesters() {
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Summary Section */}
+                  <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3">
+                    <div className="rounded-xl border border-[#E0AAEE] bg-white p-6 shadow-md dark:border-[#AE45FB] dark:bg-[#281459]">
+                      <h3 className="text-center text-lg font-semibold text-[#5e5b63] dark:text-[#E0AAEE]">
+                        {t("gradesAllSemesters.totalScore")}
+                      </h3>
+                      <p className="mt-2 text-center text-2xl font-bold text-[#5e5b63] dark:text-[#E0AAEE]">
+                        {totalScore} / {totalMaxScore}
+                      </p>
+                    </div>
+
+                    <div className="rounded-xl border border-[#E0AAEE] bg-white p-6 shadow-md dark:border-[#AE45FB] dark:bg-[#281459]">
+                      <h3 className="text-center text-lg font-semibold text-[#5e5b63] dark:text-[#E0AAEE]">
+                        {t("gradesAllSemesters.degreeSubjects")}
+                      </h3>
+                      <p className="mt-2 text-center text-2xl font-bold text-[#5e5b63] dark:text-[#E0AAEE]">
+                        {degreeSubjectsCount}
+                      </p>
+                    </div>
+
+                    <div className="rounded-xl border border-[#E0AAEE] bg-white p-6 shadow-md dark:border-[#AE45FB] dark:bg-[#281459]">
+                      <h3 className="text-center text-lg font-semibold text-[#5e5b63] dark:text-[#E0AAEE]">
+                        {t("gradesAllSemesters.overallPercentage")}
+                      </h3>
+                      <p className="mt-2 text-center text-2xl font-bold text-[#5e5b63] dark:text-[#E0AAEE]">
+                        {totalMaxScore > 0
+                          ? ((totalScore / totalMaxScore) * 100).toFixed(2) +
+                            "%"
+                          : "-"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               );
             })
           ) : (
-            <div className="rounded-xl border border-gray-200 p-8 text-center shadow-md dark:border-[#E0AAEE]">
+            <div className="rounded-xl border border-[#E0AAEE] p-8 text-center shadow-md">
               <p className="py-16 text-lg text-gray-500 dark:text-[#D1D5DB]">
                 {error ? error.message : t("gradesAllSemesters.noSemesters")}
               </p>
