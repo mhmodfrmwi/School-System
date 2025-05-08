@@ -279,6 +279,10 @@ const GradesForChild = lazy(
   () => import("./Features/Parent/components/Grades/GradesForChild"),
 );
 
+const AttendanceForChild = lazy(
+  () => import("./Features/Parent/components/Attendance/Attendance"),
+);
+
 /* /////////////////teacher imports//////////////////// */
 
 const SeeVR = lazy(
@@ -768,7 +772,16 @@ function App() {
                 path="edit-parent-profile"
                 element={<EditParentProfile />}
               />
-              <Route path="activities" element={ <ProtectedRoute  element={<ParentActivities />} requiredRole="parent" requiresKid={true}  /> } />
+              <Route
+                path="activities"
+                element={
+                  <ProtectedRoute
+                    element={<ParentActivities />}
+                    requiredRole="parent"
+                    requiresKid={true}
+                  />
+                }
+              />
               <Route
                 path="activities/detailes/:id"
                 element={<DetailesParentActivity />}
@@ -787,6 +800,8 @@ function App() {
                 path="grades-for-all-semesters"
                 element={<GradesForAllSemestersForChild />}
               />
+
+              <Route path="attendance" element={<AttendanceForChild />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route

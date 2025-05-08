@@ -1860,7 +1860,7 @@ i18n.use(initReactI18next).init({
               noData: "No contests available",
             },
           },
-       
+
           activityDetails: {
             title: "Activities",
             tabs: {
@@ -1868,9 +1868,9 @@ i18n.use(initReactI18next).init({
               prizes: "Prizes",
             },
 
-              location: "Location",
-              details: "Details",
-            
+            location: "Location",
+            details: "Details",
+
             notFound: "No activity found",
           },
           errors: {
@@ -1978,6 +1978,26 @@ i18n.use(initReactI18next).init({
             totalScore: "Total Score",
             noData: "No performance data available",
           },
+        },
+
+        childAttendance: {
+          title: "Attendance Record",
+          back: "Back",
+          error: "Error loading attendance data",
+          totalPresent: "Total Present",
+          totalAbsent: "Total Absent",
+          overallAttendance: "Overall Attendance",
+          date: "Date",
+          totalSessions: "Total Sessions",
+          presentCount: "Present",
+          absentCount: "Absent",
+          presentPercentage: "Present %",
+          absentPercentage: "Absent %",
+          noDataTitle: "No Attendance Records Found",
+          attendance: "Attendance",
+          absence: "Absence",
+          noDataDescription:
+            "There are no attendance records available for this student yet.",
         },
 
         ////////////////////////////////auth////////////////////////
@@ -3895,82 +3915,83 @@ i18n.use(initReactI18next).init({
           class: "الفصل",
           academicNumber: "الرقم الأكاديمي",
           gender: "النوع",
-          "activities": {
-            "title": "أنشطة الطالب",
-            "noKidSelected": "لم يتم اختيار طفل",
-            "selectKid": "اختر طفلاً",
-            "tabs": {
-              "schoolHubs": "الأندية المدرسية",
-              "contests": "المسابقات"
+          activities: {
+            title: "أنشطة الطالب",
+            noKidSelected: "لم يتم اختيار طفل",
+            selectKid: "اختر طفلاً",
+            tabs: {
+              schoolHubs: "الأندية المدرسية",
+              contests: "المسابقات",
             },
-            "hubCard": {
-              "registrationStart": "بداية تسجيل المسابقة:",
-              "registrationEnd": "نهاية التسجيل:",
-              "contestDate": "تاريخ المسابقة:",
-              "details": "التفاصيل",
-              "prizes": "الجوائز",
-              "join": "انضم",
-              "disjoin": "انسحب",
-              "noHubs": "لا توجد أندية مدرسية متاحة",
-              "noHubsMessage": "يبدو أنه لا توجد أندية مدرسية متاحة حالياً. يرجى التحقق لاحقاً."
+            hubCard: {
+              registrationStart: "بداية تسجيل المسابقة:",
+              registrationEnd: "نهاية التسجيل:",
+              contestDate: "تاريخ المسابقة:",
+              details: "التفاصيل",
+              prizes: "الجوائز",
+              join: "انضم",
+              disjoin: "انسحب",
+              noHubs: "لا توجد أندية مدرسية متاحة",
+              noHubsMessage:
+                "يبدو أنه لا توجد أندية مدرسية متاحة حالياً. يرجى التحقق لاحقاً.",
             },
-            "errors": {
-              "title": "خطأ",
-              "default": "حدث خطأ ما"
+            errors: {
+              title: "خطأ",
+              default: "حدث خطأ ما",
             },
-            "registration": "فترة التسجيل",
-            "contests": "المسابقات",
-            "contestTitle": "عنوان المسابقة",
-            "contestDate": "تاريخ المسابقة",
-            "status": "الحالة",
-            "active": "نشط",
-            "ended": "منتهي"
+            registration: "فترة التسجيل",
+            contests: "المسابقات",
+            contestTitle: "عنوان المسابقة",
+            contestDate: "تاريخ المسابقة",
+            status: "الحالة",
+            active: "نشط",
+            ended: "منتهي",
           },
-          "contests": {
-            "title": "مسابقات الطالب",
-            "noKidSelected": "لم يتم اختيار طفل",
-            "selectKid": "اختر طفلاً",
-            "tabs": {
-              "schoolHubs": "الأندية المدرسية",
-              "contests": "المسابقات"
+          contests: {
+            title: "مسابقات الطالب",
+            noKidSelected: "لم يتم اختيار طفل",
+            selectKid: "اختر طفلاً",
+            tabs: {
+              schoolHubs: "الأندية المدرسية",
+              contests: "المسابقات",
             },
-            "table": {
-              "headers": {
-                "title": "العنوان",
-                "teacher": "المعلم",
-                "startDate": "تاريخ البدء",
-                "endDate": "تاريخ الانتهاء",
-                "status": "الحالة"
+            table: {
+              headers: {
+                title: "العنوان",
+                teacher: "المعلم",
+                startDate: "تاريخ البدء",
+                endDate: "تاريخ الانتهاء",
+                status: "الحالة",
               },
-              "status": {
-                "active": "نشط",
-                "ended": "منتهي"
+              status: {
+                active: "نشط",
+                ended: "منتهي",
               },
-              "noData": "لا توجد مسابقات متاحة"
-            }
-          },
-          "activityDetails": {
-            "title": "الأنشطة",
-            "tabs": {
-              "details": "التفاصيل",
-              "prizes": "الجوائز"
+              noData: "لا توجد مسابقات متاحة",
             },
-            "location": "الموقع",
-            "details": "التفاصيل",
-            "notFound": "لم يتم العثور على نشاط"
           },
-          "errors": {
-            "title": "خطأ",
-            "default": "حدث خطأ ما"
-          },
-          "activityPrizes": {
-            "title": "الأنشطة",
-            "tabs": {
-              "details": "التفاصيل",
-              "prizes": "الجوائز"
+          activityDetails: {
+            title: "الأنشطة",
+            tabs: {
+              details: "التفاصيل",
+              prizes: "الجوائز",
             },
-            "prizeLevel": "المستوى ",
-            "notFound": "لم يتم العثور على نشاط"
+            location: "الموقع",
+            details: "التفاصيل",
+            notFound: "لم يتم العثور على نشاط",
+          },
+          errors: {
+            title: "خطأ",
+            default: "حدث خطأ ما",
+          },
+          activityPrizes: {
+            title: "الأنشطة",
+            tabs: {
+              details: "التفاصيل",
+              prizes: "الجوائز",
+            },
+            prizeLevel: "المستوى ",
+            notFound: "لم يتم العثور على نشاط",
           },
         },
         menuparent: {
@@ -4063,6 +4084,25 @@ i18n.use(initReactI18next).init({
             totalScore: "المجموع الكلي",
             noData: "لا توجد بيانات أداء متاحة",
           },
+        },
+
+        childAttendance: {
+          title: "سجل الحضور",
+          back: "رجوع",
+          error: "خطأ في تحميل بيانات الحضور",
+          totalPresent: "إجمالي الحضور",
+          totalAbsent: "إجمالي الغياب",
+          overallAttendance: "النسبة العامة للحضور",
+          date: "التاريخ",
+          totalSessions: "إجمالي الجلسات",
+          presentCount: "حاضر",
+          absentCount: "غائب",
+          presentPercentage: "نسبة الحضور %",
+          absentPercentage: "نسبة الغياب %",
+          noDataTitle: "لا توجد سجلات حضور",
+          attendance: "حضور",
+          absence: "غياب",
+          noDataDescription: "لا توجد سجلات حضور متاحة لهذا الطالب حتى الآن.",
         },
 
         ////////////////////////////////auth/////////////////////////////

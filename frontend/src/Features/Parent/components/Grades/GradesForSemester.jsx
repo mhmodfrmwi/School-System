@@ -79,10 +79,10 @@ export default function GradesForSemester() {
 
       <section className="mx-auto mb-20 mt-16 min-h-screen w-[88%] pt-4 font-poppins">
         <div className="relative z-10 mb-8 flex flex-col">
-          <h1 className="tex-sm relative bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-2xl font-semibold text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] md:text-3xl">
+          <h1 className="relative bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-2xl font-semibold text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] md:text-2xl xl:text-3xl">
             {t("gradesSemesterForChild.title")} - {selectedKid.fullName}
             <span
-              className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${
+              className={`absolute bottom-[-9px] h-[4px] w-[80px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] md:w-[200px] ${
                 i18n.language === "ar" ? "right-0" : "left-0"
               }`}
             ></span>
