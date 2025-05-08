@@ -114,27 +114,27 @@ function DashboardParent() {
               {
                 label: t("menuparent.grades"),
                 icon: GradeIcon,
-                path: `/student/grades?kidId=${selectedKid._id}`,
+                path: `/parent/grades-for-child?kidId=${selectedKid._id}`,
               },
               {
                 label: t("menuparent.attendance"),
                 icon: AbsenceIcon,
-                path: `/student/attendance?kidId=${selectedKid._id}`,
+                path: `/parent/attendance?kidId=${selectedKid._id}`,
               },
               {
                 label: t("menuparent.schedule"),
                 icon: ScheduleIcon,
-                path: `/student/schedule?kidId=${selectedKid._id}`,
+                path: `/parent/schedule?kidId=${selectedKid._id}`,
               },
               {
                 label: t("menuparent.courses"),
                 icon: CourseIcon,
-                path: `/student/allcourses?kidId=${selectedKid._id}`,
+                path: `/parent/allcourses?kidId=${selectedKid._id}`,
               },
               {
                 label: t("menuparent.activities"),
                 icon: ActivityIcon,
-                path: `/student/activities?kidId=${selectedKid._id}`,
+                path: `/parent/activities?kidId=${selectedKid._id}`,
               },
             ].map((item, index) => (
               <div

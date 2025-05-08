@@ -263,6 +263,31 @@ const ParentActivities = lazy(
 const ParentContests = lazy(
   () => import("./Features/Parent/components/Activites/Contests"),
 );
+const DetailesParentActivity = lazy(
+  () => import("./Features/Parent/components/Activites/DetailesActivity"),
+);
+const PrizesParentActivity = lazy(
+  () => import("./Features/Parent/components/Activites/PrizesActivity"),
+);
+const ScheduleParent = lazy(
+  () => import("./Features/Parent/components/Schedule/schedule"),
+);
+const MotivationParent = lazy(
+  () => import("./Features/Parent/pages/MotivationPage"),
+);
+const GradesForSemesterForChild = lazy(
+  () => import("./Features/Parent/components/Grades/GradesForSemester"),
+);
+const GradesForAllSemestersForChild = lazy(
+  () => import("./Features/Parent/components/Grades/GradesForAllSemesters"),
+);
+const GradesForChild = lazy(
+  () => import("./Features/Parent/components/Grades/GradesForChild"),
+);
+
+const AttendanceForChild = lazy(
+  () => import("./Features/Parent/components/Attendance/Attendance"),
+);
 
 /* /////////////////teacher imports//////////////////// */
 
@@ -763,7 +788,28 @@ function App() {
                   />
                 }
               />
+              <Route
+                path="activities/detailes/:id"
+                element={<DetailesParentActivity />}
+              />
+              <Route
+                path="activities/prizes/:id"
+                element={<PrizesParentActivity />}
+              />
               <Route path="activities/contests" element={<ParentContests />} />
+              <Route path="schedule" element={<ScheduleParent />} />
+              <Route path="motivation" element={<MotivationParent />} />
+              <Route path="grades-for-child" element={<GradesForChild />} />
+              <Route
+                path="grades-for-semester"
+                element={<GradesForSemesterForChild />}
+              />
+              <Route
+                path="grades-for-all-semesters"
+                element={<GradesForAllSemestersForChild />}
+              />
+
+              <Route path="attendance" element={<AttendanceForChild />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route

@@ -39,7 +39,9 @@ const EditParentForm = () => {
         phone: parent.phone,
         password: parent.password,
         gender: parent.gender,
-        students: parent.parentStudents?.map((ps) => ps.student_id._id) || [],
+        students:
+          parent.parentStudents?.map((ps) => ps.student_id.academic_number) ||
+          [],
       });
     }
   }, [id, parents]);
@@ -180,17 +182,20 @@ const EditParentForm = () => {
               {t("tableHeaders.children")}
             </h3>
 
-            {formData.students.map((studentId, index) => (
+            {formData.students.map((studentAcademicNumber, index) => (
               <div key={index} className="mb-4 flex items-center">
                 <select
-                  value={studentId}
+                  value={studentAcademicNumber}
                   onChange={(e) => handleStudentChange(index, e)}
                   className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
                   required={index === 0} // First student is required
                 >
                   <option value="">{t("formLabels.SelectStudentID")}</option>
                   {students.map((student) => (
-                    <option key={student._id} value={student._id}>
+                    <option
+                      key={student.academic_number}
+                      value={student.academic_number}
+                    >
                       {student.fullName} ({student.academic_number})
                     </option>
                   ))}
