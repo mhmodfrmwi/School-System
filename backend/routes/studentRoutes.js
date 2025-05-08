@@ -15,6 +15,7 @@ const {
 const {
   getQuestionsBySubjectForStudent,
   getAllQuestionsForAllSubjects,
+  getAllQuestionsForAllSubjectsWithStatus,
 } = require("../controllers/Student/questionBankController");
 const {
   addQuestionToBookmarks,
@@ -24,6 +25,7 @@ const {
 const {
   updateQuestionView,
   getQuestionViewByQuestionId,
+  getAllQuestionViewByStudentId,
 } = require("../controllers/Student/questionBankViewController");
 const {
   getContestForStudent,
@@ -147,6 +149,11 @@ router.get(
   getAllQuestionsForAllSubjects
 );
 router.get(
+  "/questionBank/getAllBankQuestionsWithStatus",
+  validateJwt,
+  getAllQuestionsForAllSubjectsWithStatus
+);
+router.get(
   "/questionBank/:gradeSubjectSemesterId",
   validateJwt,
   validateStudent,
@@ -170,7 +177,12 @@ router.get(
   validateStudent,
   getAllBookmarkedQuestions
 );
-
+router.get(
+  "/allQuestionViews",
+  validateJwt,
+  validateStudent,
+  getAllQuestionViewByStudentId
+);
 router
   .route("/question/:questionId")
   .patch(validateJwt, validateStudent, updateQuestionView)

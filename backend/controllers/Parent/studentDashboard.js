@@ -10,7 +10,9 @@ const { getMaterialsForGrade } = require("../../services/materialService");
 const {
   getAllCompletedVirtualRoomsForAllSubjects,
 } = require("../../services/virtualRoomService");
-
+const studentService = require("../../services/studentService");
+const academicService = require("../../services/academicYearService");
+const questionService = require("../../services/questionBankService");
 const getDashboardData = async (req, res) => {
   try {
     const id = req.query.id || req.user.id;
@@ -43,6 +45,19 @@ const getDashboardData = async (req, res) => {
     );
     const missedAssignments = await getMissedAssignments(studentId, authToken);
     const grades = await getStudentGradesReport(studentId);
+
+    const gradeId = await studentService.getStudentGradeId(studentId);
+    const academicYear = await academicService.getCurrentAcademicYear();
+    const currentSemester = await academicService.getCurrentSemester(
+      academicYear._id
+    );
+
+    const questions =
+      await questionService.getQuestionsByGradeAndSemesterWithStatus(
+        gradeId,
+        currentSemester._id,
+        studentId
+      );
     const materialsStates = (await getMaterialsForGrade(studentId))
       .studentStats;
     const virtualRoomsStates = await getAllCompletedVirtualRoomsForAllSubjects(
@@ -67,7 +82,7 @@ const getDashboardData = async (req, res) => {
       enhancedGradeMetrics,
       examMetrics
     );
-
+    const questionMetrics = calculateQuestionMetrics(questions);
     res.status(200).json({
       status: 200,
       message: "Dashboard data fetched successfully",
@@ -79,12 +94,14 @@ const getDashboardData = async (req, res) => {
         missedExams,
         completedAssignments,
         missedAssignments,
+        questions,
         grades,
         virtualRoomsStates,
         dashboardMetrics: {
           attendance: attendanceMetrics,
           exams: examMetrics,
           assignments: assignmentMetrics,
+          questions: questionMetrics,
           grades: enhancedGradeMetrics,
           performanceTrends,
           academicStanding,
@@ -1015,6 +1032,92 @@ const getCompletedAssignments = async (student_id, authToken) => {
     console.error("Error fetching completed assignments:", error.message);
     throw new Error("Failed to fetch completed assignments");
   }
+};
+
+const calculateQuestionMetrics = (questions) => {
+  try {
+    const totalQuestions = questions.length;
+    const bookmarkedCount = questions.filter((q) => q.isBookmarked).length;
+    const viewedCount = questions.filter((q) => q.isViewed).length;
+
+    const completionRate =
+      totalQuestions > 0
+        ? ((viewedCount / totalQuestions) * 100).toFixed(2)
+        : 0;
+    const bookmarkedRate =
+      totalQuestions > 0
+        ? ((bookmarkedCount / totalQuestions) * 100).toFixed(2)
+        : 0;
+
+    const typeDistribution = questions.reduce((acc, q) => {
+      const type = q.questionType;
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    }, {});
+
+    const subjectDistribution = questions.reduce((acc, q) => {
+      const subject = q.subjectId?.subjectName || "Unknown";
+      acc[subject] = (acc[subject] || 0) + 1;
+      return acc;
+    }, {});
+
+    const recentActivity = questions
+      .filter((q) => q.isViewed || q.isBookmarked)
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      .slice(0, 5)
+      .map((q) => ({
+        questionId: q._id,
+        type: q.questionType,
+        subject: q.subjectId?.subjectName || "Unknown",
+        isBookmarked: q.isBookmarked,
+        isViewed: q.isViewed,
+        lastInteraction: q.updatedAt,
+      }));
+
+    return {
+      summary: {
+        totalQuestions,
+        bookmarkedCount,
+        viewedCount,
+        unviewedCount: totalQuestions - viewedCount,
+        completionRate,
+        bookmarkedRate,
+      },
+      typeDistribution,
+      subjectDistribution,
+      recentActivity,
+      engagementScore: calculateEngagementScore(questions),
+    };
+  } catch (error) {
+    console.error("Error calculating question metrics:", error);
+    return {
+      summary: {
+        totalQuestions: 0,
+        bookmarkedCount: 0,
+        viewedCount: 0,
+        completionRate: 0,
+        bookmarkedRate: 0,
+      },
+      typeDistribution: {},
+      subjectDistribution: {},
+      recentActivity: [],
+    };
+  }
+};
+
+const calculateEngagementScore = (questions) => {
+  const viewedWeight = 0.6;
+  const bookmarkedWeight = 0.4;
+  const maxPossible = questions.length * (viewedWeight + bookmarkedWeight);
+
+  const score = questions.reduce((sum, q) => {
+    let questionScore = 0;
+    if (q.isViewed) questionScore += viewedWeight;
+    if (q.isBookmarked) questionScore += bookmarkedWeight;
+    return sum + questionScore;
+  }, 0);
+
+  return maxPossible > 0 ? ((score / maxPossible) * 100).toFixed(2) : 0;
 };
 module.exports = {
   getDashboardData,

@@ -28,7 +28,11 @@ const updateQuestionView = expressAsyncHandler(async (req, res) => {
     });
 
     if (!questionView || !questionView.is_viewed) {
-      await addRewardClaimAndUpdatePoints(student_id, "Student", "View Question");
+      await addRewardClaimAndUpdatePoints(
+        student_id,
+        "Student",
+        "View Question"
+      );
     }
     questionView = await QuestionView.findOneAndUpdate(
       { question_id: questionId, student_id },
@@ -86,7 +90,26 @@ const getQuestionViewByQuestionId = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const getAllQuestionViewByStudentId = expressAsyncHandler(async (req, res) => {
+  const student_id = req.user.id;
+
+  try {
+    const questionViews = await QuestionView.find({
+      student_id,
+      is_viewed: true,
+    });
+    res.status(200).json({
+      status: 200,
+      message: "Question views fetched successfully",
+      questionViews,
+    });
+  } catch (error) {
+    console.error("Error fetching question views:", error);
+    res.status(500).json({ status: 500, message: "Internal Server Error" });
+  }
+});
 module.exports = {
   updateQuestionView,
   getQuestionViewByQuestionId,
+  getAllQuestionViewByStudentId,
 };

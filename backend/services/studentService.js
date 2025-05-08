@@ -14,7 +14,16 @@ const getStudentById = async (student_id) => {
     throw new Error(error.message);
   }
 };
-
+async function getStudentGradeId(studentId) {
+  const student = await Student.findById(studentId).populate("gradeId");
+  if (!student?.gradeId) {
+    const error = new Error("Student grade not found");
+    error.statusCode = 404;
+    throw error;
+  }
+  return student.gradeId._id;
+}
 module.exports = {
   getStudentById,
+  getStudentGradeId,
 };
