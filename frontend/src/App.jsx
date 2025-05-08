@@ -29,6 +29,7 @@ import ForgotPassword from "./Features/Auth/ForgotPassword";
 import VerifyEmail from "./Features/Auth/VerifyEmail";
 import ResendVerification from "./Features/Auth/ResendVerification";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ExamsParent from "./Features/Parent/components/Exams/ExamPage";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -810,6 +811,7 @@ function App() {
               />
 
               <Route path="attendance" element={<AttendanceForChild />} />
+              <Route path="exams" element={<ExamsParent />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route
