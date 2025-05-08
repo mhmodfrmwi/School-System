@@ -130,15 +130,15 @@ const Attendance = () => {
       ></div>
 
       <section className="relative z-10 mx-auto mb-20 mt-16 min-h-screen max-w-6xl pt-4 font-poppins">
-        <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <div>
+        <div>
+          <div className="">
             <h1 className="text-2xl font-bold text-[#5e5b63] dark:text-[#E0AAEE] md:text-3xl">
-              {t("childAttendance.title")} -{" "}
-              <span className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
+              {t("childAttendance.title")}
+              <span className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-xl text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
+                <br />
                 {selectedKid.fullName}
               </span>
             </h1>
-            <div className="mt-2 h-1 w-44 rounded-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] md:w-72"></div>
           </div>
 
           <div

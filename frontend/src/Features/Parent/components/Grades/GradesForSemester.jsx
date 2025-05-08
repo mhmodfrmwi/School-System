@@ -78,28 +78,28 @@ export default function GradesForSemester() {
       ></div>
 
       <section className="mx-auto mb-20 mt-16 min-h-screen w-[88%] pt-4 font-poppins">
-        <div className="relative z-10 mb-8 flex flex-col">
-          <h1 className="relative bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-2xl font-semibold text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] md:text-2xl xl:text-3xl">
-            {t("gradesSemesterForChild.title")} - {selectedKid.fullName}
-            <span
-              className={`absolute bottom-[-9px] h-[4px] w-[80px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] md:w-[200px] ${
-                i18n.language === "ar" ? "right-0" : "left-0"
-              }`}
-            ></span>
-          </h1>
-        </div>
+        <div>
+          <div className="">
+            <h1 className="text-2xl font-bold text-[#5e5b63] dark:text-[#E0AAEE] md:text-3xl">
+              {t("gradesSemesterForChild.title")} <br />
+              <span className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-xl text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
+                {selectedKid.fullName}
+              </span>
+            </h1>
+          </div>
 
-        <div
-          dir={isRTL ? "rtl" : "ltr"}
-          className={`relative z-10 mb-16 flex w-full items-center ${isRTL ? "flex-row-reverse" : "flex-row-reverse"}`}
-        >
-          <Button
-            variant="solid"
-            className={`bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white transition-shadow duration-300 hover:shadow-lg dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${isRTL ? "ml-4" : "mr-4"}`}
-            onClick={() => navigate(-1)}
+          <div
+            dir={isRTL ? "rtl" : "ltr"}
+            className={`relative z-10 mb-16 flex w-full items-center ${isRTL ? "flex-row-reverse" : "flex-row-reverse"}`}
           >
-            {t("gradesSemesterForChild.back")}
-          </Button>
+            <Button
+              variant="solid"
+              className={`bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white transition-shadow duration-300 hover:shadow-lg dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${isRTL ? "ml-4" : "mr-4"}`}
+              onClick={() => navigate(-1)}
+            >
+              {t("gradesSemesterForChild.back")}
+            </Button>
+          </div>
         </div>
 
         {/* Grades Table */}

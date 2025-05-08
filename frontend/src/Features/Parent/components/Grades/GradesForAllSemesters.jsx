@@ -68,37 +68,37 @@ export default function GradesForAllSemesters() {
   return (
     <div className="relative min-h-screen bg-white p-8 font-poppins dark:bg-[#13082F]">
       <div
-        className="absolute inset-0 h-screen bg-cover bg-no-repeat opacity-0 dark:opacity-100"
+        className="absolute inset-0 h-screen bg-cover bg-no-repeat opacity-0"
         style={{ backgroundImage: `url(${backgroundStars})` }}
       ></div>
       <div
-        className="absolute inset-0 h-screen bg-cover bg-no-repeat opacity-0 dark:opacity-100"
+        className="absolute inset-0 h-screen bg-cover bg-no-repeat opacity-0"
         style={{ backgroundImage: `url(${backgroundWaves})` }}
       ></div>
 
       <section className="mx-auto mb-20 mt-16 min-h-screen w-[88%] pt-4 font-poppins">
-        <div className="relative z-10 mb-8 flex flex-col">
-          <h1 className="relative bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-2xl font-semibold text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] md:text-3xl">
-            {t("gradesAllSemesters.title")} - {selectedKid.fullName}
-            <span
-              className={`absolute bottom-[-9px] h-[4px] w-[80px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] md:w-[200px] ${
-                i18n.language === "ar" ? "right-0" : "left-0"
-              }`}
-            ></span>
-          </h1>
-        </div>
+        <div>
+          <div>
+            <h1 className="text-2xl font-bold text-[#5e5b63] dark:text-[#E0AAEE] md:text-3xl">
+              {t("gradesAllSemesters.title")} <br />
+              <span className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] bg-clip-text text-xl text-transparent dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
+                {selectedKid.fullName}
+              </span>
+            </h1>
+          </div>
 
-        <div
-          dir={isRTL ? "rtl" : "ltr"}
-          className={`relative z-10 mb-16 flex w-full items-center ${isRTL ? "flex-row-reverse" : "flex-row-reverse"}`}
-        >
-          <Button
-            variant="solid"
-            className={`bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white transition-shadow duration-300 hover:shadow-lg dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${isRTL ? "ml-4" : "mr-4"}`}
-            onClick={() => navigate(-1)}
+          <div
+            dir={isRTL ? "rtl" : "ltr"}
+            className={`relative z-10 mb-16 flex w-full items-center ${isRTL ? "flex-row-reverse" : "flex-row-reverse"}`}
           >
-            {t("gradesAllSemesters.back")}
-          </Button>
+            <Button
+              variant="solid"
+              className={`bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] text-white transition-shadow duration-300 hover:shadow-lg dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${isRTL ? "ml-4" : "mr-4"}`}
+              onClick={() => navigate(-1)}
+            >
+              {t("gradesAllSemesters.back")}
+            </Button>
+          </div>
         </div>
 
         <div className="relative z-10 mx-auto mb-20 space-y-12">
