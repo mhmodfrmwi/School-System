@@ -11,7 +11,7 @@ import Icon4 from "../../../assets/StudentIcon/Icon4.png";
 import Icon5 from "../../../assets/StudentIcon/Icon5.png";
 import Icon6 from "../../../assets/StudentIcon/Icon6.png";
 import Icon7 from "../../../assets/StudentIcon/Icon7.png";
-import Icon8 from "../../../assets/StudentIcon/Icon8.png";
+// import Icon8 from "../../../assets/StudentIcon/Icon8.png";
 import Icon12 from "../../../assets/StudentIcon/Icon12.png";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -51,7 +51,7 @@ const Sidebar = ({ kid = null, closeSidebar, setSelectedKid }) => {
       path: "/parent/grades-for-child",
     },
     { label: t("Activities"), icon: Icon7, path: "/parent/activities" },
-    { label: t("Library"), icon: Icon8, path: "/parent/library" },
+    // { label: t("Library"), icon: Icon8, path: "/parent/library" },
     {
       label: t("Logout"),
       icon: Icon12,

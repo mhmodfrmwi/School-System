@@ -269,6 +269,12 @@ const DetailesParentActivity = lazy(
 const PrizesParentActivity = lazy(
   () => import("./Features/Parent/components/Activites/PrizesActivity"),
 );
+const ScheduleParent = lazy(
+  () => import("./Features/Parent/components/Schedule/schedule"),
+);
+const MotivationParent = lazy(
+  () => import("./Features/Parent/pages/MotivationPage"),
+);
 const GradesForSemesterForChild = lazy(
   () => import("./Features/Parent/components/Grades/GradesForSemester"),
 );
@@ -791,6 +797,8 @@ function App() {
                 element={<PrizesParentActivity />}
               />
               <Route path="activities/contests" element={<ParentContests />} />
+              <Route path="schedule" element={<ScheduleParent />} />
+              <Route path="motivation" element={<MotivationParent />} />
               <Route path="grades-for-child" element={<GradesForChild />} />
               <Route
                 path="grades-for-semester"
