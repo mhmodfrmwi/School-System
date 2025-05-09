@@ -16,6 +16,7 @@ const {
   displaySubmission,
   getStudentSubmissions,
   getMissedAssignmentsForStudent,
+  getCompletedAssignmentsForStudent,
 } = require("../controllers/assignmentSubmissionController");
 
 const router = express.Router();
@@ -25,6 +26,11 @@ router.get("/", validateJwt, getAssignments);
 router.get("/submissions/student/", validateJwt, getStudentSubmissions);
 router.get("/teacher", validateJwt, getAssignmentsForTeacher);
 router.post("/missedAssignments", validateJwt, getMissedAssignmentsForStudent);
+router.post(
+  "/completedAssignments",
+  validateJwt,
+  getCompletedAssignmentsForStudent
+);
 router.get("/:id", validateJwt, getAssignmentById);
 router.patch("/:id", validateJwt, updateAssignmentById);
 router.delete("/:id", validateJwt, deleteAssignmentById);
