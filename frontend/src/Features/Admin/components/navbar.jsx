@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaSearch, FaBell, FaArrowLeft } from "react-icons/fa";
+import { FaSearch, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,6 +16,7 @@ import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
+import NavbarNotification from "./Notification/NavbarNotification";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -209,8 +210,7 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-2 md:space-x-6">
           <button className="relative p-2 text-gray-500">
-            <FaBell className="text-xl" />
-            <span className="absolute right-2 top-1 block h-3.5 w-3.5 rounded-full bg-red-500"></span>
+            <NavbarNotification />
           </button>
           <button className="text-xl text-gray-500">
             <FontAwesomeIcon icon={faEnvelope} className="text-2xl" />
