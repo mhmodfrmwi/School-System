@@ -1,58 +1,44 @@
-import { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { resendVerificationEmail, clearError, resetState } from "./AuthRedux/verifyEmailSlice";
 import { toast } from "react-toastify";
 
 const ResendVerification = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [status, setStatus] = useState("idle");
-  const [message, setMessage] = useState("");
-  const [formData, setFormData] = useState({
+  const { status, message, loading, error } = useSelector((state) => state.verifyEmail);
+  const [formData, setFormData] = React.useState({
     email: "",
     model: "Student",
   });
-  const resendVerificationEmail = async () => {
-    if (!formData.email || !formData.email.includes("@")) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
 
-    setStatus("loading");
-    setMessage("Sending verification email...");
+  React.useEffect(() => {
+    // Reset state when component mounts
+    dispatch(resetState());
+  }, [dispatch]);
 
-    try {
-      const response = await axios.post(
-        `${"http://localhost:4000"}/api/v1/general/resend-verification`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      setStatus("success");
-      setMessage(
-        response.data.message || "Verification email sent successfully!",
-      );
+  React.useEffect(() => {
+    if (status === "success") {
       toast.success("Verification email sent! Check your inbox.");
-
       setTimeout(() => navigate("/login"), 5000);
-    } catch (error) {
-      setStatus("error");
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to resend verification email";
-      setMessage(errorMessage);
-      toast.error(errorMessage);
+    } else if (error) {
+      toast.error(error);
     }
-  };
+  }, [status, error, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const resendVerificationEmailHandler = () => {
+    if (!formData.email || !formData.email.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    dispatch(resendVerificationEmail(formData));
   };
 
   return (
@@ -96,15 +82,13 @@ const ResendVerification = () => {
         </div>
 
         <button
-          onClick={resendVerificationEmail}
-          disabled={status === "loading"}
+          onClick={resendVerificationEmailHandler}
+          disabled={loading}
           className={`w-full rounded-md px-4 py-2 font-medium text-white ${
-            status === "loading"
-              ? "cursor-not-allowed bg-blue-400"
-              : "bg-blue-600 hover:bg-blue-700"
+            loading ? "cursor-not-allowed bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
           }`}
         >
-          {status === "loading" ? (
+          {loading ? (
             <span className="flex items-center justify-center">
               <svg
                 className="-ml-1 mr-2 h-4 w-4 animate-spin text-white"
@@ -144,7 +128,10 @@ const ResendVerification = () => {
           <div className="mt-4 rounded-md bg-red-50 p-3 text-red-700">
             <p>{message}</p>
             <button
-              onClick={resendVerificationEmail}
+              onClick={() => {
+                dispatch(clearError());
+                resendVerificationEmailHandler();
+              }}
               className="mt-2 text-sm font-medium text-red-600 hover:text-red-800"
             >
               Try again

@@ -18,9 +18,8 @@ function Login() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  const { loading } = useSelector((state) => state.login);
-  const role =
-    useSelector((state) => state.role.role) || localStorage.getItem("role");
+  const { loading, error } = useSelector((state) => state.login);
+  const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -130,12 +129,21 @@ function Login() {
               <div
                 className={i18n.language === "ar" ? "text-left" : "text-right"}
               >
-                <span
-                  onClick={() => navigate("/forgot-password")}
-                  className="text-sm text-orange-500 hover:underline dark:text-[#E0AAEE]"
-                >
-                  {t("login.forgotPassword")}
-                </span>
+                {error !== "We sent you a verification email, please verify your account" ? (
+                  <span
+                    onClick={() => navigate("/forgot-password")}
+                    className="text-sm text-orange-500 hover:underline dark:text-[#E0AAEE] cursor-pointer"
+                  >
+                    {t("login.forgotPassword")}
+                  </span>
+                ) : (
+                  <span
+                    onClick={() => navigate("/resend-verification")}
+                    className="text-sm text-orange-500 hover:underline dark:text-[#E0AAEE] cursor-pointer"
+                  >
+                    Resend Verification Email
+                  </span>
+                )}
               </div>
 
               <button

@@ -1,40 +1,35 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { verifyEmail, clearError } from "./AuthRedux/verifyEmailSlice";
 import { toast } from "react-toastify";
 
 const VerifyEmail = () => {
   const { userId, token } = useParams();
   const navigate = useNavigate();
-  const [status, setStatus] = useState("verifying");
-  const [message, setMessage] = useState("Verifying your email...");
+  const dispatch = useDispatch();
 
-  const verifyEmail = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:4000/api/v1/general/${userId}/verify/${token}`,
-      );
+  const { status, message, loading, error } = useSelector((state) => state.verifyEmail);
 
-      setStatus("success");
-      setMessage(response.data.message || "Email verified successfully!");
-      setTimeout(() => navigate("/login"), 3000);
-    } catch (error) {
-      setStatus("error");
-      const errorMessage =
-        error.response?.data?.message ||
-        "Failed to verify email. Please try again or contact support.";
-      setMessage(errorMessage);
-      toast.error(errorMessage);
-
-      if (error.response?.status === 410) {
-        setTimeout(() => navigate("/login"), 3000);
-      }
+  React.useEffect(() => {
+    if (userId && token) {
+      dispatch(verifyEmail({ userId, token }));
     }
-  };
+  }, [dispatch, userId, token]);
 
-  useEffect(() => {
-    verifyEmail();
-  }, [userId, token]);
+  React.useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  React.useEffect(() => {
+    if (status === "success") {
+      setTimeout(() => navigate("/login"), 3000);
+    } else if (status === "expired") {
+      setTimeout(() => navigate("/login"), 3000);
+    }
+  }, [status, navigate]);
 
   const getStatusStyles = () => {
     switch (status) {
@@ -52,22 +47,21 @@ const VerifyEmail = () => {
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-gray-100 p-4">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
-        <h1 className="mb-6 text-center text-2xl font-bold">
-          Email Verification
-        </h1>
+        <h1 className="mb-6 text-center text-2xl font-bold">Email Verification</h1>
 
         <div className="flex flex-col items-center">
-          {status === "verifying" && (
+          {loading && (
             <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
           )}
 
-          <p className={`text-center text-lg ${getStatusStyles()}`}>
-            {message}
-          </p>
+          <p className={`text-center text-lg ${getStatusStyles()}`}>{message}</p>
 
           {status === "error" && (
             <button
-              onClick={() => navigate("/resend-verification")}
+              onClick={() => {
+                dispatch(clearError());
+                navigate("/resend-verification");
+              }}
               className="mt-6 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             >
               Resend Verification Email
