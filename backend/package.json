@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "concurrently \"nodemon index.js\" \"wait-port -t 6000 localhost:4000 && cd ../microservices/exams-microservice && npm run dev\""
+    "dev": "concurrently -n BACKEND,EXAMS,FRONTEND,AI,ML -c green,cyan,blue,magenta,yellow \"nodemon index.js\" \"wait-port -t 6000 localhost:4000 && cd ../microservices/exams-microservice && npm run dev\" \"cd ../frontend && npm install && npm run dev\" \"cd ../ai chatbot && npm install && npm start\" \"cd ../ML Models && python ml_api_app.py\""
   },
   "keywords": [],
   "author": "",
