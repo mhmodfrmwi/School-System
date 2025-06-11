@@ -16,7 +16,7 @@ import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
-import NavbarNotification from "./Notification/NavbarNotification";
+import NavbarNotification from "./../../Notification/SendNotifications/NavbarNotification";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();

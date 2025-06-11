@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNotificationService } from "../../../Notification/hooks/notification";
+import { toast } from "react-toastify";
 import { FaTimes, FaPaperPlane } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGrades } from "../AdminRedux/gradeSlice";
-import { fetchStudents } from "../AdminRedux/studentSlice";
-import { fetchClasses } from "../AdminRedux/classSlice";
-import { toast } from "react-toastify";
-import { fetchManagers } from "../AdminRedux/managerSlice";
-import { fetchParents } from "../AdminRedux/parentSlice";
-import { fetchAdmins } from "../AdminRedux/adminSlice";
-import { fetchTeachers } from "../AdminRedux/teacherSlice";
+import { fetchGrades } from "../../../Features/Admin/components/AdminRedux/gradeSlice";
+import { fetchStudents } from "../../../Features/Admin/components/AdminRedux/studentSlice";
+import { fetchManagers } from "../../../Features/Admin/components/AdminRedux/managerSlice";
+import { fetchParents } from "../../../Features/Admin/components/AdminRedux/parentSlice";
+import { fetchTeachers } from "../../../Features/Admin/components/AdminRedux/teacherSlice";
+import { fetchAdmins } from "../../../Features/Admin/components/AdminRedux/adminSlice";
+import { fetchClasses } from "../../../Features/Admin/components/AdminRedux/classSlice";
+import { fetchClassTeacher } from "../../Teacher/components/TeacherRedux/TeacherClassSlice";
+import { useNotificationService } from "../hooks/notification";
+import { useClasses } from "../../..//Features/Manager/components/hooks/attendance";
 
 const notificationTypes = [
   { value: "reminder", label: "Reminder" },
@@ -48,12 +50,19 @@ const NotificationForm = ({ onClose, currentUser }) => {
   const dispatch = useDispatch();
   const { _id: userId, role, fullName } = useSelector((state) => state.login);
 
+  // Conditional hook usage for manager role
+  const useManagerClasses = () => {
+    if (role === "manager") {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      return useClasses();
+    }
+    return { managerclasses: [], isLoading: false };
+  };
+  const managerClassesData = useManagerClasses();
+
   // Fetch all user types
   const { grades = [], loading: gradesLoading } = useSelector(
     (state) => state.grades,
-  );
-  const { classes = [], loading: classesLoading } = useSelector(
-    (state) => state.classes,
   );
   const { students = [], loading: studentsLoading } = useSelector(
     (state) => state.students,
@@ -71,15 +80,41 @@ const NotificationForm = ({ onClose, currentUser }) => {
     (state) => state.teachers || {},
   );
 
+  // Get all possible class data sources
+  const classTeacherData = useSelector((state) => state.classTeachers || {});
+  const adminClassesData = useSelector((state) => state.classes || {});
+
+  // Determine which classes to use based on role
+  let classes = [];
+  let classesLoading = false;
+
+  if (role === "teacher") {
+    classes = classTeacherData.classTeachers || [];
+    classesLoading = classTeacherData.loading || false;
+  } else if (role === "admin") {
+    classes = adminClassesData.classes || [];
+    classesLoading = adminClassesData.loading || false;
+  } else if (role === "manager") {
+    classes = managerClassesData.managerclasses || [];
+    classesLoading = managerClassesData.isLoading || false;
+  }
+
   useEffect(() => {
     dispatch(fetchGrades());
-    dispatch(fetchClasses());
     dispatch(fetchStudents());
     dispatch(fetchManagers());
     dispatch(fetchParents());
     dispatch(fetchAdmins());
     dispatch(fetchTeachers());
-  }, [dispatch]);
+
+    // Fetch classes based on role
+    if (role === "teacher") {
+      dispatch(fetchClassTeacher());
+    } else if (role === "admin") {
+      dispatch(fetchClasses());
+    }
+    // For manager, the useClasses hook will handle the fetching
+  }, [dispatch, role]);
 
   const capitalizedRole = role
     ? role.charAt(0).toUpperCase() + role.slice(1)
@@ -217,6 +252,66 @@ const NotificationForm = ({ onClose, currentUser }) => {
       console.error("Error sending notification:", err);
       toast.error("Failed to send notification");
     }
+  };
+
+  const renderClassSelect = () => {
+    if (role === "manager") {
+      return (
+        <select
+          name="classId"
+          value={formData.classId}
+          onChange={handleChange}
+          required
+          className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
+        >
+          <option value="">Select a class</option>
+          {classes.map((classItem) => (
+            <option key={classItem._id} value={classItem._id}>
+              {classItem.gradeId.gradeName}-{classItem.className}
+            </option>
+          ))}
+        </select>
+      );
+    } else if (role === "admin") {
+      return (
+        <select
+          name="classId"
+          value={formData.classId}
+          onChange={handleChange}
+          required
+          className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
+        >
+          <option value="">Select a class</option>
+          {classes.map((classItem) => (
+            <option key={classItem._id} value={classItem._id}>
+              {classItem.gradeId?.gradeName}-{classItem.className}
+            </option>
+          ))}
+        </select>
+      );
+    } else if (role === "teacher") {
+      return (
+        <select
+          name="classId"
+          value={formData.classId}
+          onChange={handleChange}
+          required
+          className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
+        >
+          <option value="">Select a class</option>
+          {classes.map((classItem) => {
+            const classId = classItem.classId?._id;
+            const className = `${classItem.gradeName}-${classItem.className}`;
+            return (
+              <option key={classId} value={classId}>
+                {className}
+              </option>
+            );
+          })}
+        </select>
+      );
+    }
+    return null;
   };
 
   return (
@@ -417,20 +512,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
                 <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Select Class
                 </label>
-                <select
-                  name="classId"
-                  value={formData.classId}
-                  onChange={handleChange}
-                  required
-                  className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
-                >
-                  <option value="">Select a class</option>
-                  {classes.map((classItem) => (
-                    <option key={classItem._id} value={classItem._id}>
-                      {classItem.gradeId?.gradeName}-{classItem.className}
-                    </option>
-                  ))}
-                </select>
+                {renderClassSelect()}
               </div>
             )}
 

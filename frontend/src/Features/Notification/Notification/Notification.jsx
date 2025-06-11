@@ -8,13 +8,14 @@ import {
   FaPaperPlane,
 } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
-import { useNotifications } from "../../../Notification/hooks/notification";
+import { fetchStudents } from "../../../Features/Admin/components/AdminRedux/studentSlice";
+import { fetchManagers } from "../../../Features/Admin/components/AdminRedux/managerSlice";
+import { fetchParents } from "../../../Features/Admin/components/AdminRedux/parentSlice";
+import { fetchTeachers } from "../../../Features/Admin/components/AdminRedux/teacherSlice";
+import { fetchAdmins } from "../../../Features/Admin/components/AdminRedux/adminSlice";
 import NotificationForm from "./NotificationForm";
-import { fetchManagers } from "../AdminRedux/managerSlice";
-import { fetchStudents } from "../AdminRedux/studentSlice";
-import { fetchParents } from "../AdminRedux/parentSlice";
-import { fetchAdmins } from "../AdminRedux/adminSlice";
-import { fetchTeachers } from "../AdminRedux/teacherSlice";
+import { useNotifications } from "../hooks/notification";
+import SpinnerMini from "../../../ui/SpinnerMini";
 
 const Notification = ({ userId, role, onClose }) => {
   const dispatch = useDispatch();
@@ -98,7 +99,7 @@ const Notification = ({ userId, role, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 dark:bg-white/70">
       <div className="h-[75vh] w-[80vw] max-w-4xl rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-600 dark:bg-gray-800">
         {/* Header */}
-        <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-r from-[#117C90] to-[#0D5665] px-6 py-4 text-white dark:from-[#0D5665] dark:to-[#093D4A]">
+        <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-6 py-4 text-white dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
           <div className="flex items-center">
             <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white">
               <FaBell className="h-5 w-5" />
@@ -106,7 +107,7 @@ const Notification = ({ userId, role, onClose }) => {
             <h3 className="text-lg font-medium">
               Notifications
               {unreadCount > 0 && (
-                <span className="ml-2 rounded-full bg-white/20 px-2 py-1 text-xs">
+                <span className="ml-2 rounded-full bg-red-700 px-2 py-1 text-xs">
                   {unreadCount} new
                 </span>
               )}
@@ -133,7 +134,7 @@ const Notification = ({ userId, role, onClose }) => {
         </div>
 
         {showForm && (
-          <div className="bg-gradient-to-r from-[#117C90]/10 to-[#0D5665]/10 p-4 dark:from-[#0D5665]/20 dark:to-[#093D4A]/20">
+          <div className="bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10 p-4 dark:from-[#CE4EA0]/20 dark:via-[#BF4ACB]/20 dark:to-[#AE45FB]/20">
             <NotificationForm
               onClose={() => setShowForm(false)}
               currentUser={{ id: userId, role }}
@@ -150,8 +151,8 @@ const Notification = ({ userId, role, onClose }) => {
 
         <div className="h-[calc(100%-120px)] overflow-y-auto bg-gray-50 p-6 dark:bg-gray-800">
           {allDataLoading ? (
-            <div className="flex justify-center py-8">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#117C90] border-t-transparent dark:border-[#0D5665]"></div>
+            <div className="flex justify-center pt-44">
+              <SpinnerMini />
             </div>
           ) : notifications.length === 0 ? (
             <div className="py-8 text-center">
@@ -171,7 +172,7 @@ const Notification = ({ userId, role, onClose }) => {
                 <button
                   onClick={markAllAsRead}
                   disabled={unreadCount === 0}
-                  className="flex items-center gap-1 rounded-full bg-[#117C90]/10 px-3 py-1 text-xs text-[#117C90] hover:bg-[#117C90]/20 disabled:opacity-50 dark:bg-[#0D5665]/20 dark:text-white dark:hover:bg-[#0D5665]/30"
+                  className="flex items-center gap-1 rounded-full bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10 px-3 py-1 text-xs text-[#FD813D] hover:from-[#FD813D]/20 hover:via-[#CF72C0]/20 hover:to-[#BC6FFB]/20 disabled:opacity-50 dark:from-[#CE4EA0]/20 dark:via-[#BF4ACB]/20 dark:to-[#AE45FB]/20 dark:text-white dark:hover:from-[#CE4EA0]/30 dark:hover:via-[#BF4ACB]/30 dark:hover:to-[#AE45FB]/30"
                 >
                   <FaCheck size={12} />
                   Mark all as read
@@ -185,20 +186,21 @@ const Notification = ({ userId, role, onClose }) => {
                     key={notification._id}
                     className={`rounded-lg p-3 ${
                       !notification.isRead
-                        ? "bg-[#117C90]/25 dark:bg-[#0D5665]"
+                        ? "bg-gradient-to-r from-[#FD813D]/25 via-[#CF72C0]/25 to-[#BC6FFB]/25 dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"
                         : "bg-white dark:bg-gray-700"
                     } shadow-sm dark:shadow-none`}
                   >
-                    <div className="flex justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                    <div className="grid grid-cols-8">
+                      <div className="col-span-6 sm:col-span-7">
+                        <p className="w-[80%] break-words text-sm font-medium text-gray-800 dark:text-gray-100">
                           {notification.content}
                         </p>
+
                         <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
                           <span className="text-gray-600 dark:text-gray-300">
                             From: {senderInfo.name} ({senderInfo.role})
                           </span>
-                          <span className="rounded-full bg-gray-200 px-2 py-0.5 text-gray-700 dark:bg-gray-600 dark:text-gray-200">
+                          <span className="rounded-full bg-gradient-to-r from-[#FD813D]/20 via-[#CF72C0]/20 to-[#BC6FFB]/20 px-2 py-0.5 text-gray-700 dark:from-[#CE4EA0]/20 dark:via-[#BF4ACB]/20 dark:to-[#AE45FB]/20 dark:text-white">
                             {notification.type}
                           </span>
                           <span className="text-gray-500 dark:text-white">
@@ -211,14 +213,14 @@ const Notification = ({ userId, role, onClose }) => {
                           </span>
                         </div>
                       </div>
-                      <div className="flex gap-1">
+                      <div className="col-span-2 flex sm:col-span-1">
                         {!notification.isRead && (
                           <button
                             onClick={() => markAsRead(notification._id)}
-                            className="rounded-full p-1 text-[#117C90] hover:bg-[#117C90]/20 dark:text-white dark:hover:bg-[#0D5665]/30"
+                            className="rounded-full p-1 text-[#FD813D] dark:text-white"
                             title="Mark as read"
                           >
-                            <FaCheck size={12} />
+                            <FaCheck size={20} />
                           </button>
                         )}
                         <button
@@ -232,10 +234,10 @@ const Notification = ({ userId, role, onClose }) => {
                               deleteNotification(notification._id);
                             }
                           }}
-                          className="rounded-full p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20"
+                          className="rounded-full p-1 text-red-500"
                           title="Delete notification"
                         >
-                          <FaTrash size={12} />
+                          <FaTrash size={20} />
                         </button>
                       </div>
                     </div>
