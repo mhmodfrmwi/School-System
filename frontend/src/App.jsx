@@ -566,7 +566,6 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <TitleUpdater />
         <ToastContainer
@@ -585,12 +584,20 @@ function App() {
           <Routes>
             <Route index element={<Navigate replace to="onboarding" />} />
             <Route path="onboarding" element={<OnBoarding />} />
+            <Route path="role" element={<ChooseRole />} />
             <Route
               path="/login"
               element={role ? <Login /> : <Navigate to="/role" />}
             />
             <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="role" element={<ChooseRole />} />
+            <Route
+              path="/users/:userId/verify/:token"
+              element={<VerifyEmail />}
+            />
+            <Route
+              path="/resend-verification"
+              element={<ResendVerification />}
+            />
             {/* /////////////////adminpage//////////////////// */}
             <Route
               path="admin"
@@ -1101,14 +1108,6 @@ function App() {
                 element={<WeeklyScheduleForManager />}
               />
             </Route>
-            <Route
-              path="/users/:userId/verify/:token"
-              element={<VerifyEmail />}
-            />
-            <Route
-              path="/resend-verification"
-              element={<ResendVerification />}
-            />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>

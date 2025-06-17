@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  FaCheck,
-  FaTrash,
-  FaTimes,
-  FaBell,
-  FaPaperPlane,
-} from "react-icons/fa";
+import { FaCheck, FaTrash, FaTimes, FaBell } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 import { fetchStudents } from "../../../Features/Admin/components/AdminRedux/studentSlice";
 import { fetchManagers } from "../../../Features/Admin/components/AdminRedux/managerSlice";
 import { fetchParents } from "../../../Features/Admin/components/AdminRedux/parentSlice";
 import { fetchTeachers } from "../../../Features/Admin/components/AdminRedux/teacherSlice";
 import { fetchAdmins } from "../../../Features/Admin/components/AdminRedux/adminSlice";
-import NotificationForm from "./NotificationForm";
 import { useNotifications } from "../hooks/notification";
 import SpinnerMini from "../../../ui/SpinnerMini";
+import { useTranslation } from "react-i18next";
 
 const Notification = ({ userId, role, onClose }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
   const dispatch = useDispatch();
   const {
     notifications,
@@ -27,7 +23,6 @@ const Notification = ({ userId, role, onClose }) => {
     deleteNotification,
     unreadCount,
   } = useNotifications(userId, role);
-  const [showForm, setShowForm] = useState(false);
 
   const { students = [], loading: studentsLoading } = useSelector(
     (state) => state.students,
@@ -55,7 +50,10 @@ const Notification = ({ userId, role, onClose }) => {
 
   const getSenderInfo = (sender) => {
     if (!sender?.id || !sender?.model)
-      return { name: "System", role: "System" };
+      return {
+        name: t("notifications.system"),
+        role: t("notifications.system"),
+      };
 
     let userList = [];
     let roleName = sender.model;
@@ -63,26 +61,31 @@ const Notification = ({ userId, role, onClose }) => {
     switch (sender.model) {
       case "Student":
         userList = students;
+        roleName = t("roles.student");
         break;
       case "Manager":
         userList = managers;
+        roleName = t("roles.manager");
         break;
       case "Parent":
         userList = parents;
+        roleName = t("roles.parent");
         break;
       case "Admin":
         userList = admins;
+        roleName = t("roles.admin");
         break;
       case "Teacher":
         userList = teachers;
+        roleName = t("roles.teacher");
         break;
       default:
-        return { name: "Unknown", role: sender.model };
+        return { name: t("notifications.unknownUser"), role: sender.model };
     }
 
     const user = userList.find((user) => user._id === sender.id);
     return {
-      name: user ? `${user.fullName}` : "Unknown User",
+      name: user ? `${user.fullName}` : t("notifications.unknownUser"),
       role: roleName,
     };
   };
@@ -97,18 +100,25 @@ const Notification = ({ userId, role, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 dark:bg-white/70">
-      <div className="h-[75vh] w-[80vw] max-w-4xl rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-600 dark:bg-gray-800">
+      <div
+        className="h-[75vh] w-[80vw] max-w-4xl rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-600 dark:bg-gray-800"
+        dir={isRTL ? "rtl" : "ltr"}
+      >
         {/* Header */}
         <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] px-6 py-4 text-white dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]">
           <div className="flex items-center">
-            <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white">
+            <div
+              className={`${isRTL ? "ml-3" : "mr-3"} flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white`}
+            >
               <FaBell className="h-5 w-5" />
             </div>
             <h3 className="text-lg font-medium">
-              Notifications
+              {t("notifications.title")}
               {unreadCount > 0 && (
-                <span className="ml-2 rounded-full bg-red-700 px-2 py-1 text-xs">
-                  {unreadCount} new
+                <span
+                  className={`${isRTL ? "mr-2" : "ml-2"} rounded-full bg-red-700 px-2 py-1 text-xs`}
+                >
+                  {unreadCount} {t("notifications.new")}
                 </span>
               )}
             </h3>
@@ -116,40 +126,16 @@ const Notification = ({ userId, role, onClose }) => {
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setShowForm(!showForm)}
-              className="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-sm hover:bg-white/30"
-              title="Send Notification"
-            >
-              <FaPaperPlane size={12} />
-              <span>Send</span>
-            </button>
-            <button
               onClick={onClose}
               className="rounded-full p-1 text-white hover:bg-white/20 focus:outline-none"
-              title="Close"
+              title={t("notifications.close")}
             >
               <FaTimes />
             </button>
           </div>
         </div>
 
-        {showForm && (
-          <div className="bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10 p-4 dark:from-[#CE4EA0]/20 dark:via-[#BF4ACB]/20 dark:to-[#AE45FB]/20">
-            <NotificationForm
-              onClose={() => setShowForm(false)}
-              currentUser={{ id: userId, role }}
-              userLists={{
-                students,
-                managers,
-                parents,
-                admins,
-                teachers,
-              }}
-            />
-          </div>
-        )}
-
-        <div className="h-[calc(100%-120px)] overflow-y-auto bg-gray-50 p-6 dark:bg-gray-800">
+        <div className="h-[calc(100%-120px)] overflow-y-scroll bg-gray-50 p-6 dark:bg-gray-800">
           {allDataLoading ? (
             <div className="flex justify-center pt-44">
               <SpinnerMini />
@@ -160,22 +146,24 @@ const Notification = ({ userId, role, onClose }) => {
                 <FaBell className="h-6 w-6 text-gray-500 dark:text-gray-400" />
               </div>
               <p className="text-gray-600 dark:text-gray-300">
-                No notifications yet
+                {t("notifications.empty.title")}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                We'll notify you when something arrives
+                {t("notifications.empty.subtitle")}
               </p>
             </div>
           ) : (
             <div className="space-y-3">
-              <div className="flex justify-end">
+              <div
+                className={`flex ${isRTL ? "justify-start" : "justify-end"}`}
+              >
                 <button
                   onClick={markAllAsRead}
                   disabled={unreadCount === 0}
                   className="flex items-center gap-1 rounded-full bg-gradient-to-r from-[#FD813D]/10 via-[#CF72C0]/10 to-[#BC6FFB]/10 px-3 py-1 text-xs text-[#FD813D] hover:from-[#FD813D]/20 hover:via-[#CF72C0]/20 hover:to-[#BC6FFB]/20 disabled:opacity-50 dark:from-[#CE4EA0]/20 dark:via-[#BF4ACB]/20 dark:to-[#AE45FB]/20 dark:text-white dark:hover:from-[#CE4EA0]/30 dark:hover:via-[#BF4ACB]/30 dark:hover:to-[#AE45FB]/30"
                 >
                   <FaCheck size={12} />
-                  Mark all as read
+                  {t("notifications.markAllAsRead")}
                 </button>
               </div>
 
@@ -198,7 +186,8 @@ const Notification = ({ userId, role, onClose }) => {
 
                         <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
                           <span className="text-gray-600 dark:text-gray-300">
-                            From: {senderInfo.name} ({senderInfo.role})
+                            {t("notifications.from")}: {senderInfo.name} (
+                            {senderInfo.role})
                           </span>
                           <span className="rounded-full bg-gradient-to-r from-[#FD813D]/20 via-[#CF72C0]/20 to-[#BC6FFB]/20 px-2 py-0.5 text-gray-700 dark:from-[#CE4EA0]/20 dark:via-[#BF4ACB]/20 dark:to-[#AE45FB]/20 dark:text-white">
                             {notification.type}
@@ -213,12 +202,14 @@ const Notification = ({ userId, role, onClose }) => {
                           </span>
                         </div>
                       </div>
-                      <div className="col-span-2 flex sm:col-span-1">
+                      <div
+                        className={`col-span-2 flex ${isRTL ? "justify-start" : "justify-end"} sm:col-span-1`}
+                      >
                         {!notification.isRead && (
                           <button
                             onClick={() => markAsRead(notification._id)}
                             className="rounded-full p-1 text-[#FD813D] dark:text-white"
-                            title="Mark as read"
+                            title={t("notifications.markAsRead")}
                           >
                             <FaCheck size={20} />
                           </button>
@@ -228,14 +219,14 @@ const Notification = ({ userId, role, onClose }) => {
                             e.stopPropagation();
                             if (
                               window.confirm(
-                                "Are you sure you want to delete this notification?",
+                                t("notifications.deleteConfirmation"),
                               )
                             ) {
                               deleteNotification(notification._id);
                             }
                           }}
                           className="rounded-full p-1 text-red-500"
-                          title="Delete notification"
+                          title={t("notifications.delete")}
                         >
                           <FaTrash size={20} />
                         </button>
