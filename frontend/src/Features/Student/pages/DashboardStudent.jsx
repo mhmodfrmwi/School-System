@@ -249,8 +249,8 @@ function DashboardStudent() {
         label: t("dashboard.grades"),
         data: [
           dashboardData.grades.statistics.averageGrade,
-          dashboardData.grades.statistics.highestGrade.grade,
-          dashboardData.grades.statistics.lowestGrade.grade,
+          dashboardData.grades.statistics.highestGrade?.grade || 0,
+          dashboardData.grades.statistics.lowestGrade?.grade || 0,
         ],
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
