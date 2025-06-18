@@ -223,12 +223,17 @@ const Notification = ({ userId, role, onClose }) => {
                           <span className="rounded-full bg-gray-200 px-2 py-0.5 text-gray-700 dark:bg-gray-600 dark:text-gray-200">
                             {notification.type}
                           </span>
-                          <span className="text-gray-500 dark:text-white">
+
+                          <span
+                            dir="ltr"
+                            className="text-sm italic text-gray-500 dark:text-white"
+                            title={new Date(
+                              notification.createdAt,
+                            ).toLocaleString()}
+                          >
                             {formatDistanceToNow(
                               new Date(notification.createdAt),
-                              {
-                                addSuffix: true,
-                              },
+                              { addSuffix: true },
                             )}
                           </span>
                         </div>

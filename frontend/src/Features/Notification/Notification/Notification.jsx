@@ -189,15 +189,19 @@ const Notification = ({ userId, role, onClose }) => {
                             {t("notifications.from")}: {senderInfo.name} (
                             {senderInfo.role})
                           </span>
-                          <span className="rounded-full bg-gradient-to-r from-[#FD813D]/20 via-[#CF72C0]/20 to-[#BC6FFB]/20 px-2 py-0.5 text-gray-700 dark:from-[#CE4EA0]/20 dark:via-[#BF4ACB]/20 dark:to-[#AE45FB]/20 dark:text-white">
+                          <span className="rounded-full bg-gradient-to-r from-[#FD813D]/20 via-[#CF72C0]/20 to-[#BC6FFB]/20 px-2 py-0.5 text-gray-700 dark:from-[#CE4EA0]/20 dark:via-[#BF4ACB]/20 dark:to-[#AE45FB]/20 dark:text-gray-300">
                             {notification.type}
                           </span>
-                          <span className="text-gray-500 dark:text-white">
+                          <span
+                            dir="ltr"
+                            className="text-sm italic dark:text-gray-300"
+                            title={new Date(
+                              notification.createdAt,
+                            ).toLocaleString()}
+                          >
                             {formatDistanceToNow(
                               new Date(notification.createdAt),
-                              {
-                                addSuffix: true,
-                              },
+                              { addSuffix: true },
                             )}
                           </span>
                         </div>
