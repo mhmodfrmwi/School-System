@@ -9,6 +9,7 @@ import Pagination from "../Pagination";
 import Header from "../Admins/adminHeader";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import * as XLSX from 'xlsx';
 
 const AdminTable = () => {
   const { t ,i18n} = useTranslation();
@@ -69,14 +70,31 @@ const AdminTable = () => {
     navigate(`/admin/editadminform/${id}`);
   };
 
+  const handleExportCSV = () => {
+  const dataToExport = filteredAdmins.map(admin => ({
+    [t("tableHeaders.name")]: admin.fullName,
+    [t("tableHeaders.email")]: admin.email,
+    [t("tableHeaders.gender")]: admin.gender,
+    [t("tableHeaders.phone")]: admin.phone || 'N/A', 
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(dataToExport);
+  
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Admins");
+  
+  XLSX.writeFile(wb, "admins_export.xlsx");
+};
+
   if (loading) {
-    return <div className="h-full w-full"></div>; // Empty div during loading
+    return <div className="h-full w-full"></div>; 
   }
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0" dir={isRTL ? 'rtl' : 'ltr'}>
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
+        onExportCSV={handleExportCSV}
       />
       <div className="mt-7">
         <div className="overflow-x-auto">

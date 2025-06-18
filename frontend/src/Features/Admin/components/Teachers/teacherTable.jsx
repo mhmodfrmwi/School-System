@@ -5,6 +5,7 @@ import Pagination from "../Pagination";
 import Header from "../Teachers/teacherHeader";
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import * as XLSX from 'xlsx';
 
 const TeacherTable = () => {
   const { teachers = [] } = useSelector((state) => state.teachers || {});
@@ -28,14 +29,20 @@ const TeacherTable = () => {
     const lowerSearchText = searchText.toLowerCase();
 
     if (filterOption) {
-      const filterValue = teacher[filterOption];
+      if (filterOption === "subject") {
+      const subjectName = teacher.subjectId?.subjectName?.toLowerCase() || "";
+      return subjectName.includes(lowerSearchText);
+    }
+
+      const filterValue = teacher[filterOption]?.toString().toLowerCase() || "";
       return filterValue && filterValue.toLowerCase().includes(lowerSearchText);
     }
 
     return (
       teacher.fullName?.toLowerCase().includes(lowerSearchText) ||
       teacher.email?.toLowerCase().includes(lowerSearchText) ||
-      teacher.academicNumber?.toLowerCase().includes(lowerSearchText)
+      teacher.academicNumber?.toLowerCase().includes(lowerSearchText)||
+      teacher.subjectId?.subjectName?.toLowerCase().includes(lowerSearchText)
     );
   });
 
@@ -61,6 +68,21 @@ const TeacherTable = () => {
   const handleSearchChange = (search) => setSearchText(search);
   const handleFilterChange = (filter) => setFilterOption(filter);
 
+   const handleExportCSV = () => {
+    const dataToExport = filteredTeachers.map(teacher => ({
+      [t("tableHeaders.name")]: teacher.fullName,
+      [t("tableHeaders.subject")]: teacher.subjectId?.subjectName || 'N/A',
+      [t("tableHeaders.email")]: teacher.email,
+      [t("tableHeaders.AcademicNumber")]: teacher.academicNumber,
+      [t("tableHeaders.gender")]: teacher.gender
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Teachers");
+    XLSX.writeFile(workbook, "teachers_data.xlsx");
+  };
+
   if (loading) {
     return <div className="h-full w-full"></div>; // Empty div during loading
   }
@@ -70,6 +92,7 @@ const TeacherTable = () => {
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
+        onExportCSV={handleExportCSV}
       />
 
       <div className="mt-7">

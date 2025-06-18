@@ -9,7 +9,7 @@ import Pagination from "../Pagination";
 import Header from "../Parents/parentHeader";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
+import * as XLSX from 'xlsx';
 const ParentTable = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -33,13 +33,22 @@ const ParentTable = () => {
   }, [dispatch]);
 
   const filteredParents = parents.filter((parent) => {
+    if (!searchText) return true;
     const lowerSearchText = searchText.toLowerCase();
     if (filterOption) {
-      return parent[filterOption]?.toLowerCase().includes(lowerSearchText);
+      if (filterOption === 'gender') {
+        const genderText = parent.gender === 'M' ? t('genderOptions.male') : t('genderOptions.female');
+        return genderText.toLowerCase().includes(lowerSearchText);
+      }
+
+      const fieldValue = String(parent[filterOption] || '').toLowerCase();
+      return fieldValue.includes(lowerSearchText);
     }
+
     return (
-      parent.fullName.toLowerCase().includes(lowerSearchText) ||
-      parent.email.toLowerCase().includes(lowerSearchText)
+      String(parent.fullName || '').toLowerCase().includes(lowerSearchText) ||
+      String(parent.email || '').toLowerCase().includes(lowerSearchText) ||
+      (parent.gender === 'M' ? t('genderOptions.male') : t('genderOptions.female')).toLowerCase().includes(lowerSearchText)
     );
   });
 
@@ -60,10 +69,12 @@ const ParentTable = () => {
 
   const handleSearchChange = (search) => {
     setSearchText(search);
+    setCurrentPage(1);
   };
 
   const handleFilterChange = (filter) => {
     setFilterOption(filter);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -78,6 +89,30 @@ const ParentTable = () => {
     navigate(`/admin/editparentform/${id}`);
   };
 
+  const handleExportCSV = () => {
+
+    const dataToExport = filteredParents.map(parent => ({
+      [t("tableHeaders.name")]: parent.fullName,
+      [t("tableHeaders.email")]: parent.email,
+      [t("tableHeaders.gender")]: parent.gender === "M" ? t("genderOptions.male") : t("genderOptions.female"),
+      [t("tableHeaders.children")]: parent.parentStudents && parent.parentStudents.length > 0
+        ? parent.parentStudents
+          .map(student => `${student.student_id?.fullName} (${student.student_id?.academic_number})`)
+          .join(", ")
+        : t("parentTable.noChildren")
+    }));
+
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Parents");
+
+
+    XLSX.writeFile(wb, "parents_export.xlsx");
+  };
+
   if (loading) {
     return <div className="h-full w-full"></div>;
   }
@@ -87,6 +122,7 @@ const ParentTable = () => {
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
+        onExportCSV={handleExportCSV}
       />
 
       <div className="mt-7">
@@ -151,7 +187,7 @@ const ParentTable = () => {
 
                     <td className="px-3 py-2 font-poppins text-xs dark:text-black sm:text-sm md:text-base">
                       {parent.parentStudents &&
-                      parent.parentStudents.length > 0 ? (
+                        parent.parentStudents.length > 0 ? (
                         <div className="space-y-1">
                           {parent.parentStudents.map((student, i) => (
                             <div key={i} className="flex items-center">

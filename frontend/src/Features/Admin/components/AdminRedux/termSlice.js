@@ -178,9 +178,8 @@ const termsSlice = createSlice({
       })
       .addCase(postTerm.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to post term data";
         state.loading = false;
-        toast.error(state.error);
+       toast.error(action.payload || "This term already exists for the selected academic year");
       })
       .addCase(fetchTerms.pending, (state) => {
         state.loading = true;

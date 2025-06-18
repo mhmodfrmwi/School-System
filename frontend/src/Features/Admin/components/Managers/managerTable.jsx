@@ -5,8 +5,9 @@ import { fetchManagers, removeManager } from "../AdminRedux/managerSlice";
 import Pagination from "../Pagination";
 import Header from "../Managers/managerHeader";
 import { useTranslation } from 'react-i18next';
+import * as XLSX from 'xlsx';
 const ManagerTable = () => {
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { managers = [], loading } = useSelector(
     (state) => state.managers || {},
@@ -24,16 +25,21 @@ const ManagerTable = () => {
   }, [dispatch]);
 
   const filteredManagers = managers.filter((manager) => {
+    if (!searchText) return true;
+
     const lowerSearchText = searchText.toLowerCase();
 
+
     if (filterOption) {
-      const value = manager[filterOption];
-      return value && value.toLowerCase().includes(lowerSearchText);
+      const fieldName = filterOption === 'name' ? 'fullName' : filterOption;
+      const fieldValue = String(manager[filterOption] || '').toLowerCase();
+      return fieldValue.includes(lowerSearchText);
     }
 
     return (
-      manager.fullName?.toLowerCase().includes(lowerSearchText) || // Safely check `name`
-      manager.email?.toLowerCase().includes(lowerSearchText) // Safely check `email`
+      String(manager.fullName || '').toLowerCase().includes(lowerSearchText) ||
+      String(manager.email || '').toLowerCase().includes(lowerSearchText) ||
+      String(manager.gender || '').toLowerCase().includes(lowerSearchText)
     );
   });
 
@@ -56,25 +62,51 @@ const ManagerTable = () => {
     setCurrentPage(page);
   };
 
-  const handleSearchChange = (search) => {
+  const handleSearchChange = (search, filter = filterOption) => {
     setSearchText(search);
+    setFilterOption(filter);
+    setCurrentPage(1);
   };
 
-  const handleFilterChange = (filter) => {
+  const handleFilterChange = (filter, search = searchText) => {
     setFilterOption(filter);
+    setSearchText(search);
+    setCurrentPage(1);
   };
 
   const handleEditClick = (id) => {
     navigate(`/admin/editmanagerform/${id}`);
   };
+
+  const handleExportCSV = () => {
+   
+    const dataToExport = filteredManagers.map(manager => ({
+      [t("tableHeaders.name")]: manager.fullName,
+      [t("tableHeaders.email")]: manager.email,
+      [t("tableHeaders.gender")]: manager.gender,
+      
+    }));
+
+   
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+
+    
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Managers");
+
+   
+    XLSX.writeFile(wb, "managers_export.xlsx");
+  };
+
   if (loading) {
-    return <div className="h-full w-full"></div>; // Empty div during loading
+    return <div className="h-full w-full"></div>; 
   }
   return (
     <div className="relative w-full px-4 sm:w-full lg:px-0" dir={isRTL ? 'rtl' : 'ltr'}>
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
+        onExportCSV={handleExportCSV}
       />
 
       <div className="mt-7">
@@ -83,16 +115,16 @@ const ManagerTable = () => {
             <thead className="bg-[#117C90] text-white dark:bg-[#043B44]">
               <tr>
                 <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
-                {t("tableHeaders.name")}
+                  {t("tableHeaders.name")}
                 </th>
                 <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
-                {t("tableHeaders.email")}
+                  {t("tableHeaders.email")}
                 </th>
                 <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
-                {t("tableHeaders.gender")}
+                  {t("tableHeaders.gender")}
                 </th>
                 <th className={`px-3 py-2 text-${isRTL ? 'right' : 'left'} font-poppins text-xs font-medium sm:text-sm md:text-base`}>
-                {t("tableHeaders.actions")}
+                  {t("tableHeaders.actions")}
                 </th>
               </tr>
             </thead>
@@ -101,9 +133,8 @@ const ManagerTable = () => {
                 paginatedManagers.map((manager, index) => (
                   <tr
                     key={manager._id}
-                    className={`${
-                      index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
-                    } hover:bg-[#117C90]/70 dark:hover:bg-[#043B44]/70`}
+                    className={`${index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
+                      } hover:bg-[#117C90]/70 dark:hover:bg-[#043B44]/70`}
                   >
                     <td className="flex items-center px-3 py-2 text-xs dark:text-black sm:text-sm md:text-base">
                       <img
@@ -146,10 +177,10 @@ const ManagerTable = () => {
                     className="rounded-lg border-2 border-[#E3E8F1] bg-[#F7FAFC] py-28 text-center shadow-md"
                   >
                     <p className="text-lg font-semibold text-gray-600">
-                    {t("managerTable.noManagersFound.title")}
+                      {t("managerTable.noManagersFound.title")}
                     </p>
                     <p className="mt-2 text-sm text-gray-500">
-                    {t("managerTable.noManagersFound.description")}
+                      {t("managerTable.noManagersFound.description")}
                     </p>
                   </td>
                 </tr>
