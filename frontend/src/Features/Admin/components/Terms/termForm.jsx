@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAcademicYears } from "../AdminRedux/academicYearSlice";
 import { postTerm } from "../AdminRedux/termSlice";
 import { useTranslation } from 'react-i18next';
+import { toast } from "react-toastify";
 function TermForm() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -11,7 +12,6 @@ function TermForm() {
     year: "",
   });
 
-  const [semesters, setSemesters] = useState([]);
 
   const academicYears = useSelector(
     (state) => state.academicYears.academicYears,
@@ -20,23 +20,6 @@ function TermForm() {
   useEffect(() => {
     dispatch(fetchAcademicYears());
 
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch(
-    //       "http://localhost:4000/api/v1/admin/semester",
-    //     );
-    //     const data = await response.json();
-    //     const uniqueSemesters = [
-    //       ...new Map(
-    //         data.semesters.map((item) => [item.semesterName, item]),
-    //       ).values(),
-    //     ];
-    //     setSemesters(uniqueSemesters);
-    //   } catch (error) {
-    //     console.error("Error fetching semesters:", error);
-    //   }
-    // };
-    // fetchData();
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -47,18 +30,20 @@ function TermForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      await dispatch(
+     try {
+      const resultAction = await dispatch(
         postTerm({
           semesterName: formData.term,
           academicYear: formData.year,
-        }),
+        })
       );
 
-      setFormData({ term: "", year: "" });
+      if (postTerm.fulfilled.match(resultAction)) {
+        setFormData({ term: "", year: "" });
+        toast.success(t('termForm.successMessage'));
+      }
     } catch (error) {
-      console.error("Error creating semester:", error);
-      alert(error.message || "An error occurred. Please try again.");
+      console.error("Error:", error);
     }
   };
 

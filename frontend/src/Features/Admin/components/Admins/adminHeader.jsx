@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-const AdminHeader = ({ onSearchChange, onFilterChange }) => {
+const AdminHeader = ({ onSearchChange, onFilterChange ,onExportCSV}) => {
   const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
@@ -27,7 +27,9 @@ const AdminHeader = ({ onSearchChange, onFilterChange }) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
-          <button className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white dark:hover:bg-[#043B44] sm:text-sm">
+          <button 
+          onClick={onExportCSV}
+          className="rounded-md px-4 py-2 font-poppins text-xs text-[#244856] transition hover:bg-[#117C90] hover:text-white dark:hover:bg-[#043B44] sm:text-sm">
           {t("Header.exportCSV")}
           </button>
 

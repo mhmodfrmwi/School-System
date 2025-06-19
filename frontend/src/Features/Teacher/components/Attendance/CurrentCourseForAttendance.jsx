@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import bag from "../../../../assets/bag.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
-import CourseToggle from "./SelectCoursePageForAttendance";
+// import CourseToggle from "./SelectCoursePageForAttendance";
 import Loader from "@/ui/Loader";
 import { useTranslation } from "react-i18next";
 
@@ -51,7 +51,6 @@ const CurrentCourse = ({ onSearchChange }) => {
   if (classTeachers.length === 0) {
     return (
       <>
-        <CourseToggle />
         <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
           <FontAwesomeIcon
             icon={faCalendar}
@@ -69,10 +68,9 @@ const CurrentCourse = ({ onSearchChange }) => {
   }
   return (
     <>
-      <div className="mx-auto w-[90%] px-4 md:px-6 lg:px-0">
-        <CourseToggle />
+      <div className="mx-auto mt-20 w-[90%] px-4 md:px-6 lg:px-0">
         <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
-          <div className="flex flex-col">
+          <div className="flex ml-3 flex-col">
             <h1 className="font-poppins text-lg font-semibold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-2xl">
               {t("coursest.CurrentCourse")}
             </h1>
@@ -81,7 +79,7 @@ const CurrentCourse = ({ onSearchChange }) => {
 
           <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
             <div className="flex w-full flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
-              <div className="relative flex-grow">
+              <div className="relative mr-3 flex-grow">
                 <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-gray-500 sm:text-sm"></i>
                 <input
                   type="text"
