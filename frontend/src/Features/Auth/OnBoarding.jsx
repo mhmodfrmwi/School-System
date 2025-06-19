@@ -50,6 +50,7 @@ function Onboarding() {
   });
   const [lang, setLang] = useState(i18n.language);
 
+
   const { ref: inViewRef, inView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
@@ -99,6 +100,7 @@ function Onboarding() {
       transition: { duration: 0.6, ease: "easeOut" },
     },
   };
+
 
   const toggleLanguage = () => {
     const newLang = lang === "en" ? "ar" : "en";
@@ -186,7 +188,7 @@ function Onboarding() {
               />
             </div>
             <div className="mr-12 hidden items-center justify-between space-x-12 md:flex">
-              <div className="flex hidden gap-4 space-x-12 font-['Poppins'] text-lg lg:flex">
+              <div className="flex  gap-4 space-x-12 font-['Poppins'] text-lg lg:flex">
                 <a
                   href="#features"
                   className="text-gray-600 transition hover:text-blue-600 dark:text-[#E0AAEE] dark:hover:text-[#C459D9]"
@@ -211,7 +213,7 @@ function Onboarding() {
               </div>
             </div>
             <div className="mx-10 hidden items-center justify-between gap-2 md:flex">
-              <div dir="ltr" className="rounded-lg bg-[#E1834E] p-1">
+              <div dir="ltr" className="rounded-2xl bg-[#E1834E] p-1">
                 <ThemeSwitcher />
               </div>
               <Toggles lang={lang} toggleLanguage={toggleLanguage} />

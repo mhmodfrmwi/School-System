@@ -47,34 +47,24 @@ const EditClassTeacherForm = () => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Split the combined values back into individual IDs
+    // Extract the IDs
     const [teacherId, subjectId] = formData.teacherSubject.split("-");
     const [classId] = formData.classAcademicYear.split("-");
 
-    // Find the corresponding names for the IDs
-    const selectedTeacher = teachers.find(
-      (teacher) => teacher._id === teacherId,
-    );
-    const selectedSubject = subjects.find(
-      (subject) => subject._id === subjectId,
-    );
+    // Get the full objects for names
+    const selectedTeacher = teachers.find((teacher) => teacher._id === teacherId);
+    const selectedSubject = subjects.find((subject) => subject._id === subjectId);
     const selectedClass = classes.find((cls) => cls._id === classId);
-    const selectedAcademicYear = classes.find(
-      (cls) => cls._id === classId,
-    )?.academicYear_id;
+    const academicYearObj = selectedClass?.academicYear_id;
 
-    // Prepare the data to match the server's expectations
     const updatedClassTeacher = {
-      className: selectedClass?.className || "",
-      subjectName: selectedSubject?.subjectName || "",
+      classId,
       teacherName: selectedTeacher?.fullName || "",
-      academicYear:
-        `${selectedAcademicYear?.startYear}-${selectedAcademicYear?.endYear}` ||
-        "",
+      subjectName: selectedSubject?.subjectName || "",
+      academicYear: `${academicYearObj?.startYear}-${academicYearObj?.endYear}` || "",
     };
 
     dispatch(editClassTeacher({ id, updatedClassTeacher }))
@@ -84,13 +74,17 @@ const EditClassTeacherForm = () => {
       })
       .catch((error) => {
         console.error("Error updating class teacher", error);
+        console.log("🚀 updatedClassTeacher:", updatedClassTeacher);
+
       });
   };
+
+
 
   return (
     <div className="mx-auto mt-10 w-[80%]">
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
-      {t("edit.classteacher")}
+        {t("edit.classteacher")}
       </h1>
       <div className="ml-3 mt-1 h-[4px] w-[170px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
@@ -101,7 +95,7 @@ const EditClassTeacherForm = () => {
           {/* Teacher-Subject Field */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("teacherdata.TeacherSubject")}
+              {t("teacherdata.TeacherSubject")}
             </label>
             <select
               name="teacherSubject"
@@ -126,7 +120,7 @@ const EditClassTeacherForm = () => {
           {/* Class-Academic Year Field */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("teacherdata.ClassAcademicYear")}
+              {t("teacherdata.ClassAcademicYear")}
             </label>
             <select
               name="classAcademicYear"
@@ -153,7 +147,7 @@ const EditClassTeacherForm = () => {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-                  {t("placeholders.SaveChanges")}
+              {t("placeholders.SaveChanges")}
             </button>
           </div>
         </form>
