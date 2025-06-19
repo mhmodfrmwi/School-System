@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getStudentWithFriendsReward } from "../../../Student/components/StudentRedux/motivationSlice";
+import { getStudentWithFriendsReward } from "../../../Parent/components/ParentRedux/MotivationSlice";
 import { useTranslation } from "react-i18next";
 
 function Table() {

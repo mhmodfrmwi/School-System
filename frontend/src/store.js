@@ -62,6 +62,8 @@ import parentKidsReducer from './Features/Parent/components/ParentRedux/parentSl
 import dashboardStudentReducer from "./Features/Student/components/StudentRedux/dashboardSlice";
 import parentScheduleReducer from "./Features/Parent/components/ParentRedux/ScheduleSlice";
 import verifyEmailReducer from "./Features/Auth/AuthRedux/verifyEmailSlice";
+import motivationparentReducer from "./Features/Parent/components/ParentRedux/MotivationSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -128,6 +130,7 @@ const store = configureStore({
     dashboardStudent: dashboardStudentReducer,
     parentSchedule: parentScheduleReducer,
     verifyEmail: verifyEmailReducer,
+    motivationparent:motivationparentReducer,
   },
 });
 
