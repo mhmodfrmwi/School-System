@@ -50,6 +50,12 @@ const {
   getAllStudentRewardsData,
 } = require("../controllers/Parent/childReward");
 const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Parent/getGradeSubjectSemesterForChild");
+const {
+  getVirtualRoomsForStudent,
+  //handleVrLinkClick,
+  getCompletedVirtualRooms,
+  getMissedVirtualRooms,
+} = require("../controllers/Parent/virtualRoom");
 
 const router = express.Router();
 router.post("/login", login);
@@ -170,6 +176,24 @@ router.get(
   getSubjectsAcademicYearAndGradeAndSemester
 );
 
+router.get(
+  "/virtual-rooms/:gradeSubjectSemesterId/:studentId",
+  validateJwt,
+  validateParent,
+  getVirtualRoomsForStudent
+);
+router.get(
+  "/virtual-rooms/:gradeSubjectSemesterId/completed/:studentId",
+  validateJwt,
+  validateParent,
+  getCompletedVirtualRooms
+);
+router.get(
+  "/virtual-rooms/:gradeSubjectSemesterId/missed/:studentId",
+  validateJwt,
+  validateParent,
+  getMissedVirtualRooms
+);
 ///$$$$$$$$//
 
 module.exports = router;
