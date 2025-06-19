@@ -10,6 +10,7 @@ import Loader from "@/ui/Loader";
 import SubjectsHeader from "./AssignSubjectHeader";
 import Pagination from "../Pagination";
 import { useTranslation } from 'react-i18next';
+import * as XLSX from 'xlsx';
 const AssignedSubjects = () => {
   const { t,i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -82,6 +83,25 @@ const AssignedSubjects = () => {
     setFilterOption(filter);
   };
 
+  
+  const handleExportCSV = () => {
+    const dataToExport = subjectsWithGradeName.map(subject => ({
+      [t("assignedSubjects.tableHeaders.subject")]: subject.subject,
+      [t("assignedSubjects.tableHeaders.grade")]: subject.gradeName,
+      [t("assignedSubjects.tableHeaders.term")]: subject.term,
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "AssignedSubjects");
+    
+    // Generate current date for filename
+    const today = new Date();
+    const dateStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+    
+    XLSX.writeFile(wb, `assigned_subjects_${dateStr}.xlsx`);
+  };
+
   // Show loading state while data is being fetched
   if (loadingSubjects || loadingGrades) {
     return (
@@ -104,6 +124,7 @@ const AssignedSubjects = () => {
             <SubjectsHeader
               onSearchChange={handleSearchChange}
               onFilterChange={handleFilterChange}
+              onExportCSV={handleExportCSV}
             />
 
             <div className="mt-7">

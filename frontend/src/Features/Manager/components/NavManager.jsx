@@ -185,9 +185,6 @@ const NavManager = () => {
           <button className="p-2 text-gray-500">
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
           </button>
-          <div dir="ltr">
-            <ThemeSwitcher />
-          </div>
 
           {/* تعديل جزء صورة المستخدم */}
           <div className="flex items-center space-x-2">

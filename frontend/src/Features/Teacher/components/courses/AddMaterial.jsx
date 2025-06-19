@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
+import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faVideo,
   faBook,
   faTasks,
   faFileAlt,
+  faBank,
   faPlus,
   faEye,
 } from "@fortawesome/free-solid-svg-icons";
@@ -152,7 +154,7 @@ const AddMaterial = () => {
       id: 4,
       name: t("addmaterial.QuestionBank"),
       total: questionBankCount,
-      icon: faVideo,
+      icon: faBank,
     },
     {
       id: 5,
@@ -175,9 +177,9 @@ const AddMaterial = () => {
               : "No Subject Assigned"}
           </div>
           {courses.map((course, index) => (
-            <div
+            <motion.div
               key={course.id}
-              className="mb-4 flex max-w-full items-center justify-between rounded-lg bg-white p-4 shadow-md transition-colors hover:bg-slate-100 dark:bg-DarkManager2"
+              className="mb-4  flex max-w-full items-center justify-between rounded-lg bg-white p-4 shadow-md transition-colors duration-200 hover:bg-slate-100 dark:bg-DarkManager2"
             >
               <div className="flex items-center">
                 <div
@@ -213,7 +215,7 @@ const AddMaterial = () => {
                   <FontAwesomeIcon icon={faPlus} className="h-5 w-5" />
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -10,6 +10,7 @@ import Pagination from "../Pagination";
 import Header from "./scheduleHeader";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import * as XLSX from 'xlsx';
 const SchedualTable = () => {
   const { t ,i18n} = useTranslation();
   const dispatch = useDispatch();
@@ -106,6 +107,26 @@ const SchedualTable = () => {
     navigate(`/admin/edit-schedule/${scheduleId}`);
   };
 
+    const handleExportCSV = () => {
+    const dataToExport = filteredScheduals.map(schedule => ({
+      [t("scheduleAdmin.table.columns.subject")]: schedule.subject_id?.subjectName || t("scheduleAdmin.table.noSubject"),
+      [t("scheduleAdmin.table.columns.teacher")]: schedule.teacher_id?.fullName || t("scheduleAdmin.table.unknownTeacher"),
+      [t("scheduleAdmin.table.columns.grade")]: schedule.grade_id?.gradeName || t("scheduleAdmin.table.noGrade"),
+      [t("scheduleAdmin.table.columns.day")]: schedule.day_of_week || t("scheduleAdmin.table.noDay"),
+      [t("scheduleAdmin.table.columns.from")]: schedule.start_time || t("scheduleAdmin.table.noStartTime"),
+      [t("scheduleAdmin.table.columns.to")]: schedule.end_time || t("scheduleAdmin.table.noEndTime"),
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Schedules");
+    
+    const today = new Date();
+    const dateStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+    
+    XLSX.writeFile(wb, `schedules_export_${dateStr}.xlsx`);
+  };
+
   if (loading) {
     return <div className="h-full w-full"></div>; // Empty div during loading
   }
@@ -114,6 +135,7 @@ const SchedualTable = () => {
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
+        onExportCSV={handleExportCSV}
       />
 
       <div className="mt-7">

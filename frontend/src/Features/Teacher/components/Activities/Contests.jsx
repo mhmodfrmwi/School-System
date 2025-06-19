@@ -58,7 +58,7 @@ const Contests = () => {
       <div className="flex flex-col p-4">
         <div className="flex-1">
           <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-full">
-            <div className="mx-auto w-full max-w-7xl px-4">
+            <div className="mx-auto w-full max-w-7xl px-4 mb-0">
               <div className="mt-2 flex items-center justify-between">
                 <div>
                   <div className="dark:text-Da\\\\ cursor-text py-1 font-poppins text-lg font-bold text-[#105E6A] dark:text-DarkManager sm:text-2xl">
@@ -74,9 +74,9 @@ const Contests = () => {
                 </button>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse rounded-2xl border-2 border-[#117C90] shadow-lg dark:border-DarkManager">
-                  <thead>
+              <div className="overflow-x-auto ">
+              <table className="min-w-full  mt-0 table-auto border-collapse overflow-hidden rounded-[1rem] border-2 border-[#117C90] bg-[#FBE9D1] shadow-md shadow-[#117C90] dark:border-DarkManager">
+                <thead className="bg-[#117C90] text-white dark:bg-DarkManager">
                     <tr className="bg-[#105E6A] font-poppins text-xs text-white dark:bg-DarkManager sm:text-sm md:text-base">
                       <th className={`border border-[#117C90] px-2 py-2 text-${isRTL ? 'right' : 'left'} sm:px-4`}>
                         {t("contests.table.headers.title")}
@@ -105,45 +105,47 @@ const Contests = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {contests.length > 0 ? (
-                      contests.map((contest) => (
-                        <tr
-                          key={contest._id || uuidv4()}
-                          className="font-poppins text-xs hover:bg-gray-100 dark:text-black sm:text-sm md:text-base"
-                        >
+                     {contests.length > 0 ? (
+                    contests.map((item, index) => (
+                      <tr
+                        key={item._id}
+                        className={`${
+                          index % 2 === 0 ? "bg-[#F5FAFF]" : "bg-white"
+                        } hover:bg-[#117C90]/70 dark:hover:bg-DarkManager/70`}
+                      >
                           <td className="border border-[#117C90] px-2 py-2 dark:border-DarkManager sm:px-4">
-                            {contest.title}
+                            {item.title}
                           </td>
                           <td className="border border-[#117C90] px-2 py-2 dark:border-DarkManager sm:px-4">
-                            {contest.teacherId?.fullName || "N/A"}
+                            {item.teacherId?.fullName || "N/A"}
                           </td>
                           <td className="border border-[#117C90] px-2 py-2 dark:border-DarkManager sm:px-4">
-                            {contest.subjectId?.subjectName || "N/A"}
+                            {item.subjectId?.subjectName || "N/A"}
                           </td>
                           <td className="whitespace-nowrap border border-[#117C90] px-2 py-2 dark:border-DarkManager sm:px-4">
-                            {contest.startDate
-                              ? new Date(contest.startDate)
+                            {item.startDate
+                              ? new Date(item.startDate)
                                   .toISOString()
                                   .split("T")[0]
                               : "N/A"}
                           </td>
                           <td className="whitespace-nowrap border border-[#117C90] px-2 py-2 dark:border-DarkManager sm:px-4">
-                            {contest.endDate
-                              ? new Date(contest.endDate)
+                            {item.endDate
+                              ? new Date(item.endDate)
                                   .toISOString()
                                   .split("T")[0]
                               : "N/A"}
                           </td>
                           <td className="dark:border-DarkManagerpx-2 border border-[#117C90] py-2 dark:border-DarkManager sm:px-4">
-                            {contest.numberOfTeamMembers}
+                            {item.numberOfTeamMembers}
                           </td>
-                          <td className="border border-[#117C90] px-2 py-2 dark:border-DarkManager sm:px-4">
-                            {contest.requirements}
+                          <td className="border border-[#117C90] px-2 py-2 dark:border-DarkManager sm:px-2">
+                            {item.requirements}
                           </td>
                           <td className={`border border-[#117C90] px-2 py-2 text-center dark:border-DarkManager sm:px-4 ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
                             <button
                               aria-label="Edit contest"
-                              onClick={() => handleEdit(contest._id)}
+                              onClick={() => handleEdit(item._id)}
                               className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-DarkManager"
                             >
                               <i className="far fa-edit text-lg" />
@@ -151,7 +153,7 @@ const Contests = () => {
                             <button
                               aria-label="Edit contest"
                               onClick={() =>
-                                handleEnterParticipants(contest._id)
+                                handleEnterParticipants(item._id)
                               }
                               className="text-[#117C90] transition duration-300 hover:text-[#244856] dark:text-DarkManager"
                             >
@@ -159,7 +161,7 @@ const Contests = () => {
                             </button>
                             <button
                               aria-label="Delete contest"
-                              onClick={() => handleDelete(contest._id)}
+                              onClick={() => handleDelete(item._id)}
                               className="text-[#E74833] transition duration-300 hover:text-[#244856]"
                             >
                               <i className="far fa-trash-alt text-lg" />

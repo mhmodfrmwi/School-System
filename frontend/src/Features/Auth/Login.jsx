@@ -19,7 +19,8 @@ function Login() {
   const { t, i18n } = useTranslation();
 
   const { loading, error } = useSelector((state) => state.login);
-  const role = useSelector((state) => state.role.role) || localStorage.getItem("role");
+  const role =
+    useSelector((state) => state.role.role) || localStorage.getItem("role");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -129,17 +130,18 @@ function Login() {
               <div
                 className={i18n.language === "ar" ? "text-left" : "text-right"}
               >
-                {error !== "We sent you a verification email, please verify your account" ? (
+                {error !==
+                "We sent you a verification email, please verify your account" ? (
                   <span
                     onClick={() => navigate("/forgot-password")}
-                    className="text-sm text-orange-500 hover:underline dark:text-[#E0AAEE] cursor-pointer"
+                    className="cursor-pointer text-sm text-orange-500 hover:underline dark:text-[#E0AAEE]"
                   >
                     {t("login.forgotPassword")}
                   </span>
                 ) : (
                   <span
                     onClick={() => navigate("/resend-verification")}
-                    className="text-sm text-orange-500 hover:underline dark:text-[#E0AAEE] cursor-pointer"
+                    className="cursor-pointer text-sm text-orange-500 hover:underline dark:text-[#E0AAEE]"
                   >
                     Resend Verification Email
                   </span>
@@ -154,32 +156,6 @@ function Login() {
                 {loading ? <SpinnerMini /> : t("login.submit")}
               </button>
             </form>
-
-            <div className="mt-8 text-center">
-              <p className="mb-4 text-gray-600 dark:text-gray-400">
-                {t("login.orLoginWith")}
-              </p>
-              <div className="flex justify-center space-x-4">
-                <button className="me-2 flex items-center justify-center rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-50 dark:border-[#AE45FB] dark:bg-[#281459] dark:hover:bg-[#3A1D7A]">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/2/25/Microsoft_icon.svg"
-                    alt="Microsoft"
-                    className="h-6 w-6"
-                  />
-                </button>
-                <button className="flex items-center justify-center rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-50 dark:border-[#AE45FB] dark:bg-[#281459] dark:hover:bg-[#3A1D7A]">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "https://www.google.com/favicon.ico";
-                    }}
-                    alt="Google"
-                    className="h-6 w-6"
-                  />
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>

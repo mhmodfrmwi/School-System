@@ -62,7 +62,6 @@ const EditMaterial = () => {
         throw new Error(result.error.message);
       }
 
-      toast.success("Material updated successfully");
       navigate(-1);
     } catch (error) {
       console.error("Update failed:", error);

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchContests, updateContest } from "../TeacherRedux/ContestSlice";
 import { fetchClassTeacher } from "../TeacherRedux/TeacherClassSlice";
 import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function EditActivityForm() {
   const { id } = useParams();
@@ -58,11 +60,25 @@ function EditActivityForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Validate dates are in the future
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of day
+    
+    const startDate = new Date(formData.startDate);
+    const endDate = new Date(formData.endDate);
+    
+    if (startDate < today || endDate < today) {
+      toast.error("Please choose a future date and time");
+      return;
+    }
+
     dispatch(updateContest({ contestId: id, updatedData: formData }));
   };
 
   return (
     <div className="relative mx-auto my-10 w-[80%] font-poppins">
+      <ToastContainer />
       <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
         {t("activitiest.EditContest")}
       </h1>

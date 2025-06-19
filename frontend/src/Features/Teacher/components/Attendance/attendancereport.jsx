@@ -229,7 +229,7 @@ function Attendancereport() {
         <div>Loading attendance data...</div>
       ) : currentStudents.length > 0 ? (
         <>
-          <table className="mx-auto mt-7 w-full table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90] dark:shadow-DarkManager">
+          <table className="mx-auto mt-7 ml-5 w-[98%] table-auto border-collapse overflow-hidden rounded-[1rem] bg-[#FBE9D1] font-poppins shadow-md shadow-[#117C90] dark:shadow-DarkManager">
             <thead className="bg-[#117C90] text-left text-white dark:bg-DarkManager">
               <tr className="bg-[#117C90] text-white dark:bg-DarkManager">
                 <th

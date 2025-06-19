@@ -204,7 +204,7 @@ const ExamForm = () => {
         <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
           Upload Exam
         </h1>
-        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[200px]"></div>
+        <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></div>
       </div>
 
       <div className="mx-auto w-[80%] rounded-xl bg-gray-100 p-6 shadow-md dark:bg-DarkManager2">
@@ -260,7 +260,7 @@ const ExamForm = () => {
               />
             </div>
             <div>
-              <label className="block font-medium">{t("examst.Start")}:</label>
+              <label className="block font-medium">{t("examst.End")}:</label>
               <input
                 type="datetime-local"
                 name="end_time"

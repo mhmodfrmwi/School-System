@@ -38,7 +38,7 @@ const CurrentCoursesForGrades = ({ onSearchChange }) => {
   if (classTeachers.length === 0) {
     return (
       <>
-        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
+        <div className="mt-32 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
           <FontAwesomeIcon
             icon={faCalendar}
             className="mb-4 text-6xl text-gray-400"
@@ -56,7 +56,7 @@ const CurrentCoursesForGrades = ({ onSearchChange }) => {
   return (
     <>
       <div className="mx-auto w-[90%] px-4 md:px-6 lg:px-0">
-        <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
+        <div className="p-6 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
           <div className="flex flex-col">
             <h1 className="font-poppins text-lg font-semibold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-2xl">
               {t('coursest.CurrentCourse')} 

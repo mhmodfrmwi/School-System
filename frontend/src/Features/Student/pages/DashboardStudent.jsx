@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import userImage from "../../../assets/Girl.png";
 import trueIcon from "../../../assets/true icon.png";
+import absentIcon from "../../../assets/StudentIcon/absent.png"; // Added absent icon
 import awardIcon from "../../../assets/Award.png";
 import GradeIcon from "../../../assets/StudentIcon/Grade.png";
 import AwardIcon from "../../../assets/StudentIcon/Awards.png";
@@ -19,9 +20,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getSemesterReward } from "../components/StudentRedux/motivationSlice";
 import { fetchDashboardData } from "../components/StudentRedux/dashboardSlice";
+import { fetchStudentAttendance } from "../components/StudentRedux/studentAttendanceSlice"; // Added student attendance slice
 import { useTranslation } from "react-i18next";
-import { Card, CardContent } from "@/components/ui/card"; 
-import Loader from "@/ui/Loader"; 
+import { Card, CardContent } from "@/components/ui/card";
+import Loader from "@/ui/Loader";
 import Swal from "sweetalert2";
 import backgroundWaves from "../../../assets/StudentIcon/bg-color2.png";
 import backgroundStars from "../../../assets/StudentIcon/bg-color1.png";
@@ -38,7 +40,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Pie, Line, Bar } from "react-chartjs-2"; 
+import { Pie, Line, Bar } from "react-chartjs-2";
 
 // Register ChartJS components
 ChartJS.register(
@@ -61,12 +63,91 @@ function DashboardStudent() {
   const { data: dashboardData, loading, error } = useSelector(
     (state) => state.dashboardStudent
   );
+  const { studentAttendance, status: attendanceStatus } = useSelector(
+    (state) => state.studentAttendance
+  ); // Fetch attendance data
   const { fullName } = useSelector((state) => state.login);
   const [mainCategories, setMainCategories] = useState([]);
+
+  // Function to calculate Learning Streak
+  const calculateLearningStreak = () => {
+    if (!studentAttendance || studentAttendance.length === 0) return 0;
+
+    // Today's date (19 June 2025)
+    const today = new Date("2025-06-19T00:00:00.000Z");
+    let streak = 0;
+    let lastDate = null;
+
+    // Sort attendance records by date in descending order
+    const sortedAttendance = [...studentAttendance].sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+
+    // Check last 5 days for consecutive presence
+    for (const record of sortedAttendance) {
+      const recordDate = new Date(record.date);
+      if (!lastDate) {
+        // First record should be today or the most recent day
+        if (
+          recordDate.toDateString() === today.toDateString() ||
+          recordDate < today
+        ) {
+          if (record.status === "P") {
+            streak = 1;
+          } else {
+            break; // Stop if absent
+          }
+          lastDate = recordDate;
+        }
+      } else {
+        // Check if the previous day is consecutive
+        const previousDay = new Date(lastDate);
+        previousDay.setDate(lastDate.getDate() - 1);
+
+        if (recordDate.toDateString() === previousDay.toDateString()) {
+          if (record.status === "P") {
+            streak++;
+            lastDate = recordDate;
+            if (streak >= 5) break; // Stop at 5 days
+          } else {
+            break; // Stop if absent
+          }
+        }
+      }
+    }
+
+    return streak;
+  };
+
+  // Function to determine today's attendance status
+  const getTodayStatus = () => {
+    const today = new Date("2025-06-19T00:00:00.000Z");
+    const todayRecord = studentAttendance.find(
+      (record) => new Date(record.date).toDateString() === today.toDateString()
+    );
+
+    if (todayRecord && todayRecord.status === "P") {
+      return {
+        isPresent: true,
+        icon: trueIcon,
+        text: t("dashboard.presentToday") // "You were present today!"
+      };
+    } else {
+      return {
+        isPresent: false,
+        icon: absentIcon,
+        text: t("dashboard.absentToday") // "You were absent today!"
+      };
+    }
+  };
+
+  const streak = calculateLearningStreak();
+  const todayStatus = getTodayStatus();
 
   useEffect(() => {
     dispatch(getSemesterReward());
     dispatch(fetchDashboardData());
+    dispatch(fetchStudentAttendance()); // Fetch attendance data
   }, [dispatch]);
 
   useEffect(() => {
@@ -75,7 +156,11 @@ function DashboardStudent() {
         {
           label: t("dashboard.onlineAssignments"),
           icon: editI,
-          progress: `${100 - dashboardData.dashboardMetrics.assignments.totalMissed * 50}%`,
+          progress: `${
+            dashboardData.dashboardMetrics.assignments.summary.totalAssignments > 0
+              ? ((dashboardData.dashboardMetrics.assignments.summary.totalCompleted / dashboardData.dashboardMetrics.assignments.summary.totalAssignments) * 100).toFixed(2)
+              : 0
+          }%`,
         },
         {
           label: t("dashboard.exams"),
@@ -112,7 +197,7 @@ function DashboardStudent() {
     }
   }, [dashboardData, t]);
 
-  if (loading) {
+  if (loading || attendanceStatus === "loading") {
     return (
       <div
         className="min-h-screen flex items-center justify-center bg-white dark:bg-[#13082F]"
@@ -132,7 +217,6 @@ function DashboardStudent() {
         popup: "dark:bg-[#281459] dark:text-gray-300",
       },
     });
-  
   }
 
   if (!dashboardData) {
@@ -151,10 +235,6 @@ function DashboardStudent() {
         ></div>
         
         <div className="relative z-10 pt-16">
-          {/* Header Placeholder */}
-        {/*  <div className="h-24 bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"></div>*/}
-          
-          {/* Main Content */}
           <div className="mx-auto w-[95%] py-12">
             <div className="flex flex-col items-center justify-center min-h-[50vh]">
               <Card className="border border-gray-200 dark:border-[#E0AAEE] rounded-xl shadow-lg w-full max-w-2xl bg-white/90 dark:bg-[#281459]/90 backdrop-blur-sm">
@@ -260,15 +340,15 @@ function DashboardStudent() {
   const chartOptions = {
     responsive: true,
     plugins: {
-      legend: { 
-        position: "top", 
-        labels: { 
+      legend: {
+        position: "top",
+        labels: {
           color: "gray",
-          dark: { color: "#A070B5" } 
-        } 
+          dark: { color: "#A070B5" }
+        }
       },
-      title: { 
-        display: true, 
+      title: {
+        display: true,
         color: "gray",
         dark: { color: "#A070B5" }
       },
@@ -276,25 +356,25 @@ function DashboardStudent() {
     scales: {
       y: {
         beginAtZero: true,
-        ticks: { 
-          color: "gray",
-          dark: { color: "#A070B5" }
-        },
-        grid: {
-          color: "#E0E0E0",
-          dark: { color: "#4B3B7A" }, 
-          borderWidth: 0.3, 
-        },
-      },
-      x: { 
-        ticks: { 
+        ticks: {
           color: "gray",
           dark: { color: "#A070B5" }
         },
         grid: {
           color: "#E0E0E0",
           dark: { color: "#4B3B7A" },
-          borderWidth: 0.3, 
+          borderWidth: 0.3,
+        },
+      },
+      x: {
+        ticks: {
+          color: "gray",
+          dark: { color: "#A070B5" }
+        },
+        grid: {
+          color: "#E0E0E0",
+          dark: { color: "#4B3B7A" },
+          borderWidth: 0.3,
         },
       },
     },
@@ -303,7 +383,7 @@ function DashboardStudent() {
   return (
     <div
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
-      className="min-h-screen bg-white dark:bg-[#13082F] relative "
+      className="min-h-screen bg-white dark:bg-[#13082F] relative"
     >
       <div
         className="absolute inset-0 bg-no-repeat bg-cover opacity-0 dark:opacity-100 h-screen"
@@ -339,12 +419,12 @@ function DashboardStudent() {
                 }`}
               >
                 <img
-                  src={trueIcon}
-                  alt={t("dashboard.presentIconAlt")}
+                  src={todayStatus.icon}
+                  alt={todayStatus.isPresent ? t("dashboard.presentIconAlt") : t("dashboard.absentIconAlt")}
                   className="h-6 w-6"
                 />
                 <p className="font-poppins font-medium text-[#62413A] dark:text-gray-300">
-                  {t("dashboard.presentToday")}
+                  {todayStatus.text}
                 </p>
               </div>
             </div>
@@ -408,11 +488,11 @@ function DashboardStudent() {
                     i18n.language === "ar" ? "space-x-reverse" : ""
                   } space-x-1`}
                 >
-                  {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+                  {["S", "M", "T", "W", "T"].map((day, index) => (
                     <div
                       key={index}
                       className={`h-6 w-6 rounded-full border text-center font-bold ${
-                        index < 3
+                        index < streak
                           ? "bg-[#FD813D] text-white"
                           : "bg-gray-200 dark:bg-[#4B3B7A] text-gray-400 dark:text-gray-300"
                       }`}
@@ -422,7 +502,7 @@ function DashboardStudent() {
                   ))}
                 </div>
                 <p className="mt-1 font-poppins text-sm font-medium text-gray-600 dark:text-gray-300">
-                  3{t("dashboard.days")} 🔥
+                  {streak} {t("dashboard.days")} 🔥
                 </p>
               </div>
             </div>

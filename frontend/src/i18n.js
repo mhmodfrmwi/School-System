@@ -74,6 +74,8 @@ i18n.use(initReactI18next).init({
           profileImageAlt: "Student Profile Image",
           presentIconAlt: "Present Icon",
           presentToday: "You were present today!",
+          absentToday: "You were absent today!",
+          absentIconAlt: "Absent Icon",
           greenLevel: "Green Level",
           diamondLevel: "Diamond Level",
           goldLevel: "Gold Level",
@@ -2004,19 +2006,54 @@ i18n.use(initReactI18next).init({
 
         onboarding: {
           header: {
-            login: "Login",
+            features: 'Features',
+            superpower: 'Superpower',
+            solutions: 'Solutions',
+            login: 'Login',
           },
-          carousel: {
-            altText: "Slide",
+          hero: {
+            title: 'Transform your school to digital, today!',
+            description: 'Learnova is your one-stop digital solution partner to empower your educators, learners and management.',
           },
-          content: {
-            journeyTitle: "Start a journey with us",
-            welcomeText:
-              "Welcome to our platform! Our website is designed to help you get started smoothly, providing essential resources and a clear understanding of our values. We're here to support you every step of the way as you embark on this journey with us.",
-            yourJourney: "Your journey starts here",
-            studyText:
-              "Studying is the foundation of success, building knowledge and skills that open doors to future opportunities. Dedication to learning fosters growth, resilience, and the confidence needed to achieve your goals",
-            clickToLogin: "Click here to login →",
+          digital: {
+            title: 'Here’s what your school gets by partnering with Learnova',
+            cards: {
+              digital_experiences: 'Digital Experiences',
+              digital_experiences_desc: 'For both in-class and after-class learning',
+              learning_materials: 'Learning Materials',
+              learning_materials_desc: 'In print and digital formats',
+              year_round_learning: 'Year-round Learning',
+              year_round_learning_desc: 'Holistic learning',
+              ai_driven_learning: 'AI-driven Learning',
+              ai_driven_learning_desc: 'To meet all learning goals',
+              assessments: 'Assessments',
+              assessments_desc: 'For all subjects with question banks',
+              lesson_plans: 'Lesson Plans',
+              lesson_plans_desc: 'Comprehensive plans for teachers',
+            },
+          },
+          superpower: {
+            subtitle: 'Your school’s',
+            title: 'One Superpower',
+            cards: {
+              infrastructure: 'Infrastructure',
+              infrastructure_desc: 'Textbooks and integrated platform for online and offline',
+              calendar_setup: 'Calendar Setup',
+              calendar_setup_desc: 'Easy calendar setup with personalisation',
+              timetable_design: 'Timetable Design',
+              timetable_design_desc: 'Automated timetables for smooth day-to-day functioning',
+              analytics: 'Analytics',
+              analytics_desc: 'Academic progress tracked school wide',
+              curriculum_progress: 'Curriculum Progress',
+              curriculum_progress_desc: 'Concepts, content and skills tracked across all teaching stages',
+              user_management: 'User Management',
+              user_management_desc: 'HR needs and admin management',
+            },
+          },
+          solutions: {
+            title: 'All the solutions your school needs in one place!',
+            description: 'A successful digital transformation can only happen when the learning platform meets the specific needs of your school. With Learnova as your partner, your school will be future-ready with a digital learning platform that optimizes teaching and learning experiences.',
+            get_started: 'Get Started',
           },
           footer: {
             slogan: "Learn, Grow, Succeed",
@@ -2290,6 +2327,8 @@ i18n.use(initReactI18next).init({
           profileImageAlt: "صورة الطالب الشخصية",
           presentIconAlt: "أيقونة الحضور",
           presentToday: "لقد حضرت اليوم!",
+          absentToday: "لقد غبت اليوم!",
+          absentIconAlt: "أيقونة الغياب",
           greenLevel: "المستوى الأخضر",
           diamondLevel: "المستوى الماسي",
           goldLevel: "المستوى الذهبي",
@@ -4205,20 +4244,55 @@ i18n.use(initReactI18next).init({
 
         onboarding: {
           header: {
-            login: "تسجيل الدخول",
+            features: 'المميزات',
+            superpower: 'القوة العظمى',
+            solutions: 'الحلول',
+            login: 'تسجيل الدخول',
           },
-          carousel: {
-            altText: "شريحة",
+          hero: {
+            title: 'حوّل مدرستك إلى الرقمية، اليوم!',
+            description: 'ليرنوفا هي شريكك في الحلول الرقمية الشاملة لتمكين المعلمين والمتعلمين والإدارة.',
           },
-          content: {
-            journeyTitle: "ابدأ رحلة معنا",
-            welcomeText:
-              "مرحبًا بكم في منصتنا! تم تصميم موقعنا لمساعدتك على البدء بسلاسة، حيث يوفر الموارد الأساسية وفهمًا واضحًا لقيمنا. نحن هنا لدعمك في كل خطوة أثناء انطلاقك في هذه الرحلة معنا.",
-            yourJourney: "رحلتك تبدأ من هنا",
-            studyText:
-              "الدراسة هي أساس النجاح، حيث تبني المعرفة والمهارات التي تفتح الأبواب أمام الفرص المستقبلية. التفاني في التعلم يعزز النمو والمرونة والثقة اللازمة لتحقيق أهدافك",
-            clickToLogin: "انقر هنا لتسجيل الدخول →",
+          digital: {
+            title: 'إليك ما ستحصل عليه مدرستك بشراکة مع ليرنوفا',
+            cards: {
+              digital_experiences: 'تجارب رقمية',
+              digital_experiences_desc: 'للتعلم داخل وخارج الصف',
+              learning_materials: 'مواد تعليمية',
+              learning_materials_desc: 'بصيغ مطبوعة ورقمية',
+              year_round_learning: 'التعلم على مدار العام',
+              year_round_learning_desc: 'تعلم شامل',
+              ai_driven_learning: 'التعلم بمساعدة الذكاء الصناعي',
+              ai_driven_learning_desc: 'لتحقيق جميع أهداف التعلم',
+              assessments: 'التقييمات',
+              assessments_desc: 'لجميع المواد مع بنوك أسئلة',
+              lesson_plans: 'خطط الدروس',
+              lesson_plans_desc: 'خطط شاملة للمعلمين',
+            },
           },
+            superpower: {
+              subtitle: 'قوة مدرستك',
+              title: 'قوة عظمى واحدة',
+              cards: {
+                infrastructure: 'البنية التحتية',
+                infrastructure_desc: 'كتب دراسية ومنصة مدمجة للأونلاين والأوفلاين',
+                calendar_setup: 'إعداد التقويم',
+                calendar_setup_desc: 'إعداد تقويم سهل مع التخصيص',
+                timetable_design: 'تصميم الجدول',
+                timetable_design_desc: 'جداول آلية لتسهيل العمليات اليومية',
+                analytics: 'التحليلات',
+                analytics_desc: 'تتبع التقدم الأكاديمي على مستوى المدرسة',
+                curriculum_progress: 'تقدم المنهج',
+                curriculum_progress_desc: 'تتبع المفاهيم والمحتوى والمهارات عبر جميع مراحل التعليم',
+                user_management: 'إدارة المستخدمين',
+                user_management_desc: 'احتياجات الموارد البشرية وإدارة الإدارة',
+              },
+            },
+            solutions: {
+              title: 'كل الحلول التي تحتاجها مدرستك في مكان واحد!',
+              description: 'لا يمكن أن يحدث التحول الرقمي الناجح إلا عندما تلبي منصة التعلم الاحتياجات المحددة لمدرستك. مع ليرنوفا كشريك، ستكون مدرستك جاهزة للمستقبل مع منصة تعليمية رقمية تعمل على تحسين تجارب التعليم والتعلم.',
+                get_started: 'ابدأ الآن',
+              },
           footer: {
             slogan: "تعلم، انمو، انجح",
             points: [

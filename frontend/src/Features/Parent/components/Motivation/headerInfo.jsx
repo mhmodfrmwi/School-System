@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllReward,
   getSemesterReward,
-} from "../../../Student/components/StudentRedux/motivationSlice";
+} from "../../../Parent/components/ParentRedux/MotivationSlice";
 import { useTranslation } from "react-i18next";
 
 function HeaderInfo() {

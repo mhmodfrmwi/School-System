@@ -42,7 +42,7 @@ const Sidebar = ({ kid = null, closeSidebar, setSelectedKid }) => {
     { label: t("Home"), icon: Icon1, onClick: handleHomeClick },
     { label: t("parentKids.title"), icon: Icon2, path: "/parent/parent-kids" },
     { label: t("Motivation"), icon: Icon2, path: "/parent/motivation" },
-    { label: t("Exams"), icon: Icon3, path: "/parent/exams" },
+    { label: t("Courses"), icon: Icon3, path: "/parent/exams" },
     { label: t("Absence"), icon: Icon4, path: "/parent/attendance" },
     { label: t("Schedule"), icon: Icon5, path: "/parent/schedule" },
     {

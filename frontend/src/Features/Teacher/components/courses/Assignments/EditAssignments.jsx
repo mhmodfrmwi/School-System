@@ -44,6 +44,16 @@ const EditAssignment = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Validate due date is in the future
+    const dueDate = new Date(formData.due_date);
+    const now = new Date();
+    
+    if (dueDate <= now) {
+      toast.error("Please choose a future date and time");
+      return;
+    }
+
     dispatch(editAssignment({ assignmentId, updatedData: formData }))
       .unwrap()
       .then(() => {

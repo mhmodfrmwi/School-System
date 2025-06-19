@@ -55,7 +55,7 @@ const SeeAllQuestion = () => {
             <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
               {t("tablesheader.allquestions")}
             </h1>
-            <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[350px]"></div>
+            <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[150px]"></div>
           </div>
           <div className="relative w-full px-4 font-poppins sm:px-6 lg:px-8">
             <div className="mt-7">
