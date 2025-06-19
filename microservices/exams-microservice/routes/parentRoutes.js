@@ -16,6 +16,15 @@ const{
   getUpcomingExams,
 }=require("../controllers/examScheduleControllerForParent");
 
+const {
+  getAssignments,
+  getAssignmentById,
+
+  getStudentSubmissions,
+  getMissedAssignmentsForStudent,
+  getCompletedAssignmentsForStudent,
+} = require("../controllers/childAssignmentControllerForParent");
+
 const router = express.Router();
 
 router.get("/student-results/:student_id", validateJwt, validateParent,getAllStudentResults);
@@ -33,6 +42,17 @@ router.get(
 router.get("/schedules/current", validateJwt, getCurrentSemesterSchedules);
 router.get("/schedules/upcoming/:student_id", validateJwt, getUpcomingExams);
 
+router.get("/", validateJwt,validateParent, getAssignments);
+router.get("/Assignment/:id", validateJwt,validateParent, getAssignmentById);
+router.get("/submissions/student/:studentId", validateJwt,validateParent, getStudentSubmissions);
+
+router.get("/missedAssignments/:student_id", validateJwt,validateParent, getMissedAssignmentsForStudent);
+router.get(
+  "/completedAssignments/:student_id",
+  validateJwt,
+  validateParent,
+  getCompletedAssignmentsForStudent
+);
 ///$$$$$$$$//
 
 module.exports = router;
