@@ -41,6 +41,16 @@ const {
   getCompletedExamsForSubjects,
 } = require("../../microservices/exams-microservice/controllers/childExamControllerForParent");
 const { getDashboardData } = require("../controllers/Parent/studentDashboard");
+
+const {
+  getDailyPoints,
+  getAllPoints,
+  getSemesterPoints,
+  getStudentWithFriendsPoints,
+  getAllStudentRewardsData,
+} = require("../controllers/Parent/childReward");
+const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Parent/getGradeSubjectSemesterForChild");
+
 const router = express.Router();
 router.post("/login", login);
 router.patch(
@@ -136,6 +146,30 @@ router.get(
   validateParent,
   getCompletedExamsForSubjects
 );
+
+router.get("/daily-reward/:studentId", validateJwt, validateParent, getDailyPoints);
+router.get("/reward/:studentId", validateJwt, validateParent, getAllPoints);
+router.get("/semester-reward/:studentId", validateJwt, validateParent, getSemesterPoints);
+router.get(
+  "/student-with-friends-reward/:studentId",
+  validateJwt,
+  validateParent,
+  getStudentWithFriendsPoints
+);
+router.get(
+  "/all-reward",
+  validateJwt,
+  validateParent,
+  getAllStudentRewardsData
+);
+
+router.get(
+  "/get-subjects/:studentId",
+  validateJwt,
+  validateParent,
+  getSubjectsAcademicYearAndGradeAndSemester
+);
+
 ///$$$$$$$$//
 
 module.exports = router;
