@@ -86,7 +86,6 @@ const EditQuestion = () => {
     dispatch(updateQuestion({ questionId, formData: dataToSend }))
       .unwrap()
       .then(() => {
-        toast.success("Question updated successfully!");
         navigate(-1);
       })
       .catch((error) => {

@@ -101,7 +101,7 @@ export const updateMaterial = createAsyncThunk(
         const error = await response.json();
         return rejectWithValue(error.message);
       }
-     // toast("material updated successflly");
+     toast("material updated successflly");
       return await response.json();
 
     } catch (error) {

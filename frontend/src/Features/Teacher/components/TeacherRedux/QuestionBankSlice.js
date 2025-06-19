@@ -257,6 +257,7 @@ const QuestionBank = createSlice({
             .addCase(updateQuestion.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 const updatedQuestion = action.payload;
+                toast.success("Question updated successflly")
                 state.questionbank = state.questionbank.map((question) =>
                     question._id === updatedQuestion._id ? updatedQuestion : question
                 );

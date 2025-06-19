@@ -5,6 +5,7 @@ import { createTeacherVirtualRoom } from "../../TeacherRedux/VRSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
+
 const VRForm = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -28,6 +29,15 @@ const VRForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Validate start time is in the future
+    const selectedStartTime = new Date(formData.startTime);
+    const currentTime = new Date();
+    
+    if (selectedStartTime <= currentTime) {
+      toast.error("Please choose a future date and time");
+      return;
+    }
 
     dispatch(createTeacherVirtualRoom(formData))
       .unwrap()

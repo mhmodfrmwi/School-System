@@ -81,6 +81,18 @@ const EditExam = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Validate times are in the future
+    const now = new Date();
+    const startTime = new Date(formData.start_time);
+    const endTime = new Date(formData.end_time);
+    
+    if (startTime <= now || endTime <= now) {
+      toast.error("Please choose future dates for start and end times");
+      return;
+    }
+    
+    // Existing validation for exam duration
     const currentTime = new Date();
     const examEndTime = new Date(formData.end_time);
     if (currentTime > examEndTime) {
@@ -221,83 +233,88 @@ const EditExam = () => {
             </div>
           </div>
 
-          {/* Added Questions */}
-          {formData.exam_questions?.map((q, index) => (
-            <div
-              key={index}
-              className="mb-4 rounded-lg border border-gray-300 p-4"
-            >
-              <h3 className="mb-2 font-medium dark:text-white">
-                {t("tablesheader.Question")} {index + 1}
-              </h3>
-              <div>
-                <label className="block font-medium">Question Text:</label>
-                <input
-                  type="text"
-                  name="question_text"
-                  value={q.question_text}
-                  onChange={(e) => handleQuestionChange(e, index)}
-                  className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block font-medium">
-                  {t("examst.Options")} ({t("examst.commaseparated")}):
-                </label>
-                <input
-                  type="text"
-                  name="options"
-                  value={q.options?.join(",") || ""}
-                  onChange={(e) => handleQuestionChange(e, index)}
-                  className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
-                  placeholder="Option 1, Option 2, Option 3, Option 4"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block font-medium">
-                  {t("tablesheader.CorrectAnswer")}:
-                </label>
-                <select
-                  name="correct_answer"
-                  value={q.correct_answer}
-                  onChange={(e) => handleQuestionChange(e, index)}
-                  className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
-                  required
+          {/* Only show questions section for online exams */}
+          {formData.type === "Online" && (
+            <>
+              {/* Added Questions */}
+              {formData.exam_questions?.map((q, index) => (
+                <div
+                  key={index}
+                  className="mb-4 rounded-lg border border-gray-300 p-4"
                 >
-                  <option value="">Select correct answer</option>
-                  {q.options?.map((option, i) => (
-                    <option key={i} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block font-medium">
-                  {t("assignmentt.Marks")}:
-                </label>
-                <input
-                  type="number"
-                  name="marks"
-                  value={q.marks}
-                  onChange={(e) => handleQuestionChange(e, index)}
-                  className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
-                  required
-                />
-              </div>
-            </div>
-          ))}
+                  <h3 className="mb-2 font-medium dark:text-white">
+                    {t("tablesheader.Question")} {index + 1}
+                  </h3>
+                  <div>
+                    <label className="block font-medium">Question Text:</label>
+                    <input
+                      type="text"
+                      name="question_text"
+                      value={q.question_text}
+                      onChange={(e) => handleQuestionChange(e, index)}
+                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium">
+                      {t("examst.Options")} ({t("examst.commaseparated")}):
+                    </label>
+                    <input
+                      type="text"
+                      name="options"
+                      value={q.options?.join(",") || ""}
+                      onChange={(e) => handleQuestionChange(e, index)}
+                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
+                      placeholder="Option 1, Option 2, Option 3, Option 4"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium">
+                      {t("tablesheader.CorrectAnswer")}:
+                    </label>
+                    <select
+                      name="correct_answer"
+                      value={q.correct_answer}
+                      onChange={(e) => handleQuestionChange(e, index)}
+                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
+                      required
+                    >
+                      <option value="">Select correct answer</option>
+                      {q.options?.map((option, i) => (
+                        <option key={i} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block font-medium">
+                      {t("assignmentt.Marks")}:
+                    </label>
+                    <input
+                      type="number"
+                      name="marks"
+                      value={q.marks}
+                      onChange={(e) => handleQuestionChange(e, index)}
+                      className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
+                      required
+                    />
+                  </div>
+                </div>
+              ))}
 
-          {/* Add New Question Button */}
-          <button
-            type="button"
-            onClick={addNewQuestion}
-            className="mt-2 rounded-2xl bg-[#117C90] px-4 py-2 text-white dark:bg-white dark:text-black"
-          >
-            Add Question
-          </button>
+              {/* Add New Question Button - only for online exams */}
+              <button
+                type="button"
+                onClick={addNewQuestion}
+                className="mt-2 rounded-2xl bg-[#117C90] px-4 py-2 text-white dark:bg-white dark:text-black"
+              >
+                Add Question
+              </button>
+            </>
+          )}
 
           {/* Submit button */}
           <button
