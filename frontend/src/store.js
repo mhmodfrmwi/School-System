@@ -67,7 +67,7 @@ import parentExamScheduleReducer from "./Features/Parent/components/ParentRedux/
 import allSubjectsParentReducer from "./Features/Parent/components/ParentRedux/CoursesSlice";
 import virtualRoomsParentReducer from "./Features/Parent/components/ParentRedux/VRSlice";
 import assignmentsParentReducer from "./Features/Parent/components/ParentRedux/AssignmentSlice";
-
+import parentExamReducer from "./Features/Parent/components/ParentRedux/ParentExamsSlice";
 
 const store = configureStore({
   reducer: {
@@ -139,6 +139,7 @@ const store = configureStore({
     allSubjectsParent:allSubjectsParentReducer,
     virtualRoomsParent:virtualRoomsParentReducer,
     assignmentsParent:assignmentsParentReducer,
+    parentExam: parentExamReducer,
 
   },
 });

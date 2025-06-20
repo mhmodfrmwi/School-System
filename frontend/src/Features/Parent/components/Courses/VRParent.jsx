@@ -180,7 +180,7 @@ const VirtualRoomsParent = () => {
                             <Button
                                 variant="solid"
                                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
-                                onClick={() => navigate(`/student/allcourses/exams/${subjectId}`)}
+                                 onClick={() => navigate(`/parent/all-subjects/exams/${subjectId}`)}
                             >
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span>{t('virtualRooms.sidebar.exams')}
                             </Button>

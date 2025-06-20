@@ -840,7 +840,7 @@ function App() {
               />
 
               <Route path="attendance" element={<AttendanceForChild />} />
-              <Route path="exams" element={<ExamsParent />} />
+                 <Route path="all-subjects/exams/:subjectId" element={<ExamsParent />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route
