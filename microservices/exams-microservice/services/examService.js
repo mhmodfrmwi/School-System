@@ -374,6 +374,67 @@ const missedExamsForAllSubjects = async (student_id) => {
   }
 };
 
+//
+const getStudentExams = async (
+  student_id,
+  subject_id,
+  grade_id,
+  academic_year_id,
+  semester_id,
+  class_id
+) => {
+  try {
+    const exams = await Exam.find({
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+      class_id,
+    })
+      .populate("subject_id grade_id class_id academic_year_id semester_id")
+      .populate("created_by", "_id fullName")
+      .select("-__v -createdAt -updatedAt");
+
+    const resultExams = [];
+
+    for (const exam of exams) {
+      const session = await Session.findOne({
+        student_id,
+        exam_id: exam._id,
+      });
+
+      let status = "upcoming";
+      let result = null;
+
+      if (session?.status === "Submitted") {
+        status = "completed";
+        result = await ExamResult.findOne({
+          student_id,
+          exam_id: exam._id,
+        });
+      } else if (exam.exam_status === "Expired") {
+        status = "missed";
+      }
+
+      resultExams.push({
+        ...exam.toObject(),
+        status,
+        result: result ? {
+          score: result.total_marks,
+          percentage: result.percentage,
+          grade: result.status
+        } : null
+      });
+    }
+
+    return resultExams;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+//
+
 module.exports = {
   addExam,
   fetchExams,
@@ -389,4 +450,5 @@ module.exports = {
   getCompletedExams,
   getCompletedExamsForAllSubjects,
   missedExamsForAllSubjects,
+  getStudentExams
 };
