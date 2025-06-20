@@ -158,9 +158,18 @@ const updateClassTeacher = [
   expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const { classId, subjectName, teacherName, academicYear } = req.body;
+    console.log(classId, subjectName, teacherName, academicYear);
 
     if (!validateObjectId(id))
       return res.status(400).json({ status: 400, message: "Invalid ID" });
+
+    // Fix: Handle the academic year query properly
+    const academicYearQuery = /^\d{4}-\d{4}$/.test(academicYear)
+      ? AcademicYear.findOne({
+          startYear: academicYear.split("-")[0],
+          endYear: academicYear.split("-")[1],
+        })
+      : Promise.resolve(null);
 
     const [
       existingAssignment,
@@ -177,12 +186,7 @@ const updateClassTeacher = [
       Teacher.findOne({
         fullName: { $regex: new RegExp(`^${teacherName}$`, "i") },
       }),
-      ...(/^\d{4}-\d{4}$/.test(academicYear)
-        ? AcademicYear.findOne({
-            startYear: academicYear.split("-")[0],
-            endYear: academicYear.split("-")[1],
-          })
-        : [null]),
+      academicYearQuery, // Use the properly handled query
     ]);
 
     if (!existingAssignment)

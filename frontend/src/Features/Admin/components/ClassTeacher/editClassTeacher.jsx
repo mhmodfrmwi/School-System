@@ -5,7 +5,7 @@ import { fetchClasses } from "../AdminRedux/classSlice";
 import { fetchSubjects } from "../AdminRedux/subjectSlice";
 import { fetchTeachers } from "../AdminRedux/teacherSlice";
 import { editClassTeacher } from "../AdminRedux/classTeacherSlice";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 const EditClassTeacherForm = () => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -55,8 +55,12 @@ const EditClassTeacherForm = () => {
     const [classId] = formData.classAcademicYear.split("-");
 
     // Get the full objects for names
-    const selectedTeacher = teachers.find((teacher) => teacher._id === teacherId);
-    const selectedSubject = subjects.find((subject) => subject._id === subjectId);
+    const selectedTeacher = teachers.find(
+      (teacher) => teacher._id === teacherId,
+    );
+    const selectedSubject = subjects.find(
+      (subject) => subject._id === subjectId,
+    );
     const selectedClass = classes.find((cls) => cls._id === classId);
     const academicYearObj = selectedClass?.academicYear_id;
 
@@ -64,7 +68,8 @@ const EditClassTeacherForm = () => {
       classId,
       teacherName: selectedTeacher?.fullName || "",
       subjectName: selectedSubject?.subjectName || "",
-      academicYear: `${academicYearObj?.startYear}-${academicYearObj?.endYear}` || "",
+      academicYear:
+        `${academicYearObj?.startYear}-${academicYearObj?.endYear}` || "",
     };
 
     dispatch(editClassTeacher({ id, updatedClassTeacher }))
@@ -75,11 +80,8 @@ const EditClassTeacherForm = () => {
       .catch((error) => {
         console.error("Error updating class teacher", error);
         console.log("🚀 updatedClassTeacher:", updatedClassTeacher);
-
       });
   };
-
-
 
   return (
     <div className="mx-auto mt-10 w-[80%]">
@@ -128,13 +130,16 @@ const EditClassTeacherForm = () => {
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
             >
-              <option value="">{t("teacherdata.SelectClassAcademicYear")}</option>
+              <option value="">
+                {t("teacherdata.SelectClassAcademicYear")}
+              </option>
               {classes?.map((cls) => (
                 <option
                   key={cls._id}
                   value={`${cls._id}-${cls.academicYear_id._id}`}
                 >
-                  {cls.className} - {cls.academicYear_id.startYear} -{" "}
+                  {cls.gradeId.gradeName}-{cls.className} -
+                  {cls.academicYear_id.startYear} -{" "}
                   {cls.academicYear_id.endYear}
                 </option>
               ))}
