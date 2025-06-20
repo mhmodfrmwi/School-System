@@ -21,7 +21,7 @@ const Sidebar = ({ closeSidebar }) => {
   const { t , i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { fullName } = useSelector((state) => state.login);
+  const { fullName, profileImage , className,startYear,endYear,gradeName } = useSelector((state) => state.login);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -64,7 +64,7 @@ const Sidebar = ({ closeSidebar }) => {
           <div className={`${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}>
             <h2 className="font-poppins text-lg font-bold">{t('KhatabSchool')}</h2>
             <p className="font-poppins text-sm text-gray-400 dark:text-gray-300">
-              Term1 2025-2026
+              {startYear} - {endYear}
             </p>
           </div>
           <img src={SidebarImg} alt="Logo" className="h-20 w-20" />
@@ -72,10 +72,10 @@ const Sidebar = ({ closeSidebar }) => {
       </div>
 
       <div className={`flex items-center p-4`}>
-        <img src={userImage} alt="User" className="h-10 w-10 rounded-full" />
+        <img src={profileImage} alt="User" className="h-10 w-10 rounded-full" />
         <div className={i18n.language === 'ar' ? 'mr-2 text-right' : 'ml-2 text-left'}>
           <p className="font-poppins font-semibold text-[#043B44] dark:text-white">{fullName}</p>
-          <p className="font-poppins text-sm text-gray-400 dark:text-gray-300">G/3 Student</p>
+          <p className="font-poppins text-sm text-gray-400 dark:text-gray-300">({gradeName } / {className } ) Student</p>
         </div>
       </div>
 

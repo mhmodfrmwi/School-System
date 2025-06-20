@@ -2,46 +2,56 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const BASE_URL = "http://localhost:3000/parent";
 
-// Fetch all assignments
 export const fetchAssignments = createAsyncThunk(
   "assignments/fetchAssignments",
-  async ({ gradeSubjectSemesterId }, { getState, rejectWithValue }) => {
+  async (subjectId, { getState, rejectWithValue }) => {
     const state = getState();
-    const studentId = state.motivationparent.selectedKid?._id;
-    const classId = state.motivationparent.selectedKid?.classId;
+    const { selectedKid } = state.motivationparent;
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
+    // Validate all required parameters
     if (!token) return rejectWithValue("Authentication required");
-    if (!studentId) return rejectWithValue("Kid ID is required");
-    if (!gradeSubjectSemesterId) return rejectWithValue("Subject ID is required");
-    if (!classId) return rejectWithValue("Class ID is required");
+    if (!subjectId) return rejectWithValue("Subject ID is required");
+    if (!selectedKid?._id) return rejectWithValue("Student ID is required");
+    if (!selectedKid?.classId) return rejectWithValue("Class ID is required");
 
     try {
       const response = await fetch(
-        `${BASE_URL}/Assignment/?gradeSubjectSemesterId=${gradeSubjectSemesterId}&classId=${classId}&studentId=${studentId}`,
+        `${BASE_URL}/Assignment/${subjectId}?studentId=${selectedKid._id}&classId=${selectedKid.classId}`,
         {
-          method: "GET",
-          headers: { 
+          headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
-          },
+          }
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to fetch assignments");
+        // Handle "not found" as empty array
+        if (response.status === 404 || data.message?.includes('not found')) {
+          return [];
+        }
+        throw new Error(data.message || `Server error: ${response.status}`);
       }
 
-      const data = await response.json();
       return data;
+
     } catch (error) {
+      console.error('API call failed:', error);
+      
+      // Handle "not found" errors gracefully
+      if (error.message.includes('not found')) {
+        return [];
+      }
+      
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Fetch assignment by ID
+
 export const fetchAssignmentById = createAsyncThunk(
   "assignments/fetchAssignmentById",
   async (assignmentId, { getState, rejectWithValue }) => {
@@ -49,22 +59,16 @@ export const fetchAssignmentById = createAsyncThunk(
     const studentId = state.motivationparent.selectedKid?._id;
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
-    if (!token) return rejectWithValue("Authentication required");
-    if (!studentId) return rejectWithValue("Kid ID is required");
-    if (!assignmentId) return rejectWithValue("Assignment ID is required");
-
     try {
       const response = await fetch(
         `${BASE_URL}/Assignment/${assignmentId}?studentId=${studentId}`,
         {
-          method: "GET",
           headers: { 
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           },
         }
       );
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to fetch assignment by ID");
@@ -78,22 +82,17 @@ export const fetchAssignmentById = createAsyncThunk(
   }
 );
 
-// Fetch all student submissions
 export const fetchAllStudentSubmissions = createAsyncThunk(
   "assignments/fetchAllStudentSubmissions",
   async (_, { getState, rejectWithValue }) => {
     const state = getState();
-    const studentId = state.motivationparent.selectedKid?._id;
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
-    if (!token) return rejectWithValue("Authentication required");
-    if (!studentId) return rejectWithValue("Kid ID is required");
-
+    const studentId = state.motivationparent.selectedKid?._id;
+    
     try {
       const response = await fetch(
         `${BASE_URL}/submissions/student/${studentId}`,
         {
-          method: "GET",
           headers: { 
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -101,9 +100,9 @@ export const fetchAllStudentSubmissions = createAsyncThunk(
         }
       );
 
-      if (!response.ok) {
+     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to fetch student submissions");
+        throw new Error(errorData.message || "Failed to fetch assignment by ID");
       }
 
       const data = await response.json();
@@ -114,13 +113,79 @@ export const fetchAllStudentSubmissions = createAsyncThunk(
   }
 );
 
+
+export const fetchCompletedAssignments = createAsyncThunk(
+  "assignments/fetchCompleted",
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState();
+    const studentId = state.motivationparent.selectedKid?._id;
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+      `${BASE_URL}/completedAssignments/${studentId}`,
+       {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        }
+      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch assignment by ID");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchMissedAssignments = createAsyncThunk(
+  "assignments/fetchMissed",
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState();
+    const studentId = state.motivationparent.selectedKid?._id;
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+      `${BASE_URL}/missedAssignments/${studentId}`,
+       {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        }
+      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch assignment by ID");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 const assignmentsSlice = createSlice({
   name: "assignmentsParent",
   initialState: {
     assignments: [],
+    completedAssignments: [],
+    missedAssignments: [],
     currentAssignment: null,
     studentSubmissions: [],
     loadingAssignments: false,
+    loadingCompleted: false,
+    loadingMissed: false,
     loadingAssignmentById: false,
     loadingSubmissions: false,
     loadingSubmit: false,
@@ -132,9 +197,13 @@ const assignmentsSlice = createSlice({
     },
     resetState: (state) => {
       state.assignments = [];
+      state.completedAssignments = [];
+      state.missedAssignments = [];
       state.currentAssignment = null;
       state.studentSubmissions = [];
       state.loadingAssignments = false;
+      state.loadingCompleted = false;
+      state.loadingMissed = false;
       state.loadingSubmissions = false;
       state.loadingSubmit = false;
       state.error = null;
@@ -155,6 +224,7 @@ const assignmentsSlice = createSlice({
         state.loadingAssignments = false;
         state.error = action.payload;
       })
+      
       // Fetch Assignment By ID
       .addCase(fetchAssignmentById.pending, (state) => {
         state.loadingAssignmentById = true;
@@ -168,6 +238,7 @@ const assignmentsSlice = createSlice({
         state.loadingAssignmentById = false;
         state.error = action.payload;
       })
+      
       // Fetch All Student Submissions
       .addCase(fetchAllStudentSubmissions.pending, (state) => {
         state.loadingSubmissions = true;
@@ -179,6 +250,34 @@ const assignmentsSlice = createSlice({
       })
       .addCase(fetchAllStudentSubmissions.rejected, (state, action) => {
         state.loadingSubmissions = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch Completed Assignments
+      .addCase(fetchCompletedAssignments.pending, (state) => {
+        state.loadingCompleted = true;
+        state.error = null;
+      })
+      .addCase(fetchCompletedAssignments.fulfilled, (state, action) => {
+        state.loadingCompleted = false;
+        state.completedAssignments = Array.isArray(action.payload) ? action.payload : [];
+      })
+      .addCase(fetchCompletedAssignments.rejected, (state, action) => {
+        state.loadingCompleted = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch Missed Assignments
+      .addCase(fetchMissedAssignments.pending, (state) => {
+        state.loadingMissed = true;
+        state.error = null;
+      })
+      .addCase(fetchMissedAssignments.fulfilled, (state, action) => {
+        state.loadingMissed = false;
+        state.missedAssignments = Array.isArray(action.payload) ? action.payload : [];
+      })
+      .addCase(fetchMissedAssignments.rejected, (state, action) => {
+        state.loadingMissed = false;
         state.error = action.payload;
       });
   },
