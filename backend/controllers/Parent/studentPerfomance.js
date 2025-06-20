@@ -2,7 +2,7 @@ const { get } = require("mongoose");
 const student = require("../../DB/StudentModel");
 const { getNumberOfAbsentDays } = require("../../services/attendaceService");
 
-const modelData = async (req, res) => {
+const StudentmodelDataForParent = async (req, res) => {
   try {
     const { student_id } = req.params;
 
@@ -62,5 +62,5 @@ const getModelResponse = async (response) => {
   return data;
 };
 module.exports = {
-  modelData,
+  StudentmodelDataForParent,
 };
