@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     fetchAssignments,
     fetchAllStudentSubmissions,
+    fetchCompletedAssignments,
+    fetchMissedAssignments,
     clearError,
 } from "../../components/ParentRedux/AssignmentSlice";
 import { fetchSubjects } from "../../components/ParentRedux/CoursesSlice";
@@ -24,12 +26,19 @@ const AssignmentsParent = () => {
     const { subjectId } = useParams();
     const selectedKid = useSelector((state) => state.motivationparent.selectedKid);
     const navigate = useNavigate();
+
     const {
         assignments = [],
+        completedAssignments = [],
+        missedAssignments = [],
         studentSubmissions = [],
-        loading,
+        loadingAssignments,
+        loadingSubmissions,
+        loadingCompleted,
+        loadingMissed,
         error,
     } = useSelector((state) => state.assignments);
+
     const { subjects } = useSelector((state) => state.allSubjectsStudent);
     const [activeTab, setActiveTab] = useState("all");
     const [filteredAssignments, setFilteredAssignments] = useState([]);
@@ -41,48 +50,59 @@ const AssignmentsParent = () => {
     const [initialLoading, setInitialLoading] = useState(true);
     const [hasClassIdError, setHasClassIdError] = useState(false);
     const itemsPerPage = 3;
-    
+
     // Initialize selected kid from storage
     useEffect(() => {
         const kidFromStorage = JSON.parse(localStorage.getItem('selectedKid') || sessionStorage.getItem('selectedKid'));
         if (kidFromStorage) {
             dispatch(setSelectedKid({
                 ...kidFromStorage,
-                // Ensure classId is set properly
-                classId: kidFromStorage.classId || kidFromStorage.class_id
+                classId: kidFromStorage.classId || kidFromStorage.class_id || kidFromStorage.class?._id
             }));
         }
     }, [dispatch]);
 
-    // Fetch data when component mounts or subjectId changes
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (!selectedKid || !selectedKid.classId) {
-                    setHasClassIdError(true);
-                    throw new Error("Class ID is missing for selected kid");
+                setInitialLoading(true);
+                if (!selectedKid || !selectedKid._id || !selectedKid.classId) {
+                    throw new Error("Student data incomplete");
                 }
 
-                setHasClassIdError(false);
-                await Promise.all([
-                    dispatch(fetchSubjects()),
-                    dispatch(fetchAssignments({ gradeSubjectSemesterId: subjectId })),
-                    dispatch(fetchAllStudentSubmissions()),
-                ]);
-                
-                // Set subject name
-                const currentSubject = subjects.find(subj => subj._id === subjectId);
-                if (currentSubject) {
-                    setSubjectName(currentSubject.name);
+                if (!subjectId) {
+                    throw new Error("Subject ID missing");
                 }
+
+                // Fetch assignments
+                const result = await dispatch(fetchAssignments(subjectId));
+
+                // Check if we got a successful result
+                if (fetchAssignments.fulfilled.match(result)) {
+                    // Only fetch other data if we got assignments
+                    await Promise.all([
+                        dispatch(fetchSubjects()),
+                        dispatch(fetchAllStudentSubmissions()),
+                    ]);
+
+                    // Set subject name
+                    const currentSubject = subjects.find(subj => subj._id === subjectId);
+                    if (currentSubject) {
+                        setSubjectName(currentSubject.name);
+                    }
+                }
+
             } catch (error) {
-                console.error("Error fetching data:", error);
-                Swal.fire({
-                    title: t('assignments.alerts.error.title'),
-                    text: error.message,
-                    icon: "error",
-                    confirmButtonText: t('assignments.alerts.error.confirmButton'),
-                });
+                console.error("Data loading error:", error);
+
+                // Don't show error for "no assignments found"
+                if (!error.message.includes('not found')) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.message,
+                        icon: 'error'
+                    });
+                }
             } finally {
                 setInitialLoading(false);
             }
@@ -90,7 +110,7 @@ const AssignmentsParent = () => {
 
         fetchData();
     }, [dispatch, subjectId, selectedKid, subjects]);
-
+    // Error handling
     useEffect(() => {
         if (error) {
             Swal.fire({
@@ -108,7 +128,6 @@ const AssignmentsParent = () => {
     const categorizeAndSortAssignments = useCallback(
         (assignments) => {
             const now = new Date();
-
             return [...assignments].sort((a, b) => {
                 const aDueDate = new Date(a.due_date);
                 const bDueDate = new Date(b.due_date);
@@ -134,52 +153,54 @@ const AssignmentsParent = () => {
         [studentSubmissions]
     );
 
-    // Update filtered assignments
+    // Update filtered assignments when data or tab changes
     useEffect(() => {
         let assignmentsToDisplay = [];
-        if (activeTab === "all") {
-            assignmentsToDisplay = categorizeAndSortAssignments(assignments);
-        } else if (activeTab === "submitted") {
-            assignmentsToDisplay = assignments.filter((assignment) =>
-                studentSubmissions.some((submission) => submission.assignment_id?._id === assignment._id)
-            );
-        } else if (activeTab === "pending") {
-            assignmentsToDisplay = assignments.filter((assignment) => {
-                const isSubmitted = studentSubmissions.some(
-                    (submission) => submission.assignment_id?._id === assignment._id
-                );
-                const dueDate = new Date(assignment.due_date);
-                const now = new Date();
-                return !isSubmitted && dueDate >= now;
-            });
-        } else if (activeTab === "missed") {
-            assignmentsToDisplay = assignments.filter((assignment) => {
-                const isSubmitted = studentSubmissions.some(
-                    (submission) => submission.assignment_id?._id === assignment._id
-                );
-                const dueDate = new Date(assignment.due_date);
-                const now = new Date();
-                return !isSubmitted && dueDate < now;
-            });
+
+        switch (activeTab) {
+            case "all":
+                assignmentsToDisplay = categorizeAndSortAssignments(assignments);
+                break;
+            case "submitted":
+                assignmentsToDisplay = completedAssignments;
+                break;
+            case "pending":
+                assignmentsToDisplay = assignments.filter((assignment) => {
+                    const isSubmitted = studentSubmissions.some(
+                        (submission) => submission.assignment_id?._id === assignment._id
+                    );
+                    const dueDate = new Date(assignment.due_date);
+                    const now = new Date();
+                    return !isSubmitted && dueDate >= now;
+                });
+                break;
+            case "missed":
+                assignmentsToDisplay = missedAssignments;
+                break;
+            default:
+                assignmentsToDisplay = [];
         }
+
         setFilteredAssignments(assignmentsToDisplay);
-    }, [activeTab, assignments, studentSubmissions, categorizeAndSortAssignments]);
+    }, [activeTab, assignments, completedAssignments, missedAssignments, studentSubmissions, categorizeAndSortAssignments]);
 
     const handleViewAssignment = (assignmentId) => {
         const isSubmitted = studentSubmissions.some(
             (submission) => submission.assignment_id?._id === assignmentId
         );
-        // Navigation logic would go here
+        navigate(`/parent/assignment/${assignmentId}`, {
+            state: { isSubmitted }
+        });
     };
 
     // Pagination logic
-    const currentPage = activeTab === "all" ? currentPageAll : 
-        activeTab === "submitted" ? currentPageSubmitted : 
-        activeTab === "pending" ? currentPagePending : currentPageMissed;
-        
+    const currentPage = activeTab === "all" ? currentPageAll :
+        activeTab === "submitted" ? currentPageSubmitted :
+            activeTab === "pending" ? currentPagePending : currentPageMissed;
+
     const totalPages = Math.ceil(filteredAssignments.length / itemsPerPage);
     const paginatedAssignments = filteredAssignments.slice(
-        (currentPage - 1) * itemsPerPage, 
+        (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
@@ -201,6 +222,9 @@ const AssignmentsParent = () => {
         }
     };
 
+    // Loading state
+    const loading = loadingAssignments || loadingSubmissions || loadingCompleted || loadingMissed;
+
     if (initialLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center dark:bg-[#13082F] bg-white">
@@ -219,7 +243,7 @@ const AssignmentsParent = () => {
                     <p className="text-gray-700 dark:text-gray-300 mb-6">
                         {t('assignments.errors.selectKidInstruction')}
                     </p>
-                    <Button 
+                    <Button
                         onClick={() => navigate('/parent/kids')}
                         className="bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
                     >
@@ -229,6 +253,7 @@ const AssignmentsParent = () => {
             </div>
         );
     }
+
 
     return (
         <div
@@ -291,8 +316,8 @@ const AssignmentsParent = () => {
                         <Button
                             variant={activeTab === "all" ? "outline" : "solid"}
                             className={`${activeTab === "all"
-                                    ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-                                    : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+                                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                                : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
                                 } px-4 md:px-6 py-2 rounded-full`}
                             onClick={() => setActiveTab("all")}
                         >
@@ -301,8 +326,8 @@ const AssignmentsParent = () => {
                         <Button
                             variant={activeTab === "submitted" ? "outline" : "solid"}
                             className={`${activeTab === "submitted"
-                                    ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-                                    : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+                                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                                : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
                                 } px-4 md:px-6 py-2 rounded-full`}
                             onClick={() => setActiveTab("submitted")}
                         >
@@ -311,8 +336,8 @@ const AssignmentsParent = () => {
                         <Button
                             variant={activeTab === "pending" ? "outline" : "solid"}
                             className={`${activeTab === "pending"
-                                    ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-                                    : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+                                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                                : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
                                 } px-4 md:px-6 py-2 rounded-full`}
                             onClick={() => setActiveTab("pending")}
                         >
@@ -325,8 +350,8 @@ const AssignmentsParent = () => {
                         <Button
                             variant={activeTab === "missed" ? "outline" : "solid"}
                             className={`${activeTab === "missed"
-                                    ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-                                    : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+                                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                                : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
                                 } px-4 md:px-6 py-2 rounded-full`}
                             onClick={() => setActiveTab("missed")}
                         >
@@ -338,11 +363,11 @@ const AssignmentsParent = () => {
                         </Button>
                     </div>
 
-                    {/* Loading Message */}
-                    {loading && !initialLoading && (
-                        <div className="flex items-center justify-center text-center text-gray-500 dark:text-gray-300 mt-10">
-                            <FaSpinner className="animate-spin text-4xl text-blue-500 dark:text-[#C459D9] mb-4 mr-5" />
-                            <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold"> {t('assignments.main.loading')}</p>
+                    {loading && (
+                        <div className="flex flex-col items-center justify-center mt-10">
+                            <FaSpinner className="animate-spin text-4xl text-blue-500 mb-4" />
+                            <p className="text-gray-700 dark:text-gray-300">
+                            </p>
                         </div>
                     )}
 
