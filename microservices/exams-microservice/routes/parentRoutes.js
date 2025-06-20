@@ -47,7 +47,7 @@ router.get(
 router.get("/schedules/current", validateJwt, getCurrentSemesterSchedules);
 router.get("/schedules/upcoming/:student_id", validateJwt, getUpcomingExams);
 
-router.get("/", validateJwt,validateParent, getAssignments);
+router.get("/:gradeSubjectSemesterId", validateJwt,validateParent, getAssignments);
 router.get("/Assignment/:id", validateJwt,validateParent, getAssignmentById);
 router.get("/submissions/student/:studentId", validateJwt,validateParent, getStudentSubmissions);
 
