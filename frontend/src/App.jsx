@@ -32,6 +32,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ExamsParent from "./Features/Parent/components/Exams/ExamPage";
 import VirtualRoomsParent from "./Features/Parent/components/Courses/VRParent";
 import AssignmentsParent from "./Features/Parent/components/Courses/assignmentsPage";
+import ThemeInitializer from "./ui/ThemeInitializer ";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -574,9 +575,10 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <BrowserRouter>
         <TitleUpdater />
+        <ThemeInitializer />
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -819,17 +821,14 @@ function App() {
               />
               <Route path="activities/contests" element={<ParentContests />} />
               <Route path="schedule" element={<ScheduleParent />} />
-               <Route path="exam-schedule" element={<ParentExamSchedule />} />
+              <Route path="exam-schedule" element={<ParentExamSchedule />} />
               <Route path="motivation" element={<MotivationParent />} />
               <Route path="grades-for-child" element={<GradesForChild />} />
               <Route
                 path="grades-for-semester"
                 element={<GradesForSemesterForChild />}
               />
-              <Route
-                path="all-subjects"
-                element={<AllCoursesParent/>}
-              />
+              <Route path="all-subjects" element={<AllCoursesParent />} />
               <Route
                 path="all-subjects/virtualrooms/:subjectId"
                 element={<VirtualRoomsParent />}
@@ -840,7 +839,10 @@ function App() {
               />
 
               <Route path="attendance" element={<AttendanceForChild />} />
-                 <Route path="all-subjects/exams/:subjectId" element={<ExamsParent />} />
+              <Route
+                path="all-subjects/exams/:subjectId"
+                element={<ExamsParent />}
+              />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route
