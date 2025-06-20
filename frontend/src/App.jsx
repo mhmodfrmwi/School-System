@@ -31,6 +31,7 @@ import ResendVerification from "./Features/Auth/ResendVerification";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ExamsParent from "./Features/Parent/components/Exams/ExamPage";
 import VirtualRoomsParent from "./Features/Parent/components/Courses/VRParent";
+import AssignmentsParent from "./Features/Parent/components/Courses/assignmentsPage";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -795,6 +796,10 @@ function App() {
                 element={<EditParentProfile />}
               />
               <Route
+                path="all-subjects/assignments/:gradeSubjectSemesterId"
+                element={<AssignmentsParent />}
+              />
+              <Route
                 path="activities"
                 element={
                   <ProtectedRoute
@@ -835,7 +840,7 @@ function App() {
               />
 
               <Route path="attendance" element={<AttendanceForChild />} />
-              <Route path="exams" element={<ExamsParent />} />
+                 <Route path="all-subjects/exams/:subjectId" element={<ExamsParent />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route

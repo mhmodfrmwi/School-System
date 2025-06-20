@@ -164,25 +164,25 @@ const VirtualRoomsParent = () => {
                                 variant="solid"
                                 className="md:w-11/12 bg-[#BFBFBF] dark:bg-[#C459D9] text-white font-medium py-4 rounded-lg"
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span> {t('virtualRooms.sidebar.virtualRooms')}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">01</span> {t('virtualRooms.sidebar.virtualRooms')}
                             </Button>
                         </li>
                         <li>
                             <Button
                                 variant="solid"
                                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
-                                onClick={() => navigate(`/student/allcourses/assignments/${subjectId}`)}
+                                onClick={() => navigate(`/parent/all-subjects/assignments/${subjectId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">04</span>{t('virtualRooms.sidebar.assignments')}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">02</span>{t('virtualRooms.sidebar.assignments')}
                             </Button>
                         </li>
                         <li>
                             <Button
                                 variant="solid"
                                 className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
-                                onClick={() => navigate(`/student/allcourses/exams/${subjectId}`)}
+                                 onClick={() => navigate(`/parent/all-subjects/exams/${subjectId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">05</span>{t('virtualRooms.sidebar.exams')}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span>{t('virtualRooms.sidebar.exams')}
                             </Button>
                         </li>
                     </ul>

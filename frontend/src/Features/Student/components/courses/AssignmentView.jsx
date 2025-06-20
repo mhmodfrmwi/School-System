@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
 import backgroundWaves from "../../../../assets/StudentIcon/bg-color2.png";
 import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
-import { useTranslation } from "react-i18next";
+import { useTranslation,i18n } from "react-i18next";
 
 const AssignmentView = () => {
   const { t } = useTranslation();
