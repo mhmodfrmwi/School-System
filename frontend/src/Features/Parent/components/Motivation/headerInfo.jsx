@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllReward,
   getSemesterReward,
-} from "../../../Student/components/StudentRedux/motivationSlice";
+} from "../../../Parent/components/ParentRedux/MotivationSlice";
 import { useTranslation } from "react-i18next";
 
 function HeaderInfo() {
@@ -49,7 +49,7 @@ function HeaderInfo() {
               alt={t("motivation.scheduleIcon")}
             />
             <p className={`mt-1 text-3xl text-white dark:text-white ${i18n.language === 'ar' ? 'mr-2' : 'ml-2'}`}>
-              {semesterReward.totalSemesterPoints}
+              {semesterReward?.totalSemesterPoints || 0}
             </p>
           </div>
         </div>
@@ -92,9 +92,10 @@ function HeaderInfo() {
             }`}
           >
             {t("motivation.forAllSemesters")}
+            
           </p>
           <p className="text-2xl font-extrabold text-white dark:text-white md:text-3xl">
-            {reward.totalPoints}
+            {reward?.totalPoints || 0}
           </p>
         </div>
       </div>

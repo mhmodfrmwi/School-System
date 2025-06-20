@@ -10,6 +10,7 @@ import Pagination from "../Pagination";
 import Header from "./classTeacherHeader";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import * as XLSX from 'xlsx';
 const ClassTeacherTable = () => {
   const { t ,i18n} = useTranslation();
   const { classTeachers = [], loading } = useSelector(
@@ -139,6 +140,26 @@ const ClassTeacherTable = () => {
     const teacher = teachers.find((t) => t._id === teacherId);
     return teacher ? teacher.fullName : t("teacherdata.NoTeacherAssigned");
   };
+
+const handleExportCSV = () => {
+  const dataToExport = filteredClassTeachers.map(classTeacher => ({
+    [t("tableHeaders.Class")]: `${getClassDetails(classTeacher.classId._id).className} - ${getClassDetails(classTeacher.classId._id).gradeName}`,
+    [t("tableHeaders.subject")]: classTeacher.subjectId?.subjectName || t("teacherdata.NoSubject"),
+    [t("tableHeaders.teacher")]: getTeacherName(classTeacher.teacherId?._id),
+    [t("tableHeaders.AcademicYear")]: `${classTeacher.academicYear_id?.startYear || ''} - ${classTeacher.academicYear_id?.endYear || ''}`
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "ClassTeachers");
+  
+
+  const today = new Date();
+  const dateString = `${today.getFullYear()}-${(today.getMonth()+1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+  
+  XLSX.writeFile(workbook, `class_teachers_${dateString}.xlsx`);
+};
+  
   if (loading) {
     return <div className="h-full w-full"></div>; // Empty div during loading
   }
@@ -147,6 +168,7 @@ const ClassTeacherTable = () => {
       <Header
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
+        onExportCSV={handleExportCSV}
       />
 
       <div className="mt-7">

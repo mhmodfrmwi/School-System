@@ -77,7 +77,7 @@ const GetStudentsForGrades = () => {
 
   return (
     <div className="mx-auto font-poppins w-[360px] p-6 sm:w-[550px] md:w-[700px] lg:px-0 xl:w-full">
-      <div className="flex flex-col">
+      <div className="flex m-auto w-[95%] flex-col">
         <h1 className="font-poppins text-lg font-semibold text-[#117C90] dark:text-DarkManager sm:text-xl lg:text-2xl">
           {t('gradest.ExamScores')}
         </h1>
@@ -93,21 +93,21 @@ const GetStudentsForGrades = () => {
 
       {scores?.data?.students?.length > 0 ? (
         <>
-          <div className="my-4 text-lg text-black">
+          <div className="my-4 m-auto w-[95%] text-lg text-black">
             <span className="text-xl font-semibold">{t('gradest.AcademicYear')}:</span>{" "}
             {scores.data.grade.academicYear.startYear} -{" "}
             {scores.data.grade.academicYear.endYear}
           </div>
-          <div className="my-4 text-lg text-black">
+          <div className="my-4 m-auto w-[95%] text-lg text-black">
             <span className="text-xl font-semibold">{t('examst.Grade')}:</span>{" "}
             {scores.data.grade.gradeName}{" "}
           </div>
-          <div className="my-4 text-lg text-black">
+          <div className="my-4 m-auto w-[95%] text-lg text-black">
             <span className="text-xl font-semibold">{t('examst.Subject')}:</span>{" "}
             {scores.data.subject.subjectName}
           </div>
 
-          <div className="mb-6 flex justify-between">
+          <div className="mb-6 flex m-auto w-[95%] justify-between">
             <button
               onClick={handleExportCSV}
               className="rounded-lg bg-[#117C90] px-4 py-2 font-poppins text-white transition hover:opacity-90 dark:bg-DarkManager dark:hover:bg-[#2A2A2A]"
@@ -123,7 +123,7 @@ const GetStudentsForGrades = () => {
             </button>
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-[#117C90] dark:border-DarkManager shadow-lg">
+          <div className="overflow-x-auto m-auto w-[95%] rounded-lg border border-[#117C90] dark:border-DarkManager shadow-lg">
             <table className="min-w-full">
               <thead>
                 <tr className="bg-[#117C90] text-white dark:bg-DarkManager">

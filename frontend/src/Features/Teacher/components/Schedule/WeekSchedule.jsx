@@ -68,11 +68,11 @@ const WeeklySchedule = () => {
 
     return (
         <>
-            <ScheduleToggle />
+            
 
             <div className="flex flex-col p-4">
                 <div className="flex-1">
-                    <div className="mx-auto w-[360px] p-6 sm:w-[550px] md:w-[700px] xl:w-full">
+                    <div className="mx-auto w-[360px] mt-0 sm:w-[550px] md:w-[700px] xl:w-full">
                         <div className="mx-auto w-full max-w-7xl px-4">
                             <div className="flex justify-between items-center my-2">
                                 <div>

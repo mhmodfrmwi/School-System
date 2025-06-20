@@ -177,7 +177,7 @@ function Schedule() {
                                 </button>
                                 <button
                                     className="me-10 cursor-pointer rounded-3xl bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] bg-clip-text px-5 py-2 font-poppins text-lg font-medium text-transparent"
-                                    onClick={() => navigate("/parent/get-exam-schedule")}
+                                    onClick={() => navigate("/parent/exam-schedule")}
                                 >
                                     {t("schedule.examSchedule")}
                                 </button>

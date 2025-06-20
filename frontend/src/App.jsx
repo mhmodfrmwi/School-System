@@ -30,6 +30,8 @@ import VerifyEmail from "./Features/Auth/VerifyEmail";
 import ResendVerification from "./Features/Auth/ResendVerification";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ExamsParent from "./Features/Parent/components/Exams/ExamPage";
+import VirtualRoomsParent from "./Features/Parent/components/Courses/VRParent";
+import AssignmentsParent from "./Features/Parent/components/Courses/assignmentsPage";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -264,6 +266,9 @@ const ParentActivities = lazy(
 const ParentContests = lazy(
   () => import("./Features/Parent/components/Activites/Contests"),
 );
+const AllCoursesParent = lazy(
+  () => import("./Features/Parent/components/Courses/CoursesPage"),
+);
 const DetailesParentActivity = lazy(
   () => import("./Features/Parent/components/Activites/DetailesActivity"),
 );
@@ -272,6 +277,9 @@ const PrizesParentActivity = lazy(
 );
 const ScheduleParent = lazy(
   () => import("./Features/Parent/components/Schedule/schedule"),
+);
+const ParentExamSchedule = lazy(
+  () => import("./Features/Parent/components/Schedule/examSchedule"),
 );
 const MotivationParent = lazy(
   () => import("./Features/Parent/pages/MotivationPage"),
@@ -585,12 +593,20 @@ function App() {
           <Routes>
             <Route index element={<Navigate replace to="onboarding" />} />
             <Route path="onboarding" element={<OnBoarding />} />
+            <Route path="role" element={<ChooseRole />} />
             <Route
               path="/login"
               element={role ? <Login /> : <Navigate to="/role" />}
             />
             <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="role" element={<ChooseRole />} />
+            <Route
+              path="/users/:userId/verify/:token"
+              element={<VerifyEmail />}
+            />
+            <Route
+              path="/resend-verification"
+              element={<ResendVerification />}
+            />
             {/* /////////////////adminpage//////////////////// */}
             <Route
               path="admin"
@@ -780,6 +796,10 @@ function App() {
                 element={<EditParentProfile />}
               />
               <Route
+                path="all-subjects/assignments/:gradeSubjectSemesterId"
+                element={<AssignmentsParent />}
+              />
+              <Route
                 path="activities"
                 element={
                   <ProtectedRoute
@@ -799,6 +819,7 @@ function App() {
               />
               <Route path="activities/contests" element={<ParentContests />} />
               <Route path="schedule" element={<ScheduleParent />} />
+               <Route path="exam-schedule" element={<ParentExamSchedule />} />
               <Route path="motivation" element={<MotivationParent />} />
               <Route path="grades-for-child" element={<GradesForChild />} />
               <Route
@@ -806,12 +827,20 @@ function App() {
                 element={<GradesForSemesterForChild />}
               />
               <Route
+                path="all-subjects"
+                element={<AllCoursesParent/>}
+              />
+              <Route
+                path="all-subjects/virtualrooms/:subjectId"
+                element={<VirtualRoomsParent />}
+              />
+              <Route
                 path="grades-for-all-semesters"
                 element={<GradesForAllSemestersForChild />}
               />
 
               <Route path="attendance" element={<AttendanceForChild />} />
-              <Route path="exams" element={<ExamsParent />} />
+                 <Route path="all-subjects/exams/:subjectId" element={<ExamsParent />} />
             </Route>
             {/* /////////////////teacher pages//////////////////// */}
             <Route
@@ -1101,14 +1130,6 @@ function App() {
                 element={<WeeklyScheduleForManager />}
               />
             </Route>
-            <Route
-              path="/users/:userId/verify/:token"
-              element={<VerifyEmail />}
-            />
-            <Route
-              path="/resend-verification"
-              element={<ResendVerification />}
-            />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>

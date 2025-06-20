@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FaBell, FaRegBell } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useNotifications } from "../../../Notification/hooks/notification";
+
 import Notification from "./Notification";
+import { useNotifications } from "../hooks/notification";
 
 const NavbarNotification = () => {
   const { _id: userId, role } = useSelector((state) => state.login);

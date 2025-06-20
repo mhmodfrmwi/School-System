@@ -8,6 +8,8 @@ import {
 import { useEffect, useState } from "react";
 import Pagination from "../Pagination";
 import Loader from "@/ui/Loader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import Papa from "papaparse";
 import { useTranslation } from "react-i18next";
@@ -141,7 +143,18 @@ function GetStudentsWithGrades() {
         <h1 className="mb-4 text-2xl font-semibold text-[#117C90] dark:text-DarkManager">
           Student Exam Results
         </h1>
-        <div>No student results found.</div>
+        <div className="mt-9 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
+          <FontAwesomeIcon
+            icon={faCalendar}
+            className="mb-4 text-6xl text-gray-400"
+          />
+          <p className="mb-2 font-poppins text-xl font-semibold text-gray-600 dark:text-white">
+            No student results found
+          </p>
+          <p className="mb-4 max-w-xl text-center font-poppins text-gray-500 dark:text-white">
+            It seems like there are No student results found  at the moment.
+          </p>
+        </div>
       </div>
     );
   }

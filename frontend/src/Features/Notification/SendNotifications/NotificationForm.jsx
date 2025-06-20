@@ -1,59 +1,88 @@
 import React, { useState, useEffect } from "react";
-import { useNotificationService } from "../../../Notification/hooks/notification";
+import { toast } from "react-toastify";
 import { FaTimes, FaPaperPlane } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGrades } from "../AdminRedux/gradeSlice";
-import { fetchStudents } from "../AdminRedux/studentSlice";
-import { fetchClasses } from "../AdminRedux/classSlice";
-import { toast } from "react-toastify";
-import { fetchManagers } from "../AdminRedux/managerSlice";
-import { fetchParents } from "../AdminRedux/parentSlice";
-import { fetchAdmins } from "../AdminRedux/adminSlice";
-import { fetchTeachers } from "../AdminRedux/teacherSlice";
-
-const notificationTypes = [
-  { value: "reminder", label: "Reminder" },
-  { value: "alert", label: "Alert" },
-  { value: "message", label: "Message" },
-];
-
-const receiverModels = [
-  { value: "Admin", label: "Admin" },
-  { value: "Teacher", label: "Teacher" },
-  { value: "Student", label: "Student" },
-  { value: "Parent", label: "Parent" },
-  { value: "Manager", label: "Manager" },
-];
-
-const endpointOptions = [
-  {
-    value: "",
-    label: "Specific User",
-    requires: ["receiverId", "receiverModel"],
-  },
-  {
-    value: "/students-in-same-grade",
-    label: "Students in Same Grade",
-    requires: ["gradeId"],
-  },
-  {
-    value: "/students-in-same-class",
-    label: "Students in Same Class",
-    requires: ["classId"],
-  },
-  { value: "/all-students", label: "All Students", requires: [] },
-];
+import { fetchGrades } from "../../../Features/Admin/components/AdminRedux/gradeSlice";
+import { fetchStudents } from "../../../Features/Admin/components/AdminRedux/studentSlice";
+import { fetchManagers } from "../../../Features/Admin/components/AdminRedux/managerSlice";
+import { fetchParents } from "../../../Features/Admin/components/AdminRedux/parentSlice";
+import { fetchTeachers } from "../../../Features/Admin/components/AdminRedux/teacherSlice";
+import { fetchAdmins } from "../../../Features/Admin/components/AdminRedux/adminSlice";
+import { fetchClasses } from "../../../Features/Admin/components/AdminRedux/classSlice";
+import { fetchClassTeacher } from "../../Teacher/components/TeacherRedux/TeacherClassSlice";
+import { useNotificationService } from "../hooks/notification";
+import { useClasses } from "../../..//Features/Manager/components/hooks/attendance";
+import { useTranslation } from "react-i18next";
 
 const NotificationForm = ({ onClose, currentUser }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+
+  const notificationTypes = [
+    { value: "reminder", label: t("sendNotificationsForm.types.reminder") },
+    { value: "alert", label: t("sendNotificationsForm.types.alert") },
+    { value: "message", label: t("sendNotificationsForm.types.message") },
+  ];
+
+  const receiverModels = [
+    { value: "Admin", label: t("sendNotificationsForm.receiverModels.Admin") },
+    {
+      value: "Teacher",
+      label: t("sendNotificationsForm.receiverModels.Teacher"),
+    },
+    {
+      value: "Student",
+      label: t("sendNotificationsForm.receiverModels.Student"),
+    },
+    {
+      value: "Parent",
+      label: t("sendNotificationsForm.receiverModels.Parent"),
+    },
+    {
+      value: "Manager",
+      label: t("sendNotificationsForm.receiverModels.Manager"),
+    },
+  ];
+
+  const endpointOptions = [
+    {
+      value: "",
+      label: t("sendNotificationsForm.endpointOptions.specificUser"),
+      requires: ["receiverId", "receiverModel"],
+    },
+    {
+      value: "/students-in-same-grade",
+      label: t("sendNotificationsForm.endpointOptions.sameGrade"),
+      requires: ["gradeId"],
+    },
+    {
+      value: "/students-in-same-class",
+      label: t("sendNotificationsForm.endpointOptions.sameClass"),
+      requires: ["classId"],
+    },
+    {
+      value: "/all-students",
+      label: t("sendNotificationsForm.endpointOptions.allStudents"),
+      requires: [],
+    },
+  ];
+
   const dispatch = useDispatch();
   const { _id: userId, role, fullName } = useSelector((state) => state.login);
+
+  // Conditional hook usage for manager role
+  const useManagerClasses = () => {
+    if (role === "manager") {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      return useClasses();
+    }
+    return { managerclasses: [], isLoading: false };
+  };
+  const managerClassesData = useManagerClasses();
 
   // Fetch all user types
   const { grades = [], loading: gradesLoading } = useSelector(
     (state) => state.grades,
-  );
-  const { classes = [], loading: classesLoading } = useSelector(
-    (state) => state.classes,
   );
   const { students = [], loading: studentsLoading } = useSelector(
     (state) => state.students,
@@ -71,15 +100,41 @@ const NotificationForm = ({ onClose, currentUser }) => {
     (state) => state.teachers || {},
   );
 
+  // Get all possible class data sources
+  const classTeacherData = useSelector((state) => state.classTeachers || {});
+  const adminClassesData = useSelector((state) => state.classes || {});
+
+  // Determine which classes to use based on role
+  let classes = [];
+  let classesLoading = false;
+
+  if (role === "teacher") {
+    classes = classTeacherData.classTeachers || [];
+    classesLoading = classTeacherData.loading || false;
+  } else if (role === "admin") {
+    classes = adminClassesData.classes || [];
+    classesLoading = adminClassesData.loading || false;
+  } else if (role === "manager") {
+    classes = managerClassesData.managerclasses || [];
+    classesLoading = managerClassesData.isLoading || false;
+  }
+
   useEffect(() => {
     dispatch(fetchGrades());
-    dispatch(fetchClasses());
     dispatch(fetchStudents());
     dispatch(fetchManagers());
     dispatch(fetchParents());
     dispatch(fetchAdmins());
     dispatch(fetchTeachers());
-  }, [dispatch]);
+
+    // Fetch classes based on role
+    if (role === "teacher") {
+      dispatch(fetchClassTeacher());
+    } else if (role === "admin") {
+      dispatch(fetchClasses());
+    }
+    // For manager, the useClasses hook will handle the fetching
+  }, [dispatch, role]);
 
   const capitalizedRole = role
     ? role.charAt(0).toUpperCase() + role.slice(1)
@@ -145,6 +200,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
         return students.map((student) => ({
           id: student._id,
           name: student.fullName,
+          academic_number: student.academic_number,
         }));
       case "Parent":
         return parents.map((parent) => ({
@@ -181,7 +237,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
         : formData[field];
 
       if (!value) {
-        toast.error(`Missing required field: ${field}`);
+        toast.error(t("sendNotificationsForm.errors.missingField", { field }));
         return;
       }
     }
@@ -211,29 +267,94 @@ const NotificationForm = ({ onClose, currentUser }) => {
         endpoint: selectedEndpoint,
         data: dataToSend,
       });
-      toast.success("Notification sent successfully!");
+      toast.success(t("sendNotificationsForm.success"));
       onClose();
     } catch (err) {
       console.error("Error sending notification:", err);
-      toast.error("Failed to send notification");
+      toast.error(t("sendNotificationsForm.error"));
     }
+  };
+
+  const renderClassSelect = () => {
+    if (role === "manager") {
+      return (
+        <select
+          name="classId"
+          value={formData.classId}
+          onChange={handleChange}
+          required
+          className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
+        >
+          <option value="">{t("sendNotificationsForm.selectAClass")}</option>
+          {classes.map((classItem) => (
+            <option key={classItem._id} value={classItem._id}>
+              {classItem.gradeId.gradeName}-{classItem.className}
+            </option>
+          ))}
+        </select>
+      );
+    } else if (role === "admin") {
+      return (
+        <select
+          name="classId"
+          value={formData.classId}
+          onChange={handleChange}
+          required
+          className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
+        >
+          <option value="">{t("sendNotificationsForm.selectAClass")}</option>
+          {classes.map((classItem) => (
+            <option key={classItem._id} value={classItem._id}>
+              {classItem.gradeId?.gradeName}-{classItem.className}
+            </option>
+          ))}
+        </select>
+      );
+    } else if (role === "teacher") {
+      return (
+        <select
+          name="classId"
+          value={formData.classId}
+          onChange={handleChange}
+          required
+          className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
+        >
+          <option value="">{t("sendNotificationsForm.selectAClass")}</option>
+          {classes.map((classItem) => {
+            const classId = classItem.classId?._id;
+            const className = `${classItem.gradeName}-${classItem.className}`;
+            return (
+              <option key={classId} value={classId}>
+                {className}
+              </option>
+            );
+          })}
+        </select>
+      );
+    }
+    return null;
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="h-[75vh] w-[80vw] max-w-4xl rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-600 dark:bg-gray-800">
+      <div
+        className="h-[75vh] w-[80vw] max-w-4xl rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-600 dark:bg-gray-800"
+        dir={isRTL ? "rtl" : "ltr"}
+      >
         {/* Header */}
         <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-r from-[#117C90] to-[#0D5665] px-6 py-4 text-white dark:from-[#0D5665] dark:to-[#093D4A]">
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 p-2 text-white">
               <FaPaperPlane className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-medium">Send Notification</h3>
+            <h3 className="text-lg font-medium">
+              {t("sendNotificationsForm.title")}
+            </h3>
           </div>
           <button
             onClick={onClose}
             className="rounded-full p-1 text-white hover:bg-white/20 focus:outline-none"
-            title="Close"
+            title={t("sendNotificationsForm.cancel")}
           >
             <FaTimes />
           </button>
@@ -251,7 +372,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Sender Name
+                  {t("sendNotificationsForm.senderName")}
                 </label>
                 <input
                   type="text"
@@ -269,7 +390,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Sender Role
+                  {t("sendNotificationsForm.senderRole")}
                 </label>
                 <input
                   type="text"
@@ -291,7 +412,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Notification Type
+                {t("sendNotificationsForm.notificationType")}
               </label>
               <select
                 name="type"
@@ -300,7 +421,9 @@ const NotificationForm = ({ onClose, currentUser }) => {
                 required
                 className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
               >
-                <option value="">Select a type</option>
+                <option value="">
+                  {t("sendNotificationsForm.selectType")}
+                </option>
                 {notificationTypes.map((type) => (
                   <option key={type.value} value={type.value}>
                     {type.label}
@@ -311,7 +434,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Recipient Type
+                {t("sendNotificationsForm.recipientType")}
               </label>
               <select
                 value={selectedEndpoint}
@@ -328,7 +451,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Message Content
+                {t("sendNotificationsForm.messageContent")}
               </label>
               <textarea
                 name="content"
@@ -336,7 +459,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
                 onChange={handleChange}
                 rows={4}
                 required
-                placeholder="Enter your notification message..."
+                placeholder={t("sendNotificationsForm.enterMessage")}
                 className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
               />
             </div>
@@ -346,7 +469,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
               <>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Receiver Type
+                    {t("sendNotificationsForm.receiverType")}
                   </label>
                   <select
                     name="receiverModel"
@@ -355,7 +478,9 @@ const NotificationForm = ({ onClose, currentUser }) => {
                     required
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
                   >
-                    <option value="">Select receiver type</option>
+                    <option value="">
+                      {t("sendNotificationsForm.selectReceiverType")}
+                    </option>
                     {receiverModels.map((model) => (
                       <option key={model.value} value={model.value}>
                         {model.label}
@@ -367,7 +492,9 @@ const NotificationForm = ({ onClose, currentUser }) => {
                 {formData.receiverModel && (
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Select {formData.receiverModel}
+                      {t("sendNotificationsForm.selectUser", {
+                        userType: formData.receiverModel,
+                      })}
                     </label>
                     <select
                       name="receiverId"
@@ -377,11 +504,13 @@ const NotificationForm = ({ onClose, currentUser }) => {
                       className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
                     >
                       <option value="">
-                        Select a {formData.receiverModel.toLowerCase()}
+                        {t("sendNotificationsForm.selectUser", {
+                          userType: formData.receiverModel.toLowerCase(),
+                        })}
                       </option>
                       {getUsersByModel(formData.receiverModel).map((user) => (
                         <option key={user.id} value={user.id}>
-                          {user.name}
+                          {user.name} {user.academic_number}
                         </option>
                       ))}
                     </select>
@@ -393,7 +522,7 @@ const NotificationForm = ({ onClose, currentUser }) => {
             {selectedEndpoint === "/students-in-same-grade" && (
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Select Grade
+                  {t("sendNotificationsForm.selectGrade")}
                 </label>
                 <select
                   name="gradeId"
@@ -402,7 +531,9 @@ const NotificationForm = ({ onClose, currentUser }) => {
                   required
                   className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
                 >
-                  <option value="">Select a grade</option>
+                  <option value="">
+                    {t("sendNotificationsForm.selectAGrade")}
+                  </option>
                   {grades.map((grade) => (
                     <option key={grade._id} value={grade._id}>
                       {grade.gradeName}
@@ -415,33 +546,22 @@ const NotificationForm = ({ onClose, currentUser }) => {
             {selectedEndpoint === "/students-in-same-class" && (
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Select Class
+                  {t("sendNotificationsForm.selectClass")}
                 </label>
-                <select
-                  name="classId"
-                  value={formData.classId}
-                  onChange={handleChange}
-                  required
-                  className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-[#117C90] focus:ring-[#117C90] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-[#0D5665] dark:focus:ring-[#0D5665]"
-                >
-                  <option value="">Select a class</option>
-                  {classes.map((classItem) => (
-                    <option key={classItem._id} value={classItem._id}>
-                      {classItem.gradeId?.gradeName}-{classItem.className}
-                    </option>
-                  ))}
-                </select>
+                {renderClassSelect()}
               </div>
             )}
 
-            <div className="flex justify-end gap-3 pt-4">
+            <div
+              className={`flex ${isRTL ? "flex-row-reverse" : ""} justify-end gap-3 pt-4`}
+            >
               <button
                 type="button"
                 onClick={onClose}
                 disabled={isLoading}
                 className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-[#117C90]/50 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-600 dark:focus:ring-[#0D5665]/50"
               >
-                Cancel
+                {t("sendNotificationsForm.cancel")}
               </button>
               <button
                 type="submit"
@@ -474,12 +594,12 @@ const NotificationForm = ({ onClose, currentUser }) => {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    Sending...
+                    {t("sendNotificationsForm.sending")}
                   </>
                 ) : (
                   <>
                     <FaPaperPlane size={14} />
-                    Send Notification
+                    {t("sendNotificationsForm.sendNotification")}
                   </>
                 )}
               </button>

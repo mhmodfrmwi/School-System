@@ -8,15 +8,19 @@ import {
   FaPaperPlane,
 } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
-import { useNotifications } from "../../../Notification/hooks/notification";
+import { fetchStudents } from "../../../Features/Admin/components/AdminRedux/studentSlice";
+import { fetchManagers } from "../../../Features/Admin/components/AdminRedux/managerSlice";
+import { fetchParents } from "../../../Features/Admin/components/AdminRedux/parentSlice";
+import { fetchTeachers } from "../../../Features/Admin/components/AdminRedux/teacherSlice";
+import { fetchAdmins } from "../../../Features/Admin/components/AdminRedux/adminSlice";
 import NotificationForm from "./NotificationForm";
-import { fetchManagers } from "../AdminRedux/managerSlice";
-import { fetchStudents } from "../AdminRedux/studentSlice";
-import { fetchParents } from "../AdminRedux/parentSlice";
-import { fetchAdmins } from "../AdminRedux/adminSlice";
-import { fetchTeachers } from "../AdminRedux/teacherSlice";
+import { useNotifications } from "../hooks/notification";
+import SpinnerMini from "../../../ui/SpinnerMini";
+import { useTranslation } from "react-i18next";
 
 const Notification = ({ userId, role, onClose }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
   const dispatch = useDispatch();
   const {
     notifications,
@@ -54,7 +58,10 @@ const Notification = ({ userId, role, onClose }) => {
 
   const getSenderInfo = (sender) => {
     if (!sender?.id || !sender?.model)
-      return { name: "System", role: "System" };
+      return {
+        name: t("sendNotifications.system"),
+        role: t("sendNotifications.system"),
+      };
 
     let userList = [];
     let roleName = sender.model;
@@ -62,26 +69,31 @@ const Notification = ({ userId, role, onClose }) => {
     switch (sender.model) {
       case "Student":
         userList = students;
+        roleName = t("sendRoles.student");
         break;
       case "Manager":
         userList = managers;
+        roleName = t("sendRoles.manager");
         break;
       case "Parent":
         userList = parents;
+        roleName = t("sendRoles.parent");
         break;
       case "Admin":
         userList = admins;
+        roleName = t("sendRoles.admin");
         break;
       case "Teacher":
         userList = teachers;
+        roleName = t("sendRoles.teacher");
         break;
       default:
-        return { name: "Unknown", role: sender.model };
+        return { name: t("sendNotifications.unknownUser"), role: sender.model };
     }
 
     const user = userList.find((user) => user._id === sender.id);
     return {
-      name: user ? `${user.fullName}` : "Unknown User",
+      name: user ? `${user.fullName}` : t("sendNotifications.unknownUser"),
       role: roleName,
     };
   };
@@ -96,18 +108,25 @@ const Notification = ({ userId, role, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 dark:bg-white/70">
-      <div className="h-[75vh] w-[80vw] max-w-4xl rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-600 dark:bg-gray-800">
+      <div
+        className="h-[75vh] w-[80vw] max-w-4xl rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-600 dark:bg-gray-800"
+        dir={isRTL ? "rtl" : "ltr"}
+      >
         {/* Header */}
         <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-r from-[#117C90] to-[#0D5665] px-6 py-4 text-white dark:from-[#0D5665] dark:to-[#093D4A]">
           <div className="flex items-center">
-            <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white">
+            <div
+              className={`${isRTL ? "ml-3" : "mr-3"} flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white`}
+            >
               <FaBell className="h-5 w-5" />
             </div>
             <h3 className="text-lg font-medium">
-              Notifications
+              {t("sendNotifications.title")}
               {unreadCount > 0 && (
-                <span className="ml-2 rounded-full bg-white/20 px-2 py-1 text-xs">
-                  {unreadCount} new
+                <span
+                  className={`${isRTL ? "mr-2" : "ml-2"} rounded-full bg-red-700 px-2 py-1 text-xs`}
+                >
+                  {unreadCount} {t("sendNotifications.new")}
                 </span>
               )}
             </h3>
@@ -117,15 +136,15 @@ const Notification = ({ userId, role, onClose }) => {
             <button
               onClick={() => setShowForm(!showForm)}
               className="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-sm hover:bg-white/30"
-              title="Send Notification"
+              title={t("sendNotifications.sendNotification")}
             >
               <FaPaperPlane size={12} />
-              <span>Send</span>
+              <span>{t("sendNotifications.send")}</span>
             </button>
             <button
               onClick={onClose}
               className="rounded-full p-1 text-white hover:bg-white/20 focus:outline-none"
-              title="Close"
+              title={t("sendNotifications.close")}
             >
               <FaTimes />
             </button>
@@ -150,8 +169,8 @@ const Notification = ({ userId, role, onClose }) => {
 
         <div className="h-[calc(100%-120px)] overflow-y-auto bg-gray-50 p-6 dark:bg-gray-800">
           {allDataLoading ? (
-            <div className="flex justify-center py-8">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#117C90] border-t-transparent dark:border-[#0D5665]"></div>
+            <div className="flex justify-center pt-44">
+              <SpinnerMini />
             </div>
           ) : notifications.length === 0 ? (
             <div className="py-8 text-center">
@@ -159,22 +178,24 @@ const Notification = ({ userId, role, onClose }) => {
                 <FaBell className="h-6 w-6 text-gray-500 dark:text-gray-400" />
               </div>
               <p className="text-gray-600 dark:text-gray-300">
-                No notifications yet
+                {t("sendNotifications.empty.title")}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                We'll notify you when something arrives
+                {t("sendNotifications.empty.subtitle")}
               </p>
             </div>
           ) : (
             <div className="space-y-3">
-              <div className="flex justify-end">
+              <div
+                className={`flex ${isRTL ? "justify-start" : "justify-end"}`}
+              >
                 <button
                   onClick={markAllAsRead}
                   disabled={unreadCount === 0}
                   className="flex items-center gap-1 rounded-full bg-[#117C90]/10 px-3 py-1 text-xs text-[#117C90] hover:bg-[#117C90]/20 disabled:opacity-50 dark:bg-[#0D5665]/20 dark:text-white dark:hover:bg-[#0D5665]/30"
                 >
                   <FaCheck size={12} />
-                  Mark all as read
+                  {t("sendNotifications.markAllAsRead")}
                 </button>
               </div>
 
@@ -189,36 +210,44 @@ const Notification = ({ userId, role, onClose }) => {
                         : "bg-white dark:bg-gray-700"
                     } shadow-sm dark:shadow-none`}
                   >
-                    <div className="flex justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                    <div className="grid grid-cols-8">
+                      <div className="col-span-6 sm:col-span-7">
+                        <p className="w-[80%] break-words text-sm font-medium text-gray-800 dark:text-gray-100">
                           {notification.content}
                         </p>
                         <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
                           <span className="text-gray-600 dark:text-gray-300">
-                            From: {senderInfo.name} ({senderInfo.role})
+                            {t("sendNotifications.from")}: {senderInfo.name} (
+                            {senderInfo.role})
                           </span>
                           <span className="rounded-full bg-gray-200 px-2 py-0.5 text-gray-700 dark:bg-gray-600 dark:text-gray-200">
                             {notification.type}
                           </span>
-                          <span className="text-gray-500 dark:text-white">
+
+                          <span
+                            dir="ltr"
+                            className="text-sm italic text-gray-500 dark:text-white"
+                            title={new Date(
+                              notification.createdAt,
+                            ).toLocaleString()}
+                          >
                             {formatDistanceToNow(
                               new Date(notification.createdAt),
-                              {
-                                addSuffix: true,
-                              },
+                              { addSuffix: true },
                             )}
                           </span>
                         </div>
                       </div>
-                      <div className="flex gap-1">
+                      <div
+                        className={`col-span-2 flex ${isRTL ? "justify-start" : "justify-end"} sm:col-span-1`}
+                      >
                         {!notification.isRead && (
                           <button
                             onClick={() => markAsRead(notification._id)}
-                            className="rounded-full p-1 text-[#117C90] hover:bg-[#117C90]/20 dark:text-white dark:hover:bg-[#0D5665]/30"
-                            title="Mark as read"
+                            className="rounded-full p-1 text-[#117C90] dark:text-white"
+                            title={t("sendNotifications.markAsRead")}
                           >
-                            <FaCheck size={12} />
+                            <FaCheck size={20} />
                           </button>
                         )}
                         <button
@@ -226,16 +255,16 @@ const Notification = ({ userId, role, onClose }) => {
                             e.stopPropagation();
                             if (
                               window.confirm(
-                                "Are you sure you want to delete this notification?",
+                                t("sendNotifications.deleteConfirmation"),
                               )
                             ) {
                               deleteNotification(notification._id);
                             }
                           }}
-                          className="rounded-full p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20"
-                          title="Delete notification"
+                          className="rounded-full p-1 text-red-500"
+                          title={t("sendNotifications.delete")}
                         >
-                          <FaTrash size={12} />
+                          <FaTrash size={20} />
                         </button>
                       </div>
                     </div>

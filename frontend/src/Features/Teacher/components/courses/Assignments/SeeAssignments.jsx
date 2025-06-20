@@ -79,18 +79,18 @@ const SeeAssignments = () => {
           assignment.map((item) => (
             <div
               key={item._id}
-              className="rounded-xl border border-[#117C90] bg-slate-50 p-6 shadow-md transition-shadow duration-300 hover:shadow-lg dark:bg-DarkManager2"
+              className="rounded-xl border border-[#117C90] bg-slate-50 p-3 shadow-md transition-shadow  hover:bg-slate-100 duration-300 hover:shadow-lg dark:bg-DarkManager2"
             >
               <h2 className="text-lg font-semibold text-[#244856] dark:text-white">
-                {item.title}
+                📜 {item.title}
               </h2>
-              <p className="mb-4 whitespace-normal break-words text-sm text-gray-600 dark:text-white">
+              <p className="mb-4 ml-7 mt-3 whitespace-normal break-words text-sm text-gray-600 dark:text-white">
                 {item.description}
               </p>
-              <p className="mt-1 text-sm text-gray-700 dark:text-white">
+              <p className=" ml-7 mt-3 text-sm text-gray-700 dark:text-white">
                 {t("assignmentt.Due")}: {formatStartTime(item.due_date)}
               </p>
-              <p className="mt-1 text-sm text-gray-700 dark:text-white">
+              <p className="ml-7 mt-3 text-sm text-gray-700 dark:text-white">
                 {t("assignmentt.Marks")}: {item.total_marks}
               </p>
               <div className={`mt-4 flex justify-end ${i18n.language === 'ar' ? 'space-x-reverse' : ''} space-x-4`}>

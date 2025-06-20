@@ -46,7 +46,7 @@ const ExamDetails = () => {
                 </div>
 
                 <div
-                  className={`mt-9 rounded-xl border border-[#117C90] bg-slate-50 p-6 shadow-md transition-shadow duration-300 hover:shadow-lg dark:bg-DarkManager2 ${textAlign}`}
+                  className={`mt-9 rounded-xl border border-[#117C90] bg-slate-50 p-6 shadow-md transition-shadow  hover:bg-slate-100 duration-300 hover:shadow-lg dark:bg-DarkManager2 ${textAlign}`}
                 >
                   <h2
                     className={`mb-4 font-poppins text-xl font-semibold text-[#47bfee] dark:text-white`}
@@ -93,7 +93,7 @@ const ExamDetails = () => {
                 </div>
 
                 <div
-                  className={`mt-8 rounded-xl border border-[#117C90] bg-slate-50 p-6 shadow-md transition-shadow duration-300 hover:shadow-lg dark:border-DarkManager dark:bg-DarkManager2 ${textAlign}`}
+                  className={`mt-8 rounded-xl border border-[#117C90] bg-slate-50  hover:bg-slate-100 p-6 shadow-md transition-shadow duration-300 hover:shadow-lg dark:border-DarkManager dark:bg-DarkManager2 ${textAlign}`}
                 >
                   <h2
                     className={`mb-4 font-poppins text-xl font-semibold text-[#244856] dark:text-white`}

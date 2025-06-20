@@ -41,6 +41,22 @@ const {
   getCompletedExamsForSubjects,
 } = require("../../microservices/exams-microservice/controllers/childExamControllerForParent");
 const { getDashboardData } = require("../controllers/Parent/studentDashboard");
+
+const {
+  getDailyPoints,
+  getAllPoints,
+  getSemesterPoints,
+  getStudentWithFriendsPoints,
+  getAllStudentRewardsData,
+} = require("../controllers/Parent/childReward");
+const getSubjectsAcademicYearAndGradeAndSemester = require("../controllers/Parent/getGradeSubjectSemesterForChild");
+const {
+  getVirtualRoomsForStudent,
+  //handleVrLinkClick,
+  getCompletedVirtualRooms,
+  getMissedVirtualRooms,
+} = require("../controllers/Parent/virtualRoom");
+
 const router = express.Router();
 router.post("/login", login);
 router.patch(
@@ -135,6 +151,48 @@ router.get(
   validateJwt,
   validateParent,
   getCompletedExamsForSubjects
+);
+
+router.get("/daily-reward/:studentId", validateJwt, validateParent, getDailyPoints);
+router.get("/reward/:studentId", validateJwt, validateParent, getAllPoints);
+router.get("/semester-reward/:studentId", validateJwt, validateParent, getSemesterPoints);
+router.get(
+  "/student-with-friends-reward/:studentId",
+  validateJwt,
+  validateParent,
+  getStudentWithFriendsPoints
+);
+router.get(
+  "/all-reward",
+  validateJwt,
+  validateParent,
+  getAllStudentRewardsData
+);
+
+router.get(
+  "/get-subjects/:studentId",
+  validateJwt,
+  validateParent,
+  getSubjectsAcademicYearAndGradeAndSemester
+);
+
+router.get(
+  "/virtual-rooms/:gradeSubjectSemesterId/:studentId",
+  validateJwt,
+  validateParent,
+  getVirtualRoomsForStudent
+);
+router.get(
+  "/virtual-rooms/:gradeSubjectSemesterId/completed/:studentId",
+  validateJwt,
+  validateParent,
+  getCompletedVirtualRooms
+);
+router.get(
+  "/virtual-rooms/:gradeSubjectSemesterId/missed/:studentId",
+  validateJwt,
+  validateParent,
+  getMissedVirtualRooms
 );
 ///$$$$$$$$//
 

@@ -49,7 +49,7 @@ const CurrentCourse = ({ onSearchChange }) => {
     return (
       <>
         <CourseToggle />
-        <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
+        <div className="mt-10  flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
           <FontAwesomeIcon
             icon={faCalendar}
             className="mb-4 text-6xl text-gray-400"
@@ -69,7 +69,7 @@ const CurrentCourse = ({ onSearchChange }) => {
     <>
       <div className="mx-auto w-[90%] px-4 md:px-6 lg:px-0">
         <CourseToggle />
-        <div className="mb-4 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
+        <div className="mb-4 ml-3 flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 lg:mb-6">
           <div className="flex flex-col">
             <h1 className="font-poppins text-lg font-semibold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-2xl">
               {t("coursest.CurrentCourse")}
@@ -77,7 +77,7 @@ const CurrentCourse = ({ onSearchChange }) => {
             <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] dark:bg-DarkManager lg:h-[4px] lg:w-[140px]"></div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
+          <div className="flex mr-3 flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-4">
             <div className="flex w-full flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
               <div className="relative flex-grow">
                 <i className="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 transform text-xs text-gray-500 sm:text-sm"></i>

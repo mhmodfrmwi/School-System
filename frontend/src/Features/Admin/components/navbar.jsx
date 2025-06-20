@@ -16,7 +16,7 @@ import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
-import NavbarNotification from "./Notification/NavbarNotification";
+import NavbarNotification from "./../../Notification/SendNotifications/NavbarNotification";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -218,9 +218,6 @@ const Navbar = () => {
           <button className="p-2 text-gray-500">
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
           </button>
-          <div dir="ltr">
-            <ThemeSwitcher />
-          </div>
 
           {/* تعديل جزء صورة المستخدم */}
           <div className="flex items-center space-x-2">

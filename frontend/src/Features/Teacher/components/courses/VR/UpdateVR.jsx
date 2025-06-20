@@ -52,6 +52,15 @@ const EditVR = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Add validation for future time
+    const selectedStartTime = new Date(formData.startTime);
+    const currentTime = new Date();
+    
+    if (selectedStartTime <= currentTime) {
+      toast.error("Please choose a future date and time");
+      return;
+    }
+
     console.log("Submitting update:", formData);
     console.log("VR ID:", id);
 
@@ -84,6 +93,7 @@ const EditVR = () => {
       toast.error("Failed to update VR");
     }
   };
+  
   return (
     <>
       <div className="mx-auto flex w-[80%] flex-col px-4 md:px-6 lg:px-0">
