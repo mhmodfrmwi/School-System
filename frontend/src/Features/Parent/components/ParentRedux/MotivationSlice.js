@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const BASE_URL = "http://localhost:4000/api/v1/parent";
-      
+
 export const getDailyReward = createAsyncThunk(
   "motivation/getDailyReward",
   async (_, { getState, rejectWithValue }) => {
     const state = getState();
-    const studentId = state.motivation.activeStudent?._id;
+    const studentId = state.motivationparent.selectedKid?._id;
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    
+
     if (!token) return rejectWithValue("Authentication required");
     if (!studentId) return rejectWithValue("Kid ID is required");
 
@@ -25,7 +25,7 @@ export const getDailyReward = createAsyncThunk(
         const errorData = await response.json();
         throw new Error(errorData.message || "Request failed");
       }
-      
+
       const { data } = await response.json();
       return data;
     } catch (error) {
@@ -38,9 +38,9 @@ export const getAllReward = createAsyncThunk(
   "motivation/getAllReward",
   async (_, { getState, rejectWithValue }) => {
     const state = getState();
-    const studentId = state.motivation.activeStudent?._id;
+    const studentId = state.motivationparent.selectedKid?._id;
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    
+
     if (!token) return rejectWithValue("Authentication required");
     if (!studentId) return rejectWithValue("Kid ID is required");
 
@@ -57,7 +57,7 @@ export const getAllReward = createAsyncThunk(
         const errorData = await response.json();
         throw new Error(errorData.message || "Request failed");
       }
-      
+
       const { data } = await response.json();
       return data;
     } catch (error) {
@@ -70,9 +70,9 @@ export const getSemesterReward = createAsyncThunk(
   "motivation/getSemesterReward",
   async (_, { getState, rejectWithValue }) => {
     const state = getState();
-    const studentId = state.motivation.activeStudent?._id;
+    const studentId = state.motivationparent.selectedKid?._id;
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    
+
     if (!token) return rejectWithValue("Authentication required");
     if (!studentId) return rejectWithValue("Kid ID is required");
 
@@ -89,7 +89,7 @@ export const getSemesterReward = createAsyncThunk(
         const errorData = await response.json();
         throw new Error(errorData.message || "Request failed");
       }
-      
+
       const { data } = await response.json();
       return data;
     } catch (error) {
@@ -100,11 +100,11 @@ export const getSemesterReward = createAsyncThunk(
 
 export const getStudentWithFriendsReward = createAsyncThunk(
   "motivation/getStudentWithFriendsReward",
- async (_, { getState, rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     const state = getState();
-    const studentId = state.motivation.activeStudent?._id;
+    const studentId = state.motivationparent.selectedKid?._id;
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    
+
     if (!token) return rejectWithValue("Authentication required");
     if (!studentId) return rejectWithValue("Kid ID is required");
 
@@ -125,11 +125,10 @@ export const getStudentWithFriendsReward = createAsyncThunk(
   },
 );
 
-// Added reducer to set active student
 const motivationSlice = createSlice({
-    name: "motivationparent",
+  name: "motivationparent",
   initialState: {
-    activeStudent: null,
+    selectedKid: null,  
     dailyReward: { totalDailyPoints: 0, badge: "Green" },
     reward: { totalPoints: 0, badges: "Green" },
     semesterReward: { totalSemesterPoints: 0, badge: "Green" },
@@ -137,10 +136,10 @@ const motivationSlice = createSlice({
     error: null,
   },
   reducers: {
-    setActiveStudent: (state, action) => {
-      state.activeStudent = action.payload;
-      state.error = null; // Clear previous errors when setting new student
-    }
+    setSelectedKid: (state, action) => {
+      state.selectedKid = action.payload;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -157,7 +156,7 @@ const motivationSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // All Rewards
       .addCase(getAllReward.pending, (state) => {
         state.loading = true;
@@ -171,7 +170,7 @@ const motivationSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // Semester Reward
       .addCase(getSemesterReward.pending, (state) => {
         state.loading = true;
@@ -201,5 +200,5 @@ const motivationSlice = createSlice({
 });
 
 
-export const { setActiveStudent } = motivationSlice.actions;
+export const { setSelectedKid } = motivationSlice.actions;
 export default motivationSlice.reducer;

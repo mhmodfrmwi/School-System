@@ -30,6 +30,7 @@ import VerifyEmail from "./Features/Auth/VerifyEmail";
 import ResendVerification from "./Features/Auth/ResendVerification";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ExamsParent from "./Features/Parent/components/Exams/ExamPage";
+import VirtualRoomsParent from "./Features/Parent/components/Courses/VRParent";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -264,6 +265,9 @@ const ParentActivities = lazy(
 const ParentContests = lazy(
   () => import("./Features/Parent/components/Activites/Contests"),
 );
+const AllCoursesParent = lazy(
+  () => import("./Features/Parent/components/Courses/CoursesPage"),
+);
 const DetailesParentActivity = lazy(
   () => import("./Features/Parent/components/Activites/DetailesActivity"),
 );
@@ -272,6 +276,9 @@ const PrizesParentActivity = lazy(
 );
 const ScheduleParent = lazy(
   () => import("./Features/Parent/components/Schedule/schedule"),
+);
+const ParentExamSchedule = lazy(
+  () => import("./Features/Parent/components/Schedule/examSchedule"),
 );
 const MotivationParent = lazy(
   () => import("./Features/Parent/pages/MotivationPage"),
@@ -807,11 +814,20 @@ function App() {
               />
               <Route path="activities/contests" element={<ParentContests />} />
               <Route path="schedule" element={<ScheduleParent />} />
+               <Route path="exam-schedule" element={<ParentExamSchedule />} />
               <Route path="motivation" element={<MotivationParent />} />
               <Route path="grades-for-child" element={<GradesForChild />} />
               <Route
                 path="grades-for-semester"
                 element={<GradesForSemesterForChild />}
+              />
+              <Route
+                path="all-subjects"
+                element={<AllCoursesParent/>}
+              />
+              <Route
+                path="all-subjects/virtualrooms/:subjectId"
+                element={<VirtualRoomsParent />}
               />
               <Route
                 path="grades-for-all-semesters"

@@ -1789,6 +1789,22 @@ i18n.use(initReactI18next).init({
         ///////////////////////////////////////////////////////////////parent//////////////////////////////////////
 
         parent: {
+
+          "examSchedule": {
+            "title": "Exam Schedule",
+            "headers": {
+              "subject": "Subject",
+              "examDate": "Exam Date",
+              "startTime": "Start Time",
+              "endTime": "End Time",
+              "location": "Location"
+            },
+            "noExams": {
+              "title": "No Exam Schedule",
+              "message": "There are no exams scheduled for the selected period."
+            }
+          }
+          ,
           role: "Parent",
           selectChild: "Select Child",
           selectChildDesc: "Choose which child's dashboard to view",
@@ -1888,6 +1904,7 @@ i18n.use(initReactI18next).init({
             prizeLevel: "Level ",
             notFound: "No activity found",
           },
+
         },
         menuparent: {
           grades: "Grades",
@@ -4032,6 +4049,24 @@ i18n.use(initReactI18next).init({
         },
         ///////////////////////////////////////////////////////////parent//////////////////////////////
         parent: {
+
+          "examSchedule": {
+            "title": "جدول الامتحانات",
+            "headers": {
+              "subject": "المادة",
+              "examDate": "تاريخ الامتحان",
+              "startTime": "وقت البدء",
+              "endTime": "وقت الانتهاء",
+              "location": "المكان"
+            },
+            "noExams": {
+              "title": "لا يوجد جدول امتحانات",
+              "message": "لا توجد امتحانات مجدولة للفترة المحددة."
+            }
+          }
+
+
+          ,
           role: "ولي الأمر",
           selectChild: "اختيار طفل",
           selectChildDesc: "اختر لوحة التحكم الخاصة بالطفل الذي تريد عرضها",
@@ -4270,29 +4305,29 @@ i18n.use(initReactI18next).init({
               lesson_plans_desc: 'خطط شاملة للمعلمين',
             },
           },
-            superpower: {
-              subtitle: 'قوة مدرستك',
-              title: 'قوة عظمى واحدة',
-              cards: {
-                infrastructure: 'البنية التحتية',
-                infrastructure_desc: 'كتب دراسية ومنصة مدمجة للأونلاين والأوفلاين',
-                calendar_setup: 'إعداد التقويم',
-                calendar_setup_desc: 'إعداد تقويم سهل مع التخصيص',
-                timetable_design: 'تصميم الجدول',
-                timetable_design_desc: 'جداول آلية لتسهيل العمليات اليومية',
-                analytics: 'التحليلات',
-                analytics_desc: 'تتبع التقدم الأكاديمي على مستوى المدرسة',
-                curriculum_progress: 'تقدم المنهج',
-                curriculum_progress_desc: 'تتبع المفاهيم والمحتوى والمهارات عبر جميع مراحل التعليم',
-                user_management: 'إدارة المستخدمين',
-                user_management_desc: 'احتياجات الموارد البشرية وإدارة الإدارة',
-              },
+          superpower: {
+            subtitle: 'قوة مدرستك',
+            title: 'قوة عظمى واحدة',
+            cards: {
+              infrastructure: 'البنية التحتية',
+              infrastructure_desc: 'كتب دراسية ومنصة مدمجة للأونلاين والأوفلاين',
+              calendar_setup: 'إعداد التقويم',
+              calendar_setup_desc: 'إعداد تقويم سهل مع التخصيص',
+              timetable_design: 'تصميم الجدول',
+              timetable_design_desc: 'جداول آلية لتسهيل العمليات اليومية',
+              analytics: 'التحليلات',
+              analytics_desc: 'تتبع التقدم الأكاديمي على مستوى المدرسة',
+              curriculum_progress: 'تقدم المنهج',
+              curriculum_progress_desc: 'تتبع المفاهيم والمحتوى والمهارات عبر جميع مراحل التعليم',
+              user_management: 'إدارة المستخدمين',
+              user_management_desc: 'احتياجات الموارد البشرية وإدارة الإدارة',
             },
-            solutions: {
-              title: 'كل الحلول التي تحتاجها مدرستك في مكان واحد!',
-              description: 'لا يمكن أن يحدث التحول الرقمي الناجح إلا عندما تلبي منصة التعلم الاحتياجات المحددة لمدرستك. مع ليرنوفا كشريك، ستكون مدرستك جاهزة للمستقبل مع منصة تعليمية رقمية تعمل على تحسين تجارب التعليم والتعلم.',
-                get_started: 'ابدأ الآن',
-              },
+          },
+          solutions: {
+            title: 'كل الحلول التي تحتاجها مدرستك في مكان واحد!',
+            description: 'لا يمكن أن يحدث التحول الرقمي الناجح إلا عندما تلبي منصة التعلم الاحتياجات المحددة لمدرستك. مع ليرنوفا كشريك، ستكون مدرستك جاهزة للمستقبل مع منصة تعليمية رقمية تعمل على تحسين تجارب التعليم والتعلم.',
+            get_started: 'ابدأ الآن',
+          },
           footer: {
             slogan: "تعلم، انمو، انجح",
             points: [
