@@ -30,6 +30,7 @@ import VerifyEmail from "./Features/Auth/VerifyEmail";
 import ResendVerification from "./Features/Auth/ResendVerification";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ExamsParent from "./Features/Parent/components/Exams/ExamPage";
+import VirtualRoomsParent from "./Features/Parent/components/Courses/VRParent";
 
 /* /////////////////auth imports//////////////////// */
 
@@ -823,6 +824,10 @@ function App() {
               <Route
                 path="all-subjects"
                 element={<AllCoursesParent/>}
+              />
+              <Route
+                path="all-subjects/virtualrooms/:subjectId"
+                element={<VirtualRoomsParent />}
               />
               <Route
                 path="grades-for-all-semesters"

@@ -65,6 +65,7 @@ import verifyEmailReducer from "./Features/Auth/AuthRedux/verifyEmailSlice";
 import motivationparentReducer from "./Features/Parent/components/ParentRedux/MotivationSlice";
 import parentExamScheduleReducer from "./Features/Parent/components/ParentRedux/ExamScheduleSlice";
 import allSubjectsParentReducer from "./Features/Parent/components/ParentRedux/CoursesSlice";
+import virtualRoomsParentReducer from "./Features/Parent/components/ParentRedux/VRSlice";
 
 
 const store = configureStore({
@@ -135,6 +136,7 @@ const store = configureStore({
     motivationparent:motivationparentReducer,
     parentExamSchedule: parentExamScheduleReducer,
     allSubjectsParent:allSubjectsParentReducer,
+    virtualRoomsParent:virtualRoomsParentReducer,
   },
 });
 

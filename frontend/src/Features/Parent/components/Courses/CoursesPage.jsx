@@ -6,6 +6,7 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { useTranslation } from 'react-i18next';
 import { fetchSubjects,} from "../../components/ParentRedux/CoursesSlice";
+import {fetchVirtualRooms} from "../../components/ParentRedux/VRSlice"
 import { setSelectedKid } from "../../components/ParentRedux/MotivationSlice"; 
 import Loader from "../../../../ui/Loader";
 import ErrorComponent from "@/ui/ErrorComponent";
@@ -23,15 +24,10 @@ const AllCoursesParent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  // Get selected kid from motivation slice
   const selectedKid = useSelector((state) => state.motivationparent.selectedKid);
-  
-  // Get subjects state
   const { subjects, loading, error } = useSelector((state) => state.allSubjectsParent);
-  
   const [activeButton, setActiveButton] = useState(t('courses.allSubjects'));
 
-  // Initialize selected kid from localStorage
   useEffect(() => {
     const kidFromStorage = JSON.parse(localStorage.getItem('selectedKid'));
     if (kidFromStorage) {
@@ -39,7 +35,6 @@ const AllCoursesParent = () => {
     }
   }, [dispatch]);
 
-  // Fetch subjects when selectedKid changes
   useEffect(() => {
     if (selectedKid?._id) {
       dispatch(fetchSubjects());
@@ -71,6 +66,10 @@ const AllCoursesParent = () => {
       );
     }
     return null;
+  };
+const handleStartClick = (subjectId) => {
+    dispatch(fetchVirtualRooms(subjectId));
+    navigate(`/parent/all-subjects/virtualrooms/${subjectId}`);
   };
 
   const renderNoSubjects = () => {
@@ -209,6 +208,8 @@ const AllCoursesParent = () => {
                     </div>
                     <button
                       className="bg-blue-100 dark:bg-[#C459D9] font-poppins text-blue-600 dark:text-white py-1 px-3 rounded-md border border-blue-600 dark:border-[#E0AAEE]"
+                      onClick={() => handleStartClick(subject.id)}
+
                     >
                       {t('courses.startButton')}
                     </button>
