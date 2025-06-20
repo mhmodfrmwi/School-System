@@ -30,6 +30,11 @@ export const loginUser = createAsyncThunk(
       sessionStorage.setItem("token", data.token);
       sessionStorage.setItem("fullName", data[role]?.fullName || "Unknown");
       sessionStorage.setItem("profileImage", data[role]?.profileImage || "Unknown");
+      sessionStorage.setItem("gender", data[role]?.gender || "Male");
+      sessionStorage.setItem("gradeName", data[role]?.gradeId?.gradeName || "Unknown");
+      sessionStorage.setItem("className", data[role]?.classId?.className || "Unknown");
+      sessionStorage.setItem("startYear", data[role]?.academicYear_id?.startYear || "Unknown");
+      sessionStorage.setItem("endYear", data[role]?.academicYear_id?.endYear || "Unknown");
       sessionStorage.setItem("role", role || "Unknown");
       sessionStorage.setItem("_id", data[role]?._id || "Unknown");
 
@@ -38,6 +43,11 @@ export const loginUser = createAsyncThunk(
         token: data.token,
         fullName: data[role]?.fullName || "Unknown",
         profileImage: data[role]?.profileImage || "Unknown",
+        gender: data[role]?.gender || "Male",
+        gradeName: data[role]?.gradeId?.gradeName || "Unknown",
+        className: data[role]?.classId?.className || "Unknown",
+        startYear: data[role]?.academicYear_id?.startYear || "Unknown",
+        endYear: data[role]?.academicYear_id?.endYear || "Unknown",
         role: role || "Unknown",
         _id: data[role]?._id || "Unknown",
       };
@@ -53,6 +63,11 @@ const loginSlice = createSlice({
     email: "",
     fullName: sessionStorage.getItem("fullName") || "Unknown",
     profileImage: sessionStorage.getItem("profileImage") || "Unknown",
+    gender: sessionStorage.getItem("gender") || "Male",
+    gradeName: sessionStorage.getItem("gradeName") || "Unknown",
+    className: sessionStorage.getItem("className") || "Unknown",
+    startYear: sessionStorage.getItem("startYear") || "Unknown",
+    endYear: sessionStorage.getItem("endYear") || "Unknown",
     token: sessionStorage.getItem("token") || null,
     role: sessionStorage.getItem("role") || "Unknown",
     _id: sessionStorage.getItem("_id") || "Unknown",
@@ -64,6 +79,11 @@ const loginSlice = createSlice({
       state.email = "";
       state.fullName = "Unknown";
       state.profileImage = "Unknown";
+      state.gender = "Male";
+      state.gradeName = "Unknown";
+      state.className = "Unknown";
+      state.startYear = "Unknown";
+      state.endYear = "Unknown";
       state.role = "Unknown";
       state._id = "Unknown";
       state.token = null;
@@ -71,12 +91,23 @@ const loginSlice = createSlice({
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("fullName");
       sessionStorage.removeItem("profileImage");
+      sessionStorage.removeItem("gender");
+      sessionStorage.removeItem("gradeName");
+      sessionStorage.removeItem("className");
+      sessionStorage.removeItem("startYear");
+      sessionStorage.removeItem("endYear");
+      sessionStorage.removeItem("role");
       sessionStorage.removeItem("_id");
       toast.info("Logged out successfully!");
     },
     updateUserData: (state, action) => {
       state.fullName = action.payload.fullName || state.fullName;
       state.profileImage = action.payload.profileImage || state.profileImage;
+      state.gender = action.payload.gender || state.gender;
+      state.gradeName = action.payload.gradeName || state.gradeName;
+      state.className = action.payload.className || state.className;
+      state.startYear = action.payload.startYear || state.startYear;
+      state.endYear = action.payload.endYear || state.endYear;
       state._id = action.payload._id || state._id;
     },
   },
@@ -92,6 +123,11 @@ const loginSlice = createSlice({
         state.token = action.payload.token;
         state.fullName = action.payload.fullName;
         state.profileImage = action.payload.profileImage;
+        state.gender = action.payload.gender;
+        state.gradeName = action.payload.gradeName;
+        state.className = action.payload.className;
+        state.startYear = action.payload.startYear;
+        state.endYear = action.payload.endYear;
         state.role = action.payload.role;
         state._id = action.payload._id;
 
