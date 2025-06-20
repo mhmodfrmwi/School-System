@@ -91,28 +91,41 @@ const checkExamStatus = async (id) => {
 
 const updateExam = async (id, updateData) => {
   try {
-    const existingSessionsForTheExam = await Session.find({
-      exam_id: id,
-      status: "Submitted",
-    });
-    if (existingSessionsForTheExam.length > 0) {
-      throw new Error(
-        "Cannot update exam status while there are ongoing sessions"
-      );
+    // Check if exam exists first
+    const existingExam = await Exam.findById(id);
+    if (!existingExam) {
+      throw new Error("Exam not found");
     }
+
+    // Fixed: Check for active sessions (not submitted ones)
+    const activeSessionsForTheExam = await Session.find({
+      exam_id: id,
+      status: { $nin: ["Submitted", "Completed"] }, // Exclude submitted/completed sessions
+    });
+
+    if (activeSessionsForTheExam.length > 0) {
+      throw new Error("Cannot update exam while there are active sessions");
+    }
+
     const { exam_questions, ...examUpdateData } = updateData;
 
+    // Handle exam questions updates
     if (exam_questions && exam_questions.length > 0) {
       await Promise.all(
         exam_questions.map(async (question) => {
           if (question._id) {
+            // Update existing question
             await ExamQuestion.findByIdAndUpdate(
               question._id,
               { $set: question },
               { new: true }
             );
           } else {
-            const newQuestion = await ExamQuestion.create(question);
+            // Create new question and add to exam
+            const newQuestion = await ExamQuestion.create({
+              ...question,
+              exam_id: id, // Ensure exam_id is set
+            });
             await Exam.findByIdAndUpdate(id, {
               $push: { exam_questions: newQuestion._id },
             });
@@ -121,21 +134,40 @@ const updateExam = async (id, updateData) => {
       );
     }
 
+    // Calculate total marks based on exam type and update data
+    let finalUpdateData = { ...examUpdateData };
+
+    // Get updated exam with questions to calculate total marks
     const examWithQuestions = await Exam.findById(id).populate(
       "exam_questions"
     );
-    const newTotalMarks = examWithQuestions.exam_questions.reduce(
-      (sum, question) => sum + question.marks,
-      0
-    );
 
+    // If total_marks is provided in updateData and exam is offline, use it
+    // Otherwise, calculate from questions
+    if (
+      examUpdateData.total_marks !== undefined &&
+      (examWithQuestions.exam_type === "offline" ||
+        examUpdateData.exam_type === "offline")
+    ) {
+      // For offline exams, allow manual total marks update
+      finalUpdateData.total_marks = examUpdateData.total_marks;
+    } else if (
+      examWithQuestions.exam_questions &&
+      examWithQuestions.exam_questions.length > 0
+    ) {
+      // Calculate total marks from questions for online exams or when not manually specified
+      const calculatedTotalMarks = examWithQuestions.exam_questions.reduce(
+        (sum, question) => sum + (question.marks || 0),
+        0
+      );
+      finalUpdateData.total_marks = calculatedTotalMarks;
+    }
+
+    // Update the exam
     const updatedExam = await Exam.findByIdAndUpdate(
       id,
-      {
-        ...examUpdateData,
-        total_marks: newTotalMarks,
-      },
-      { new: true }
+      finalUpdateData,
+      { new: true, runValidators: true } // Added runValidators for data validation
     )
       .populate("subject_id grade_id class_id academic_year_id semester_id")
       .populate("created_by", "_id fullName")
@@ -144,7 +176,7 @@ const updateExam = async (id, updateData) => {
 
     return updatedExam;
   } catch (error) {
-    console.error(error);
+    console.error("Error in updateExam:", error);
     throw new Error(error.message);
   }
 };

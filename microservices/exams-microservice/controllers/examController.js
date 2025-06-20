@@ -156,17 +156,42 @@ const updateExamById = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
 
+    // Validate required parameters
+    if (!id) {
+      return res.status(400).json({ message: "Exam ID is required" });
+    }
+
+    // Validate ObjectId format
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: "Invalid exam ID format" });
+    }
+
     const updatedExam = await updateExam(id, updateData);
+
     if (!updatedExam) {
       return res.status(404).json({ message: "Exam not found" });
     }
 
-    res.status(200).json({ exam: updatedExam });
+    res.status(200).json({
+      message: "Exam updated successfully",
+      exam: updatedExam,
+    });
   } catch (err) {
-    console.log(err.message);
-    res
-      .status(500)
-      .json({ message: "Failed to update exam", err: err.message });
+    console.error("Error in updateExamById:", err);
+
+    // Handle specific error types
+    if (err.message === "Exam not found") {
+      return res.status(404).json({ message: err.message });
+    }
+
+    if (err.message.includes("active sessions")) {
+      return res.status(400).json({ message: err.message });
+    }
+
+    res.status(500).json({
+      message: "Failed to update exam",
+      error: err.message,
+    });
   }
 };
 
