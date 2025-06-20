@@ -1,5 +1,5 @@
 const express = require("express");
-const multer = require('multer');
+const multer = require("multer");
 const validateJwt = require("../middlewares/validateJWT");
 const validateTeacher = require("../middlewares/validateTeacher");
 const uploadImage = require("../utils/uploadProfileImages");
@@ -16,7 +16,7 @@ const {
   deleteQuestion,
   getQuestion,
   getTeacherQuestions,
-  getSubjestSemesterQuestions
+  getSubjestSemesterQuestions,
 } = require("../controllers/Teacher/questionBankController");
 const {
   createVirtualRoom,
@@ -32,12 +32,15 @@ const {
   getContest,
   updateContest,
   deleteContest,
-  getTeamsForContest
+  getTeamsForContest,
 } = require("../controllers/Teacher/contestController");
 const {
   createStudentAttendance,
 } = require("../controllers/Student/attendanceController");
-const {login,updateTeacherProfile} = require("../controllers/auth/authTeacherController");
+const {
+  login,
+  updateTeacherProfile,
+} = require("../controllers/auth/authTeacherController");
 const getStudentsForSpecificSubjectUsingClassId = require("../controllers/Teacher/getStudentsForSpecificSubjectUsingClassId");
 const {
   getAttendanceForClassInPeriod,
@@ -54,46 +57,45 @@ const {
   deleteMaterialForLibrary,
 } = require("../controllers/Teacher/MatrialForLibrary");
 const {
-  getAllSchoolHubs
+  getAllSchoolHubs,
 } = require("../controllers/Teacher/schoolHubController");
-const{
+const {
   getDailyPoints,
   getAllPoints,
   getTeachersWithPointsAndBadges,
-  getTeacherWithPointsAndBadges
-}= require("../controllers/Teacher/teacherRewardsController");
-const{
+  getTeacherWithPointsAndBadges,
+} = require("../controllers/Teacher/teacherRewardsController");
+const {
   getGradeData,
   uploadScoresFromExcel,
   getExamResults,
   updateScoresFromExcel,
   deleteExamResults,
-}= require("../controllers/Teacher/subjectScore");
+} = require("../controllers/Teacher/subjectScore");
 
 const {
   handleVrLinkClick,
   getVirtualRoomsForTeacher,
   getCompletedVirtualRooms,
-  getMissedVirtualRooms
+  getMissedVirtualRooms,
 } = require("../controllers/Teacher/gettingManagerVirtualRooms");
 const {
-  getLoggedInTeacherData
+  getLoggedInTeacherData,
 } = require("../controllers/Teacher/teacherData");
 
 const router = express.Router();
 
-const upload = multer({ dest: 'uploads/' }); 
+const upload = multer({ dest: "uploads/" });
 
 router.post("/login", login);
 
-
 router.patch(
   "/teacher-profile",
-  validateJwt, 
-  validateTeacher,
+  validateJwt,
+
   uploadImage.single("profileImage"),
   (err, req, res, next) => {
-    console.log(req.file)
+    console.log(req.file);
     if (err instanceof multer.MulterError) {
       return res.status(400).json({ error: err.message });
     } else if (err) {
@@ -106,77 +108,92 @@ router.patch(
 
 router
   .route("/material/:id")
-  .post(validateJwt, validateTeacher, createMateriel)
-  .patch(validateJwt, validateTeacher, updateMateriel)
-  .delete(validateJwt, validateTeacher, deleteMateriel)
-  .get(validateJwt, validateTeacher, getAllMateriels);
+  .post(validateJwt, createMateriel)
+  .patch(validateJwt, updateMateriel)
+  .delete(validateJwt, deleteMateriel)
+  .get(validateJwt, getAllMateriels);
 
-router.post("/questionBank/:gradeSubjectSemesterId", validateJwt, validateTeacher, createQuestion);
+router.post(
+  "/questionBank/:gradeSubjectSemesterId",
+  validateJwt,
+
+  createQuestion
+);
 router
   .route("/questionBank/:questionId")
-  .get(validateJwt, validateTeacher, getQuestion)
-  .patch(validateJwt, validateTeacher, updateQuestion)
-  .delete(validateJwt, validateTeacher, deleteQuestion);;
-router.get("/questionBank/:gradeSubjectSemesterId/my-questions", validateJwt, validateTeacher, getTeacherQuestions);
-router.get("/questionBank/:gradeSubjectSemesterId/all-questions", validateJwt, validateTeacher, getSubjestSemesterQuestions);
+  .get(validateJwt, getQuestion)
+  .patch(validateJwt, updateQuestion)
+  .delete(validateJwt, deleteQuestion);
+router.get(
+  "/questionBank/:gradeSubjectSemesterId/my-questions",
+  validateJwt,
+
+  getTeacherQuestions
+);
+router.get(
+  "/questionBank/:gradeSubjectSemesterId/all-questions",
+  validateJwt,
+
+  getSubjestSemesterQuestions
+);
 
 router.post(
   "/virtualRoom/:gradeSubjectSemesterId/:classId",
   validateJwt,
-  validateTeacher,
+
   createVirtualRoom
 );
 router
   .route("/virtualRoom/:id")
-  .get(validateJwt, validateTeacher, getVirtualRoom)
-  .patch(validateJwt, validateTeacher, updateVirtualRoom)
-  .delete(validateJwt, validateTeacher, deleteVirtualRoom);
-router.get("/virtualRoom", validateJwt, validateTeacher, getAllVirtualRooms);
+  .get(validateJwt, getVirtualRoom)
+  .patch(validateJwt, updateVirtualRoom)
+  .delete(validateJwt, deleteVirtualRoom);
+router.get("/virtualRoom", validateJwt, getAllVirtualRooms);
 router.get(
   "/Teacher-virtualRoom/:id",
   validateJwt,
-  validateTeacher,
+
   getTeacherVirtualRooms
 );
 
-router.post("/contest", validateJwt, validateTeacher, createContest);
+router.post("/contest", validateJwt, createContest);
 router
   .route("/contest/:id")
-  .get(validateJwt, validateTeacher, getContest)
-  .patch(validateJwt, validateTeacher, updateContest)
-  .delete(validateJwt, validateTeacher, deleteContest);
-router.get("/contest", validateJwt, validateTeacher, getAllContests);
-router.get("/contest/:contestId/teams", validateJwt, validateTeacher, getTeamsForContest);
+  .get(validateJwt, getContest)
+  .patch(validateJwt, updateContest)
+  .delete(validateJwt, deleteContest);
+router.get("/contest", validateJwt, getAllContests);
+router.get(
+  "/contest/:contestId/teams",
+  validateJwt,
+
+  getTeamsForContest
+);
 
 router.post(
   "/get-students-for-subject/:gradeSubjectSemesterId",
   validateJwt,
-  validateTeacher,
+
   getStudentsForSpecificSubjectUsingClassId
 );
 router.post(
   "/createAttendance",
   validateJwt,
-  validateTeacher,
+
   createStudentAttendance
 );
 router.post(
   "/get-class-attendance-in-period",
   validateJwt,
-  validateTeacher,
+
   getAttendanceForClassInPeriod
 );
-router.get(
-  "/semester-class",
-  validateJwt,
-  validateTeacher,
-  getTeacherClassesForCurrentSemester
-);
-router.get("/class", validateJwt, validateTeacher, getAllTeacherClasses);
+router.get("/semester-class", validateJwt, getTeacherClassesForCurrentSemester);
+router.get("/class", validateJwt, getAllTeacherClasses);
 router.get(
   "/get-schedule",
   validateJwt,
-  validateTeacher,
+
   getScheduleForSpecificTeacher
 );
 
@@ -184,43 +201,35 @@ router.get(
 router.post(
   "/library-material",
   validateJwt,
-  validateTeacher,
+
   createMaterialForLibrary
 );
 
 router.delete(
   "/library-material/:id",
   validateJwt,
-  validateTeacher,
+
   deleteMaterialForLibrary
 );
-router.get("/school-hub", validateJwt, validateTeacher, getAllSchoolHubs);
-router.get(
-  "/daily-reward",
-  validateJwt,
-  validateTeacher,
-  getDailyPoints
-);
-router.get(
-  "/reward",
-  validateJwt,
-  validateTeacher,
-  getAllPoints
-);
+router.get("/school-hub", validateJwt, getAllSchoolHubs);
+router.get("/daily-reward", validateJwt, getDailyPoints);
+router.get("/reward", validateJwt, getAllPoints);
 router.get(
   "/all-teacher-reward",
   validateJwt,
-  validateTeacher,
+
   getTeachersWithPointsAndBadges
 );
-router.get("/teacher-points",
+router.get(
+  "/teacher-points",
   validateJwt,
-  validateTeacher,
+
   getTeacherWithPointsAndBadges
 );
-router.get("/exam-score/:classId/:gradeSubjectSemesterId/students",
+router.get(
+  "/exam-score/:classId/:gradeSubjectSemesterId/students",
   validateJwt,
-  validateTeacher,
+
   getGradeData
 );
 /////
@@ -228,57 +237,49 @@ router
   .route("/exam-score/:classId/:gradeSubjectSemesterId")
   .post(
     validateJwt,
-    validateTeacher,
-    upload.single('file'),
-    uploadScoresFromExcel,
+
+    upload.single("file"),
+    uploadScoresFromExcel
   )
   .patch(
     validateJwt,
-    validateTeacher,
-    upload.single('file'),
+
+    upload.single("file"),
     updateScoresFromExcel
-  )
+  );
 router
   .route("/exam-results/:classId/:gradeSubjectSemesterId/:type")
-  .get(
-    validateJwt,
-    validateTeacher,
-    getExamResults
-  )
-  .delete(
-    validateJwt,
-    validateTeacher,
-    deleteExamResults
-  )
+  .get(validateJwt, getExamResults)
+  .delete(validateJwt, deleteExamResults);
 ///manager vr
-  router.get(
-    "/virtual-rooms",
-    validateJwt,
-    validateTeacher,
-    getVirtualRoomsForTeacher
-  );
-  router.get(
-    "/virtual-rooms/completed",
-    validateJwt,
-    validateTeacher,
-    getCompletedVirtualRooms
-  );
-  router.get(
-    "/virtual-rooms/missed",
-    validateJwt,
-    validateTeacher,
-    getMissedVirtualRooms
-  );
-  router.post(
-    "/virtual-rooms/:virtualRoomId/click",
-    validateJwt,
-    validateTeacher,
-    handleVrLinkClick
-  );
-  router.get(
-    "/teacher-data",
-    validateJwt,
-    validateTeacher,
-    getLoggedInTeacherData
-  );
+router.get(
+  "/virtual-rooms",
+  validateJwt,
+
+  getVirtualRoomsForTeacher
+);
+router.get(
+  "/virtual-rooms/completed",
+  validateJwt,
+
+  getCompletedVirtualRooms
+);
+router.get(
+  "/virtual-rooms/missed",
+  validateJwt,
+
+  getMissedVirtualRooms
+);
+router.post(
+  "/virtual-rooms/:virtualRoomId/click",
+  validateJwt,
+
+  handleVrLinkClick
+);
+router.get(
+  "/teacher-data",
+  validateJwt,
+
+  getLoggedInTeacherData
+);
 module.exports = router;
