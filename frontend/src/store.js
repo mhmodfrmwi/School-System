@@ -63,7 +63,7 @@ import dashboardStudentReducer from "./Features/Student/components/StudentRedux/
 import parentScheduleReducer from "./Features/Parent/components/ParentRedux/ScheduleSlice";
 import verifyEmailReducer from "./Features/Auth/AuthRedux/verifyEmailSlice";
 import motivationparentReducer from "./Features/Parent/components/ParentRedux/MotivationSlice";
-
+import parentExamScheduleReducer from "./Features/Parent/components/ParentRedux/ExamScheduleSlice";
 
 const store = configureStore({
   reducer: {
@@ -131,6 +131,7 @@ const store = configureStore({
     parentSchedule: parentScheduleReducer,
     verifyEmail: verifyEmailReducer,
     motivationparent:motivationparentReducer,
+    parentExamSchedule: parentExamScheduleReducer,
   },
 });
 
