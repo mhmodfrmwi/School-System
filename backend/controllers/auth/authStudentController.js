@@ -16,7 +16,9 @@ const login = expressAsyncHandler(async (req, res) => {
     });
   }
   // Check if user exists && password is correct
-  const student = await Student.findOne({ email }).select("+password");
+  const student = await Student.findOne({ email })
+    .select("+password")
+    .populate("classId gradeId academicYear_id");
 
   if (
     !student ||

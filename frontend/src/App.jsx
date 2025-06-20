@@ -798,7 +798,7 @@ function App() {
                 element={<EditParentProfile />}
               />
               <Route
-                path="all-subjects/assignments/:gradeSubjectSemesterId"
+                path="all-subjects/assignments/:subjectId"
                 element={<AssignmentsParent />}
               />
               <Route
