@@ -93,8 +93,8 @@ function GetExamScheduleForStudent() {
               />
             </div>
 
-            <div className="mx-auto mb-20 w-full rounded-xl border border-gray-200 bg-white p-6 text-center font-poppins shadow-md dark:border-[#E0AAEE] dark:bg-[#281459]">
-              <p className="text-lg text-gray-700 dark:text-gray-300">
+            <div className="mx-auto h-[300px] my-auto mb-20 w-full rounded-xl border border-gray-200 bg-white p-6 text-center font-poppins shadow-md dark:border-[#E0AAEE] dark:bg-[#281459]">
+              <p className="text-xl text-center pt-20 text-gray-700 dark:text-gray-300">
                 {t("examSchedule.noSchedules")}
               </p>
             </div>

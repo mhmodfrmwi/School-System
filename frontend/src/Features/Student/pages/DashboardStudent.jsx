@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import userImage from "../../../assets/Girl.png";
+import userImage2 from "../../../assets/boy.jpg";
 import trueIcon from "../../../assets/true icon.png";
 import absentIcon from "../../../assets/StudentIcon/absent.png"; // Added absent icon
 import awardIcon from "../../../assets/Award.png";
@@ -20,13 +21,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getSemesterReward } from "../components/StudentRedux/motivationSlice";
 import { fetchDashboardData } from "../components/StudentRedux/dashboardSlice";
-import { fetchStudentAttendance } from "../components/StudentRedux/studentAttendanceSlice"; // Added student attendance slice
+import { fetchStudentAttendance } from "../components/StudentRedux/studentAttendanceSlice"; 
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import Loader from "@/ui/Loader";
 import Swal from "sweetalert2";
 import backgroundWaves from "../../../assets/StudentIcon/bg-color2.png";
 import backgroundStars from "../../../assets/StudentIcon/bg-color1.png";
+
 import { Button } from "@headlessui/react";
 import {
   Chart as ChartJS,
@@ -66,7 +68,7 @@ function DashboardStudent() {
   const { studentAttendance, status: attendanceStatus } = useSelector(
     (state) => state.studentAttendance
   ); // Fetch attendance data
-  const { fullName } = useSelector((state) => state.login);
+  const { fullName , gender } = useSelector((state) => state.login);
   const [mainCategories, setMainCategories] = useState([]);
 
   // Function to calculate Learning Streak
@@ -405,7 +407,7 @@ function DashboardStudent() {
             }`}
           >
             <img
-              src={userImage}
+              src={ gender === "M" ? userImage2 : userImage }
               alt={t("dashboard.profileImageAlt")}
               className="h-40 w-40 rounded-full border-4 border-white bg-[#CA9C9C] shadow-lg"
             />
