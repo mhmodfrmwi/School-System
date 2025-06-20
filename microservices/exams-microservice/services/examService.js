@@ -433,6 +433,47 @@ const getStudentExams = async (
     throw new Error(error.message);
   }
 };
+
+const getUpcomingExams = async (
+  student_id,
+  subject_id,
+  grade_id,
+  academic_year_id,
+  semester_id,
+  class_id
+) => {
+  try {
+    const exams = await Exam.find({
+      subject_id,
+      grade_id,
+      academic_year_id,
+      semester_id,
+      class_id,
+      exam_status: { $ne: "Expired" }
+    })
+      .populate("subject_id grade_id class_id academic_year_id semester_id")
+      .populate("created_by", "_id fullName")
+      .select("-__v -createdAt -updatedAt");
+
+    const upcomingExams = [];
+
+    for (const exam of exams) {
+      const session = await Session.findOne({
+        student_id,
+        exam_id: exam._id,
+      });
+
+      if (!session) {
+        upcomingExams.push(exam);
+      }
+    }
+
+    return upcomingExams;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
 //
 
 module.exports = {
@@ -450,5 +491,6 @@ module.exports = {
   getCompletedExams,
   getCompletedExamsForAllSubjects,
   missedExamsForAllSubjects,
-  getStudentExams
+  getStudentExams,
+  getUpcomingExams
 };
