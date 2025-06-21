@@ -6,7 +6,8 @@ const {
   getCompletedExamsForStudent,
   getCompletedExamsForSubjects,
   getAllExamsForStudent,
-  getUpcomingExamsForStudent
+  getUpcomingExamsForStudent,
+  getRunningExamsForStudent
 } =require("../controllers/childExamControllerForParent");
 const validateJwt = require("../../../backend/middlewares/validateJWT");
 const validateParent = require("../../../backend/middlewares/validateParent");
@@ -36,6 +37,7 @@ router.get("/student/completed/all/:student_id", validateJwt, validateParent, ge
 
 router.get("/student/all-exams/:gradeSubjectSemesterId/:student_id", validateJwt, validateParent, getAllExamsForStudent);
 router.get("/student/Upcoming-Exams-exams/:gradeSubjectSemesterId/:student_id", validateJwt, validateParent, getUpcomingExamsForStudent);
+router.get("/student/Running-Exams-exams/:gradeSubjectSemesterId/:student_id", validateJwt, validateParent, getRunningExamsForStudent);
 
 router.get("/:id",validateJwt, getExamScheduleById);
 
@@ -47,7 +49,7 @@ router.get(
 router.get("/schedules/current", validateJwt, getCurrentSemesterSchedules);
 router.get("/schedules/upcoming/:student_id", validateJwt, getUpcomingExams);
 
-router.get("assignment/:gradeSubjectSemesterId", validateJwt,validateParent, getAssignments);
+router.get("/assignments/:gradeSubjectSemesterId", validateJwt,validateParent, getAssignments);
 router.get("/Assignment/:id", validateJwt,validateParent, getAssignmentById);
 router.get("/submissions/student/:studentId", validateJwt,validateParent, getStudentSubmissions);
 
