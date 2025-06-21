@@ -122,6 +122,7 @@ const { getLoggedInAdminData } = require("../controllers/Admin/adminData");
 const {
   getTeacherClassesForCurrentSemester,
   getAllTeacherClasses,
+  getClassTeacherById,
 } = require("../controllers/Teacher/getAllClasses");
 
 const router = express.Router();
@@ -324,6 +325,7 @@ router.get(
   getTeacherClassesForCurrentSemester
 );
 router.get("/allTeacherClasses/:teacherId", validateJwt, getAllTeacherClasses);
+router.get("/classTeacher/:id", validateJwt, getClassTeacherById);
 //parent routes
 router.post("/parent/createParent", validateJwt, createParent);
 router
