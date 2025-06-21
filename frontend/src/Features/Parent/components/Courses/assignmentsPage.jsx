@@ -273,35 +273,37 @@ const AssignmentsParent = () => {
                 {/* Sidebar */}
                 <div className="w-full md:w-1/4 bg-white dark:bg-[#13082F] md:border-r border-gray-300 dark:border-[#E0AAEE] p-6 mt-2 md:h-[550px]">
                     <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] relative">
-                        {subjectName}
+                        {subjectName || t("exams.main.Subjects")}
                         <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${i18n.language === 'ar' ? 'right-0' : 'left-0'}`}></span>
                     </h2>
                     <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
                         <li>
                             <Button
                                 variant="solid"
-                                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
+                                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg hover:bg-gradient-to-r hover:from-[#FD813D20] hover:via-[#CF72C020] hover:to-[#BC6FFB20] dark:hover:from-[#CE4EA020] dark:hover:via-[#BF4ACB20] dark:hover:to-[#AE45FB20]"
                                 onClick={() => navigate(`/parent/all-subjects/virtualrooms/${subjectId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">01</span> {t('assignments.sidebar.virtualRooms')}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">01</span>
+                                {t("exams.sidebar.virtualRooms")}
                             </Button>
                         </li>
                         <li>
                             <Button
                                 variant="solid"
-                                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
-                                onClick={() => navigate(`/parent/all-subjects/assignments/${subjectId}`)}
+                                className="md:w-11/12 bg-[#BFBFBF] dark:bg-[#C459D9] text-white font-medium py-4 rounded-lg bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB]"
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">02</span> {t('assignments.sidebar.assignments')}
+                                <span className="text-white mr-2">02</span>
+                                {t("exams.sidebar.assignments")}
                             </Button>
                         </li>
                         <li>
                             <Button
                                 variant="solid"
-                                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg"
-                                onClick={() => navigate(`/parent/allcourses/exams/${subjectId}`)}
+                                className="md:w-11/12 bg-gray-100 dark:bg-[#281459] text-gray-700 dark:text-gray-300 font-medium py-4 rounded-lg hover:bg-gradient-to-r hover:from-[#FD813D20] hover:via-[#CF72C020] hover:to-[#BC6FFB20] dark:hover:from-[#CE4EA020] dark:hover:via-[#BF4ACB20] dark:hover:to-[#AE45FB20]"
+                                onClick={() => navigate(`/parent/all-subjects/exams/${subjectId}`)}
                             >
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span> {t('assignments.sidebar.exams')}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] mr-2">03</span>
+                                {t("exams.sidebar.exams")}
                             </Button>
                         </li>
                     </ul>

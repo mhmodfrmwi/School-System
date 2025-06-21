@@ -206,9 +206,7 @@ const parentExamSlice = createSlice({
             })
             .addCase(fetchAllExams.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log("API Response for all exams:", action.payload);
                 state.allExams = action.payload.exams || action.payload || [];
-                console.log("Stored all exams:", state.allExams);
             })
             .addCase(fetchAllExams.rejected, (state, action) => {
                 state.loading = false;
@@ -223,7 +221,6 @@ const parentExamSlice = createSlice({
             .addCase(fetchCompletedExams.fulfilled, (state, action) => {
                 state.loading = false;
                 state.completedExams = action.payload.exams || action.payload || [];
-                console.log("Storing completed exams:", state.completedExams);
             })
             .addCase(fetchCompletedExams.rejected, (state, action) => {
                 state.loading = false;
@@ -265,7 +262,6 @@ const parentExamSlice = createSlice({
             .addCase(fetchUpcomingExams.fulfilled, (state, action) => {
                 state.loading = false;
                 state.upcomingExams = action.payload.exams || action.payload || [];
-                console.log("Storing upcoming exams:", state.upcomingExams);
             })
             .addCase(fetchUpcomingExams.rejected, (state, action) => {
                 state.loading = false;

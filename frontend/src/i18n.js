@@ -459,6 +459,7 @@ i18n.use(initReactI18next).init({
             questionBank: "Question Bank",
           },
           main: {
+            Subjects: "Subject",
             title: "Exams",
             loading: "Loading...",
             allTab: "All",
@@ -1800,6 +1801,64 @@ i18n.use(initReactI18next).init({
 
         parent: {
 
+          "dashboardparent": {
+            "title": "Parent Dashboard",
+            "grades": "Grades",
+            "attendance": "Attendance",
+            "schedule": "Schedule",
+            "courses": "Courses",
+            "activities": "Activities",
+            "profileImageAlt": "Student profile image",
+            "presentIconAlt": "Present icon",
+            "classInfo": "Class Information"
+          },
+         
+            "studentInfo": "Student Information",
+            "studentData": "Student Data",
+            "studentProgress": "Student Progress",
+            "studentSummary": "Student Summary",
+            "personalInfo": "Personal Information",
+            "academicInfo": "Academic Information",
+            "additionalInfo": "Additional Information",
+            "email": "Email",
+            "phone": "Phone",
+            "gender": "Gender",
+            "address": "Address",
+            "academicNumber": "Academic Number",
+            "admissionDate": "Admission Date",
+            "grade": "Grade",
+            "class": "Class",
+            "dateOfBirth": "Date of Birth",
+            "age": "Age",
+            "years": "years",
+            "accountStatus": "Account Status",
+            "verified": "Verified",
+            "pendingVerification": "Pending Verification",
+            "noGradeAssigned": "No grade assigned",
+            "noClassAssigned": "No class assigned",
+            "role": "Parent",
+            "selectChild": "Select Child",
+            "selectChildToView": "Select a child to view their dashboard",
+            "noKidsRegistered": "No children registered under your account",
+            "loading": "Loading...",
+            "editProfile": "Edit Profile",
+            "editProfileDesc": "Update your personal information",
+            "helpSupport": "Help & Support",
+            "helpSupportDesc": "Get help or contact support"
+          ,
+          "menuparent": {
+            "grades": "Grades",
+            "attendance": "Attendance",
+            "schedule": "Schedule",
+            "courses": "Courses",
+            "activities": "Activities"
+          },
+          "generalparent": {
+            "male": "Male",
+            "female": "Female"
+          }
+          ,
+
           "examSchedule": {
             "title": "Exam Schedule",
             "headers": {
@@ -2733,6 +2792,7 @@ i18n.use(initReactI18next).init({
             questionBank: "بنك الأسئلة",
           },
           main: {
+            Subjects: "ماده دراسيه",
             title: "الامتحانات",
             loading: "جاري التحميل...",
             allTab: "الكل",
@@ -4069,6 +4129,64 @@ i18n.use(initReactI18next).init({
         },
         ///////////////////////////////////////////////////////////parent//////////////////////////////
         parent: {
+
+          "dashboardparent": {
+            "title": "لوحة تحكم ولي الأمر",
+            "grades": "الدرجات",
+            "attendance": "الحضور",
+            "schedule": "الجدول",
+            "courses": "المقررات",
+            "activities": "الأنشطة",
+            "profileImageAlt": "صورة الطالب",
+            "presentIconAlt": "أيقونة الحضور",
+            "classInfo": "معلومات الفصل"
+          },
+         
+            "studentInfo": "معلومات الطالب",
+            "studentData": "بيانات الطالب",
+            "studentProgress": "تقدم الطالب",
+            "studentSummary": "ملخص الطالب",
+            "personalInfo": "المعلومات الشخصية",
+            "academicInfo": "المعلومات الأكاديمية",
+            "additionalInfo": "معلومات إضافية",
+            "email": "البريد الإلكتروني",
+            "phone": "الهاتف",
+            "gender": "الجنس",
+            "address": "العنوان",
+            "academicNumber": "الرقم الأكاديمي",
+            "admissionDate": "تاريخ الالتحاق",
+            "grade": "المرحلة",
+            "class": "الفصل",
+            "dateOfBirth": "تاريخ الميلاد",
+            "age": "العمر",
+            "years": "سنة",
+            "accountStatus": "حالة الحساب",
+            "verified": "مفعل",
+            "pendingVerification": "في انتظار التفعيل",
+            "noGradeAssigned": "لا توجد مرحلة محددة",
+            "noClassAssigned": "لا يوجد فصل محدد",
+            "role": "ولي أمر",
+            "selectChild": "اختيار طفل",
+            "selectChildToView": "اختر طفلًا لعرض لوحة التحكم الخاصة به",
+            "noKidsRegistered": "لا يوجد أطفال مسجلين تحت حسابك",
+            "loading": "جاري التحميل...",
+            "editProfile": "تعديل الملف الشخصي",
+            "editProfileDesc": "تحديث معلوماتك الشخصية",
+            "helpSupport": "المساعدة والدعم",
+            "helpSupportDesc": "احصل على مساعدة أو اتصل بالدعم الفني"
+          ,
+          "menuparent": {
+            "grades": "الدرجات",
+            "attendance": "الحضور",
+            "schedule": "الجدول",
+            "courses": "المقررات",
+            "activities": "الأنشطة"
+          },
+          "generalparent": {
+            "male": "ذكر",
+            "female": "أنثى"
+          }
+          ,
 
           "examSchedule": {
             "title": "جدول الامتحانات",
