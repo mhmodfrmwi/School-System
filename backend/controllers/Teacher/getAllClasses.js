@@ -27,14 +27,15 @@ const getTeacherClassesForCurrentSemester = expressAsyncHandler(
     const classTeachers = await ClassTeacher.find({ teacherId })
       .populate("classId")
       .populate("subjectId")
-      .populate("semester_id");
+      .populate("semester_id")
+      .populate("academicYear_id");
     if (classTeachers.length === 0) {
       return res.status(404).json({
         status: 404,
         message: "No classes found for the teacher",
       });
     }
-
+    const classTeacherIds = classTeachers.map((ct) => ct._id);
     const classIds = classTeachers.map((ct) => ct.classId);
     const classes = await Class.find({ _id: { $in: classIds } }).populate(
       "gradeId"
@@ -73,9 +74,12 @@ const getTeacherClassesForCurrentSemester = expressAsyncHandler(
       const gradeName = classes[index].gradeId.gradeName;
       const className = classes[index].className;
       const semesterName = classTeachers[index].semester_id.semesterName;
-
+      const startYear = classTeachers[index].academicYear_id.startYear;
+      const endYear = classTeachers[index].academicYear_id.endYear;
       return {
         id: gss._id,
+        classTeacherId: classTeacherIds[index],
+        teacherName: teacher.fullName,
         gradeId,
         semesterId,
         classId,
@@ -84,6 +88,9 @@ const getTeacherClassesForCurrentSemester = expressAsyncHandler(
         gradeName,
         className,
         semesterName,
+        academicYearId: classTeachers[index].academicYear_id._id,
+        startYear,
+        endYear,
       };
     });
 
