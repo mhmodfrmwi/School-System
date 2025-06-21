@@ -44,6 +44,17 @@ const ExamsParent = () => {
   // Get selected student from parent state
   const selectedStudent = useSelector((state) => state.motivationparent.selectedKid);
 
+  const [storedStudentId, setStoredStudentId] = useState(() => {
+    return localStorage.getItem('selectedStudentId') || null;
+  });
+
+  useEffect(() => {
+    if (selectedStudent?._id) {
+      localStorage.setItem('selectedStudentId', selectedStudent._id);
+      setStoredStudentId(selectedStudent._id);
+    }
+  }, [selectedStudent]);
+
   useEffect(() => {
     dispatch(fetchSubjects());
   }, [dispatch]);
@@ -58,30 +69,17 @@ const ExamsParent = () => {
   }, [subjectId, subjects]);
 
   useEffect(() => {
-    if (selectedStudent?._id && subjectId) {
-      console.log("Fetching exams for student:", selectedStudent._id, "and subject:", subjectId);
+    const studentIdToUse = selectedStudent?._id || storedStudentId;
+    if (studentIdToUse && subjectId) {
 
       // Fetch all exams
       dispatch(fetchAllExams(subjectId))
-        .then((result) => {
-          if (result.payload) {
-            console.log("All exams data:", result.payload);
-          }
-          if (result.error) {
-            console.error("Error fetching all exams:", result.error);
-          }
-        });
+
+
 
       // Fetch completed exams
       dispatch(fetchCompletedExams(subjectId))
-        .then((result) => {
-          if (result.payload) {
-            console.log("Completed exams data:", result.payload);
-          }
-          if (result.error) {
-            console.error("Error fetching completed exams:", result.error);
-          }
-        });
+
 
       // Fetch missed exams
       dispatch(fetchMissedExams(subjectId))
@@ -94,26 +92,32 @@ const ExamsParent = () => {
           }
         });
 
-      dispatch(fetchUpcomingExams(subjectId))
-        .then((result) => {
-          if (result.payload) {
-            console.log("Upcoming exams data:", result.payload);
-          }
-          if (result.error) {
-            console.error("Error fetching upcoming exams:", result.error);
-          }
-        });
+
+      dispatch(fetchUpcomingExams(subjectId)).then((result) => {
+        console.log("Upcoming exams data:", result.payload);
+      });
+
     }
-  }, [dispatch, selectedStudent, subjectId]);
+  }, [dispatch, selectedStudent, storedStudentId, subjectId]);
 
   // Filter exams based on active tab
-  const filteredExams = activeTab === "completed"
-    ? allExams.filter(exam => exam.status === "completed" && exam.result)
-    : activeTab === "missed"
-      ? allExams.filter(exam => exam.status === "missed")
-      : activeTab === "upcoming"
-        ? allExams.filter(exam => exam.status === "upcoming")
-        : allExams;
+  // const filteredExams = activeTab === "completed"
+  //   ? allExams.filter(exam => exam.status === "completed" && exam.result)
+  //   : activeTab === "missed"
+  //     ? allExams.filter(exam => exam.status === "missed")
+  //     : activeTab === "upcoming"
+  //       ? allExams.filter(exam => exam.status === "upcoming")
+  //       : allExams;
+
+
+  const filteredExams =
+    activeTab === "completed"
+      ? completedExams
+      : activeTab === "missed"
+        ? missedExams
+        : activeTab === "upcoming"
+          ? upcomingExams
+          : allExams;
 
   // عدل دالة currentPage لتشمل upcoming exams
   const currentPage = activeTab === "all"
@@ -213,7 +217,7 @@ const ExamsParent = () => {
         {/* Sidebar */}
         <div className="w-full md:w-1/4 bg-white dark:bg-[#13082F] md:border-r border-gray-300 dark:border-[#E0AAEE] p-6 mt-2 md:h-[550px]">
           <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] relative">
-            {subjectName || t("exams.main.allSubjects")}
+            {subjectName || t("exams.main.Subjects")}
             <span className={`absolute bottom-[-9px] h-[4px] w-[90px] rounded-t-full bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] ${i18n.language === 'ar' ? 'right-0' : 'left-0'}`}></span>
           </h2>
           <ul className="md:space-y-5 pt-4 flex flex-row gap-3 flex-wrap md:flex-col">
@@ -282,7 +286,7 @@ const ExamsParent = () => {
             >
               {t("exams.main.completedTab")} ({completedExams.length})
             </Button>
-              <Button
+            <Button
               variant={activeTab === "upcoming" ? "outline" : "solid"}
               className={`${activeTab === "upcoming"
                 ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
@@ -302,7 +306,7 @@ const ExamsParent = () => {
             >
               {t("exams.main.missedTab")} ({missedExams.length})
             </Button>
-          
+
           </div>
 
           {loading ? (
@@ -321,7 +325,7 @@ const ExamsParent = () => {
                     {activeTab === "completed" && t("exams.main.noExams.completed")}
                     {activeTab === "upcoming" && t("exams.main.noExams.upcoming")}
                     {activeTab === "missed" && t("exams.main.noExams.missed")}
-                    
+
                   </CardContent>
                 </Card>
               ) : (
@@ -372,26 +376,25 @@ const ExamsParent = () => {
                             </div>
 
                             {/* Result and Button */}
-                           <div className="ml-4 flex flex-col items-end min-w-[180px]">
-  <Button
-    variant="solid"
-    className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 cursor-default
-      ${
-        exam.status === "completed"
-          ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-          : exam.status === "missed"
-            ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white opacity-70"
-            : "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-      }`}
-    onClick={() => exam.status === "upcoming" && handleStartExam(exam)}
-  >
-    {exam.status === "completed"
-      ? `${t("exams.main.examCard.completed")} (${exam.result?.percentage || 0}%) - ${t(`exams.main.examCard.${exam.result?.grade.toLowerCase() || 'pass'}`)}`
-      : exam.status === "missed"
-        ? t("exams.main.missedTab")
-        : t("exams.main.upcomingTab")}
-  </Button>
-</div>
+                            <div className="ml-4 flex flex-col items-end min-w-[180px]">
+                              <Button
+                                variant="solid"
+                                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 cursor-default
+      ${exam.status === "completed"
+                                    ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                                    : exam.status === "missed"
+                                      ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white opacity-70"
+                                      : "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                                  }`}
+                                onClick={() => exam.status === "upcoming" && handleStartExam(exam)}
+                              >
+                                {exam.status === "completed"
+                                  ? `${t("exams.main.examCard.completed")} (${exam.result?.percentage || 0}%) - ${t(`exams.main.examCard.${exam.result?.grade.toLowerCase() || 'pass'}`)}`
+                                  : exam.status === "missed"
+                                    ? t("exams.main.missedTab")
+                                    : t("exams.main.upcomingTab")}
+                              </Button>
+                            </div>
                           </CardContent>
                         </Card>
                       );
