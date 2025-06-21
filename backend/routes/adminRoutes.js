@@ -119,6 +119,10 @@ const {
   updateAdminProfile,
 } = require("../controllers/auth/authAdminController");
 const { getLoggedInAdminData } = require("../controllers/Admin/adminData");
+const {
+  getTeacherClassesForCurrentSemester,
+  getAllTeacherClasses,
+} = require("../controllers/Teacher/getAllClasses");
 
 const router = express.Router();
 router.post("/login", login);
@@ -306,7 +310,6 @@ router.get("/teacher", validateJwt, getAllTeacher);
 router.post(
   "/classTeacher/createClassTeacher",
   validateJwt,
-
   createClassTeacher
 );
 router
@@ -315,7 +318,12 @@ router
   .patch(validateJwt, updateClassTeacher)
   .delete(validateJwt, deleteClassTeacher);
 router.get("/classTeacher", validateJwt, getAllClassTeacher);
-
+router.get(
+  "/currentTeacherClasses/:teacherId",
+  validateJwt,
+  getTeacherClassesForCurrentSemester
+);
+router.get("/allTeacherClasses/:teacherId", validateJwt, getAllTeacherClasses);
 //parent routes
 router.post("/parent/createParent", validateJwt, createParent);
 router

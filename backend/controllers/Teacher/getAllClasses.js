@@ -9,7 +9,7 @@ const Grade = require("../../DB/gradeModel");
 
 const getTeacherClassesForCurrentSemester = expressAsyncHandler(
   async (req, res) => {
-    const teacherId = req.user.id;
+    const teacherId = req.params.teacherId || req.user.id;
 
     if (!validateObjectId(teacherId)) {
       return res.status(400).json({ status: 400, message: "Invalid ID" });
@@ -96,7 +96,7 @@ const getTeacherClassesForCurrentSemester = expressAsyncHandler(
 );
 
 const getAllTeacherClasses = expressAsyncHandler(async (req, res) => {
-  const teacherId = req.user.id;
+  const teacherId = req.params.teacherId || req.user.id;
 
   if (!validateObjectId(teacherId)) {
     return res.status(400).json({ status: 400, message: "Invalid ID" });
