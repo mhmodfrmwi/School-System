@@ -28,7 +28,7 @@ import "./fonts.css";
 import ForgotPassword from "./Features/Auth/ForgotPassword";
 import VerifyEmail from "./Features/Auth/VerifyEmail";
 import ResendVerification from "./Features/Auth/ResendVerification";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ExamsParent from "./Features/Parent/components/Exams/ExamPage";
 import VirtualRoomsParent from "./Features/Parent/components/Courses/VRParent";
 import AssignmentsParent from "./Features/Parent/components/Courses/assignmentsPage";
