@@ -178,8 +178,34 @@ const getAllTeacherClasses = expressAsyncHandler(async (req, res) => {
     data: response,
   });
 });
+const getClassTeacherById = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
 
+  if (!validateObjectId(id)) {
+    return res.status(400).json({ status: 400, message: "Invalid ID" });
+  }
+
+  const classTeacher = await ClassTeacher.findById(id)
+    .populate("classId")
+    .populate("subjectId")
+    .populate("semester_id")
+    .populate("academicYear_id");
+
+  if (!classTeacher) {
+    return res.status(404).json({
+      status: 404,
+      message: "Class teacher not found",
+    });
+  }
+
+  return res.status(200).json({
+    status: 200,
+    message: "Class teacher retrieved successfully",
+    data: classTeacher,
+  });
+});
 module.exports = {
   getTeacherClassesForCurrentSemester,
   getAllTeacherClasses,
+  getClassTeacherById,
 };
