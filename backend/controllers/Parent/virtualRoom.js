@@ -110,9 +110,40 @@ const getMissedVirtualRooms = expressAsyncHandler(async (req, res) => {
   }
 });
 
+
+const getCompletedNotMissedVirtualRooms = expressAsyncHandler(async (req, res) => {
+  const { gradeSubjectSemesterId, studentId } = req.params;
+
+  if (
+    !validateObjectId(studentId) ||
+    !validateObjectId(gradeSubjectSemesterId)
+  ) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid studentId or gradeSubjectSemesterId.",
+    });
+  }
+
+  try {
+    const result = await virtualRoomService.getCompletedNotMissedVirtualRooms(
+      studentId,
+      gradeSubjectSemesterId
+    );
+
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: "Failed to retrieve completed (not missed) virtual rooms.",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = {
   getVirtualRoomsForStudent,
   //handleVrLinkClick,
   getCompletedVirtualRooms,
   getMissedVirtualRooms,
+  getCompletedNotMissedVirtualRooms
 };

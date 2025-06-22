@@ -5,7 +5,16 @@ const showKids = async (req, res) => {
   try {
     const students = await ParentStudent.find({
       parent_id: req.user.id,
-    }).populate("student_id");
+    }).populate({
+        path: "student_id",
+        populate: [
+          { path: "gradeId", select: "gradeName" },
+          { path: "classId", select: "className" },
+          { path: "academicYear_id", select: "startYear endYear" },
+        ],
+        select: "-password -__v -createdAt -updatedAt", // hide sensitive info
+      })
+      .select("-__v -createdAt -updatedAt");
 
     if (!students || students.length === 0) {
       return res
