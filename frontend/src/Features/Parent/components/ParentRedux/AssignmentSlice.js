@@ -14,11 +14,15 @@ export const fetchAssignments = createAsyncThunk(
     if (!subjectId) return rejectWithValue("Subject ID is required");
     if (!selectedKid?._id) return rejectWithValue("Student ID is required");
     if (!selectedKid?.classId) return rejectWithValue("Class ID is required");
+    if (!selectedKid?.semesterId) return rejectWithValue("Semester ID is required");
+    if (!selectedKid?.academicYearId) return rejectWithValue("Academic Year ID is required");
+    if (!selectedKid?.gradeId) return rejectWithValue("Grade ID is required");
 
     try {
       const response = await fetch(
-        `${BASE_URL}/Assignment/${subjectId}?studentId=${selectedKid._id}&classId=${selectedKid.classId}`,
+        `${BASE_URL}/assignments?gradeSubjectSemesterId=${subjectId}`,
         {
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -27,25 +31,9 @@ export const fetchAssignments = createAsyncThunk(
       );
 
       const data = await response.json();
-
-      if (!response.ok) {
-        // Handle "not found" as empty array
-        if (response.status === 404 || data.message?.includes('not found')) {
-          return [];
-        }
-        throw new Error(data.message || `Server error: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(data.message || "Failed to fetch assignments");
       return data;
-
     } catch (error) {
-      console.error('API call failed:', error);
-      
-      // Handle "not found" errors gracefully
-      if (error.message.includes('not found')) {
-        return [];
-      }
-      
       return rejectWithValue(error.message);
     }
   }
@@ -63,7 +51,7 @@ export const fetchAssignmentById = createAsyncThunk(
       const response = await fetch(
         `${BASE_URL}/Assignment/${assignmentId}?studentId=${studentId}`,
         {
-          headers: { 
+          headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           },
@@ -88,19 +76,19 @@ export const fetchAllStudentSubmissions = createAsyncThunk(
     const state = getState();
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     const studentId = state.motivationparent.selectedKid?._id;
-    
+
     try {
       const response = await fetch(
         `${BASE_URL}/submissions/student/${studentId}`,
         {
-          headers: { 
+          headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           },
         }
       );
 
-     if (!response.ok) {
+      if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to fetch assignment by ID");
       }
@@ -123,9 +111,9 @@ export const fetchCompletedAssignments = createAsyncThunk(
 
     try {
       const response = await fetch(
-      `${BASE_URL}/completedAssignments/${studentId}`,
-       {
-          headers: { 
+        `${BASE_URL}/completedAssignments/${studentId}`,
+        {
+          headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           },
@@ -153,9 +141,9 @@ export const fetchMissedAssignments = createAsyncThunk(
 
     try {
       const response = await fetch(
-      `${BASE_URL}/missedAssignments/${studentId}`,
-       {
-          headers: { 
+        `${BASE_URL}/missedAssignments/${studentId}`,
+        {
+          headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           },
@@ -192,6 +180,15 @@ const assignmentsSlice = createSlice({
     error: null,
   },
   reducers: {
+setSelectedKid: (state, action) => {
+    state.selectedKid = {
+        ...action.payload,
+        classId: action.payload.classId || action.payload.class_id,
+        semesterId: action.payload.semesterId || action.payload.semester_id,
+        academicYearId: action.payload.academicYearId || action.payload.academic_year_id,
+        gradeId: action.payload.gradeId || action.payload.grade_id
+    };
+},
     clearError: (state) => {
       state.error = null;
     },
@@ -224,7 +221,7 @@ const assignmentsSlice = createSlice({
         state.loadingAssignments = false;
         state.error = action.payload;
       })
-      
+
       // Fetch Assignment By ID
       .addCase(fetchAssignmentById.pending, (state) => {
         state.loadingAssignmentById = true;
@@ -238,7 +235,7 @@ const assignmentsSlice = createSlice({
         state.loadingAssignmentById = false;
         state.error = action.payload;
       })
-      
+
       // Fetch All Student Submissions
       .addCase(fetchAllStudentSubmissions.pending, (state) => {
         state.loadingSubmissions = true;
@@ -252,7 +249,7 @@ const assignmentsSlice = createSlice({
         state.loadingSubmissions = false;
         state.error = action.payload;
       })
-      
+
       // Fetch Completed Assignments
       .addCase(fetchCompletedAssignments.pending, (state) => {
         state.loadingCompleted = true;
@@ -266,7 +263,7 @@ const assignmentsSlice = createSlice({
         state.loadingCompleted = false;
         state.error = action.payload;
       })
-      
+
       // Fetch Missed Assignments
       .addCase(fetchMissedAssignments.pending, (state) => {
         state.loadingMissed = true;
@@ -284,4 +281,4 @@ const assignmentsSlice = createSlice({
 });
 
 export default assignmentsSlice.reducer;
-export const { clearError, resetState } = assignmentsSlice.actions;
+export const { clearError, resetState ,setSelectedKid} = assignmentsSlice.actions;

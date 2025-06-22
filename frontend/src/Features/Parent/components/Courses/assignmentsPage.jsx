@@ -14,7 +14,7 @@ import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loader from "../../../../ui/Loader";
-import { setSelectedKid } from "../../components/ParentRedux/MotivationSlice";
+import { setSelectedKid } from "../../components/ParentRedux/AssignmentSlice";
 import backgroundWaves from "../../../../assets/StudentIcon/bg-color2.png";
 import backgroundStars from "../../../../assets/StudentIcon/bg-color1.png";
 import { useTranslation } from 'react-i18next';
@@ -51,65 +51,64 @@ const AssignmentsParent = () => {
     const [hasClassIdError, setHasClassIdError] = useState(false);
     const itemsPerPage = 3;
 
-    // Initialize selected kid from storage
-    useEffect(() => {
-        const kidFromStorage = JSON.parse(localStorage.getItem('selectedKid') || sessionStorage.getItem('selectedKid'));
-        if (kidFromStorage) {
-            dispatch(setSelectedKid({
-                ...kidFromStorage,
-                classId: kidFromStorage.classId || kidFromStorage.class_id || kidFromStorage.class?._id
-            }));
-        }
-    }, [dispatch]);
+useEffect(() => {
+    const kidFromStorage = JSON.parse(localStorage.getItem('selectedKid') || sessionStorage.getItem('selectedKid'));
+    if (kidFromStorage) {
+        dispatch(setSelectedKid({
+            ...kidFromStorage,
+            _id: kidFromStorage._id,
+            classId: kidFromStorage.classId || kidFromStorage.class_id || kidFromStorage.class?._id,
+            semesterId: kidFromStorage.semesterId || kidFromStorage.semester_id || kidFromStorage.semester?._id,
+            academicYearId: kidFromStorage.academicYearId || kidFromStorage.academic_year_id || kidFromStorage.academicYear?._id,
+            gradeId: kidFromStorage.gradeId || kidFromStorage.grade_id || kidFromStorage.grade?._id
+        }));
+    }
+}, [dispatch]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setInitialLoading(true);
-                if (!selectedKid || !selectedKid._id || !selectedKid.classId) {
-                    throw new Error("Student data incomplete");
-                }
+// Update the useEffect for data fetching
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      setInitialLoading(true);
+      
+      // Check if all required data is available
+      if (!selectedKid || !selectedKid._id || !selectedKid.classId || 
+          !selectedKid.semesterId || !selectedKid.academicYearId || 
+          !selectedKid.gradeId || !subjectId) {
+        throw new Error("Missing required student data");
+      }
 
-                if (!subjectId) {
-                    throw new Error("Subject ID missing");
-                }
+      // Fetch data in parallel
+      await Promise.all([
+        dispatch(fetchAssignments(subjectId)),
+        dispatch(fetchSubjects()),
+        dispatch(fetchAllStudentSubmissions()),
+        dispatch(fetchCompletedAssignments()),
+        dispatch(fetchMissedAssignments())
+      ]);
 
-                // Fetch assignments
-                const result = await dispatch(fetchAssignments(subjectId));
+      // Set subject name
+      const currentSubject = subjects.find(subj => subj._id === subjectId);
+      if (currentSubject) setSubjectName(currentSubject.name);
 
-                // Check if we got a successful result
-                if (fetchAssignments.fulfilled.match(result)) {
-                    // Only fetch other data if we got assignments
-                    await Promise.all([
-                        dispatch(fetchSubjects()),
-                        dispatch(fetchAllStudentSubmissions()),
-                    ]);
+    } catch (error) {
+      console.error("Data loading error:", error);
+      if (!error.message.includes('not found')) {
+        Swal.fire({
+          title: 'Error',
+          text: error.message,
+          icon: 'error'
+        });
+      }
+    } finally {
+      setInitialLoading(false);
+    }
+  };
 
-                    // Set subject name
-                    const currentSubject = subjects.find(subj => subj._id === subjectId);
-                    if (currentSubject) {
-                        setSubjectName(currentSubject.name);
-                    }
-                }
+  fetchData();
+}, [dispatch, subjectId, selectedKid]);
 
-            } catch (error) {
-                console.error("Data loading error:", error);
 
-                // Don't show error for "no assignments found"
-                if (!error.message.includes('not found')) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: error.message,
-                        icon: 'error'
-                    });
-                }
-            } finally {
-                setInitialLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [dispatch, subjectId, selectedKid, subjects]);
     // Error handling
     useEffect(() => {
         if (error) {
