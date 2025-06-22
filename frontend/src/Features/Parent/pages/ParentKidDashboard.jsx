@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import userImage from "../../../assets/Girl.png";
 import trueIcon from "../../../assets/true icon.png";
@@ -16,6 +16,7 @@ import backgroundWaves from "../../../assets/StudentIcon/bg-color2.png";
 import backgroundStars from "../../../assets/StudentIcon/bg-color1.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { fetchParentKids } from "../../Parent/components/services/apiKids";
+import { fetchParentDashboard } from "../../Parent/components/ParentRedux/dashboardSlice";
 
 
 
@@ -24,6 +25,8 @@ function DashboardParent() {
   const navigate = useNavigate();
   const location = useLocation();
   const { fullName, profileImage } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
+  const dashboardData = useSelector((state) => state.parentDashboard.data);
 
   const [selectedKid, setSelectedKid] = useState(() => {
     return location.state?.selectedKid ||
@@ -48,6 +51,27 @@ function DashboardParent() {
 
     loadKids();
   }, []);
+
+  useEffect(() => {
+    if (selectedKid) {
+       setLoading(true);
+      dispatch(fetchParentDashboard(selectedKid._id))
+      .finally(() => setLoading(false));
+    }
+  }, [dispatch, selectedKid]);
+
+  useEffect(() => {
+    if (dashboardData?.data) {
+      console.log("Dashboard data from backend:", dashboardData.data);
+
+      console.log("Attendance rate:", dashboardData.data.dashboardMetrics?.attendance?.attendanceRate);
+      console.log("Grades data:", dashboardData?.data?.dashboardMetrics?.grades);
+      console.log("Grades prediction:", dashboardData.data.dashboardMetrics?.grades?.predictedFinalGrade);
+      console.log("Questions completion:", dashboardData?.dashboardMetrics?.questions?.completionRate);
+      console.log("Exams completion:", dashboardData.data.dashboardMetrics?.exams?.summary?.examCompletionRate);
+      console.log("Assignments completion:", dashboardData.data.dashboardMetrics?.assignments?.summary?.completionRate);
+    }
+  }, [dashboardData]);
 
   const handleKidSelect = (kid) => {
     setSelectedKid(kid.student_id);
@@ -76,13 +100,6 @@ function DashboardParent() {
     return age;
   };
 
-  const mainCategories = [
-    { label: t("dashboardparent.grades"), icon: GradeIcon, progress: "100%" },
-    { label: t("dashboardparent.attendance"), icon: AbsenceIcon, progress: "90%" },
-    { label: t("dashboardparent.schedule"), icon: ScheduleIcon, progress: "80%" },
-    { label: t("dashboardparent.courses"), icon: CourseIcon, progress: "60%" },
-    { label: t("dashboardparent.activities"), icon: ActivityIcon, progress: "50%" },
-  ];
 
   if (selectedKid) {
     return (
@@ -194,7 +211,7 @@ function DashboardParent() {
                 {
                   label: t("menuparent.courses"),
                   icon: CourseIcon,
-                  path: `/parent/allcourses?kidId=${selectedKid._id}`,
+                  path: `/parent/all-subjects?kidId=${selectedKid._id}`,
                 },
                 {
                   label: t("menuparent.activities"),
@@ -228,7 +245,44 @@ function DashboardParent() {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-              {mainCategories.map((category, index) => (
+              {[
+                {
+                  label: t("dashboardparent.grades"),
+                  icon: GradeIcon,
+                  progress: `${dashboardData?.data?.dashboardMetrics?.grades?.predictedFinalGrade || 0}%`,
+                  value: dashboardData?.data?.dashboardMetrics?.grades?.predictedFinalGrade || 0
+                },
+                {
+                  label: t("dashboardparent.attendance"),
+                  icon: AbsenceIcon,
+                  progress: `${dashboardData?.data?.dashboardMetrics?.attendance?.attendanceRate || 0}%`,
+                  value: dashboardData?.data?.dashboardMetrics?.attendance?.attendanceRate || 0
+                },
+                {
+                  label: t("dashboardparent.questions"),
+                  icon: ActivityIcon,
+                  progress: `${dashboardData?.data?.dashboardMetrics?.questions?.summary?.completionRate ||
+                    dashboardData?.data?.dashboardMetrics?.questions?.engagementScore ||
+                    dashboardData?.data?.materialsStates?.viewedPercentage ||
+                    0}%`,
+                  value: dashboardData?.data?.dashboardMetrics?.questions?.summary?.completionRate ||
+                    dashboardData?.data?.dashboardMetrics?.questions?.engagementScore ||
+                    dashboardData?.data?.materialsStates?.viewedPercentage ||
+                    0
+                },
+                {
+                  label: t("dashboardparent.exams"),
+                  icon: ScheduleIcon,
+                  progress: `${dashboardData?.data?.dashboardMetrics?.exams?.summary?.examCompletionRate || 0}%`,
+                  value: dashboardData?.data?.dashboardMetrics?.exams?.summary?.examCompletionRate || 0
+                },
+                {
+                  label: t("dashboardparent.assignments"),
+                  icon: CourseIcon,
+                  progress: `${dashboardData?.data?.dashboardMetrics?.assignments?.summary?.completionRate || 0}%`,
+                  value: dashboardData?.data?.dashboardMetrics?.assignments?.summary?.completionRate || 0
+                },
+              ].map((category, index) => (
                 <Card
                   key={index}
                   className="hover:scale-102 flex transform flex-col items-center rounded-2xl border-4 bg-[#F5F5F5] dark:bg-[#281459] p-4 shadow-md transition-transform duration-300 ease-in-out hover:cursor-pointer hover:bg-[#F1F1F1] dark:hover:bg-[#1A0C3D] hover:shadow-xl border-gray-200 dark:border-[#E0AAEE]"
