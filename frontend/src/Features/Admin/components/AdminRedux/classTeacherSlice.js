@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 const initialState = {
   classTeachers: [],
+  selectedClassTeacher: null,
   status: "idle",
   error: null,
   loading: false,
@@ -61,7 +62,7 @@ export const fetchClassTeachers = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.data;
+      return data.data || []; // Ensure empty array if no data
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch class teachers");
     }
@@ -160,28 +161,34 @@ const classTeacherSlice = createSlice({
     clearMessage: (state) => {
       state.message = "";
     },
+    clearClassTeachers: (state) => {
+      state.classTeachers = [];
+      state.status = "idle";
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
-    .addCase(fetchClassTeacherById.pending, (state) => {
-    state.status = "loading";
-    state.loading = true;
-  })
-  .addCase(fetchClassTeacherById.fulfilled, (state, action) => {
-    state.status = "succeeded";
-    state.selectedClassTeacher = action.payload;
-    state.loading = false;
-    state.error = null;
-  })
-  .addCase(fetchClassTeacherById.rejected, (state, action) => {
-    state.status = "failed";
-    state.error = action.payload || "Failed to fetch class teacher";
-    state.loading = false;
-    toast.error(action.payload || "Failed to fetch class teacher");
-  })
+      .addCase(fetchClassTeacherById.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+      })
+      .addCase(fetchClassTeacherById.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.selectedClassTeacher = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(fetchClassTeacherById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to fetch class teacher";
+        state.loading = false;
+         toast.error(action.payload || "Failed to fetch class teacher");
+      })
       .addCase(fetchClassTeachers.pending, (state) => {
         state.status = "loading";
         state.loading = true;
+        state.classTeachers = []; // Clear classTeachers on new fetch
       })
       .addCase(fetchClassTeachers.fulfilled, (state, action) => {
         state.status = "succeeded";
@@ -193,6 +200,7 @@ const classTeacherSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Failed to fetch class teachers";
         state.loading = false;
+        state.classTeachers = []; // Clear on error
         toast.error(action.payload || "Failed to fetch class teachers");
       })
       .addCase(postClassTeacher.pending, (state) => {
@@ -253,4 +261,5 @@ const classTeacherSlice = createSlice({
   },
 });
 
+export const { clearMessage, clearClassTeachers } = classTeacherSlice.actions;
 export default classTeacherSlice.reducer;
