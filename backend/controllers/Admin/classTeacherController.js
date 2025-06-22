@@ -118,10 +118,11 @@ const createClassTeacher = [
         message: "Subject-semester combination not found",
       });
 
+    // Fixed: Check for duplicate assignment without including teacherId
+    // This prevents multiple teachers from being assigned to the same class/subject/semester
     const existingAssignment = await ClassTeacher.findOne({
       classId,
       subjectId: subject._id,
-      teacherId: teacher._id,
       academicYear_id: academicYearRecord._id,
       semester_id: semester._id,
     });
@@ -129,7 +130,8 @@ const createClassTeacher = [
     if (existingAssignment) {
       return res.status(409).json({
         status: 409,
-        message: "Teacher already assigned to this class for the semester",
+        message:
+          "This class already has a teacher assigned for this subject in the current semester",
       });
     }
 

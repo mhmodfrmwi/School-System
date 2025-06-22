@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 const initialState = {
   classTeachers: [],
+  selectedClassTeacher: null,
   status: "idle",
   error: null,
   loading: false,
@@ -10,12 +11,15 @@ const initialState = {
 
 const getToken = () => sessionStorage.getItem("token");
 
-export const fetchClassTeachers = createAsyncThunk(
-  "classTeachers/fetchClassTeachers",
-  async (_, { rejectWithValue }) => {
+export const fetchClassTeacherById = createAsyncThunk(
+  "classTeachers/fetchClassTeacherById",
+  async (id, { rejectWithValue }) => {
     try {
+      if (!id || id === "undefined") {
+        return rejectWithValue("Invalid class teacher ID");
+      }
       const response = await fetch(
-        "http://localhost:4000/api/v1/admin/classTeacher",
+        `http://localhost:4000/api/v1/admin/classTeacher/${id}`,
         {
           headers: {
             Authorization: `Bearer ${getToken()}`,
@@ -25,11 +29,40 @@ export const fetchClassTeachers = createAsyncThunk(
 
       if (!response.ok) {
         const error = await response.json();
-        return rejectWithValue(error.message);
+        return rejectWithValue(error.message || "Failed to fetch class teacher");
       }
 
       const data = await response.json();
-      return data.classTeachers;
+      return data.classTeacher;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to fetch class teacher");
+    }
+  },
+);
+
+export const fetchClassTeachers = createAsyncThunk(
+  "classTeachers/fetchClassTeachers",
+  async (id, { rejectWithValue }) => {
+    try {
+      if (!id || id === "undefined") {
+        return rejectWithValue("Invalid teacher ID");
+      }
+      const response = await fetch(
+        `http://localhost:4000/api/v1/admin/currentTeacherClasses/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message || "Failed to fetch class teachers");
+      }
+
+      const data = await response.json();
+      return data.data || []; // Ensure empty array if no data
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch class teachers");
     }
@@ -96,7 +129,7 @@ export const editClassTeacher = createAsyncThunk(
 
 export const removeClassTeacher = createAsyncThunk(
   "classTeachers/removeClassTeacher",
-  async (id, { rejectWithValue, dispatch }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const response = await fetch(
         `http://localhost:4000/api/v1/admin/classTeacher/${id}`,
@@ -114,7 +147,6 @@ export const removeClassTeacher = createAsyncThunk(
         return rejectWithValue(error.message);
       }
 
-      dispatch(fetchClassTeachers());
       return id;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove class teacher");
@@ -129,29 +161,47 @@ const classTeacherSlice = createSlice({
     clearMessage: (state) => {
       state.message = "";
     },
+    clearClassTeachers: (state) => {
+      state.classTeachers = [];
+      state.status = "idle";
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchClassTeacherById.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+      })
+      .addCase(fetchClassTeacherById.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.selectedClassTeacher = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(fetchClassTeacherById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to fetch class teacher";
+        state.loading = false;
+         toast.error(action.payload || "Failed to fetch class teacher");
+      })
       .addCase(fetchClassTeachers.pending, (state) => {
         state.status = "loading";
         state.loading = true;
+        state.classTeachers = []; // Clear classTeachers on new fetch
       })
       .addCase(fetchClassTeachers.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.classTeachers = action.payload;
         state.loading = false;
+        state.error = null;
       })
       .addCase(fetchClassTeachers.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to fetch class teachers";
         state.loading = false;
-        if (
-          state.error.includes("NetworkError") ||
-          state.error.includes("Token is required!")
-        ) {
-        } else {
-          toast.error(action.payload || "Failed to fetch class teachers");
-        }
+        state.classTeachers = []; // Clear on error
+        toast.error(action.payload || "Failed to fetch class teachers");
       })
       .addCase(postClassTeacher.pending, (state) => {
         state.status = "loading";
@@ -176,7 +226,7 @@ const classTeacherSlice = createSlice({
       .addCase(editClassTeacher.fulfilled, (state, action) => {
         state.status = "succeeded";
         const index = state.classTeachers.findIndex(
-          (classTeacher) => classTeacher._id === action.payload._id,
+          (classTeacher) => classTeacher.classTeacherId === action.payload.classTeacherId,
         );
         if (index !== -1) {
           state.classTeachers[index] = action.payload;
@@ -197,7 +247,7 @@ const classTeacherSlice = createSlice({
       .addCase(removeClassTeacher.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.classTeachers = state.classTeachers.filter(
-          (classTeacher) => classTeacher._id !== action.payload,
+          (classTeacher) => classTeacher.classTeacherId !== action.payload,
         );
         toast.success("Class Teacher removed successfully");
         state.loading = false;
@@ -211,4 +261,5 @@ const classTeacherSlice = createSlice({
   },
 });
 
+export const { clearMessage, clearClassTeachers } = classTeacherSlice.actions;
 export default classTeacherSlice.reducer;

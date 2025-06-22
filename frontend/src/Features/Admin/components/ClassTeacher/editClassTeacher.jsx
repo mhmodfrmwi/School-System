@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchClasses } from "../AdminRedux/classSlice";
-import { fetchSubjects } from "../AdminRedux/subjectSlice";
-import { fetchTeachers } from "../AdminRedux/teacherSlice";
-import { editClassTeacher } from "../AdminRedux/classTeacherSlice";
+import { editClassTeacher, fetchClassTeacherById } from "../AdminRedux/classTeacherSlice";
 import { useTranslation } from "react-i18next";
+
 const EditClassTeacherForm = () => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -14,74 +13,63 @@ const EditClassTeacherForm = () => {
 
   // Data from the Redux store
   const { classes } = useSelector((state) => state.classes);
-  const { subjects } = useSelector((state) => state.subject);
-  const { teachers } = useSelector((state) => state.teachers);
-  const { classTeachers } = useSelector((state) => state.classTeacher);
+  const { selectedClassTeacher} = useSelector((state) => state.classTeacher);
 
   // State to hold the form data
   const [formData, setFormData] = useState({
-    teacherSubject: "", // Combines teacher and subject
-    classAcademicYear: "", // Combines class and academic year
+    teacherSubject: "",
+    classAcademicYear: "",
   });
 
   useEffect(() => {
+    // Fetch class teacher data by ID
+    dispatch(fetchClassTeacherById(id));
     dispatch(fetchClasses());
-    dispatch(fetchSubjects());
-    dispatch(fetchTeachers());
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   useEffect(() => {
-    // Find the class teacher to edit
-    const classTeacherToEdit = classTeachers.find(
-      (teacher) => teacher._id === id,
-    );
-    if (classTeacherToEdit) {
+    // Populate form data when selectedClassTeacher is available
+    if (selectedClassTeacher) {
       setFormData({
-        teacherSubject: `${classTeacherToEdit.teacherId._id}-${classTeacherToEdit.subjectId._id}`,
-        classAcademicYear: `${classTeacherToEdit.classId._id}-${classTeacherToEdit.academicYear_id._id}`,
+        teacherSubject: `${selectedClassTeacher.teacherId._id}-${selectedClassTeacher.subjectId._id}`,
+        classAcademicYear: `${selectedClassTeacher.classId._id}-${selectedClassTeacher.academicYear_id._id}`,
       });
     }
-  }, [classTeachers, id]);
+  }, [selectedClassTeacher]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Extract the IDs
-    const [teacherId, subjectId] = formData.teacherSubject.split("-");
+
     const [classId] = formData.classAcademicYear.split("-");
 
-    // Get the full objects for names
-    const selectedTeacher = teachers.find(
-      (teacher) => teacher._id === teacherId,
-    );
-    const selectedSubject = subjects.find(
-      (subject) => subject._id === subjectId,
-    );
+    // Get the full objects for names from selectedClassTeacher and classes
     const selectedClass = classes.find((cls) => cls._id === classId);
     const academicYearObj = selectedClass?.academicYear_id;
 
     const updatedClassTeacher = {
       classId,
-      teacherName: selectedTeacher?.fullName || "",
-      subjectName: selectedSubject?.subjectName || "",
-      academicYear:
-        `${academicYearObj?.startYear}-${academicYearObj?.endYear}` || "",
+      teacherName: selectedClassTeacher?.teacherId?.fullName || "",
+      subjectName: selectedClassTeacher?.subjectId?.subjectName || "",
+      academicYear: `${academicYearObj?.startYear}-${academicYearObj?.endYear}` || "",
     };
 
     dispatch(editClassTeacher({ id, updatedClassTeacher }))
       .unwrap()
       .then(() => {
-        navigate(`/admin/allteachers/${id}`);
+        navigate(`/admin/allteachers/${selectedClassTeacher?.teacherId?._id || id}`);
       })
       .catch((error) => {
         console.error("Error updating class teacher", error);
         console.log("🚀 updatedClassTeacher:", updatedClassTeacher);
       });
   };
+
 
   return (
     <div className="mx-auto mt-10 w-[80%]">
@@ -94,29 +82,24 @@ const EditClassTeacherForm = () => {
           onSubmit={handleSubmit}
           className="m-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
         >
-          {/* Teacher-Subject Field */}
+          {/* Teacher-Subject Field (Read-Only) */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
               {t("teacherdata.TeacherSubject")}
             </label>
-            <select
+            <input
+              type="text"
+              name="teacherSubjectDisplay"
+              value={`${selectedClassTeacher?.teacherId?.fullName || ""} - ${selectedClassTeacher?.subjectId?.subjectName || ""}`}
+              readOnly
+              className="w-full rounded-2xl border border-gray-300 bg-gray-200 px-4 py-2 text-gray-700 dark:bg-[#0f6b7c] dark:text-white"
+            />
+            {/* Hidden input to keep teacherSubject value */}
+            <input
+              type="hidden"
               name="teacherSubject"
               value={formData.teacherSubject}
-              onChange={handleChange}
-              className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
-            >
-              <option value="">{t("teacherdata.SelectTeacherSubject")}</option>
-              {teachers?.map((teacher) =>
-                subjects?.map((subject) => (
-                  <option
-                    key={`${teacher._id}-${subject._id}`}
-                    value={`${teacher._id}-${subject._id}`}
-                  >
-                    {teacher.fullName} - {subject.subjectName}
-                  </option>
-                )),
-              )}
-            </select>
+            />
           </div>
 
           {/* Class-Academic Year Field */}

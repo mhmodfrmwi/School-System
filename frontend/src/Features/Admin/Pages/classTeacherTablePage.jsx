@@ -1,14 +1,7 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { fetchClassTeachers } from "../components/AdminRedux/classTeacherSlice";
+import React from "react";
 import ClassTeacherTable from "../components/ClassTeacher/classTeacherTable";
 
 const AllClassTeacher = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchClassTeachers());
-  }, [dispatch]);
 
   return (
     <div className="flex flex-col p-4">
