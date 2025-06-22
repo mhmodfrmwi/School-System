@@ -41,6 +41,7 @@ const {
   getCompletedExamsForSubjects,
 } = require("../../microservices/exams-microservice/controllers/childExamControllerForParent");
 const { getDashboardData } = require("../controllers/Parent/studentDashboard");
+const { getBulkDashboardData } = require("../controllers/Parent/studentDashboard");
 
 const {
   getDailyPoints,
@@ -201,7 +202,10 @@ router.get(
   validateParent,
   getCompletedNotMissedVirtualRooms
 );
+
+router.get("/dashboard/:studentId", validateJwt, getBulkDashboardData);
 ///$$$$$$$$//
+
 
 module.exports = router;
 

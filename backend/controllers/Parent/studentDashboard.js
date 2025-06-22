@@ -1,3 +1,5 @@
+// controllers/dashboardController.js
+const { generateStudentToken } = require('../../utils/studentLoginForParentDashBoard');
 const Attendance = require("../../DB/attendanceModel");
 const student = require("../../DB/StudentModel");
 const axios = require("axios");
@@ -15,13 +17,21 @@ const academicService = require("../../services/academicYearService");
 const questionService = require("../../services/questionBankService");
 const getDashboardData = async (req, res) => {
   try {
-    const id = req.query.id || req.user.id;
-    const authToken = req.authToken;
+    const id = req.params?.studentId || req.query?.id || req.user?.id;
+    const authToken = req.params?.authToken || req.authToken;
     const studentId = id;
+
     if (!studentId) {
       return res.status(400).json({
         status: 400,
         message: "Student ID is required",
+      });
+    }
+
+    if (!authToken) {
+      return res.status(400).json({
+        status: 400,
+        message: "Authentication token is required",
       });
     }
 
@@ -39,51 +49,31 @@ const getDashboardData = async (req, res) => {
     const numberOfAbsentDays = await getNumberOfAbsentDays(studentId);
     const completedExams = await getCompletedExams(studentId, authToken);
     const missedExams = await getMissedExams(studentId, authToken);
-    const completedAssignments = await getCompletedAssignments(
-      studentId,
-      authToken
-    );
+    const completedAssignments = await getCompletedAssignments(studentId, authToken);
     const missedAssignments = await getMissedAssignments(studentId, authToken);
     const grades = await getStudentGradesReport(studentId);
 
     const gradeId = await studentService.getStudentGradeId(studentId);
     const academicYear = await academicService.getCurrentAcademicYear();
-    const currentSemester = await academicService.getCurrentSemester(
-      academicYear._id
-    );
+    const currentSemester = await academicService.getCurrentSemester(academicYear._id);
 
-    const questions =
-      await questionService.getQuestionsByGradeAndSemesterWithStatus(
-        gradeId,
-        currentSemester._id,
-        studentId
-      );
-    const materialsStates = (await getMaterialsForGrade(studentId))
-      .studentStats;
-    const virtualRoomsStates = await getAllCompletedVirtualRoomsForAllSubjects(
+    const questions = await questionService.getQuestionsByGradeAndSemesterWithStatus(
+      gradeId,
+      currentSemester._id,
       studentId
     );
+    const materialsStates = (await getMaterialsForGrade(studentId)).studentStats;
+    const virtualRoomsStates = await getAllCompletedVirtualRoomsForAllSubjects(studentId);
 
-    const attendanceMetrics = await calculateAttendanceMetrics(
-      studentId,
-      numberOfAbsentDays
-    );
+    const attendanceMetrics = await calculateAttendanceMetrics(studentId, numberOfAbsentDays);
     const examMetrics = calculateExamMetrics(completedExams, missedExams);
-    const assignmentMetrics = calculateAssignmentMetrics(
-      completedAssignments,
-      missedAssignments
-    );
+    const assignmentMetrics = calculateAssignmentMetrics(completedAssignments, missedAssignments);
     const enhancedGradeMetrics = calculateEnhancedGradeMetrics(grades);
-    const performanceTrends = calculatePerformanceTrends(
-      grades,
-      completedExams
-    );
-    const academicStanding = calculateAcademicStanding(
-      enhancedGradeMetrics,
-      examMetrics
-    );
+    const performanceTrends = calculatePerformanceTrends(grades, completedExams);
+    const academicStanding = calculateAcademicStanding(enhancedGradeMetrics, examMetrics);
     const questionMetrics = calculateQuestionMetrics(questions);
-    res.status(200).json({
+
+    const responseData = {
       status: 200,
       message: "Dashboard data fetched successfully",
       data: {
@@ -107,12 +97,29 @@ const getDashboardData = async (req, res) => {
           academicStanding,
         },
       },
-    });
+    };
+
+    if (req.isBulkCall) {
+      return responseData;
+    }
+
+    res.status(200).json(responseData);
+
   } catch (error) {
     console.error(error);
+
+    if (req.isBulkCall) {
+      return {
+        studentId: req.params?.studentId || req.query?.id || req.user?.id,
+        error: error.message,
+        status: 500
+      };
+    }
+
     res.status(500).json({
       status: 500,
       message: "Internal server error",
+      error: error.message
     });
   }
 };
@@ -1119,6 +1126,121 @@ const calculateEngagementScore = (questions) => {
 
   return maxPossible > 0 ? ((score / maxPossible) * 100).toFixed(2) : 0;
 };
+
+/*const getBulkDashboardData = async (req, res) => {
+  try {
+    const { studentIds } = req.body;
+    
+    if (!studentIds || !Array.isArray(studentIds)) {
+      return res.status(400).json({
+        status: 400,
+        message: "studentIds array is required in request body"
+      });
+    }
+
+    // Limit number of students to process
+    const MAX_STUDENTS = 50;
+    const idsToProcess = studentIds.slice(0, MAX_STUDENTS);
+
+    const results = await Promise.all(idsToProcess.map(async (studentId) => {
+      try {
+        // Generate token for each student
+        const authToken = await generateStudentToken(studentId);
+        
+        // Create mock request object
+        const mockReq = {
+          params: { studentId, authToken },
+          isBulkCall: true
+        };
+
+        // Call dashboard function
+        return await getDashboardData(mockReq, {});
+      } catch (error) {
+        return {
+          studentId,
+          error: error.message,
+          status: 500
+        };
+      }
+    }));
+
+    // Separate successful and failed responses
+    const successful = results.filter(r => !r.error);
+    const errors = results.filter(r => r.error);
+
+    res.status(200).json({
+      status: 200,
+      message: "Bulk dashboard data processed",
+      data: {
+        totalRequested: studentIds.length,
+        totalProcessed: idsToProcess.length,
+        successCount: successful.length,
+        errorCount: errors.length,
+        dashboards: successful,
+        errors: errors.length > 0 ? errors : undefined
+      }
+    });
+
+  } catch (error) {
+    console.error("Error in getBulkDashboardData:", error);
+    res.status(500).json({
+      status: 500,
+      message: "Failed to process bulk dashboard request",
+      error: error.message
+    });
+  }
+};
+*/
+const getBulkDashboardData = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    
+    if (!studentId) {
+      return res.status(400).json({
+        status: 400,
+        message: "Student ID is required in URL parameters"
+      });
+    }
+
+    try {
+      // Generate token for the student
+      const authToken = await generateStudentToken(studentId);
+      
+      // Create mock request object
+      const mockReq = {
+        params: { studentId, authToken },
+        isBulkCall: true
+      };
+
+      // Call dashboard function
+      const dashboardData = await getDashboardData(mockReq, {});
+
+      res.status(200).json({
+        status: 200,
+        message: "Dashboard data fetched successfully",
+        data: dashboardData.data
+      });
+
+    } catch (error) {
+      console.error(`Error processing student ${studentId}:`, error);
+      res.status(500).json({
+        status: 500,
+        message: "Failed to fetch dashboard data",
+        error: error.message,
+        studentId
+      });
+    }
+
+  } catch (error) {
+    console.error("Error in getBulkDashboardData:", error);
+    res.status(500).json({
+      status: 500,
+      message: "Failed to process dashboard request",
+      error: error.message
+    });
+  }
+};
 module.exports = {
-  getDashboardData,
+    getDashboardData,
+  getBulkDashboardData,
 };
