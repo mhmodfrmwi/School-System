@@ -55,6 +55,7 @@ const {
   //handleVrLinkClick,
   getCompletedVirtualRooms,
   getMissedVirtualRooms,
+  getCompletedNotMissedVirtualRooms,
 } = require("../controllers/Parent/virtualRoom");
 
 const router = express.Router();
@@ -193,6 +194,12 @@ router.get(
   validateJwt,
   validateParent,
   getMissedVirtualRooms
+);
+router.get(
+  "/virtual-rooms/completed-not-missed/:gradeSubjectSemesterId/:studentId",
+  validateJwt,
+  validateParent,
+  getCompletedNotMissedVirtualRooms
 );
 ///$$$$$$$$//
 

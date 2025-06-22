@@ -388,6 +388,49 @@ const getAllCompletedVirtualRoomsForAllSubjects = async (studentId) => {
         100 || 0,
   };
 };
+
+const getCompletedNotMissedVirtualRooms = async (studentId, gradeSubjectSemesterId) => {
+  const gradeSubSem = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
+    .populate("grade_subject_id")
+    .lean();
+
+  if (!gradeSubSem) {
+    throw new Error("GradeSubjectSemester not found");
+  }
+
+  const subjectId = gradeSubSem.grade_subject_id.subjectId;
+  const gradeId = gradeSubSem.grade_subject_id.gradeId;
+  const semesterId = gradeSubSem.semester_id;
+
+  const completedRooms = await VirtualRoom.find({
+    subjectId,
+    gradeId,
+    semesterId,
+    status: "completed",
+  })
+    .populate("subjectId", "subjectName")
+    .populate("academicYearId", "academicYear")
+    .populate("gradeId", "gradeName")
+    .populate("semesterId", "semesterName")
+    .populate("teacherId", "fullName");
+
+  const completedRoomIds = completedRooms.map((room) => room._id);
+
+  const attendanceRecords = await VirtualRoomAttendance.find({
+    studentId,
+    virtualRoomId: { $in: completedRoomIds },
+    status: { $in: ["attended", "pending"] },
+  });
+
+  const validRoomIds = attendanceRecords.map((a) => a.virtualRoomId.toString());
+
+  const completedNotMissedRooms = completedRooms.filter((room) =>
+    validRoomIds.includes(room._id.toString())
+  );
+
+  return completedNotMissedRooms;
+};
+
 module.exports = {
   handleVrLinkClick,
   getVirtualRoomsForStudent,
@@ -395,4 +438,5 @@ module.exports = {
   getMissedVirtualRooms,
   getAllMissedVirtualRoomsForAllSubjects,
   getAllCompletedVirtualRoomsForAllSubjects,
+  getCompletedNotMissedVirtualRooms
 };
