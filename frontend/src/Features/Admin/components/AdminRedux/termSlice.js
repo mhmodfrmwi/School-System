@@ -166,7 +166,6 @@ const termsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(postTerm.pending, (state) => {
-        state.status = "loading";
         state.error = "";
         state.loading = true;
       })
@@ -177,9 +176,10 @@ const termsSlice = createSlice({
         toast.success("Term added successfully");
       })
       .addCase(postTerm.rejected, (state, action) => {
-        state.status = "failed";
-        state.loading = false;
-       toast.error(action.payload || "This term already exists for the selected academic year");
+        toast.error(
+          action.payload ||
+            "This term already exists for the selected academic year",
+        );
       })
       .addCase(fetchTerms.pending, (state) => {
         state.loading = true;
