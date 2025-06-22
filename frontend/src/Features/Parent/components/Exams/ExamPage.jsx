@@ -12,6 +12,7 @@ import {
   fetchCompletedExams,
   fetchMissedExams,
   fetchUpcomingExams,
+  fetchRunningExams,
   clearExamError
 } from "../ParentRedux/ParentExamsSlice";
 import { fetchSubjects } from "../../components/ParentRedux/CoursesSlice";
@@ -27,6 +28,7 @@ const ExamsParent = () => {
   const [currentPageCompleted, setCurrentPageCompleted] = useState(1);
   const [currentPageMissed, setCurrentPageMissed] = useState(1);
   const [currentPageUpcoming, setCurrentPageUpcoming] = useState(1);
+  const [currentPageRunning, setCurrentPageRunning] = useState(1);
   const itemsPerPage = 3;
 
   // Redux state
@@ -36,6 +38,7 @@ const ExamsParent = () => {
     completedExams,
     missedExams,
     upcomingExams,
+    runningExams,
     studentResults,
     loading,
     error
@@ -97,6 +100,11 @@ const ExamsParent = () => {
         console.log("Upcoming exams data:", result.payload);
       });
 
+      dispatch(fetchRunningExams(subjectId))  // Add this
+        .then((result) => {
+          console.log("Running exams data:", result.payload);
+        });
+
     }
   }, [dispatch, selectedStudent, storedStudentId, subjectId]);
 
@@ -117,7 +125,9 @@ const ExamsParent = () => {
         ? missedExams
         : activeTab === "upcoming"
           ? upcomingExams
-          : allExams;
+          : activeTab === "running"
+            ? runningExams
+            : allExams;
 
   // عدل دالة currentPage لتشمل upcoming exams
   const currentPage = activeTab === "all"
@@ -126,7 +136,9 @@ const ExamsParent = () => {
       ? currentPageCompleted
       : activeTab === "missed"
         ? currentPageMissed
-        : currentPageUpcoming;
+        : activeTab === "upcoming"
+          ? currentPageUpcoming
+          : currentPageRunning;  // Add this case
 
   const totalPages = Math.ceil(filteredExams.length / itemsPerPage);
   const paginatedExams = filteredExams.slice(
@@ -153,6 +165,8 @@ const ExamsParent = () => {
       setCurrentPageMissed(prev => Math.min(prev + 1, totalPages));
     } else if (activeTab === "upcoming") {
       setCurrentPageUpcoming(prev => Math.min(prev + 1, totalPages));
+    } else if (activeTab === "running") {  // Add this case
+      setCurrentPageRunning(prev => Math.min(prev + 1, totalPages));
     }
   };
 
@@ -165,6 +179,8 @@ const ExamsParent = () => {
       setCurrentPageMissed(prev => Math.max(prev - 1, 1));
     } else if (activeTab === "upcoming") {
       setCurrentPageUpcoming(prev => Math.max(prev - 1, 1));
+    } else if (activeTab === "running") {  // Add this case
+      setCurrentPageRunning(prev => Math.max(prev - 1, 1));
     }
   };
 
@@ -188,6 +204,12 @@ const ExamsParent = () => {
       return t("exams.main.examCard.notSpecified");
     }
   };
+  // Add this debug useEffect
+  useEffect(() => {
+    console.log("Current missed exams:", missedExams);
+    console.log("Current active tab:", activeTab);
+    console.log("Current filtered exams:", filteredExams);
+  }, [missedExams, activeTab, filteredExams]);
 
   // Clear error after 5 seconds
   useEffect(() => {
@@ -199,6 +221,7 @@ const ExamsParent = () => {
       return () => clearTimeout(timer);
     }
   }, [error, dispatch]);
+
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#13082F] p-6 relative">
@@ -297,6 +320,16 @@ const ExamsParent = () => {
               {t("exams.main.upcomingTab")} ({upcomingExams.length})
             </Button>
             <Button
+              variant={activeTab === "running" ? "outline" : "solid"}
+              className={`${activeTab === "running"
+                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300 hover:bg-gradient-to-r hover:from-[#FD813D10] hover:via-[#CF72C010] hover:to-[#BC6FFB10] dark:hover:from-[#CE4EA010] dark:hover:via-[#BF4ACB10] dark:hover:to-[#AE45FB10]"
+                } px-4 md:px-6 py-2 rounded-full transition-all duration-300`}
+              onClick={() => setActiveTab("running")}
+            >
+              {t("exams.main.runningTab")} ({runningExams.length})
+            </Button>
+            <Button
               variant={activeTab === "missed" ? "outline" : "solid"}
               className={`${activeTab === "missed"
                 ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
@@ -324,6 +357,7 @@ const ExamsParent = () => {
                     {activeTab === "all" && t("exams.main.noExams.all")}
                     {activeTab === "completed" && t("exams.main.noExams.completed")}
                     {activeTab === "upcoming" && t("exams.main.noExams.upcoming")}
+                    {activeTab === "running" && t("exams.main.noExams.running")}
                     {activeTab === "missed" && t("exams.main.noExams.missed")}
 
                   </CardContent>
@@ -380,19 +414,33 @@ const ExamsParent = () => {
                               <Button
                                 variant="solid"
                                 className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 cursor-default
-      ${exam.status === "completed"
+    ${activeTab === "completed" || exam.status === "completed"
                                     ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-                                    : exam.status === "missed"
+                                    : exam.status === "missed" || activeTab === "missed"
                                       ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white opacity-70"
-                                      : "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                                      : exam.status === "running"
+                                        ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
+                                        : "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
                                   }`}
-                                onClick={() => exam.status === "upcoming" && handleStartExam(exam)}
+                                onClick={() => {
+                                  if (exam.status === "upcoming") {
+                                    handleStartExam(exam);
+                                  } else if (exam.status === "running") {
+                                    console.log("Joining running exam:", exam);
+                                  }
+                                }}
                               >
-                                {exam.status === "completed"
-                                  ? `${t("exams.main.examCard.completed")} (${exam.result?.percentage || 0}%) - ${t(`exams.main.examCard.${exam.result?.grade.toLowerCase() || 'pass'}`)}`
-                                  : exam.status === "missed"
-                                    ? t("exams.main.missedTab")
-                                    : t("exams.main.upcomingTab")}
+                                {activeTab === "completed"
+                                  ? t("exams.main.examCard.completed")
+                                  : activeTab === "missed"
+                                    ? t("exams.main.missedTab") // في تبويب Missed يظهر "Missed" فقط
+                                    : exam.status === "completed"
+                                      ? `${t("exams.main.examCard.completed")} (${examResult?.percentage || exam.result?.percentage || 0}%) - ${t(`exams.main.examCard.${(examResult?.grade || exam.result?.grade)?.toLowerCase() || 'pass'}`)}`
+                                      : exam.status === "missed"
+                                        ? t("exams.main.missedTab")
+                                        : exam.status === "running"
+                                          ? t("exams.main.runningTab")
+                                          : t("exams.main.upcomingTab")}
                               </Button>
                             </div>
                           </CardContent>

@@ -178,6 +178,42 @@ export const fetchUpcomingExams = createAsyncThunk(
     }
 );
 
+// Add this with your other async thunks
+export const fetchRunningExams = createAsyncThunk(
+    "parentExam/fetchRunningExams",
+    async (gradeSubjectSemesterId, { getState, rejectWithValue }) => {
+        const state = getState();
+        const studentId = state.motivationparent.selectedKid?._id;
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+        if (!token) return rejectWithValue("Authentication required");
+        if (!studentId) return rejectWithValue("Student ID is required");
+        if (!gradeSubjectSemesterId) return rejectWithValue("Subject semester ID is required");
+
+        try {
+            const response = await fetch(
+                `${BASE_URL}/Running-Exams-exams/${gradeSubjectSemesterId}/${studentId}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to fetch running exams");
+            }
+
+            return await response.json();
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
 const parentExamSlice = createSlice({
     name: "parentExam",
     initialState: {
@@ -185,7 +221,8 @@ const parentExamSlice = createSlice({
         completedExams: [],
         missedExams: [],
         upcomingExams: [],
-        studentResults: [],  
+        runningExams: [],
+        studentResults: [],
         loading: false,
         error: null,
     },
@@ -234,7 +271,7 @@ const parentExamSlice = createSlice({
             })
             .addCase(fetchMissedExams.fulfilled, (state, action) => {
                 state.loading = false;
-                state.missedExams = action.payload.exams || [];
+                state.missedExams = action.payload || [];
             })
             .addCase(fetchMissedExams.rejected, (state, action) => {
                 state.loading = false;
@@ -254,7 +291,7 @@ const parentExamSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-                        // Upcoming Exams
+            // Upcoming Exams
             .addCase(fetchUpcomingExams.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -264,6 +301,19 @@ const parentExamSlice = createSlice({
                 state.upcomingExams = action.payload.exams || action.payload || [];
             })
             .addCase(fetchUpcomingExams.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Add this in the extraReducers builder
+            .addCase(fetchRunningExams.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchRunningExams.fulfilled, (state, action) => {
+                state.loading = false;
+                state.runningExams = action.payload.exams || action.payload || [];
+            })
+            .addCase(fetchRunningExams.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

@@ -110,12 +110,48 @@ export const fetchMissedRooms = createAsyncThunk(
   }
 );
 
+export const fetchCompletedNotMissedRooms = createAsyncThunk(
+  "virtualRooms/fetchCompletedNotMissedRooms",
+  async ({subjectId, studentId}, { rejectWithValue }) => {
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+    if (!token) return rejectWithValue("Authentication required");
+    if (!studentId) return rejectWithValue("Kid ID is required");
+    if (!subjectId) return rejectWithValue("Subject ID is required");
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/virtual-rooms/completed-not-missed/${subjectId}/${studentId}`,
+        {
+          method: "GET",
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch completed-not-missed rooms");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 const virtualRoomsSlice = createSlice({
   name: "virtualRoomsParent",
   initialState: {
     virtualRooms: [],
     completedRooms: [],
     missedRooms: [],
+    completedNotMissedRooms: [],
     loading: false,
     error: null,
   },
@@ -161,6 +197,18 @@ const virtualRoomsSlice = createSlice({
         state.missedRooms = action.payload.virtualRooms || [];
       })
       .addCase(fetchMissedRooms.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+         .addCase(fetchCompletedNotMissedRooms.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCompletedNotMissedRooms.fulfilled, (state, action) => {
+        state.loading = false;
+        state.completedNotMissedRooms = action.payload || [];
+      })
+      .addCase(fetchCompletedNotMissedRooms.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

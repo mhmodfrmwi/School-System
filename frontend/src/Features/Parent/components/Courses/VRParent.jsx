@@ -5,6 +5,7 @@ import {
     fetchVirtualRooms,
     fetchCompletedRooms,
     fetchMissedRooms,
+    fetchCompletedNotMissedRooms,
     clearError
 } from "../../components/ParentRedux/VRSlice";
 import { setSelectedKid } from "../../components/ParentRedux/MotivationSlice";
@@ -36,6 +37,7 @@ const VirtualRoomsParent = () => {
     const {
         virtualRooms,
         completedRooms,
+        completedNotMissedRooms,
         missedRooms,
         loading,
         error
@@ -65,6 +67,7 @@ const VirtualRoomsParent = () => {
                 dispatch(fetchVirtualRooms(subjectId)),
                 dispatch(fetchCompletedRooms(subjectId)),
                 dispatch(fetchMissedRooms(subjectId)),
+                dispatch(fetchCompletedNotMissedRooms({subjectId, studentId: selectedKid._id})), 
             ])
                 .then(() => setInitialLoading(false))
                 .catch(() => setInitialLoading(false));
@@ -91,7 +94,7 @@ const VirtualRoomsParent = () => {
 
     const displayedRooms =
         activeTab === "completed"
-            ? completedRooms
+            ? completedNotMissedRooms
             : activeTab === "missed"
                 ? missedRooms
                 : virtualRooms;
@@ -194,44 +197,40 @@ const VirtualRoomsParent = () => {
                     <h1 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-300 mb-4">{t('virtualRooms.main.title')}</h1>
 
                     {/* Filter Buttons */}
-                    <div className="flex flex-wrap gap-3 mb-6">
-                        <Button
-                            variant={activeTab === "all" ? "outline" : "solid"}
-                            className={`${activeTab === "all"
-                                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-                                : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
-                                } px-4 md:px-6 py-2 rounded-full`}
-                            onClick={() => setActiveTab("all")}
-                        >
-                            {t('virtualRooms.main.allTab')} ({virtualRooms.length})
-                        </Button>
+                  <div className="flex flex-wrap gap-3 mb-6">
+                <Button
+                    variant={activeTab === "all" ? "outline" : "solid"}
+                    className={`${activeTab === "all"
+                        ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                        : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+                        } px-4 md:px-6 py-2 rounded-full`}
+                    onClick={() => setActiveTab("all")}
+                >
+                    {t('virtualRooms.main.allTab')} ({virtualRooms.length})
+                </Button>
 
-                        <Button
-                            variant={activeTab === "completed" ? "outline" : "solid"}
-                            className={`${activeTab === "completed"
-                                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-                                : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
-                                } px-4 md:px-6 py-2 rounded-full`}
-                            onClick={() => {
-                                setActiveTab("completed");
-                            }}
-                        >
-                            {t('virtualRooms.main.completedTab')}  ({completedRooms?.length || 0})
-                        </Button>
+                <Button
+                    variant={activeTab === "completed" ? "outline" : "solid"}
+                    className={`${activeTab === "completed"
+                        ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                        : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+                        } px-4 md:px-6 py-2 rounded-full`}
+                    onClick={() => setActiveTab("completed")}
+                >
+                    {t('virtualRooms.main.completedTab')} ({completedNotMissedRooms?.length || 0}) {/* تم التعديل هنا */}
+                </Button>
 
-                        <Button
-                            variant={activeTab === "missed" ? "outline" : "solid"}
-                            className={`${activeTab === "missed"
-                                ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
-                                : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
-                                } px-4 md:px-6 py-2 rounded-full`}
-                            onClick={() => {
-                                setActiveTab("missed");
-                            }}
-                        >
-                            {t('virtualRooms.main.missedTab')}  ({missedRooms?.length || 0})
-                        </Button>
-                    </div>
+                <Button
+                    variant={activeTab === "missed" ? "outline" : "solid"}
+                    className={`${activeTab === "missed"
+                        ? "bg-gradient-to-r from-[#FD813D] via-[#CF72C0] to-[#BC6FFB] dark:from-[#CE4EA0] dark:via-[#BF4ACB] dark:to-[#AE45FB] text-white"
+                        : "border border-gray-500 dark:border-[#E0AAEE] text-gray-800 dark:text-gray-300"
+                        } px-4 md:px-6 py-2 rounded-full`}
+                    onClick={() => setActiveTab("missed")}
+                >
+                    {t('virtualRooms.main.missedTab')} ({missedRooms?.length || 0})
+                </Button>
+            </div>
 
                     {/* Secondary Loading State (for actions after initial load) */}
                     {loading && !initialLoading && (

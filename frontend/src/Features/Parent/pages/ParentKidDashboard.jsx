@@ -17,6 +17,8 @@ import backgroundStars from "../../../assets/StudentIcon/bg-color1.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { fetchParentKids } from "../../Parent/components/services/apiKids";
 
+
+
 function DashboardParent() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -155,7 +157,7 @@ function DashboardParent() {
                       {t("dashboardparent.classInfo")}
                     </p>
                     <p className="mt-2 font-poppins text-lg font-semibold dark:text-gray-300">
-                      {selectedKid.gradeId?.name || 'N/A'}
+                      {selectedKid.gradeId?.gradeName || 'N/A'}
                     </p>
                   </CardContent>
                 </Card>
@@ -299,10 +301,10 @@ function DashboardParent() {
                       <span className="font-semibold">{t("parent.admissionDate")}:</span> {formatDate(selectedKid.admission_date)}
                     </p>
                     <p className="font-poppins text-gray-600 dark:text-gray-300">
-                      <span className="font-semibold">{t("parent.grade")}:</span> {selectedKid.gradeId?.name || t("parent.noGradeAssigned")}
+                      <span className="font-semibold">{t("parent.grade")}:</span> {selectedKid.gradeId?.gradeName || t("parent.noGradeAssigned")}
                     </p>
                     <p className="font-poppins text-gray-600 dark:text-gray-300">
-                      <span className="font-semibold">{t("parent.class")}:</span> {selectedKid.classId?.name || t("parent.noClassAssigned")}
+                      <span className="font-semibold">{t("parent.class")}:</span> {selectedKid.classId?.className || t("parent.noClassAssigned")}
                     </p>
                   </div>
                 </CardContent>

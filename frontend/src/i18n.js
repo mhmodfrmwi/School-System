@@ -466,6 +466,7 @@ i18n.use(initReactI18next).init({
             upcomingTab: "Upcoming",
             completedTab: "Completed",
             missedTab: "Missed",
+            runningTab: "Running",
             page: "Page",
             of: "of",
             noExams: {
@@ -473,6 +474,7 @@ i18n.use(initReactI18next).init({
               upcoming: "No upcoming exams available",
               completed: "No completed exams available",
               missed: "No missed exams available",
+              running: "No running exams available",
             },
             examCard: {
               title: "Title",
@@ -2799,6 +2801,7 @@ i18n.use(initReactI18next).init({
             upcomingTab: "القادمة",
             completedTab: "المكتملة",
             missedTab: "الفائتة",
+            runningTab: "المستمرة",
             page: "صفحة",
             of: "من",
             noExams: {
@@ -2806,6 +2809,7 @@ i18n.use(initReactI18next).init({
               upcoming: "لا توجد امتحانات قادمة",
               completed: "لا توجد امتحانات مكتملة",
               missed: "لا توجد امتحانات فائتة",
+              running: "لا توجد امتحانات مستمرة",
             },
             examCard: {
               title: "العنوان",
