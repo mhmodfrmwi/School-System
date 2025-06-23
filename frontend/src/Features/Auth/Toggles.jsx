@@ -41,9 +41,9 @@ const Toggles = () => {
 
   const getLanguageIcon = () => {
     if (currentTheme === "dark") {
-      return i18n.language === "en" ? languageA : languageE;
+      return i18n.language === "en" ? languageE : languageA; 
     } else {
-      return i18n.language === "en" ? languageAO : languageEO;
+      return i18n.language === "en" ? languageEO : languageAO;
     }
   };
 
