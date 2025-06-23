@@ -267,9 +267,9 @@ const Navbar = () => {
                 <p className="mx-auto my-2 w-40 border-b-2 border-white dark:border-gray-500"></p>
               </div>
 
-              <div dir="ltr" className="ms-20">
-                <ThemeSwitcher />
-              </div>
+              <div className="mx-auto flex items-center justify-center">
+                              <ThemeSwitcher />
+                            </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white dark:border-gray-500"></p>
               <button
                 className="mx-auto ms-6 p-2 text-[#C459D9] dark:text-[#D6BCFA]"

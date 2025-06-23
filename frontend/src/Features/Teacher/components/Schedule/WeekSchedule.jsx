@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherSchedule } from "../TeacherRedux/teacherScheduleSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import ScheduleToggle from "./SelectPage";
 import { useTranslation } from 'react-i18next';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const WeeklySchedule = () => {
     const dispatch = useDispatch();
@@ -12,6 +14,7 @@ const WeeklySchedule = () => {
     const teacherSchedule = useSelector(state => state.teacherSchedule.teacherSchedule);
     const loading = useSelector(state => state.teacherSchedule.loading);
     const error = useSelector(state => state.teacherSchedule.error);
+    const scheduleRef = useRef(null); // Create a ref for the schedule table
 
     const days = [
         t('schaduel.Sunday'), t('schaduel.Monday'), t('schaduel.Tuesday'), t('schaduel.Wednesday'), t('schaduel.Thursday'),t('schaduel.Friday'), t('schaduel.Saturday')
@@ -27,6 +30,42 @@ const WeeklySchedule = () => {
     useEffect(() => {
         dispatch(fetchTeacherSchedule());
     }, [dispatch]);
+
+    const handleExportPDF = () => {
+        const input = scheduleRef.current;
+        
+        // Temporarily hide the export button to avoid it appearing in the PDF
+        const exportButton = document.querySelector('.export-pdf-button');
+        if (exportButton) exportButton.style.visibility = 'hidden';
+
+        html2canvas(input, {
+            scale: 2, // Increase scale for better quality
+            logging: false,
+            useCORS: true,
+            allowTaint: true,
+            scrollY: -window.scrollY
+        }).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'mm'
+            });
+
+            const imgWidth = 297; // A4 width in mm (landscape)
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+            
+            // Add title to the PDF
+            pdf.setFontSize(18);
+            pdf.text(`Teacher Schedule - ${semesterName} (${startYear}-${endYear})`, 10, 10);
+            
+            pdf.save(`${semesterName}_Schedule_${startYear}-${endYear}.pdf`);
+
+            // Restore the export button visibility
+            if (exportButton) exportButton.style.visibility = 'visible';
+        });
+    };
 
     if (loading) return <p>Loading...</p>;
     if (teacherSchedule.length === 0) {
@@ -45,8 +84,6 @@ const WeeklySchedule = () => {
     }
     if (error) return <p>{error}</p>;
 
-
-
     const calculateDuration = (start_time, end_time) => {
         const startTime = new Date(`1970-01-01T${start_time}:00Z`);
         const endTime = new Date(`1970-01-01T${end_time}:00Z`);
@@ -64,12 +101,8 @@ const WeeklySchedule = () => {
         }
     };
 
-
-
     return (
         <>
-            
-
             <div className="flex flex-col p-4">
                 <div className="flex-1">
                     <div className="mx-auto w-[360px] mt-0 sm:w-[550px] md:w-[700px] xl:w-full">
@@ -81,11 +114,14 @@ const WeeklySchedule = () => {
                                     </div>
                                     <p className="w-24 rounded-xl mb-4 border-t-4 border-[#117C90] ms-4 dark:border-DarkManager"></p>
                                 </div>
-                                <button className="bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:to-DarkManager font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white">
-                                {t('schaduel.ExportPDF')}
+                                <button 
+                                    className="export-pdf-button bg-gradient-to-r from-[#105E6A] to-[#117C90] dark:bg-gradient-to-r dark:from-DarkManager dark:to-DarkManager font-poppins rounded-2xl px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white"
+                                    onClick={handleExportPDF}
+                                >
+                                    {t('schaduel.ExportPDF')}
                                 </button>
                             </div>
-                            <div className="overflow-x-auto p-4">
+                            <div className="overflow-x-auto p-4" ref={scheduleRef}>
                                 <table className="min-w-[800px] w-full border-collapse border border-gray-300 text-sm sm:text-base dark:border-DarkManager">
                                     <thead>
                                         <tr className="bg-[#105E6A] text-white dark:bg-DarkManager">

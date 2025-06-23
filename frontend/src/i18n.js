@@ -8,6 +8,11 @@ i18n.use(initReactI18next).init({
         /////////////////////////////////////////////////////////////Student////////////////////////////////////////////////////////
 
         //Nav
+        ViewDetails:"ViewDetails",
+        ViewAll:"ViewAll",
+        StafMeetings:"Staf Meetings",
+        Details:"Details",
+        Semester:"Semester",
         SearchStudentPage: "Search Student Page",
         Logout: "Logout",
         EditProfile: "Edit Profile",
@@ -2180,6 +2185,24 @@ i18n.use(initReactI18next).init({
           roleError: "Please select a role first!",
           orLoginWith: "OR LOGIN WITH",
         },
+        "resendVerification": {
+  "backToLogin": "Back to Login",
+  "title": "Resend Verification Email",
+  "subtitle": "Enter your email to resend the verification link.",
+  "emailLabel": "Email Address",
+  "emailPlaceholder": "Enter your email",
+  "accountType": "Account Type",
+  "student": "Student",
+  "teacher": "Teacher",
+  "parent": "Parent",
+  "admin": "Admin",
+  "manager": "Manager",
+  "submitButton": "Resend Verification Email",
+  "successMessage": "Verification email sent! Check your inbox.",
+  "redirectMessage": "Redirecting to login in 5 seconds...",
+  "invalidEmail": "Please enter a valid email address",
+  "tryAgain": "Try again"
+},
         /////////////////////////chatbot///////////////////
         chatbot: {
           title: "Study Assistant",
@@ -2355,6 +2378,11 @@ i18n.use(initReactI18next).init({
         ////////////////////////////////////////Student//////////////////////////////////////////////////////////////////
 
         //Nav
+        ViewDetails:"عرض التفاصيل",
+        ViewAll:"عرض الكل",
+        StafMeetings:"اجتماعات الموظفين",
+        Details:"تفاصيل",
+        Semester:"الترم",
         SearchStudentPage: "البحث في صفحة الطالب",
         Logout: "تسجيل الخروج",
         EditProfile: "تعديل الملف الشخصي",
@@ -4512,6 +4540,24 @@ i18n.use(initReactI18next).init({
           roleError: "الرجاء تحديد الدور أولاً!",
           orLoginWith: "أو سجل الدخول باستخدام",
         },
+        "resendVerification": {
+  "backToLogin": "العودة إلى تسجيل الدخول",
+  "title": "إعادة إرسال بريد التحقق",
+  "subtitle": "أدخل بريدك الإلكتروني لإعادة إرسال رابط التحقق.",
+  "emailLabel": "عنوان البريد الإلكتروني",
+  "emailPlaceholder": "أدخل بريدك الإلكتروني",
+  "accountType": "نوع الحساب",
+  "student": "طالب",
+  "teacher": "معلم",
+  "parent": "ولي أمر",
+  "admin": "مدير",
+  "manager": "مدير تنفيذي",
+  "submitButton": "إعادة إرسال بريد التحقق",
+  "successMessage": "تم إرسال بريد التحقق! تحقق من بريدك الوارد.",
+  "redirectMessage": "جار التوجيه إلى تسجيل الدخول خلال 5 ثوانٍ...",
+  "invalidEmail": "الرجاء إدخال بريد إلكتروني صالح",
+  "tryAgain": "حاول مرة أخرى"
+},
         ////////////////////////chatbot////////////////
 
         chatbot: {
