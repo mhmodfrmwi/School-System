@@ -8,6 +8,11 @@ i18n.use(initReactI18next).init({
         /////////////////////////////////////////////////////////////Student////////////////////////////////////////////////////////
 
         //Nav
+        ViewDetails:"ViewDetails",
+        ViewAll:"ViewAll",
+        StafMeetings:"Staf Meetings",
+        Details:"Details",
+        Semester:"Semester",
         SearchStudentPage: "Search Student Page",
         Logout: "Logout",
         EditProfile: "Edit Profile",
@@ -2355,6 +2360,11 @@ i18n.use(initReactI18next).init({
         ////////////////////////////////////////Student//////////////////////////////////////////////////////////////////
 
         //Nav
+        ViewDetails:"عرض التفاصيل",
+        ViewAll:"عرض الكل",
+        StafMeetings:"اجتماعات الموظفين",
+        Details:"تفاصيل",
+        Semester:"الترم",
         SearchStudentPage: "البحث في صفحة الطالب",
         Logout: "تسجيل الخروج",
         EditProfile: "تعديل الملف الشخصي",

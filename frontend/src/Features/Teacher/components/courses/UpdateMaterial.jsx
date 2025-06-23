@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  updateMaterial,
-  fetchMaterials,
-} from "../TeacherRedux/PdfMaterialSlice";
+import { updateMaterial, fetchMaterials } from "../TeacherRedux/PdfMaterialSlice";
 import { useTranslation } from "react-i18next";
 
 const EditMaterial = () => {
@@ -21,7 +18,7 @@ const EditMaterial = () => {
     title: "",
     description: "",
     type: "PDF",
-    fileUrl: "",
+    file_url: "", 
     class_id: "",
     grade_subject_semester_id: "",
   });
@@ -34,10 +31,9 @@ const EditMaterial = () => {
         title: selectedMaterial.title || "",
         description: selectedMaterial.description || "",
         type: selectedMaterial.type || "PDF",
-        fileUrl: selectedMaterial.file_url || "",
+        file_url: selectedMaterial.file_url || "", 
         class_id: selectedMaterial.class_id || "",
-        grade_subject_semester_id:
-          selectedMaterial.grade_subject_semester_id || "",
+        grade_subject_semester_id: selectedMaterial.grade_subject_semester_id || "",
       });
     }
   }, [dispatch, materialId, selectedMaterial]);
@@ -48,24 +44,35 @@ const EditMaterial = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting update:", formData);
-
+    
     try {
       if (!materialId) {
         throw new Error("Material ID is missing!");
       }
 
-      const result = await dispatch(updateMaterial({ materialId, formData }));
-      console.log("Update result:", result);
+      const payload = {
+        materialId,
+        formData: {
+          ...formData,
+          title: formData.title,
+          description: formData.description,
+          type: formData.type,
+          file_url: formData.file_url, 
+          class_id: formData.class_id,
+          grade_subject_semester_id: formData.grade_subject_semester_id
+        }
+      };
+
+      const result = await dispatch(updateMaterial(payload));
 
       if (result.error) {
-        throw new Error(result.error.message);
+        throw new Error(result.error.message || "Update failed");
       }
 
-      navigate(-1);
+      navigate(-1); 
     } catch (error) {
-      console.error("Update failed:", error);
-      toast.error("Failed to update material");
+      console.error("Update error:", error);
+      toast.error(error.message || "Failed to update material");
     }
   };
 
@@ -75,7 +82,6 @@ const EditMaterial = () => {
         <h1 className="font-poppins text-lg font-semibold text-[#244856] sm:text-xl lg:text-2xl">
           {t("tablesheader.EditMaterial")}
         </h1>
-
         <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[190px]"></div>
       </div>
       <div className="mx-auto w-[80%] rounded-xl bg-gray-100 p-6 shadow-md dark:bg-DarkManager2">
@@ -128,8 +134,8 @@ const EditMaterial = () => {
               </label>
               <input
                 type="text"
-                name="fileUrl"
-                value={formData.fileUrl}
+                name="file_url" 
+                value={formData.file_url}
                 onChange={handleChange}
                 className="w-full rounded-2xl border border-gray-300 px-4 py-2 font-poppins text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-DarkManager2 dark:text-white dark:placeholder-white"
                 required

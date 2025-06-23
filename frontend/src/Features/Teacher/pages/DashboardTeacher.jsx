@@ -1,18 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Mail, BookOpen, Calendar, MessageCircle } from "lucide-react";
-import { FaBullhorn, FaBell, FaCalendarAlt } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { Mail, BookOpen, Calendar, MessageCircle, Clock } from "lucide-react";
+import { FaCalendarAlt, FaChalkboardTeacher } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBook,
+  faCalendarAlt,
+  faClipboardList,
+  faGraduationCap,
+  faRunning,
+  faUserClock
+} from '@fortawesome/free-solid-svg-icons';
+
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassTeacher } from "../components/TeacherRedux/TeacherClassSlice";
-import bag from "../../../assets/bag.png";
 import { getTeacherPointsForTerm } from "../components/TeacherRedux/motivationTeacherSlice";
 import { useTranslation } from 'react-i18next';
-
+import GradeIcon from "../../../assets/StudentIcon/Grade.png";
+import ActivityIcon from "../../../assets/StudentIcon/Activites.png";
+import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
+import LibraryIcon from "../../../assets/StudentIcon/Library.png";
+import CourseIcon from "../../../assets/StudentIcon/Course.png";
+import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
 const DashboardTeacher = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  
+  const navigate = useNavigate();
   const { classTeachers = [] } = useSelector(
     (state) => state.classTeachers || {},
   );
@@ -28,21 +41,15 @@ const DashboardTeacher = () => {
     dispatch(getTeacherPointsForTerm());
   }, [dispatch]);
 
-  const [notifications, setNotifications] = useState({
-    mail: 0,
-    messages: 0,
-    others: 2,
-  });
-
-  const [categories, setCategories] = useState([
-    { name: t('dashboardteacher.Mailbox'), icon: "mail", count: 3 },
-    { name: t('dashboardteacher.DiscussionRooms'), icon: "message-circle", count: 0 },
-    { name: t('dashboardteacher.CustomLibraries'), icon: "book-open", count: 3 },
-    { name: t('dashboardteacher.AcademicCalendar'), icon: "calendar", count: 0 },
-  ]);
-  const [virtualClassrooms, setVirtualClassrooms] = useState([]);
-
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
+  const [categories] = useState([
+    { name: t("Courses"), icon: faBook, link: '/teacher/currentcourse' },
+    { name: t("Absence"), icon: faUserClock, link: '/teacher/currentcourseforattendance' },
+    { name: t("Schedule"), icon: faCalendarAlt, link: '/teacher/weekly-schedule' },
+    { name: t("GradeManagements"), icon: faClipboardList, link: '/teacher/current-courses-for-grades' },
+    { name: t("Activities"), icon: faRunning, link: '/teacher/school-hubs' },
+    { name: t("Library"), icon: faGraduationCap, link: '/teacher/teacher-library' },
+  ]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -53,171 +60,163 @@ const DashboardTeacher = () => {
   }, []);
 
   return (
-    <div className="min-h-screen p-4 font-sans md:p-6">
-      {/* Top Section */}
-      <div className="mb-10 grid grid-cols-1 gap-10 font-poppins sm:grid-cols-2">
-        <div className="grid h-48 grid-cols-2 rounded-md bg-[#117C90] p-4 dark:bg-DarkManager">
-          <div className="ml-2 grid grid-cols-1 gap-2 text-left">
-            <div className="flex items-center gap-2">
-              <FaCalendarAlt className="text-lg text-gray-200 dark:text-white" />
-              <span className="text-sm text-gray-200 dark:text-white">{currentTime}</span>
+    <div className="min-h-screen font-poppins p-4  md:p-6">
+      {/* Welcome and Stats Section */}
+      <div className="mb-9  grid grid-cols-1 gap-6 md:grid-cols-2">
+        {/* Welcome Card */}
+        <div className="rounded-xl bg-gradient-to-r from-[#117C90] to-[#0f6b7c] p-6 shadow-lg dark:bg-DarkManager dark:to-[#4b6584]">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-white">{t('dashboardteacher.Welcome')},</h2>
+              <h1 className="mt-2 text-2xl font-bold text-white md:text-3xl">{fullName}</h1>
+              <p className="mt-2 flex items-center text-sm text-white">
+                <Clock className="mr-2 h-4 w-4" />
+                {currentTime}
+              </p>
             </div>
-            <div className="flex flex-col items-start">
-              <div className="ml-2 grid grid-cols-1 gap-1 text-center">
-                <span className="text-lg font-bold text-white md:text-sm">
-                  {t('dashboardteacher.Welcome')}
-                </span>
-                <span className="mt-4 text-2xl font-bold text-white md:text-xl xl:text-3xl">
-                  {fullName}
-                </span>
+            <div className="flex flex-col items-center">
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white bg-opacity-20">
+                <FontAwesomeIcon
+                  icon={faGraduationCap}
+                  className="text-2xl text-white"
+                />
               </div>
-            </div>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <span className="text-sm text-white md:text-lg">{t('dashboard.yourScore')}</span>
-            <div className="relative flex items-center justify-center">
-              <div
-                className={`flex h-12 w-12 items-center justify-center rounded-full border-4 ${
-                  teacherPointsForTerm.badge === "Green"
-                    ? "border-green-500 bg-green-500"
-                    : teacherPointsForTerm.badge === "Diamond"
-                      ? "border-[#6a6969] bg-[#6a6969]"
-                      : teacherPointsForTerm.badge === "Gold"
-                        ? "border-yellow-500 bg-yellow-500"
-                        : "border-gray-300 bg-gray-300"
-                } p-7 md:h-14 md:w-14`}
-              >
-                <span className="text-lg font-bold text-white md:text-2xl">
-                  {teacherPointsForTerm.totalPoints}
-                </span>
-              </div>
+
             </div>
           </div>
         </div>
 
-        <div className="grid h-48 rounded-md bg-[#117C90] p-4 dark:bg-DarkManager">
-          <span className="ml-4 block text-start text-sm font-semibold text-white md:text-lg">
-            {t('dashboardteacher.notify')}
-          </span>
-          <div className="flex h-14 w-full justify-center gap-4">
-            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1 dark:bg-DarkManager2">
-              <FaBullhorn className="text-2xl text-[#c9cc29]" />
-              <span className="ml-2 text-2xl font-bold text-[#117C90] dark:text-white">0</span>
+        {/* Points Card */}
+        <div className="rounded-xl bg-gradient-to-r from-[#117C90] to-[#0f6b7c] p-6 shadow-lg dark:bg-DarkManager dark:to-[#4b6584]">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-white dark:text-white">{t('dashboard.yourScore')}</h2>
+              <div className="mt-4 flex items-center">
+                <div className={`flex h-14 w-14 items-center justify-center rounded-full border-4 ${teacherPointsForTerm.badge === "Green" ? "border-green-500 bg-green-500" :
+                  teacherPointsForTerm.badge === "Diamond" ? "border-[#6a6969] bg-[#6a6969]" :
+                    teacherPointsForTerm.badge === "Gold" ? "border-yellow-500 bg-yellow-500" :
+                      "border-gray-300 bg-gray-300"
+                  }`}>
+                  <span className="text-xl font-bold text-white">
+                    {teacherPointsForTerm.totalPoints}
+                  </span>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm text-white dark:text-gray-300">{t('points.semesterPoints')}</p>
+                  <p className="text-lg font-bold text-white dark:text-white">
+                    {teacherPointsForTerm.badge} Level
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1 dark:bg-DarkManager2">
-              <FontAwesomeIcon
-                icon={faEnvelope}
-                className="text-2xl text-[#cf502a]"
-              />
-              <span className="ml-2 text-2xl font-bold text-[#117C90] dark:text-white">0</span>
-            </div>
-            <div className="flex items-center rounded-md bg-gray-100 px-3 py-1 dark:bg-DarkManager2">
-              <FaBell className="text-2xl text-[#31961d]" />
-              <span className="ml-2 text-2xl font-bold text-[#117C90] dark:text-white">2</span>
+            <div className="text-right">
+              <button
+                onClick={() => navigate('/teacher/motivation')}
+                className="rounded-lg border border-[#117C90] bg-white px-3 py-1 text-xs font-medium text-[#117C90] transition-colors hover:bg-[#117C90] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#117C90] focus:ring-offset-2 dark:border-[#4b6584] dark:bg-gray-800 dark:text-white dark:hover:bg-[#4b6584] dark:hover:text-white"
+              >
+                {t('ViewDetails')}
+              </button>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Main Content */}
       <main className="container mx-auto">
         {/* Courses Section */}
-        <section className="mb-4 rounded-lg p-4 md:mb-6 md:p-6">
-          <div className="ml-0">
-            <div className="flex flex-col">
-              <h1 className="font-poppins text-lg font-bold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-3xl">
-                {t('Courses')}
-              </h1>
-              <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[125px]"></div>
+        <section className="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-DarkManager dark:to-[#4b6584]">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-[#244856] dark:text-white">{t('Courses')}</h2>
+              <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856]"></div>
             </div>
-
-            <div className="ml-0 grid grid-cols-1 justify-items-start gap-10 pt-6 sm:grid-cols-2 xl:grid-cols-3">
-              {classTeachers.length > 0 ? (
-                classTeachers.map((classteacher, index) => (
-                  <div
-                    key={classteacher?.classId || index}
-                    className="relative flex w-56 cursor-pointer flex-col items-center rounded-xl border border-gray-300 bg-slate-100 p-5 text-center shadow-lg transition-colors hover:bg-slate-200 dark:bg-DarkManager2 dark:hover:bg-DarkManager"
-                  >
-                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600">
-                      <img src={bag} alt="bag" className="h-7 w-7" />
-                    </div>
-                    <p className="font-poppins text-lg font-semibold dark:text-white">
-                      {classteacher?.subjectName || "N/A"}
-                    </p>
-                    <div className="flex justify-start gap-4">
-                      <p className="font-poppins font-semibold text-[#197080] dark:text-white">
-                        {classteacher.gradeName || "N/A"}
-                      </p>
-                      <p className="font-poppins font-semibold text-[#197080] dark:text-white">
-                        {classteacher.className || "N/A"}
-                      </p>
-                    </div>
-                    <p className="font-poppins text-[#197080] dark:text-white">
-                      {classteacher.semesterName || "N/A"}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="mb-4 text-6xl text-gray-400 dark:text-white"
-                  />
-                  <p className="mb-2 font-poppins text-xl font-semibold text-gray-600 dark:text-white">
-                    No Teacher Classes Found
-                  </p>
-                  <p className="mb-4 max-w-xl text-center font-poppins text-gray-500 dark:text-white">
-                    It seems like there are no teacher classes available at
-                    the moment.
-                  </p>
-                </div>
-              )}
-            </div>
+            <button className="rounded-lg bg-[#117C90] px-3 py-1 text-sm text-white hover:bg-[#0f6b7c] dark:bg-[#4b6584]"
+              onClick={() => navigate('/teacher/currentcourse')}>
+              {t('ViewAll')}
+            </button>
           </div>
-        </section>
-        {/* Main Categories Section */}
-        <section className="mb-4 rounded-lg p-4 font-poppins md:mb-6 md:p-6">
-          <div className="ml-0">
-            <div className="mb-7 flex flex-col">
-              <h1 className="font-poppins text-lg font-bold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-2xl">
-                {t('dashboardteacher.mainCategories')}
-              </h1>
-              <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[205px]"></div>
-            </div>
-            <div className="grid grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-4">
-              {categories.map((category, index) => (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 ">
+            {classTeachers.length > 0 ? (
+              classTeachers.map((classteacher, index) => (
                 <div
-                  key={index}
-                  className="grid grid-cols-1 gap-4 rounded-lg bg-slate-100 p-4 transition-shadow hover:shadow-md dark:bg-DarkManager2"
+                  key={classteacher?.classId || index}
+                  className="flex items-center rounded-lg border cursor-pointer border-gray-200 p-4 transition-all hover:shadow-md dark:border-gray-700"
+                  onClick={() => {
+                    const classId = classteacher.classId._id;
+                    const gradeSubjectSemesterId = classteacher.id;
+                    navigate(
+                      `/teacher/addmaterial/${classId}/${gradeSubjectSemesterId}`,
+                    );
+                  }}
                 >
-                  <div className="flex items-center justify-center rounded-full">
-                    {getIconComponent(category.icon)}
+                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#117C90] text-white dark:bg-[#4b6584]">
+                    <FaChalkboardTeacher className="text-xl" />
                   </div>
-                  <span className="ml-2 text-center text-sm font-medium text-[#105E6A] dark:text-white md:ml-3 md:text-lg">
-                    {category.name}
-                  </span>
+                  <div className="ml-2 mr-2">
+                    <h3 className="font-semibold dark:text-white">{classteacher?.subjectName || "N/A"}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      {classteacher.gradeName || "N/A"} • {classteacher.className || "N/A"}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {t('Semester')}: {classteacher.semesterName || "N/A"}
+                    </p>
+                  </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="col-span-2 flex flex-col items-center justify-center rounded-lg bg-gray-100 py-10 dark:bg-gray-700">
+                <BookOpen className="mb-4 h-12 w-12 text-gray-400 dark:text-gray-300" />
+                <p className="mb-2 text-lg font-semibold text-gray-600 dark:text-white">No Classes Assigned</p>
+                <p className="text-center text-gray-500 dark:text-gray-300">
+                  You don't have any classes assigned yet. Please check back later.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+        {/* Upcoming Events */}
+        <section className="rounded-xl mb-6 bg-white p-6 shadow-lg dark:bg-DarkManager ">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-[#244856] dark:text-white"> Staf Meetings</h2>
+              <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856]"></div>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-start rounded-lg border transition-all hover:shadow-md border-gray-200 p-4 dark:border-gray-700">
+              <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                <FaCalendarAlt className="text-lg" />
+              </div>
+              <div className="flex-1 m-2">
+                <h3 className="font-semibold dark:text-white">{t("sidebart.GeneralVirtualRooms")}</h3>
+              </div>
+              <button
+                onClick={() => navigate('/teacher/vr-manger')}
+                className="rounded-lg m-2 bg-[#117C90] px-3 py-1 text-sm text-white hover:bg-[#0f6b7c] dark:bg-[#4b6584]"
+              >
+                {t('Details')}
+              </button>
             </div>
           </div>
         </section>
+        {/* mainCategories Section */}
+        <section className="rounded-xl bg-white p-6 shadow-lg dark:bg-DarkManager">
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-[#244856] dark:text-white">{t('dashboardteacher.mainCategories')}</h2>
+            <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856]"></div>
+          </div>
 
-        {/* Virtual Classrooms Section */}
-        <section className="rounded-lg p-4 font-poppins md:p-6">
-          <div className="ml-0">
-            <div className="mb-6 flex flex-col">
-              <h1 className="font-poppins text-lg font-bold text-[#244856] dark:text-DarkManager sm:text-xl lg:text-2xl">
-                {t('dashboardteacher.VirtualClassrooms')}
-              </h1>
-              <div className="mt-1 h-[3px] w-[100px] rounded-t-md bg-[#244856] lg:h-[4px] lg:w-[235px]"></div>
-            </div>
-            {virtualClassrooms.length > 0 ? (
-              <div>{/* Render virtual classrooms here */}</div>
-            ) : (
-              <p className="w-[70%] bg-slate-100 p-10 text-lg font-medium text-gray-600 dark:bg-DarkManager2 dark:text-white md:text-2xl">
-                {t('dashboardteacher.contentvr')}
-              </p>
-            )}
+          <div className="grid grid-cols-2 gap-4">
+            {categories.map((category, index) => (
+              <a
+                key={index}
+                href={category.link}
+                className="flex flex-col items-center rounded-lg bg-gray-100 p-4 text-center transition-all hover:bg-gray-200 dark:bg-[#184b5f] dark:hover:bg-gray-600"
+              >
+                <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#117C90] dark:bg-[#224a5a] dark:text-white">
+                  <FontAwesomeIcon icon={category.icon} className="h-6 w-6" />
+                </div>
+                <span className="text-sm font-medium dark:text-white">{category.name}</span>
+              </a>
+            ))}
           </div>
         </section>
       </main>
@@ -225,19 +224,6 @@ const DashboardTeacher = () => {
   );
 };
 
-const getIconComponent = (iconName) => {
-  switch (iconName) {
-    case "mail":
-      return <Mail className="text-[#105E6A] dark:text-white md:h-12 md:w-12" />;
-    case "message-circle":
-      return <MessageCircle className="text-[#105E6A] dark:text-white md:h-12 md:w-12" />;
-    case "book-open":
-      return <BookOpen className="text-[#105E6A] dark:text-white md:h-12 md:w-12" />;
-    case "calendar":
-      return <Calendar className="text-[#105E6A] dark:text-white md:h-12 md:w-12" />;
-    default:
-      return null;
-  }
-};
+
 
 export default DashboardTeacher;
