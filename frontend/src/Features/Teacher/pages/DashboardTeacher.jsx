@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Mail, BookOpen, Calendar, MessageCircle, Clock } from "lucide-react";
+import {  BookOpen, Clock } from "lucide-react";
 import { FaCalendarAlt, FaChalkboardTeacher } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,12 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchClassTeacher } from "../components/TeacherRedux/TeacherClassSlice";
 import { getTeacherPointsForTerm } from "../components/TeacherRedux/motivationTeacherSlice";
 import { useTranslation } from 'react-i18next';
-import GradeIcon from "../../../assets/StudentIcon/Grade.png";
-import ActivityIcon from "../../../assets/StudentIcon/Activites.png";
-import ScheduleIcon from "../../../assets/StudentIcon/Schedule.png";
-import LibraryIcon from "../../../assets/StudentIcon/Library.png";
-import CourseIcon from "../../../assets/StudentIcon/Course.png";
-import AbsenceIcon from "../../../assets/StudentIcon/Absence.png";
+
 const DashboardTeacher = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
