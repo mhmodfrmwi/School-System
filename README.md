@@ -380,26 +380,3 @@ classDiagram
     UserManager --> BulkImporter
     CurriculumManager --> StructureValidator
 ```
-### Academic Year Lifecycle State Diagram
-```mermaid
-stateDiagram-v2
-    [*] --> New
-    New --> Active: Activate
-    Active --> Archived: End of year
-    Archived --> [*]
-    
-    state Active {
-        [*] --> Planning
-        Planning --> ClassesCreated: Create classes
-        ClassesCreated --> StudentsAssigned: Assign students
-        StudentsAssigned --> Ongoing: Start semester
-        Ongoing --> SemesterBreak: End semester
-        SemesterBreak --> Ongoing: New semester
-    }
-    
-    state Archived {
-        [*] --> ReadOnly
-        ReadOnly --> ReportsGenerated: Generate reports
-        ReportsGenerated --> [*]
-    }
-```
