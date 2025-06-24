@@ -96,6 +96,9 @@ const {
   deleteStudent,
   getStudent,
   getAllStudents,
+  assignStudentsToClasses,
+  getUnassignedStudents,
+  createMultipleStudents,
 } = require("../controllers/Admin/studentController");
 const {
   createGradeYear,
@@ -280,19 +283,16 @@ router
 router.get("/class", validateJwt, getAllClasses);
 
 //student Routes
-router.post(
-  "/student/createStudent",
-  validateJwt,
-
-  createStudent
-);
+router.post("/student/createStudent", validateJwt, createStudent);
+router.post("/student/create-multiple", validateJwt, createMultipleStudents);
 router
   .route("/student/:id")
   .get(validateJwt, getStudent)
   .patch(validateJwt, updateStudent)
   .delete(validateJwt, deleteStudent);
 router.get("/student", validateJwt, getAllStudents);
-
+router.post("/student/assign-to-classes", validateJwt, assignStudentsToClasses);
+router.get("/unassigned-students", validateJwt, getUnassignedStudents);
 //teacher routes
 router.post(
   "/teacher/createTeacher",
