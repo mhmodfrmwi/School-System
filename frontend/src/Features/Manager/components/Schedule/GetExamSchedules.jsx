@@ -24,9 +24,15 @@ const GetExamSchedules = () => {
       <>
         <ScheduleToggle />
         <div className="mt-10 flex flex-col items-center justify-center rounded-lg bg-[#F9FAFB] py-16 shadow-lg dark:bg-DarkManager2">
+          <button
+            className="me-0 rounded-2xl bg-gradient-to-r from-[#117C90] to-[#117C90] px-3 py-1 font-poppins text-xs text-white dark:from-DarkManager dark:to-DarkManager sm:px-4 sm:py-2 sm:text-sm xl:me-4"
+            onClick={() => navigate("/manager/create-exam-schedule")}
+          >
+            {t("schedulem.AddExamSchedule")}
+          </button>
           <FontAwesomeIcon
             icon={faCalendar}
-            className="mb-4 text-6xl text-gray-400 dark:text-white"
+            className="mb-4 mt-10 text-6xl text-gray-400 dark:text-white"
           />
           <p className="mb-2 text-xl font-semibold text-gray-600 dark:text-white">
             No schedules found for the academic year

@@ -213,10 +213,10 @@ function Onboarding() {
               </div>
             </div>
             <div className="mx-10 hidden items-center justify-between gap-2 md:flex">
-              <div dir="ltr" className="rounded-2xl bg-[#E1834E] p-1">
+              <Toggles lang={lang} toggleLanguage={toggleLanguage} />
+              <div dir="ltr" className=" p-2">
                 <ThemeSwitcher />
               </div>
-              <Toggles lang={lang} toggleLanguage={toggleLanguage} />
               <button
                 className={`rounded bg-[#E1834E] py-2 text-lg text-white transition hover:bg-[#EA580C] md:ml-4 ${i18n.language === "ar" ? "px-8" : "px-12"}`}
                 onClick={() => navigate("/role")}
@@ -246,7 +246,7 @@ function Onboarding() {
             </div>
           </div>
         </div>
-        {isOpen && (
+       {isOpen && (
           <motion.div
             ref={menuRef}
             initial={{ opacity: 0, y: -20 }}

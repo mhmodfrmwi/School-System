@@ -23,8 +23,8 @@ function ForgotPassword() {
       className="flex min-h-[100vh] bg-[#FEDDC6] font-poppins dark:bg-[#13082F]"
     >
       <div className="flex w-full flex-col rounded-sm bg-[#e6b28c] dark:bg-[#13082F] md:w-1/2">
-        <div className="sticky top-0 z-10 grid grid-cols-1 bg-[#e6b28c] p-4 dark:bg-[#13082F] lg:grid-cols-2">
-          <img src={logo} alt="Logo" className="mx-auto h-14" />
+        <div className="sticky top-0 z-10 grid grid-cols-1 bg-[#e6b28c] p-4 dark:bg-[#13082F] lg:grid-cols-2 mx-8 mt-4">
+          <img src={logo} alt="Logo" className="mx-auto h-16" />
           <div className="mx-auto">
             <Toggles />
           </div>
