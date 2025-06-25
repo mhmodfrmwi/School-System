@@ -666,3 +666,315 @@ erDiagram
     CONTEST ||--o{ CONTEST-TEAM : has
     VIRTUAL-ROOM ||--o{ VR-ATTENDANCE : has
 ```
+
+## Parent Diagrams
+
+## Class Diagram
+```mermaid
+classDiagram
+    class Parent {
+        +ObjectId _id
+        +String fullName
+        +String email
+        +String password
+        +String phone
+        +String profileImage
+        +Boolean isVerified
+        +login()
+        +updateProfile()
+        +getData()
+    }
+
+    class Student {
+        +ObjectId _id
+        +String fullName
+        +String academic_number
+        +ObjectId gradeId
+        +ObjectId classId
+        +ObjectId academicYear_id
+        +getAttendance()
+        +getRewards()
+        +getGrades()
+        +getSchedule()
+    }
+
+    class ParentStudent {
+        +ObjectId parent_id
+        +ObjectId student_id
+        +showKids()
+        +chooseKid()
+    }
+
+    class RewardSystem {
+        +getSemesterPoints()
+        +getDailyPoints()
+        +getAllPoints()
+        +getStudentWithFriendsPoints()
+    }
+
+    class Dashboard {
+        +getDashboardData()
+        +calculateMetrics()
+        +getAcademicStanding()
+    }
+
+    Parent "1" -- "*" ParentStudent : manages
+    ParentStudent "*" -- "1" Student : links
+    Student "1" -- "*" RewardSystem : has
+    Student "1" -- "1" Dashboard : accesses
+```
+Sequence Diagram: Login Sequence Diagram
+```mermaid
+sequenceDiagram
+    participant Parent
+    participant AuthController
+    participant ParentModel
+    participant TokenService
+
+    Parent->>AuthController: POST /login (email, password)
+    AuthController->>ParentModel: findOne({email})
+    ParentModel-->>AuthController: parent data
+    AuthController->>ParentModel: comparePassword()
+    ParentModel-->>AuthController: true/false
+    alt Valid credentials
+        AuthController->>TokenService: signToken(parent._id)
+        TokenService-->>AuthController: JWT token
+        AuthController-->>Parent: 200 OK (token, parent data)
+    else Invalid credentials
+        AuthController-->>Parent: 401 Unauthorized
+    end
+```
+Sequence Diagram: Choose Kid Sequence
+```mermaid
+sequenceDiagram
+    participant Parent as Parent
+    participant ParentController
+    participant ParentStudentModel
+    participant TokenService
+
+    Parent->>ParentController: POST /choose-kid {studentId}
+    ParentController->>ParentStudentModel: findOne({parent_id, student_id})
+    ParentStudentModel-->>ParentController: Relationship record
+    alt Relationship not found
+        ParentController-->>Parent: 400 Unauthorized
+    else Valid relationship
+        ParentController->>TokenService: signToken(studentId, role)
+        TokenService-->>ParentController: Student token
+        ParentController-->>Parent: 200 {student_token}
+    end
+```
+Sequence Diagram: View Child Attendance Sequence
+```mermaid
+sequenceDiagram
+    participant Parent as Parent
+    participant AttendanceController
+    participant AttendanceService
+    participant AttendanceModel
+
+    Parent->>AttendanceController: GET /child/:studentId/attendance
+    AttendanceController->>AttendanceService: getAttendance(studentId)
+    AttendanceService->>AttendanceModel: find({studentId})
+    AttendanceModel-->>AttendanceService: Attendance records
+    AttendanceService-->>AttendanceController: Formatted attendance
+    AttendanceController-->>Parent: 200 (Attendance data)
+```
+Sequence Diagram: View Child Schedule Sequence
+```mermaid
+sequenceDiagram
+    participant Parent as Parent
+    participant ScheduleController
+    participant StudentModel
+    participant AcademicYearModel
+    participant SemesterModel
+    participant ScheduleModel
+
+    Parent->>ScheduleController: GET /child/:studentId/schedule
+    ScheduleController->>StudentModel: findById(studentId)
+    StudentModel-->>ScheduleController: Student record
+    ScheduleController->>AcademicYearModel: findCurrentYear()
+    AcademicYearModel-->>ScheduleController: Academic year
+    ScheduleController->>SemesterModel: findCurrentSemester()
+    SemesterModel-->>ScheduleController: Semester
+    ScheduleController->>ScheduleModel: find({class, grade, semester})
+    ScheduleModel-->>ScheduleController: Schedule data
+    ScheduleController-->>Parent: 200 (Class schedule)
+```
+Sequence Diagram: View Child Grades Sequence
+```mermaid
+sequenceDiagram
+    participant Parent as Parent
+    participant GradeController
+    participant GradeService
+    participant GradeModel
+
+    Parent->>GradeController: GET /child/:studentId/grades
+    GradeController->>GradeService: getStudentGradesReport(studentId)
+    GradeService->>GradeModel: find({student_id})
+    GradeModel-->>GradeService: Grade records
+    GradeService->>GradeService: calculateMetrics()
+    GradeService-->>GradeController: Grade report
+    GradeController-->>Parent: 200 (Grades report)
+```
+Sequence Diagram: View Child Dashboard Sequence
+```mermaid
+sequenceDiagram
+    participant Parent as Parent
+    participant DashboardController
+    participant DashboardService
+    participant MultipleServices
+
+    Parent->>DashboardController: GET /child/:studentId/dashboard
+    DashboardController->>DashboardService: getDashboardData(studentId)
+    DashboardService->>AttendanceService: getAbsences()
+    DashboardService->>ExamService: getCompletedExams()
+    DashboardService->>AssignmentService: getMissedAssignments()
+    DashboardService->>GradeService: getGradesReport()
+    DashboardService->>MaterialService: getMaterials()
+    DashboardService->>VirtualRoomService: getVirtualRooms()
+    DashboardService->>DashboardService: calculateMetrics()
+    DashboardService-->>DashboardController: Dashboard data
+    DashboardController-->>Parent: 200 (Dashboard metrics)
+```
+Sequence Diagram: Update Profile Sequence
+```mermaid
+sequenceDiagram
+    participant Parent as Parent
+    participant ProfileController
+    participant ParentModel
+    participant FileSystem
+
+    Parent->>ProfileController: PUT /profile {data, file}
+    ProfileController->>ParentModel: findById(parentId)
+    ParentModel-->>ProfileController: Parent record
+    alt New password provided
+        ProfileController->>ParentModel: comparePassword(currentPassword)
+        ParentModel-->>ProfileController: true/false
+        alt Password mismatch
+            ProfileController-->>Parent: 401 (Invalid password)
+        else Password match
+            ProfileController->>bcrypt: hash(newPassword)
+        end
+    end
+    alt Profile image provided
+        ProfileController->>FileSystem: delete old image
+        ProfileController->>FileSystem: save new image
+    end
+    ProfileController->>ParentModel: findByIdAndUpdate()
+    ParentModel-->>ProfileController: Updated parent
+    ProfileController-->>Parent: 200 (Updated profile)
+```
+Entity-Relationship Diagram (ERD)
+```mermaid
+erDiagram
+    PARENT ||--o{ PARENT_STUDENT : has
+    STUDENT ||--o{ PARENT_STUDENT : belongs_to
+    STUDENT ||--o{ ATTENDANCE : has
+    STUDENT ||--o{ REWARD_CLAIM : earns
+    STUDENT ||--o{ USER_POINT : accumulates
+    STUDENT ||--o{ STUDENT_GRADE : has
+    STUDENT ||--o{ VIRTUAL_ROOM : participates_in
+    REWARD_CLAIM }|--|| REWARD_CATALOG : references
+    GRADE_SUBJECT ||--o{ GRADE_SUBJECT_SEMESTER : includes
+    SEMESTER ||--o{ GRADE_SUBJECT_SEMESTER : in
+    SUBJECT ||--o{ GRADE_SUBJECT : categorized_under
+    GRADE ||--o{ GRADE_SUBJECT : has
+    ACADEMIC_YEAR ||--o{ SEMESTER : contains
+
+    PARENT {
+        ObjectId _id PK
+        String fullName
+        String email
+        String password
+        String phone
+        String profileImage
+        Boolean isVerified
+    }
+    
+    STUDENT {
+        ObjectId _id PK
+        String fullName
+        String academic_number
+        ObjectId gradeId FK
+        ObjectId classId FK
+        ObjectId academicYear_id FK
+    }
+    
+    REWARD_CLAIM {
+        ObjectId _id PK
+        ObjectId userId FK
+        String userType
+        ObjectId rewardId FK
+        String rewardType
+        Number value
+        Date claimDate
+    }
+    
+    STUDENT_GRADE {
+        ObjectId _id PK
+        ObjectId student_id FK
+        ObjectId subject_id FK
+        ObjectId semester_id FK
+        Number midterm_examGrade
+        Number midterm_finalDegree
+        Number final_examGrade
+        Number final_finalDegree
+    }
+```
+Flowchart
+```mermaid
+flowchart TD
+    A[Start] --> B[Parent Login]
+    B --> C{Login Successful?}
+    C -->|No| D[Show Error]
+    C -->|Yes| E[Parent Dashboard]
+    
+    E --> F[Profile Management]
+    F --> F1[Update Password]
+    F --> F2[Update Phone]
+    F --> F3[Update Profile Image]
+    
+    E --> G[Child Management]
+    G --> G1[View Children List]
+    G1 --> G11[Choose Child]
+    
+    G11 --> H[Child Dashboard]
+    H --> H1[View Rewards]
+    H1 --> H11[Daily Points]
+    H1 --> H12[Semester Points]
+    H1 --> H13[All Points]
+    H1 --> H14[Leaderboard]
+    
+    H --> H2[View Attendance]
+    H2 --> H21[Absence Days]
+    H2 --> H22[Attendance Rate]
+    
+    H --> H3[View Grades]
+    H3 --> H31[Subject Grades]
+    H3 --> H32[Semester Grades]
+    H3 --> H33[Full Report]
+    H3 --> H34[Academic Standing]
+    
+    H --> H4[View Schedule]
+    H4 --> H41[Daily Classes]
+    H4 --> H42[Subject Teachers]
+    
+    H --> H5[View Virtual Rooms]
+    H5 --> H51[Completed Rooms]
+    H5 --> H52[Missed Rooms]
+    H5 --> H53[Upcoming Rooms]
+    
+    H --> H6[View Contests]
+    H6 --> H61[Subject Contests]
+    H6 --> H62[Results]
+    
+    H --> H7[View Materials]
+    H7 --> H71[Subject Resources]
+    H7 --> H72[Downloads]
+    
+    E --> I[System Features]
+    I --> I1[Switch Child]
+    I --> I2[Logout]
+    
+    D --> K[End]
+    I2 --> K
+```
