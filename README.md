@@ -1051,7 +1051,7 @@ classDiagram
     SHController --> Manager : uses
     ManagerData --> Manager : fetches
 ```
-Sequence Diagram: Manager Login
+### Sequence Diagram: Manager Login
 ```mermaid
 sequenceDiagram
     participant Client
@@ -1075,7 +1075,7 @@ sequenceDiagram
         Controller-->>Client: 200 OK (token + manager data)
     end
 ```
-Sequence Diagram: Dashboard Statistics Sequence
+### Sequence Diagram: Dashboard Statistics Sequence
 ```mermaid
 sequenceDiagram
     participant Client
@@ -1088,7 +1088,7 @@ sequenceDiagram
     DashboardController->>Models: find(top students)
     DashboardController-->>Client: 200 (stats + percentages)
 ```
-Sequence Diagram: Create Virtual Room Sequence
+### Sequence Diagram: Create Virtual Room Sequence
 ```mermaid
 sequenceDiagram
     participant Client
@@ -1102,7 +1102,7 @@ sequenceDiagram
     VirtualRoomModel-->>Controller: New virtual room
     Controller-->>Client: 201 Created
 ```
-Sequence Diagram: Update Profile Sequence
+### Sequence Diagram: Update Profile Sequence
 ```mermaid
 sequenceDiagram
     participant Client
@@ -1126,7 +1126,7 @@ sequenceDiagram
     ManagerModel-->>Controller: Updated manager
     Controller-->>Client: 200 Success
 ```
-Flowchart
+### Flowchart
 ```mermaid
 flowchart TD
     A[Manager] --> B[Authentication]
@@ -1165,3 +1165,156 @@ flowchart TD
     H --> H3[Update Virtual Room]
     H --> H4[Delete Virtual Room]
 ```
+### Entity-Relationship Diagram (ERD)
+erDiagram
+    MANAGER ||--o{ VIRTUAL_ROOM : creates
+    MANAGER {
+        ObjectId _id PK
+        string email
+        string password
+        string fullName
+        string phone
+        string profileImage
+        boolean isVerified
+    }
+    
+    VIRTUAL_ROOM {
+        ObjectId _id PK
+        string title
+        ObjectId academicYearId FK
+        ObjectId semesterId FK
+        Date startTime
+        number duration
+        string link
+        ObjectId managerId FK
+    }
+    
+    ACADEMIC_YEAR ||--o{ SEMESTER : contains
+    ACADEMIC_YEAR {
+        ObjectId _id PK
+        string startYear
+        string endYear
+    }
+    
+    SEMESTER {
+        ObjectId _id PK
+        string semesterName
+        ObjectId academicYear_id FK
+    }
+    
+    GRADE ||--o{ CLASS_GROUP : contains
+    GRADE ||--o{ STUDENT : has
+    GRADE {
+        ObjectId _id PK
+        string gradeName
+        string level
+    }
+    
+    CLASS_GROUP {
+        ObjectId _id PK
+        string className
+        ObjectId gradeId FK
+        ObjectId academicYear_id FK
+    }
+    
+    STUDENT ||--o{ SCORE : achieves
+    STUDENT ||--o{ ATTENDANCE : has
+    STUDENT ||--o{ PARTICIPATION : participates_in
+    STUDENT ||--o{ REWARD_CLAIM : earns
+    STUDENT ||--o{ USER_POINT : accumulates
+    STUDENT {
+        ObjectId _id PK
+        string fullName
+        string academic_number
+        string email
+        string phone
+        string gender
+        ObjectId gradeId FK
+        ObjectId classId FK
+    }
+    
+    SUBJECT ||--o{ SUBJECT_SCORE : assessed_in
+    SUBJECT {
+        ObjectId _id PK
+        string subjectName
+        string subjectCode
+    }
+    
+    SUBJECT_SCORE ||--o{ SCORE : contributes_to
+    SUBJECT_SCORE {
+        ObjectId _id PK
+        ObjectId subjectId FK
+        ObjectId gradeId FK
+        ObjectId semesterId FK
+        string type
+        number finalDegree
+    }
+    
+    SCORE {
+        ObjectId _id PK
+        ObjectId studentId FK
+        ObjectId subjectScoreId FK
+        ObjectId classId FK
+        ObjectId teacherId FK
+        number examGrade
+    }
+    
+    ATTENDANCE {
+        ObjectId _id PK
+        ObjectId student_id FK
+        ObjectId class_id FK
+        Date date
+        string status
+    }
+    
+    SCHOOL_HUB ||--o{ PARTICIPATION : includes
+    SCHOOL_HUB {
+        ObjectId _id PK
+        string title
+        Date registrationStart
+        Date registrationEnd
+        Date contestDate
+        string location
+        string details
+        string prizes
+    }
+    
+    PARTICIPATION {
+        ObjectId _id PK
+        ObjectId schoolHubId FK
+        ObjectId studentId FK
+        boolean participated
+    }
+    
+    REWARD_CLAIM {
+        ObjectId _id PK
+        ObjectId userId FK
+        string userType
+        ObjectId rewardId
+        string rewardType
+        number value
+    }
+    
+    USER_POINT {
+        ObjectId _id PK
+        ObjectId userId FK
+        string userType
+        string badges
+    }
+    
+    TEACHER {
+        ObjectId _id PK
+        string gender
+    }
+    
+    PARENT {
+        ObjectId _id PK
+    }
+    
+    ADMIN {
+        ObjectId _id PK
+    }
+    
+    SCHEDULE {
+        ObjectId _id PK
+    }
