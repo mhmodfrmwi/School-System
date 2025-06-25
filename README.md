@@ -451,7 +451,7 @@ classDiagram
     Contest "1" -- "*" ContestTeam : has
     VirtualRoom "1" -- "*" VirtualRoomAttendance : has
 ```
-Sequence Diagram: Teacher Login
+### Sequence Diagram: Teacher Login
 ```mermaid
 sequenceDiagram
     actor Teacher
@@ -475,7 +475,7 @@ sequenceDiagram
     end
     UI-->>Teacher: Shows success message
 ```
-Sequence Diagram: Virtual Room Creation Sequence
+### Sequence Diagram: Virtual Room Creation Sequence
 ```mermaid
 sequenceDiagram
     participant Teacher
@@ -494,7 +494,7 @@ sequenceDiagram
     VRController-->>UI: 201 Created (VR details)
     UI-->>Teacher: Shows success message
 ```
-Sequence Diagram: Exam Score Upload Sequence
+### Sequence Diagram: Exam Score Upload Sequence
 ```mermaid
 sequenceDiagram
     participant Teacher
@@ -515,7 +515,7 @@ sequenceDiagram
     ScoreController-->>UI: 200 OK (results)
     UI-->>Teacher: Shows upload summary
 ```
-Sequence Diagram: Material Creation Sequence
+### Sequence Diagram: Material Creation Sequence
 ```mermaid
 sequenceDiagram
     participant Teacher
@@ -534,7 +534,7 @@ sequenceDiagram
     MaterialController-->>UI: 201 Created (material)
     UI-->>Teacher: Shows material preview
 ```
-Sequence Diagram: Question Bank Management Sequence
+### Sequence Diagram: Question Bank Management Sequence
 ```mermaid
 sequenceDiagram
     participant Teacher
@@ -553,7 +553,7 @@ sequenceDiagram
     QuestionController-->>UI: 201 Created (question)
     UI-->>Teacher: Shows question in bank
 ```
-Sequence Diagram: Attendance Management Sequence
+### Sequence Diagram: Attendance Management Sequence
 ```mermaid
 sequenceDiagram
     participant Teacher
@@ -571,7 +571,7 @@ sequenceDiagram
     AttendanceController-->>UI: 200 OK (attendance data)
     UI-->>Teacher: Displays attendance report
 ```
-Sequence Diagram: Contest Creation Sequence
+### Sequence Diagram: Contest Creation Sequence
 ```mermaid
 sequenceDiagram
     participant Teacher
@@ -590,7 +590,7 @@ sequenceDiagram
     ContestController-->>UI: 201 Created (contest details)
     UI-->>Teacher: Shows contest dashboard
 ```
-Sequence Diagram: Profile Update Sequence
+### Sequence Diagram: Profile Update Sequence
 ```mermaid
 sequenceDiagram
     participant Teacher
@@ -614,7 +614,7 @@ sequenceDiagram
     ProfileController-->>UI: 200 OK (updated profile)
     UI-->>Teacher: Shows updated profile
 ```
-Entity-Relationship Diagram (ERD)
+### Entity-Relationship Diagram (ERD)
 ```mermaid
 erDiagram
     TEACHER {
@@ -723,7 +723,7 @@ classDiagram
     Student "1" -- "*" RewardSystem : has
     Student "1" -- "1" Dashboard : accesses
 ```
-Sequence Diagram: Login Sequence Diagram
+### Sequence Diagram: Login Sequence Diagram
 ```mermaid
 sequenceDiagram
     participant Parent
@@ -744,7 +744,7 @@ sequenceDiagram
         AuthController-->>Parent: 401 Unauthorized
     end
 ```
-Sequence Diagram: Choose Kid Sequence
+### Sequence Diagram: Choose Kid Sequence
 ```mermaid
 sequenceDiagram
     participant Parent as Parent
@@ -763,7 +763,7 @@ sequenceDiagram
         ParentController-->>Parent: 200 {student_token}
     end
 ```
-Sequence Diagram: View Child Attendance Sequence
+### Sequence Diagram: View Child Attendance Sequence
 ```mermaid
 sequenceDiagram
     participant Parent as Parent
@@ -778,7 +778,7 @@ sequenceDiagram
     AttendanceService-->>AttendanceController: Formatted attendance
     AttendanceController-->>Parent: 200 (Attendance data)
 ```
-Sequence Diagram: View Child Schedule Sequence
+### Sequence Diagram: View Child Schedule Sequence
 ```mermaid
 sequenceDiagram
     participant Parent as Parent
@@ -799,7 +799,7 @@ sequenceDiagram
     ScheduleModel-->>ScheduleController: Schedule data
     ScheduleController-->>Parent: 200 (Class schedule)
 ```
-Sequence Diagram: View Child Grades Sequence
+### Sequence Diagram: View Child Grades Sequence
 ```mermaid
 sequenceDiagram
     participant Parent as Parent
@@ -815,7 +815,7 @@ sequenceDiagram
     GradeService-->>GradeController: Grade report
     GradeController-->>Parent: 200 (Grades report)
 ```
-Sequence Diagram: View Child Dashboard Sequence
+### Sequence Diagram: View Child Dashboard Sequence
 ```mermaid
 sequenceDiagram
     participant Parent as Parent
@@ -835,7 +835,7 @@ sequenceDiagram
     DashboardService-->>DashboardController: Dashboard data
     DashboardController-->>Parent: 200 (Dashboard metrics)
 ```
-Sequence Diagram: Update Profile Sequence
+### Sequence Diagram: Update Profile Sequence
 ```mermaid
 sequenceDiagram
     participant Parent as Parent
@@ -863,7 +863,7 @@ sequenceDiagram
     ParentModel-->>ProfileController: Updated parent
     ProfileController-->>Parent: 200 (Updated profile)
 ```
-Entity-Relationship Diagram (ERD)
+### Entity-Relationship Diagram (ERD)
 ```mermaid
 erDiagram
     PARENT ||--o{ PARENT_STUDENT : has
@@ -920,7 +920,7 @@ erDiagram
         Number final_finalDegree
     }
 ```
-Flowchart
+### Flowchart
 ```mermaid
 flowchart TD
     A[Start] --> B[Parent Login]
