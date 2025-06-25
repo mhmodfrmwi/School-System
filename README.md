@@ -380,3 +380,289 @@ classDiagram
     UserManager --> BulkImporter
     CurriculumManager --> StructureValidator
 ```
+
+## Teacher Diagrams
+
+### Class Diagram
+```mermaid
+classDiagram
+    class Teacher {
+        +_id: ObjectId
+        +fullName: String
+        +email: String
+        +password: String
+        +isVerified: Boolean
+        +subjectId: ObjectId
+        +academicNumber: String
+        +profileImage: String
+        +phone: String
+        +login()
+        +updateProfile()
+    }
+    
+    class Contest {
+        +_id: ObjectId
+        +title: String
+        +teacherId: ObjectId
+        +startDate: Date
+        +endDate: Date
+        +requirements: String
+        +subjectId: ObjectId
+        +createContest()
+        +updateContest()
+        +deleteContest()
+    }
+    
+    class VirtualRoom {
+        +_id: ObjectId
+        +title: String
+        +link: String
+        +startTime: Date
+        +duration: Number
+        +teacherId: ObjectId
+        +createVirtualRoom()
+        +updateVirtualRoom()
+    }
+    
+    class Material {
+        +_id: ObjectId
+        +title: String
+        +type: String
+        +file_url: String
+        +uploaded_by: ObjectId
+        +createMaterial()
+        +deleteMaterial()
+    }
+    
+    class Question {
+        +_id: ObjectId
+        +questionText: String
+        +questionType: String
+        +choices: [String]
+        +answer: String
+        +createQuestion()
+        +updateQuestion()
+    }
+    
+    Teacher "1" -- "*" Contest : creates
+    Teacher "1" -- "*" VirtualRoom : creates
+    Teacher "1" -- "*" Material : uploads
+    Teacher "1" -- "*" Question : creates
+    Contest "1" -- "*" ContestTeam : has
+    VirtualRoom "1" -- "*" VirtualRoomAttendance : has
+```
+Sequence Diagram: Teacher Login
+```mermaid
+sequenceDiagram
+    actor Teacher
+    participant UI as Frontend
+    participant AuthController
+    participant TeacherModel
+    participant TokenUtil
+    
+    Teacher->>UI: Enters email/password
+    UI->>AuthController: POST /login {email, password}
+    AuthController->>TeacherModel: findOne({email})
+    TeacherModel-->>AuthController: Teacher data
+    alt Invalid credentials
+        AuthController-->>UI: 401 Unauthorized
+    else Not verified
+        AuthController-->>UI: 401 Verify account
+    else Valid
+        AuthController->>TokenUtil: signToken(teacherId)
+        TokenUtil-->>AuthController: JWT Token
+        AuthController-->>UI: 200 {token, teacher}
+    end
+    UI-->>Teacher: Shows success message
+```
+Sequence Diagram: Virtual Room Creation Sequence
+```mermaid
+sequenceDiagram
+    participant Teacher
+    participant UI as Frontend
+    participant VRController
+    participant VirtualRoomModel
+    participant GradeSubjectSemesterModel
+    
+    Teacher->>UI: Fills VR form
+    UI->>VRController: POST /virtual-rooms (VR data)
+    VRController->>GradeSubjectSemesterModel: findById(gradeSubjectSemesterId)
+    GradeSubjectSemesterModel-->>VRController: GSS document
+    VRController->>VirtualRoomModel: create(newVirtualRoom)
+    VirtualRoomModel-->>VRController: Saved VR document
+    VRController->>RewardService: updatePoints("Adding VR")
+    VRController-->>UI: 201 Created (VR details)
+    UI-->>Teacher: Shows success message
+```
+Sequence Diagram: Exam Score Upload Sequence
+```mermaid
+sequenceDiagram
+    participant Teacher
+    participant UI as Frontend
+    participant ScoreController
+    participant ExcelParser
+    participant SubjectScoreModel
+    participant ScoreModel
+    
+    Teacher->>UI: Uploads Excel file
+    UI->>ScoreController: POST /scores/upload (file)
+    ScoreController->>ExcelParser: parseFile(file)
+    ExcelParser-->>ScoreController: JSON data
+    loop For each student
+        ScoreController->>SubjectScoreModel: findOrCreate()
+        ScoreController->>ScoreModel: createOrUpdate()
+    end
+    ScoreController-->>UI: 200 OK (results)
+    UI-->>Teacher: Shows upload summary
+```
+Sequence Diagram: Material Creation Sequence
+```mermaid
+sequenceDiagram
+    participant Teacher
+    participant UI as Frontend
+    participant MaterialController
+    participant MaterialModel
+    participant GSSModel
+    
+    Teacher->>UI: Fills material form
+    UI->>MaterialController: POST /materials (data)
+    MaterialController->>GSSModel: findById(gradeSubjectSemesterId)
+    GSSModel-->>MaterialController: GSS document
+    MaterialController->>MaterialModel: create(newMaterial)
+    MaterialModel-->>MaterialController: Saved material
+    MaterialController->>RewardService: updatePoints("Adding Material")
+    MaterialController-->>UI: 201 Created (material)
+    UI-->>Teacher: Shows material preview
+```
+Sequence Diagram: Question Bank Management Sequence
+```mermaid
+sequenceDiagram
+    participant Teacher
+    participant UI as Frontend
+    participant QuestionController
+    participant QuestionModel
+    participant GSSModel
+    
+    Teacher->>UI: Creates new question
+    UI->>QuestionController: POST /questions (question data)
+    QuestionController->>GSSModel: findById(gradeSubjectSemesterId)
+    GSSModel-->>QuestionController: GSS document
+    QuestionController->>QuestionModel: create(newQuestion)
+    QuestionModel-->>QuestionController: Saved question
+    QuestionController->>RewardService: updatePoints("Adding Question")
+    QuestionController-->>UI: 201 Created (question)
+    UI-->>Teacher: Shows question in bank
+```
+Sequence Diagram: Attendance Management Sequence
+```mermaid
+sequenceDiagram
+    participant Teacher
+    participant UI as Frontend
+    participant AttendanceController
+    participant AttendanceModel
+    participant ClassModel
+    
+    Teacher->>UI: Requests class attendance
+    UI->>AttendanceController: GET /attendance?classId=X&start=Y&end=Z
+    AttendanceController->>ClassModel: findById(classId)
+    ClassModel-->>AttendanceController: Class document
+    AttendanceController->>AttendanceModel: find({classId, date range})
+    AttendanceModel-->>AttendanceController: Attendance records
+    AttendanceController-->>UI: 200 OK (attendance data)
+    UI-->>Teacher: Displays attendance report
+```
+Sequence Diagram: Contest Creation Sequence
+```mermaid
+sequenceDiagram
+    participant Teacher
+    participant UI as Frontend
+    participant ContestController
+    participant ContestModel
+    participant ClassTeacherModel
+    
+    Teacher->>UI: Fills contest form
+    UI->>ContestController: POST /contests (contest data)
+    ContestController->>ClassTeacherModel: verifyAssignment(teacherId, subject, class)
+    ClassTeacherModel-->>ContestController: Verification result
+    ContestController->>ContestModel: create(newContest)
+    ContestModel-->>ContestController: Saved contest
+    ContestController->>RewardService: updatePoints("Adding Contest")
+    ContestController-->>UI: 201 Created (contest details)
+    UI-->>Teacher: Shows contest dashboard
+```
+Sequence Diagram: Profile Update Sequence
+```mermaid
+sequenceDiagram
+    participant Teacher
+    participant UI as Frontend
+    participant ProfileController
+    participant TeacherModel
+    participant FileStorage
+    
+    Teacher->>UI: Updates profile + uploads image
+    UI->>ProfileController: PUT /profile (data + file)
+    ProfileController->>TeacherModel: findById(teacherId)
+    TeacherModel-->>ProfileController: Teacher document
+    alt Password change
+        ProfileController->>TeacherModel: comparePassword(oldPassword)
+        ProfileController->>TeacherModel: hashPassword(newPassword)
+    end
+    ProfileController->>FileStorage: uploadProfileImage(file)
+    FileStorage-->>ProfileController: Image URL
+    ProfileController->>TeacherModel: saveUpdates()
+    TeacherModel-->>ProfileController: Updated teacher
+    ProfileController-->>UI: 200 OK (updated profile)
+    UI-->>Teacher: Shows updated profile
+```
+Entity-Relationship Diagram (ERD)
+```mermaid
+erDiagram
+    TEACHER {
+        ObjectId _id PK
+        string fullName
+        string email
+        string password
+        bool isVerified
+        ObjectId subjectId FK
+    }
+    
+    CONTEST {
+        ObjectId _id PK
+        string title
+        ObjectId teacherId FK
+        date startDate
+        date endDate
+        ObjectId subjectId FK
+    }
+    
+    VIRTUAL-ROOM {
+        ObjectId _id PK
+        string title
+        string link
+        datetime startTime
+        int duration
+        ObjectId teacherId FK
+    }
+    
+    MATERIAL {
+        ObjectId _id PK
+        string title
+        string type
+        string file_url
+        ObjectId teacherId FK
+    }
+    
+    QUESTION {
+        ObjectId _id PK
+        string questionText
+        string questionType
+        ObjectId teacherId FK
+    }
+    
+    TEACHER ||--o{ CONTEST : creates
+    TEACHER ||--o{ VIRTUAL-ROOM : conducts
+    TEACHER ||--o{ MATERIAL : uploads
+    TEACHER ||--o{ QUESTION : creates
+    CONTEST ||--o{ CONTEST-TEAM : has
+    VIRTUAL-ROOM ||--o{ VR-ATTENDANCE : has
+```
