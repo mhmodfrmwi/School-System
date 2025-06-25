@@ -50,7 +50,6 @@ function Onboarding() {
   });
   const [lang, setLang] = useState(i18n.language);
 
-
   const { ref: inViewRef, inView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
@@ -100,7 +99,6 @@ function Onboarding() {
       transition: { duration: 0.6, ease: "easeOut" },
     },
   };
-
 
   const toggleLanguage = () => {
     const newLang = lang === "en" ? "ar" : "en";
@@ -188,7 +186,7 @@ function Onboarding() {
               />
             </div>
             <div className="mr-12 hidden items-center justify-between space-x-12 md:flex">
-              <div className="flex  gap-4 space-x-12 font-['Poppins'] text-lg lg:flex">
+              <div className="flex gap-4 space-x-12 font-['Poppins'] text-lg lg:flex">
                 <a
                   href="#features"
                   className="text-gray-600 transition hover:text-blue-600 dark:text-[#E0AAEE] dark:hover:text-[#C459D9]"
@@ -214,7 +212,7 @@ function Onboarding() {
             </div>
             <div className="mx-10 hidden items-center justify-between gap-2 md:flex">
               <Toggles lang={lang} toggleLanguage={toggleLanguage} />
-              <div dir="ltr" className=" p-2">
+              <div dir="ltr" className="p-2">
                 <ThemeSwitcher />
               </div>
               <button
@@ -246,7 +244,7 @@ function Onboarding() {
             </div>
           </div>
         </div>
-       {isOpen && (
+        {isOpen && (
           <motion.div
             ref={menuRef}
             initial={{ opacity: 0, y: -20 }}
@@ -298,6 +296,10 @@ function Onboarding() {
               <hr className="border-white dark:border-[#E0AAEE]" />
               <div className="flex items-center justify-center">
                 <Toggles lang={lang} toggleLanguage={toggleLanguage} />
+              </div>
+              <hr className="border-white dark:border-[#E0AAEE]" />
+              <div dir="ltr" className="px-2">
+                <ThemeSwitcher />
               </div>
               <hr className="border-white dark:border-[#E0AAEE]" />
               <button

@@ -4,8 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
-import { faSliders } from "@fortawesome/free-solid-svg-icons";
+import { faSliders, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { ReactSVG } from "react-svg";
 import InfoIcon from "../../../assets/icons/Info.svg";
 import userImage from "../../../assets/user.jpeg";
@@ -17,6 +16,7 @@ import ThemeSwitcher from "@/ui/ThemeSwitcher";
 import { useTranslation } from "react-i18next";
 import { logout } from "../../../Features/Auth/AuthRedux/loginSlice";
 import NavbarNotification from "./../../Notification/SendNotifications/NavbarNotification";
+import { motion } from "framer-motion";
 
 const NavTeacher = () => {
   const navigate = useNavigate();
@@ -37,34 +37,26 @@ const NavTeacher = () => {
   };
 
   const routes = [
+    { path: "dashboard" },
     { path: "edit-teacher-profile" },
     { path: "school-hubs" },
-    { path: "school-hubs/detailes" },
-    { path: "school-hubs/prizes" },
     { path: "contests" },
-    { path: "contests/participants/:contestId" },
     { path: "contests/activity-form" },
-    { path: "contests/edit-activity-form/:id" },
     { path: "weekly-schedule" },
     { path: "exam-schedule" },
     { path: "currentCourse" },
     { path: "allcourses" },
-    { path: "currentCourseforattendance" },
+    { path: "currentcourseforattendance" },
     { path: "allcoursesforattendance" },
-    { path: "student-attendance-details/:id" },
     { path: "materialform" },
-    { path: "/teacher/addmaterial/:classId/:gradeSubjectSemesterId" },
-    { path: "/teacher/materialform/:classId/:gradeSubjectSemesterId" },
-    { path: "/teacher/see-material/:grade_subject_semester_id" },
-    { path: "update-material/:materialId" },
-    { path: "takeattendance/:id" },
-    { path: "attendancereport/:id" },
-    { path: "/teacher/virtual-room/:grade_subject_semester_id" },
-    { path: "/teacher/VR-form/:classId/:gradeSubjectSemesterId" },
-    { path: "edit-vr/:id" },
     { path: "library-form" },
     { path: "all-subjects-library" },
-    { path: "all-materials-library/:id" },
+    { path: "library-item-form" },
+    { path: "items-in-library" },
+    { path: "teacher-library" },
+    { path: "motivation" },
+    { path: "current-courses-for-grades" },
+    { path: "vr-manger" },
   ];
 
   const filteredRoutes = routes.filter((route) => {
@@ -151,64 +143,167 @@ const NavTeacher = () => {
         </div>
 
         <div
-          className="relative ml-auto hidden max-w-sm sm:flex rtl:ml-0"
+          className="relative ml-auto hidden max-w-sm sm:flex rtl:ml-0 rtl:mr-auto"
           ref={searchRef}
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
-          <div
-            className={`absolute ${i18n.language === "ar" ? "right-14 lg:right-6" : "left-14 lg:left-6"} top-1/2 z-10 -translate-y-1/2 transform`}
-          >
-            <FaSearch className="text-lg text-gray-400" />
-          </div>
-
           <div className="mx-auto w-[75%] max-w-md lg:w-[90%]">
-            <input
-              type="text"
-              placeholder={t("SearchTeacherPage")}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className={`w-full rounded-full border bg-gray-100 py-2 dark:bg-gray-700 ${i18n.language === "ar" ? "pl-12 pr-12" : "pl-12 pr-12"} text-center font-poppins text-sm text-gray-800 focus:outline-none dark:text-gray-200 md:text-left md:text-base`}
-            />
+            {!isDropdownOpen && (
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={t("SearchTeacherPage")}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onClick={() => setIsDropdownOpen(true)}
+                  className={`w-full rounded-full border bg-gray-100 py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 md:text-left md:text-base ${
+                    i18n.language === "ar" ? "text-right" : "text-left"
+                  }`}
+                  dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                />
+                <div
+                  className={`absolute ${
+                    i18n.language === "ar" ? "right-4" : "left-4"
+                  } top-1/2 -translate-y-1/2 transform`}
+                >
+                  <FaSearch className="text-lg text-gray-400" />
+                </div>
+              </div>
+            )}
 
             {isDropdownOpen && (
-              <ul className="absolute z-20 mt-1 max-h-72 w-full overflow-y-scroll rounded-lg border bg-white shadow-md">
-                {filteredRoutes.length > 0 ? (
-                  filteredRoutes.map((route) => (
-                    <li
-                      key={route.path}
-                      onClick={() => handleSelect(route.path)}
-                      className="cursor-pointer px-4 py-2 font-semibold text-[#117C90] hover:bg-blue-100 dark:text-DarkManager"
+              <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-50">
+                <div className="z-20 mb-4 w-[60vw]">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder={t("SearchTeacherPage")}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      className={`w-full rounded-full border bg-white py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-800 dark:text-gray-200 md:text-left md:text-base ${
+                        i18n.language === "ar" ? "text-left" : "text-left"
+                      }`}
+                      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                    />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 transform">
+                      <FaSearch className="text-lg text-gray-400" />
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        setSearchTerm("");
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 transform"
+                      aria-label="Close search"
                     >
-                      {route.path}
-                      <p className="mx-auto my-2 w-[98%] border-b-2 border-[#117C90] dark:border-DarkManager"></p>
-                    </li>
-                  ))
-                ) : (
-                  <li className="px-4 py-2 text-red-900">{t("NoMatches")}</li>
-                )}
-              </ul>
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        className="text-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                      />
+                    </button>
+                  </div>
+                </div>
+
+                <motion.ul
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="relative z-20 h-[50vh] max-h-[50vh] w-[60vw] overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-2xl focus:outline-none dark:border-gray-700 dark:bg-gray-800"
+                  role="listbox"
+                >
+                  {filteredRoutes.length > 0 ? (
+                    filteredRoutes.map((route, index) => (
+                      <motion.li
+                        key={route.path}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: index * 0.05 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelect(route.path);
+                        }}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && handleSelect(route.path)
+                        }
+                        className={`search-result-item flex cursor-pointer items-center justify-center px-4 py-3 font-medium text-gray-800 transition-colors duration-150 hover:bg-blue-50 dark:text-gray-200 dark:hover:bg-gray-700 ${
+                          index === 0 ? "rounded-t-lg" : ""
+                        } ${
+                          index === filteredRoutes.length - 1
+                            ? "rounded-b-lg"
+                            : ""
+                        }`}
+                        role="option"
+                        tabIndex={0}
+                      >
+                        <div className="flex w-full items-center justify-between">
+                          <span className="flex-1 text-center">
+                            {route.path.replace("/teacher/", "")}
+                          </span>
+                        </div>
+                      </motion.li>
+                    ))
+                  ) : (
+                    <motion.li
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="absolute inset-0 flex items-center justify-center px-4 py-3 text-center text-gray-500 dark:text-gray-400"
+                    >
+                      <div className="flex flex-col items-center justify-center py-4">
+                        <svg
+                          className="mb-2 h-8 w-8 text-gray-400 dark:text-gray-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        <span className="text-sm font-medium">
+                          {t("NoMatches")}
+                        </span>
+                        <span className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                          {t("TryDifferentSearch")}
+                        </span>
+                      </div>
+                    </motion.li>
+                  )}
+                </motion.ul>
+              </div>
             )}
           </div>
 
-          <div
-            className={`absolute ${i18n.language === "ar" ? "left-14 lg:left-6" : "right-14 lg:right-7"} top-1/2 -translate-y-1/2 transform`}
-          >
-            <FontAwesomeIcon
-              icon={faSliders}
-              className="text-lg text-gray-400"
-            />
-          </div>
+          {!isDropdownOpen && (
+            <div
+              className={`absolute ${
+                i18n.language === "ar"
+                  ? "left-14 lg:left-6"
+                  : "right-14 lg:right-7"
+              } top-1/2 -translate-y-1/2 transform`}
+            >
+              <FontAwesomeIcon
+                icon={faSliders}
+                className="text-lg text-gray-400"
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex items-center space-x-2 md:space-x-6">
           <button className="relative p-2 text-gray-500">
             <NavbarNotification />
           </button>
-          <button className="text-xl text-gray-500">
-            <FontAwesomeIcon icon={faEnvelope} className="text-2xl" />
-          </button>
-          <button className="p-2 text-gray-500">
+
+          <button
+            className="p-2 text-gray-500"
+            onClick={() => navigate("/teacher")}
+          >
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
           </button>
 
@@ -257,8 +352,8 @@ const NavTeacher = () => {
               </div>
 
               <div className="mx-auto flex items-center justify-center">
-                              <ThemeSwitcher />
-                            </div>
+                <ThemeSwitcher />
+              </div>
               <p className="mx-auto my-2 w-28 border-b-2 border-white"></p>
               <button
                 className="mx-auto ms-6 p-2 text-[#C459D9]"
