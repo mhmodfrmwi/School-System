@@ -1166,6 +1166,7 @@ flowchart TD
     H --> H4[Delete Virtual Room]
 ```
 ### Entity-Relationship Diagram (ERD)
+```mermaid
 erDiagram
     MANAGER ||--o{ VIRTUAL_ROOM : creates
     MANAGER {
@@ -1318,3 +1319,4 @@ erDiagram
     SCHEDULE {
         ObjectId _id PK
     }
+```
