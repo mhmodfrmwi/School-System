@@ -978,3 +978,190 @@ flowchart TD
     D --> K[End]
     I2 --> K
 ```
+
+## Manager Diagrams
+
+### Class Diagram
+```mermaid
+classDiagram
+    class AuthManagerController {
+        +login()
+        +updateManagerProfile()
+    }
+    
+    class AbsenceController {
+        +FetchClasses()
+        +FetchAbsenceForClassInDay()
+    }
+    
+    class DashBoardController {
+        +getStatistics()
+        +getGradeStatistics()
+        +getDailyAttendancePercentage()
+        +getTop10Students()
+    }
+    
+    class GradesController {
+        +getExamResults()
+        +getUniqueNames()
+    }
+    
+    class ManagerData {
+        +getLoggedInManagerData()
+    }
+    
+    class SHController {
+        +createSchoolHub()
+        +getAllSchoolHubs()
+        +updateSchoolHub()
+        +deleteSchoolHub()
+        +getContestStudents()
+    }
+    
+    class VirtualRoomController {
+        +createVirtualRoom()
+        +updateVirtualRoom()
+        +deleteVirtualRoom()
+        +getVirtualRoom()
+        +getAllVirtualRooms()
+    }
+    
+    class Manager {
+        +email
+        +password
+        +profileImage
+        +phone
+        +isVerified
+        +comparePasswordInDb()
+    }
+    
+    class VirtualRoom {
+        +title
+        +academicYearId
+        +semesterId
+        +startTime
+        +duration
+        +link
+        +managerId
+    }
+    
+    AuthManagerController --> Manager : uses
+    VirtualRoomController --> VirtualRoom : manages
+    VirtualRoomController --> Manager : uses
+    SHController --> Manager : uses
+    ManagerData --> Manager : fetches
+```
+Sequence Diagram: Manager Login
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Controller as AuthManagerController
+    participant ManagerModel
+    participant Bcrypt
+    
+    Client->>Controller: POST /login (email, password)
+    Controller->>ManagerModel: findOne({email})
+    ManagerModel-->>Controller: Manager document
+    alt Missing credentials
+        Controller-->>Client: 400 Bad Request
+    else Invalid credentials
+        Controller->>Bcrypt: comparePassword()
+        Bcrypt-->>Controller: false
+        Controller-->>Client: 401 Unauthorized
+    else Unverified account
+        Controller-->>Client: 401 Unauthorized (verify email)
+    else Valid credentials
+        Controller->>Controller: signToken()
+        Controller-->>Client: 200 OK (token + manager data)
+    end
+```
+Sequence Diagram: Dashboard Statistics Sequence
+```mermaid
+sequenceDiagram
+    participant Client
+    participant DashboardController
+    participant Models
+    Client->>DashboardController: GET /statistics
+    DashboardController->>Models: countDocuments()
+    Models-->>DashboardController: Student/Teacher/Parent counts
+    DashboardController->>Models: aggregate(gender)
+    DashboardController->>Models: find(top students)
+    DashboardController-->>Client: 200 (stats + percentages)
+```
+Sequence Diagram: Create Virtual Room Sequence
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant AcademicYearModel
+    participant VirtualRoomModel
+    Client->>Controller: POST /virtual-rooms
+    Controller->>AcademicYearModel: findCurrentAcademicYear()
+    AcademicYearModel-->>Controller: academicYearId
+    Controller->>VirtualRoomModel: create(title, link, etc.)
+    VirtualRoomModel-->>Controller: New virtual room
+    Controller-->>Client: 201 Created
+```
+Sequence Diagram: Update Profile Sequence
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant ManagerModel
+    participant FS
+    Client->>Controller: PATCH /profile (with updates)
+    Controller->>ManagerModel: findById(managerId)
+    alt No updates provided
+        Controller->>FS: unlinkTempFile()
+        Controller-->>Client: 400 Validation Error
+    else Password change
+        Controller->>ManagerModel: comparePassword()
+        Controller->>bcrypt: hash(newPassword)
+    end
+    alt Profile image update
+        Controller->>FS: deleteOldImage()
+        Controller->>FS: saveNewImage()
+    end
+    Controller->>ManagerModel: findByIdAndUpdate()
+    ManagerModel-->>Controller: Updated manager
+    Controller-->>Client: 200 Success
+```
+Flowchart
+```mermaid
+flowchart TD
+    A[Manager] --> B[Authentication]
+    A --> C[Dashboard]
+    A --> D[Absence Tracking]
+    A --> E[Grades Management]
+    A --> F[Profile Management]
+    A --> G[School Hub]
+    A --> H[Virtual Rooms]
+    
+    B --> B1[Login]
+    
+    C --> C1[View Statistics]
+    C --> C2[Grade Performance]
+    C --> C3[Daily Attendance]
+    C --> C4[Top Students]
+    
+    D --> D1[Fetch Classes]
+    D --> D2[View Daily Absence]
+    
+    E --> E1[Get Unique Names]
+    E --> E2[View Exam Results]
+    
+    F --> F1[Update Profile]
+    F --> F2[Change Password]
+    F --> F3[Update Profile Image]
+    
+    G --> G1[Create Contest]
+    G --> G2[View Contests]
+    G --> G3[Update Contest]
+    G --> G4[Delete Contest]
+    G --> G5[View Participants]
+    
+    H --> H1[Create Virtual Room]
+    H --> H2[View Virtual Rooms]
+    H --> H3[Update Virtual Room]
+    H --> H4[Delete Virtual Room]
+```
