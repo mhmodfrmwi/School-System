@@ -226,6 +226,70 @@ const getCompletedAssignmentsForStudent = async (req, res) => {
   }
 };
 
+const getUpcomingUnsubmittedAssignments = async (req, res) => {
+  try {
+    const { student_id, gradeSubjectSemesterId } = req.params;
+
+    const student = await Student.findById(student_id);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    const class_id = student.classId;
+
+    const gradeSubjectSemester = await GradeSubjectSemester.findById(gradeSubjectSemesterId)
+      .populate([
+        {
+          path: "grade_subject_id",
+          populate: [
+            { path: "gradeId" },
+            { path: "academicYear_id" },
+          ],
+        },
+        { path: "semester_id" },
+      ]);
+
+    if (!gradeSubjectSemester) {
+      return res.status(404).json({ message: "GradeSubjectSemester not found" });
+    }
+
+    if (!gradeSubjectSemester.grade_subject_id) {
+      return res.status(500).json({ message: "grade_subject_id is null or not populated" });
+    }
+
+    const grade_id = gradeSubjectSemester.grade_subject_id.gradeId._id;
+    const academic_year_id = gradeSubjectSemester.grade_subject_id.academicYear_id;
+    const semester_id = gradeSubjectSemester.semester_id._id;
+
+    const allAssignments = await Assignment.find({
+      class_id,
+      semester_id,
+      grade_id,
+      academic_year_id,
+      due_date: { $gt: new Date() },
+    });
+    const unsubmittedUpcomingAssignments = [];
+
+    for (const assignment of allAssignments) {
+      const alreadySubmitted = await AssignmentSubmission.findOne({
+        assignment_id: assignment._id,
+        student_id,
+      });
+
+      if (!alreadySubmitted) {
+        unsubmittedUpcomingAssignments.push(assignment);
+      }
+    }
+
+    res.status(200).json(unsubmittedUpcomingAssignments);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to fetch unsubmitted and active assignments",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getAssignmentById,
   getAssignments,
@@ -233,5 +297,6 @@ module.exports = {
   getStudentSubmissions,
   getMissedAssignmentsForStudent,
   getCompletedAssignmentsForStudent,
+  getUpcomingUnsubmittedAssignments
 };
 

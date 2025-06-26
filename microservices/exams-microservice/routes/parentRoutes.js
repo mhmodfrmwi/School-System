@@ -26,6 +26,7 @@ const {
   getStudentSubmissions,
   getMissedAssignmentsForStudent,
   getCompletedAssignmentsForStudent,
+  getUpcomingUnsubmittedAssignments
 } = require("../controllers/childAssignmentControllerForParent");
 
 const router = express.Router();
@@ -60,6 +61,13 @@ router.get(
   validateParent,
   getCompletedAssignmentsForStudent
 );//done
+
+router.get(
+  "/notSubmittedNotEndedAssignments/:gradeSubjectSemesterId/:student_id",
+  validateJwt,
+  validateParent,
+  getUpcomingUnsubmittedAssignments
+);
 
 ///$$$$$$$$//
 
