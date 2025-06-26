@@ -6,10 +6,9 @@ const BASE_URL = "http://localhost:3000/parent/student";
 export const fetchAllExams = createAsyncThunk(
     "parentExam/fetchAllExams",
     async (gradeSubjectSemesterId, { getState, rejectWithValue }) => {
-        const state = getState();
-        const studentId = state.motivationparent.selectedKid?._id;
+        const studentId = localStorage.getItem('selectedStudentId');
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
+        console.log("studentId", studentId);
         if (!token) return rejectWithValue("Authentication required");
         if (!studentId) return rejectWithValue("Student ID is required");
         if (!gradeSubjectSemesterId) return rejectWithValue("Subject semester ID is required");
@@ -42,8 +41,7 @@ export const fetchAllExams = createAsyncThunk(
 export const fetchMissedExams = createAsyncThunk(
     "parentExam/fetchMissedExams",
     async (gradeSubjectSemesterId, { getState, rejectWithValue }) => {
-        const state = getState();
-        const studentId = state.motivationparent.selectedKid?._id;
+        const studentId = localStorage.getItem('selectedStudentId');
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
         if (!token) return rejectWithValue("Authentication required");
@@ -78,8 +76,7 @@ export const fetchMissedExams = createAsyncThunk(
 export const fetchCompletedExams = createAsyncThunk(
     "parentExam/fetchCompletedExams",
     async (gradeSubjectSemesterId, { getState, rejectWithValue }) => {
-        const state = getState();
-        const studentId = state.motivationparent.selectedKid?._id;
+        const studentId = localStorage.getItem('selectedStudentId');
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
         if (!token) return rejectWithValue("Authentication required");
@@ -146,8 +143,7 @@ export const fetchStudentResults = createAsyncThunk(
 export const fetchUpcomingExams = createAsyncThunk(
     "parentExam/fetchUpcomingExams",
     async (gradeSubjectSemesterId, { getState, rejectWithValue }) => {
-        const state = getState();
-        const studentId = state.motivationparent.selectedKid?._id;
+        const studentId = localStorage.getItem('selectedStudentId');
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
         if (!token) return rejectWithValue("Authentication required");
@@ -182,8 +178,7 @@ export const fetchUpcomingExams = createAsyncThunk(
 export const fetchRunningExams = createAsyncThunk(
     "parentExam/fetchRunningExams",
     async (gradeSubjectSemesterId, { getState, rejectWithValue }) => {
-        const state = getState();
-        const studentId = state.motivationparent.selectedKid?._id;
+        const studentId = localStorage.getItem('selectedStudentId');
         const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
         if (!token) return rejectWithValue("Authentication required");

@@ -70,9 +70,9 @@ const ExamsParent = () => {
       }
     }
   }, [subjectId, subjects]);
-
   useEffect(() => {
     const studentIdToUse = selectedStudent?._id || storedStudentId;
+   
     if (studentIdToUse && subjectId) {
 
       // Fetch all exams
