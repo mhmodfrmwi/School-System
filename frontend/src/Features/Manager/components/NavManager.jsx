@@ -117,12 +117,17 @@ const NavManager = () => {
     <div className="relative">
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md">
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
-          <button
+          <motion.button
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, 5, -5, 5, -5, 0],
+              transition: { duration: 0.5 }
+            }}
             onClick={handleBack}
-            className="hidden rounded-lg bg-dashboard-bg p-2 text-white dark:bg-DarkManager lg:flex"
+            className="hidden rounded-lg bg-dashboard-bg p-2 text-white dark:bg-[#043B44] lg:flex"
           >
             <FaArrowLeft className="text-lg" />
-          </button>
+          </motion.button>
           <p className="hidden font-inter text-lg font-semibold text-dashboard-bg dark:text-DarkManager lg:flex">
             {managerName === "/manager" ? "dashboard" : `${name}`}
           </p>
@@ -142,17 +147,20 @@ const NavManager = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={handleKeyDown}
                   onClick={() => setIsDropdownOpen(true)}
-                  className={`w-full rounded-full border bg-gray-100 py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 md:text-left md:text-base ${
-                    i18n.language === "ar" ? "text-right" : "text-left"
-                  }`}
+                  className={`w-full rounded-full border bg-gray-100 py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 md:text-left md:text-base ${i18n.language === "ar" ? "text-right" : "text-left"
+                    }`}
                   dir={i18n.language === "ar" ? "rtl" : "ltr"}
                 />
-                <div
-                  className={`absolute ${
-                    i18n.language === "ar" ? "right-4" : "left-4"
-                  } top-1/2 -translate-y-1/2 transform`}
-                >
-                  <FaSearch className="text-lg text-gray-400" />
+                <div className={`absolute ${i18n.language === "ar" ? "right-4" : "left-4"} top-1/2 -translate-y-1/2 transform`}>
+                  <motion.div
+                    whileHover={{
+                      scale: 1.1,
+                      rotate: [0, 5, -5, 5, -5, 0],
+                      transition: { duration: 0.5 }
+                    }}
+                  >
+                    <FaSearch className="text-lg text-gray-400" />
+                  </motion.div>
                 </div>
               </div>
             )}
@@ -167,9 +175,8 @@ const NavManager = () => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      className={`w-full rounded-full border bg-white py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-800 dark:text-gray-200 md:text-left md:text-base ${
-                        i18n.language === "ar" ? "text-left" : "text-left"
-                      }`}
+                      className={`w-full rounded-full border bg-white py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-800 dark:text-gray-200 md:text-left md:text-base ${i18n.language === "ar" ? "text-left" : "text-left"
+                        }`}
                       dir={i18n.language === "ar" ? "rtl" : "ltr"}
                     />
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 transform">
@@ -213,13 +220,11 @@ const NavManager = () => {
                         onKeyDown={(e) =>
                           e.key === "Enter" && handleSelect(route.path)
                         }
-                        className={`search-result-item flex cursor-pointer items-center justify-center px-4 py-3 font-medium text-gray-800 transition-colors duration-150 hover:bg-blue-50 dark:text-gray-200 dark:hover:bg-gray-700 ${
-                          index === 0 ? "rounded-t-lg" : ""
-                        } ${
-                          index === filteredRoutes.length - 1
+                        className={`search-result-item flex cursor-pointer items-center justify-center px-4 py-3 font-medium text-gray-800 transition-colors duration-150 hover:bg-blue-50 dark:text-gray-200 dark:hover:bg-gray-700 ${index === 0 ? "rounded-t-lg" : ""
+                          } ${index === filteredRoutes.length - 1
                             ? "rounded-b-lg"
                             : ""
-                        }`}
+                          }`}
                         role="option"
                         tabIndex={0}
                       >
@@ -267,11 +272,10 @@ const NavManager = () => {
 
           {!isDropdownOpen && (
             <div
-              className={`absolute ${
-                i18n.language === "ar"
+              className={`absolute ${i18n.language === "ar"
                   ? "left-14 lg:left-6"
                   : "right-14 lg:right-7"
-              } top-1/2 -translate-y-1/2 transform`}
+                } top-1/2 -translate-y-1/2 transform`}
             >
               <FontAwesomeIcon
                 icon={faSliders}
@@ -281,16 +285,23 @@ const NavManager = () => {
           )}
         </div>
         <div className="flex items-center space-x-2 md:space-x-6">
-          <button className="relative p-2 text-gray-500">
-            <NavbarNotification />
-          </button>
+          <div className="relative group">
+            <div className="p-2 text-gray-500 dark:text-gray-300 group-hover:animate-shake">
+              <NavbarNotification />
+            </div>
+          </div>
 
-          <button
-            className="p-2 text-gray-500"
+          <motion.button
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, 5, -5, 5, -5, 0],
+              transition: { duration: 0.5 }
+            }}
+            className="p-2 text-gray-500 dark:text-gray-300"
             onClick={() => navigate("/manager")}
           >
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
-          </button>
+          </motion.button>
 
           {/* تعديل جزء صورة المستخدم */}
           <div className="flex items-center space-x-2">
@@ -310,12 +321,17 @@ const NavManager = () => {
               {fullName}
             </span>
           </div>
-          <button
-            className="p-2 text-2xl text-gray-500 md:text-3xl"
+          <motion.button
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, 10, -10, 10, -10, 0],
+              transition: { duration: 0.5 }
+            }}
+            className="p-2 text-2xl text-gray-500 dark:text-gray-300 md:text-3xl"
             onClick={() => setSettingToggle(!settingToggle)}
           >
             <IoSettingsOutline />
-          </button>
+          </motion.button>
 
           {settingToggle && (
             <div

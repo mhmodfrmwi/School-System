@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome, faBars } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import logo from "../../../assets/logologin.png";
 
 import GradeIconH from "../../../assets/TeacherIcon/Grade.png";
@@ -20,6 +20,7 @@ const SidebarManager = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
   const { t,i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
@@ -86,6 +87,7 @@ const SidebarManager = () => {
               hoveredIndex={hoveredIndex}
               setHoveredIndex={setHoveredIndex}
               currentPath={currentPath}
+              navigate={navigate}
             />
           </div>
         </div>
@@ -97,6 +99,7 @@ const SidebarManager = () => {
           hoveredIndex={hoveredIndex}
           setHoveredIndex={setHoveredIndex}
           currentPath={currentPath}
+          navigate={navigate}
           t={t}
           isRTL={isRTL}
         />
@@ -110,6 +113,7 @@ const SidebarContent = ({
   hoveredIndex,
   setHoveredIndex,
   currentPath,
+  navigate,
   t,
   isRTL
 }) => {
@@ -175,7 +179,8 @@ const SidebarContent = ({
         <div className="dark:text-DarkManager mb-4 rounded-md bg-white px-4 py-1 font-poppins text-xs text-dashboard-bg">
           Term: 2023-2024
         </div>
-        <button className="dark:text-DarkManager rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300">
+        <button className="dark:text-DarkManager rounded-md bg-white px-4 py-2 font-poppins text-sm text-dashboard-bg hover:bg-gray-300"
+         onClick={() => navigate("/role")}>
         {t('Logout')}
         </button>
       </div>

@@ -129,24 +129,42 @@ const Navbar = () => {
     <div className="relative z-50">
       <div className="flex h-16 w-full max-w-full items-center justify-between bg-white px-4 shadow-md dark:bg-[#13082F] dark:shadow-[0_4px_15px_rgba(224,170,238,0.3)]">
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
-          <button
+          <motion.button
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, 5, -5, 5, -5, 0],
+              transition: { duration: 0.5 }
+            }}
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="flex rounded-lg p-2"
           >
             <img src={Menu} alt="Menu" className="h-8 w-8" />
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, 5, -5, 5, -5, 0],
+              transition: { duration: 0.5 }
+            }}
             onClick={handleBack}
             className="hidden rounded-lg border-2 border-[#FD813D] bg-[#FFD4AD] p-1 text-[#FD813D] dark:border-[#FFD4AD] dark:bg-[#6B4B3E] dark:text-[#FFD4AD] lg:flex"
           >
             <FaArrowLeft className="text-lg" />
-          </button>
+          </motion.button>
           <Link to="/student">
-            <img
-              src={Logo}
-              alt="Logo"
-              className="h-9 w-9 cursor-pointer object-contain"
-            />
+            <motion.div
+              whileHover={{
+                scale: 1.1,
+                rotate: [0, 5, -5, 5, -5, 0],
+                transition: { duration: 0.5 }
+              }}
+            >
+              <img
+                src={Logo}
+                alt="Logo"
+                className="h-9 w-9 cursor-pointer object-contain"
+              />
+            </motion.div>
           </Link>
           <p
             className="hidden font-inter text-lg font-semibold text-[#3D52A1] dark:text-[#A3BFFA] lg:flex"
@@ -174,17 +192,20 @@ const Navbar = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={handleKeyDown}
                   onClick={() => setIsDropdownOpen(true)}
-                  className={`w-full rounded-full border bg-gray-100 py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 md:text-left md:text-base ${
-                    i18n.language === "ar" ? "text-right" : "text-left"
-                  }`}
+                  className={`w-full rounded-full border bg-gray-100 py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 md:text-left md:text-base ${i18n.language === "ar" ? "text-right" : "text-left"
+                    }`}
                   dir={i18n.language === "ar" ? "rtl" : "ltr"}
                 />
-                <div
-                  className={`absolute ${
-                    i18n.language === "ar" ? "right-4" : "left-4"
-                  } top-1/2 -translate-y-1/2 transform`}
-                >
-                  <FaSearch className="text-lg text-gray-400" />
+                <div className={`absolute ${i18n.language === "ar" ? "right-4" : "left-4"} top-1/2 -translate-y-1/2 transform`}>
+                  <motion.div
+                    whileHover={{
+                      scale: 1.1,
+                      rotate: [0, 5, -5, 5, -5, 0],
+                      transition: { duration: 0.5 }
+                    }}
+                  >
+                    <FaSearch className="text-lg text-gray-400" />
+                  </motion.div>
                 </div>
               </div>
             )}
@@ -199,9 +220,8 @@ const Navbar = () => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      className={`w-full rounded-full border bg-white py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-800 dark:text-gray-200 md:text-left md:text-base ${
-                        i18n.language === "ar" ? "text-left" : "text-left"
-                      }`}
+                      className={`w-full rounded-full border bg-white py-2 pl-12 pr-12 text-center font-poppins text-sm text-gray-800 focus:outline-none dark:bg-gray-800 dark:text-gray-200 md:text-left md:text-base ${i18n.language === "ar" ? "text-left" : "text-left"
+                        }`}
                       dir={i18n.language === "ar" ? "rtl" : "ltr"}
                     />
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 transform">
@@ -245,13 +265,11 @@ const Navbar = () => {
                         onKeyDown={(e) =>
                           e.key === "Enter" && handleSelect(route.path)
                         }
-                        className={`search-result-item flex cursor-pointer items-center justify-center px-4 py-3 font-medium text-gray-800 transition-colors duration-150 hover:bg-blue-50 dark:text-gray-200 dark:hover:bg-gray-700 ${
-                          index === 0 ? "rounded-t-lg" : ""
-                        } ${
-                          index === filteredRoutes.length - 1
+                        className={`search-result-item flex cursor-pointer items-center justify-center px-4 py-3 font-medium text-gray-800 transition-colors duration-150 hover:bg-blue-50 dark:text-gray-200 dark:hover:bg-gray-700 ${index === 0 ? "rounded-t-lg" : ""
+                          } ${index === filteredRoutes.length - 1
                             ? "rounded-b-lg"
                             : ""
-                        }`}
+                          }`}
                         role="option"
                         tabIndex={0}
                       >
@@ -299,11 +317,10 @@ const Navbar = () => {
 
           {!isDropdownOpen && (
             <div
-              className={`absolute ${
-                i18n.language === "ar"
-                  ? "left-14 lg:left-6"
-                  : "right-14 lg:right-7"
-              } top-1/2 -translate-y-1/2 transform`}
+              className={`absolute ${i18n.language === "ar"
+                ? "left-14 lg:left-6"
+                : "right-14 lg:right-7"
+                } top-1/2 -translate-y-1/2 transform`}
             >
               <FontAwesomeIcon
                 icon={faSliders}
@@ -314,16 +331,23 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-2 md:space-x-6">
-          <button className="relative p-2 text-gray-500 dark:text-gray-300">
-            <NavbarNotification />
-          </button>
+          <div className="relative group">
+            <div className="p-2 text-gray-500 dark:text-gray-300 group-hover:animate-shake">
+              <NavbarNotification />
+            </div>
+          </div>
 
-          <button
+          <motion.button
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, 5, -5, 5, -5, 0],
+              transition: { duration: 0.5 }
+            }}
             className="p-2 text-gray-500 dark:text-gray-300"
             onClick={() => navigate("/student")}
           >
             <ReactSVG src={InfoIcon} className="h-auto w-auto" />
-          </button>
+          </motion.button>
 
           <div className="flex items-center">
             <img
@@ -335,19 +359,24 @@ const Navbar = () => {
               alt="User"
               className="me-5 h-8 w-8 rounded-full md:h-10 md:w-10"
               onError={(e) => {
-                e.target.src = userImage; // لو الصورة ماتحملتش، نرجع للصورة الافتراضية
+                e.target.src = userImage; 
               }}
             />
             <span className="hidden font-poppins text-sm font-semibold text-[#3D52A1] dark:text-[#A3BFFA] md:text-base lg:flex">
               {fullName}
             </span>
           </div>
-          <button
+          <motion.button
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, 10, -10, 10, -10, 0],
+              transition: { duration: 0.5 }
+            }}
             className="p-2 text-2xl text-gray-500 dark:text-gray-300 md:text-3xl"
             onClick={() => setSettingToggle(!settingToggle)}
           >
             <IoSettingsOutline />
-          </button>
+          </motion.button>
 
           {settingToggle && (
             <div

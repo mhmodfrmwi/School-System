@@ -11,6 +11,16 @@ export default {
       inter: ["Inter", "sans-serif"],
     },
     extend: {
+       animation: {
+        shake: 'shake 0.5s ease-in-out',
+      },
+      keyframes: {
+        shake: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(5deg)' },
+          '75%': { transform: 'rotate(-5deg)' },
+        }
+      },
       fontSize: {
         huge: ["80rem", { lineHeight: "1" }],
       },
