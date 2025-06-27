@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo,useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import {
@@ -11,11 +11,21 @@ function Table() {
   const dispatch = useDispatch();
 
   const selectedKid = useSelector((state) => state.motivationparent.selectedKid);
+   const [storedKid, setStoredKid] = useState(() => {
+    return JSON.parse(localStorage.getItem('selectedKid')) || null;
+  });
   const {
     studentWithFriendsReward: friendsData,
     loading,
     error
   } = useSelector((state) => state.motivationparent);
+
+    useEffect(() => {
+    if (selectedKid) {
+      localStorage.setItem('selectedKid', JSON.stringify(selectedKid));
+      setStoredKid(selectedKid);
+    }
+  }, [selectedKid]);
 
   useEffect(() => {
     const kidFromStorage = JSON.parse(localStorage.getItem('selectedKid'));
@@ -25,10 +35,11 @@ function Table() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (selectedKid?._id) {
-      dispatch(getStudentWithFriendsReward());
+    const kidToUse = selectedKid || storedKid;
+    if (kidToUse?._id) {
+      dispatch(getStudentWithFriendsReward(kidToUse._id));
     }
-  }, [dispatch, selectedKid]);
+  }, [dispatch, selectedKid, storedKid]);
 
   const score = useMemo(
     () => [

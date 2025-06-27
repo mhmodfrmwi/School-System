@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import img1 from "../../../../assets/img1.png";
 import img2 from "../../../../assets/img2.png";
 import img3 from "../../../../assets/img3.png";
-import { useEffect } from "react";
+import { useEffect ,useState} from "react";
 import {
   getAllReward,
   getDailyReward,
@@ -23,6 +23,17 @@ const PointsSummary = () => {
     error
   } = useSelector((state) => state.motivationparent); 
 
+    const [storedKid, setStoredKid] = useState(() => {
+    return JSON.parse(localStorage.getItem('selectedKid')) || null;
+  });
+
+  useEffect(() => {
+    if (selectedKid) {
+      localStorage.setItem('selectedKid', JSON.stringify(selectedKid));
+      setStoredKid(selectedKid);
+    }
+  }, [selectedKid]);
+
   useEffect(() => {
     const kidFromStorage = JSON.parse(localStorage.getItem('selectedKid'));
     if (kidFromStorage) {
@@ -30,13 +41,14 @@ const PointsSummary = () => {
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    if (selectedKid?._id) {
-      dispatch(getAllReward());
-      dispatch(getSemesterReward());
-      dispatch(getDailyReward());
+ useEffect(() => {
+    const kidToUse = selectedKid || storedKid;
+    if (kidToUse?._id) {
+      dispatch(getAllReward(kidToUse._id));
+      dispatch(getSemesterReward(kidToUse._id));
+      dispatch(getDailyReward(kidToUse._id));
     }
-  }, [dispatch, selectedKid]); 
+  }, [dispatch, selectedKid, storedKid]); 
 
   const getBadgeColor = (badge) => {
     switch (badge) {

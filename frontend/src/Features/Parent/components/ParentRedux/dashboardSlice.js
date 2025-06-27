@@ -20,6 +20,7 @@ export const fetchParentDashboard = createAsyncThunk(
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           },
+           cache: 'force-cache'
         }
       );
 
