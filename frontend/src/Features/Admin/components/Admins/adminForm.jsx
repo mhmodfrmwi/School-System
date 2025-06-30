@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { postAdmin } from "../AdminRedux/adminSlice";
-import { toast } from "react-toastify";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 function AdminForm() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -21,6 +20,9 @@ function AdminForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    formData.gender === "Male"
+      ? (formData.gender = "M")
+      : (formData.gender = "F");
 
     if (
       !formData.fullName ||
@@ -32,20 +34,24 @@ function AdminForm() {
       alert(t("validation.requiredFields"));
       return;
     }
-    const phoneRegex = /^[0-9]{11}$/;
-    if (!phoneRegex.test(formData.phoneNumber)) {
-      toast.error(t("validation.phoneValidation"));
-      return;
-    }
+    // const phoneRegex = /^[0-9]{11}$/;
+    // if (!phoneRegex.test(formData.phoneNumber)) {
+    //   toast.error(t("validation.phoneValidation"));
+    //   return;
+    // }
 
-    const genderMap = { Male: t("genderOptions.male"), Female: t("genderOptions.female"), Other: "O" };
+    // const genderMap = {
+    //   Male: t("genderOptions.male"),
+    //   Female: t("genderOptions.female"),
+    //   Other: "O",
+    // };
 
     const payload = {
       fullName: formData.fullName,
       email: formData.email,
       password: formData.password,
       phone: formData.phoneNumber,
-      gender: genderMap[formData.gender],
+      gender: formData.gender,
     };
 
     try {
@@ -59,15 +65,17 @@ function AdminForm() {
       });
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message ||
-        t("validation.errorMessage");
+        error.response?.data?.message || t("validation.errorMessage");
       alert(errorMessage);
     }
   };
 
   return (
     <div className="mx-auto my-10 w-[80%] font-poppins">
-      <h1 className="pl-5 text-2xl font-semibold text-[#244856]"> {t("adminHeader.add")}</h1>
+      <h1 className="pl-5 text-2xl font-semibold text-[#244856]">
+        {" "}
+        {t("adminHeader.add")}
+      </h1>
       <div className="ml-3 mt-1 h-[4px] w-[120px] rounded-t-md bg-[#244856]"></div>
       <div className="rounded-3xl bg-[#F5F5F5] p-6 shadow-md dark:bg-[#117C90]">
         <form
@@ -77,11 +85,11 @@ function AdminForm() {
           {/* Full Name and Email */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("formLabels.fullName")}
+              {t("formLabels.fullName")}
             </label>
             <input
               type="text"
-              name= "fullName"
+              name="fullName"
               value={formData.fullName}
               onChange={handleChange}
               className="w-full rounded-2xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#117C90] dark:bg-[#117C90] dark:placeholder-white"
@@ -91,7 +99,7 @@ function AdminForm() {
           </div>
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("formLabels.email")}
+              {t("formLabels.email")}
             </label>
             <input
               type="email"
@@ -107,7 +115,7 @@ function AdminForm() {
           {/* Gender and Password */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("formLabels.gender")}
+              {t("formLabels.gender")}
             </label>
             <select
               name="gender"
@@ -117,14 +125,17 @@ function AdminForm() {
               required
             >
               <option value="">{t("genderOptions.select")}</option>
-              <option value={t("genderOptions.male")}>{t("genderOptions.male")}</option>
-              <option value={t("genderOptions.female")}>{t("genderOptions.female")}</option>
+              <option value={t("genderOptions.male")}>
+                {t("genderOptions.male")}
+              </option>
+              <option value={t("genderOptions.female")}>
+                {t("genderOptions.female")}
+              </option>
             </select>
           </div>
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("formLabels.password")}
-
+              {t("formLabels.password")}
             </label>
             <input
               type="password"
@@ -140,7 +151,7 @@ function AdminForm() {
           {/* Phone Number */}
           <div className="mb-4">
             <label className="text-md mb-2 block font-medium text-gray-700 dark:text-white">
-            {t("formLabels.phoneNumber")}
+              {t("formLabels.phoneNumber")}
             </label>
             <input
               type="text"
@@ -159,7 +170,7 @@ function AdminForm() {
               type="submit"
               className="text-md mx-auto block rounded-md bg-[#117C90] px-6 py-2 font-medium text-white transition hover:bg-[#0f6b7c] dark:bg-white dark:text-black"
             >
-               {t("adminHeader.add")}
+              {t("adminHeader.add")}
             </button>
           </div>
         </form>
