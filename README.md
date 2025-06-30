@@ -1320,3 +1320,564 @@ erDiagram
         ObjectId _id PK
     }
 ```
+## Student diagrams
+
+### Class diagram
+```mermaid
+classDiagram
+    class Student {
+        +String _id
+        +String fullName
+        +String email
+        +String password
+        +String academic_number
+        +String profileImage
+        +ObjectId gradeId
+        +ObjectId classId
+        +ObjectId academicYear_id
+        +Boolean isVerified
+        +login()
+        +comparePasswordInDb()
+        +updateProfile()
+    }
+
+    class Material {
+        +String _id
+        +String title
+        +String description
+        +String fileUrl
+        +ObjectId gradeSubjectSemesterId
+        +ObjectId uploaded_by
+    }
+
+    class Contest {
+        +String _id
+        +String title
+        +String description
+        +ObjectId subjectId
+        +Number numberOfTeamMembers
+    }
+
+    class ContestTeam {
+        +String _id
+        +String teamName
+        +ObjectId contestId
+        +ObjectId[] teamMembers
+        +ObjectId leaderId
+    }
+
+    class Question {
+        +String _id
+        +String questionText
+        +String[] options
+        +String correctAnswer
+        +ObjectId gradeSubjectSemesterId
+    }
+
+    class RewardSystem {
+        +RewardClaim[]
+        +UserPoint userPoint
+        +addRewardClaim()
+        +updatePoints()
+        +calculateBadges()
+    }
+
+    class RewardClaim {
+        +String _id
+        +ObjectId userId
+        +String userType
+        +ObjectId rewardId
+        +Date claimDate
+        +String rewardType
+        +Number value
+    }
+
+    class UserPoint {
+        +String _id
+        +ObjectId userId
+        +String userType
+        +Number totalPoints
+        +String badges
+    }
+
+    class Attendance {
+        +String _id
+        +ObjectId student_id
+        +Date date
+        +String status
+    }
+
+    class Schedule {
+        +String _id
+        +String day
+        +Time startTime
+        +Time endTime
+        +ObjectId subject_id
+        +ObjectId class_id
+        +ObjectId grade_id
+    }
+
+    class GradeSubject {
+        +String _id
+        +ObjectId gradeId
+        +ObjectId subjectId
+    }
+
+    class Bookmark {
+        +Material[]
+        +Question[]
+        +addMaterialBookmark()
+        +addQuestionBookmark()
+        +getAllBookmarks()
+    }
+
+    class ViewTracking {
+        +MaterialView[]
+        +LibraryMaterialView[]
+        +QuestionView[]
+        +updateViewStatus()
+        +getViewHistory()
+    }
+
+    class PerformanceTracking {
+        +Number[] subjectAverages
+        +Number absentDays
+        +predictPerformance()
+    }
+
+    class SchoolHub {
+        +String _id
+        +String title
+        +String description
+        +Date date
+    }
+
+    class Trip {
+        +String _id
+        +String title
+        +String description
+        +Date date
+        +ObjectId teacherId
+    }
+
+    Student "1" -- "0..*" Attendance: has
+    Student "1" -- "0..*" ContestTeam: member_of
+    Student "1" -- "1" UserPoint: has_points
+    Student "1" -- "0..*" RewardClaim: earns
+    Student "1" -- "1" PerformanceTracking: has_performance
+    Student "1" -- "1" Bookmark: has_bookmarks
+    Student "1" -- "1" ViewTracking: has_view_history
+    
+    Contest "1" -- "0..*" ContestTeam: has_teams
+    ContestTeam "1" -- "1..*" Student: consists_of
+    
+    Material "1" -- "0..*" Bookmark: bookmarked_by
+    Question "1" -- "0..*" Bookmark: bookmarked_by
+    Material "1" -- "0..*" ViewTracking: viewed_by
+    Question "1" -- "0..*" ViewTracking: viewed_by
+    
+    RewardSystem "1" -- "0..*" RewardClaim: manages
+    RewardSystem "1" -- "1" UserPoint: manages
+    
+    GradeSubject "1" -- "0..*" Material: contains
+    GradeSubject "1" -- "0..*" Question: contains
+    
+    Schedule "1" -- "1" Student: for_class
+    SchoolHub "1" -- "0..*" Student: participated_by
+    Trip "1" -- "0..*" Student: attended_by
+```
+### Sequence diagram: Student Login Sequence
+```mermaid
+sequenceDiagram
+    participant Student
+    participant AuthController
+    participant StudentModel
+    participant TokenService
+    
+    Student->>AuthController: POST /login (email, password)
+    AuthController->>StudentModel: findOne({email}).select("+password")
+    StudentModel-->>AuthController: Student data
+    alt Invalid credentials
+        AuthController-->>Student: 401 Unauthorized
+    else Valid credentials
+        AuthController->>StudentModel: comparePasswordInDb()
+        StudentModel-->>AuthController: true/false
+        AuthController->>TokenService: signToken()
+        TokenService-->>AuthController: JWT
+        AuthController-->>Student: 200 Success (token + student data)
+    end
+```
+### Sequence diagram: Create Contest Team Sequence
+```mermaid
+sequenceDiagram
+    participant Student
+    participant ContestTeamController
+    participant ContestModel
+    participant StudentModel
+    participant ContestTeamModel
+    participant RewardsService
+    
+    Student->>ContestTeamController: POST /contests/:id/teams
+    ContestTeamController->>ContestModel: findById(contestId)
+    ContestTeamController->>StudentModel: findOne({fullName, academic_number})
+    loop For each teammate
+        ContestTeamController->>ContestTeamModel: Check existing participation
+    end
+    ContestTeamController->>ContestTeamModel: create(newTeam)
+    ContestTeamController->>RewardsService: addRewardClaim(teamMembers)
+    ContestTeamModel-->>ContestTeamController: Created team
+    ContestTeamController-->>Student: 201 Created
+```
+### Sequence diagram: View Material Sequence
+```mermaid
+sequenceDiagram
+    participant Student
+    participant MaterialViewController
+    participant MaterialViewModel
+    participant RewardsService
+    
+    Student->>MaterialViewController: GET /materials/view/:id
+    MaterialViewController->>MaterialViewModel: findOneAndUpdate()
+    alt First view
+        MaterialViewController->>RewardsService: addRewardClaim()
+        RewardsService->>RewardsService: Update points
+    end
+    MaterialViewModel-->>MaterialViewController: Updated view record
+    MaterialViewController-->>Student: 200 Success
+```
+### Sequence diagram: Get Grades Sequence
+```mermaid
+sequenceDiagram
+    participant Student
+    participant GradeController
+    participant AcademicYearService
+    participant SemesterService
+    participant SubjectScoreModel
+    participant ScoreModel
+    
+    Student->>GradeController: GET /grades/:subjectId
+    GradeController->>AcademicYearService: getCurrentAcademicYear()
+    GradeController->>SemesterService: getCurrentSemester()
+    GradeController->>SubjectScoreModel: find({subjectId, semesterId})
+    loop For each subject score
+        GradeController->>ScoreModel: find({studentId, subjectScoreId})
+    end
+    ScoreModel-->>GradeController: Grades data
+    GradeController-->>Student: 200 Success (midterm/final grades)
+```
+### Sequence diagram: Update Profile Sequence
+```mermaid
+sequenceDiagram
+    participant Student
+    participant ProfileController
+    participant StudentModel
+    participant bcrypt
+    participant FileSystem
+    
+    Student->>ProfileController: PATCH /profile (with image/data)
+    ProfileController->>StudentModel: findById(studentId)
+    alt Password change
+        ProfileController->>StudentModel: comparePasswordInDb()
+        ProfileController->>bcrypt: hash(newPassword)
+    end
+    alt Profile image update
+        ProfileController->>FileSystem: delete old image
+    end
+    ProfileController->>StudentModel: findByIdAndUpdate()
+    StudentModel-->>ProfileController: Updated student
+    ProfileController-->>Student: 200 Success
+```
+### Sequence diagram: Register in School Hub Sequence
+```mermaid
+sequenceDiagram
+    participant Student
+    participant SchoolHubController
+    participant ParticipationModel
+    participant RewardsService
+    
+    Student->>SchoolHubController: POST /schoolhub/:id/register
+    SchoolHubController->>ParticipationModel: findOne({studentId, schoolHubId})
+    alt New participation
+        SchoolHubController->>ParticipationModel: create()
+        SchoolHubController->>RewardsService: addRewardClaim()
+        RewardsService->>RewardsService: Update points
+        ParticipationModel-->>SchoolHubController: New record
+        SchoolHubController-->>Student: 201 Created
+    else Already registered
+        SchoolHubController-->>Student: 400 Already registered
+    end
+```
+### Flowchart
+```mermaid
+graph TD
+    A[Student] --> B[Authentication]
+    A --> C[Academic Activities]
+    A --> D[Rewards System]
+    A --> E[Social & Extracurricular]
+    A --> F[Personal Management]
+    
+    B --> B1[Login]
+    B --> B2[Update Profile]
+    B2 --> B2a[Change Password]
+    B2 --> B2b[Update Profile Image]
+    B2 --> B2c[Update Phone Number]
+    
+    C --> C1[View Materials]
+    C1 --> C1a[Track Views]
+    C1 --> C1b[Bookmark Materials]
+    C --> C2[Question Bank]
+    C2 --> C2a[View Questions]
+    C2 --> C2b[Bookmark Questions]
+    C --> C3[Grades]
+    C3 --> C3a[Subject Grades]
+    C3 --> C3b[Semester Grades]
+    C3 --> C3c[All Grades]
+    C --> C4[Performance]
+    C4 --> C4a[View Predictions]
+    C --> C5[Schedule]
+    C5 --> C5a[View Class Schedule]
+    
+    D --> D1[Points Tracking]
+    D1 --> D1a[Daily Points]
+    D1 --> D1b[Semester Points]
+    D1 --> D1c[Total Points]
+    D --> D2[Badges]
+    D2 --> D2a[View Badges]
+    D2 --> D2b[Leaderboard]
+    D2 --> D2c[Compare with Friends]
+    
+    E --> E1[Contests]
+    E1 --> E1a[Create Team]
+    E1 --> E1b[Edit Team]
+    E1 --> E1c[Delete Team]
+    E1 --> E1d[View Teams]
+    E --> E2[School Hub]
+    E2 --> E2a[Register]
+    E2 --> E2b[Check Participation]
+    E2 --> E2c[Delete Registration]
+    E --> E3[Trips]
+    E3 --> E3a[View All Trips]
+    
+    F --> F1[Attendance]
+    F1 --> F1a[View Attendance]
+    F1 --> F1b[View Absences]
+    F --> F2[Bookmarks]
+    F2 --> F2a[View Material Bookmarks]
+    F2 --> F2b[View Question Bookmarks]
+    F2 --> F2c[Delete Bookmarks]
+```
+### Entity-Relationship Diagram (ERD)
+```mermaid
+erDiagram
+    STUDENT {
+        string student_id
+        string full_name
+        string email
+        string password
+        string academic_number
+        string profile_image_url
+        date date_joined
+        bool is_verified
+        string classroom_id
+        string grade_id
+        string academic_year_id
+    }
+    
+    CLASSROOM {
+        string classroom_id
+        string name
+    }
+    
+    ATTENDANCE {
+        string attendance_id
+        date attendance_date
+        string status
+        string student_id
+    }
+    
+    MATERIAL {
+        string material_id
+        string title
+        string description
+        string file_url
+        datetime upload_date
+        string grade_subject_id
+    }
+    
+    MATERIAL_VIEW {
+        string view_id
+        datetime view_date
+        string student_id
+        string material_id
+    }
+    
+    QUESTION {
+        string question_id
+        text question_text
+        json options
+        string correct_answer
+        string difficulty
+        string grade_subject_id
+    }
+    
+    QUESTION_VIEW {
+        string view_id
+        datetime view_date
+        string student_id
+        string question_id
+    }
+    
+    BOOKMARK {
+        string bookmark_id
+        string type
+        datetime created_at
+        string student_id
+        string material_id
+        string question_id
+    }
+    
+    REWARD_CATALOG {
+        string reward_id
+        string name
+        string description
+        int points_value
+    }
+    
+    REWARD_CLAIM {
+        string claim_id
+        datetime claim_date
+        string type
+        string student_id
+        string reward_id
+    }
+    
+    USER_POINT {
+        string point_id
+        int total_points
+        string badge_level
+        string student_id
+    }
+    
+    CONTEST {
+        string contest_id
+        string title
+        text description
+        date start_date
+        date end_date
+        int max_team_size
+        string subject_id
+    }
+    
+    CONTEST_TEAM {
+        string team_id
+        string team_name
+        string contest_id
+        string leader_id
+    }
+    
+    CONTEST_TEAM_MEMBER {
+        string team_id
+        string student_id
+    }
+    
+    SCORE {
+        string score_id
+        int exam_grade
+        int final_degree
+        string exam_type
+        string student_id
+        string subject_id
+    }
+    
+    SCHOOL_HUB {
+        string hub_id
+        string title
+        text description
+        date event_date
+    }
+    
+    PARTICIPATION {
+        string participation_id
+        bool participated
+        datetime registration_date
+        string student_id
+        string hub_id
+    }
+    
+    TRIP {
+        string trip_id
+        string title
+        text description
+        date trip_date
+        string location
+    }
+    
+    SCHEDULE {
+        string schedule_id
+        string day_of_week
+        time start_time
+        time end_time
+        string classroom_id
+        string subject_id
+        string semester_id
+    }
+    
+    GRADE_SUBJECT {
+        string grade_subject_id
+        string grade_id
+        string subject_id
+    }
+    
+    SUBJECT {
+        string subject_id
+        string name
+    }
+    
+    GRADE {
+        string grade_id
+        string name
+    }
+    
+    ACADEMIC_YEAR {
+        string year_id
+        int start_year
+        int end_year
+    }
+    
+    SEMESTER {
+        string semester_id
+        string name
+        string academic_year_id
+    }
+
+    STUDENT ||--o{ ATTENDANCE : "has"
+    STUDENT ||--o{ MATERIAL_VIEW : "views"
+    STUDENT ||--o{ QUESTION_VIEW : "views"
+    STUDENT ||--o{ BOOKMARK : "creates"
+    STUDENT ||--o{ REWARD_CLAIM : "earns"
+    STUDENT ||--o{ CONTEST_TEAM_MEMBER : "member_of"
+    STUDENT ||--o{ PARTICIPATION : "participates_in"
+    STUDENT ||--o{ SCORE : "has"
+    STUDENT }o--|| CLASSROOM : "belongs_to"
+    STUDENT }o--|| GRADE : "belongs_to"
+    
+    CLASSROOM ||--o{ SCHEDULE : "has"
+    GRADE ||--o{ GRADE_SUBJECT : "contains"
+    GRADE_SUBJECT ||--|| SUBJECT : "includes"
+    GRADE_SUBJECT ||--o{ MATERIAL : "has"
+    GRADE_SUBJECT ||--o{ QUESTION : "has"
+    
+    SUBJECT ||--o{ CONTEST : "has"
+    CONTEST ||--o{ CONTEST_TEAM : "contains"
+    
+    REWARD_CATALOG ||--o{ REWARD_CLAIM : "claimed_as"
+    USER_POINT ||--|| STUDENT : "for"
+    
+    SCHEDULE ||--|| SUBJECT : "for"
+    SCHEDULE ||--|| SEMESTER : "in"
+    SEMESTER ||--|| ACADEMIC_YEAR : "part_of"
+    
+    TRIP ||--o{ STUDENT : "attended_by"
+    SCHOOL_HUB ||--o{ PARTICIPATION : "has"
+    CONTEST_TEAM ||--o{ CONTEST_TEAM_MEMBER : "has"
+```
